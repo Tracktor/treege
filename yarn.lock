@@ -5165,6 +5165,11 @@ finalhandler@1.2.0:
     statuses "2.0.1"
     unpipe "~1.0.0"
 
+find-and@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/find-and/-/find-and-1.3.1.tgz#729a7ae770f86f8a917d760cabf35515146de1e4"
+  integrity sha512-lQRsojVy7J92cp6NASf4YZtI07QNMlCqNZJWkyU44tvvrxmRFHDOsu9Vdrr1Zcc0yXIG9rJNk0wI9zetzEhVeA==
+
 find-cache-dir@^3.3.1:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/find-cache-dir/-/find-cache-dir-3.3.2.tgz#b30c5b6eff0730731aea9bbd9dbecbd80256d64b"

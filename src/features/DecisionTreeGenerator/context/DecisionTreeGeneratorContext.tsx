@@ -15,39 +15,7 @@ export const treeDefaultValue: TreeDefaultValue = {
       required: true,
       type: "",
     },
-    children: [
-      {
-        attributes: {
-          depth: 1,
-          disable: false,
-          required: true,
-          type: "",
-        },
-        children: [
-          {
-            attributes: {
-              depth: 2,
-              disable: false,
-              required: true,
-              type: "",
-            },
-            children: [],
-            name: "C",
-          },
-        ],
-        name: "B",
-      },
-      {
-        attributes: {
-          depth: 1,
-          disable: false,
-          required: true,
-          type: "",
-        },
-        children: [],
-        name: "D",
-      },
-    ],
+    children: [],
     name: "A",
   },
 };

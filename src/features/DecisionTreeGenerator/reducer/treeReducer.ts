@@ -1,24 +1,20 @@
+import { appendProps } from "find-and";
+import type { RawNodeDatum } from "react-d3-tree/lib/types/common";
+
 export const treeReducerActionType = {
-  AddChildren: "AddChildren",
+  appendTreeCard: "appendTreeCard",
 };
 
-export const addChildrenAction = (depth: number) => ({
-  depth,
-  type: treeReducerActionType.AddChildren,
+export const appendTreeCard = (name: string, children: RawNodeDatum[]) => ({
+  children,
+  name,
+  type: treeReducerActionType.appendTreeCard,
 });
 
 const treeReducer = (state: any, action: any) => {
   switch (action.type) {
-    case treeReducerActionType.AddChildren:
-      return {
-        ...state,
-        children: [
-          {
-            attributes: {},
-            name: "x",
-          },
-        ],
-      };
+    case treeReducerActionType.appendTreeCard:
+      return appendProps(state, { name: action.name }, { children: action.children });
     default:
       throw new Error();
   }
