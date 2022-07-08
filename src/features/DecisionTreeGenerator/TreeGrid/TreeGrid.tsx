@@ -1,12 +1,13 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Stack } from "@mui/material";
 import { useContext } from "react";
+import styles from "./TreeGrid.module.scss";
 import TreeForm from "@/components/ui/TreeForm/TreeForm";
 import ViewerJSON from "@/components/ui/ViewerJSON/ViewerJSON";
+import ViewerJSONAction from "@/components/ui/ViewerJSONAction/ViewerJSONAction";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
-import styles from "@/features/DecisionTreeGenerator/DecisionTreeGenerator.module.scss";
 import TreeCardContainer from "@/features/DecisionTreeGenerator/TreeCardContainer/TreeCardContainer";
 
-const DecisionTreeGeneratorConsumer = () => {
+const TreeGrid = () => {
   const { tree } = useContext(DecisionTreeGeneratorContext);
 
   return (
@@ -16,13 +17,18 @@ const DecisionTreeGeneratorConsumer = () => {
           <TreeForm data={tree} renderCustomNodeElement={TreeCardContainer} />
         </Box>
       </Grid>
-      <Grid item xs={3} padding={1} className={styles.Grid}>
-        <Box p={2} className={styles.Box}>
-          <ViewerJSON value={tree} />
-        </Box>
+      <Grid item xs={3} padding={1} className={styles.GridItemViewer}>
+        <Stack spacing={1} className={styles.Stack}>
+          <Box p={2} className={`${styles.Box} ${styles.BoxViewer}`}>
+            <ViewerJSON value={tree} />
+          </Box>
+          <Box p={2} className={`${styles.Box} ${styles.BoxAction}`}>
+            <ViewerJSONAction value={tree} />
+          </Box>
+        </Stack>
       </Grid>
     </Grid>
   );
 };
 
-export default DecisionTreeGeneratorConsumer;
+export default TreeGrid;
