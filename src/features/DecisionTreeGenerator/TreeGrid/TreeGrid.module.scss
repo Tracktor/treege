@@ -1,29 +1,22 @@
 @import "src/styles/colors.module";
 
-.Grid {
-  height: 100%;
-}
-
-.GridItemViewer {
-  display: flex;
-  flex-direction: column;
-}
-
 .Box {
-  height: 100%;
   border: solid 1px $borderLight;
+  flex-grow: 1;
+}
+
+.BoxViewer {
+  @extend .Box;
+  overflow: auto;
+  flex-grow: 1;
+}
+
+.BoxAction {
+  @extend .Box;
+  flex-grow: 0;
 }
 
 .Stack {
   width: 100%;
 }
-
-.BoxViewer {
-  flex: 1;
-}
-
-.BoxAction {
-  flex: 0;
-}
-
 

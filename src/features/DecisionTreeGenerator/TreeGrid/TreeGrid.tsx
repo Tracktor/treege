@@ -11,18 +11,18 @@ const TreeGrid = () => {
   const { tree } = useContext(DecisionTreeGeneratorContext);
 
   return (
-    <Grid container p={1} className={styles.Grid}>
-      <Grid item xs={9} padding={1} className={styles.Grid}>
+    <Grid container padding={1} flexWrap="nowrap">
+      <Grid item xs={9} padding={1} display="flex">
         <Box className={styles.Box}>
           <TreeForm data={tree} renderCustomNodeElement={TreeCardContainer} />
         </Box>
       </Grid>
-      <Grid item xs={3} padding={1} className={styles.GridItemViewer}>
-        <Stack spacing={1} className={styles.Stack}>
-          <Box p={2} className={`${styles.Box} ${styles.BoxViewer}`}>
+      <Grid item xs={3} padding={1} display="flex">
+        <Stack className={styles.Stack} spacing={2}>
+          <Box className={styles.BoxViewer}>
             <ViewerJSON value={tree} />
           </Box>
-          <Box p={2} className={`${styles.Box} ${styles.BoxAction}`}>
+          <Box className={styles.BoxAction} p={2}>
             <ViewerJSONAction value={tree} />
           </Box>
         </Stack>
