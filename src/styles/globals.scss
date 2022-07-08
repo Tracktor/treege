@@ -4,13 +4,19 @@ html {
 
 /* Firefox */
 * {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
+  //scrollbar-width: thin;
+  //scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
 }
 
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
+  height: 6px;
   width: 6px;
+}
+
+*::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
 }
 
 *::-webkit-scrollbar-track {
@@ -20,5 +26,9 @@ html {
 *::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
-  border: 3px solid transparent;
+  border: 0;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
 }
