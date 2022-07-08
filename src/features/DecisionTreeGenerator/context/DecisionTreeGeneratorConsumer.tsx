@@ -11,7 +11,7 @@ const DecisionTreeGeneratorConsumer = () => {
 
   return (
     <Grid container p={1} className={styles.Grid}>
-      <Grid item xs={9} padding={1}>
+      <Grid item xs={9} padding={1} className={styles.Grid}>
         <Box className={styles.Box}>
           <TreeForm data={tree} renderCustomNodeElement={TreeCardContainer} />
         </Box>
