@@ -1,0 +1,10 @@
+{
+  "author": "Mickaël Austoni",
+  "short_name": "Treege",
+  "name": "Treege",
+  "description": "Form decision tree generator",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

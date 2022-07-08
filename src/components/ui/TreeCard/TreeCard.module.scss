@@ -1,0 +1,6 @@
+@import "src/styles/colors.module";
+
+.Container {
+  border: solid 1px $borderMedium;
+  background: $backgroundPrimary;
+}
