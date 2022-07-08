@@ -10,13 +10,13 @@ const DecisionTreeGeneratorConsumer = () => {
   const { tree } = useContext(DecisionTreeGeneratorContext);
 
   return (
-    <Grid container p={1} className={styles.GridContainer}>
+    <Grid container p={1} className={styles.Grid}>
       <Grid item xs={9} padding={1}>
         <Box className={styles.Box}>
           <TreeForm data={tree} renderCustomNodeElement={TreeCardContainer} />
         </Box>
       </Grid>
-      <Grid item xs={3} padding={1}>
+      <Grid item xs={3} padding={1} className={styles.Grid}>
         <Box p={2} className={styles.Box}>
           <ViewerJSON value={tree} />
         </Box>
