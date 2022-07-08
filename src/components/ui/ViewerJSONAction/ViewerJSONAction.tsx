@@ -12,7 +12,7 @@ const ViewerJSONAction = ({ downloadedFileName = "export", onSave, value }: View
   const { getDownloadLink } = useViewerJSONAction();
 
   return (
-    <Stack direction="row" spacing={1} justifyContent="center">
+    <Stack direction="row" spacing={2} justifyContent="center">
       <Button variant="outlined" href={getDownloadLink(value)} download={`${downloadedFileName}.json`}>
         Télécharger
       </Button>
