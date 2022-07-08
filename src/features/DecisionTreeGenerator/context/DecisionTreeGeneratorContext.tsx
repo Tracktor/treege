@@ -1,20 +1,55 @@
-import { createContext, Dispatch, SetStateAction } from "react";
+import { createContext, Dispatch } from "react";
 import type { RawNodeDatum } from "react-d3-tree/lib/types/common";
 
-export interface DecisionTreeGeneratorContextProviderDefaultValue {
+export interface TreeDefaultValue {
+  dispatch: Dispatch<any>;
   tree: RawNodeDatum | undefined;
-  setTree: Dispatch<SetStateAction<RawNodeDatum>>;
 }
 
-export const DecisionTreeGeneratorContextDefaultValue: DecisionTreeGeneratorContextProviderDefaultValue = {
-  setTree: () => null,
+export const treeDefaultValue: TreeDefaultValue = {
+  dispatch: () => null,
   tree: {
     attributes: {
-      type: "select",
+      depth: 0,
+      disable: false,
+      required: true,
+      type: "",
     },
-    children: [],
+    children: [
+      {
+        attributes: {
+          depth: 1,
+          disable: false,
+          required: true,
+          type: "",
+        },
+        children: [
+          {
+            attributes: {
+              depth: 2,
+              disable: false,
+              required: true,
+              type: "",
+            },
+            children: [],
+            name: "C",
+          },
+        ],
+        name: "B",
+      },
+      {
+        attributes: {
+          depth: 1,
+          disable: false,
+          required: true,
+          type: "",
+        },
+        children: [],
+        name: "D",
+      },
+    ],
     name: "A",
   },
 };
 
-export const DecisionTreeGeneratorContext = createContext(DecisionTreeGeneratorContextDefaultValue);
+export const DecisionTreeGeneratorContext = createContext(treeDefaultValue);

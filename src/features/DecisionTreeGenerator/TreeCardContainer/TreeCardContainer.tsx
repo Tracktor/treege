@@ -20,7 +20,7 @@ const TreeCardContainerConsumer = ({
       onNodeClick={onNodeClick}
       onNodeMouseOver={onNodeMouseOver}
       onNodeMouseOut={onNodeMouseOut}
-      onAddChildren={(e) => handleOnAddChildren(e, handleOnAddChildren)}
+      onAddChildren={handleOnAddChildren}
     />
   );
 };

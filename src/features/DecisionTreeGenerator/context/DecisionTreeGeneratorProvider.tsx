@@ -1,16 +1,15 @@
-import { ReactNode, useMemo, useState } from "react";
-import {
-  DecisionTreeGeneratorContext,
-  DecisionTreeGeneratorContextDefaultValue,
-} from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
+import { ReactNode, useMemo, useReducer } from "react";
+import { DecisionTreeGeneratorContext, treeDefaultValue } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
+import treeReducer from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 
 interface DecisionTreeGeneratorContextProviderProps {
   children: ReactNode;
 }
 
 const DecisionTreeGeneratorContextProvider = ({ children }: DecisionTreeGeneratorContextProviderProps) => {
-  const [tree, setTree] = useState(DecisionTreeGeneratorContextDefaultValue.tree);
-  const value = useMemo(() => ({ setTree, tree }), [tree]);
+  const [tree, dispatch] = useReducer(treeReducer, treeDefaultValue.tree);
+  const value = useMemo(() => ({ dispatch, tree }), [tree]);
+
   return <DecisionTreeGeneratorContext.Provider value={value}>{children}</DecisionTreeGeneratorContext.Provider>;
 };
 

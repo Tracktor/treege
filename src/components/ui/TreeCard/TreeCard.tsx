@@ -1,13 +1,12 @@
 import SaveOutlined from "@mui/icons-material/SaveOutlined";
 import { Button, Stack } from "@mui/material";
 import type { HierarchyPointNode } from "d3-hierarchy";
-import type { MouseEvent } from "react";
 import type { CustomNodeElementProps, TreeNodeDatum } from "react-d3-tree/lib/types/common";
 import styles from "./TreeCard.module.scss";
 
 interface TreeCardProps extends CustomNodeElementProps {
   size?: number;
-  onAddChildren?(e: MouseEvent<HTMLButtonElement>, hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>): void;
+  onAddChildren?(hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>): void;
 }
 
 const TreeCard = ({ nodeDatum, onAddChildren, hierarchyPointNode, size = 220 }: TreeCardProps) => (
@@ -15,7 +14,7 @@ const TreeCard = ({ nodeDatum, onAddChildren, hierarchyPointNode, size = 220 }: 
     <foreignObject height={size} width={size} x={`-${size / 2}`} className={styles.Container}>
       <Stack alignItems="center" justifyContent="center" flex={1} display="flex" height="100%" p={2}>
         <p>{nodeDatum.name}</p>
-        <Button variant="outlined" onClick={(e) => onAddChildren?.(e, hierarchyPointNode)}>
+        <Button variant="outlined" onClick={() => onAddChildren?.(hierarchyPointNode)}>
           <SaveOutlined />
         </Button>
       </Stack>

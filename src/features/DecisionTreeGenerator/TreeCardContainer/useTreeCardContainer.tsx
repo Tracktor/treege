@@ -1,21 +1,14 @@
+import type { HierarchyPointNode } from "d3-hierarchy";
 import { useContext } from "react";
+import type { TreeNodeDatum } from "react-d3-tree/lib/types/common";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
+import { addChildrenAction } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 
 const useTreeCardContainer = () => {
-  const { setTree } = useContext(DecisionTreeGeneratorContext);
-  const handleOnAddChildren = (a: any, b: any) => {
-    console.log(a);
-    console.log(b);
+  const { dispatch } = useContext(DecisionTreeGeneratorContext);
 
-    setTree((prevState) => ({
-      ...prevState,
-      children: [
-        {
-          attributes: {},
-          name: "x",
-        },
-      ],
-    }));
+  const handleOnAddChildren = (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => {
+    dispatch(addChildrenAction(hierarchyPointNode.depth));
   };
 
   return { handleOnAddChildren };

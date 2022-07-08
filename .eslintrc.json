@@ -58,7 +58,10 @@
     ],
     "indent": [
       "error",
-      2
+      2,
+      {
+        "SwitchCase": 1
+      }
     ],
     "jsx-a11y/anchor-is-valid": [
       "error",
