@@ -7,7 +7,7 @@ export const treeReducerActionType = {
   replaceTreeCard: "replaceTreeCard",
 } as const;
 
-export const appendTreeCard = (name: string, children: RawNodeDatum[]) => ({
+export const appendTreeCard = (name: string, children: RawNodeDatum) => ({
   children,
   name,
   type: treeReducerActionType.appendTreeCard,

@@ -56,7 +56,7 @@ const useFormTreeCardMutation = () => {
 
     const currentName = String(currentHierarchyPointNode?.data?.name);
 
-    dispatchTree(appendTreeCard(currentName, [{ attributes: { disabled, required, type }, children: [], name }]));
+    dispatchTree(appendTreeCard(currentName, { attributes: { disabled, required, type }, children: [], name }));
     setModalIsOpen(false);
   };
 
