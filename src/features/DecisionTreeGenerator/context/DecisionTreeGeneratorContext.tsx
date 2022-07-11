@@ -1,13 +1,17 @@
-import { createContext, Dispatch } from "react";
+import { createContext, Dispatch, ReducerAction, SetStateAction } from "react";
 import type { RawNodeDatum } from "react-d3-tree/lib/types/common";
 
 export interface TreeDefaultValue {
-  dispatch: Dispatch<any>;
+  dispatchTree: Dispatch<ReducerAction<any>>;
+  modalIsOpen: boolean;
+  setModalIsOpen: Dispatch<SetStateAction<boolean>>;
   tree: RawNodeDatum | undefined;
 }
 
 export const treeDefaultValue: TreeDefaultValue = {
-  dispatch: () => null,
+  dispatchTree: () => null,
+  modalIsOpen: false,
+  setModalIsOpen: () => null,
   tree: {
     attributes: {
       depth: 0,

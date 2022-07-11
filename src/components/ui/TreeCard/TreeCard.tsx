@@ -1,4 +1,4 @@
-import SaveOutlined from "@mui/icons-material/SaveOutlined";
+import AddCircleOutlineTwoToneIcon from "@mui/icons-material/AddCircleOutlineTwoTone";
 import { Button, Stack } from "@mui/material";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import type { CustomNodeElementProps, TreeNodeDatum } from "react-d3-tree/lib/types/common";
@@ -13,9 +13,9 @@ const TreeCard = ({ nodeDatum, onAddChildren, hierarchyPointNode, size = 220 }: 
   <g>
     <foreignObject height={size} width={size} x={`-${size / 2}`} className={styles.Container}>
       <Stack alignItems="center" justifyContent="center" flex={1} display="flex" height="100%" p={2}>
-        <p>{nodeDatum.name}</p>
+        {nodeDatum?.attributes?.type && <p>{nodeDatum?.attributes?.type}</p>}
         <Button variant="outlined" onClick={() => onAddChildren?.(hierarchyPointNode)}>
-          <SaveOutlined />
+          <AddCircleOutlineTwoToneIcon />
         </Button>
       </Stack>
     </foreignObject>

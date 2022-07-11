@@ -1,6 +1,13 @@
 @import "src/styles/colors.module";
 
+:global {
+  .rd3t-node svg {
+    stroke: transparent !important;
+  }
+}
+
+
 .Container {
-  border: solid 1px $borderMedium;
+  border: solid 1px $borderBlueLight;
   background: $backgroundPrimary;
 }

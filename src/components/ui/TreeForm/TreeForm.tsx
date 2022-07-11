@@ -6,10 +6,18 @@ import useTreeForm from "@/components/ui/TreeForm/useTreeForm";
 
 interface TreeDragZoneProps {
   data: any;
+  nodeSize?: { x: number; y: number };
   renderCustomNodeElement?: RenderCustomNodeElementFn;
 }
 
-const TreeForm = ({ data, renderCustomNodeElement }: TreeDragZoneProps) => {
+const TreeForm = ({
+  data,
+  renderCustomNodeElement,
+  nodeSize = {
+    x: 300,
+    y: 300,
+  },
+}: TreeDragZoneProps) => {
   const { dimensions, refContainer, translate } = useTreeForm();
 
   return (
@@ -22,10 +30,7 @@ const TreeForm = ({ data, renderCustomNodeElement }: TreeDragZoneProps) => {
         renderCustomNodeElement={renderCustomNodeElement}
         pathFunc="diagonal"
         pathClassFunc={() => styles.Link}
-        nodeSize={{
-          x: 300,
-          y: 300,
-        }}
+        nodeSize={nodeSize}
       />
     </div>
   );

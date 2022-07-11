@@ -5,8 +5,13 @@ import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/c
 import { appendTreeCard } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 
 const useTreeCardContainer = () => {
-  const { dispatch } = useContext(DecisionTreeGeneratorContext);
-  const handleOnAddChildren = (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => {
+  const { dispatchTree, setModalIsOpen } = useContext(DecisionTreeGeneratorContext);
+
+  const handleOnAddChildren = () => {
+    setModalIsOpen(true);
+  };
+
+  const handleOnConfirmAddChildren = (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => {
     const { name } = hierarchyPointNode?.data || {};
     const children = [
       {
@@ -21,9 +26,9 @@ const useTreeCardContainer = () => {
       },
     ];
 
-    dispatch(appendTreeCard(name, children));
+    dispatchTree(appendTreeCard(name, children));
   };
 
-  return { handleOnAddChildren };
+  return { handleOnAddChildren, handleOnConfirmAddChildren };
 };
 export default useTreeCardContainer;
