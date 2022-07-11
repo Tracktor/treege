@@ -5,18 +5,20 @@ import TreeForm from "@/components/ui/TreeForm/TreeForm";
 import TreeModal from "@/components/ui/TreeModal/TreeModal";
 import ViewerJSON from "@/components/ui/ViewerJSON/ViewerJSON";
 import ViewerJSONAction from "@/components/ui/ViewerJSONAction/ViewerJSONAction";
+import TreeCardContainer from "@/features/DecisionTreeGenerator/components/TreeCardContainer/TreeCardContainer";
+import useTreeGrid from "@/features/DecisionTreeGenerator/components/TreeGrid/useTreeGrid";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
-import TreeCardContainer from "@/features/DecisionTreeGenerator/TreeCardContainer/TreeCardContainer";
 
 const TreeGrid = () => {
   const { tree, setModalIsOpen, modalIsOpen } = useContext(DecisionTreeGeneratorContext);
+  const { getModalSuffix } = useTreeGrid();
 
   return (
     <Grid container padding={1} flexWrap="nowrap">
       <Grid item xs={9} padding={1} display="flex">
         <Box className={styles.Box}>
           <TreeForm data={tree} renderCustomNodeElement={TreeCardContainer} />
-          <TreeModal open={modalIsOpen} onClose={() => setModalIsOpen(false)} />
+          <TreeModal open={modalIsOpen} onClose={() => setModalIsOpen(false)} suffixTitle={getModalSuffix()} />
         </Box>
       </Grid>
       <Grid item xs={3} padding={1} display="flex">

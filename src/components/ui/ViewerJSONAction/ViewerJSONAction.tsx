@@ -1,4 +1,5 @@
-import SaveOutlined from "@mui/icons-material/SaveOutlined";
+import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
+import SimCardDownloadRoundedIcon from "@mui/icons-material/SimCardDownloadRounded";
 import { Button, Stack } from "@mui/material";
 import useViewerJSONAction from "@/components/ui/ViewerJSONAction/useViewerJSONAction";
 
@@ -14,10 +15,10 @@ const ViewerJSONAction = ({ downloadedFileName = "export", onSave, value }: View
   return (
     <Stack direction="row" spacing={2} justifyContent="center">
       <Button variant="outlined" href={getDownloadLink(value)} download={`${downloadedFileName}.json`}>
-        Télécharger
+        <SimCardDownloadRoundedIcon />
       </Button>
       <Button variant="outlined" onClick={onSave}>
-        <SaveOutlined />
+        <SaveRoundedIcon />
       </Button>
     </Stack>
   );

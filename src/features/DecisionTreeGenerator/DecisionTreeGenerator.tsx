@@ -1,5 +1,5 @@
+import TreeGrid from "@/features/DecisionTreeGenerator/components/TreeGrid/TreeGrid";
 import DecisionTreeGeneratorProvider from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorProvider";
-import TreeGrid from "@/features/DecisionTreeGenerator/TreeGrid/TreeGrid";
 
 const DecisionTreeGenerator = () => (
   <DecisionTreeGeneratorProvider>

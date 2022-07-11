@@ -1,6 +1,6 @@
 import type { CustomNodeElementProps } from "react-d3-tree/lib/types/common";
 import TreeCard from "@/components/ui/TreeCard/TreeCard";
-import useTreeCardContainer from "@/features/DecisionTreeGenerator/TreeCardContainer/useTreeCardContainer";
+import useTreeCardContainer from "@/features/DecisionTreeGenerator/components/TreeCardContainer/useTreeCardContainer";
 
 const TreeCardContainerConsumer = ({
   nodeDatum,

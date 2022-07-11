@@ -1,4 +1,4 @@
-import { appendProps, removeObject, replaceObject } from "find-and";
+import { appendProps, removeObject, replaceObject, returnFound } from "find-and";
 import type { RawNodeDatum } from "react-d3-tree/lib/types/common";
 
 export const treeReducerActionType = {
@@ -27,7 +27,11 @@ export const replaceTreeCard = (name: string, children: RawNodeDatum) => ({
 const treeReducer = (state: any, action: any) => {
   switch (action.type) {
     case treeReducerActionType.appendTreeCard:
-      return appendProps(state, { name: action.name }, { children: action.children });
+      return appendProps(
+        state,
+        { name: action.name },
+        { children: [...(returnFound(state, { name: action.name })?.children || []), action.children] }
+      );
     case treeReducerActionType.removeTreeCard:
       return removeObject(state, { name: action.name });
     case treeReducerActionType.replaceTreeCard:
