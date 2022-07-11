@@ -20,8 +20,9 @@ export const treeDefaultValue: TreeDefaultValue = {
   setModalIsOpen: () => null,
   tree: {
     attributes: {
+      data: [{ label: "label", value: "value" }],
       depth: 0,
-      disable: false,
+      disabled: false,
       required: false,
       type: "text",
     },
