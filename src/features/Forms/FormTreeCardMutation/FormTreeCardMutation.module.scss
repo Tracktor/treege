@@ -1,0 +1,14 @@
+@import "src/styles/colors.module";
+
+.IconButton {
+  min-width: auto !important;
+  margin-right: -20px !important;
+}
+
+.IconButtonDelete {
+  @extend .IconButton;
+  position: absolute !important;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}

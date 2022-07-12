@@ -81,6 +81,19 @@ const useFormTreeCardMutation = () => {
     setModalOpen(null);
   };
 
+  const handleAddValue = () => {
+    setValues((prevState) => {
+      const nextId = String(Number(prevState[prevState.length - 1]) + 1);
+      return [...prevState, { id: nextId, label: "", value: "" }];
+    });
+  };
+
+  const handleDeleteValue = (idToDelete: string) => {
+    console.log(idToDelete);
+
+    setValues((prevState) => prevState.filter(({ id }) => idToDelete === id));
+  };
+
   // Populate form data
   useEffect(() => {
     if (modalOpen === "edit") {
@@ -110,12 +123,14 @@ const useFormTreeCardMutation = () => {
 
   return {
     disabled,
+    handleAddValue,
     handleChangeDisabled,
     handleChangeLabel,
     handleChangeName,
     handleChangeRequired,
     handleChangeType,
     handleChangeValue,
+    handleDeleteValue,
     handleSubmit,
     name,
     required,

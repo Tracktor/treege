@@ -1,4 +1,19 @@
-import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
+import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
+import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+} from "@mui/material";
+import styles from "./FormTreeCardMutation.module.scss";
 import useFormTreeCardMutation from "@/features/Forms/FormTreeCardMutation/useFormTreeCardMutation";
 
 interface FormTreeCardMutationProps {
@@ -17,8 +32,10 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     type,
     handleChangeType,
     handleChangeLabel,
+    handleDeleteValue,
     handleChangeValue,
     handleSubmit,
+    handleAddValue,
   } = useFormTreeCardMutation();
 
   return (
@@ -56,7 +73,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
       <h4>Valeurs</h4>
 
       {values?.map(({ value, label, id }) => (
-        <Stack direction="row" spacing={1} paddingY={1} key={id}>
+        <Stack direction="row" spacing={1} paddingY={1} key={id} position="relative">
           <TextField
             label="Label"
             variant="outlined"
@@ -75,10 +92,21 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             inputProps={{ "data-id": id }}
             required
           />
+          {values.length > 1 && (
+            <Button color="warning" className={styles.IconButtonDelete} data-id={id} onClick={() => handleDeleteValue(id)}>
+              <RemoveCircleRoundedIcon />
+            </Button>
+          )}
         </Stack>
       ))}
 
-      <Stack spacing={2} direction="row" justifyContent="flex-end">
+      <Box justifyContent="flex-end" display="flex">
+        <Button color="success" className={styles.IconButton} onClick={handleAddValue}>
+          <AddCircleRoundedIcon />
+        </Button>
+      </Box>
+
+      <Stack spacing={2} direction="row" justifyContent="flex-end" paddingTop={3}>
         <Button variant="text" onClick={onClose}>
           Annuler
         </Button>
