@@ -20,13 +20,22 @@ export const treeDefaultValue: TreeDefaultValue = {
   setModalIsOpen: () => null,
   tree: {
     attributes: {
-      data: [{ label: "label", value: "value" }],
       depth: 0,
       disabled: false,
       required: false,
       type: "text",
     },
-    children: [],
+    children: [
+      {
+        attributes: {
+          depth: 1,
+          label: "label",
+          value: "value",
+        },
+        children: [],
+        name: "ccc",
+      },
+    ],
     name: "Champs de texte",
   },
 };

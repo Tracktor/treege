@@ -5,14 +5,14 @@ import { appendTreeCard } from "@/features/DecisionTreeGenerator/reducer/treeRed
 
 const useFormTreeCardMutation = () => {
   const { dispatchTree, setModalIsOpen, currentHierarchyPointNode } = useContext(DecisionTreeGeneratorContext);
-  const [data, setData] = useState([{ id: "1", label: "", value: "" }]);
+  const [values, setValues] = useState([{ id: "1", label: "", value: "" }]);
   const [disabled, setDisabled] = useState(false);
   const [name, setName] = useState("");
   const [required, setRequired] = useState(false);
   const [type, setType] = useState("");
 
   const handleChangeLabel = (event: ChangeEvent<HTMLInputElement>) => {
-    setData((prevState) =>
+    setValues((prevState) =>
       [...prevState].map(({ value, label, id }) => {
         if (event.target.dataset.id === id) {
           return { id, label: event.target.value, value };
@@ -24,7 +24,7 @@ const useFormTreeCardMutation = () => {
   };
 
   const handleChangeValue = (event: ChangeEvent<HTMLInputElement>) => {
-    setData((prevState) =>
+    setValues((prevState) =>
       [...prevState].map(({ value, label, id }) => {
         if (event.target.dataset.id === id) {
           return { id, label, value: event.target.value };
@@ -57,12 +57,31 @@ const useFormTreeCardMutation = () => {
     const currentName = String(currentHierarchyPointNode?.data?.name);
     const depth = Number(currentHierarchyPointNode?.depth) + 1;
 
-    dispatchTree(appendTreeCard(currentName, { attributes: { data, depth, disabled, required, type }, children: [], name }));
+    const children = {
+      attributes: {
+        depth,
+        disabled,
+        required,
+        type,
+      },
+      children: values.map(({ value, label }) => ({
+        attributes: {
+          depth: depth + 1,
+          label,
+          value,
+        },
+        children: [],
+        name: value,
+      })),
+      name,
+    };
+
+    dispatchTree(appendTreeCard(currentName, children));
     setModalIsOpen(false);
   };
 
   return {
-    data,
+    data: values,
     disabled,
     handleChangeDisabled,
     handleChangeLabel,
