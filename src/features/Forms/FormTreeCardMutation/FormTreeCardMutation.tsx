@@ -43,6 +43,16 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         </FormControl>
       </Stack>
 
+      <FormGroup>
+        <FormControlLabel control={<Checkbox checked={required} onChange={handleChangeRequired} />} label="Requis" />
+      </FormGroup>
+
+      <FormGroup>
+        <FormControlLabel control={<Checkbox checked={disabled} onChange={handleChangeDisabled} />} label="Désactivé" />
+      </FormGroup>
+
+      <h4>Valeurs</h4>
+
       {values?.map(({ value, label, id }) => (
         <Stack direction="row" spacing={1} paddingY={1} key={id}>
           <TextField
@@ -65,14 +75,6 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           />
         </Stack>
       ))}
-
-      <FormGroup>
-        <FormControlLabel control={<Checkbox checked={required} onChange={handleChangeRequired} />} label="Requis" />
-      </FormGroup>
-
-      <FormGroup>
-        <FormControlLabel control={<Checkbox checked={disabled} onChange={handleChangeDisabled} />} label="Désactivé" />
-      </FormGroup>
 
       <Stack spacing={2} direction="row" justifyContent="flex-end">
         <Button variant="text" onClick={onClose}>

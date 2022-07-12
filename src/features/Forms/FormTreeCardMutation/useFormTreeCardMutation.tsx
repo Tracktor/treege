@@ -72,7 +72,7 @@ const useFormTreeCardMutation = () => {
           value,
         },
         children: [],
-        name: value,
+        name: `${label} ${value}`,
       })),
       name,
     };

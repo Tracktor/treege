@@ -30,6 +30,15 @@ export const treeDefaultValue: TreeDefaultValue = {
         attributes: {
           depth: 1,
           label: "Age",
+          value: "20",
+        },
+        children: [],
+        name: "Age 20",
+      },
+      {
+        attributes: {
+          depth: 1,
+          label: "Age",
           value: "30",
         },
         children: [],
