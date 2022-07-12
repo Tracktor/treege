@@ -2,11 +2,22 @@ import { useContext } from "react";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
 
 const useTreeGrid = () => {
-  const { currentHierarchyPointNode } = useContext(DecisionTreeGeneratorContext);
+  const { currentHierarchyPointNode, setModalMutationIsOpen, setModalDeleteIsOpen } = useContext(DecisionTreeGeneratorContext);
 
-  const getModalSuffix = () => (currentHierarchyPointNode?.data?.name ? `à ${currentHierarchyPointNode?.data.name}` : "");
+  const getTitleModalMutation = () =>
+    currentHierarchyPointNode?.data?.name ? `Ajouter un element à "${currentHierarchyPointNode?.data.name}"` : "";
 
-  return { getModalSuffix };
+  const getTitleModalDelete = () => `Voulez vraiment supprimer "${currentHierarchyPointNode?.data.name}"`;
+
+  const closeModalMutation = () => {
+    setModalMutationIsOpen(false);
+  };
+
+  const closeModalDelete = () => {
+    setModalDeleteIsOpen(false);
+  };
+
+  return { closeModalDelete, closeModalMutation, getTitleModalDelete, getTitleModalMutation };
 };
 
 export default useTreeGrid;

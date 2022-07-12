@@ -3,7 +3,7 @@ import type { TreeRawNodeDatum } from "@/features/DecisionTreeGenerator/type/Tre
 
 export const treeReducerActionType = {
   appendTreeCard: "appendTreeCard",
-  removeTreeCard: "removeTreeCard",
+  deleteTreeCard: "deleteTreeCard",
   replaceTreeCard: "replaceTreeCard",
 } as const;
 
@@ -13,9 +13,9 @@ export const appendTreeCard = (name: string, children: TreeRawNodeDatum) => ({
   type: treeReducerActionType.appendTreeCard,
 });
 
-export const removeTreeCard = (name: string) => ({
+export const deleteTreeCard = (name: string) => ({
   name,
-  type: treeReducerActionType.removeTreeCard,
+  type: treeReducerActionType.deleteTreeCard,
 });
 
 export const replaceTreeCard = (name: string, children: TreeRawNodeDatum) => ({
@@ -32,7 +32,7 @@ const treeReducer = (state: any, action: any) => {
         { name: action.name },
         { children: [...(returnFound(state, { name: action.name })?.children || []), action.children] }
       );
-    case treeReducerActionType.removeTreeCard:
+    case treeReducerActionType.deleteTreeCard:
       return removeObject(state, { name: action.name });
     case treeReducerActionType.replaceTreeCard:
       return replaceObject(state, { name: action.name }, action.children);

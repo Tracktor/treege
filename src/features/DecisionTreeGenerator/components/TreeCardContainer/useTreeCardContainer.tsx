@@ -4,13 +4,18 @@ import type { TreeNodeDatum } from "react-d3-tree/lib/types/common";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
 
 const useTreeCardContainer = () => {
-  const { setModalIsOpen, setCurrentHierarchyPointNode } = useContext(DecisionTreeGeneratorContext);
+  const { setModalMutationIsOpen, setModalDeleteIsOpen, setCurrentHierarchyPointNode } = useContext(DecisionTreeGeneratorContext);
 
-  const handleOnAddChildren = (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => {
+  const handleMutationChildren = (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => {
     setCurrentHierarchyPointNode(hierarchyPointNode);
-    setModalIsOpen(true);
+    setModalMutationIsOpen(true);
   };
 
-  return { handleOnAddChildren };
+  const handleDeleteChildren = (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => {
+    setCurrentHierarchyPointNode(hierarchyPointNode);
+    setModalDeleteIsOpen(true);
+  };
+
+  return { handleDeleteChildren, handleMutationChildren };
 };
 export default useTreeCardContainer;

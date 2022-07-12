@@ -10,7 +10,7 @@ const TreeCardContainerConsumer = ({
   onNodeMouseOver,
   onNodeMouseOut,
 }: CustomNodeElementProps) => {
-  const { handleOnAddChildren } = useTreeCardContainer();
+  const { handleDeleteChildren, handleMutationChildren } = useTreeCardContainer();
 
   return (
     <TreeCard
@@ -20,7 +20,9 @@ const TreeCardContainerConsumer = ({
       onNodeClick={onNodeClick}
       onNodeMouseOver={onNodeMouseOver}
       onNodeMouseOut={onNodeMouseOut}
-      onAddChildren={handleOnAddChildren}
+      onAddChildren={handleMutationChildren}
+      onDeleteChildren={handleDeleteChildren}
+      onEditChildren={handleMutationChildren}
     />
   );
 };

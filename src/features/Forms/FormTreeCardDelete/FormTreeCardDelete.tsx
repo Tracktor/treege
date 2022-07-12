@@ -1,0 +1,25 @@
+import { Button, Stack } from "@mui/material";
+import useFormTreeCardDelete from "@/features/Forms/FormTreeCardDelete/useFormTreeCardDelete";
+
+interface FormTreeCardMutationProps {
+  onClose?(): void;
+}
+
+const FormTreeCardDelete = ({ onClose }: FormTreeCardMutationProps) => {
+  const { handleSubmit } = useFormTreeCardDelete();
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <Stack spacing={2} direction="row" justifyContent="flex-end">
+        <Button variant="text" onClick={onClose}>
+          Annuler
+        </Button>
+        <Button variant="contained" color="warning" type="submit">
+          Supprimer
+        </Button>
+      </Stack>
+    </form>
+  );
+};
+
+export default FormTreeCardDelete;

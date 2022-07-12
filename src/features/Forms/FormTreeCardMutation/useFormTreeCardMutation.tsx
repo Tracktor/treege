@@ -4,7 +4,7 @@ import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/c
 import { appendTreeCard } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 
 const useFormTreeCardMutation = () => {
-  const { dispatchTree, setModalIsOpen, currentHierarchyPointNode } = useContext(DecisionTreeGeneratorContext);
+  const { dispatchTree, setModalMutationIsOpen, currentHierarchyPointNode } = useContext(DecisionTreeGeneratorContext);
   const [values, setValues] = useState([{ id: "1", label: "", value: "" }]);
   const [disabled, setDisabled] = useState(false);
   const [name, setName] = useState("");
@@ -77,7 +77,7 @@ const useFormTreeCardMutation = () => {
     };
 
     dispatchTree(appendTreeCard(currentName, children));
-    setModalIsOpen(false);
+    setModalMutationIsOpen(false);
   };
 
   return {

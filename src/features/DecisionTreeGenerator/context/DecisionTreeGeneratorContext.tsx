@@ -6,18 +6,22 @@ import type { TreeRawNodeDatum } from "@/features/DecisionTreeGenerator/type/Tre
 export interface TreeDefaultValue {
   currentHierarchyPointNode: null | HierarchyPointNode<TreeNodeDatum>;
   dispatchTree: Dispatch<ReducerAction<any>>;
-  modalIsOpen: boolean;
+  modalDeleteIsOpen: boolean;
+  modalMutationIsOpen: boolean;
   setCurrentHierarchyPointNode: Dispatch<SetStateAction<null | HierarchyPointNode<TreeNodeDatum>>>;
-  setModalIsOpen: Dispatch<SetStateAction<boolean>>;
+  setModalMutationIsOpen: Dispatch<SetStateAction<boolean>>;
+  setModalDeleteIsOpen: Dispatch<SetStateAction<boolean>>;
   tree: TreeRawNodeDatum;
 }
 
 export const treeDefaultValue: TreeDefaultValue = {
   currentHierarchyPointNode: null,
   dispatchTree: () => null,
-  modalIsOpen: false,
+  modalDeleteIsOpen: false,
+  modalMutationIsOpen: false,
   setCurrentHierarchyPointNode: () => null,
-  setModalIsOpen: () => null,
+  setModalDeleteIsOpen: () => null,
+  setModalMutationIsOpen: () => null,
   tree: {
     attributes: {
       depth: 0,
