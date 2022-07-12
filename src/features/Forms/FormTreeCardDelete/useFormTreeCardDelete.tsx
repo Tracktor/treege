@@ -3,13 +3,13 @@ import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/c
 import { deleteTreeCard } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 
 const useFormTreeCardDelete = () => {
-  const { dispatchTree, setModalDeleteIsOpen, currentHierarchyPointNode } = useContext(DecisionTreeGeneratorContext);
+  const { dispatchTree, setModalOpen, currentHierarchyPointNode } = useContext(DecisionTreeGeneratorContext);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     dispatchTree(deleteTreeCard(String(currentHierarchyPointNode?.data.name)));
-    setModalDeleteIsOpen(false);
+    setModalOpen(null);
   };
 
   return {

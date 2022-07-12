@@ -12,19 +12,19 @@ import FormTreeCardDelete from "@/features/Forms/FormTreeCardDelete/FormTreeCard
 import FormTreeCardMutation from "@/features/Forms/FormTreeCardMutation/FormTreeCardMutation";
 
 const TreeGrid = () => {
-  const { tree, modalMutationIsOpen, modalDeleteIsOpen } = useContext(DecisionTreeGeneratorContext);
-  const { getTitleModalMutation, closeModalMutation, closeModalDelete, getTitleModalDelete } = useTreeGrid();
+  const { tree, modalOpen } = useContext(DecisionTreeGeneratorContext);
+  const { getTitleModalMutation, closeModal, getTitleModalDelete, isModalMutationOpen } = useTreeGrid();
 
   return (
     <Grid container padding={1} flexWrap="nowrap">
       <Grid item xs={9} padding={1} display="flex">
         <Box className={styles.Box}>
           <TreeForm data={tree} renderCustomNodeElement={TreeCardContainer} />
-          <MainModal open={modalMutationIsOpen} onClose={closeModalMutation} title={getTitleModalMutation()}>
-            <FormTreeCardMutation onClose={closeModalMutation} />
+          <MainModal open={isModalMutationOpen} onClose={closeModal} title={getTitleModalMutation()}>
+            <FormTreeCardMutation onClose={closeModal} />
           </MainModal>
-          <MainModal open={modalDeleteIsOpen} onClose={closeModalDelete} title={getTitleModalDelete()}>
-            <FormTreeCardDelete onClose={closeModalDelete} />
+          <MainModal open={modalOpen === "delete"} onClose={closeModal} title={getTitleModalDelete()}>
+            <FormTreeCardDelete onClose={closeModal} />
           </MainModal>
         </Box>
       </Grid>

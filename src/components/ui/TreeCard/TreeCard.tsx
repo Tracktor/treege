@@ -16,7 +16,8 @@ interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum"> {
 }
 
 const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, hierarchyPointNode, size = 220 }: TreeCardProps) => {
-  const hasDeleteButton = hierarchyPointNode.depth > 0;
+  const hasDeleteButton = hierarchyPointNode?.depth > 0;
+  const hasEditButton = hierarchyPointNode?.data?.attributes?.type;
 
   return (
     <g>
@@ -47,11 +48,13 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
                 </Button>
               </Tooltip>
             )}
-            <Tooltip title="Editer">
-              <Button variant="text" className={styles.ActionButton} onClick={() => onEditChildren?.(hierarchyPointNode)}>
-                <EditRoundedIcon />
-              </Button>
-            </Tooltip>
+            {hasEditButton && (
+              <Tooltip title="Editer">
+                <Button variant="text" className={styles.ActionButton} onClick={() => onEditChildren?.(hierarchyPointNode)}>
+                  <EditRoundedIcon />
+                </Button>
+              </Tooltip>
+            )}
             <Tooltip title="Ajouter un champ">
               <Button variant="text" className={styles.ActionButton} onClick={() => onAddChildren?.(hierarchyPointNode)}>
                 <AddBoxRoundedIcon />

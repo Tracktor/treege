@@ -8,22 +8,19 @@ interface DecisionTreeGeneratorContextProviderProps {
 
 const DecisionTreeGeneratorContextProvider = ({ children }: DecisionTreeGeneratorContextProviderProps) => {
   const [currentHierarchyPointNode, setCurrentHierarchyPointNode] = useState(treeDefaultValue.currentHierarchyPointNode);
-  const [modalMutationIsOpen, setModalMutationIsOpen] = useState(treeDefaultValue.modalMutationIsOpen);
-  const [modalDeleteIsOpen, setModalDeleteIsOpen] = useState(treeDefaultValue.modalDeleteIsOpen);
+  const [modalOpen, setModalOpen] = useState(treeDefaultValue.modalOpen);
   const [tree, dispatchTree] = useReducer(treeReducer, treeDefaultValue.tree);
 
   const value = useMemo(
     () => ({
       currentHierarchyPointNode,
       dispatchTree,
-      modalDeleteIsOpen,
-      modalMutationIsOpen,
+      modalOpen,
       setCurrentHierarchyPointNode,
-      setModalDeleteIsOpen,
-      setModalMutationIsOpen,
+      setModalOpen,
       tree,
     }),
-    [currentHierarchyPointNode, modalDeleteIsOpen, modalMutationIsOpen, tree]
+    [currentHierarchyPointNode, modalOpen, tree]
   );
 
   return <DecisionTreeGeneratorContext.Provider value={value}>{children}</DecisionTreeGeneratorContext.Provider>;

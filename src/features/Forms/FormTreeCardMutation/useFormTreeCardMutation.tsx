@@ -1,11 +1,12 @@
 import type { SelectChangeEvent } from "@mui/material/Select";
-import { ChangeEvent, FormEvent, useContext, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useEffect, useMemo, useState } from "react";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
 import { appendTreeCard } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 
 const useFormTreeCardMutation = () => {
-  const { dispatchTree, setModalMutationIsOpen, currentHierarchyPointNode } = useContext(DecisionTreeGeneratorContext);
-  const [values, setValues] = useState([{ id: "1", label: "", value: "" }]);
+  const defaultValues = useMemo(() => [{ id: "1", label: "", value: "" }], []);
+  const { dispatchTree, setModalOpen, currentHierarchyPointNode, modalOpen } = useContext(DecisionTreeGeneratorContext);
+  const [values, setValues] = useState(defaultValues);
   const [disabled, setDisabled] = useState(false);
   const [name, setName] = useState("");
   const [required, setRequired] = useState(false);
@@ -77,8 +78,33 @@ const useFormTreeCardMutation = () => {
     };
 
     dispatchTree(appendTreeCard(currentName, children));
-    setModalMutationIsOpen(false);
+    setModalOpen(null);
   };
+
+  // Populate form data
+  useEffect(() => {
+    if (modalOpen === "edit") {
+      const initialValues = currentHierarchyPointNode?.data?.children?.map(({ attributes }, index) => {
+        const { label, value } = attributes || {};
+        return { id: String(index), label: String(label), value: String(value) };
+      });
+
+      setName(String(currentHierarchyPointNode?.data.name));
+      setType(String(currentHierarchyPointNode?.data.attributes?.type));
+      setRequired(Boolean(currentHierarchyPointNode?.data.attributes?.required));
+      setDisabled(Boolean(currentHierarchyPointNode?.data.attributes?.disabled));
+      setValues(initialValues?.length ? initialValues : defaultValues);
+    }
+  }, [
+    currentHierarchyPointNode,
+    currentHierarchyPointNode?.data.attributes?.disabled,
+    currentHierarchyPointNode?.data.attributes?.required,
+    currentHierarchyPointNode?.data.attributes?.type,
+    currentHierarchyPointNode?.data.attributes?.values,
+    currentHierarchyPointNode?.data.name,
+    defaultValues,
+    modalOpen,
+  ]);
 
   return {
     disabled,
