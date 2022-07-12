@@ -3,10 +3,16 @@ import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/c
 
 const useTreeGrid = () => {
   const { currentHierarchyPointNode, modalOpen, setModalOpen } = useContext(DecisionTreeGeneratorContext);
-  const isModalMutationOpen = modalOpen === "edit" || modalOpen === "add";
+  const isEditModal = modalOpen === "edit";
+  const isAddModal = modalOpen === "add";
+  const isModalMutationOpen = isEditModal || isAddModal;
 
-  const getTitleModalMutation = () =>
-    currentHierarchyPointNode?.data?.name ? `Ajouter un element à "${currentHierarchyPointNode?.data.name}"` : "";
+  const getTitleModalMutation = () => {
+    const AddTitle = `Ajouter un champ à « ${currentHierarchyPointNode?.data.name} »"`;
+    const EditTitle = `Editer le champ « ${currentHierarchyPointNode?.data.name} »"`;
+
+    return isEditModal ? EditTitle : AddTitle;
+  };
 
   const getTitleModalDelete = () => `Voulez vraiment supprimer "${currentHierarchyPointNode?.data.name}"`;
 

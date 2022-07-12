@@ -79,7 +79,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           Annuler
         </Button>
         <Button variant="contained" type="submit">
-          Ajouter
+          Valider
         </Button>
       </Stack>
     </form>

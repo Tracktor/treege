@@ -13,7 +13,7 @@ interface TreeModalProps {
 const MainModal = ({ children, description, open, onClose, title }: TreeModalProps) => (
   <Modal open={open} onClose={onClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
     <Box className={styles.Box} p={4}>
-      <h2>{title}</h2>
+      <h3>{title}</h3>
       <p>{description}</p>
       {children}
     </Box>
