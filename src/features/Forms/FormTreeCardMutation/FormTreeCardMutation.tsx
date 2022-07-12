@@ -38,7 +38,8 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           <InputLabel>Type</InputLabel>
           <Select value={type} label="Age" onChange={handleChangeType}>
             <MenuItem value="checkbox">Checkbox</MenuItem>
-            <MenuItem value="radio">Champ de text</MenuItem>
+            <MenuItem value="text">Champ de text</MenuItem>
+            <MenuItem value="number">Champ de number</MenuItem>
             <MenuItem value="select">Select</MenuItem>
           </Select>
         </FormControl>
