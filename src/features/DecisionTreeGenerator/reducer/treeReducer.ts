@@ -1,5 +1,5 @@
 import { appendProps, removeObject, replaceObject, returnFound } from "find-and";
-import type { TreeRawNodeDatum } from "@/features/DecisionTreeGenerator/type/TreeRawNodeDatum";
+import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 
 export const treeReducerActionType = {
   appendTreeCard: "appendTreeCard",
@@ -7,7 +7,7 @@ export const treeReducerActionType = {
   replaceTreeCard: "replaceTreeCard",
 } as const;
 
-export const appendTreeCard = (name: string, children: TreeRawNodeDatum) => ({
+export const appendTreeCard = (name: string, children: TreeNode) => ({
   children,
   name,
   type: treeReducerActionType.appendTreeCard,
@@ -18,7 +18,7 @@ export const deleteTreeCard = (name: string) => ({
   type: treeReducerActionType.deleteTreeCard,
 });
 
-export const replaceTreeCard = (name: string, children: TreeRawNodeDatum) => ({
+export const replaceTreeCard = (name: string, children: TreeNode) => ({
   children,
   name,
   type: treeReducerActionType.replaceTreeCard,

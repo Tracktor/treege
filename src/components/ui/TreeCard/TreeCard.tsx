@@ -5,8 +5,10 @@ import { Box, Button, Chip, Stack, Tooltip } from "@mui/material";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import type { CustomNodeElementProps, TreeNodeDatum } from "react-d3-tree/lib/types/common";
 import styles from "./TreeCard.module.scss";
+import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 
-interface TreeCardProps extends CustomNodeElementProps {
+interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum"> {
+  nodeDatum: TreeNode | TreeNodeDatum;
   size?: number;
   onAddChildren?(hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>): void;
   onEditChildren?(hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>): void;
