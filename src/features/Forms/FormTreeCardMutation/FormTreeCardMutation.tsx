@@ -7,7 +7,7 @@ interface FormTreeCardMutationProps {
 
 const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
   const {
-    data,
+    values,
     required,
     disabled,
     handleChangeRequired,
@@ -43,7 +43,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         </FormControl>
       </Stack>
 
-      {data.map(({ value, label, id }) => (
+      {values.map(({ value, label, id }) => (
         <Stack direction="row" spacing={1} paddingY={1} key={id}>
           <TextField
             label="Label"

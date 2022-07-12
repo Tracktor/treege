@@ -81,7 +81,6 @@ const useFormTreeCardMutation = () => {
   };
 
   return {
-    data: values,
     disabled,
     handleChangeDisabled,
     handleChangeLabel,
@@ -93,6 +92,7 @@ const useFormTreeCardMutation = () => {
     name,
     required,
     type,
+    values,
   };
 };
 
