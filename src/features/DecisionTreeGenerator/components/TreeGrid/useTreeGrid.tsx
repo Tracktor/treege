@@ -9,7 +9,7 @@ const useTreeGrid = () => {
 
   const getTitleModalMutation = () => {
     const AddTitle = `Ajouter un champ à « ${currentHierarchyPointNode?.data.name} »"`;
-    const EditTitle = `Editer le champ « ${currentHierarchyPointNode?.data.name} »"`;
+    const EditTitle = `Editer le champ « ${currentHierarchyPointNode?.data.name} »`;
 
     return isEditModal ? EditTitle : AddTitle;
   };

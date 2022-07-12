@@ -29,14 +29,14 @@ export const treeDefaultValue: TreeDefaultValue = {
       {
         attributes: {
           depth: 1,
-          label: "label",
-          value: "value",
+          label: "Age",
+          value: "30",
         },
         children: [],
-        name: "ccc",
+        name: "Age 30",
       },
     ],
-    name: "Champs de texte",
+    name: "Age",
   },
 };
 

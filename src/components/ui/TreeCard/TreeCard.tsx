@@ -27,9 +27,7 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
             {nodeDatum?.attributes?.type && <h4 className={styles.Title}>{nodeDatum.name}</h4>}
             {nodeDatum?.attributes?.type && <Chip color="secondary" size="small" label={nodeDatum?.attributes?.type} />}
             <Stack direction="row" spacing={0.5}>
-              {nodeDatum?.attributes?.label && (
-                <Chip color="success" size="small" variant="outlined" label={nodeDatum?.attributes?.label} />
-              )}
+              {nodeDatum?.attributes?.label && <Chip color="error" size="small" variant="outlined" label={nodeDatum?.attributes?.label} />}
               {nodeDatum?.attributes?.value && (
                 <Chip color="success" size="small" variant="outlined" label={nodeDatum?.attributes?.value} />
               )}
