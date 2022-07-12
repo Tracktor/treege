@@ -84,10 +84,12 @@ const useFormTreeCardMutation = () => {
   // Populate form data
   useEffect(() => {
     if (modalOpen === "edit") {
-      const initialValues = currentHierarchyPointNode?.data?.children?.map(({ attributes }, index) => {
-        const { label, value } = attributes || {};
-        return { id: String(index), label: String(label), value: String(value) };
-      });
+      const initialValues = currentHierarchyPointNode?.data?.children
+        ?.filter(({ attributes }) => !attributes?.type)
+        ?.map(({ attributes }, index) => {
+          const { label, value } = attributes || {};
+          return { id: String(index), label: String(label), value: String(value) };
+        });
 
       setName(String(currentHierarchyPointNode?.data.name));
       setType(String(currentHierarchyPointNode?.data.attributes?.type));
