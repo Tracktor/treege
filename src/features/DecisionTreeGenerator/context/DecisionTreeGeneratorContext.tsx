@@ -23,7 +23,7 @@ export const treeDefaultValue: TreeDefaultValue = {
       depth: 0,
       disabled: false,
       required: false,
-      type: "text",
+      type: "select",
     },
     children: [
       {
