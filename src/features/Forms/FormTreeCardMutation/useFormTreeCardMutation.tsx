@@ -1,7 +1,7 @@
 import type { SelectChangeEvent } from "@mui/material/Select";
 import { ChangeEvent, FormEvent, useContext, useEffect, useMemo, useState } from "react";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
-import { appendTreeCard } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
+import { appendTreeCard, replaceTreeCard } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 
 const useFormTreeCardMutation = () => {
   const defaultValues = useMemo(() => [{ id: "1", label: "", value: "" }], []);
@@ -77,7 +77,7 @@ const useFormTreeCardMutation = () => {
       name,
     };
 
-    dispatchTree(appendTreeCard(currentName, children));
+    modalOpen === "edit" ? dispatchTree(replaceTreeCard(currentName, children)) : dispatchTree(appendTreeCard(currentName, children));
     setModalOpen(null);
   };
 
