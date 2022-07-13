@@ -3,6 +3,8 @@ import type { RawNodeDatum } from "react-d3-tree/lib/types/common";
 export interface TreeNodeField {
   depth: number;
   disabled: boolean;
+  isLeaf?: never;
+  isRoot?: boolean;
   label?: never;
   required: boolean;
   type: string;
@@ -12,6 +14,8 @@ export interface TreeNodeField {
 export interface TreeNodeValues {
   depth: number;
   disabled?: never;
+  isLeaf?: boolean;
+  isRoot?: never;
   label: string;
   required?: never;
   type?: never;
