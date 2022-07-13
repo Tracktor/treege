@@ -67,8 +67,9 @@ const useFormTreeCardMutation = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
+    const isEdit = modalOpen === "edit";
     const currentName = String(currentHierarchyPointNode?.data?.name);
-    const depth = Number(currentHierarchyPointNode?.depth) + 1;
+    const depth = isEdit ? Number(currentHierarchyPointNode?.depth) : Number(currentHierarchyPointNode?.depth) + 1;
 
     const children = {
       attributes: {
@@ -89,7 +90,7 @@ const useFormTreeCardMutation = () => {
       name,
     };
 
-    modalOpen === "edit" ? dispatchTree(replaceTreeCard(currentName, children)) : dispatchTree(appendTreeCard(currentName, children));
+    dispatchTree(isEdit ? replaceTreeCard(currentName, children) : appendTreeCard(currentName, children));
     setModalOpen(null);
   };
 
