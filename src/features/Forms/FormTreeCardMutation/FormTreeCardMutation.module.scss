@@ -11,4 +11,14 @@
   top: 50%;
   right: 0;
   transform: translateY(-50%);
+
+  &:before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    z-index: -1;
+    border-radius: 50%;
+    background-color: $backgroundPrimary;
+  }
 }
