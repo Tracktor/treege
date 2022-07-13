@@ -36,6 +36,8 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeValue,
     handleSubmit,
     handleAddValue,
+    isMultipleFieldValuesSelected,
+    getDisabledValueField,
   } = useFormTreeCardMutation();
 
   return (
@@ -57,6 +59,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             <MenuItem value="checkbox">Checkbox</MenuItem>
             <MenuItem value="text">Champ de text</MenuItem>
             <MenuItem value="number">Champ de number</MenuItem>
+            <MenuItem value="radio">Radio</MenuItem>
             <MenuItem value="select">Select</MenuItem>
           </Select>
         </FormControl>
@@ -72,7 +75,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
       <h4>Valeurs</h4>
 
-      {values?.map(({ value, label, id }) => (
+      {values?.map(({ value, label, id }, index) => (
         <Stack direction="row" spacing={1} paddingY={1} key={id} position="relative">
           <TextField
             label="Label"
@@ -82,6 +85,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             value={label}
             inputProps={{ "data-id": id }}
             required
+            disabled={getDisabledValueField(index)}
           />
           <TextField
             label="Valeur"
@@ -91,6 +95,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             value={value}
             inputProps={{ "data-id": id }}
             required
+            disabled={getDisabledValueField(index)}
           />
           {values.length > 1 && (
             <Button color="warning" className={styles.IconButtonDelete} data-id={id} onClick={() => handleDeleteValue(id)}>
@@ -100,11 +105,13 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         </Stack>
       ))}
 
-      <Box justifyContent="flex-end" display="flex">
-        <Button color="success" className={styles.IconButton} onClick={handleAddValue}>
-          <AddCircleRoundedIcon />
-        </Button>
-      </Box>
+      {isMultipleFieldValuesSelected && (
+        <Box justifyContent="flex-end" display="flex">
+          <Button color="success" className={styles.IconButton} onClick={handleAddValue}>
+            <AddCircleRoundedIcon />
+          </Button>
+        </Box>
+      )}
 
       <Stack spacing={2} direction="row" justifyContent="flex-end" paddingTop={3}>
         <Button variant="text" onClick={onClose}>

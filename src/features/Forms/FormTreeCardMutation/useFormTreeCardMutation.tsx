@@ -11,6 +11,9 @@ const useFormTreeCardMutation = () => {
   const [name, setName] = useState("");
   const [required, setRequired] = useState(false);
   const [type, setType] = useState("");
+  const isMultipleFieldValuesSelected = ["select", "radio"].includes(type);
+
+  const getDisabledValueField = (index: number) => !isMultipleFieldValuesSelected && index > 0;
 
   const handleChangeLabel = (event: ChangeEvent<HTMLInputElement>) => {
     setValues((prevState) =>
@@ -69,7 +72,7 @@ const useFormTreeCardMutation = () => {
 
     const isEdit = modalOpen === "edit";
     const currentName = String(currentHierarchyPointNode?.data?.name);
-    const depth = isEdit ? Number(currentHierarchyPointNode?.depth) : Number(currentHierarchyPointNode?.depth) + 1;
+    const depth = Number(currentHierarchyPointNode?.depth) + (isEdit ? 0 : 1);
 
     const children = {
       attributes: {
@@ -78,15 +81,17 @@ const useFormTreeCardMutation = () => {
         required,
         type,
       },
-      children: values.map(({ value, label }) => ({
-        attributes: {
-          depth: depth + 1,
-          label,
-          value,
-        },
-        children: [],
-        name: `${label} ${value}`,
-      })),
+      children: values
+        ?.filter((_, index) => !getDisabledValueField(index))
+        ?.map(({ value, label }) => ({
+          attributes: {
+            depth: depth + 1,
+            label,
+            value,
+          },
+          children: [],
+          name: `${label} ${value}`,
+        })),
       name,
     };
 
@@ -123,6 +128,7 @@ const useFormTreeCardMutation = () => {
 
   return {
     disabled,
+    getDisabledValueField,
     handleAddValue,
     handleChangeDisabled,
     handleChangeLabel,
@@ -132,6 +138,7 @@ const useFormTreeCardMutation = () => {
     handleChangeValue,
     handleDeleteValue,
     handleSubmit,
+    isMultipleFieldValuesSelected,
     name,
     required,
     type,
