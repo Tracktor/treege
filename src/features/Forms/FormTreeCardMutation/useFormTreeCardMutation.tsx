@@ -4,7 +4,7 @@ import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/c
 import { appendTreeCard, replaceTreeCard } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 
 const useFormTreeCardMutation = () => {
-  const defaultValues = useMemo(() => [{ id: "1", label: "", value: "" }], []);
+  const defaultValues = useMemo(() => [{ id: "0", label: "", value: "" }], []);
   const { dispatchTree, setModalOpen, currentHierarchyPointNode, modalOpen } = useContext(DecisionTreeGeneratorContext);
   const [values, setValues] = useState(defaultValues);
   const [disabled, setDisabled] = useState(false);
@@ -14,7 +14,7 @@ const useFormTreeCardMutation = () => {
 
   const handleChangeLabel = (event: ChangeEvent<HTMLInputElement>) => {
     setValues((prevState) =>
-      [...prevState].map(({ value, label, id }) => {
+      prevState.map(({ value, label, id }) => {
         if (event.target.dataset.id === id) {
           return { id, label: event.target.value, value };
         }
@@ -26,7 +26,7 @@ const useFormTreeCardMutation = () => {
 
   const handleChangeValue = (event: ChangeEvent<HTMLInputElement>) => {
     setValues((prevState) =>
-      [...prevState].map(({ value, label, id }) => {
+      prevState.map(({ value, label, id }) => {
         if (event.target.dataset.id === id) {
           return { id, label, value: event.target.value };
         }
@@ -83,15 +83,14 @@ const useFormTreeCardMutation = () => {
 
   const handleAddValue = () => {
     setValues((prevState) => {
-      const nextId = String(Number(prevState[prevState.length - 1]) + 1);
+      const lastId = Number(prevState[prevState.length - 1].id);
+      const nextId = String(lastId + 1);
       return [...prevState, { id: nextId, label: "", value: "" }];
     });
   };
 
   const handleDeleteValue = (idToDelete: string) => {
-    console.log(idToDelete);
-
-    setValues((prevState) => prevState.filter(({ id }) => idToDelete === id));
+    setValues((prevState) => prevState.filter(({ id }) => idToDelete !== id));
   };
 
   // Populate form data

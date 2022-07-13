@@ -74,6 +74,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
       {values?.map(({ value, label, id }) => (
         <Stack direction="row" spacing={1} paddingY={1} key={id} position="relative">
+          {id}
           <TextField
             label="Label"
             variant="outlined"
