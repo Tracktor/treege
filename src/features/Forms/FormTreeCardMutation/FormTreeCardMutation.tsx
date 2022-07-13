@@ -22,7 +22,8 @@ interface FormTreeCardMutationProps {
 }
 
 const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["translation", "form"]);
+
   const {
     values,
     required,
@@ -51,18 +52,18 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           sx={{ flex: 1 }}
           onChange={handleChangeName}
           value={name}
-          helperText={t("form.mustBeUnique")}
+          helperText={t("mustBeUnique", { ns: "form" })}
           required
         />
 
         <FormControl sx={{ flex: 1 }} required>
           <InputLabel>{t("type")}</InputLabel>
           <Select value={type} label={t("type")} onChange={handleChangeType}>
-            <MenuItem value="checkbox">{t("form.type.checkbox")}</MenuItem>
-            <MenuItem value="number">{t("form.type.number")}</MenuItem>
-            <MenuItem value="radio">{t("form.type.radio")}</MenuItem>
-            <MenuItem value="select">{t("form.type.select")}</MenuItem>
-            <MenuItem value="text">{t("form.type.text")}</MenuItem>
+            <MenuItem value="checkbox">{t("type.checkbox", { ns: "form" })}</MenuItem>
+            <MenuItem value="number">{t("type.number", { ns: "form" })}</MenuItem>
+            <MenuItem value="radio">{t("type.radio", { ns: "form" })}</MenuItem>
+            <MenuItem value="select">{t("type.select", { ns: "form" })}</MenuItem>
+            <MenuItem value="text">{t("type.text", { ns: "form" })}</MenuItem>
           </Select>
         </FormControl>
       </Stack>
@@ -75,7 +76,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         <FormControlLabel control={<Checkbox checked={disabled} onChange={handleChangeDisabled} />} label={t("disabled")} />
       </FormGroup>
 
-      <h4>Valeurs</h4>
+      <h4>{t("values")}</h4>
 
       {values?.map(({ value, label, id }, index) => (
         <Stack direction="row" spacing={1} paddingY={1} key={id} position="relative">

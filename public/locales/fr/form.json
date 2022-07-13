@@ -1,0 +1,10 @@
+{
+  "mustBeUnique": "Doit être unique",
+  "type": {
+    "checkbox": "Case à cocher",
+    "number": "Champ de texte",
+    "radio": "Radio",
+    "select": "Select",
+    "text": "Champ de nombre"
+  }
+}

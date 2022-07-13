@@ -1,0 +1,11 @@
+{
+  "mustBeUnique": "Must be unique",
+  "type": {
+    "checkbox": "Checkbox",
+    "number": "Number field",
+    "radio": "Radio",
+    "select": "Select",
+    "text": "Text field"
+  },
+  "values": "Values"
+}

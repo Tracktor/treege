@@ -3,21 +3,6 @@
   "cancel": "Annuler",
   "disabled": "Désactivé",
   "edit": "Éditer",
-  "form": {
-    "mustBeUnique": "Doit être unique",
-    "type": {
-      "checkbox": "Case à cocher",
-      "number": "Champ de texte",
-      "radio": "Radio",
-      "select": "Select",
-      "text": "Champ de nombre"
-    }
-  },
-  "modal": {
-    "addTitle": "Ajouter un champ à « {{name}} »",
-    "deleteTitle": "Voulez vraiment supprimer  « {{name}} »",
-    "editTitle": "Éditer le champ « {{name}} »"
-  },
   "name": "Nom",
   "remove": "Supprimer",
   "required": "Requis",

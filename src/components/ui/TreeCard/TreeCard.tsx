@@ -17,7 +17,7 @@ interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum"> {
 }
 
 const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, hierarchyPointNode, size = 220 }: TreeCardProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["translation", "form"]);
   const hasDeleteButton = hierarchyPointNode?.depth > 0;
   const hasEditButton = hierarchyPointNode?.data?.attributes?.type;
 
@@ -27,7 +27,9 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
         <Box flex={1} display="flex" p={2} height="100%" flexDirection="column" justifyContent="space-between">
           <Stack alignItems="flex-end">
             {nodeDatum?.attributes?.type && <h4 className={styles.Title}>{nodeDatum.name}</h4>}
-            {nodeDatum?.attributes?.type && <Chip color="secondary" size="small" label={t(`form.type.${nodeDatum?.attributes?.type}`)} />}
+            {nodeDatum?.attributes?.type && (
+              <Chip color="secondary" size="small" label={t(`type.${nodeDatum?.attributes?.type}`, { ns: "form" })} />
+            )}
             <Stack direction="row" spacing={0.5}>
               {nodeDatum?.attributes?.label && <Chip color="error" size="small" variant="outlined" label={nodeDatum?.attributes?.label} />}
               {nodeDatum?.attributes?.value && (

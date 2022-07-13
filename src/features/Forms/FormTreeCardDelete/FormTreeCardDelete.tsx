@@ -7,10 +7,8 @@ interface FormTreeCardMutationProps {
 }
 
 const FormTreeCardDelete = ({ onClose }: FormTreeCardMutationProps) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { handleSubmit } = useFormTreeCardDelete();
-
-  console.log(i18n.language);
 
   return (
     <form onSubmit={handleSubmit}>

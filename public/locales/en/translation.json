@@ -3,21 +3,6 @@
   "cancel": "Cancel",
   "disabled": "Disabled",
   "edit": "Edit",
-  "form": {
-    "mustBeUnique": "Must be unique",
-    "type": {
-      "checkbox": "Checkbox",
-      "number": "Number field",
-      "radio": "Radio",
-      "select": "Select",
-      "text": "Text field"
-    }
-  },
-  "modal": {
-    "addTitle": "Add a field to « {{name}} »",
-    "deleteTitle": "Are you sure to delete « {{name}} »",
-    "editTitle": "Edit field « {{name}} »"
-  },
   "name": "Name",
   "remove": "Remove",
   "required": "Required",

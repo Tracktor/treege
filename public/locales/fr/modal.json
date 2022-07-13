@@ -1,0 +1,5 @@
+{
+  "addTitle": "Ajouter un champ à « {{name}} »",
+  "deleteTitle": "Voulez vraiment supprimer  « {{name}} »",
+  "editTitle": "Éditer le champ « {{name}} »"
+}

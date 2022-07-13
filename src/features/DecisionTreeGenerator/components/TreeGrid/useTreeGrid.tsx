@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
 
 const useTreeGrid = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("modal");
   const { currentHierarchyPointNode, modalOpen, setModalOpen } = useContext(DecisionTreeGeneratorContext);
   const isEditModal = modalOpen === "edit";
   const isAddModal = modalOpen === "add";
@@ -12,13 +12,13 @@ const useTreeGrid = () => {
   const getTitleModalMutation = () => {
     const name = currentHierarchyPointNode?.data.name;
 
-    return isEditModal ? t("modal.editTitle", { name }) : t("modal.addTitle", { name });
+    return isEditModal ? t("editTitle", { name }) : t("addTitle", { name });
   };
 
   const getTitleModalDelete = () => {
     const name = currentHierarchyPointNode?.data.name;
 
-    return t("modal.deleteTitle", { name });
+    return t("deleteTitle", { name });
   };
 
   const closeModal = () => setModalOpen(null);
