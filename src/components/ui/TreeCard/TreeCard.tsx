@@ -18,8 +18,8 @@ interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum"> {
 
 const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, hierarchyPointNode, size = 220 }: TreeCardProps) => {
   const { t } = useTranslation(["translation", "form"]);
-  const hasDeleteButton = hierarchyPointNode?.depth > 0;
-  const hasEditButton = hierarchyPointNode?.data?.attributes?.type;
+  const isRoot = hierarchyPointNode?.depth > 0;
+  const hasType = hierarchyPointNode?.data?.attributes?.type;
 
   return (
     <g>
@@ -40,7 +40,7 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
             </Stack>
           </Stack>
           <Stack direction="row" justifyContent="flex-end" spacing={0} alignSelf="flex-end">
-            {hasDeleteButton && (
+            {isRoot && (
               <Tooltip title={t("remove")}>
                 <Button
                   variant="text"
@@ -52,18 +52,20 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
                 </Button>
               </Tooltip>
             )}
-            {hasEditButton && (
+            {hasType && (
               <Tooltip title={t("edit")}>
                 <Button variant="text" className={styles.ActionButton} onClick={() => onEditChildren?.(hierarchyPointNode)}>
                   <EditRoundedIcon />
                 </Button>
               </Tooltip>
             )}
-            <Tooltip title={t("add")}>
-              <Button variant="text" color="success" className={styles.ActionButton} onClick={() => onAddChildren?.(hierarchyPointNode)}>
-                <AddBoxRoundedIcon />
-              </Button>
-            </Tooltip>
+            {!hasType && (
+              <Tooltip title={t("add")}>
+                <Button variant="text" color="success" className={styles.ActionButton} onClick={() => onAddChildren?.(hierarchyPointNode)}>
+                  <AddBoxRoundedIcon />
+                </Button>
+              </Tooltip>
+            )}
           </Stack>
         </Box>
       </foreignObject>
