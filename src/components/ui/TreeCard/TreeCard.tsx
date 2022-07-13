@@ -31,7 +31,9 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
               <Chip color="secondary" size="small" label={t(`type.${nodeDatum?.attributes?.type}`, { ns: "form" })} />
             )}
             <Stack direction="row" spacing={0.5}>
-              {nodeDatum?.attributes?.label && <Chip color="error" size="small" variant="outlined" label={nodeDatum?.attributes?.label} />}
+              {nodeDatum?.attributes?.label && (
+                <Chip color="secondary" size="small" variant="outlined" label={nodeDatum?.attributes?.label} />
+              )}
               {nodeDatum?.attributes?.value && (
                 <Chip color="success" size="small" variant="outlined" label={nodeDatum?.attributes?.value} />
               )}
@@ -58,7 +60,7 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
               </Tooltip>
             )}
             <Tooltip title={t("add")}>
-              <Button variant="text" className={styles.ActionButton} onClick={() => onAddChildren?.(hierarchyPointNode)}>
+              <Button variant="text" color="success" className={styles.ActionButton} onClick={() => onAddChildren?.(hierarchyPointNode)}>
                 <AddBoxRoundedIcon />
               </Button>
             </Tooltip>
