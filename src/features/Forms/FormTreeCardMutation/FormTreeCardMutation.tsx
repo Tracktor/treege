@@ -13,6 +13,7 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import styles from "./FormTreeCardMutation.module.scss";
 import useFormTreeCardMutation from "@/features/Forms/FormTreeCardMutation/useFormTreeCardMutation";
 
@@ -21,6 +22,7 @@ interface FormTreeCardMutationProps {
 }
 
 const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
+  const { t } = useTranslation();
   const {
     values,
     required,
@@ -44,33 +46,33 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     <form onSubmit={handleSubmit}>
       <Stack direction="row" spacing={1} paddingY={1}>
         <TextField
-          label="Nom"
+          label={t("name")}
           variant="outlined"
           sx={{ flex: 1 }}
           onChange={handleChangeName}
           value={name}
-          helperText="Doit être unique"
+          helperText={t("form.mustBeUnique")}
           required
         />
 
         <FormControl sx={{ flex: 1 }} required>
-          <InputLabel>Type</InputLabel>
-          <Select value={type} label="Age" onChange={handleChangeType}>
-            <MenuItem value="checkbox">Checkbox</MenuItem>
-            <MenuItem value="text">Champ de text</MenuItem>
-            <MenuItem value="number">Champ de number</MenuItem>
-            <MenuItem value="radio">Radio</MenuItem>
-            <MenuItem value="select">Select</MenuItem>
+          <InputLabel>{t("type")}</InputLabel>
+          <Select value={type} label={t("type")} onChange={handleChangeType}>
+            <MenuItem value="checkbox">{t("form.type.checkbox")}</MenuItem>
+            <MenuItem value="number">{t("form.type.number")}</MenuItem>
+            <MenuItem value="radio">{t("form.type.radio")}</MenuItem>
+            <MenuItem value="select">{t("form.type.select")}</MenuItem>
+            <MenuItem value="text">{t("form.type.text")}</MenuItem>
           </Select>
         </FormControl>
       </Stack>
 
       <FormGroup>
-        <FormControlLabel control={<Checkbox checked={required} onChange={handleChangeRequired} />} label="Requis" />
+        <FormControlLabel control={<Checkbox checked={required} onChange={handleChangeRequired} />} label={t("required")} />
       </FormGroup>
 
       <FormGroup>
-        <FormControlLabel control={<Checkbox checked={disabled} onChange={handleChangeDisabled} />} label="Désactivé" />
+        <FormControlLabel control={<Checkbox checked={disabled} onChange={handleChangeDisabled} />} label={t("disabled")} />
       </FormGroup>
 
       <h4>Valeurs</h4>
@@ -115,10 +117,10 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
       <Stack spacing={2} direction="row" justifyContent="flex-end" paddingTop={3}>
         <Button variant="text" onClick={onClose}>
-          Annuler
+          {t("cancel")}
         </Button>
         <Button variant="contained" type="submit">
-          Valider
+          {t("validate")}
         </Button>
       </Stack>
     </form>

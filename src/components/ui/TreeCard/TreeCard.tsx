@@ -4,6 +4,7 @@ import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { Box, Button, Chip, Stack, Tooltip } from "@mui/material";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import type { CustomNodeElementProps, TreeNodeDatum } from "react-d3-tree/lib/types/common";
+import { useTranslation } from "react-i18next";
 import styles from "./TreeCard.module.scss";
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 
@@ -16,6 +17,7 @@ interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum"> {
 }
 
 const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, hierarchyPointNode, size = 220 }: TreeCardProps) => {
+  const { t } = useTranslation();
   const hasDeleteButton = hierarchyPointNode?.depth > 0;
   const hasEditButton = hierarchyPointNode?.data?.attributes?.type;
 
@@ -25,7 +27,7 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
         <Box flex={1} display="flex" p={2} height="100%" flexDirection="column" justifyContent="space-between">
           <Stack alignItems="flex-end">
             {nodeDatum?.attributes?.type && <h4 className={styles.Title}>{nodeDatum.name}</h4>}
-            {nodeDatum?.attributes?.type && <Chip color="secondary" size="small" label={nodeDatum?.attributes?.type} />}
+            {nodeDatum?.attributes?.type && <Chip color="secondary" size="small" label={t(`form.type.${nodeDatum?.attributes?.type}`)} />}
             <Stack direction="row" spacing={0.5}>
               {nodeDatum?.attributes?.label && <Chip color="error" size="small" variant="outlined" label={nodeDatum?.attributes?.label} />}
               {nodeDatum?.attributes?.value && (
@@ -35,7 +37,7 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
           </Stack>
           <Stack direction="row" justifyContent="flex-end" spacing={0} alignSelf="flex-end">
             {hasDeleteButton && (
-              <Tooltip title="Supprimer">
+              <Tooltip title={t("remove")}>
                 <Button
                   variant="text"
                   className={styles.ActionButton}
@@ -47,13 +49,13 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
               </Tooltip>
             )}
             {hasEditButton && (
-              <Tooltip title="Editer">
+              <Tooltip title={t("edit")}>
                 <Button variant="text" className={styles.ActionButton} onClick={() => onEditChildren?.(hierarchyPointNode)}>
                   <EditRoundedIcon />
                 </Button>
               </Tooltip>
             )}
-            <Tooltip title="Ajouter un champ">
+            <Tooltip title={t("add")}>
               <Button variant="text" className={styles.ActionButton} onClick={() => onAddChildren?.(hierarchyPointNode)}>
                 <AddBoxRoundedIcon />
               </Button>
