@@ -52,6 +52,18 @@ const useFormTreeCardMutation = () => {
     setType(event.target.value);
   };
 
+  const handleAddValue = () => {
+    setValues((prevState) => {
+      const lastId = Number(prevState[prevState.length - 1].id);
+      const nextId = String(lastId + 1);
+      return [...prevState, { id: nextId, label: "", value: "" }];
+    });
+  };
+
+  const handleDeleteValue = (idToDelete: string) => {
+    setValues((prevState) => prevState.filter(({ id }) => idToDelete !== id));
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
@@ -79,18 +91,6 @@ const useFormTreeCardMutation = () => {
 
     modalOpen === "edit" ? dispatchTree(replaceTreeCard(currentName, children)) : dispatchTree(appendTreeCard(currentName, children));
     setModalOpen(null);
-  };
-
-  const handleAddValue = () => {
-    setValues((prevState) => {
-      const lastId = Number(prevState[prevState.length - 1].id);
-      const nextId = String(lastId + 1);
-      return [...prevState, { id: nextId, label: "", value: "" }];
-    });
-  };
-
-  const handleDeleteValue = (idToDelete: string) => {
-    setValues((prevState) => prevState.filter(({ id }) => idToDelete !== id));
   };
 
   // Populate form data
