@@ -1,13 +1,13 @@
 import type { HierarchyPointNode } from "d3-hierarchy";
-import { createContext, Dispatch, ReducerAction, SetStateAction } from "react";
+import { createContext, ReducerAction, SetStateAction } from "react";
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 
 export interface TreeDefaultValue {
   currentHierarchyPointNode: null | HierarchyPointNode<TreeNode>;
-  dispatchTree: Dispatch<ReducerAction<any>>;
+  dispatchTree(state: ReducerAction<any>): void;
   modalOpen: "add" | "edit" | "delete" | null;
-  setCurrentHierarchyPointNode: Dispatch<SetStateAction<null | HierarchyPointNode<TreeNode>>>;
-  setModalOpen: Dispatch<SetStateAction<"add" | "edit" | "delete" | null>>;
+  setCurrentHierarchyPointNode(state: SetStateAction<null | HierarchyPointNode<TreeNode>>): void;
+  setModalOpen(state: SetStateAction<"add" | "edit" | "delete" | null>): void;
   tree: TreeNode;
 }
 
@@ -22,6 +22,7 @@ export const treeDefaultValue: TreeDefaultValue = {
       depth: 0,
       disabled: false,
       isRoot: true,
+      paths: ["Age"],
       required: false,
       type: "select",
     },
@@ -30,6 +31,7 @@ export const treeDefaultValue: TreeDefaultValue = {
         attributes: {
           depth: 1,
           label: "Age",
+          paths: ["Age", "Age 20"],
           value: "20",
         },
         children: [],
@@ -39,6 +41,7 @@ export const treeDefaultValue: TreeDefaultValue = {
         attributes: {
           depth: 1,
           label: "Age",
+          paths: ["Age", "Age 30"],
           value: "30",
         },
         children: [],

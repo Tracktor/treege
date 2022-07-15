@@ -6,6 +6,7 @@ export interface TreeNodeField {
   disabled: boolean;
   isRoot?: boolean;
   label?: never;
+  paths: string[];
   required: boolean;
   type: string;
   value?: never;
@@ -16,6 +17,7 @@ export interface TreeNodeValues {
   disabled?: never;
   isRoot?: never;
   label: string;
+  paths: string[];
   required?: never;
   type?: never;
   value: string;

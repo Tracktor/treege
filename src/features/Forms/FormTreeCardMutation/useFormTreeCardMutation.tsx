@@ -69,7 +69,7 @@ const useFormTreeCardMutation = () => {
     setValues((prevState) => prevState.filter(({ id }) => idToDelete !== id));
   };
 
-  const getCurrentChildrenValues = (hierarchyPointNode: null | HierarchyPointNode<TreeNode>, index: number) => {
+  const getChildrenOfField = (hierarchyPointNode: null | HierarchyPointNode<TreeNode>, index: number) => {
     if (!hierarchyPointNode?.children?.[index]?.data?.children) {
       return [];
     }
@@ -81,37 +81,55 @@ const useFormTreeCardMutation = () => {
     }));
   };
 
+  const getPaths = (currentPath: string[], prevName: string, nextName: string, isEdit: boolean) => {
+    if (!currentPath) {
+      return [];
+    }
+
+    return [...currentPath, nextName].filter((path) => {
+      if (isEdit && prevName !== nextName) {
+        return path !== prevName;
+      }
+
+      return true;
+    });
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
+    const prevName = String(currentHierarchyPointNode?.data?.name);
+    const prevDepth = Number(currentHierarchyPointNode?.depth);
+    const prevPath = currentHierarchyPointNode?.data?.attributes?.paths || [];
     const isEdit = modalOpen === "edit";
-    const currentName = String(currentHierarchyPointNode?.data?.name);
-    const currentDepth = Number(currentHierarchyPointNode?.depth);
-    const depth = currentDepth + (isEdit ? 0 : 1);
+    const depth = prevDepth + (isEdit ? 0 : 1);
+    const paths = getPaths(prevPath, prevName, name, isEdit);
 
     const children = {
       attributes: {
         depth,
         disabled,
-        ...(currentDepth === 0 && { isRoot: true }),
+        ...(prevDepth === 0 && { isRoot: true }),
+        paths,
         required,
         type,
       },
       children: values
-        ?.filter((_, index) => !getDisabledValueField(index))
+        ?.filter((_, index) => !getDisabledValueField(index)) // filter disabled value
         ?.map(({ value, label }, index) => ({
           attributes: {
             depth: depth + 1,
             label,
+            paths: [...paths, `${label} ${value}`],
             value,
           },
-          children: getCurrentChildrenValues(currentHierarchyPointNode, index),
+          children: getChildrenOfField(currentHierarchyPointNode, index),
           name: `${label} ${value}`,
         })),
       name,
     };
 
-    dispatchTree(isEdit ? replaceTreeCard(currentName, children) : appendTreeCard(currentName, children));
+    dispatchTree(isEdit ? replaceTreeCard(prevName, children) : appendTreeCard(prevName, children));
     setModalOpen(null);
   };
 
