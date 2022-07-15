@@ -40,7 +40,7 @@ const TreeGrid = () => {
             <ViewerJSON value={tree} />
           </Box>
           <Box className={styles.BoxSmall} p={2}>
-            <ViewerJSONAction value={tree} />
+            <ViewerJSONAction value={tree} onSave={() => window.parent.postMessage(JSON.stringify(tree), "*")} />
           </Box>
         </Stack>
       </Grid>
