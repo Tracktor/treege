@@ -1,4 +1,5 @@
-import type { RawNodeDatum } from "react-d3-tree/lib/types/common";
+import type { HierarchyPointNode } from "d3-hierarchy";
+import type { CustomNodeElementProps, RawNodeDatum } from "react-d3-tree/lib/types/common";
 
 export interface TreeNodeField {
   depth: number;
@@ -27,3 +28,9 @@ export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> 
   attributes: TreeNodeAttributes;
   children: TreeNode[];
 }
+
+export interface TreeCustomNodeElementProps extends Omit<CustomNodeElementProps, "hierarchyPointNode"> {
+  hierarchyPointNode: HierarchyPointNode<TreeNode>;
+}
+
+export type TreeRenderCustomNodeElementFn = (rd3tNodeProps: TreeCustomNodeElementProps) => JSX.Element;

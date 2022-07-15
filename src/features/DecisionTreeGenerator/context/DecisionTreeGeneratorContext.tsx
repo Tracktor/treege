@@ -1,13 +1,12 @@
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { createContext, Dispatch, ReducerAction, SetStateAction } from "react";
-import type { TreeNodeDatum } from "react-d3-tree/lib/types/common";
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 
 export interface TreeDefaultValue {
-  currentHierarchyPointNode: null | HierarchyPointNode<TreeNodeDatum>;
+  currentHierarchyPointNode: null | HierarchyPointNode<TreeNode>;
   dispatchTree: Dispatch<ReducerAction<any>>;
   modalOpen: "add" | "edit" | "delete" | null;
-  setCurrentHierarchyPointNode: Dispatch<SetStateAction<null | HierarchyPointNode<TreeNodeDatum>>>;
+  setCurrentHierarchyPointNode: Dispatch<SetStateAction<null | HierarchyPointNode<TreeNode>>>;
   setModalOpen: Dispatch<SetStateAction<"add" | "edit" | "delete" | null>>;
   tree: TreeNode;
 }

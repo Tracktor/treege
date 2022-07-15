@@ -1,22 +1,22 @@
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { useContext } from "react";
-import type { TreeNodeDatum } from "react-d3-tree/lib/types/common";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
+import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 
 const useTreeCardContainer = () => {
   const { setModalOpen, setCurrentHierarchyPointNode } = useContext(DecisionTreeGeneratorContext);
 
-  const handleAddChildren = (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => {
+  const handleAddChildren = (hierarchyPointNode: HierarchyPointNode<TreeNode>) => {
     setCurrentHierarchyPointNode(hierarchyPointNode);
     setModalOpen("add");
   };
 
-  const handleDeleteChildren = (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => {
+  const handleDeleteChildren = (hierarchyPointNode: HierarchyPointNode<TreeNode>) => {
     setCurrentHierarchyPointNode(hierarchyPointNode);
     setModalOpen("delete");
   };
 
-  const handleEditChildren = (hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>) => {
+  const handleEditChildren = (hierarchyPointNode: HierarchyPointNode<TreeNode>) => {
     setCurrentHierarchyPointNode(hierarchyPointNode);
     setModalOpen("edit");
   };

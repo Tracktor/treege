@@ -8,12 +8,13 @@ import { useTranslation } from "react-i18next";
 import styles from "./TreeCard.module.scss";
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 
-interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum"> {
+interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum" | "hierarchyPointNode"> {
   nodeDatum: TreeNode | TreeNodeDatum;
   size?: number;
-  onAddChildren?(hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>): void;
-  onEditChildren?(hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>): void;
-  onDeleteChildren?(hierarchyPointNode: HierarchyPointNode<TreeNodeDatum>): void;
+  onAddChildren?(hierarchyPointNode: HierarchyPointNode<TreeNode>): void;
+  onEditChildren?(hierarchyPointNode: HierarchyPointNode<TreeNode>): void;
+  onDeleteChildren?(hierarchyPointNode: HierarchyPointNode<TreeNode>): void;
+  hierarchyPointNode: HierarchyPointNode<TreeNode>;
 }
 
 const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, hierarchyPointNode, size = 220 }: TreeCardProps) => {

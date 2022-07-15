@@ -1,7 +1,9 @@
 import type { SelectChangeEvent } from "@mui/material/Select";
+import type { HierarchyPointNode } from "d3-hierarchy";
 import { ChangeEvent, FormEvent, useContext, useEffect, useMemo, useState } from "react";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
 import { appendTreeCard, replaceTreeCard } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
+import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 
 const useFormTreeCardMutation = () => {
   const defaultValues = useMemo(() => [{ id: "0", label: "", value: "" }], []);
@@ -67,6 +69,18 @@ const useFormTreeCardMutation = () => {
     setValues((prevState) => prevState.filter(({ id }) => idToDelete !== id));
   };
 
+  const getCurrentChildrenValues = (hierarchyPointNode: null | HierarchyPointNode<TreeNode>, index: number) => {
+    if (!hierarchyPointNode?.children?.[index]?.data?.children) {
+      return [];
+    }
+
+    return hierarchyPointNode.children[index].data.children.map(({ name: childrenName, attributes, children }) => ({
+      attributes,
+      children,
+      name: childrenName,
+    }));
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
@@ -85,13 +99,13 @@ const useFormTreeCardMutation = () => {
       },
       children: values
         ?.filter((_, index) => !getDisabledValueField(index))
-        ?.map(({ value, label }) => ({
+        ?.map(({ value, label }, index) => ({
           attributes: {
             depth: depth + 1,
             label,
             value,
           },
-          children: [],
+          children: getCurrentChildrenValues(currentHierarchyPointNode, index),
           name: `${label} ${value}`,
         })),
       name,
@@ -122,7 +136,7 @@ const useFormTreeCardMutation = () => {
     currentHierarchyPointNode?.data.attributes?.disabled,
     currentHierarchyPointNode?.data.attributes?.required,
     currentHierarchyPointNode?.data.attributes?.type,
-    currentHierarchyPointNode?.data.attributes?.values,
+    currentHierarchyPointNode?.data.attributes?.value,
     currentHierarchyPointNode?.data.name,
     defaultValues,
     modalOpen,

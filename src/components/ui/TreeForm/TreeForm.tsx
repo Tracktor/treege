@@ -3,11 +3,12 @@ import Tree from "react-d3-tree";
 import type { RenderCustomNodeElementFn } from "react-d3-tree/lib/types/common";
 import styles from "./TreeForm.module.scss";
 import useTreeForm from "@/components/ui/TreeForm/useTreeForm";
+import type { TreeRenderCustomNodeElementFn } from "@/features/DecisionTreeGenerator/type/TreeNode";
 
-interface TreeDragZoneProps {
+interface TreeFormProps {
   data: any;
   nodeSize?: { x: number; y: number };
-  renderCustomNodeElement?: RenderCustomNodeElementFn;
+  renderCustomNodeElement?: TreeRenderCustomNodeElementFn;
 }
 
 const TreeForm = ({
@@ -17,7 +18,7 @@ const TreeForm = ({
     x: 300,
     y: 300,
   },
-}: TreeDragZoneProps) => {
+}: TreeFormProps) => {
   const { dimensions, refContainer, translate } = useTreeForm();
 
   return (
@@ -27,7 +28,7 @@ const TreeForm = ({
         orientation="vertical"
         translate={translate}
         dimensions={dimensions}
-        renderCustomNodeElement={renderCustomNodeElement}
+        renderCustomNodeElement={renderCustomNodeElement as unknown as RenderCustomNodeElementFn}
         pathFunc="diagonal"
         pathClassFunc={() => styles.Link}
         nodeSize={nodeSize}
