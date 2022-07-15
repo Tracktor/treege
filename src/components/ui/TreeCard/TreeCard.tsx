@@ -24,7 +24,13 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
 
   return (
     <g>
-      <foreignObject height={size} width={size} x={`-${size / 2}`} className={isFieldCard ? styles.ContainerField : styles.ContainerValue}>
+      <foreignObject
+        height={size}
+        width={size}
+        x={`-${size / 2}`}
+        y={`-${size / 2}`}
+        className={isFieldCard ? styles.ContainerField : styles.ContainerValue}
+      >
         <Box flex={1} display="flex" p={2} height="100%" flexDirection="column" justifyContent="space-between">
           <Stack alignItems="flex-end">
             {nodeDatum?.attributes?.type && <h4 className={styles.Title}>{nodeDatum.name}</h4>}
