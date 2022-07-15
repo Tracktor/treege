@@ -4,7 +4,7 @@ import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/c
 
 const useTreeGrid = () => {
   const { t } = useTranslation("modal");
-  const { currentHierarchyPointNode, modalOpen, setModalOpen } = useContext(DecisionTreeGeneratorContext);
+  const { tree, currentHierarchyPointNode, modalOpen, setModalOpen } = useContext(DecisionTreeGeneratorContext);
   const isEditModal = modalOpen === "edit";
   const isAddModal = modalOpen === "add";
   const isModalMutationOpen = isEditModal || isAddModal;
@@ -23,7 +23,11 @@ const useTreeGrid = () => {
 
   const closeModal = () => setModalOpen(null);
 
-  return { closeModal, getTitleModalDelete, getTitleModalMutation, isModalMutationOpen };
+  const handleOnSave = () => {
+    window.parent.postMessage({ source: "treege", tree, type: "onSave" }, "*");
+  };
+
+  return { closeModal, getTitleModalDelete, getTitleModalMutation, handleOnSave, isModalMutationOpen };
 };
 
 export default useTreeGrid;

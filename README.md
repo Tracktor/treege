@@ -7,6 +7,7 @@
 </div>
 
 ### Embed Treege
+
 #### You can easily embed Treege in any HTML page
 
 ```html
@@ -32,13 +33,15 @@
 <iframe src="{{YOUR_TREEGE_URL}}"></iframe>
 
 <script>
+    // Handle event from iframe
     (function () {
-        window.addEventListener('message', handleMessage, false);
+        window.addEventListener('message', handleMessage);
 
         function handleMessage(event) {
-            if (event.origin === "{{YOUR_TREEGE_URL}}") {
-                // Get data from Treege
-                console.log(JSON.parse(event.data));
+            // On save event is trigger from iframe
+            if (event.origin === "{{YOUR_TREEGE_URL}}" && event.data.type === "onSave" && event.data.source === "treege") {
+                // Get tree data from Treege
+                console.log(event.data.tree);
             }
         }
     }());

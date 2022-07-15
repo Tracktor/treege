@@ -14,7 +14,7 @@ import FormTreeCardMutation from "@/features/Forms/FormTreeCardMutation/FormTree
 
 const TreeGrid = () => {
   const { tree, modalOpen } = useContext(DecisionTreeGeneratorContext);
-  const { getTitleModalMutation, closeModal, getTitleModalDelete, isModalMutationOpen } = useTreeGrid();
+  const { getTitleModalMutation, closeModal, getTitleModalDelete, handleOnSave, isModalMutationOpen } = useTreeGrid();
 
   return (
     <Grid container padding={1} flexWrap="nowrap">
@@ -40,7 +40,7 @@ const TreeGrid = () => {
             <ViewerJSON value={tree} />
           </Box>
           <Box className={styles.BoxSmall} p={2}>
-            <ViewerJSONAction value={tree} onSave={() => window.parent.postMessage(JSON.stringify(tree), "*")} />
+            <ViewerJSONAction value={tree} onSave={handleOnSave} />
           </Box>
         </Stack>
       </Grid>
