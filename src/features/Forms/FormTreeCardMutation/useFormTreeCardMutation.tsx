@@ -69,30 +69,28 @@ const useFormTreeCardMutation = () => {
     setValues((prevState) => prevState.filter(({ id }) => idToDelete !== id));
   };
 
-  const getChildrenOfField = (hierarchyPointNode: null | HierarchyPointNode<TreeNode>, index: number) => {
-    if (!hierarchyPointNode?.children?.[index]?.data?.children) {
+  const getNestedChildren = (hierarchyPointNode: null | HierarchyPointNode<TreeNode>, index: number) => {
+    const nestedChildren = hierarchyPointNode?.children?.[index]?.data?.children;
+
+    if (!nestedChildren) {
       return [];
     }
 
-    return hierarchyPointNode.children[index].data.children.map(({ name: childrenName, attributes, children }) => ({
+    return nestedChildren.map(({ name: childrenName, attributes, children }) => ({
       attributes,
       children,
       name: childrenName,
     }));
   };
 
-  const getPaths = (currentPath: string[], prevName: string, nextName: string, isEdit: boolean) => {
-    if (!currentPath) {
+  const getPaths = (hierarchyPointNode: null | HierarchyPointNode<TreeNode>, nextName: string, isEdit: boolean) => {
+    const paths = hierarchyPointNode?.data?.attributes?.paths;
+
+    if (!paths) {
       return [];
     }
 
-    return [...currentPath, nextName].filter((path) => {
-      if (isEdit && prevName !== nextName) {
-        return path !== prevName;
-      }
-
-      return true;
-    });
+    return isEdit ? paths : [...paths, nextName];
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -100,10 +98,9 @@ const useFormTreeCardMutation = () => {
 
     const prevName = String(currentHierarchyPointNode?.data?.name);
     const prevDepth = Number(currentHierarchyPointNode?.depth);
-    const prevPath = currentHierarchyPointNode?.data?.attributes?.paths || [];
     const isEdit = modalOpen === "edit";
     const depth = prevDepth + (isEdit ? 0 : 1);
-    const paths = getPaths(prevPath, prevName, name, isEdit);
+    const paths = getPaths(currentHierarchyPointNode, name, isEdit);
 
     const children = {
       attributes: {
@@ -123,7 +120,7 @@ const useFormTreeCardMutation = () => {
             paths: [...paths, `${label} ${value}`],
             value,
           },
-          children: getChildrenOfField(currentHierarchyPointNode, index),
+          children: getNestedChildren(currentHierarchyPointNode, index),
           name: `${label} ${value}`,
         })),
       name,
