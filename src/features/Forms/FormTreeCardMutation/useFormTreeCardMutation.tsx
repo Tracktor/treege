@@ -17,11 +17,15 @@ const useFormTreeCardMutation = () => {
 
   const getDisabledValueField = (index: number) => !isMultipleFieldValuesSelected && index > 0;
 
-  const handleChangeLabel = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleValues = (event: ChangeEvent<HTMLInputElement>, predicate: "value" | "label") => {
     setValues((prevState) =>
       prevState.map(({ value, label, id }) => {
         if (event.target.dataset.id === id) {
-          return { id, label: event.target.value, value };
+          return {
+            id,
+            label: predicate === "value" ? label : event.target.value,
+            value: predicate === "value" ? event.target.value : value,
+          };
         }
 
         return { id, label, value };
@@ -29,16 +33,12 @@ const useFormTreeCardMutation = () => {
     );
   };
 
-  const handleChangeValue = (event: ChangeEvent<HTMLInputElement>) => {
-    setValues((prevState) =>
-      prevState.map(({ value, label, id }) => {
-        if (event.target.dataset.id === id) {
-          return { id, label, value: event.target.value };
-        }
+  const handleChangeLabel = (event: ChangeEvent<HTMLInputElement>) => {
+    handleValues(event, "label");
+  };
 
-        return { id, label, value };
-      })
-    );
+  const handleChangeValue = (event: ChangeEvent<HTMLInputElement>) => {
+    handleValues(event, "value");
   };
 
   const handleChangeDisabled = (event: ChangeEvent<HTMLInputElement>) => {
@@ -96,17 +96,17 @@ const useFormTreeCardMutation = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    const prevName = String(currentHierarchyPointNode?.data?.name);
-    const prevDepth = Number(currentHierarchyPointNode?.depth);
+    const currentName = String(currentHierarchyPointNode?.data?.name);
+    const currentDepth = Number(currentHierarchyPointNode?.depth);
     const isEdit = modalOpen === "edit";
-    const depth = prevDepth + (isEdit ? 0 : 1);
+    const depth = currentDepth + (isEdit ? 0 : 1);
     const paths = getPaths(currentHierarchyPointNode, name, isEdit);
 
     const children = {
       attributes: {
         depth,
         disabled,
-        ...(prevDepth === 0 && { isRoot: true }),
+        ...(currentDepth === 0 && { isRoot: true }),
         paths,
         required,
         type,
@@ -126,7 +126,7 @@ const useFormTreeCardMutation = () => {
       name,
     };
 
-    dispatchTree(isEdit ? replaceTreeCard(prevName, children) : appendTreeCard(prevName, children));
+    dispatchTree(isEdit ? replaceTreeCard(currentName, children) : appendTreeCard(currentName, children));
     setModalOpen(null);
   };
 
