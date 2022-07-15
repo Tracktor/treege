@@ -72,12 +72,14 @@ const useFormTreeCardMutation = () => {
 
     const isEdit = modalOpen === "edit";
     const currentName = String(currentHierarchyPointNode?.data?.name);
-    const depth = Number(currentHierarchyPointNode?.depth) + (isEdit ? 0 : 1);
+    const currentDepth = Number(currentHierarchyPointNode?.depth);
+    const depth = currentDepth + (isEdit ? 0 : 1);
 
     const children = {
       attributes: {
         depth,
         disabled,
+        ...(currentDepth === 0 && { isRoot: true }),
         required,
         type,
       },
