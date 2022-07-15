@@ -6,10 +6,18 @@
   }
 }
 
-
 .Container {
-  border: solid 1px $borderBlueLight;
   background: $backgroundPrimary;
+}
+
+.ContainerField {
+  @extend .Container;
+  border: solid 1px $primaryMain;
+}
+
+.ContainerValue {
+  @extend .Container;
+  border: solid 1px $primaryLight;
 }
 
 .Title {

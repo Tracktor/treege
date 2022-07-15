@@ -7,6 +7,11 @@ const darkTheme = createTheme({
       default: colors.backgroundPrimary,
     },
     mode: "dark",
+    primary: {
+      dark: colors.primaryDark,
+      light: colors.primaryLight,
+      main: colors.primaryMain,
+    },
   },
 });
 

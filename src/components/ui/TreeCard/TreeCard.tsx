@@ -18,12 +18,12 @@ interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum"> {
 
 const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, hierarchyPointNode, size = 220 }: TreeCardProps) => {
   const { t } = useTranslation(["translation", "form"]);
-  const isRoot = hierarchyPointNode?.depth > 0;
-  const hasType = hierarchyPointNode?.data?.attributes?.type;
+  const isRootCard = hierarchyPointNode?.data?.attributes?.isRoot;
+  const isFieldCard = hierarchyPointNode?.data?.attributes?.type;
 
   return (
     <g>
-      <foreignObject height={size} width={size} x={`-${size / 2}`} className={styles.Container}>
+      <foreignObject height={size} width={size} x={`-${size / 2}`} className={isFieldCard ? styles.ContainerField : styles.ContainerValue}>
         <Box flex={1} display="flex" p={2} height="100%" flexDirection="column" justifyContent="space-between">
           <Stack alignItems="flex-end">
             {nodeDatum?.attributes?.type && <h4 className={styles.Title}>{nodeDatum.name}</h4>}
@@ -40,7 +40,7 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
             </Stack>
           </Stack>
           <Stack direction="row" justifyContent="flex-end" spacing={0} alignSelf="flex-end">
-            {isRoot && (
+            {!isRootCard && (
               <Tooltip title={t("remove")}>
                 <Button
                   variant="text"
@@ -52,14 +52,14 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
                 </Button>
               </Tooltip>
             )}
-            {hasType && (
+            {isFieldCard && (
               <Tooltip title={t("edit")}>
-                <Button variant="text" className={styles.ActionButton} onClick={() => onEditChildren?.(hierarchyPointNode)}>
+                <Button variant="text" color="info" className={styles.ActionButton} onClick={() => onEditChildren?.(hierarchyPointNode)}>
                   <EditRoundedIcon />
                 </Button>
               </Tooltip>
             )}
-            {!hasType && (
+            {!isFieldCard && (
               <Tooltip title={t("add")}>
                 <Button variant="text" color="success" className={styles.ActionButton} onClick={() => onAddChildren?.(hierarchyPointNode)}>
                   <AddBoxRoundedIcon />
