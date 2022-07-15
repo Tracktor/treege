@@ -30,7 +30,6 @@ export const treeDefaultValue: TreeDefaultValue = {
       {
         attributes: {
           depth: 1,
-          isLeaf: true,
           label: "Age",
           value: "20",
         },
@@ -40,7 +39,6 @@ export const treeDefaultValue: TreeDefaultValue = {
       {
         attributes: {
           depth: 1,
-          isLeaf: true,
           label: "Age",
           value: "30",
         },
