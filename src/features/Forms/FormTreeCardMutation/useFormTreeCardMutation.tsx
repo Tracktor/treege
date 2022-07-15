@@ -133,7 +133,7 @@ const useFormTreeCardMutation = () => {
     setModalOpen(null);
   };
 
-  // Populate form data
+  // Set initial form data
   useEffect(() => {
     if (modalOpen === "edit") {
       const initialValues = currentHierarchyPointNode?.data?.children
