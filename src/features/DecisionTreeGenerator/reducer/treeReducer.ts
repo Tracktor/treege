@@ -5,6 +5,7 @@ export const treeReducerActionType = {
   appendTreeCard: "appendTreeCard",
   deleteTreeCard: "deleteTreeCard",
   replaceTreeCard: "replaceTreeCard",
+  setTree: "setTree",
 } as const;
 
 export const appendTreeCard = (name: string, children: TreeNode) => ({
@@ -24,6 +25,11 @@ export const replaceTreeCard = (name: string, children: TreeNode) => ({
   type: treeReducerActionType.replaceTreeCard,
 });
 
+export const setTree = (tree: TreeNode) => ({
+  tree,
+  type: treeReducerActionType.setTree,
+});
+
 const treeReducer = (state: any, action: any) => {
   switch (action.type) {
     case treeReducerActionType.appendTreeCard:
@@ -36,6 +42,8 @@ const treeReducer = (state: any, action: any) => {
       return removeObject(state, { name: action.name });
     case treeReducerActionType.replaceTreeCard:
       return replaceObject(state, { name: action.name }, action.children);
+    case treeReducerActionType.setTree:
+      return action.tree;
     default:
       throw new Error();
   }

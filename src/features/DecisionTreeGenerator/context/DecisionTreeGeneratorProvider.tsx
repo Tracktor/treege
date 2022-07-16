@@ -1,6 +1,6 @@
-import { ReactNode, useMemo, useReducer, useState } from "react";
+import { ReactNode, useEffect, useMemo, useReducer, useState } from "react";
 import { DecisionTreeGeneratorContext, treeDefaultValue } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
-import treeReducer from "@/features/DecisionTreeGenerator/reducer/treeReducer";
+import treeReducer, { setTree } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 
 interface DecisionTreeGeneratorContextProviderProps {
   children: ReactNode;
@@ -10,6 +10,20 @@ const DecisionTreeGeneratorContextProvider = ({ children }: DecisionTreeGenerato
   const [currentHierarchyPointNode, setCurrentHierarchyPointNode] = useState(treeDefaultValue.currentHierarchyPointNode);
   const [modalOpen, setModalOpen] = useState(treeDefaultValue.modalOpen);
   const [tree, dispatchTree] = useReducer(treeReducer, treeDefaultValue.tree);
+
+  const handleMessage = (event: MessageEvent) => {
+    if (event.data?.source === "treege" && event.data?.type === "initTree") {
+      dispatchTree(setTree(event.data?.tree));
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("message", handleMessage, false);
+
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, []);
 
   const value = useMemo(
     () => ({

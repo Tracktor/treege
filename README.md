@@ -33,6 +33,30 @@
 <iframe src="{{YOUR_TREEGE_URL}}"></iframe>
 
 <script>
+    // Set initial data
+    (function() {
+        const iframe = document.querySelector("iframe");
+
+        iframe.addEventListener("load", handleLoadIframe)
+
+        function handleLoadIframe() {
+            const tree = {
+                attributes: {
+                    depth: 0,
+                    disabled: false,
+                    isRoot: true,
+                    paths: ["Age"],
+                    required: false,
+                    type: "select",
+                },
+                children: [],
+                name: "Age",
+            }
+
+            iframe.contentWindow.postMessage({source : "treege", tree, type: "initTree"}, "*")
+        }
+    })();
+
     // Handle event from iframe
     (function () {
         window.addEventListener('message', handleMessage);
@@ -44,7 +68,7 @@
                 console.log(event.data.tree);
             }
         }
-    }());
+    })();
 </script>
 
 </body>
