@@ -14,6 +14,9 @@ i18n
       escapeValue: false,
     },
     load: "languageOnly",
+    react: {
+      useSuspense: false,
+    },
   });
 
 export default i18n;

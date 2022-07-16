@@ -8,7 +8,7 @@ export interface TreeDefaultValue {
   modalOpen: "add" | "edit" | "delete" | null;
   setCurrentHierarchyPointNode(state: SetStateAction<null | HierarchyPointNode<TreeNode>>): void;
   setModalOpen(state: SetStateAction<"add" | "edit" | "delete" | null>): void;
-  tree: TreeNode;
+  tree: null | TreeNode;
 }
 
 export const treeDefaultValue: TreeDefaultValue = {
@@ -17,39 +17,7 @@ export const treeDefaultValue: TreeDefaultValue = {
   modalOpen: null,
   setCurrentHierarchyPointNode: () => null,
   setModalOpen: () => null,
-  tree: {
-    attributes: {
-      depth: 0,
-      disabled: false,
-      isRoot: true,
-      paths: ["Age"],
-      required: false,
-      type: "select",
-    },
-    children: [
-      {
-        attributes: {
-          depth: 1,
-          label: "Age",
-          paths: ["Age", "Age 20"],
-          value: "20",
-        },
-        children: [],
-        name: "Age 20",
-      },
-      {
-        attributes: {
-          depth: 1,
-          label: "Age",
-          paths: ["Age", "Age 30"],
-          value: "30",
-        },
-        children: [],
-        name: "Age 30",
-      },
-    ],
-    name: "Age",
-  },
+  tree: null,
 };
 
 export const DecisionTreeGeneratorContext = createContext(treeDefaultValue);

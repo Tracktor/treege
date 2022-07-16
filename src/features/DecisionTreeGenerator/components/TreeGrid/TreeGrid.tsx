@@ -6,6 +6,7 @@ import MainModal from "@/components/ui/MainModal/MainModal";
 import TreeForm from "@/components/ui/TreeForm/TreeForm";
 import ViewerJSON from "@/components/ui/ViewerJSON/ViewerJSON";
 import ViewerJSONAction from "@/components/ui/ViewerJSONAction/ViewerJSONAction";
+import ButtonCreateTree from "@/features/DecisionTreeGenerator/components/ButtonCreateTree/ButtonCreateTree";
 import TreeCardContainer from "@/features/DecisionTreeGenerator/components/TreeCardContainer/TreeCardContainer";
 import useTreeGrid from "@/features/DecisionTreeGenerator/components/TreeGrid/useTreeGrid";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
@@ -24,7 +25,7 @@ const TreeGrid = () => {
             <img src={Logo} alt="Treege" height={30} width="auto" />
           </Box>
           <Box className={styles.Box}>
-            <TreeForm data={tree} renderCustomNodeElement={TreeCardContainer} />
+            {tree ? <TreeForm data={tree} renderCustomNodeElement={TreeCardContainer} /> : <ButtonCreateTree />}
             <MainModal open={isModalMutationOpen} onClose={closeModal} title={getTitleModalMutation()}>
               <FormTreeCardMutation onClose={closeModal} />
             </MainModal>

@@ -21,6 +21,10 @@ const TreeForm = ({
 }: TreeFormProps) => {
   const { dimensions, refContainer, translate } = useTreeForm();
 
+  if (!data) {
+    return null;
+  }
+
   return (
     <div className={styles.Container} ref={refContainer}>
       <Tree

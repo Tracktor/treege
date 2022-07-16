@@ -2,7 +2,7 @@ import type { SelectChangeEvent } from "@mui/material/Select";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { ChangeEvent, FormEvent, useContext, useEffect, useMemo, useState } from "react";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
-import { appendTreeCard, replaceTreeCard } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
+import { appendTreeCard, replaceTreeCard, setTree } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 
 const useFormTreeCardMutation = () => {
@@ -87,7 +87,7 @@ const useFormTreeCardMutation = () => {
     const paths = hierarchyPointNode?.data?.attributes?.paths;
 
     if (!paths) {
-      return [];
+      return [nextName];
     }
 
     return isEdit ? paths : [...paths, nextName];
@@ -96,10 +96,11 @@ const useFormTreeCardMutation = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    const currentName = String(currentHierarchyPointNode?.data?.name);
-    const currentDepth = Number(currentHierarchyPointNode?.depth);
+    const currentName = currentHierarchyPointNode?.data?.name || "";
+    const currentDepth = currentHierarchyPointNode?.depth || 0;
+    const isRoot = !currentName;
     const isEdit = modalOpen === "edit";
-    const depth = currentDepth + (isEdit ? 0 : 1);
+    const depth = isRoot ? 0 : currentDepth + (isEdit ? 0 : 1);
     const paths = getPaths(currentHierarchyPointNode, name, isEdit);
 
     const children = {
@@ -126,7 +127,14 @@ const useFormTreeCardMutation = () => {
       name,
     };
 
-    dispatchTree(isEdit ? replaceTreeCard(currentName, children) : appendTreeCard(currentName, children));
+    if (isRoot) {
+      dispatchTree(setTree(children));
+    } else if (isEdit) {
+      dispatchTree(replaceTreeCard(currentName, children));
+    } else {
+      dispatchTree(appendTreeCard(currentName, children));
+    }
+
     setModalOpen(null);
   };
 

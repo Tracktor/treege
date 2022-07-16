@@ -14,10 +14,10 @@ const ViewerJSONAction = ({ downloadedFileName = "export", onSave, value }: View
 
   return (
     <Stack direction="row" spacing={2} justifyContent="center">
-      <Button variant="outlined" href={getDownloadLink(value)} download={`${downloadedFileName}.json`}>
+      <Button variant="outlined" href={getDownloadLink(value)} download={`${downloadedFileName}.json`} disabled={!value}>
         <SimCardDownloadRoundedIcon />
       </Button>
-      <Button variant="outlined" onClick={onSave}>
+      <Button variant="outlined" onClick={onSave} disabled={!value}>
         <SaveRoundedIcon />
       </Button>
     </Stack>
