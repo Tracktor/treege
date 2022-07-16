@@ -8,7 +8,7 @@
 
 ### Embed Treege
 
-#### You can easily embed Treege in any HTML page
+<p>You can easily embed Treege in any HTML page and interact with her.</p>
 
 ```html
 <!doctype html>
@@ -21,7 +21,6 @@
         iframe {
             overflow: hidden;
             margin: 0;
-            padding: 0;
             height: 100%;
             width: 100%;
             border: 0;
@@ -33,11 +32,11 @@
 <iframe src="{{YOUR_TREEGE_URL}}"></iframe>
 
 <script>
-    // Set initial data
-    (function() {
+    (function () {
         const iframe = document.querySelector("iframe");
 
-        iframe.addEventListener("load", handleLoadIframe)
+        iframe.addEventListener("load", handleLoadIframe);
+        window.addEventListener('message', handleMessage);
 
         function handleLoadIframe() {
             const tree = {
@@ -53,13 +52,11 @@
                 name: "Age",
             }
 
-            iframe.contentWindow.postMessage({source : "treege", tree, type: "initTree"}, "*")
+            // Set initial data
+            setTimeout(() => {
+                iframe.contentWindow.postMessage({source: "treege", tree, type: "initTree"}, "*");
+            }, 100);
         }
-    })();
-
-    // Handle event from iframe
-    (function () {
-        window.addEventListener('message', handleMessage);
 
         function handleMessage(event) {
             // On save event is trigger from iframe
