@@ -14,6 +14,11 @@ const useTreeGrid = () => {
 
   const getTitleModalMutation = () => {
     const name = currentHierarchyPointNode?.data.name;
+
+    if (!name) {
+      return t("addFirstTitle", { name });
+    }
+
     const translateKey = isEditModal ? "editTitle" : "addTitle";
 
     return t(translateKey, { name });
