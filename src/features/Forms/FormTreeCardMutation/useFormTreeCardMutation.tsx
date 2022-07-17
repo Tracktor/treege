@@ -83,14 +83,18 @@ const useFormTreeCardMutation = () => {
     }));
   };
 
-  const getPaths = (hierarchyPointNode: null | HierarchyPointNode<TreeNode>, nextName: string, isEdit: boolean) => {
+  const getPaths = (hierarchyPointNode: null | HierarchyPointNode<TreeNode>, prevName: string, nextName: string, isEdit: boolean) => {
     const paths = hierarchyPointNode?.data?.attributes?.paths;
 
     if (!paths) {
       return [nextName];
     }
 
-    return isEdit ? paths : [...paths, nextName];
+    if (isEdit) {
+      return paths.map((path) => (path === prevName ? nextName : path));
+    }
+
+    return [...paths, nextName];
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -101,7 +105,7 @@ const useFormTreeCardMutation = () => {
     const isRoot = !currentHierarchyPointNode;
     const isEdit = modalOpen === "edit";
     const depth = isRoot ? 0 : currentDepth + (isEdit ? 0 : 1);
-    const paths = getPaths(currentHierarchyPointNode, name, isEdit);
+    const paths = getPaths(currentHierarchyPointNode, currentName, name, isEdit);
 
     const children = {
       attributes: {
