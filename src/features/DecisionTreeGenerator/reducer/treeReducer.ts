@@ -1,10 +1,12 @@
-import { appendProps, removeObject, replaceObject, returnFound } from "find-and";
+import { appendProps, changeProps, removeObject, replaceObject, returnFound } from "find-and";
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
+import removeObjectProperty from "@/utils/removeObjectProperty";
 
 export const treeReducerActionType = {
   appendTreeCard: "appendTreeCard",
   deleteTreeCard: "deleteTreeCard",
   replaceTreeCard: "replaceTreeCard",
+  setIsLeaf: "setIsLeaf",
   setTree: "setTree",
 } as const;
 
@@ -30,18 +32,35 @@ export const setTree = (tree: TreeNode) => ({
   type: treeReducerActionType.setTree,
 });
 
+export const setIsLeaf = (name: string, isLeaf: boolean) => ({
+  isLeaf,
+  name,
+  type: treeReducerActionType.setIsLeaf,
+});
+
 const treeReducer = (state: any, action: any) => {
   switch (action.type) {
     case treeReducerActionType.appendTreeCard:
       return appendProps(
         state,
         { name: action.name },
-        { children: [...(returnFound(state, { name: action.name })?.children || []), action.children] }
+        { children: [...(returnFound(state, { name: action.name }).children || []), action.children] }
       );
     case treeReducerActionType.deleteTreeCard:
       return removeObject(state, { name: action.name });
     case treeReducerActionType.replaceTreeCard:
       return replaceObject(state, { name: action.name }, action.children);
+    case treeReducerActionType.setIsLeaf:
+      return changeProps(
+        state,
+        { name: action.name },
+        {
+          attributes: {
+            ...removeObjectProperty(returnFound(state, { name: action.name }).attributes, "isLeaf"),
+            ...(action.isLeaf && { isLeaf: true }),
+          },
+        }
+      );
     case treeReducerActionType.setTree:
       return action.tree;
     default:

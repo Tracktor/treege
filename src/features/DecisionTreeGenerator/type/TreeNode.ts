@@ -4,6 +4,7 @@ import type { CustomNodeElementProps, RawNodeDatum } from "react-d3-tree/lib/typ
 export interface TreeNodeField {
   depth: number;
   disabled: boolean;
+  isLeaf?: boolean;
   isRoot?: boolean;
   label?: never;
   paths: string[];
@@ -15,6 +16,7 @@ export interface TreeNodeField {
 export interface TreeNodeValues {
   depth: number;
   disabled?: never;
+  isLeaf?: boolean;
   isRoot?: never;
   label: string;
   paths: string[];

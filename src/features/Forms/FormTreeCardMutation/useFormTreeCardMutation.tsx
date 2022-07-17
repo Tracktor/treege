@@ -2,7 +2,7 @@ import type { SelectChangeEvent } from "@mui/material/Select";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { ChangeEvent, FormEvent, useContext, useEffect, useMemo, useState } from "react";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
-import { appendTreeCard, replaceTreeCard, setTree } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
+import { appendTreeCard, replaceTreeCard, setIsLeaf, setTree } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 
 const useFormTreeCardMutation = () => {
@@ -121,6 +121,7 @@ const useFormTreeCardMutation = () => {
         ?.map(({ value, label }, index) => ({
           attributes: {
             depth: depth + 1,
+            ...(getNestedChildren(currentHierarchyPointNode, index).length === 0 && { isLeaf: true }),
             label,
             paths: [...paths, `${label} ${value}`],
             value,
@@ -136,6 +137,7 @@ const useFormTreeCardMutation = () => {
     } else if (isEdit) {
       dispatchTree(replaceTreeCard(currentName, children));
     } else {
+      dispatchTree(setIsLeaf(currentName, false));
       dispatchTree(appendTreeCard(currentName, children));
     }
 
