@@ -98,7 +98,7 @@ const useFormTreeCardMutation = () => {
 
     const currentName = currentHierarchyPointNode?.data?.name || "";
     const currentDepth = currentHierarchyPointNode?.depth || 0;
-    const isRoot = !currentName;
+    const isRoot = !currentHierarchyPointNode;
     const isEdit = modalOpen === "edit";
     const depth = isRoot ? 0 : currentDepth + (isEdit ? 0 : 1);
     const paths = getPaths(currentHierarchyPointNode, name, isEdit);
