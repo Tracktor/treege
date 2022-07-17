@@ -20,6 +20,7 @@ interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum" | "hier
 const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, hierarchyPointNode, size = 220 }: TreeCardProps) => {
   const { t } = useTranslation(["translation", "form"]);
   const isFieldCard = hierarchyPointNode?.data?.attributes?.type;
+  const isRootCard = hierarchyPointNode?.data?.attributes?.isRoot;
 
   return (
     <g>
@@ -46,11 +47,18 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
             </Stack>
           </Stack>
           <Stack direction="row" justifyContent="flex-end" spacing={0} alignSelf="flex-end">
-            <Tooltip title={t("remove")}>
-              <Button variant="text" className={styles.ActionButton} color="warning" onClick={() => onDeleteChildren?.(hierarchyPointNode)}>
-                <DeleteOutlineRoundedIcon />
-              </Button>
-            </Tooltip>
+            {!isRootCard && (
+              <Tooltip title={t("remove")}>
+                <Button
+                  variant="text"
+                  className={styles.ActionButton}
+                  color="warning"
+                  onClick={() => onDeleteChildren?.(hierarchyPointNode)}
+                >
+                  <DeleteOutlineRoundedIcon />
+                </Button>
+              </Tooltip>
+            )}
             {isFieldCard && (
               <Tooltip title={t("edit")}>
                 <Button variant="text" color="info" className={styles.ActionButton} onClick={() => onEditChildren?.(hierarchyPointNode)}>
