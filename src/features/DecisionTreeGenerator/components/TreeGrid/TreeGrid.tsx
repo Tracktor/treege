@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import Logo from "@/assets/img/treege-white.svg";
 import GridLayout from "@/components/Layouts/GridLayout/GridLayout";
+import Logo from "@/components/UI/Logo/Logo";
 import MainModal from "@/components/UI/MainModal/MainModal";
 import TreeForm from "@/components/UI/TreeForm/TreeForm";
 import ViewerJSON from "@/components/UI/ViewerJSON/ViewerJSON";
@@ -19,7 +19,7 @@ const TreeGrid = () => {
   return (
     <GridLayout>
       <GridLayout.Header>
-        <img src={Logo} alt="Treege" height={30} width="auto" />
+        <Logo />
       </GridLayout.Header>
 
       <GridLayout.Main>
