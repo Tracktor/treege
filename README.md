@@ -90,4 +90,4 @@ function handleMessage(event) {
 
 | Event name | Data                                        |
 |------------|---------------------------------------------|
-| initTree   | `{source: "treege", type : "setTree, tree}` |
+| setTree    | `{source: "treege", type : "setTree, tree}` |
