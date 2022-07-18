@@ -1,3 +1,5 @@
 {
-  "createTree": "Créer un arbre"
+  "createTree": "Créer un arbre",
+  "downloadJSONFile": "Télécharger le fichier JSON",
+  "save": "Enregistrer"
 }

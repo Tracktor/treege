@@ -48,7 +48,7 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
           </Stack>
           <Stack direction="row" justifyContent="flex-end" spacing={0} alignSelf="flex-end">
             {!isRootCard && (
-              <Tooltip title={t("remove")}>
+              <Tooltip title={t("remove")} arrow>
                 <Button
                   variant="text"
                   className={styles.ActionButton}
@@ -60,14 +60,14 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
               </Tooltip>
             )}
             {isFieldCard && (
-              <Tooltip title={t("edit")}>
+              <Tooltip title={t("edit")} arrow>
                 <Button variant="text" color="info" className={styles.ActionButton} onClick={() => onEditChildren?.(hierarchyPointNode)}>
                   <EditRoundedIcon />
                 </Button>
               </Tooltip>
             )}
             {!isFieldCard && (
-              <Tooltip title={t("add")}>
+              <Tooltip title={t("add")} arrow>
                 <Button variant="text" color="success" className={styles.ActionButton} onClick={() => onAddChildren?.(hierarchyPointNode)}>
                   <AddBoxRoundedIcon />
                 </Button>
