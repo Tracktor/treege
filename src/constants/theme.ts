@@ -8,9 +8,10 @@ const darkTheme = createTheme({
     },
     mode: "dark",
     primary: {
-      dark: colors.primaryDark,
-      light: colors.primaryLight,
       main: colors.primaryMain,
+    },
+    secondary: {
+      main: colors.secondaryMain,
     },
   },
 });

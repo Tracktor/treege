@@ -3,10 +3,14 @@
   "cancel": "Cancel",
   "disabled": "Disabled",
   "edit": "Edit",
+  "isALeaf": "Is a leaf",
+  "isABranch": "Is a branch",
+  "label": "Label",
   "name": "Name",
   "remove": "Remove",
   "required": "Required",
   "type": "Type",
   "validate": "Validate",
+  "value": "Value"
   "values": "Values"
 }

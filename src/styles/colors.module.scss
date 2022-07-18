@@ -1,8 +1,8 @@
 $backgroundPrimary: #0a1929;
 
-$primaryDark: #007ef6;
-$primaryLight: #0364a8;
 $primaryMain: #0ed3b4;
+$secondaryMain: #007ef6;
+$secondaryLight: #0364a8;
 
 $borderLight: rgba(255, 255, 255, 0.1);
 $borderBlueLight: rgba(144, 202, 249, 0.5);
@@ -12,6 +12,6 @@ $borderBlueLight: rgba(144, 202, 249, 0.5);
   borderLight: $borderLight;
   borderBlueLight: $borderBlueLight;
   primaryMain: $primaryMain;
-  primaryDark: $primaryDark;
-  primaryLight: $primaryLight;
+  secondaryMain: $secondaryMain;
+  secondaryLight: $secondaryLight;
 }

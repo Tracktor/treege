@@ -3,10 +3,14 @@
   "cancel": "Annuler",
   "disabled": "Désactivé",
   "edit": "Éditer",
+  "isALeaf": "Est une feuille",
+  "isABranch": "Est une branche",
+  "label": "Label",
   "name": "Nom",
   "remove": "Supprimer",
   "required": "Requis",
   "type": "Type",
   "validate": "Valider",
+  "value": "Valeur",
   "values": "Valeurs"
 }
