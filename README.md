@@ -6,9 +6,9 @@
   <strong>Treege is a tools for decision tree generator</strong>
 </div>
 
-### Embed Treege
+### Embed
 
-<p>You can easily embed Treege in any HTML page and interact with her.</p>
+<p><b>Treege can be easily embed  in any HTML page.</b></p>
 
 ```html
 <!doctype html>
@@ -31,43 +31,50 @@
 
 <iframe src="{{YOUR_TREEGE_URL}}"></iframe>
 
-<script>
-    (function () {
-        const iframe = document.querySelector("iframe");
-
-        iframe.addEventListener("load", handleLoadIframe);
-        window.addEventListener('message', handleMessage);
-
-        function handleLoadIframe() {
-            const tree = {
-                attributes: {
-                    depth: 0,
-                    disabled: false,
-                    isRoot: true,
-                    paths: ["Age"],
-                    required: false,
-                    type: "select",
-                },
-                children: [],
-                name: "Age",
-            }
-
-            // Set initial data
-            setTimeout(() => {
-                iframe.contentWindow.postMessage({source: "treege", tree, type: "initTree"}, "*");
-            }, 100);
-        }
-
-        function handleMessage(event) {
-            // On save event is trigger from iframe
-            if (event.origin === "{{YOUR_TREEGE_URL}}" && event.data.type === "onSave" && event.data.source === "treege") {
-                // Get tree data from Treege
-                console.log(event.data.tree);
-            }
-        }
-    })();
-</script>
-
 </body>
 </html>
+```
+
+<p><b>Data can be passed to iframe</b></p>
+
+```javascript
+const iframe = document.querySelector("iframe");
+
+iframe.addEventListener("load", handleLoadIframe);
+
+function handleLoadIframe() {
+    const tree = {
+        attributes: {
+            depth: 0,
+            disabled: false,
+            isLeaf: true,
+            isRoot: true,
+            paths: ["Age"],
+            required: false,
+            type: "select",
+        },
+        children: [],
+        name: "Age",
+    }
+    
+    setTimeout(() => {
+        iframe.contentWindow.postMessage({source: "treege", tree, type: "initTree"}, "*");
+    }, 100);
+}
+```
+
+<p><b>Listen Treege event</b></p>
+
+```javascript
+const iframe = document.querySelector("iframe");
+
+window.addEventListener('message', handleMessage);
+
+function handleMessage(event) {
+    // On save event is trigger from iframe
+    if (event.origin === "{{YOUR_TREEGE_URL}}" && event.data.type === "onSave" && event.data.source === "treege") {
+        // Get tree data from Treege
+        console.log(event.data.tree);
+    }
+}
 ```
