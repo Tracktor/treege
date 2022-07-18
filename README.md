@@ -58,7 +58,7 @@ function handleLoadIframe() {
     }
 
     setTimeout(() => {
-        iframe.contentWindow.postMessage({source: "treege", tree, type: "initTree"}, "*");
+        iframe.contentWindow.postMessage({source: "treege", tree, type: "setTree"}, "*");
     }, 100);
 }
 ```
@@ -88,6 +88,6 @@ function handleMessage(event) {
 
 #### Liste des événements pouvant être envoyés
 
-| Event name | Data                                         |
-|------------|----------------------------------------------|
-| initTree   | `{source: "treege", type : "initTree, tree}` |
+| Event name | Data                                        |
+|------------|---------------------------------------------|
+| initTree   | `{source: "treege", type : "setTree, tree}` |

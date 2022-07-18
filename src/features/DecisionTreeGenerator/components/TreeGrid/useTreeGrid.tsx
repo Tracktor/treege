@@ -36,7 +36,7 @@ const useTreeGrid = () => {
 
   const handleMessage = useCallback(
     (event: MessageEvent) => {
-      if (event.data?.source === "treege" && event.data?.type === "initTree") {
+      if (event.data?.source === "treege" && event.data?.type === "setTree") {
         dispatchTree(setTree(event.data?.tree));
       }
     },
