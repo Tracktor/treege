@@ -6,9 +6,9 @@
   <strong>Treege is a tools for decision tree generator</strong>
 </div>
 
-### Embed
+## Embed
 
-<p><b>Treege can be easily embed  in any HTML page.</b></p>
+#### Treege can be easily embed  in any HTML page.
 
 ```html
 <!doctype html>
@@ -35,7 +35,7 @@
 </html>
 ```
 
-<p><b>Data can be passed to iframe</b></p>
+#### Data can be passed to iframe
 
 ```javascript
 const iframe = document.querySelector("iframe");
@@ -56,14 +56,14 @@ function handleLoadIframe() {
         children: [],
         name: "Age",
     }
-    
+
     setTimeout(() => {
         iframe.contentWindow.postMessage({source: "treege", tree, type: "initTree"}, "*");
     }, 100);
 }
 ```
 
-<p><b>Listen Treege event</b></p>
+#### Listen Treege event
 
 ```javascript
 const iframe = document.querySelector("iframe");
@@ -78,3 +78,16 @@ function handleMessage(event) {
     }
 }
 ```
+
+### Events available
+#### List of events that can be listened
+
+| Event name | Data                                       |
+|------------|--------------------------------------------|
+| onSave     | `{source: "treege", type : "onSave, tree}` |
+
+#### Liste des événements pouvant être envoyés
+
+| Event name | Data                                         |
+|------------|----------------------------------------------|
+| initTree   | `{source: "treege", type : "initTree, tree}` |
