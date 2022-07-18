@@ -1,4 +1,4 @@
-import TreeCard from "@/components/ui/TreeCard/TreeCard";
+import TreeCard from "@/components/UI/TreeCard/TreeCard";
 import useTreeCardContainer from "@/features/DecisionTreeGenerator/components/TreeCardContainer/useTreeCardContainer";
 import type { TreeCustomNodeElementProps } from "@/features/DecisionTreeGenerator/type/TreeNode";
 

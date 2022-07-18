@@ -2,7 +2,7 @@ import { json } from "@codemirror/lang-json";
 import { dracula } from "@uiw/codemirror-theme-dracula";
 import CodeMirror from "@uiw/react-codemirror";
 import styles from "./ViewerJSON.module.scss";
-import useViewerJSON from "@/components/ui/ViewerJSON/useViewerJSON";
+import useViewerJSON from "@/components/UI/ViewerJSON/useViewerJSON";
 
 interface ViewerJSONProps {
   value: any;

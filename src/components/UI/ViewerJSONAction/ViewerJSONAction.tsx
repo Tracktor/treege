@@ -1,7 +1,7 @@
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import SimCardDownloadRoundedIcon from "@mui/icons-material/SimCardDownloadRounded";
 import { Button, Stack } from "@mui/material";
-import useViewerJSONAction from "@/components/ui/ViewerJSONAction/useViewerJSONAction";
+import useViewerJSONAction from "@/components/UI/ViewerJSONAction/useViewerJSONAction";
 
 interface ViewerJSONProps {
   value: any;
