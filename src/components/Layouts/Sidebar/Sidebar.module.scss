@@ -1,0 +1,7 @@
+@import "src/styles/colors.module";
+
+.Box {
+  border: solid 1px $borderLight;
+  flex-grow: 1;
+  overflow: auto;
+}

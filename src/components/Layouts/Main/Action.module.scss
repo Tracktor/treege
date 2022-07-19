@@ -1,0 +1,6 @@
+@import "src/styles/colors.module";
+
+.BoxSmall {
+  border: solid 1px $borderLight;
+  flex-grow: 0;
+}

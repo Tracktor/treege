@@ -1,5 +1,9 @@
 import { useContext } from "react";
-import GridLayout from "@/components/Layouts/GridLayout/GridLayout";
+import Main from "@/components/Layouts/Action/Main";
+import Header from "@/components/Layouts/Header/Header";
+import Action from "@/components/Layouts/Main/Action";
+import MosaicLayout from "@/components/Layouts/MosaicLayout/MosaicLayout";
+import Sidebar from "@/components/Layouts/Sidebar/Sidebar";
 import Logo from "@/components/UI/Logo/Logo";
 import MainModal from "@/components/UI/MainModal/MainModal";
 import TreeForm from "@/components/UI/TreeForm/TreeForm";
@@ -17,12 +21,12 @@ const TreeGrid = () => {
   const { getTitleModalMutation, closeModal, getTitleModalDelete, handleOnSave, isModalMutationOpen } = useTreeGrid();
 
   return (
-    <GridLayout>
-      <GridLayout.Header>
+    <MosaicLayout>
+      <Header>
         <Logo />
-      </GridLayout.Header>
+      </Header>
 
-      <GridLayout.Main>
+      <Main>
         {tree ? <TreeForm data={tree} renderCustomNodeElement={TreeCardContainer} /> : <ButtonCreateTree />}
         <MainModal open={isModalMutationOpen} onClose={closeModal} title={getTitleModalMutation()}>
           <FormTreeCardMutation onClose={closeModal} />
@@ -30,16 +34,16 @@ const TreeGrid = () => {
         <MainModal open={modalOpen === "delete"} onClose={closeModal} title={getTitleModalDelete()}>
           <FormTreeCardDelete onClose={closeModal} />
         </MainModal>
-      </GridLayout.Main>
+      </Main>
 
-      <GridLayout.SideBar>
+      <Sidebar>
         <ViewerJSON value={tree} />
-      </GridLayout.SideBar>
+      </Sidebar>
 
-      <GridLayout.Action>
+      <Action>
         <ViewerJSONAction value={tree} onSave={handleOnSave} />
-      </GridLayout.Action>
-    </GridLayout>
+      </Action>
+    </MosaicLayout>
   );
 };
 
