@@ -110,7 +110,7 @@
               "!*.module.scss",
               "!*.test.tsx"
             ],
-            "message": "No relative import allowed 1."
+            "message": "No relative import allowed."
           }
         ]
       }
