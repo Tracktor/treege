@@ -68,7 +68,7 @@ function handleLoadIframe() {
 ```javascript
 const iframe = document.querySelector("iframe");
 
-window.addEventListener('message', handleMessage);
+window.addEventListener("message", handleMessage);
 
 function handleMessage(event) {
     // On save event is trigger from iframe
@@ -79,15 +79,59 @@ function handleMessage(event) {
 }
 ```
 
-### Events available
-#### List of events that can be listened
+### Listen events
+List of `event.data` that can be listened with`window.addEventListener("message")`
 
-| Event name | Data                                       |
-|------------|--------------------------------------------|
-| onSave     | `{source: "treege", type : "onSave, tree}` |
+| Event name | Data                                                                                        |
+|------------|---------------------------------------------------------------------------------------------|
+| onSave     | `{source: "treege", type : "onSave", tree : {{attributes: {...}, children: [], name: ""}}}` |
 
-#### Liste des événements pouvant être envoyés
+### Posts events
+List of events that can be sent with `iframe.contentWindow.postMessage`
 
-| Event name | Data                                        |
-|------------|---------------------------------------------|
-| setTree    | `{source: "treege", type : "setTree, tree}` |
+| Event name | Data                                                                                         |
+|------------|----------------------------------------------------------------------------------------------|
+| setTree    | `{source: "treege", type : "setTree", tree : {{attributes: {...}, children: [], name: ""}}}` |
+
+### Types
+Tree data that can be provided
+
+``` typescript
+interface TreeNode {
+  name: string;
+  attributes: TreeNodeAttributes;
+  children: TreeNode[];
+}
+```
+
+``` typescript
+type TreeNodeAttributes = TreeNodeField | TreeNodeValues;
+```
+
+```typescript
+interface TreeNodeField {
+  depth: number;
+  disabled: boolean;
+  isLeaf?: boolean;
+  isRoot?: boolean;
+  label?: never;
+  paths: string[];
+  required: boolean;
+  type: string;
+  value?: never;
+}
+```
+
+``` typescript
+export interface TreeNodeValues {
+  depth: number;
+  disabled?: never;
+  isLeaf?: boolean;
+  isRoot?: never;
+  label: string;
+  paths: string[];
+  required?: never;
+  type?: never;
+  value: string;
+}
+```
