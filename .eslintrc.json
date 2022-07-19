@@ -180,6 +180,14 @@
       "rules": {
         "no-undef": "off"
       }
+    },
+    {
+      "files": [
+        "*.test.tsx"
+      ],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
     }
   ]
 }
