@@ -5,12 +5,12 @@ $secondaryMain: #007ef6;
 $secondaryLight: #0364a8;
 
 $borderLight: rgba(255, 255, 255, 0.1);
-$borderBlueLight: rgba(144, 202, 249, 0.5);
+$borderMedium: rgba(255, 255, 255, 0.5);
 
 :export {
   backgroundPrimary: $backgroundPrimary;
   borderLight: $borderLight;
-  borderBlueLight: $borderBlueLight;
+  borderMedium: $borderMedium;
   primaryMain: $primaryMain;
   secondaryMain: $secondaryMain;
   secondaryLight: $secondaryLight;

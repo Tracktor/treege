@@ -8,6 +8,7 @@
 
 .Container {
   background: $backgroundPrimary;
+  border-radius: 1rem;
 }
 
 .ContainerField {
@@ -17,7 +18,7 @@
 
 .ContainerValue {
   @extend .Container;
-  border: solid 1px $secondaryLight;
+  border: solid 1px $secondaryMain;
 }
 
 .Title {
@@ -26,4 +27,9 @@
 
 .ActionButton {
   min-width: auto !important;
+}
+
+.SmallChip {
+  height: 20px !important;
+  font-size: .7rem !important;
 }

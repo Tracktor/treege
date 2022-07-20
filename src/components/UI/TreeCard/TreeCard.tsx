@@ -40,18 +40,20 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
             {nodeDatum?.attributes?.type && (
               <Chip color="secondary" size="small" label={t(`type.${nodeDatum?.attributes?.type}`, { ns: "form" })} />
             )}
-            <Stack spacing={0} alignItems="flex-end">
+            <Stack spacing={0.5} alignItems="flex-end">
               {nodeDatum?.attributes?.label && (
-                <Tooltip title={t("label")} placement="left">
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <Chip size="small" label={t("label")} className={styles.SmallChip} variant="outlined" />
                   <Typography variant="subtitle2">{nodeDatum?.attributes?.label}</Typography>
-                </Tooltip>
+                </Stack>
               )}
               {nodeDatum?.attributes?.value && (
-                <Tooltip title={t("value")} placement="left">
-                  <Typography color="primary" variant="button">
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <Chip size="small" label={t("value")} className={styles.SmallChip} variant="outlined" color="primary" />
+                  <Typography color="primary" variant="subtitle2">
                     <strong>{nodeDatum?.attributes?.value}</strong>
                   </Typography>
-                </Tooltip>
+                </Stack>
               )}
             </Stack>
             <Box paddingTop={0.5}>
@@ -66,6 +68,7 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
                 <Button
                   variant="text"
                   className={styles.ActionButton}
+                  size="small"
                   color="warning"
                   onClick={() => onDeleteChildren?.(hierarchyPointNode)}
                 >
@@ -75,14 +78,26 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
             )}
             {isFieldCard && (
               <Tooltip title={t("edit")} arrow>
-                <Button variant="text" color="info" className={styles.ActionButton} onClick={() => onEditChildren?.(hierarchyPointNode)}>
+                <Button
+                  variant="text"
+                  color="info"
+                  className={styles.ActionButton}
+                  size="small"
+                  onClick={() => onEditChildren?.(hierarchyPointNode)}
+                >
                   <EditRoundedIcon />
                 </Button>
               </Tooltip>
             )}
             {!isFieldCard && (
               <Tooltip title={t("add")} arrow>
-                <Button variant="text" color="success" className={styles.ActionButton} onClick={() => onAddChildren?.(hierarchyPointNode)}>
+                <Button
+                  variant="text"
+                  color="success"
+                  className={styles.ActionButton}
+                  size="small"
+                  onClick={() => onAddChildren?.(hierarchyPointNode)}
+                >
                   <AddBoxRoundedIcon />
                 </Button>
               </Tooltip>
