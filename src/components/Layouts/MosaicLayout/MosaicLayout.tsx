@@ -3,7 +3,7 @@ import { Children, ReactElement } from "react";
 import styles from "./MosaicLayout.module.scss";
 
 interface GridLayoutProps {
-  children?: ReactElement<any, any>[];
+  children: ReactElement<any, any>[];
 }
 
 const MosaicLayout = ({ children }: GridLayoutProps) => {
@@ -20,7 +20,7 @@ const MosaicLayout = ({ children }: GridLayoutProps) => {
   }
 
   return (
-    <Grid container padding={1} flexWrap="nowrap" height="100%">
+    <Grid container padding={1} flexWrap="nowrap" height="100%" role="treegrid">
       <Grid item xs={9} padding={1} display="flex">
         <Stack className={styles.Stack} spacing={2}>
           {HeaderChildren}

@@ -6,6 +6,10 @@ interface MainProps {
   children?: ReactNode;
 }
 
-const Main = ({ children }: MainProps) => <Box className={styles.Box}>{children}</Box>;
+const Main = ({ children }: MainProps) => (
+  <Box className={styles.Box} component="main" role="tree">
+    {children}
+  </Box>
+);
 
 export default Main;

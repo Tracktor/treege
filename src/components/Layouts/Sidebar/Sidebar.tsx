@@ -6,6 +6,10 @@ interface SidebarProps {
   children?: ReactNode;
 }
 
-const Sidebar = ({ children }: SidebarProps) => <Box className={styles.Box}>{children}</Box>;
+const Sidebar = ({ children }: SidebarProps) => (
+  <Box className={styles.Box} component="aside">
+    {children}
+  </Box>
+);
 
 export default Sidebar;

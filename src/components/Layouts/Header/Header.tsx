@@ -7,7 +7,7 @@ interface HeaderProps {
 }
 
 const Header = ({ children }: HeaderProps) => (
-  <Box className={styles.Box} padding={2}>
+  <Box className={styles.Box} padding={2} component="header">
     {children}
   </Box>
 );

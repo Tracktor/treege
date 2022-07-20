@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { test } from "vitest";
 import Logo from "./Logo";
 
-test("render logo", () => {
+test("render <Logo />", () => {
   render(<Logo />);
 
   const img = screen.getByRole("img");

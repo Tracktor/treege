@@ -7,7 +7,7 @@ interface ActionProps {
 }
 
 const Action = ({ children }: ActionProps) => (
-  <Box className={styles.BoxSmall} p={2}>
+  <Box className={styles.Box} p={2} role="group">
     {children}
   </Box>
 );

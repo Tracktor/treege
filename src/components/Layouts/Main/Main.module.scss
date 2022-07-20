@@ -1,6 +1,6 @@
 @import "src/styles/colors.module";
 
-.BoxSmall {
+.Box {
   border: solid 1px $borderLight;
-  flex-grow: 0;
+  flex-grow: 1;
 }

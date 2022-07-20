@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import Main from "@/components/Layouts/Action/Main";
+import Action from "@/components/Layouts/Action/Action";
 import Header from "@/components/Layouts/Header/Header";
-import Action from "@/components/Layouts/Main/Action";
+import Main from "@/components/Layouts/Main/Main";
 import MosaicLayout from "@/components/Layouts/MosaicLayout/MosaicLayout";
 import Sidebar from "@/components/Layouts/Sidebar/Sidebar";
 import Logo from "@/components/UI/Logo/Logo";
