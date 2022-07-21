@@ -11,7 +11,7 @@
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^1.3.2",
     "@vitest/ui": "0.18.1",
-    "eslint-config-react": "git+https://github.com/Tracktor/eslint-config-react#v1.1.1",
+    "eslint-config-react": "git+https://github.com/Tracktor/eslint-config-react#v1.2.0",
     "jsdom": "20.0.0",
     "vitest": "^0.18.1"
   },
