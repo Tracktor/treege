@@ -39,10 +39,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "craco start",
     "build": "craco build",
     "eject": "craco eject",
     "lint": "eslint .",
+    "start": "craco start",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui"
