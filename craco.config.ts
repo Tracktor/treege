@@ -1,9 +1,11 @@
 import * as path from "path";
 
-export default () => ({
+const config = () => ({
   webpack: {
     alias: {
       "@": path.resolve(__dirname, "src"),
     },
   },
 });
+
+export default config;
