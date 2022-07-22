@@ -1,4 +1,5 @@
-import { Button, Stack } from "@mui/material";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 import { useTranslation } from "react-i18next";
 import useFormTreeCardDelete from "@/features/Forms/FormTreeCardDelete/useFormTreeCardDelete";
 
