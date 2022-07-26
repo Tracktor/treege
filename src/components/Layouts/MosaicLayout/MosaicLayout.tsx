@@ -1,5 +1,5 @@
-import Grid from "@mui/material/Grid";
-import Stack from "@mui/material/Stack";
+import Grid from "design-system/lib/components/Grid";
+import Stack from "design-system/lib/components/Stack";
 import { Children, ReactElement } from "react";
 import styles from "./MosaicLayout.module.scss";
 

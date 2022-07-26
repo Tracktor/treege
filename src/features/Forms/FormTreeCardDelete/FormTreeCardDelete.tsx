@@ -1,5 +1,5 @@
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
+import Button from "design-system/lib/components/Button";
+import Stack from "design-system/lib/components/Stack";
 import { useTranslation } from "react-i18next";
 import useFormTreeCardDelete from "@/features/Forms/FormTreeCardDelete/useFormTreeCardDelete";
 

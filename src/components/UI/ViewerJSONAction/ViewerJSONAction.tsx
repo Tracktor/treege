@@ -1,9 +1,9 @@
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import SimCardDownloadRoundedIcon from "@mui/icons-material/SimCardDownloadRounded";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import Tooltip from "@mui/material/Tooltip";
+import Box from "design-system/lib/components/Box";
+import Button from "design-system/lib/components/Button";
+import Stack from "design-system/lib/components/Stack";
+import Tooltip from "design-system/lib/components/Tooltip";
 import { useTranslation } from "react-i18next";
 import useViewerJSONAction from "@/components/UI/ViewerJSONAction/useViewerJSONAction";
 

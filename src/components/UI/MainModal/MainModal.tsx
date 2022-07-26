@@ -1,5 +1,5 @@
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
+import Box from "design-system/lib/components/Box";
+import Modal from "design-system/lib/components/Modal";
 import type { ReactNode } from "react";
 import styles from "./MainModal.module.scss";
 

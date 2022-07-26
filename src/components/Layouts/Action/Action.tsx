@@ -1,4 +1,4 @@
-import Box from "@mui/material/Box";
+import Box from "design-system/lib/components/Box";
 import type { ReactNode } from "react";
 import styles from "./Action.module.scss";
 
