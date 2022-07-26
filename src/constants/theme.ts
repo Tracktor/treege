@@ -1,7 +1,5 @@
-import { createTheme } from "@mui/material/styles";
+import createTheme from "design-system/lib/styles/createTheme";
 import colors from "@/styles/colors.module.scss";
-
-console.log("test");
 
 const darkTheme = createTheme({
   palette: {
