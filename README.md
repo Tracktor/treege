@@ -6,6 +6,22 @@
   <strong>Treege is a tools for decision tree generator</strong>
 </div>
 
+- [Features](#Features)
+- [Embed](#Embed)
+    - [Data can be passed to iframe](#Data-can-be-passed-to-iframe)
+    - [Listen Treege event](#Listen-Treege-event)
+    - [Listener events](#Listener-events)
+    - [Posts events](#Posts-events)
+- [Types](#Types)
+
+## Features
+
+- 📦 **[React](https://fr.reactjs.org)** - v18+ with Hooks
+- ⚡️ **[Vite](https://vitejs.dev)** - Next Generation Frontend Tooling
+- 📐 **[ESLint](https://eslint.org)** - Code analyzer
+- 🚀 **[Vitest](https://vitest.dev)** - A Vite native unit test framework. It's fast!
+- 🛠️ **[React Testing Library ](https://testing-library.com/docs/react-testing-library/intro/)** - React DOM testing utilities
+
 ## Embed
 
 #### Treege can be easily embed  in any HTML page.
@@ -79,7 +95,7 @@ function handleMessage(event) {
 }
 ```
 
-### Listen events
+### Listener events
 List of `event.data` that can be listened with`window.addEventListener("message")`
 
 | Event name | Data                                                                                        |
