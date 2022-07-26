@@ -1,3 +1,3 @@
-// <reference types="react-scripts" />
+// / <reference types="vite/client" />
 declare module "*.module.scss";
 declare module "*.svg";

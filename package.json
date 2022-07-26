@@ -1,37 +1,24 @@
 {
   "name": "treege",
-  "version": "0.1.0",
   "private": true,
-  "license": "MIT",
+  "license": "ISC",
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "build": "craco build",
-    "eject": "craco eject",
+    "dev": "vite",
+    "build": "tsc && vite build",
     "lint": "eslint .",
-    "start": "craco start",
+    "preview": "vite preview",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui"
   },
-  "devDependencies": {
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/node": "^16.11.43",
-    "@types/react": "^18.0.14",
-    "@types/react-dom": "^18.0.6",
-    "@vitejs/plugin-react": "^1.3.2",
-    "@vitest/ui": "0.18.1",
-    "eslint-config-react": "git+https://github.com/Tracktor/eslint-config-react#1.0.0",
-    "jsdom": "20.0.0",
-    "vitest": "^0.18.1"
-  },
   "dependencies": {
     "@codemirror/lang-json": "^6.0.0",
-    "@craco/craco": "^6.4.4",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.7",
-    "@testing-library/jest-dom": "^5.16.4",
     "@uiw/codemirror-theme-dracula": "^4.10.4",
     "@uiw/react-codemirror": "^4.10.4",
     "find-and": "^1.3.1",
@@ -42,40 +29,21 @@
     "react-d3-tree": "^3.3.2",
     "react-dom": "^18.2.0",
     "react-i18next": "^11.18.0",
-    "react-scripts": "5.0.1",
-    "sass": "^1.53.0",
-    "typescript": "^4.7.4",
-    "web-vitals": "^2.1.4"
+    "sass": "^1.53.0"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "shared-config"
-    ],
-    "rules": {
-      "additional-rule": "warn"
-    },
-    "overrides": [
-      {
-        "files": [
-          "**/*.ts?(x)"
-        ],
-        "rules": {
-          "additional-typescript-only-rule": "warn"
-        }
-      }
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/node": "^16.11.43",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "@vitejs/plugin-react": "^2.0.0",
+    "@vitest/ui": "0.18.1",
+    "eslint-config-react": "git+https://github.com/Tracktor/eslint-config-react",
+    "typescript": "^4.6.4",
+    "jsdom": "20.0.0",
+    "vite": "^3.0.0",
+    "vitest": "^0.18.1"
   }
 }

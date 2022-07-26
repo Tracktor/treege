@@ -11,11 +11,11 @@ export default defineConfig({
   },
   test: {
     coverage: {
-      exclude: ["node_modules/", "src/setupTests.ts"],
+      exclude: ["node_modules/", "config/setupTests.ts"],
       reporter: ["text", "html"],
     },
     environment: "jsdom",
     globals: true,
-    setupFiles: "./src/setupTests.ts",
+    setupFiles: "config/setupTests.ts",
   },
 });
