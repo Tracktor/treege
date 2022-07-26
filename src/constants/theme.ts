@@ -1,8 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 import colors from "@/styles/colors.module.scss";
 
-console.log("test");
-
 const darkTheme = createTheme({
   palette: {
     background: {
