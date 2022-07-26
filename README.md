@@ -8,10 +8,10 @@
 
 - [Features](#Features)
 - [Embed](#Embed)
-    - [Data can be passed to iframe](#Data-can-be-passed-to-iframe)
+    - [Provide data to iframe](#Provide-data-to-iframe)
     - [Listen Treege event](#Listen-Treege-event)
-    - [Listener events](#Listener-events)
-    - [Posts events](#Posts-events)
+    - [Events listener](#Events-listener)
+    - [Events message](#Events-message)
 - [Types](#Types)
 
 ## Features
@@ -51,7 +51,7 @@
 </html>
 ```
 
-#### Data can be passed to iframe
+#### Provide data to iframe
 
 ```javascript
 const iframe = document.querySelector("iframe");
@@ -95,14 +95,14 @@ function handleMessage(event) {
 }
 ```
 
-### Listener events
+### Events listener
 List of `event.data` that can be listened with`window.addEventListener("message")`
 
 | Event name | Data                                                                                        |
 |------------|---------------------------------------------------------------------------------------------|
 | onSave     | `{source: "treege", type : "onSave", tree : {{attributes: {...}, children: [], name: ""}}}` |
 
-### Posts events
+### Events message
 List of events that can be sent with `iframe.contentWindow.postMessage`
 
 | Event name | Data                                                                                         |
