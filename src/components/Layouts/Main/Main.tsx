@@ -1,4 +1,4 @@
-import Box from "design-system/lib/components/Box";
+import { Box } from "design-system";
 import type { ReactNode } from "react";
 import styles from "./Main.module.scss";
 

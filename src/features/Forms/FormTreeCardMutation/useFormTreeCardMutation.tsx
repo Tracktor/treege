@@ -1,5 +1,5 @@
 import type { HierarchyPointNode } from "d3-hierarchy";
-import type { SelectChangeEvent } from "design-system/lib/components/Select";
+import type { SelectChangeEvent } from "design-system";
 import { ChangeEvent, FormEvent, useContext, useEffect, useMemo, useState } from "react";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
 import { appendTreeCard, replaceTreeCard, setIsLeaf, setTree } from "@/features/DecisionTreeGenerator/reducer/treeReducer";

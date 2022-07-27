@@ -1,4 +1,4 @@
-import createTheme from "design-system/lib/styles/createTheme";
+import { createTheme } from "design-system";
 import colors from "@/styles/colors.module.scss";
 
 const darkTheme = createTheme({

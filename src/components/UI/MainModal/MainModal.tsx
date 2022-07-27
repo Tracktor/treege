@@ -1,5 +1,4 @@
-import Box from "design-system/lib/components/Box";
-import Modal from "design-system/lib/components/Modal";
+import { Box, Modal } from "design-system";
 import type { ReactNode } from "react";
 import styles from "./MainModal.module.scss";
 
