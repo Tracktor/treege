@@ -7,30 +7,20 @@ interface GridLayoutProps {
 }
 
 const MosaicLayout = ({ children }: GridLayoutProps) => {
-  const allowedChildren = ["Header", "Main", "Sidebar", "Action"];
-  const childrenName = Children.map(children, (child) => child?.type?.name);
-  const HeaderChildren = children?.find(({ type }) => type?.name === "Header");
-  const MainChildren = children?.find(({ type }) => type?.name === "Main");
-  const SidebarChildren = children?.find(({ type }) => type?.name === "Sidebar");
-  const ActionChildren = children?.find(({ type }) => type?.name === "Action");
-  const hasWrongChildren = !childrenName?.every((name) => allowedChildren.includes(name));
-
-  if (hasWrongChildren) {
-    throw Error(`Only component "${allowedChildren.join(" ")}" is allowed as children`);
-  }
+  const childrenArray = Children.toArray(children);
 
   return (
     <Grid container padding={1} flexWrap="nowrap" height="100%" role="treegrid">
       <Grid item xs={9} padding={1} display="flex">
         <Stack className={styles.Stack} spacing={2}>
-          {HeaderChildren}
-          {MainChildren}
+          {childrenArray[0]}
+          {childrenArray[1]}
         </Stack>
       </Grid>
       <Grid item xs={3} padding={1} display="flex">
         <Stack className={styles.Stack} spacing={2}>
-          {SidebarChildren}
-          {ActionChildren}
+          {childrenArray[2]}
+          {childrenArray[3]}
         </Stack>
       </Grid>
     </Grid>
