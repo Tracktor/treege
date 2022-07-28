@@ -2609,7 +2609,7 @@ dequal@^2.0.2:
 
 "design-system@git+https://github.com/Tracktor/design-system.git":
   version "1.0.0"
-  resolved "git+https://github.com/Tracktor/design-system.git#123e3c9c26befe152b6a6f5f53fe74fbd3303c66"
+  resolved "git+https://github.com/Tracktor/design-system.git#4bcd69c8d86ffc9b013ea9e793157d18b6ee6d4d"
   dependencies:
     "@emotion/react" "^11.9.3"
     "@emotion/styled" "^11.9.3"
@@ -2679,9 +2679,9 @@ domexception@^4.0.0:
     webidl-conversions "^7.0.0"
 
 electron-to-chromium@^1.4.202:
-  version "1.4.202"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.202.tgz#0c2ed733f42b02ec49a955c5badfcc65888c390b"
-  integrity sha512-JYsK2ex9lmQD27kj19fhXYxzFJ/phLAkLKHv49A5UY6kMRV2xED3qMMLg/voW/+0AR6wMiI+VxlmK9NDtdxlPA==
+  version "1.4.203"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.203.tgz#335ee9ef97ac538624fe1e694c0e4a8b15428020"
+  integrity sha512-EG+Llo8SZGZCgErY+PzE9N+Ld/O80243hTufTeg4GbZ1U+Xn92n6ewxKhZjt/bxdF7aS5OXEU7QlRs5uRoTVKw==
 
 emoji-regex@^9.2.2:
   version "9.2.2"
@@ -4409,9 +4409,9 @@ react-dom@^18.2.0:
     scheduler "^0.23.0"
 
 react-i18next@^11.18.2:
-  version "11.18.2"
-  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-11.18.2.tgz#b61b3e43cbd94ee8b83681206ba1bfe1168fe4d1"
-  integrity sha512-nDtspGjqytBA9IxRfw0fjylkfbsKqjJCWKVifvID9rDMjUhAaXvAE4HPU6oABVP9FXxYzfXxMHtvnNkTDWTUTw==
+  version "11.18.3"
+  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-11.18.3.tgz#50211810bcc9fdea2d70c8aefdfff5f1eb39a923"
+  integrity sha512-EttTX31HbqzZymUM3SIrMPuvamfSXFZVsDHm/ZAqoDfTLjhzlwyxqfbDNxcKNAGOi2mjZaXfR7hSNMlvLNpB/g==
   dependencies:
     "@babel/runtime" "^7.14.5"
     html-parse-stringify "^3.0.1"
