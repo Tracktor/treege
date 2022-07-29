@@ -13,6 +13,12 @@
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui"
   },
+  "repository": "git@github.com:Tracktor/treege.git",
+  "author": "Mickaël Austoni",
+  "bugs": {
+    "url": "https://github.com/Tracktor/treege/issues"
+  },
+  "homepage": "https://github.com/Tracktor/treege#readme",
   "dependencies": {
     "@codemirror/lang-json": "^6.0.0",
     "@mui/icons-material": "^5.8.4",
@@ -38,7 +44,7 @@
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.0.0",
     "@vitest/ui": "0.19.1",
-    "eslint-config-react": "git+https://github.com/Tracktor/eslint-config-react#1.0.0",
+    "eslint-config-react": "git+https://github.com/Tracktor/eslint-config-react",
     "jsdom": "20.0.0",
     "typescript": "^4.7.4",
     "vite": "^3.0.3",
