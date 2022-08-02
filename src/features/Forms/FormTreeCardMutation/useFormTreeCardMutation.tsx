@@ -160,11 +160,11 @@ const useFormTreeCardMutation = () => {
           return { id: String(index), label: String(label), value: String(value) };
         });
 
-      setName(String(currentHierarchyPointNode?.data.name));
-      setType(String(currentHierarchyPointNode?.data.attributes?.type));
-      setRequired(Boolean(currentHierarchyPointNode?.data.attributes?.required));
-      setDisabled(Boolean(currentHierarchyPointNode?.data.attributes?.disabled));
-      setStep(String(currentHierarchyPointNode?.data.attributes?.step));
+      setName(currentHierarchyPointNode?.data.name || "");
+      setType(currentHierarchyPointNode?.data.attributes?.type || "");
+      setRequired(currentHierarchyPointNode?.data.attributes?.required || false);
+      setDisabled(currentHierarchyPointNode?.data.attributes?.disabled || false);
+      setStep(currentHierarchyPointNode?.data.attributes?.step || "");
       setValues(initialValues?.length ? initialValues : defaultValues);
     }
   }, [
