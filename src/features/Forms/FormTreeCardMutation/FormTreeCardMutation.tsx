@@ -81,7 +81,14 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           </FormGroup>
         </Box>
 
-        <TextField label={t("step", { ns: "form" })} variant="outlined" onChange={handleStep} value={step} type="number" />
+        <TextField
+          label={t("step", { ns: "form" })}
+          variant="outlined"
+          onChange={handleStep}
+          value={step}
+          type="number"
+          inputProps={{ min: 0 }}
+        />
       </Stack>
 
       <h4>{t("values")}</h4>
