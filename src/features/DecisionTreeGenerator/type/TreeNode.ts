@@ -9,6 +9,7 @@ export interface TreeNodeField {
   label?: never;
   paths: string[];
   required: boolean;
+  step?: string;
   type: string;
   value?: never;
 }
@@ -21,6 +22,7 @@ export interface TreeNodeValues {
   label: string;
   paths: string[];
   required?: never;
+  step?: never;
   type?: never;
   value: string;
 }

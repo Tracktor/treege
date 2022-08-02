@@ -13,6 +13,7 @@ const useFormTreeCardMutation = () => {
   const [name, setName] = useState("");
   const [required, setRequired] = useState(false);
   const [type, setType] = useState("");
+  const [step, setStep] = useState("");
   const isMultipleFieldValuesSelected = ["select", "radio"].includes(type);
 
   const getDisabledValueField = (index: number) => !isMultipleFieldValuesSelected && index > 0;
@@ -39,6 +40,10 @@ const useFormTreeCardMutation = () => {
 
   const handleChangeValue = (event: ChangeEvent<HTMLInputElement>) => {
     handleValues(event, "value");
+  };
+
+  const handleStep = (event: ChangeEvent<HTMLInputElement>) => {
+    setStep(event.target.value);
   };
 
   const handleChangeDisabled = (event: ChangeEvent<HTMLInputElement>) => {
@@ -114,6 +119,7 @@ const useFormTreeCardMutation = () => {
         ...(currentDepth === 0 && { isRoot: true }),
         paths,
         required,
+        ...(step && { step }),
         type,
       },
       children: values
@@ -158,6 +164,7 @@ const useFormTreeCardMutation = () => {
       setType(String(currentHierarchyPointNode?.data.attributes?.type));
       setRequired(Boolean(currentHierarchyPointNode?.data.attributes?.required));
       setDisabled(Boolean(currentHierarchyPointNode?.data.attributes?.disabled));
+      setStep(String(currentHierarchyPointNode?.data.attributes?.step));
       setValues(initialValues?.length ? initialValues : defaultValues);
     }
   }, [
@@ -182,10 +189,12 @@ const useFormTreeCardMutation = () => {
     handleChangeType,
     handleChangeValue,
     handleDeleteValue,
+    handleStep,
     handleSubmit,
     isMultipleFieldValuesSelected,
     name,
     required,
+    step,
     type,
     values,
   };

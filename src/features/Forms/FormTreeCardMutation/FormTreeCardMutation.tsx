@@ -33,6 +33,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeName,
     name,
     type,
+    step,
     handleChangeType,
     handleChangeLabel,
     handleDeleteValue,
@@ -41,11 +42,12 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleAddValue,
     isMultipleFieldValuesSelected,
     getDisabledValueField,
+    handleStep,
   } = useFormTreeCardMutation();
 
   return (
     <form onSubmit={handleSubmit}>
-      <Stack direction="row" spacing={1} paddingY={1}>
+      <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
         <TextField
           label={t("name")}
           variant="outlined"
@@ -68,18 +70,24 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         </FormControl>
       </Stack>
 
-      <FormGroup>
-        <FormControlLabel control={<Checkbox checked={required} onChange={handleChangeRequired} />} label={t("required")} />
-      </FormGroup>
+      <Stack direction="row" spacing={1} paddingY={1} alignItems="center" justifyContent="space-between">
+        <Box>
+          <FormGroup>
+            <FormControlLabel control={<Checkbox checked={required} onChange={handleChangeRequired} />} label={t("required")} />
+          </FormGroup>
 
-      <FormGroup>
-        <FormControlLabel control={<Checkbox checked={disabled} onChange={handleChangeDisabled} />} label={t("disabled")} />
-      </FormGroup>
+          <FormGroup>
+            <FormControlLabel control={<Checkbox checked={disabled} onChange={handleChangeDisabled} />} label={t("disabled")} />
+          </FormGroup>
+        </Box>
+
+        <TextField label={t("step", { ns: "form" })} variant="outlined" onChange={handleStep} value={step} type="number" />
+      </Stack>
 
       <h4>{t("values")}</h4>
 
       {values?.map(({ value, label, id }, index) => (
-        <Stack direction="row" spacing={1} paddingY={1} key={id} position="relative">
+        <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} key={id} position="relative">
           <TextField
             label="Label"
             variant="outlined"

@@ -1,5 +1,6 @@
 {
   "mustBeUnique": "Must be unique",
+  "step": "Step",
   "type": {
     "checkbox": "Checkbox",
     "number": "Number field",

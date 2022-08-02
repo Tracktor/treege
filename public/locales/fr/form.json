@@ -1,5 +1,6 @@
 {
   "mustBeUnique": "Doit être unique",
+  "step": "Étape",
   "type": {
     "checkbox": "Case à cocher",
     "number": "Champ de texte",

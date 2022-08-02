@@ -40,6 +40,14 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
             {nodeDatum?.attributes?.type && (
               <Chip color="secondary" size="small" label={t(`type.${nodeDatum?.attributes?.type}`, { ns: "form" })} />
             )}
+            {nodeDatum?.attributes?.step && (
+              <Chip
+                color="secondary"
+                size="small"
+                variant="outlined"
+                label={`${t("step", { ns: "form" })} ${nodeDatum?.attributes?.step}`}
+              />
+            )}
             <Stack spacing={0.5} alignItems="flex-end">
               {nodeDatum?.attributes?.label && (
                 <Stack direction="row" spacing={1} alignItems="center">
