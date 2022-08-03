@@ -151,3 +151,11 @@ export interface TreeNodeValues {
   value: string;
 }
 ```
+
+## Convention
+- [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)
+- [Versioning](https://semver.org/)
+
+## Changelog
+
+### 1.0.0
