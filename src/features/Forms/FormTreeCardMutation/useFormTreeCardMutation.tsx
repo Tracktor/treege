@@ -124,17 +124,21 @@ const useFormTreeCardMutation = () => {
       },
       children: values
         ?.filter((_, index) => !getDisabledValueField(index)) // filter disabled value
-        ?.map(({ value, label }, index) => ({
-          attributes: {
-            depth: depth + 1,
-            ...(getNestedChildren(currentHierarchyPointNode, index).length === 0 && { isLeaf: true }),
-            label,
-            paths: [...paths, `${label} ${value}`],
-            value,
-          },
-          children: getNestedChildren(currentHierarchyPointNode, index),
-          name: `[${label}][${value}]`,
-        })),
+        ?.map(({ value, label }, index) => {
+          const labelValue = `[${label}][${value}]`;
+
+          return {
+            attributes: {
+              depth: depth + 1,
+              ...(getNestedChildren(currentHierarchyPointNode, index).length === 0 && { isLeaf: true }),
+              label,
+              paths: [...paths, labelValue],
+              value,
+            },
+            children: getNestedChildren(currentHierarchyPointNode, index),
+            name: labelValue,
+          };
+        }),
       name,
     };
 
@@ -168,11 +172,11 @@ const useFormTreeCardMutation = () => {
       setValues(initialValues?.length ? initialValues : defaultValues);
     }
   }, [
-    currentHierarchyPointNode,
     currentHierarchyPointNode?.data.attributes?.disabled,
     currentHierarchyPointNode?.data.attributes?.required,
+    currentHierarchyPointNode?.data.attributes?.step,
     currentHierarchyPointNode?.data.attributes?.type,
-    currentHierarchyPointNode?.data.attributes?.value,
+    currentHierarchyPointNode?.data?.children,
     currentHierarchyPointNode?.data.name,
     defaultValues,
     modalOpen,
