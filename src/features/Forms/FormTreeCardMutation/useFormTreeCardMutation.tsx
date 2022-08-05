@@ -133,7 +133,7 @@ const useFormTreeCardMutation = () => {
             value,
           },
           children: getNestedChildren(currentHierarchyPointNode, index),
-          name: `${label} ${value}`,
+          name: `[${label}][${value}]`,
         })),
       name,
     };

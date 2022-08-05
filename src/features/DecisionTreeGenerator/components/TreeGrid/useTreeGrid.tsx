@@ -25,7 +25,8 @@ const useTreeGrid = () => {
   };
 
   const getTitleModalDelete = () => {
-    const name = currentHierarchyPointNode?.data.name;
+    const isField = currentHierarchyPointNode?.data?.attributes?.type;
+    const name = isField ? currentHierarchyPointNode?.data?.name : currentHierarchyPointNode?.data?.attributes?.label;
 
     return t("deleteTitle", { name });
   };
