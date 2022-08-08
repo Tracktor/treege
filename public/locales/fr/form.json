@@ -7,6 +7,7 @@
     "number": "Champ de texte",
     "radio": "Radio",
     "select": "Select",
+    "switch": "Switch",
     "text": "Champ de nombre"
   }
 }

@@ -32,7 +32,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     type,
     step,
     label,
-    isMultipleFieldValuesSelected,
+    isDecisionField,
     handleChangeRequired,
     handleChangeDisabled,
     handleChangeName,
@@ -69,6 +69,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             <MenuItem value="number">{t("type.number", { ns: "form" })}</MenuItem>
             <MenuItem value="radio">{t("type.radio", { ns: "form" })}</MenuItem>
             <MenuItem value="select">{t("type.select", { ns: "form" })}</MenuItem>
+            <MenuItem value="switch">{t("type.switch", { ns: "form" })}</MenuItem>
             <MenuItem value="text">{t("type.text", { ns: "form" })}</MenuItem>
           </Select>
         </FormControl>
@@ -87,36 +88,40 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         </Box>
       </Stack>
 
-      <h4>{t("values")}</h4>
+      {isDecisionField && (
+        <>
+          <h4>{t("values")}</h4>
+          {decisionValues?.map(({ value, label: labelOption, id }, index) => (
+            <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} key={id} position="relative">
+              <TextField
+                label="Label"
+                sx={{ flex: 1 }}
+                onChange={handleChangeOptionLabel}
+                value={labelOption}
+                inputProps={{ "data-id": id }}
+                disabled={getDisabledValueField(index)}
+                required
+              />
+              <TextField
+                label="Valeur"
+                sx={{ flex: 1 }}
+                onChange={handleChangeOptionValue}
+                value={value}
+                inputProps={{ "data-id": id }}
+                disabled={getDisabledValueField(index)}
+                required
+              />
+              {decisionValues.length > 1 && (
+                <Button color="warning" className={styles.IconButtonDelete} data-id={id} onClick={() => handleDeleteValue(id)}>
+                  <RemoveCircleRoundedIcon />
+                </Button>
+              )}
+            </Stack>
+          ))}
+        </>
+      )}
 
-      {decisionValues?.map(({ value, label: labelOption, id }, index) => (
-        <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} key={id} position="relative">
-          <TextField
-            label="Label"
-            sx={{ flex: 1 }}
-            onChange={handleChangeOptionLabel}
-            value={labelOption}
-            inputProps={{ "data-id": id }}
-            disabled={getDisabledValueField(index)}
-          />
-          <TextField
-            label="Valeur"
-            sx={{ flex: 1 }}
-            onChange={handleChangeOptionValue}
-            value={value}
-            inputProps={{ "data-id": id }}
-            disabled={getDisabledValueField(index)}
-            required={Boolean(labelOption)}
-          />
-          {decisionValues.length > 1 && (
-            <Button color="warning" className={styles.IconButtonDelete} data-id={id} onClick={() => handleDeleteValue(id)}>
-              <RemoveCircleRoundedIcon />
-            </Button>
-          )}
-        </Stack>
-      ))}
-
-      {isMultipleFieldValuesSelected && (
+      {isDecisionField && (
         <Box justifyContent="flex-end" display="flex">
           <Button color="success" className={styles.IconButton} onClick={handleAddValue}>
             <AddCircleRoundedIcon />

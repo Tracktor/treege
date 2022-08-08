@@ -6,18 +6,18 @@ import { appendTreeCard, replaceTreeCard, setIsLeaf, setTree } from "@/features/
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 
 const useFormTreeCardMutation = () => {
-  const defaultValues = useMemo(() => [{ id: "0", label: "", value: "" }], []);
   const { dispatchTree, setModalOpen, currentHierarchyPointNode, modalOpen } = useContext(DecisionTreeGeneratorContext);
-  const [decisionValues, setDecisionValues] = useState(defaultValues);
+  const defaultDecisionValues = useMemo(() => [{ id: "0", label: "", value: "" }], []);
+  const [decisionValues, setDecisionValues] = useState(defaultDecisionValues);
   const [disabled, setDisabled] = useState(false);
   const [name, setName] = useState("");
   const [label, setLabel] = useState("");
   const [required, setRequired] = useState(false);
   const [type, setType] = useState("");
   const [step, setStep] = useState("");
-  const isMultipleFieldValuesSelected = ["select", "radio"].includes(type);
+  const isDecisionField = ["select", "radio"].includes(type);
 
-  const getDisabledValueField = (index: number) => !isMultipleFieldValuesSelected && index > 0;
+  const getDisabledValueField = (index: number) => !isDecisionField && index > 0;
 
   const handlePresetValues = (event: ChangeEvent<HTMLInputElement>, predicate: "value" | "label") => {
     setDecisionValues((prevState) =>
@@ -108,22 +108,22 @@ const useFormTreeCardMutation = () => {
   };
 
   const addValuesAsChildren = ({ depth, paths }: { depth: number; paths: string[] }) => {
-    if (decisionValues[0].value && decisionValues[0].label) {
+    if (isDecisionField) {
       return decisionValues
         ?.filter((_, index) => !getDisabledValueField(index)) // filter disabled value
         ?.map(({ value, label: optionLabel }, index) => {
-          const labelValue = `[${optionLabel}][${value}]`;
+          const nextName = `[${name}][${value}]`;
 
           return {
             attributes: {
               depth: depth + 1,
               label: optionLabel,
-              paths: [...paths, labelValue],
+              paths: [...paths, nextName],
               value,
               ...(getNestedChildren(currentHierarchyPointNode, index).length === 0 && { isLeaf: true }),
             },
             children: getNestedChildren(currentHierarchyPointNode, index),
-            name: labelValue,
+            name: nextName,
           };
         });
     }
@@ -147,10 +147,12 @@ const useFormTreeCardMutation = () => {
         label,
         paths,
         type,
-        ...(currentDepth === 0 && { isRoot: true }),
-        ...(disabled && { disabled: true }),
-        ...(required && { required: true }),
+        ...(currentDepth === 0 && { isRoot }),
+        ...(disabled && { disabled }),
+        ...(isDecisionField && { isDecisionField }),
+        ...(required && { required }),
         ...(step && { step }),
+        ...(!isEdit && !isDecisionField && { isLeaf: true }),
       },
       children: addValuesAsChildren({ depth, paths }),
       name,
@@ -183,7 +185,7 @@ const useFormTreeCardMutation = () => {
       setRequired(currentHierarchyPointNode?.data.attributes?.required || false);
       setDisabled(currentHierarchyPointNode?.data.attributes?.disabled || false);
       setStep(currentHierarchyPointNode?.data.attributes?.step || "");
-      setDecisionValues(initialValues?.length ? initialValues : defaultValues);
+      setDecisionValues(initialValues?.length ? initialValues : defaultDecisionValues);
       setLabel(currentHierarchyPointNode?.data.attributes?.label || "");
     }
   }, [
@@ -194,7 +196,7 @@ const useFormTreeCardMutation = () => {
     currentHierarchyPointNode?.data.attributes?.type,
     currentHierarchyPointNode?.data?.children,
     currentHierarchyPointNode?.data.name,
-    defaultValues,
+    defaultDecisionValues,
     modalOpen,
   ]);
 
@@ -213,7 +215,7 @@ const useFormTreeCardMutation = () => {
     handleChangeType,
     handleDeleteValue,
     handleSubmit,
-    isMultipleFieldValuesSelected,
+    isDecisionField,
     label,
     name,
     required,

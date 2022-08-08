@@ -25,6 +25,7 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
   const isValueCard = !isFieldCard;
   const isRootCard = hierarchyPointNode?.data?.attributes?.isRoot;
   const isLeaf = hierarchyPointNode?.data?.attributes?.isLeaf;
+  const isDecisionField = hierarchyPointNode?.data?.attributes?.isDecisionField;
 
   return (
     <g>
@@ -75,28 +76,32 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
                 </Button>
               </Tooltip>
             )}
-            <Tooltip title={t("edit")} arrow>
-              <Button
-                variant="text"
-                color="info"
-                className={styles.ActionButton}
-                size="small"
-                onClick={() => onEditChildren?.(hierarchyPointNode)}
-              >
-                <EditRoundedIcon />
-              </Button>
-            </Tooltip>
-            <Tooltip title={t("add")} arrow>
-              <Button
-                variant="text"
-                color="success"
-                className={styles.ActionButton}
-                size="small"
-                onClick={() => onAddChildren?.(hierarchyPointNode)}
-              >
-                <AddBoxRoundedIcon />
-              </Button>
-            </Tooltip>
+            {!isValueCard && (
+              <Tooltip title={t("edit")} arrow>
+                <Button
+                  variant="text"
+                  color="info"
+                  className={styles.ActionButton}
+                  size="small"
+                  onClick={() => onEditChildren?.(hierarchyPointNode)}
+                >
+                  <EditRoundedIcon />
+                </Button>
+              </Tooltip>
+            )}
+            {!isDecisionField && (
+              <Tooltip title={t("add")} arrow>
+                <Button
+                  variant="text"
+                  color="success"
+                  className={styles.ActionButton}
+                  size="small"
+                  onClick={() => onAddChildren?.(hierarchyPointNode)}
+                >
+                  <AddBoxRoundedIcon />
+                </Button>
+              </Tooltip>
+            )}
           </Stack>
         </Box>
       </foreignObject>
