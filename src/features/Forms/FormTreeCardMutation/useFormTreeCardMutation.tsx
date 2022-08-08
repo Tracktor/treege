@@ -30,7 +30,7 @@ const useFormTreeCardMutation = () => {
           };
         }
 
-        return { id, label, value };
+        return { id, label: optionLabel, value };
       })
     );
   };
@@ -112,7 +112,7 @@ const useFormTreeCardMutation = () => {
       return decisionValues
         ?.filter((_, index) => !getDisabledValueField(index)) // filter disabled value
         ?.map(({ value, label: optionLabel }, index) => {
-          const labelValue = `[${label}][${value}]`;
+          const labelValue = `[${optionLabel}][${value}]`;
 
           return {
             attributes: {
@@ -174,8 +174,8 @@ const useFormTreeCardMutation = () => {
       const initialValues = currentHierarchyPointNode?.data?.children
         ?.filter(({ attributes }) => !attributes?.type)
         ?.map(({ attributes }, index) => {
-          const { label: presetLabel, value } = attributes || {};
-          return { id: String(index), label: String(presetLabel), value: String(value) };
+          const { label: optionLabel, value } = attributes || {};
+          return { id: String(index), label: String(optionLabel), value: String(value) };
         });
 
       setName(currentHierarchyPointNode?.data.name || "");
