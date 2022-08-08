@@ -1,6 +1,7 @@
 {
   "add": "Add",
   "cancel": "Cancel",
+  "decisionValues": "Decision Values",
   "disabled": "Disabled",
   "edit": "Edit",
   "isALeaf": "Is a leaf",
@@ -12,6 +13,6 @@
   "required": "Required",
   "type": "Type",
   "validate": "Validate",
-  "value": "Value"
+  "value": "Value",
   "values": "Values"
 }
