@@ -89,7 +89,7 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
                 </Button>
               </Tooltip>
             )}
-            {!isDecisionField && (
+            {isLeaf && (
               <Tooltip title={t("add")} arrow>
                 <Button
                   variant="text"
