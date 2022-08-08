@@ -13,7 +13,7 @@ const useTreeGrid = () => {
   const closeModal = () => setModalOpen(null);
 
   const getTitleModalMutation = () => {
-    const name = currentHierarchyPointNode?.data.name;
+    const name = currentHierarchyPointNode?.data?.attributes.label;
 
     if (!name) {
       return t("addFirstTitle", { name });
@@ -25,8 +25,7 @@ const useTreeGrid = () => {
   };
 
   const getTitleModalDelete = () => {
-    const isField = currentHierarchyPointNode?.data?.attributes?.type;
-    const name = isField ? currentHierarchyPointNode?.data?.name : currentHierarchyPointNode?.data?.attributes?.label;
+    const name = currentHierarchyPointNode?.data?.attributes?.label;
 
     return t("deleteTitle", { name });
   };

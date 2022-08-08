@@ -4,7 +4,7 @@ import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import EnergySavingsLeafRoundedIcon from "@mui/icons-material/EnergySavingsLeafRounded";
 import type { HierarchyPointNode } from "d3-hierarchy";
-import { Box, Button, Chip, Stack, Tooltip, Typography } from "design-system";
+import { Box, Button, Chip, Stack, Tooltip } from "design-system";
 import type { CustomNodeElementProps, TreeNodeDatum } from "react-d3-tree/lib/types/common";
 import { useTranslation } from "react-i18next";
 import styles from "./TreeCard.module.scss";
@@ -37,10 +37,8 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
       >
         <Box flex={1} display="flex" p={2} height="100%" flexDirection="column" justifyContent="space-between">
           <Stack alignItems="flex-end" spacing={0.5}>
-            {nodeDatum?.attributes?.type && <h4 className={styles.Title}>{nodeDatum.name}</h4>}
-            {nodeDatum?.attributes?.type && (
-              <Chip color="secondary" size="small" label={t(`type.${nodeDatum?.attributes?.type}`, { ns: "form" })} />
-            )}
+            {isFieldCard && <h4 className={styles.Title}>{nodeDatum?.attributes?.label}</h4>}
+            {isFieldCard && <Chip color="secondary" size="small" label={t(`type.${nodeDatum?.attributes?.type}`, { ns: "form" })} />}
             {nodeDatum?.attributes?.step && (
               <Chip
                 color="secondary"
@@ -50,18 +48,10 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
               />
             )}
             <Stack spacing={0.5} alignItems="flex-end">
-              {isValueCard && nodeDatum?.attributes?.label && (
+              {isValueCard && (
                 <Stack direction="row" spacing={1} alignItems="center">
-                  <Chip size="small" label={t("label")} className={styles.SmallChip} variant="outlined" />
-                  <Typography variant="subtitle2">{nodeDatum?.attributes?.label}</Typography>
-                </Stack>
-              )}
-              {nodeDatum?.attributes?.value && (
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Chip size="small" label={t("value")} className={styles.SmallChip} variant="outlined" color="primary" />
-                  <Typography color="primary" variant="subtitle2">
-                    <strong>{nodeDatum?.attributes?.value}</strong>
-                  </Typography>
+                  <Chip size="small" label={nodeDatum?.attributes?.label} variant="outlined" />
+                  <Chip size="small" color="primary" label={nodeDatum?.attributes?.value} variant="outlined" />
                 </Stack>
               )}
             </Stack>

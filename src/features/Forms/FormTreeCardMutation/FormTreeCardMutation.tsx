@@ -25,7 +25,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
   const { t } = useTranslation(["translation", "form"]);
 
   const {
-    values,
+    decisionValues,
     required,
     disabled,
     name,
@@ -89,7 +89,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
       <h4>{t("values")}</h4>
 
-      {values?.map(({ value, label: labelOption, id }, index) => (
+      {decisionValues?.map(({ value, label: labelOption, id }, index) => (
         <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} key={id} position="relative">
           <TextField
             label="Label"
@@ -108,7 +108,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             disabled={getDisabledValueField(index)}
             required={Boolean(labelOption)}
           />
-          {values.length > 1 && (
+          {decisionValues.length > 1 && (
             <Button color="warning" className={styles.IconButtonDelete} data-id={id} onClick={() => handleDeleteValue(id)}>
               <RemoveCircleRoundedIcon />
             </Button>
