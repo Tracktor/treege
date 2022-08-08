@@ -65,12 +65,12 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         <FormControl sx={{ flex: 1 }} required>
           <InputLabel>{t("type")}</InputLabel>
           <Select value={type} label={t("type")} onChange={handleChangeType}>
-            <MenuItem value="checkbox">{t("type.checkbox", { ns: "form" })}</MenuItem>
             <MenuItem value="number">{t("type.number", { ns: "form" })}</MenuItem>
+            <MenuItem value="text">{t("type.text", { ns: "form" })}</MenuItem>
+            <MenuItem value="switch">{t("type.switch", { ns: "form" })}</MenuItem>
+            <MenuItem value="checkbox">{t("type.checkbox", { ns: "form" })}</MenuItem>
             <MenuItem value="radio">{t("type.radio", { ns: "form" })}</MenuItem>
             <MenuItem value="select">{t("type.select", { ns: "form" })}</MenuItem>
-            <MenuItem value="switch">{t("type.switch", { ns: "form" })}</MenuItem>
-            <MenuItem value="text">{t("type.text", { ns: "form" })}</MenuItem>
           </Select>
         </FormControl>
         <TextField label={t("step", { ns: "form" })} onChange={handleChangeStep} value={step} type="number" inputProps={{ min: 0 }} />
