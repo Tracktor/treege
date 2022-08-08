@@ -6,7 +6,5 @@ test("render <Action />", () => {
   const { getByRole } = render(<Action />);
   const action = getByRole("group");
 
-  console.log(action);
-
-  // expect(action).toBeInTheDocument();
+  expect(action).toBeInTheDocument();
 });
