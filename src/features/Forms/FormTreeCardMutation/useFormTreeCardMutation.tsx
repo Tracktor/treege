@@ -11,6 +11,7 @@ const useFormTreeCardMutation = () => {
   const [values, setValues] = useState(defaultValues);
   const [disabled, setDisabled] = useState(false);
   const [name, setName] = useState("");
+  const [label, setLabel] = useState("");
   const [required, setRequired] = useState(false);
   const [type, setType] = useState("");
   const [step, setStep] = useState("");
@@ -18,13 +19,13 @@ const useFormTreeCardMutation = () => {
 
   const getDisabledValueField = (index: number) => !isMultipleFieldValuesSelected && index > 0;
 
-  const handleValues = (event: ChangeEvent<HTMLInputElement>, predicate: "value" | "label") => {
+  const handlePresetValues = (event: ChangeEvent<HTMLInputElement>, predicate: "value" | "label") => {
     setValues((prevState) =>
-      prevState.map(({ value, label, id }) => {
+      prevState.map(({ value, label: optionLabel, id }) => {
         if (event.target.dataset.id === id) {
           return {
             id,
-            label: predicate === "value" ? label : event.target.value,
+            label: predicate === "value" ? optionLabel : event.target.value,
             value: predicate === "value" ? event.target.value : value,
           };
         }
@@ -35,14 +36,18 @@ const useFormTreeCardMutation = () => {
   };
 
   const handleChangeLabel = (event: ChangeEvent<HTMLInputElement>) => {
-    handleValues(event, "label");
+    setLabel(event.target.value);
   };
 
-  const handleChangeValue = (event: ChangeEvent<HTMLInputElement>) => {
-    handleValues(event, "value");
+  const handleChangeOptionLabel = (event: ChangeEvent<HTMLInputElement>) => {
+    handlePresetValues(event, "label");
   };
 
-  const handleStep = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeOptionValue = (event: ChangeEvent<HTMLInputElement>) => {
+    handlePresetValues(event, "value");
+  };
+
+  const handleChangeStep = (event: ChangeEvent<HTMLInputElement>) => {
     setStep(event.target.value);
   };
 
@@ -102,6 +107,30 @@ const useFormTreeCardMutation = () => {
     return [...paths, nextName];
   };
 
+  const addValuesAsChildren = ({ depth, paths }: { depth: number; paths: string[] }) => {
+    if (values[0].value && values[0].label) {
+      return values
+        ?.filter((_, index) => !getDisabledValueField(index)) // filter disabled value
+        ?.map(({ value, label: optionLabel }, index) => {
+          const labelValue = `[${label}][${value}]`;
+
+          return {
+            attributes: {
+              depth: depth + 1,
+              label: optionLabel,
+              paths: [...paths, labelValue],
+              value,
+              ...(getNestedChildren(currentHierarchyPointNode, index).length === 0 && { isLeaf: true }),
+            },
+            children: getNestedChildren(currentHierarchyPointNode, index),
+            name: labelValue,
+          };
+        });
+    }
+
+    return [];
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
@@ -115,30 +144,15 @@ const useFormTreeCardMutation = () => {
     const children = {
       attributes: {
         depth,
-        disabled,
-        ...(currentDepth === 0 && { isRoot: true }),
+        label,
         paths,
-        required,
-        ...(step && { step }),
         type,
+        ...(currentDepth === 0 && { isRoot: true }),
+        ...(disabled && { disabled: true }),
+        ...(required && { required: true }),
+        ...(step && { step }),
       },
-      children: values
-        ?.filter((_, index) => !getDisabledValueField(index)) // filter disabled value
-        ?.map(({ value, label }, index) => {
-          const labelValue = `[${label}][${value}]`;
-
-          return {
-            attributes: {
-              depth: depth + 1,
-              ...(getNestedChildren(currentHierarchyPointNode, index).length === 0 && { isLeaf: true }),
-              label,
-              paths: [...paths, labelValue],
-              value,
-            },
-            children: getNestedChildren(currentHierarchyPointNode, index),
-            name: labelValue,
-          };
-        }),
+      children: addValuesAsChildren({ depth, paths }),
       name,
     };
 
@@ -160,8 +174,8 @@ const useFormTreeCardMutation = () => {
       const initialValues = currentHierarchyPointNode?.data?.children
         ?.filter(({ attributes }) => !attributes?.type)
         ?.map(({ attributes }, index) => {
-          const { label, value } = attributes || {};
-          return { id: String(index), label: String(label), value: String(value) };
+          const { label: presetLabel, value } = attributes || {};
+          return { id: String(index), label: String(presetLabel), value: String(value) };
         });
 
       setName(currentHierarchyPointNode?.data.name || "");
@@ -170,9 +184,11 @@ const useFormTreeCardMutation = () => {
       setDisabled(currentHierarchyPointNode?.data.attributes?.disabled || false);
       setStep(currentHierarchyPointNode?.data.attributes?.step || "");
       setValues(initialValues?.length ? initialValues : defaultValues);
+      setLabel(currentHierarchyPointNode?.data.attributes?.label || "");
     }
   }, [
     currentHierarchyPointNode?.data.attributes?.disabled,
+    currentHierarchyPointNode?.data.attributes?.label,
     currentHierarchyPointNode?.data.attributes?.required,
     currentHierarchyPointNode?.data.attributes?.step,
     currentHierarchyPointNode?.data.attributes?.type,
@@ -189,13 +205,15 @@ const useFormTreeCardMutation = () => {
     handleChangeDisabled,
     handleChangeLabel,
     handleChangeName,
+    handleChangeOptionLabel,
+    handleChangeOptionValue,
     handleChangeRequired,
+    handleChangeStep,
     handleChangeType,
-    handleChangeValue,
     handleDeleteValue,
-    handleStep,
     handleSubmit,
     isMultipleFieldValuesSelected,
+    label,
     name,
     required,
     step,

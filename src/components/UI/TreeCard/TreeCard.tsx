@@ -22,6 +22,7 @@ interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum" | "hier
 const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, hierarchyPointNode, size = 220 }: TreeCardProps) => {
   const { t } = useTranslation(["translation", "form"]);
   const isFieldCard = hierarchyPointNode?.data?.attributes?.type;
+  const isValueCard = !isFieldCard;
   const isRootCard = hierarchyPointNode?.data?.attributes?.isRoot;
   const isLeaf = hierarchyPointNode?.data?.attributes?.isLeaf;
 
@@ -49,7 +50,7 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
               />
             )}
             <Stack spacing={0.5} alignItems="flex-end">
-              {nodeDatum?.attributes?.label && (
+              {isValueCard && nodeDatum?.attributes?.label && (
                 <Stack direction="row" spacing={1} alignItems="center">
                   <Chip size="small" label={t("label")} className={styles.SmallChip} variant="outlined" />
                   <Typography variant="subtitle2">{nodeDatum?.attributes?.label}</Typography>
@@ -84,32 +85,28 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
                 </Button>
               </Tooltip>
             )}
-            {isFieldCard && (
-              <Tooltip title={t("edit")} arrow>
-                <Button
-                  variant="text"
-                  color="info"
-                  className={styles.ActionButton}
-                  size="small"
-                  onClick={() => onEditChildren?.(hierarchyPointNode)}
-                >
-                  <EditRoundedIcon />
-                </Button>
-              </Tooltip>
-            )}
-            {!isFieldCard && (
-              <Tooltip title={t("add")} arrow>
-                <Button
-                  variant="text"
-                  color="success"
-                  className={styles.ActionButton}
-                  size="small"
-                  onClick={() => onAddChildren?.(hierarchyPointNode)}
-                >
-                  <AddBoxRoundedIcon />
-                </Button>
-              </Tooltip>
-            )}
+            <Tooltip title={t("edit")} arrow>
+              <Button
+                variant="text"
+                color="info"
+                className={styles.ActionButton}
+                size="small"
+                onClick={() => onEditChildren?.(hierarchyPointNode)}
+              >
+                <EditRoundedIcon />
+              </Button>
+            </Tooltip>
+            <Tooltip title={t("add")} arrow>
+              <Button
+                variant="text"
+                color="success"
+                className={styles.ActionButton}
+                size="small"
+                onClick={() => onAddChildren?.(hierarchyPointNode)}
+              >
+                <AddBoxRoundedIcon />
+              </Button>
+            </Tooltip>
           </Stack>
         </Box>
       </foreignObject>

@@ -28,36 +28,40 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     values,
     required,
     disabled,
-    handleChangeRequired,
-    handleChangeDisabled,
-    handleChangeName,
     name,
     type,
     step,
+    label,
+    isMultipleFieldValuesSelected,
+    handleChangeRequired,
+    handleChangeDisabled,
+    handleChangeName,
     handleChangeType,
-    handleChangeLabel,
+    handleChangeOptionLabel,
     handleDeleteValue,
-    handleChangeValue,
+    handleChangeOptionValue,
     handleSubmit,
     handleAddValue,
-    isMultipleFieldValuesSelected,
     getDisabledValueField,
-    handleStep,
+    handleChangeStep,
+    handleChangeLabel,
   } = useFormTreeCardMutation();
 
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
+        <TextField label={t("label", { ns: "form" })} onChange={handleChangeLabel} value={label} required />
         <TextField
           label={t("name")}
-          variant="outlined"
           sx={{ flex: 1 }}
           onChange={handleChangeName}
           value={name}
           helperText={t("mustBeUnique", { ns: "form" })}
           required
         />
+      </Stack>
 
+      <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
         <FormControl sx={{ flex: 1 }} required>
           <InputLabel>{t("type")}</InputLabel>
           <Select value={type} label={t("type")} onChange={handleChangeType}>
@@ -68,6 +72,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             <MenuItem value="text">{t("type.text", { ns: "form" })}</MenuItem>
           </Select>
         </FormControl>
+        <TextField label={t("step", { ns: "form" })} onChange={handleChangeStep} value={step} type="number" inputProps={{ min: 0 }} />
       </Stack>
 
       <Stack direction="row" spacing={1} paddingY={1} alignItems="center" justifyContent="space-between">
@@ -80,40 +85,28 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             <FormControlLabel control={<Checkbox checked={disabled} onChange={handleChangeDisabled} />} label={t("disabled")} />
           </FormGroup>
         </Box>
-
-        <TextField
-          label={t("step", { ns: "form" })}
-          variant="outlined"
-          onChange={handleStep}
-          value={step}
-          type="number"
-          inputProps={{ min: 0 }}
-        />
       </Stack>
 
       <h4>{t("values")}</h4>
 
-      {values?.map(({ value, label, id }, index) => (
+      {values?.map(({ value, label: labelOption, id }, index) => (
         <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} key={id} position="relative">
           <TextField
             label="Label"
-            variant="outlined"
             sx={{ flex: 1 }}
-            onChange={handleChangeLabel}
-            value={label}
+            onChange={handleChangeOptionLabel}
+            value={labelOption}
             inputProps={{ "data-id": id }}
-            required
             disabled={getDisabledValueField(index)}
           />
           <TextField
             label="Valeur"
-            variant="outlined"
             sx={{ flex: 1 }}
-            onChange={handleChangeValue}
+            onChange={handleChangeOptionValue}
             value={value}
             inputProps={{ "data-id": id }}
-            required
             disabled={getDisabledValueField(index)}
+            required={Boolean(labelOption)}
           />
           {values.length > 1 && (
             <Button color="warning" className={styles.IconButtonDelete} data-id={id} onClick={() => handleDeleteValue(id)}>

@@ -1,4 +1,5 @@
 {
+  "label" : "Label",
   "mustBeUnique": "Doit être unique",
   "step": "Étape",
   "type": {
