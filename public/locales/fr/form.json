@@ -4,10 +4,10 @@
   "step": "Étape",
   "type": {
     "checkbox": "Case à cocher",
-    "number": "Champ de texte",
+    "number": "Champ de nombre",
     "radio": "Radio",
     "select": "Select",
     "switch": "Switch",
-    "text": "Champ de nombre"
+    "text": "Champ de texte"
   }
 }
