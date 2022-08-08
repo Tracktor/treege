@@ -213,7 +213,6 @@ const useFormTreeCardMutation = () => {
     handleChangeOptionLabel,
     handleChangeOptionValue,
     handleChangeRequired,
-    requiredDisabled,
     handleChangeStep,
     handleChangeType,
     handleDeleteValue,
@@ -222,6 +221,7 @@ const useFormTreeCardMutation = () => {
     label,
     name,
     required,
+    requiredDisabled,
     step,
     type,
   };
