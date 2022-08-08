@@ -5,6 +5,7 @@
   "edit": "Éditer",
   "isALeaf": "Est une feuille",
   "isABranch": "Est une branche",
+  "isTheRoot": "Est la racine",
   "label": "Label",
   "name": "Nom",
   "remove": "Supprimer",
