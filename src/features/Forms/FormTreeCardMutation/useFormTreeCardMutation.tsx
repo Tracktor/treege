@@ -16,6 +16,7 @@ const useFormTreeCardMutation = () => {
   const [type, setType] = useState("");
   const [step, setStep] = useState("");
   const isDecisionField = ["select", "radio"].includes(type);
+  const requiredDisabled = ["checkbox", "switch"].includes(type);
 
   const getDisabledValueField = (index: number) => !isDecisionField && index > 0;
 
@@ -212,6 +213,7 @@ const useFormTreeCardMutation = () => {
     handleChangeOptionLabel,
     handleChangeOptionValue,
     handleChangeRequired,
+    requiredDisabled,
     handleChangeStep,
     handleChangeType,
     handleDeleteValue,

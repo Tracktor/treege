@@ -25,6 +25,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
   const { t } = useTranslation(["translation", "form"]);
 
   const {
+    requiredDisabled,
     decisionValues,
     required,
     disabled,
@@ -79,9 +80,12 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
       <Stack direction="row" spacing={1} paddingY={1} alignItems="center" justifyContent="space-between">
         <Box>
           <FormGroup>
-            <FormControlLabel control={<Checkbox checked={required} onChange={handleChangeRequired} />} label={t("required")} />
+            <FormControlLabel
+              disabled={requiredDisabled}
+              control={<Checkbox checked={required} onChange={handleChangeRequired} />}
+              label={t("required")}
+            />
           </FormGroup>
-
           <FormGroup>
             <FormControlLabel control={<Checkbox checked={disabled} onChange={handleChangeDisabled} />} label={t("disabled")} />
           </FormGroup>
