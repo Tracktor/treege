@@ -140,6 +140,7 @@ const useFormTreeCardMutation = () => {
     const isEdit = modalOpen === "edit";
     const depth = isRoot ? 0 : currentDepth + (isEdit ? 0 : 1);
     const paths = getPaths(currentHierarchyPointNode, currentName, name, isEdit);
+    const isLeaf = !currentHierarchyPointNode?.data?.children.length && !decisionValues[0].value && !decisionValues[0].label;
 
     const children = {
       attributes: {
@@ -152,7 +153,7 @@ const useFormTreeCardMutation = () => {
         ...(isDecisionField && { isDecisionField }),
         ...(required && { required }),
         ...(step && { step }),
-        ...(!isEdit && !isDecisionField && { isLeaf: true }),
+        ...(isLeaf && { isLeaf }),
       },
       children: addValuesAsChildren({ depth, paths }),
       name,
