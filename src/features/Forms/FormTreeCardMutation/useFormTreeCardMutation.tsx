@@ -116,7 +116,7 @@ const useFormTreeCardMutation = () => {
     return decisionValues
       ?.filter((_, index) => !getDisabledValueField(index)) // filter disabled value
       ?.map(({ value, label: optionLabel }, index) => {
-        const nextName = `[${name}][${value}]`;
+        const nextName = `${name}:${value}`;
 
         return {
           attributes: {
