@@ -12,6 +12,7 @@ import {
   Select,
   Stack,
   TextField,
+  Typography,
 } from "design-system";
 import { useTranslation } from "react-i18next";
 import styles from "./FormTreeCardMutation.module.scss";
@@ -70,8 +71,12 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             <MenuItem value="text">{t("type.text", { ns: "form" })}</MenuItem>
             <MenuItem value="switch">{t("type.switch", { ns: "form" })}</MenuItem>
             <MenuItem value="checkbox">{t("type.checkbox", { ns: "form" })}</MenuItem>
-            <MenuItem value="radio">{t("type.radio", { ns: "form" })}</MenuItem>
-            <MenuItem value="select">{t("type.select", { ns: "form" })}</MenuItem>
+            <MenuItem value="radio">
+              <Typography color="secondary">{t("type.radio", { ns: "form" })}</Typography>
+            </MenuItem>
+            <MenuItem value="select">
+              <Typography color="secondary">{t("type.select", { ns: "form" })}</Typography>
+            </MenuItem>
           </Select>
         </FormControl>
         <TextField
