@@ -109,27 +109,27 @@ const useFormTreeCardMutation = () => {
   };
 
   const addValuesAsChildren = ({ depth, paths }: { depth: number; paths: string[] }) => {
-    if (isDecisionField) {
-      return decisionValues
-        ?.filter((_, index) => !getDisabledValueField(index)) // filter disabled value
-        ?.map(({ value, label: optionLabel }, index) => {
-          const nextName = `[${name}][${value}]`;
-
-          return {
-            attributes: {
-              depth: depth + 1,
-              label: optionLabel,
-              paths: [...paths, nextName],
-              value,
-              ...(getNestedChildren(currentHierarchyPointNode, index).length === 0 && { isLeaf: true }),
-            },
-            children: getNestedChildren(currentHierarchyPointNode, index),
-            name: nextName,
-          };
-        });
+    if (!isDecisionField) {
+      return [];
     }
 
-    return [];
+    return decisionValues
+      ?.filter((_, index) => !getDisabledValueField(index)) // filter disabled value
+      ?.map(({ value, label: optionLabel }, index) => {
+        const nextName = `[${name}][${value}]`;
+
+        return {
+          attributes: {
+            depth: depth + 1,
+            label: optionLabel,
+            paths: [...paths, nextName],
+            value,
+            ...(getNestedChildren(currentHierarchyPointNode, index).length === 0 && { isLeaf: true }),
+          },
+          children: getNestedChildren(currentHierarchyPointNode, index),
+          name: nextName,
+        };
+      });
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -137,11 +137,11 @@ const useFormTreeCardMutation = () => {
 
     const currentName = currentHierarchyPointNode?.data?.name || "";
     const currentDepth = currentHierarchyPointNode?.depth || 0;
-    const isRoot = !currentHierarchyPointNode;
     const isEdit = modalOpen === "edit";
-    const depth = isRoot ? 0 : currentDepth + (isEdit ? 0 : 1);
+    const depth = currentDepth + (isEdit ? 0 : 1);
     const paths = getPaths(currentHierarchyPointNode, currentName, name, isEdit);
-    const isLeaf = !currentHierarchyPointNode?.data?.children.length && !decisionValues[0].value && !decisionValues[0].label;
+    const isRoot = !currentHierarchyPointNode || depth === 0;
+    const isLeaf = !decisionValues[0].value || !decisionValues[0].label;
 
     const children = {
       attributes: {
@@ -149,7 +149,7 @@ const useFormTreeCardMutation = () => {
         label,
         paths,
         type,
-        ...(currentDepth === 0 && { isRoot }),
+        ...(isRoot && { isRoot }),
         ...(disabled && { disabled }),
         ...(isDecisionField && { isDecisionField }),
         ...(required && { required }),
