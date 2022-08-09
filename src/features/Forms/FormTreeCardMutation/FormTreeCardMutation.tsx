@@ -51,7 +51,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
-        <TextField label={t("label", { ns: "form" })} onChange={handleChangeLabel} value={label} required />
+        <TextField sx={{ flex: 1 }} label={t("label", { ns: "form" })} onChange={handleChangeLabel} value={label} required />
         <TextField
           label={t("name")}
           sx={{ flex: 1 }}
@@ -74,7 +74,14 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             <MenuItem value="select">{t("type.select", { ns: "form" })}</MenuItem>
           </Select>
         </FormControl>
-        <TextField label={t("step", { ns: "form" })} onChange={handleChangeStep} value={step} type="number" inputProps={{ min: 0 }} />
+        <TextField
+          sx={{ flex: 1 }}
+          label={t("step", { ns: "form" })}
+          onChange={handleChangeStep}
+          value={step}
+          type="number"
+          inputProps={{ min: 0 }}
+        />
       </Stack>
 
       <Stack direction="row" spacing={1} paddingY={1} alignItems="center" justifyContent="space-between">
