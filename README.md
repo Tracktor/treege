@@ -1,9 +1,6 @@
-<div align="center">
+<div style="text-align: center">
   <img alt="Treege" src="https://raw.githubusercontent.com/Tracktor/treege/main/src/assets/img/treege-white.png" style="padding: 20px; max-height:100px; width: auto;" />
-</div>
-
-<div align="center">
-  <strong>Treege is a tools for decision tree generator</strong>
+  <div>  <strong>Treege is a tools for decision tree generator</strong></div>
 </div>
 
 https://user-images.githubusercontent.com/108873902/184317603-61ceafc6-a326-49b2-b0de-ffda9cf9c75e.mov
