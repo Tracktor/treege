@@ -1,15 +1,16 @@
-<div style="text-align: center">
+<div align="center">
   <img alt="Treege" src="https://raw.githubusercontent.com/Tracktor/treege/main/src/assets/img/treege-white.png" style="padding: 20px; max-height:100px; width: auto;" />
   <div>  <strong>Treege is a tools for decision tree generator</strong></div>
 </div>
 
-https://user-images.githubusercontent.com/108873902/184317603-61ceafc6-a326-49b2-b0de-ffda9cf9c75e.mov
+<video src="https://user-images.githubusercontent.com/108873902/184317603-61ceafc6-a326-49b2-b0de-ffda9cf9c75e.mov"></video>
+
 
 - [Features](#Features)
 - [Available Scripts](#Available-Scripts)
-  - [yarn dev](#yarn-dev)
-  - [yarn build](#yarn-build)
-  - [yarn preview](#yarn-preview)
+    - [yarn dev](#yarn-dev)
+    - [yarn build](#yarn-build)
+    - [yarn preview](#yarn-preview)
 - [Embed](#Embed)
     - [Provide data to iframe](#Provide-data-to-iframe)
     - [Listen Treege event](#Listen-Treege-event)
@@ -23,8 +24,10 @@ https://user-images.githubusercontent.com/108873902/184317603-61ceafc6-a326-49b2
 - ⚡️ **[Vite](https://vitejs.dev)** - Next Generation Frontend Tooling
 - 📐 **[ESLint](https://eslint.org)** - Code analyzer
 - 🚀 **[Vitest](https://vitest.dev)** - A Vite native unit test framework. It's fast!
-- 🛠️ **[React Testing Library](https://testing-library.com/docs/react-testing-library/intro)** - React DOM testing utilities
-- 💅️ **[CSS Modules](https://github.com/css-modules/css-modules)** - CSS files in which all class names are scoped locally
+- 🛠️ **[React Testing Library](https://testing-library.com/docs/react-testing-library/intro)** - React DOM testing
+  utilities
+- 💅️ **[CSS Modules](https://github.com/css-modules/css-modules)** - CSS files in which all class names are scoped
+  locally
 
 ## Available Scripts
 
@@ -39,6 +42,7 @@ The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
 ### `yarn build`
+
 Builds the app for production to the `dist` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
@@ -48,6 +52,7 @@ Your app is ready to be deployed!
 See the section about [deployment](https://vitejs.dev/guide/static-deploy.html) for more information.
 
 ### `yarn preview`
+
 Locally preview production build
 
 ## Embed
@@ -58,18 +63,18 @@ Locally preview production build
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Treege Iframe</title>
-    <style>
-        html,
-        body,
-        iframe {
-            overflow: hidden;
-            margin: 0;
-            height: 100%;
-            width: 100%;
-            border: 0;
-        }
-    </style>
+  <title>Treege Iframe</title>
+  <style>
+    html,
+    body,
+    iframe {
+      overflow: hidden;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      border: 0;
+    }
+  </style>
 </head>
 <body>
 
@@ -87,23 +92,23 @@ const iframe = document.querySelector("iframe");
 iframe.addEventListener("load", handleLoadIframe);
 
 function handleLoadIframe() {
-    const tree = {
-        attributes: {
-            depth: 0,
-            disabled: false,
-            isLeaf: true,
-            isRoot: true,
-            paths: ["Age"],
-            required: false,
-            type: "select",
-        },
-        children: [],
-        name: "Age",
-    }
+  const tree = {
+    attributes: {
+      depth: 0,
+      disabled: false,
+      isLeaf: true,
+      isRoot: true,
+      paths: ["Age"],
+      required: false,
+      type: "select",
+    },
+    children: [],
+    name: "Age",
+  }
 
-    setTimeout(() => {
-        iframe.contentWindow.postMessage({source: "treege", tree, type: "setTree"}, "*");
-    }, 100);
+  setTimeout(() => {
+    iframe.contentWindow.postMessage({ source: "treege", tree, type: "setTree" }, "*");
+  }, 100);
 }
 ```
 
@@ -115,15 +120,16 @@ const iframe = document.querySelector("iframe");
 window.addEventListener("message", handleMessage);
 
 function handleMessage(event) {
-    // On save event is trigger from iframe
-    if (event.origin === "{{YOUR_TREEGE_URL}}" && event.data.type === "onSave" && event.data.source === "treege") {
-        // Get tree data from Treege
-        console.log(event.data.tree);
-    }
+  // On save event is trigger from iframe
+  if (event.origin === "{{YOUR_TREEGE_URL}}" && event.data.type === "onSave" && event.data.source === "treege") {
+    // Get tree data from Treege
+    console.log(event.data.tree);
+  }
 }
 ```
 
 ### Events listener
+
 List of `event.data` that can be listened with`window.addEventListener("message")`
 
 | Event name | Data                                                                                        |
@@ -131,6 +137,7 @@ List of `event.data` that can be listened with`window.addEventListener("message"
 | onSave     | `{source: "treege", type : "onSave", tree : {{attributes: {...}, children: [], name: ""}}}` |
 
 ### Events message
+
 List of events that can be sent with `iframe.contentWindow.postMessage`
 
 | Event name | Data                                                                                         |
@@ -138,6 +145,7 @@ List of events that can be sent with `iframe.contentWindow.postMessage`
 | setTree    | `{source: "treege", type : "setTree", tree : {{attributes: {...}, children: [], name: ""}}}` |
 
 ### Types
+
 Tree data that can be provided
 
 ``` typescript
@@ -181,6 +189,7 @@ export interface TreeNodeValues {
 ```
 
 ## Convention
+
 - [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)
 - [Versioning](https://semver.org)
 - [Conventional Commits](https://www.conventionalcommits.org)
