@@ -148,6 +148,10 @@ List of events that can be sent with `iframe.contentWindow.postMessage`
 Tree data that can be provided
 
 ``` typescript
+type TreeNodeAttributes = TreeNodeField | TreeNodeValues;
+```
+
+``` typescript
 interface TreeNode {
   name: string;
   attributes: TreeNodeAttributes;
@@ -155,19 +159,17 @@ interface TreeNode {
 }
 ```
 
-``` typescript
-type TreeNodeAttributes = TreeNodeField | TreeNodeValues;
-```
-
 ```typescript
 interface TreeNodeField {
   depth: number;
-  disabled: boolean;
+  disabled?: boolean;
+  isDecisionField?: boolean;
   isLeaf?: boolean;
   isRoot?: boolean;
-  label?: never;
+  label: string;
   paths: string[];
-  required: boolean;
+  required?: boolean;
+  step?: string;
   type: string;
   value?: never;
 }
@@ -177,11 +179,13 @@ interface TreeNodeField {
 export interface TreeNodeValues {
   depth: number;
   disabled?: never;
+  isDecisionField?: never;
   isLeaf?: boolean;
   isRoot?: never;
   label: string;
   paths: string[];
   required?: never;
+  step?: never;
   type?: never;
   value: string;
 }
