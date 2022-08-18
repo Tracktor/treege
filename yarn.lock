@@ -1200,7 +1200,7 @@
   resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.8.0.tgz#f580f9beb67176fa57aae70b08ed510e1b18980f"
   integrity sha512-G/YwXTkv7Den9mXDO7AhLWkE3q+I92B+VqAE+dYG4NGPaHZGvt3G8Q0p9vmE+sq7rTGphUbAvmQ9YpbfMQGGlA==
 
-"@emotion/react@^11.9.3":
+"@emotion/react@^11.10.0":
   version "11.10.0"
   resolved "https://registry.yarnpkg.com/@emotion/react/-/react-11.10.0.tgz#53c577f063f26493f68a05188fb87528d912ff2e"
   integrity sha512-K6z9zlHxxBXwN8TcpwBKcEsBsOw4JWCCmR+BeeOWgqp8GIU1yA2Odd41bwdAAr0ssbQrbJbVnndvv7oiv1bZeQ==
@@ -1229,7 +1229,7 @@
   resolved "https://registry.yarnpkg.com/@emotion/sheet/-/sheet-1.2.0.tgz#771b1987855839e214fc1741bde43089397f7be5"
   integrity sha512-OiTkRgpxescko+M51tZsMq7Puu/KP55wMT8BgpcXVG2hqXc0Vo0mfymJ/Uj24Hp0i083ji/o0aLddh08UEjq8w==
 
-"@emotion/styled@^11.9.3":
+"@emotion/styled@^11.10.0":
   version "11.10.0"
   resolved "https://registry.yarnpkg.com/@emotion/styled/-/styled-11.10.0.tgz#c19484dab4206ae46727c07efb4316423dd21312"
   integrity sha512-V9oaEH6V4KePeQpgUE83i8ht+4Ri3E8Djp/ZPJ4DQlqWhSKITvgzlR3/YQE2hdfP4Jw3qVRkANJz01LLqK9/TA==
@@ -1455,7 +1455,7 @@
   dependencies:
     "@babel/runtime" "^7.17.2"
 
-"@mui/material@^5.9.2":
+"@mui/material@^5.10.1":
   version "5.10.1"
   resolved "https://registry.yarnpkg.com/@mui/material/-/material-5.10.1.tgz#4a980c1fc34e2853d674dd0eff2723618402a4f4"
   integrity sha512-E9fhskX6TwUdAzpL5+yoAzRxb6wY4oBqmBVlgUuLndSwPRYxXoGu+z74NxbDEkxUoHdb7vrDcRTswpB6ykDITQ==
@@ -1948,7 +1948,7 @@
     "@uiw/codemirror-extensions-basic-setup" "4.11.4"
     codemirror "^6.0.0"
 
-"@vitejs/plugin-react@^2.0.0":
+"@vitejs/plugin-react@^2.0.0", "@vitejs/plugin-react@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@vitejs/plugin-react/-/plugin-react-2.0.1.tgz#3197c01d8e4a4eb9fed829c7888c467a43aadd4e"
   integrity sha512-uINzNHmjrbunlFtyVkST6lY1ewSfz/XwLufG0PIqvLGnpk2nOIOa/1CACTDNcKi1/RwaCzJLmsXwm1NsUVV/NA==
@@ -2677,15 +2677,15 @@ dequal@^2.0.2:
 
 "design-system@git+https://github.com/Tracktor/design-system.git":
   version "1.0.0"
-  resolved "git+https://github.com/Tracktor/design-system.git#177c575f173a6fbd1584d8f44d693414ac353b1b"
+  resolved "git+https://github.com/Tracktor/design-system.git#87d0fcbfbb7dbec7693a3dc9fb83b0078d3c2d2f"
   dependencies:
-    "@emotion/react" "^11.9.3"
-    "@emotion/styled" "^11.9.3"
-    "@mui/material" "^5.9.2"
-    "@vitejs/plugin-react" "^2.0.0"
+    "@emotion/react" "^11.10.0"
+    "@emotion/styled" "^11.10.0"
+    "@mui/material" "^5.10.1"
+    "@vitejs/plugin-react" "^2.0.1"
     typescript "^4.7.4"
-    vite "^3.0.3"
-    vite-plugin-dts "^1.4.0"
+    vite "^3.0.8"
+    vite-plugin-dts "^1.4.1"
 
 diff-sequences@^28.1.1:
   version "28.1.1"
@@ -5147,7 +5147,7 @@ validator@^13.7.0:
   resolved "https://registry.yarnpkg.com/validator/-/validator-13.7.0.tgz#4f9658ba13ba8f3d82ee881d3516489ea85c0857"
   integrity sha512-nYXQLCBkpJ8X6ltALua9dRrZDHVYxjJ1wgskNt1lH9fzGjs3tgojGSCBjmEPwkWS1y29+DrizMTW19Pr9uB2nw==
 
-vite-plugin-dts@^1.4.0:
+vite-plugin-dts@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/vite-plugin-dts/-/vite-plugin-dts-1.4.1.tgz#013a2a3505ad543869d1118f346cb54c58de10a4"
   integrity sha512-jo7E4ZeheD2o48oGiI3EygPbej7ZkGFHg3GVTt7Wuo6NgzThLvuzGGuduaFpnhJOGi1piDFsu6oui/wDKIIORQ==
@@ -5160,7 +5160,7 @@ vite-plugin-dts@^1.4.0:
     fs-extra "^10.0.1"
     ts-morph "^14.0.0"
 
-"vite@^2.9.12 || ^3.0.0-0", vite@^3.0.3:
+"vite@^2.9.12 || ^3.0.0-0", vite@^3.0.3, vite@^3.0.8:
   version "3.0.8"
   resolved "https://registry.yarnpkg.com/vite/-/vite-3.0.8.tgz#aa095ad8e3e5da46d9ec7e878f262678965d6531"
   integrity sha512-AOZ4eN7mrkJiOLuw8IA7piS4IdOQyQCA81GxGsAQvAZzMRi9ZwGB3TOaYsj4uLAWK46T5L4AfQ6InNGlxX30IQ==
