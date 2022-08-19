@@ -9,7 +9,6 @@ const useFormTreeCardMutation = () => {
   const { dispatchTree, setModalOpen, currentHierarchyPointNode, modalOpen } = useContext(DecisionTreeGeneratorContext);
   const defaultDecisionValues = useMemo(() => [{ id: "0", label: "", value: "" }], []);
   const [decisionValues, setDecisionValues] = useState(defaultDecisionValues);
-  const [disabled, setDisabled] = useState(false);
   const [name, setName] = useState("");
   const [label, setLabel] = useState("");
   const [required, setRequired] = useState(false);
@@ -50,10 +49,6 @@ const useFormTreeCardMutation = () => {
 
   const handleChangeStep = (event: ChangeEvent<HTMLInputElement>) => {
     setStep(event.target.value);
-  };
-
-  const handleChangeDisabled = (event: ChangeEvent<HTMLInputElement>) => {
-    setDisabled(event.target.checked);
   };
 
   const handleChangeName = (event: ChangeEvent<HTMLInputElement>) => {
@@ -150,7 +145,6 @@ const useFormTreeCardMutation = () => {
         paths,
         type,
         ...(isRoot && { isRoot }),
-        ...(disabled && { disabled }),
         ...(isDecisionField && { isDecisionField }),
         ...(required && { required }),
         ...(step && { step }),
@@ -185,7 +179,6 @@ const useFormTreeCardMutation = () => {
       setName(currentHierarchyPointNode?.data.name || "");
       setType(currentHierarchyPointNode?.data.attributes?.type || "");
       setRequired(currentHierarchyPointNode?.data.attributes?.required || false);
-      setDisabled(currentHierarchyPointNode?.data.attributes?.disabled || false);
       setStep(currentHierarchyPointNode?.data.attributes?.step || "");
       setDecisionValues(initialValues?.length ? initialValues : defaultDecisionValues);
       setLabel(currentHierarchyPointNode?.data.attributes?.label || "");
@@ -204,10 +197,8 @@ const useFormTreeCardMutation = () => {
 
   return {
     decisionValues,
-    disabled,
     getDisabledValueField,
     handleAddValue,
-    handleChangeDisabled,
     handleChangeLabel,
     handleChangeName,
     handleChangeOptionLabel,
