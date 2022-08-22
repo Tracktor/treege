@@ -2675,9 +2675,9 @@ dequal@^2.0.2:
   resolved "https://registry.yarnpkg.com/dequal/-/dequal-2.0.3.tgz#2644214f1997d39ed0ee0ece72335490a7ac67be"
   integrity sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==
 
-"design-system@git+https://github.com/Tracktor/design-system.git#v1.0.0":
+"design-system@git+https://github.com/Tracktor/design-system#1.0.0":
   version "1.0.0"
-  resolved "git+https://github.com/Tracktor/design-system.git#499567751546aadb1609292f4037268960360405"
+  resolved "git+https://github.com/Tracktor/design-system#499567751546aadb1609292f4037268960360405"
   dependencies:
     "@emotion/react" "^11.10.0"
     "@emotion/styled" "^11.10.0"
