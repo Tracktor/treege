@@ -2677,7 +2677,7 @@ dequal@^2.0.2:
 
 "design-system@git+https://github.com/Tracktor/design-system#1.0.0":
   version "1.0.0"
-  resolved "git+https://github.com/Tracktor/design-system#60b82113a80174027731226a31467fc21620e563"
+  resolved "git+https://github.com/Tracktor/design-system#78b27ee7d56e70bbadecc828859570ce739b62a8"
   dependencies:
     "@emotion/react" "^11.10.0"
     "@emotion/styled" "^11.10.0"
