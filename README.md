@@ -16,6 +16,9 @@
     - [Events listener](#Events-listener)
     - [Events message](#Events-message)
 - [Types](#Types)
+- [Generate form from data Treege ](#Generate-form-from-data-Treege)
+- [Convention](#Convention)
+- [Changelog](#Changelog)
 
 ## Features
 
@@ -188,6 +191,9 @@ export interface TreeNodeValues {
   value: string;
 }
 ```
+
+## Generate form from Treege data
+Form can be easily generated with the React library [treege-consumer](https://github.com/Tracktor/treege-consumer)
 
 ## Convention
 
