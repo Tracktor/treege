@@ -184,7 +184,6 @@ const useFormTreeCardMutation = () => {
       setLabel(currentHierarchyPointNode?.data.attributes?.label || "");
     }
   }, [
-    currentHierarchyPointNode?.data.attributes?.disabled,
     currentHierarchyPointNode?.data.attributes?.label,
     currentHierarchyPointNode?.data.attributes?.required,
     currentHierarchyPointNode?.data.attributes?.step,

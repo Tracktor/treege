@@ -1909,10 +1909,10 @@
     "@typescript-eslint/types" "5.33.1"
     eslint-visitor-keys "^3.3.0"
 
-"@uiw/codemirror-extensions-basic-setup@4.11.4":
-  version "4.11.4"
-  resolved "https://registry.yarnpkg.com/@uiw/codemirror-extensions-basic-setup/-/codemirror-extensions-basic-setup-4.11.4.tgz#c749a66980e18ca6651488712ea3239c82a31cdd"
-  integrity sha512-pc9pQtCQFmAH5nV9UmX37VB0+yzSFQ2kbSvLHBFST9siYnacaR6HxmkBBBbYYXwVK/n9pGZ6A8ZefAUNTFfo/A==
+"@uiw/codemirror-extensions-basic-setup@4.11.5":
+  version "4.11.5"
+  resolved "https://registry.yarnpkg.com/@uiw/codemirror-extensions-basic-setup/-/codemirror-extensions-basic-setup-4.11.5.tgz#e66462bda16bb635948a6faa8ee354f5db22f0b5"
+  integrity sha512-aHtdF1JEzHmBVuWXemr8OH7SQP/LbXXZdiOo/4tcxjFpyTuVGzPteBdfQU0xPOk0m+5Oc1LPqM+HaNPXNzX6aA==
   dependencies:
     "@codemirror/autocomplete" "^6.0.0"
     "@codemirror/commands" "^6.0.0"
@@ -1923,29 +1923,29 @@
     "@codemirror/view" "^6.0.0"
 
 "@uiw/codemirror-theme-dracula@^4.11.4":
-  version "4.11.4"
-  resolved "https://registry.yarnpkg.com/@uiw/codemirror-theme-dracula/-/codemirror-theme-dracula-4.11.4.tgz#3d7418d9dfeb90c98a59a159702f003127c7cd64"
-  integrity sha512-sJUk1jsKtS+higisFLJWE+F78IEohg+pRBKjfVeCwvxOwIKr8lPfwboVeoR9q6LwoeftG0PaWkdio1X8Kk2XWw==
+  version "4.11.5"
+  resolved "https://registry.yarnpkg.com/@uiw/codemirror-theme-dracula/-/codemirror-theme-dracula-4.11.5.tgz#e2eee77a3f841d5b67946d5c5f99e31b273d192f"
+  integrity sha512-jrC4Az3D6iVPKxQ085UOexYuagLKObvOA31ZY0ygSaxho/m6SH2EGy4hItHfSnjSr9iF0wCV0qJ9jZIxr0hXkg==
   dependencies:
-    "@uiw/codemirror-themes" "4.11.4"
+    "@uiw/codemirror-themes" "4.11.5"
 
-"@uiw/codemirror-themes@4.11.4":
-  version "4.11.4"
-  resolved "https://registry.yarnpkg.com/@uiw/codemirror-themes/-/codemirror-themes-4.11.4.tgz#52a25f04756bfb388a2c1cbdbf980bffc781cc73"
-  integrity sha512-tp4wahAuGRhMoKNMk/6lt8nNr21UZ4zhFqdDTZZ4jLc2w4BKTQ23AkublXAM8vMSuYt/LpE+cajuq4/aSYn01w==
+"@uiw/codemirror-themes@4.11.5":
+  version "4.11.5"
+  resolved "https://registry.yarnpkg.com/@uiw/codemirror-themes/-/codemirror-themes-4.11.5.tgz#15926e65129b41c9ec607065416fc829970e122a"
+  integrity sha512-f2i3yGPzxmCsvx4t6HHykcEhAxbI4GDAMzdFtQfFYMuu1F5sQP43JQvBC8ESflYk05QmE9rCWWZZpvOathLzVw==
   dependencies:
     "@codemirror/language" "^6.0.0"
     "@codemirror/state" "^6.0.0"
     "@codemirror/view" "^6.0.0"
 
 "@uiw/react-codemirror@^4.11.4":
-  version "4.11.4"
-  resolved "https://registry.yarnpkg.com/@uiw/react-codemirror/-/react-codemirror-4.11.4.tgz#76adc757baa0b8b1a9bd30d7081f5622b896d607"
-  integrity sha512-p7DNBI6kj+DUzTe7MjBJwZ3qo0nSOav7T0MEGRpRNZA9ZO3RnzhPMie6swDA8e3dz1s59l9UdFB1fgyam1vFhQ==
+  version "4.11.5"
+  resolved "https://registry.yarnpkg.com/@uiw/react-codemirror/-/react-codemirror-4.11.5.tgz#9efead5e0f9496bda6eeb1118b67687b3b82861a"
+  integrity sha512-Bf8l3nVV4ekHbv4U0VrzUibl8+ucAY3UV0gk0xckbFnV1AlUxHcrYFiXSgy/rkyWBD7enHQENtM888B/3qBiwg==
   dependencies:
     "@babel/runtime" "^7.18.6"
     "@codemirror/theme-one-dark" "^6.0.0"
-    "@uiw/codemirror-extensions-basic-setup" "4.11.4"
+    "@uiw/codemirror-extensions-basic-setup" "4.11.5"
     codemirror "^6.0.0"
 
 "@vitejs/plugin-react@^2.0.0", "@vitejs/plugin-react@^2.0.1":
@@ -2279,9 +2279,9 @@ callsites@^3.0.0:
   integrity sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
 
 caniuse-lite@^1.0.30001370:
-  version "1.0.30001380"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001380.tgz#6f2427ad8ebee1b400a38ca3560515756ba352bb"
-  integrity sha512-OO+pPubxx16lkI7TVrbFpde8XHz66SMwstl1YWpg6uMGw56XnhYVwtPIjvX4kYpzwMwQKr4DDce394E03dQPGg==
+  version "1.0.30001381"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001381.tgz#e62955310e6e69cdf4b40bc5bc0895aa24bc4b8b"
+  integrity sha512-fEnkDOKpvp6qc+olg7+NzE1SqyfiyKf4uci7fAU38M3zxs0YOyKOxW/nMZ2l9sJbt7KZHcDIxUnbI0Iime7V4w==
 
 chai@^4.3.6:
   version "4.3.6"
@@ -2675,9 +2675,9 @@ dequal@^2.0.2:
   resolved "https://registry.yarnpkg.com/dequal/-/dequal-2.0.3.tgz#2644214f1997d39ed0ee0ece72335490a7ac67be"
   integrity sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==
 
-"design-system@git+https://github.com/Tracktor/design-system.git":
+"design-system@git+https://github.com/Tracktor/design-system.git#v1.0.0":
   version "1.0.0"
-  resolved "git+https://github.com/Tracktor/design-system.git#c46e05eab399dc70113e2560d99a19e030a9d199"
+  resolved "git+https://github.com/Tracktor/design-system.git#499567751546aadb1609292f4037268960360405"
   dependencies:
     "@emotion/react" "^11.10.0"
     "@emotion/styled" "^11.10.0"
@@ -3015,9 +3015,9 @@ eslint-config-react-app@^7.0.1:
     eslint-plugin-react-hooks "^4.3.0"
     eslint-plugin-testing-library "^5.0.1"
 
-"eslint-config-react@git+https://github.com/Tracktor/eslint-config-react":
+"eslint-config-react@git+https://github.com/Tracktor/eslint-config-react#v1.0.0":
   version "1.0.0"
-  resolved "git+https://github.com/Tracktor/eslint-config-react#aec425e6b4898bf2413dfeb970d5c99abdfb153c"
+  resolved "git+https://github.com/Tracktor/eslint-config-react#7c8dbca63b1517bcf1a999eedb7d5c84ccc1bdc8"
   dependencies:
     "@typescript-eslint/eslint-plugin" "^5.30.7"
     "@typescript-eslint/parser" "^5.30.7"

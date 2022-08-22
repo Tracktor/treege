@@ -24,7 +24,7 @@ interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum" | "hier
 const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, hierarchyPointNode, size = 220 }: TreeCardProps) => {
   const { t } = useTranslation(["translation", "form"]);
   const { attributes } = nodeDatum || {};
-  const { isRoot, isLeaf, disabled, required, step, type, label, value } = attributes || {};
+  const { isRoot, isLeaf, required, step, type, label, value } = attributes || {};
   const isField = type;
   const isValue = !isField;
   const isBranch = !isRoot && !isLeaf;
@@ -51,9 +51,8 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
               </Stack>
             )}
             {isField && <Chip color="secondary" size="small" label={t(`type.${type}`, { ns: "form" })} />}
-            {(disabled || required) && (
+            {required && (
               <Stack direction="row" spacing={0.5}>
-                {disabled && <Chip color="error" size="small" variant="outlined" label={`${t("disabled")}`} />}
                 {required && <Chip color="warning" size="small" variant="outlined" label={`${t("required")}`} />}
               </Stack>
             )}
