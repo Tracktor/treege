@@ -12,10 +12,11 @@ import {
   Select,
   Stack,
   TextField,
-  Typography,
 } from "design-system";
 import { useTranslation } from "react-i18next";
 import styles from "./FormTreeCardMutation.module.scss";
+import decisionFields from "@/constants/decisionFields";
+import staticFields from "@/constants/staticFields";
 import useFormTreeCardMutation from "@/features/Forms/FormTreeCardMutation/useFormTreeCardMutation";
 
 interface FormTreeCardMutationProps {
@@ -65,16 +66,22 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         <FormControl sx={{ flex: 1 }} required>
           <InputLabel>{t("type")}</InputLabel>
           <Select value={type} label={t("type")} onChange={handleChangeType}>
-            <MenuItem value="number">{t("type.number", { ns: "form" })}</MenuItem>
-            <MenuItem value="text">{t("type.text", { ns: "form" })}</MenuItem>
-            <MenuItem value="switch">{t("type.switch", { ns: "form" })}</MenuItem>
-            <MenuItem value="checkbox">{t("type.checkbox", { ns: "form" })}</MenuItem>
-            <MenuItem value="radio">
-              <Typography color="secondary">{t("type.radio", { ns: "form" })}</Typography>
+            <MenuItem disabled value="">
+              <em>{t("staticFields", { ns: "form" })}</em>
             </MenuItem>
-            <MenuItem value="select">
-              <Typography color="secondary">{t("type.select", { ns: "form" })}</Typography>
+            {staticFields.map(({ type: fieldsType }) => (
+              <MenuItem key={fieldsType} value={fieldsType}>
+                {t(`type.${fieldsType}`, { ns: "form" })}
+              </MenuItem>
+            ))}
+            <MenuItem disabled value="">
+              <em>{t("decisionField", { ns: "form" })}</em>
             </MenuItem>
+            {decisionFields.map(({ type: fieldsType }) => (
+              <MenuItem key={fieldsType} value={fieldsType}>
+                {t(`type.${fieldsType}`, { ns: "form" })}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
         <TextField

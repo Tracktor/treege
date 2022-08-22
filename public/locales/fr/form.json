@@ -1,9 +1,13 @@
 {
+  "decisionField":"Champs de décision",
   "label" : "Label",
   "mustBeUnique": "Doit être unique",
+  "staticFields": "Champs statiques",
   "step": "Étape",
   "type": {
+    "address": "Adresse",
     "checkbox": "Case à cocher",
+    "date": "Date",
     "number": "Champ de nombre",
     "radio": "Radio",
     "select": "Select",

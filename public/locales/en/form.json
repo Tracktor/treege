@@ -1,9 +1,13 @@
 {
+  "decisionFields":"Decision fields",
   "label" : "Label",
   "mustBeUnique": "Must be unique",
+  "staticFields": "Static fields",
   "step": "Step",
   "type": {
+    "address": "Address",
     "checkbox": "Checkbox",
+    "date": "Date",
     "number": "Number field",
     "radio": "Radio",
     "select": "Select",
