@@ -162,7 +162,6 @@ interface TreeNode {
 ```typescript
 interface TreeNodeField {
   depth: number;
-  disabled?: boolean;
   isDecisionField?: boolean;
   isLeaf?: boolean;
   isRoot?: boolean;
@@ -178,7 +177,6 @@ interface TreeNodeField {
 ``` typescript
 export interface TreeNodeValues {
   depth: number;
-  disabled?: never;
   isDecisionField?: never;
   isLeaf?: boolean;
   isRoot?: never;
