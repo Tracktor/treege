@@ -1,6 +1,5 @@
 {
   "name": "treege",
-  "private": true,
   "license": "ISC",
   "version": "1.0.0",
   "type": "module",
