@@ -16,9 +16,8 @@
     - [Events listener](#Events-listener)
     - [Events message](#Events-message)
 - [Types](#Types)
-- [Generate form from data Treege ](#Generate-form-from-data-Treege)
+- [Generate form from Treege data](#Generate-form-from-Treege-data)
 - [Convention](#Convention)
-- [Changelog](#Changelog)
 
 ## Features
 
@@ -200,7 +199,3 @@ Form can be easily generated with the React library [treege-consumer](https://gi
 - [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)
 - [Versioning](https://semver.org)
 - [Conventional Commits](https://www.conventionalcommits.org)
-
-## Changelog
-
-### 1.0.0
