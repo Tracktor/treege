@@ -103,7 +103,15 @@ const useFormTreeCardMutation = () => {
     return [...paths, nextName];
   };
 
-  const getChildren = ({ depth, paths }: { depth: number; paths: string[] }) => {
+  const getChildren = ({
+    depth,
+    paths,
+    hierarchyPointNode,
+  }: {
+    depth: number;
+    paths: string[];
+    hierarchyPointNode: null | HierarchyPointNode<TreeNode>;
+  }) => {
     if (!isDecisionField) {
       return [];
     }
@@ -112,7 +120,7 @@ const useFormTreeCardMutation = () => {
       ?.filter((_, index) => !getDisabledValueField(index)) // filter disabled value
       ?.map(({ value, label: optionLabel }, index) => {
         const nextName = `${name}:${value}`;
-        const children = getNestedChildren(currentHierarchyPointNode, index);
+        const children = getNestedChildren(hierarchyPointNode, index);
 
         return {
           attributes: {
@@ -151,7 +159,7 @@ const useFormTreeCardMutation = () => {
         ...(step && { step }),
         ...(isLeaf && { isLeaf }),
       },
-      children: getChildren({ depth, paths }),
+      children: getChildren({ depth, hierarchyPointNode: currentHierarchyPointNode, paths }),
       name,
     };
 
@@ -167,7 +175,7 @@ const useFormTreeCardMutation = () => {
     setModalOpen(null);
   };
 
-  // Set initial form data
+  // Set initial form data edit modal
   useEffect(() => {
     if (modalOpen === "edit") {
       const initialValues = currentHierarchyPointNode?.data?.children
