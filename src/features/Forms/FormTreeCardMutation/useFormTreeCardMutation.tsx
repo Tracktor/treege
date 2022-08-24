@@ -134,7 +134,7 @@ const useFormTreeCardMutation = () => {
     const currentName = currentHierarchyPointNode?.data?.name || "";
     const currentDepth = currentHierarchyPointNode?.depth || 0;
     const isEdit = modalOpen === "edit";
-    const depth = currentDepth + (isEdit ? 0 : 1);
+    const depth = currentDepth + (isEdit || currentHierarchyPointNode === null ? 0 : 1);
     const paths = getPaths(currentHierarchyPointNode, currentName, name, isEdit);
     const isRoot = !currentHierarchyPointNode || depth === 0;
     const isLeaf = !decisionValues[0].value || !decisionValues[0].label;
