@@ -103,7 +103,7 @@ const useFormTreeCardMutation = () => {
     return [...paths, nextName];
   };
 
-  const addValuesAsChildren = ({ depth, paths }: { depth: number; paths: string[] }) => {
+  const getChildren = ({ depth, paths }: { depth: number; paths: string[] }) => {
     if (!isDecisionField) {
       return [];
     }
@@ -112,6 +112,7 @@ const useFormTreeCardMutation = () => {
       ?.filter((_, index) => !getDisabledValueField(index)) // filter disabled value
       ?.map(({ value, label: optionLabel }, index) => {
         const nextName = `${name}:${value}`;
+        const children = getNestedChildren(currentHierarchyPointNode, index);
 
         return {
           attributes: {
@@ -119,9 +120,9 @@ const useFormTreeCardMutation = () => {
             label: optionLabel,
             paths: [...paths, nextName],
             value,
-            ...(getNestedChildren(currentHierarchyPointNode, index).length === 0 && { isLeaf: true }),
+            ...(children.length === 0 && { isLeaf: true }),
           },
-          children: getNestedChildren(currentHierarchyPointNode, index),
+          children,
           name: nextName,
         };
       });
@@ -150,7 +151,7 @@ const useFormTreeCardMutation = () => {
         ...(step && { step }),
         ...(isLeaf && { isLeaf }),
       },
-      children: addValuesAsChildren({ depth, paths }),
+      children: getChildren({ depth, paths }),
       name,
     };
 
