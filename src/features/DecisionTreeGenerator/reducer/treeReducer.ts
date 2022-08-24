@@ -6,6 +6,7 @@ export const treeReducerActionType = {
   appendTreeCard: "appendTreeCard",
   deleteTreeCard: "deleteTreeCard",
   replaceTreeCard: "replaceTreeCard",
+  replaceTreeCardAndKeepPrevChildren: "replaceTreeCardAndKeepPrevChildren",
   setIsLeaf: "setIsLeaf",
   setTree: "setTree",
 } as const;
@@ -25,6 +26,12 @@ export const replaceTreeCard = (name: string, children: TreeNode) => ({
   children,
   name,
   type: treeReducerActionType.replaceTreeCard,
+});
+
+export const replaceTreeCardAndKeepPrevChildren = (name: string, children: TreeNode) => ({
+  children,
+  name,
+  type: treeReducerActionType.replaceTreeCardAndKeepPrevChildren,
 });
 
 export const setTree = (tree: TreeNode) => ({
@@ -50,6 +57,15 @@ const treeReducer = (state: any, action: any) => {
       return removeObject(state, { name: action.name });
     case treeReducerActionType.replaceTreeCard:
       return replaceObject(state, { name: action.name }, action.children);
+    case treeReducerActionType.replaceTreeCardAndKeepPrevChildren:
+      return replaceObject(
+        state,
+        { name: action.name },
+        {
+          ...action.children,
+          children: returnFound(state, { name: action.name }).children,
+        }
+      );
     case treeReducerActionType.setIsLeaf:
       return changeProps(
         state,

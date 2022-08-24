@@ -2,7 +2,13 @@ import type { HierarchyPointNode } from "d3-hierarchy";
 import type { SelectChangeEvent } from "design-system";
 import { ChangeEvent, FormEvent, useContext, useEffect, useMemo, useState } from "react";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
-import { appendTreeCard, replaceTreeCard, setIsLeaf, setTree } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
+import {
+  appendTreeCard,
+  replaceTreeCard,
+  replaceTreeCardAndKeepPrevChildren,
+  setIsLeaf,
+  setTree,
+} from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 
 const useFormTreeCardMutation = () => {
@@ -89,29 +95,7 @@ const useFormTreeCardMutation = () => {
     }));
   };
 
-  const getPaths = (hierarchyPointNode: null | HierarchyPointNode<TreeNode>, prevName: string, nextName: string, isEdit: boolean) => {
-    const paths = hierarchyPointNode?.data?.attributes?.paths;
-
-    if (!paths) {
-      return [nextName];
-    }
-
-    if (isEdit) {
-      return paths.map((path) => (path === prevName ? nextName : path));
-    }
-
-    return [...paths, nextName];
-  };
-
-  const getChildren = ({
-    depth,
-    paths,
-    hierarchyPointNode,
-  }: {
-    depth: number;
-    paths: string[];
-    hierarchyPointNode: null | HierarchyPointNode<TreeNode>;
-  }) => {
+  const getChildren = ({ depth, hierarchyPointNode }: { depth: number; hierarchyPointNode: null | HierarchyPointNode<TreeNode> }) => {
     if (!isDecisionField) {
       return [];
     }
@@ -126,7 +110,6 @@ const useFormTreeCardMutation = () => {
           attributes: {
             depth: depth + 1,
             label: optionLabel,
-            paths: [...paths, nextName],
             value,
             ...(children.length === 0 && { isLeaf: true }),
           },
@@ -136,6 +119,22 @@ const useFormTreeCardMutation = () => {
       });
   };
 
+  const getIsLeaf = ({
+    hierarchyPointNode,
+    isDecisionField,
+    isEdit,
+  }: {
+    hierarchyPointNode: null | HierarchyPointNode<TreeNode>;
+    isDecisionField: boolean;
+    isEdit: boolean;
+  }) => {
+    if (isDecisionField) {
+      return false;
+    }
+
+    return isEdit ? hierarchyPointNode?.data?.children.length === 0 : true;
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
@@ -143,15 +142,14 @@ const useFormTreeCardMutation = () => {
     const currentDepth = currentHierarchyPointNode?.depth || 0;
     const isEdit = modalOpen === "edit";
     const depth = currentDepth + (isEdit || currentHierarchyPointNode === null ? 0 : 1);
-    const paths = getPaths(currentHierarchyPointNode, currentName, name, isEdit);
     const isRoot = !currentHierarchyPointNode || depth === 0;
-    const isLeaf = !decisionValues[0].value || !decisionValues[0].label;
+    const childOfChildren = getChildren({ depth, hierarchyPointNode: currentHierarchyPointNode });
+    const isLeaf = getIsLeaf({ hierarchyPointNode: currentHierarchyPointNode, isDecisionField, isEdit });
 
     const children = {
       attributes: {
         depth,
         label,
-        paths,
         type,
         ...(isRoot && { isRoot }),
         ...(isDecisionField && { isDecisionField }),
@@ -159,14 +157,14 @@ const useFormTreeCardMutation = () => {
         ...(step && { step }),
         ...(isLeaf && { isLeaf }),
       },
-      children: getChildren({ depth, hierarchyPointNode: currentHierarchyPointNode, paths }),
+      children: childOfChildren,
       name,
     };
 
-    if (isRoot) {
+    if (currentHierarchyPointNode === null) {
       dispatchTree(setTree(children));
     } else if (isEdit) {
-      dispatchTree(replaceTreeCard(currentName, children));
+      dispatchTree(isDecisionField ? replaceTreeCard(currentName, children) : replaceTreeCardAndKeepPrevChildren(currentName, children));
     } else {
       dispatchTree(setIsLeaf(currentName, false));
       dispatchTree(appendTreeCard(currentName, children));
