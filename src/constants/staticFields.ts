@@ -15,10 +15,16 @@ const staticFields = [
     type: "tel",
   },
   {
-    type: "time",
+    type: "address",
   },
   {
-    type: "address",
+    type: "url",
+  },
+  {
+    type: "date",
+  },
+  {
+    type: "time",
   },
   {
     requiredDisabled: true,
@@ -27,9 +33,6 @@ const staticFields = [
   {
     requiredDisabled: true,
     type: "checkbox",
-  },
-  {
-    type: "date",
   },
 ];
 

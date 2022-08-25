@@ -16,7 +16,8 @@
     "switch": "Switch",
     "tel": "Tel",
     "time": "Time",
-    "text": "Text"
+    "text": "Text",
+    "url": "URL"
   },
   "values": "Values"
 }
