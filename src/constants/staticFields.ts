@@ -12,6 +12,9 @@ const staticFields = [
     type: "password",
   },
   {
+    type: "tel",
+  },
+  {
     type: "address",
   },
   {
