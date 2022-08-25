@@ -99,7 +99,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           <FormGroup>
             <FormControlLabel
               disabled={isRequiredDisabled}
-              control={<Checkbox checked={required} onChange={handleChangeRequired} />}
+              control={<Checkbox checked={!isRequiredDisabled && required} onChange={handleChangeRequired} />}
               label={t("required")}
             />
           </FormGroup>
