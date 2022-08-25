@@ -10,6 +10,7 @@
     "date": "Date",
     "email" : "Email",
     "number": "Number field",
+    "password": "Password",
     "radio": "Radio",
     "select": "Select",
     "switch": "Switch",

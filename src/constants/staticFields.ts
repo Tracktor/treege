@@ -9,6 +9,9 @@ const staticFields = [
     type: "email",
   },
   {
+    type: "password",
+  },
+  {
     type: "address",
   },
   {
