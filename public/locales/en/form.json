@@ -9,13 +9,14 @@
     "checkbox": "Checkbox",
     "date": "Date",
     "email" : "Email",
-    "number": "Number field",
+    "number": "Number",
     "password": "Password",
     "radio": "Radio",
     "select": "Select",
     "switch": "Switch",
     "tel": "Tel",
-    "text": "Text field"
+    "time": "Time",
+    "text": "Text"
   },
   "values": "Values"
 }

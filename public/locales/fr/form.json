@@ -9,12 +9,13 @@
     "checkbox": "Case à cocher",
     "date": "Date",
     "email" : "Email",
-    "number": "Champ de nombre",
+    "number": "Nombre",
     "password": "Mot de passe",
     "radio": "Radio",
     "select": "Select",
     "switch": "Switch",
     "tel": "Téléphone",
-    "text": "Champ de texte"
+    "time": "Temps",
+    "text": "Texte"
   }
 }

@@ -15,6 +15,9 @@ const staticFields = [
     type: "tel",
   },
   {
+    type: "time",
+  },
+  {
     type: "address",
   },
   {
