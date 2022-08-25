@@ -1,6 +1,8 @@
 import type { HierarchyPointNode } from "d3-hierarchy";
 import type { SelectChangeEvent } from "design-system";
 import { ChangeEvent, FormEvent, useContext, useEffect, useMemo, useState } from "react";
+import decisionFields from "@/constants/decisionFields";
+import staticFields from "@/constants/staticFields";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
 import {
   appendTreeCard,
@@ -12,16 +14,16 @@ import {
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 
 const useFormTreeCardMutation = () => {
-  const { dispatchTree, setModalOpen, currentHierarchyPointNode, modalOpen } = useContext(DecisionTreeGeneratorContext);
   const defaultDecisionValues = useMemo(() => [{ id: "0", label: "", value: "" }], []);
+  const { dispatchTree, setModalOpen, currentHierarchyPointNode, modalOpen } = useContext(DecisionTreeGeneratorContext);
   const [decisionValues, setDecisionValues] = useState(defaultDecisionValues);
   const [name, setName] = useState("");
   const [label, setLabel] = useState("");
   const [required, setRequired] = useState(false);
   const [type, setType] = useState("");
   const [step, setStep] = useState("");
-  const isDecisionField = ["select", "radio"].includes(type);
-  const requiredDisabled = ["checkbox", "switch"].includes(type);
+  const isDecisionField = decisionFields.some((field) => field.type === type);
+  const isRequiredDisabled = staticFields.some((field) => field.type === type && field?.requiredDisabled);
 
   const getDisabledValueField = (index: number) => !isDecisionField && index > 0;
 
@@ -95,7 +97,7 @@ const useFormTreeCardMutation = () => {
     }));
   };
 
-  const getChildren = ({ depth, hierarchyPointNode }: { depth: number; hierarchyPointNode: null | HierarchyPointNode<TreeNode> }) => {
+  const getChildren = (depth: number) => {
     if (!isDecisionField) {
       return [];
     }
@@ -104,7 +106,7 @@ const useFormTreeCardMutation = () => {
       ?.filter((_, index) => !getDisabledValueField(index)) // filter disabled value
       ?.map(({ value, label: optionLabel }, index) => {
         const nextName = `${name}:${value}`;
-        const children = getNestedChildren(hierarchyPointNode, index);
+        const children = getNestedChildren(currentHierarchyPointNode, index);
 
         return {
           attributes: {
@@ -119,20 +121,12 @@ const useFormTreeCardMutation = () => {
       });
   };
 
-  const getIsLeaf = ({
-    hierarchyPointNode,
-    isDecisionField,
-    isEdit,
-  }: {
-    hierarchyPointNode: null | HierarchyPointNode<TreeNode>;
-    isDecisionField: boolean;
-    isEdit: boolean;
-  }) => {
+  const getIsLeaf = (isEdit: boolean) => {
     if (isDecisionField) {
       return false;
     }
 
-    return isEdit ? hierarchyPointNode?.data?.children.length === 0 : true;
+    return isEdit ? currentHierarchyPointNode?.data?.children.length === 0 : true;
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -143,8 +137,8 @@ const useFormTreeCardMutation = () => {
     const isEdit = modalOpen === "edit";
     const depth = currentDepth + (isEdit || currentHierarchyPointNode === null ? 0 : 1);
     const isRoot = !currentHierarchyPointNode || depth === 0;
-    const childOfChildren = getChildren({ depth, hierarchyPointNode: currentHierarchyPointNode });
-    const isLeaf = getIsLeaf({ hierarchyPointNode: currentHierarchyPointNode, isDecisionField, isEdit });
+    const isLeaf = getIsLeaf(isEdit);
+    const childOfChildren = getChildren(depth);
 
     const children = {
       attributes: {
@@ -215,10 +209,10 @@ const useFormTreeCardMutation = () => {
     handleDeleteValue,
     handleSubmit,
     isDecisionField,
+    isRequiredDisabled,
     label,
     name,
     required,
-    requiredDisabled,
     step,
     type,
   };

@@ -3,15 +3,20 @@ const staticFields = [
     type: "text",
   },
   {
-    type: "address",
-  },
-  {
     type: "number",
   },
   {
+    type: "email",
+  },
+  {
+    type: "address",
+  },
+  {
+    requiredDisabled: true,
     type: "switch",
   },
   {
+    requiredDisabled: true,
     type: "checkbox",
   },
   {
