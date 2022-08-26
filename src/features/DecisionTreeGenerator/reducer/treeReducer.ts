@@ -57,18 +57,19 @@ const treeReducer = (state: any, action: any) => {
       return removeObject(state, { name: action.name });
     case treeReducerActionType.replaceTreeCard:
       return replaceObject(state, { name: action.name }, action.children);
-    case treeReducerActionType.replaceTreeCardAndKeepPrevChildren:
+    case treeReducerActionType.replaceTreeCardAndKeepPrevChildren: {
+      const children = returnFound(state, { name: action.name }).children.filter(({ attributes }: TreeNode) => !attributes.value);
+
       return replaceObject(
         state,
         { name: action.name },
         {
           ...action.children,
-          // Override isLeaf if is root
-          ...(action.children.attributes?.isRoot &&
-            !action.children?.length && { attributes: { ...action.children.attributes, isLeaf: true } }),
-          children: returnFound(state, { name: action.name }).children.filter(({ attributes }: TreeNode) => !attributes.value),
+          ...(!children?.length && { attributes: { ...action.children.attributes, isLeaf: true } }),
+          children,
         }
       );
+    }
     case treeReducerActionType.setIsLeaf:
       return changeProps(
         state,
