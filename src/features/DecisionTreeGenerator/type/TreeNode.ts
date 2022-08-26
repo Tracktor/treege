@@ -11,6 +11,7 @@ export interface TreeNodeField {
   step?: string;
   type: string;
   value?: never;
+  values?: { id: string; label: string; value: string }[];
 }
 
 export interface TreeNodeValues {
@@ -23,6 +24,7 @@ export interface TreeNodeValues {
   step?: never;
   type?: never;
   value: string;
+  values?: never;
 }
 
 export type TreeNodeAttributes = TreeNodeField | TreeNodeValues;

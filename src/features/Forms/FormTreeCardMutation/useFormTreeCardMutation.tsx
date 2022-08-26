@@ -1,8 +1,7 @@
 import type { HierarchyPointNode } from "d3-hierarchy";
 import type { SelectChangeEvent } from "design-system";
 import { ChangeEvent, FormEvent, useContext, useEffect, useMemo, useState } from "react";
-import decisionFields from "@/constants/decisionFields";
-import staticFields from "@/constants/staticFields";
+import fields from "@/constants/fields";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
 import {
   appendTreeCard,
@@ -14,21 +13,23 @@ import {
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 
 const useFormTreeCardMutation = () => {
-  const defaultDecisionValues = useMemo(() => [{ id: "0", label: "", value: "" }], []);
+  const defaultValues = useMemo(() => [{ id: "0", label: "", value: "" }], []);
   const { dispatchTree, setModalOpen, currentHierarchyPointNode, modalOpen } = useContext(DecisionTreeGeneratorContext);
-  const [decisionValues, setDecisionValues] = useState(defaultDecisionValues);
+  const [values, setValues] = useState(defaultValues);
   const [name, setName] = useState("");
   const [label, setLabel] = useState("");
   const [required, setRequired] = useState(false);
+  const [isDecision, setIsDecision] = useState(false);
   const [type, setType] = useState("");
   const [step, setStep] = useState("");
-  const isDecisionField = decisionFields.some((field) => field.type === type);
-  const isRequiredDisabled = staticFields.some((field) => field.type === type && field?.requiredDisabled);
+  const isDecisionField = fields.some((field) => field.type === type && field?.isDecisionField);
+  const isRequiredDisabled = fields.some((field) => field.type === type && field?.requiredDisabled);
+  const isDecisionAllowed = isDecisionField && isDecision;
 
   const getDisabledValueField = (index: number) => !isDecisionField && index > 0;
 
   const handlePresetValues = (event: ChangeEvent<HTMLInputElement>, predicate: "value" | "label") => {
-    setDecisionValues((prevState) =>
+    setValues((prevState) =>
       prevState.map(({ value, label: optionLabel, id }) => {
         if (event.target.dataset.id === id) {
           return {
@@ -67,12 +68,16 @@ const useFormTreeCardMutation = () => {
     setRequired(event.target.checked);
   };
 
+  const handleChangeIsDecisionField = (event: ChangeEvent<HTMLInputElement>) => {
+    setIsDecision(event.target.checked);
+  };
+
   const handleChangeType = (event: SelectChangeEvent) => {
     setType(event.target.value);
   };
 
   const handleAddValue = () => {
-    setDecisionValues((prevState) => {
+    setValues((prevState) => {
       const lastId = Number(prevState[prevState.length - 1].id);
       const nextId = String(lastId + 1);
       return [...prevState, { id: nextId, label: "", value: "" }];
@@ -80,7 +85,7 @@ const useFormTreeCardMutation = () => {
   };
 
   const handleDeleteValue = (idToDelete: string) => {
-    setDecisionValues((prevState) => prevState.filter(({ id }) => idToDelete !== id));
+    setValues((prevState) => prevState.filter(({ id }) => idToDelete !== id));
   };
 
   const getNestedChildren = (hierarchyPointNode: null | HierarchyPointNode<TreeNode>, index: number) => {
@@ -98,11 +103,11 @@ const useFormTreeCardMutation = () => {
   };
 
   const getChildren = (depth: number) => {
-    if (!isDecisionField) {
+    if (!isDecisionAllowed) {
       return [];
     }
 
-    return decisionValues
+    return values
       ?.filter((_, index) => !getDisabledValueField(index)) // filter disabled value
       ?.map(({ value, label: optionLabel }, index) => {
         const nextName = `${name}:${value}`;
@@ -122,7 +127,7 @@ const useFormTreeCardMutation = () => {
   };
 
   const getIsLeaf = (isEdit: boolean) => {
-    if (isDecisionField) {
+    if (isDecision) {
       return false;
     }
 
@@ -146,7 +151,8 @@ const useFormTreeCardMutation = () => {
         label,
         type,
         ...(isRoot && { isRoot }),
-        ...(isDecisionField && { isDecisionField }),
+        ...(isDecisionAllowed && { isDecisionField: isDecision }),
+        ...(isDecisionField && !isDecision && values && { values }),
         ...(required && !isRequiredDisabled && { required }),
         ...(step && { step }),
         ...(isLeaf && { isLeaf }),
@@ -158,7 +164,7 @@ const useFormTreeCardMutation = () => {
     if (currentHierarchyPointNode === null) {
       dispatchTree(setTree(children));
     } else if (isEdit) {
-      dispatchTree(isDecisionField ? replaceTreeCard(currentName, children) : replaceTreeCardAndKeepPrevChildren(currentName, children));
+      dispatchTree(isDecision ? replaceTreeCard(currentName, children) : replaceTreeCardAndKeepPrevChildren(currentName, children));
     } else {
       dispatchTree(setIsLeaf(currentName, false));
       dispatchTree(appendTreeCard(currentName, children));
@@ -170,35 +176,40 @@ const useFormTreeCardMutation = () => {
   // Set initial form data edit modal
   useEffect(() => {
     if (modalOpen === "edit") {
-      const initialValues = currentHierarchyPointNode?.data?.children
-        ?.filter(({ attributes }) => !attributes?.type)
-        ?.map(({ attributes }, index) => {
-          const { label: optionLabel, value } = attributes || {};
-          return { id: String(index), label: String(optionLabel), value: String(value) };
-        });
+      const currentValues = currentHierarchyPointNode?.data?.attributes?.values;
+      const initialValues =
+        currentValues ||
+        currentHierarchyPointNode?.data?.children
+          ?.filter(({ attributes }) => !attributes?.type)
+          ?.map(({ attributes }, index) => {
+            const { label: optionLabel, value } = attributes || {};
+            return { id: String(index), label: String(optionLabel), value: String(value) };
+          });
 
       setName(currentHierarchyPointNode?.data.name || "");
       setType(currentHierarchyPointNode?.data.attributes?.type || "");
       setRequired(currentHierarchyPointNode?.data.attributes?.required || false);
       setStep(currentHierarchyPointNode?.data.attributes?.step || "");
-      setDecisionValues(initialValues?.length ? initialValues : defaultDecisionValues);
       setLabel(currentHierarchyPointNode?.data.attributes?.label || "");
+      setIsDecision(currentHierarchyPointNode?.data.attributes?.isDecisionField || false);
+      setValues(initialValues?.length ? initialValues : defaultValues);
     }
   }, [
+    currentHierarchyPointNode?.data.attributes?.isDecisionField,
     currentHierarchyPointNode?.data.attributes?.label,
     currentHierarchyPointNode?.data.attributes?.required,
     currentHierarchyPointNode?.data.attributes?.step,
     currentHierarchyPointNode?.data.attributes?.type,
     currentHierarchyPointNode?.data?.children,
     currentHierarchyPointNode?.data.name,
-    defaultDecisionValues,
+    defaultValues,
     modalOpen,
   ]);
 
   return {
-    decisionValues,
     getDisabledValueField,
     handleAddValue,
+    handleChangeIsDecisionField,
     handleChangeLabel,
     handleChangeName,
     handleChangeOptionLabel,
@@ -208,6 +219,8 @@ const useFormTreeCardMutation = () => {
     handleChangeType,
     handleDeleteValue,
     handleSubmit,
+    isDecision,
+    isDecisionAllowed,
     isDecisionField,
     isRequiredDisabled,
     label,
@@ -215,6 +228,7 @@ const useFormTreeCardMutation = () => {
     required,
     step,
     type,
+    values,
   };
 };
 

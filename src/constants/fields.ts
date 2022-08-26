@@ -1,4 +1,4 @@
-const staticFields = [
+const fields = [
   {
     type: "text",
   },
@@ -34,6 +34,14 @@ const staticFields = [
     requiredDisabled: true,
     type: "checkbox",
   },
+  {
+    isDecisionField: true,
+    type: "radio",
+  },
+  {
+    isDecisionField: true,
+    type: "select",
+  },
 ];
 
-export default staticFields;
+export default fields;

@@ -63,7 +63,7 @@ const treeReducer = (state: any, action: any) => {
         { name: action.name },
         {
           ...action.children,
-          children: returnFound(state, { name: action.name }).children,
+          children: returnFound(state, { name: action.name }).children.filter(({ attributes }: TreeNode) => !attributes.value),
         }
       );
     case treeReducerActionType.setIsLeaf:

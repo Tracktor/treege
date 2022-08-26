@@ -15,8 +15,7 @@ import {
 } from "design-system";
 import { useTranslation } from "react-i18next";
 import styles from "./FormTreeCardMutation.module.scss";
-import decisionFields from "@/constants/decisionFields";
-import staticFields from "@/constants/staticFields";
+import fields from "@/constants/fields";
 import useFormTreeCardMutation from "@/features/Forms/FormTreeCardMutation/useFormTreeCardMutation";
 
 interface FormTreeCardMutationProps {
@@ -27,23 +26,24 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
   const { t } = useTranslation(["translation", "form"]);
 
   const {
-    decisionValues,
+    values,
     required,
     name,
     type,
     step,
     label,
+    isDecision,
     isDecisionField,
     isRequiredDisabled,
     handleChangeRequired,
     handleChangeName,
     handleChangeType,
+    handleChangeIsDecisionField,
     handleChangeOptionLabel,
     handleDeleteValue,
     handleChangeOptionValue,
     handleSubmit,
     handleAddValue,
-    getDisabledValueField,
     handleChangeStep,
     handleChangeLabel,
   } = useFormTreeCardMutation();
@@ -66,18 +66,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         <FormControl sx={{ flex: 1 }} required>
           <InputLabel>{t("type")}</InputLabel>
           <Select value={type} label={t("type")} onChange={handleChangeType}>
-            <MenuItem disabled value="">
-              <em>{t("staticFields", { ns: "form" })}</em>
-            </MenuItem>
-            {staticFields.map(({ type: fieldsType }) => (
-              <MenuItem key={fieldsType} value={fieldsType}>
-                {t(`type.${fieldsType}`, { ns: "form" })}
-              </MenuItem>
-            ))}
-            <MenuItem disabled value="">
-              <em>{t("decisionField", { ns: "form" })}</em>
-            </MenuItem>
-            {decisionFields.map(({ type: fieldsType }) => (
+            {fields.map(({ type: fieldsType }) => (
               <MenuItem key={fieldsType} value={fieldsType}>
                 {t(`type.${fieldsType}`, { ns: "form" })}
               </MenuItem>
@@ -94,22 +83,27 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         />
       </Stack>
 
-      <Stack direction="row" spacing={1} paddingY={1} alignItems="center" justifyContent="space-between">
-        <Box>
-          <FormGroup>
-            <FormControlLabel
-              disabled={isRequiredDisabled}
-              control={<Checkbox checked={!isRequiredDisabled && required} onChange={handleChangeRequired} />}
-              label={t("required")}
-            />
-          </FormGroup>
-        </Box>
+      <Stack paddingY={1}>
+        <FormGroup>
+          <FormControlLabel
+            disabled={isRequiredDisabled}
+            control={<Checkbox checked={required} onChange={handleChangeRequired} />}
+            label={t("required")}
+          />
+        </FormGroup>
+        <FormGroup>
+          <FormControlLabel
+            disabled={!isDecisionField}
+            control={<Checkbox checked={isDecision} onChange={handleChangeIsDecisionField} />}
+            label={t("decisionField", { ns: "form" })}
+          />
+        </FormGroup>
       </Stack>
 
       {isDecisionField && (
         <>
           <h4>{t("decisionValues")}</h4>
-          {decisionValues?.map(({ value, label: labelOption, id }, index) => (
+          {values?.map(({ value, label: labelOption, id }) => (
             <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} key={id} position="relative">
               <TextField
                 label="Label"
@@ -117,7 +111,6 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                 onChange={handleChangeOptionLabel}
                 value={labelOption}
                 inputProps={{ "data-id": id }}
-                disabled={getDisabledValueField(index)}
                 required
               />
               <TextField
@@ -126,10 +119,9 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                 onChange={handleChangeOptionValue}
                 value={value}
                 inputProps={{ "data-id": id }}
-                disabled={getDisabledValueField(index)}
                 required
               />
-              {decisionValues.length > 1 && (
+              {values.length > 1 && (
                 <Button color="warning" className={styles.IconButtonDelete} data-id={id} onClick={() => handleDeleteValue(id)}>
                   <RemoveCircleRoundedIcon />
                 </Button>
