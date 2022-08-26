@@ -127,11 +127,16 @@ const useFormTreeCardMutation = () => {
   };
 
   const getIsLeaf = (isEdit: boolean) => {
-    if (isDecision) {
-      return false;
+    if (!currentHierarchyPointNode) {
+      return !isDecision;
     }
 
-    return isEdit ? currentHierarchyPointNode?.data?.children.length === 0 : true;
+    if (isEdit) {
+      const { data } = currentHierarchyPointNode || {};
+      return isDecision ? false : data?.children.length === 0;
+    }
+
+    return true;
   };
 
   const handleSubmit = (e: FormEvent) => {
