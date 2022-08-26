@@ -102,7 +102,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
       {isDecisionField && (
         <>
-          <h4>{t("decisionValues")}</h4>
+          <h4>{t("values")}</h4>
           {values?.map(({ value, label: labelOption, id }) => (
             <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} key={id} position="relative">
               <TextField
