@@ -47,30 +47,53 @@ export const setIsLeaf = (name: string, isLeaf: boolean) => ({
 
 const treeReducer = (state: any, action: any) => {
   switch (action.type) {
-    case treeReducerActionType.appendTreeCard:
+    case treeReducerActionType.appendTreeCard: {
+      const isLeaf = !action.children.attributes.isDecisionField;
+
       return appendProps(
         state,
         { name: action.name },
-        { children: [...(returnFound(state, { name: action.name }).children || []), action.children] }
+        {
+          children: [
+            {
+              ...action.children,
+              attributes: {
+                ...action.children.attributes,
+                isLeaf,
+              },
+            },
+          ],
+        }
       );
-    case treeReducerActionType.deleteTreeCard:
+    }
+
+    case treeReducerActionType.deleteTreeCard: {
       return removeObject(state, { name: action.name });
-    case treeReducerActionType.replaceTreeCard:
+    }
+
+    case treeReducerActionType.replaceTreeCard: {
       return replaceObject(state, { name: action.name }, action.children);
+    }
+
     case treeReducerActionType.replaceTreeCardAndKeepPrevChildren: {
       const children = returnFound(state, { name: action.name }).children.filter(({ attributes }: TreeNode) => !attributes.value);
+      const isLeaf = children?.length === 0;
 
       return replaceObject(
         state,
         { name: action.name },
         {
           ...action.children,
-          ...(!children?.length && { attributes: { ...action.children.attributes, isLeaf: true } }),
+          attributes: {
+            ...action.children.attributes,
+            isLeaf,
+          },
           children,
         }
       );
     }
-    case treeReducerActionType.setIsLeaf:
+
+    case treeReducerActionType.setIsLeaf: {
       return changeProps(
         state,
         { name: action.name },
@@ -81,8 +104,19 @@ const treeReducer = (state: any, action: any) => {
           },
         }
       );
-    case treeReducerActionType.setTree:
-      return action.tree;
+    }
+
+    case treeReducerActionType.setTree: {
+      const isLeaf = !action.tree.attributes.isDecisionField;
+
+      return {
+        ...action.tree,
+        attributes: {
+          ...action.tree.attributes,
+          isLeaf,
+        },
+      };
+    }
     default:
       throw new Error();
   }

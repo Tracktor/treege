@@ -126,19 +126,6 @@ const useFormTreeCardMutation = () => {
       });
   };
 
-  const getIsLeaf = (isEdit: boolean) => {
-    if (!currentHierarchyPointNode) {
-      return !isDecision;
-    }
-
-    if (isEdit) {
-      const { data } = currentHierarchyPointNode || {};
-      return isDecision ? false : data?.children.length === 0;
-    }
-
-    return true;
-  };
-
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
@@ -147,7 +134,6 @@ const useFormTreeCardMutation = () => {
     const isEdit = modalOpen === "edit";
     const depth = currentDepth + (isEdit || currentHierarchyPointNode === null ? 0 : 1);
     const isRoot = !currentHierarchyPointNode || depth === 0;
-    const isLeaf = getIsLeaf(isEdit);
     const childOfChildren = getChildren(depth);
 
     const children = {
@@ -160,7 +146,6 @@ const useFormTreeCardMutation = () => {
         ...(isDecisionField && !isDecision && values && { values }),
         ...(required && !isRequiredDisabled && { required }),
         ...(step && { step }),
-        ...(isLeaf && { isLeaf }),
       },
       children: childOfChildren,
       name,
