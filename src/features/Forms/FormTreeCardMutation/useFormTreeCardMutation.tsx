@@ -200,6 +200,7 @@ const useFormTreeCardMutation = () => {
     currentHierarchyPointNode?.data.attributes?.required,
     currentHierarchyPointNode?.data.attributes?.step,
     currentHierarchyPointNode?.data.attributes?.type,
+    currentHierarchyPointNode?.data.attributes?.values,
     currentHierarchyPointNode?.data?.children,
     currentHierarchyPointNode?.data.name,
     defaultValues,
