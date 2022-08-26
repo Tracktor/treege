@@ -63,7 +63,7 @@ const treeReducer = (state: any, action: any) => {
         { name: action.name },
         {
           ...action.children,
-          // Override isLeaf use case if is root
+          // Override isLeaf if is root
           ...(action.children.attributes?.isRoot &&
             !action.children?.length && { attributes: { ...action.children.attributes, isLeaf: true } }),
           children: returnFound(state, { name: action.name }).children.filter(({ attributes }: TreeNode) => !attributes.value),
