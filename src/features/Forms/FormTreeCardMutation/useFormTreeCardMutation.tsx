@@ -15,6 +15,8 @@ import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 const useFormTreeCardMutation = () => {
   const defaultValues = useMemo(() => [{ id: "0", label: "", value: "" }], []);
   const { dispatchTree, setModalOpen, currentHierarchyPointNode, modalOpen } = useContext(DecisionTreeGeneratorContext);
+
+  // Form value
   const [values, setValues] = useState(defaultValues);
   const [name, setName] = useState("");
   const [label, setLabel] = useState("");
@@ -22,9 +24,9 @@ const useFormTreeCardMutation = () => {
   const [isDecision, setIsDecision] = useState(false);
   const [type, setType] = useState("");
   const [step, setStep] = useState("");
+
   const isDecisionField = fields.some((field) => field.type === type && field?.isDecisionField);
-  const isRequiredDisabled = fields.some((field) => field.type === type && field?.requiredDisabled);
-  const isDecisionAllowed = isDecisionField && isDecision;
+  const isRequiredDisabled = fields.some((field) => field.type === type && field?.isRequiredDisabled);
 
   const getDisabledValueField = (index: number) => !isDecisionField && index > 0;
 
@@ -73,6 +75,8 @@ const useFormTreeCardMutation = () => {
   };
 
   const handleChangeType = (event: SelectChangeEvent) => {
+    setIsDecision(false);
+    setRequired(false);
     setType(event.target.value);
   };
 
@@ -103,7 +107,7 @@ const useFormTreeCardMutation = () => {
   };
 
   const getChildren = (depth: number) => {
-    if (!isDecisionAllowed) {
+    if (!isDecision) {
       return [];
     }
 
@@ -142,9 +146,9 @@ const useFormTreeCardMutation = () => {
         label,
         type,
         ...(isRoot && { isRoot }),
-        ...(isDecisionAllowed && { isDecisionField: isDecision }),
-        ...(isDecisionField && !isDecision && values && { values }),
-        ...(required && !isRequiredDisabled && { required }),
+        ...(isDecision && { isDecision }),
+        ...(isDecision && { values }),
+        ...(required && { required }),
         ...(step && { step }),
       },
       children: childOfChildren,
@@ -181,11 +185,11 @@ const useFormTreeCardMutation = () => {
       setRequired(currentHierarchyPointNode?.data.attributes?.required || false);
       setStep(currentHierarchyPointNode?.data.attributes?.step || "");
       setLabel(currentHierarchyPointNode?.data.attributes?.label || "");
-      setIsDecision(currentHierarchyPointNode?.data.attributes?.isDecisionField || false);
+      setIsDecision(currentHierarchyPointNode?.data.attributes?.isDecision || false);
       setValues(initialValues?.length ? initialValues : defaultValues);
     }
   }, [
-    currentHierarchyPointNode?.data.attributes?.isDecisionField,
+    currentHierarchyPointNode?.data.attributes?.isDecision,
     currentHierarchyPointNode?.data.attributes?.label,
     currentHierarchyPointNode?.data.attributes?.required,
     currentHierarchyPointNode?.data.attributes?.step,
@@ -211,7 +215,6 @@ const useFormTreeCardMutation = () => {
     handleDeleteValue,
     handleSubmit,
     isDecision,
-    isDecisionAllowed,
     isDecisionField,
     isRequiredDisabled,
     label,

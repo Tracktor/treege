@@ -48,7 +48,7 @@ export const setIsLeaf = (name: string, isLeaf: boolean) => ({
 const treeReducer = (state: any, action: any) => {
   switch (action.type) {
     case treeReducerActionType.appendTreeCard: {
-      const isLeaf = !action.children.attributes.isDecisionField;
+      const isLeaf = !action.children.attributes.isDecision;
 
       return appendProps(
         state,
@@ -107,7 +107,7 @@ const treeReducer = (state: any, action: any) => {
     }
 
     case treeReducerActionType.setTree: {
-      const isLeaf = !action.tree.attributes.isDecisionField;
+      const isLeaf = !action.tree.attributes.isDecision;
 
       return {
         ...action.tree,

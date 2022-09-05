@@ -1,4 +1,10 @@
-const fields = [
+interface Fields {
+  isDecisionField?: boolean;
+  isRequiredDisabled?: boolean;
+  type: string;
+}
+
+const fields: Fields[] = [
   {
     type: "text",
   },
@@ -27,11 +33,11 @@ const fields = [
     type: "time",
   },
   {
-    requiredDisabled: true,
+    isRequiredDisabled: true,
     type: "switch",
   },
   {
-    requiredDisabled: true,
+    isRequiredDisabled: true,
     type: "checkbox",
   },
   {

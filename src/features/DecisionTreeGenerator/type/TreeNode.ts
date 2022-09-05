@@ -3,7 +3,7 @@ import type { CustomNodeElementProps, RawNodeDatum } from "react-d3-tree/lib/typ
 
 export interface TreeNodeField {
   depth: number;
-  isDecisionField?: boolean;
+  isDecision?: boolean;
   isLeaf?: boolean;
   isRoot?: boolean;
   label: string;
@@ -16,7 +16,7 @@ export interface TreeNodeField {
 
 export interface TreeNodeValues {
   depth: number;
-  isDecisionField?: never;
+  isDecision?: never;
   isLeaf?: boolean;
   isRoot?: never;
   label: string;
