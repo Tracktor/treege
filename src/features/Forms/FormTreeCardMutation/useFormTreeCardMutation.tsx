@@ -147,7 +147,7 @@ const useFormTreeCardMutation = () => {
         type,
         ...(isRoot && { isRoot }),
         ...(isDecision && { isDecision }),
-        ...(isDecision && { values }),
+        ...(isDecisionField && !isDecision && { values }),
         ...(required && { required }),
         ...(step && { step }),
       },
