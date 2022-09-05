@@ -16,7 +16,7 @@ const FormTreeCardDelete = ({ onClose }: FormTreeCardMutationProps) => {
         <Button variant="text" onClick={onClose}>
           {t("cancel")}
         </Button>
-        <Button variant="contained" color="warning" type="submit">
+        <Button variant="contained" color="error" type="submit">
           {t("remove")}
         </Button>
       </Stack>

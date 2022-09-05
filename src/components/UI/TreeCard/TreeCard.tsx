@@ -5,7 +5,7 @@ import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import EnergySavingsLeafRoundedIcon from "@mui/icons-material/EnergySavingsLeafRounded";
 import ParkRoundedIcon from "@mui/icons-material/ParkRounded";
 import type { HierarchyPointNode } from "d3-hierarchy";
-import { Box, Button, Chip, Stack, Tooltip } from "design-system";
+import { Box, Button, Chip, Stack, Tooltip, Typography } from "design-system";
 import { memo } from "react";
 import type { CustomNodeElementProps, TreeNodeDatum } from "react-d3-tree/lib/types/common";
 import { useTranslation } from "react-i18next";
@@ -47,10 +47,12 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
                     <Chip color="primary" size="small" label={step} className={styles.StepChip} />
                   </Tooltip>
                 )}
-                <h4 className={styles.Title}>{label}</h4>
+                <Typography variant="subtitle2" className={styles.Title}>
+                  <strong>{label}</strong>
+                </Typography>
               </Stack>
             )}
-            {isField && <Chip color="secondary" size="small" label={t(`type.${type}`, { ns: "form" })} />}
+            {isField && <Chip color="info" size="small" label={t(`type.${type}`, { ns: "form" })} />}
             {required && (
               <Stack direction="row" spacing={0.5}>
                 {required && <Chip color="warning" size="small" variant="outlined" label={`${t("required")}`} />}
@@ -58,10 +60,9 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
             )}
             <Stack spacing={0.5} alignItems="flex-end">
               {isValue && (
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Chip size="small" label={label} variant="outlined" />
-                  <Chip size="small" color="primary" label={value} variant="outlined" />
-                </Stack>
+                <Typography variant="subtitle2" className={styles.Title}>
+                  <strong>{label}</strong>
+                </Typography>
               )}
             </Stack>
             <Box paddingTop={0.5}>
@@ -89,7 +90,7 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
                   variant="text"
                   className={styles.ActionButton}
                   size="small"
-                  color="warning"
+                  color="error"
                   onClick={() => onDeleteChildren?.(hierarchyPointNode)}
                 >
                   <DeleteOutlineRoundedIcon />
@@ -100,7 +101,7 @@ const TreeCard = ({ nodeDatum, onAddChildren, onEditChildren, onDeleteChildren, 
               <Tooltip title={t("edit")} arrow>
                 <Button
                   variant="text"
-                  color="info"
+                  color="secondary"
                   className={styles.ActionButton}
                   size="small"
                   onClick={() => onEditChildren?.(hierarchyPointNode)}
