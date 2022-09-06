@@ -22,7 +22,7 @@ const useFormTreeCardMutation = () => {
   const [label, setLabel] = useState("");
   const [required, setRequired] = useState(false);
   const [isDecision, setIsDecision] = useState(false);
-  const [type, setType] = useState("");
+  const [type, setType] = useState("text");
   const [step, setStep] = useState("");
 
   const isDecisionField = fields.some((field) => field.type === type && field?.isDecisionField);
