@@ -2674,9 +2674,9 @@ dequal@^2.0.2:
   resolved "https://registry.yarnpkg.com/dequal/-/dequal-2.0.3.tgz#2644214f1997d39ed0ee0ece72335490a7ac67be"
   integrity sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==
 
-"design-system@git+https://github.com/Tracktor/design-system#1.0.0":
-  version "1.0.0"
-  resolved "git+https://github.com/Tracktor/design-system#3b47df6bf52176b3cfbaa2751691b915d0bf175c"
+"design-system@git+https://github.com/Tracktor/design-system#1.0.1":
+  version "1.0.1"
+  resolved "git+https://github.com/Tracktor/design-system#770a0663b81408581cd3dcc3793d04a0d5c75113"
   dependencies:
     "@emotion/react" "^11.10.0"
     "@emotion/styled" "^11.10.0"
@@ -3014,13 +3014,14 @@ eslint-config-react-app@^7.0.1:
     eslint-plugin-react-hooks "^4.3.0"
     eslint-plugin-testing-library "^5.0.1"
 
-"eslint-config-react@git+https://github.com/Tracktor/eslint-config-react#v1.0.0":
-  version "1.0.0"
-  resolved "git+https://github.com/Tracktor/eslint-config-react#faca0c35e757891eae1845c1cafe87b41e40432e"
+"eslint-config-react@git+https://github.com/Tracktor/eslint-config-react#v1.0.1":
+  version "1.0.1"
+  resolved "git+https://github.com/Tracktor/eslint-config-react#2f305ff2c9b69b1e9d8cd5fb4a241ebb6647265b"
   dependencies:
     "@typescript-eslint/eslint-plugin" "^5.30.7"
     "@typescript-eslint/parser" "^5.30.7"
     "@typescript-eslint/types" "^5.30.7"
+    eslint "8.22.0"
     eslint-config-airbnb "^19.0.4"
     eslint-config-prettier "^8.5.0"
     eslint-config-react-app "^7.0.1"
@@ -3031,6 +3032,7 @@ eslint-config-react-app@^7.0.1:
     eslint-plugin-react "^7.30.1"
     eslint-plugin-react-hooks "^4.6.0"
     eslint-plugin-sort-keys-fix "^1.1.2"
+    prettier "^2.7.1"
     prettier-eslint "^15.0.1"
 
 eslint-import-resolver-node@^0.3.6:
@@ -3202,7 +3204,7 @@ eslint-visitor-keys@^3.1.0, eslint-visitor-keys@^3.3.0:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-3.3.0.tgz#f6480fa6b1f30efe2d1968aa8ac745b862469826"
   integrity sha512-mQ+suqKJVyeuwGYHAdjMFqjCyfl8+Ldnxuyp3ldiMBFKkvytrXUZWaiPCEav8qDHKty44bD+qV1IP4T+w+xXRA==
 
-eslint@^8.7.0:
+eslint@8.22.0, eslint@^8.7.0:
   version "8.22.0"
   resolved "https://registry.yarnpkg.com/eslint/-/eslint-8.22.0.tgz#78fcb044196dfa7eef30a9d65944f6f980402c48"
   integrity sha512-ci4t0sz6vSRKdmkOGmprBo6fmI4PrphDFMy5JEq/fNS0gQkJM3rLmrqcp8ipMcdobH3KtUP40KniAE9W19S4wA==
@@ -4442,7 +4444,7 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@^2.5.1:
+prettier@^2.5.1, prettier@^2.7.1:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.7.1.tgz#e235806850d057f97bb08368a4f7d899f7760c64"
   integrity sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==
