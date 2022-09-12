@@ -15,10 +15,21 @@
 - [Features](#Features)
 - [Local installation](#local-installation)
 - [Available Scripts](#Available-Scripts)
-  - [yarn dev](#yarn-dev)
-  - [yarn build](#yarn-build)
-  - [yarn preview](#yarn-preview)
+    - [yarn dev](#yarn-dev)
+    - [yarn build](#yarn-build)
+    - [yarn preview](#yarn-preview)
 - [Convention](#Convention)
+
+## Features
+
+- 📦 **[React](https://fr.reactjs.org)** - v18+ with Hooks
+- ⚡️ **[Vite](https://vitejs.dev)** - Next Generation Frontend Tooling
+- 📐 **[ESLint](https://eslint.org)** - Code analyzer
+- 🚀 **[Vitest](https://vitest.dev)** - A Vite native unit test framework. It's fast!
+- 🛠️ **[React Testing Library](https://testing-library.com/docs/react-testing-library/intro)** - React DOM testing
+  utilities
+- 💅️ **[CSS Modules](https://github.com/css-modules/css-modules)** - CSS files in which all class names are scoped
+  locally
 
 ## Embed Treege anywhere
 
@@ -154,17 +165,6 @@ interface TreeNodeValues {
 ## Generate form from Treege data
 
 Form can be easily generated with the React library [treege-consumer](https://github.com/Tracktor/treege-consumer)
-
-## Features
-
-- 📦 **[React](https://fr.reactjs.org)** - v18+ with Hooks
-- ⚡️ **[Vite](https://vitejs.dev)** - Next Generation Frontend Tooling
-- 📐 **[ESLint](https://eslint.org)** - Code analyzer
-- 🚀 **[Vitest](https://vitest.dev)** - A Vite native unit test framework. It's fast!
-- 🛠️ **[React Testing Library](https://testing-library.com/docs/react-testing-library/intro)** - React DOM testing
-  utilities
-- 💅️ **[CSS Modules](https://github.com/css-modules/css-modules)** - CSS files in which all class names are scoped
-  locally
 
 ## Local installation
 
