@@ -6,11 +6,12 @@
 <video src="https://user-images.githubusercontent.com/108873902/184317603-61ceafc6-a326-49b2-b0de-ffda9cf9c75e.mov"></video>
 
 - [Features](#Features)
+- [Installation](#Installation)
 - [Available Scripts](#Available-Scripts)
     - [yarn dev](#yarn-dev)
     - [yarn build](#yarn-build)
     - [yarn preview](#yarn-preview)
-- [Embed](#Embed)
+- [Embed Treege anywhere](#Embed-Treege-anywhere)
     - [Provide data to iframe](#Provide-data-to-iframe)
     - [Listen Treege event](#Listen-Treege-event)
     - [Events listener](#Events-listener)
@@ -29,6 +30,13 @@
   utilities
 - 💅️ **[CSS Modules](https://github.com/css-modules/css-modules)** - CSS files in which all class names are scoped
   locally
+
+## Installation
+
+Clone the repository and install dependencies
+```console 
+yarn install
+```
 
 ## Available Scripts
 
@@ -56,7 +64,7 @@ See the section about [deployment](https://vitejs.dev/guide/static-deploy.html) 
 
 Locally preview production build
 
-## Embed
+## Embed Treege anywhere
 
 #### Treege can be easily embed  in any HTML page.
 
@@ -188,6 +196,7 @@ interface TreeNodeValues {
 ```
 
 ## Generate form from Treege data
+
 Form can be easily generated with the React library [treege-consumer](https://github.com/Tracktor/treege-consumer)
 
 ## Convention
