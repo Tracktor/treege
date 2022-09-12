@@ -5,12 +5,6 @@
 
 <video src="https://user-images.githubusercontent.com/108873902/184317603-61ceafc6-a326-49b2-b0de-ffda9cf9c75e.mov"></video>
 
-- [Features](#Features)
-- [Installation](#Installation)
-- [Available Scripts](#Available-Scripts)
-    - [yarn dev](#yarn-dev)
-    - [yarn build](#yarn-build)
-    - [yarn preview](#yarn-preview)
 - [Embed Treege anywhere](#Embed-Treege-anywhere)
     - [Provide data to iframe](#Provide-data-to-iframe)
     - [Listen Treege event](#Listen-Treege-event)
@@ -18,52 +12,13 @@
     - [Events message](#Events-message)
 - [Types](#Types)
 - [Generate form from Treege data](#Generate-form-from-Treege-data)
+- [Features](#Features)
+- [Local installation](#local-installation)
+- [Available Scripts](#Available-Scripts)
+  - [yarn dev](#yarn-dev)
+  - [yarn build](#yarn-build)
+  - [yarn preview](#yarn-preview)
 - [Convention](#Convention)
-
-## Features
-
-- 📦 **[React](https://fr.reactjs.org)** - v18+ with Hooks
-- ⚡️ **[Vite](https://vitejs.dev)** - Next Generation Frontend Tooling
-- 📐 **[ESLint](https://eslint.org)** - Code analyzer
-- 🚀 **[Vitest](https://vitest.dev)** - A Vite native unit test framework. It's fast!
-- 🛠️ **[React Testing Library](https://testing-library.com/docs/react-testing-library/intro)** - React DOM testing
-  utilities
-- 💅️ **[CSS Modules](https://github.com/css-modules/css-modules)** - CSS files in which all class names are scoped
-  locally
-
-## Installation
-
-Clone the repository and install dependencies
-
-```console 
-yarn install
-```
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `yarn dev`
-
-Runs the app in the development mode.\
-Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn build`
-
-Builds the app for production to the `dist` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://vitejs.dev/guide/static-deploy.html) for more information.
-
-### `yarn preview`
-
-Locally preview production build
 
 ## Embed Treege anywhere
 
@@ -152,7 +107,7 @@ List of events that can be sent with `iframe.contentWindow.postMessage`
 |------------|----------------------------------------------------------------------------------------------|
 | setTree    | `{source: "treege", type : "setTree", tree : {{attributes: {...}, children: [], name: ""}}}` |
 
-### Types
+## Types
 
 Tree data that can be provided
 
@@ -199,6 +154,51 @@ interface TreeNodeValues {
 ## Generate form from Treege data
 
 Form can be easily generated with the React library [treege-consumer](https://github.com/Tracktor/treege-consumer)
+
+## Features
+
+- 📦 **[React](https://fr.reactjs.org)** - v18+ with Hooks
+- ⚡️ **[Vite](https://vitejs.dev)** - Next Generation Frontend Tooling
+- 📐 **[ESLint](https://eslint.org)** - Code analyzer
+- 🚀 **[Vitest](https://vitest.dev)** - A Vite native unit test framework. It's fast!
+- 🛠️ **[React Testing Library](https://testing-library.com/docs/react-testing-library/intro)** - React DOM testing
+  utilities
+- 💅️ **[CSS Modules](https://github.com/css-modules/css-modules)** - CSS files in which all class names are scoped
+  locally
+
+## Local installation
+
+Clone the repository and install dependencies
+
+```console 
+yarn install
+```
+
+## Available Scripts
+
+In the project directory, you can run:
+
+### `yarn dev`
+
+Runs the app in the development mode.\
+Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
+
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
+
+### `yarn build`
+
+Builds the app for production to the `dist` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
+
+See the section about [deployment](https://vitejs.dev/guide/static-deploy.html) for more information.
+
+### `yarn preview`
+
+Locally preview production build
 
 ## Convention
 
