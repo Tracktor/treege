@@ -34,6 +34,7 @@
 ## Installation
 
 Clone the repository and install dependencies
+
 ```console 
 yarn install
 ```
