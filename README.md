@@ -94,17 +94,15 @@ iframe.addEventListener("load", handleLoadIframe);
 
 function handleLoadIframe() {
   const tree = {
-    attributes: {
-      depth: 0,
-      disabled: false,
-      isLeaf: true,
-      isRoot: true,
-      paths: ["Age"],
-      required: false,
-      type: "select",
+    "attributes": {
+      "depth": 0,
+      "label": "Age",
+      "type": "number",
+      "isRoot": true,
+      "isLeaf": true
     },
-    children: [],
-    name: "Age",
+    "children": [],
+    "name": "age"
   }
 
   setTimeout(() => {
