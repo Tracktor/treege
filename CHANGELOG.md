@@ -1,3 +1,4 @@
 # [Versions](https://github.com/Tracktor/treege)
 
-## v1.0.0
+## v1.1.0
+- Add input type file
