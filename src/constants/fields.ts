@@ -15,6 +15,9 @@ const fields: Fields[] = [
     type: "email",
   },
   {
+    type: "file",
+  },
+  {
     type: "password",
   },
   {
