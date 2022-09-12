@@ -1,8 +1,7 @@
 <div align="center">
-  <img alt="Treege" src="https://user-images.githubusercontent.com/108873902/189672825-bd35953b-8c5e-4190-a4c6-8c0807dec4af.png" style="padding: 20px; max-height:100px; width: auto;" />
+  <img alt="Treege" src="https://user-images.githubusercontent.com/108873902/189673125-5d1fdaf3-82d1-486f-bb16-01b0554bd4f1.png" style="padding: 20px; max-height:100px; width: auto;" />
   <p><strong>Treege is a tools for decision tree generator</strong></p>
 </div>
-
 
 <video src="https://user-images.githubusercontent.com/108873902/184317603-61ceafc6-a326-49b2-b0de-ffda9cf9c75e.mov"></video>
 
