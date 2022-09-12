@@ -5,6 +5,7 @@
 
 <video src="https://user-images.githubusercontent.com/108873902/184317603-61ceafc6-a326-49b2-b0de-ffda9cf9c75e.mov"></video>
 
+- [Features](#Features)
 - [Embed Treege anywhere](#Embed-Treege-anywhere)
     - [Provide data to iframe](#Provide-data-to-iframe)
     - [Listen Treege event](#Listen-Treege-event)
@@ -12,7 +13,6 @@
     - [Events message](#Events-message)
 - [Types](#Types)
 - [Generate form from Treege data](#Generate-form-from-Treege-data)
-- [Features](#Features)
 - [Local installation](#local-installation)
 - [Available Scripts](#Available-Scripts)
     - [yarn dev](#yarn-dev)
