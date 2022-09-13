@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "prepare": "husky install"
   },
   "repository": "git@github.com:Tracktor/treege.git",
   "author": "Mickaël Austoni",
@@ -44,6 +45,7 @@
     "@vitejs/plugin-react": "^2.0.0",
     "@vitest/ui": "0.19.1",
     "eslint-config-react": "git+https://github.com/Tracktor/eslint-config-react#v1.0.1",
+    "husky": "^8.0.0",
     "jsdom": "20.0.0",
     "typescript": "^4.7.4",
     "vite": "^3.0.3",
