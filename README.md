@@ -30,6 +30,7 @@
   utilities
 - 💅️ **[CSS Modules](https://github.com/css-modules/css-modules)** - CSS files in which all class names are scoped
   locally
+- 🐶 **[Husky](https://typicode.github.io/husky)** - Modern native git hooks made easy
 
 ## Embed Treege anywhere
 
