@@ -16,7 +16,7 @@ import {
 import { useTranslation } from "react-i18next";
 import styles from "./FormTreeCardMutation.module.scss";
 import fields from "@/constants/fields";
-import useFormTreeCardMutation from "@/features/Forms/FormTreeCardMutation/useFormTreeCardMutation";
+import useFormTreeCardMutation from "@/features/DecisionTreeGenerator/Forms/FormTreeCardMutation/useFormTreeCardMutation";
 
 interface FormTreeCardMutationProps {
   onClose?(): void;
@@ -29,6 +29,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     values,
     required,
     name,
+    uniqueNameErrorMessage,
     type,
     step,
     label,
@@ -57,7 +58,8 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           sx={{ flex: 1 }}
           onChange={handleChangeName}
           value={name}
-          helperText={t("mustBeUnique", { ns: "form" })}
+          error={!!uniqueNameErrorMessage}
+          helperText={uniqueNameErrorMessage}
           required
         />
       </Stack>
@@ -143,7 +145,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         <Button variant="text" onClick={onClose}>
           {t("cancel")}
         </Button>
-        <Button variant="contained" type="submit">
+        <Button variant="contained" type="submit" disabled={!!uniqueNameErrorMessage}>
           {t("validate")}
         </Button>
       </Stack>

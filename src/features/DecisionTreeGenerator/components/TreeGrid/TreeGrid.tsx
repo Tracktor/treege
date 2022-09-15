@@ -13,8 +13,8 @@ import ButtonCreateTree from "@/features/DecisionTreeGenerator/components/Button
 import TreeCardContainer from "@/features/DecisionTreeGenerator/components/TreeCardContainer/TreeCardContainer";
 import useTreeGrid from "@/features/DecisionTreeGenerator/components/TreeGrid/useTreeGrid";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
-import FormTreeCardDelete from "@/features/Forms/FormTreeCardDelete/FormTreeCardDelete";
-import FormTreeCardMutation from "@/features/Forms/FormTreeCardMutation/FormTreeCardMutation";
+import FormTreeCardDelete from "@/features/DecisionTreeGenerator/Forms/FormTreeCardDelete/FormTreeCardDelete";
+import FormTreeCardMutation from "@/features/DecisionTreeGenerator/Forms/FormTreeCardMutation/FormTreeCardMutation";
 
 const TreeGrid = () => {
   const { tree, modalOpen } = useContext(DecisionTreeGeneratorContext);
