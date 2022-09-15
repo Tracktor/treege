@@ -34,7 +34,7 @@ export const getTreeNames = (tree: { children: TreeNode['children'], name?: Tree
 }
 
 export const hasUniqueName = (array: string[]): boolean => {
-    const uniqueName = new Set(array)
+    const uniqueName = new Set([...array]);
     return uniqueName.size === array.length;
 }
 
