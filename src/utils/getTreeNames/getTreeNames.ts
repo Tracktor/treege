@@ -1,18 +1,15 @@
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 
-const getTreeNames = (
-  tree: { children: TreeNode["children"]; name?: TreeNode["name"]; attributes?: TreeNode["attributes"] },
-  attributeAccumulator: string[] = []
-): string[] => {
+const getTreeNames = (tree: Partial<TreeNode>, attributeAccumulator: string[] = []): string[] => {
   let arrayNames = [...attributeAccumulator];
 
   // if one Field Element
-  if (!tree.children.length && !attributeAccumulator.length && tree?.name) {
+  if (!tree?.children?.length && !attributeAccumulator.length && tree?.name) {
     return [tree.name];
   }
 
   // if last element
-  if (!tree.children.length) {
+  if (!tree?.children?.length) {
     return attributeAccumulator;
   }
 
