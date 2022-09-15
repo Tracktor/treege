@@ -2,7 +2,6 @@ import type { HierarchyPointNode } from "d3-hierarchy";
 import type { SelectChangeEvent } from "design-system";
 import { ChangeEvent, FormEvent, useContext, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useDebounce } from "usehooks-ts";
 import fields from "@/constants/fields";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
 import {
@@ -13,6 +12,7 @@ import {
   setTree,
 } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
+import useDebounce from "@/hooks/useDebounce";
 import { isUniqueArrayItemWithNewEntry } from "@/utils/array";
 import getTreeNames from "@/utils/getTreeNames/getTreeNames";
 
@@ -31,9 +31,9 @@ const useFormTreeCardMutation = () => {
   const [step, setStep] = useState("");
 
   // Form Error
-  const debouncedValue = useDebounce(name, 200);
   const [uniqueNameErrorMessage, setUniqueNameErrorMessage] = useState("");
 
+  const debouncedValue = useDebounce(name, 200);
   const isDecisionField = fields.some((field) => field.type === type && field?.isDecisionField);
   const isRequiredDisabled = fields.some((field) => field.type === type && field?.isRequiredDisabled);
 
@@ -211,6 +211,7 @@ const useFormTreeCardMutation = () => {
   ]);
   const isEditModal = modalOpen === "edit";
 
+  // Debounce check unique name
   useEffect(() => {
     if (!tree || !debouncedValue) return;
 
@@ -218,8 +219,12 @@ const useFormTreeCardMutation = () => {
     const arrayNames = getTreeNames(tree);
     const isUnique = isUniqueArrayItemWithNewEntry(arrayNames, debouncedValue, excludeNameOnEditModal);
 
-    if (!isUnique) setUniqueNameErrorMessage(t("mustBeUnique", { ns: "form" }));
-    else setUniqueNameErrorMessage("");
+    if (isUnique) {
+      setUniqueNameErrorMessage("");
+      return;
+    }
+
+    setUniqueNameErrorMessage(t("mustBeUnique", { ns: "form" }));
   }, [currentHierarchyPointNode?.data.name, debouncedValue, isEditModal, t, tree]);
 
   return {
