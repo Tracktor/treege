@@ -33,7 +33,8 @@
     "react-d3-tree": "^3.3.4",
     "react-dom": "^18.2.0",
     "react-i18next": "^11.18.2",
-    "sass": "^1.54.0"
+    "sass": "^1.54.0",
+    "usehooks-ts": "^2.6.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",
