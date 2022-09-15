@@ -1,6 +1,6 @@
 import { appendProps, changeProps, removeObject, replaceObject, returnFound } from "find-and";
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
-import removeObjectProperty from "@/utils/removeObjectProperty";
+import { removeObjectProperty } from "@/utils/object";
 
 export const treeReducerActionType = {
   appendTreeCard: "appendTreeCard",
