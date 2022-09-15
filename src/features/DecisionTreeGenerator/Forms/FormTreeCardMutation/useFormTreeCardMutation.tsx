@@ -1,6 +1,8 @@
 import type { HierarchyPointNode } from "d3-hierarchy";
 import type { SelectChangeEvent } from "design-system";
 import { ChangeEvent, FormEvent, useContext, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useDebounce } from "usehooks-ts";
 import fields from "@/constants/fields";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
 import {
@@ -11,10 +13,13 @@ import {
   setTree,
 } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
+import { isUniqueArrayItemWithNewEntry } from "@/utils/array";
+import getTreeNames from "@/utils/getTreeNames/getTreeNames";
 
 const useFormTreeCardMutation = () => {
   const defaultValues = useMemo(() => [{ id: "0", label: "", value: "" }], []);
-  const { dispatchTree, setModalOpen, currentHierarchyPointNode, modalOpen } = useContext(DecisionTreeGeneratorContext);
+  const { tree, dispatchTree, setModalOpen, currentHierarchyPointNode, modalOpen } = useContext(DecisionTreeGeneratorContext);
+  const { t } = useTranslation();
 
   // Form value
   const [values, setValues] = useState(defaultValues);
@@ -24,6 +29,10 @@ const useFormTreeCardMutation = () => {
   const [isDecision, setIsDecision] = useState(false);
   const [type, setType] = useState("text");
   const [step, setStep] = useState("");
+
+  // Form Error
+  const debouncedValue = useDebounce(name, 200);
+  const [uniqueNameErrorMessage, setUniqueNameErrorMessage] = useState("");
 
   const isDecisionField = fields.some((field) => field.type === type && field?.isDecisionField);
   const isRequiredDisabled = fields.some((field) => field.type === type && field?.isRequiredDisabled);
@@ -200,6 +209,18 @@ const useFormTreeCardMutation = () => {
     defaultValues,
     modalOpen,
   ]);
+  const isEditModal = modalOpen === "edit";
+
+  useEffect(() => {
+    if (!tree || !debouncedValue) return;
+
+    const excludeNameOnEditModal = isEditModal && currentHierarchyPointNode?.data.name;
+    const arrayNames = getTreeNames(tree);
+    const isUnique = isUniqueArrayItemWithNewEntry(arrayNames, debouncedValue, excludeNameOnEditModal);
+
+    if (!isUnique) setUniqueNameErrorMessage(t("mustBeUnique", { ns: "form" }));
+    else setUniqueNameErrorMessage("");
+  }, [currentHierarchyPointNode?.data.name, debouncedValue, isEditModal, t, tree]);
 
   return {
     getDisabledValueField,
@@ -222,6 +243,7 @@ const useFormTreeCardMutation = () => {
     required,
     step,
     type,
+    uniqueNameErrorMessage,
     values,
   };
 };
