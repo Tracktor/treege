@@ -1,4 +1,4 @@
-import { createTheme } from "design-system";
+import { createTheme } from "design-system-tracktor";
 import colors from "@/styles/colors.module.scss";
 
 const darkTheme = createTheme({

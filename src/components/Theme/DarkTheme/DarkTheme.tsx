@@ -1,4 +1,4 @@
-import { ThemeProvider } from "design-system";
+import { ThemeProvider } from "design-system-tracktor";
 import type { ReactNode } from "react";
 import darkTheme from "@/constants/theme";
 

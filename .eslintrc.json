@@ -1,5 +1,5 @@
 {
   "extends": [
-    "eslint-config-react"
+    "eslint-config-react-tracktor"
   ]
 }

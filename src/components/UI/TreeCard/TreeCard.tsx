@@ -5,7 +5,7 @@ import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import EnergySavingsLeafRoundedIcon from "@mui/icons-material/EnergySavingsLeafRounded";
 import ParkRoundedIcon from "@mui/icons-material/ParkRounded";
 import type { HierarchyPointNode } from "d3-hierarchy";
-import { Box, Button, Chip, Stack, Tooltip, Typography } from "design-system";
+import { Box, Button, Chip, Stack, Tooltip, Typography } from "design-system-tracktor";
 import { memo } from "react";
 import type { CustomNodeElementProps, TreeNodeDatum } from "react-d3-tree/lib/types/common";
 import { useTranslation } from "react-i18next";

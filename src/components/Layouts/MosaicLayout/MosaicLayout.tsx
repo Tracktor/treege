@@ -1,4 +1,4 @@
-import { Grid, Stack } from "design-system";
+import { Grid, Stack } from "design-system-tracktor";
 import { Children, ReactElement } from "react";
 import styles from "./MosaicLayout.module.scss";
 

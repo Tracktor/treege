@@ -1,4 +1,4 @@
-import { Box, Modal } from "design-system";
+import { Box, Modal } from "design-system-tracktor";
 import type { ReactNode } from "react";
 import styles from "./MainModal.module.scss";
 

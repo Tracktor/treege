@@ -1,5 +1,5 @@
 import AccountTreeRoundedIcon from "@mui/icons-material/AccountTreeRounded";
-import { Box, Button } from "design-system";
+import { Box, Button } from "design-system-tracktor";
 import { useTranslation } from "react-i18next";
 import useButtonCreateTree from "@/features/DecisionTreeGenerator/components/ButtonCreateTree/useButtonCreateTree";
 

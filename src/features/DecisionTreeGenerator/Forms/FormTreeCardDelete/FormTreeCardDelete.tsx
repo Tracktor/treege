@@ -1,4 +1,4 @@
-import { Button, Stack } from "design-system";
+import { Button, Stack } from "design-system-tracktor";
 import { useTranslation } from "react-i18next";
 import useFormTreeCardDelete from "@/features/DecisionTreeGenerator/Forms/FormTreeCardDelete/useFormTreeCardDelete";
 

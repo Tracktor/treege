@@ -1,4 +1,4 @@
-import { Box } from "design-system";
+import { Box } from "design-system-tracktor";
 import type { ReactNode } from "react";
 import styles from "./Header.module.scss";
 

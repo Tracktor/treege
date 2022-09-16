@@ -12,7 +12,7 @@ import {
   Select,
   Stack,
   TextField,
-} from "design-system";
+} from "design-system-tracktor";
 import { useTranslation } from "react-i18next";
 import styles from "./FormTreeCardMutation.module.scss";
 import fields from "@/constants/fields";
