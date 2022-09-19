@@ -31,20 +31,26 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     name,
     uniqueNameErrorMessage,
     type,
-    description,
+    helperText,
     step,
     label,
+    trueMessage,
+    falseMessage,
+    isBooleanField,
     isDecision,
     isDecisionField,
     isRequiredDisabled,
+    handleChangeHelperText,
+    handleChangeOptionMessage,
     handleChangeRequired,
     handleChangeName,
     handleChangeType,
-    handleChangeDescription,
     handleChangeIsDecisionField,
     handleChangeOptionLabel,
     handleDeleteValue,
     handleChangeOptionValue,
+    handleChangeFalseMessage,
+    handleChangeTrueMessage,
     handleSubmit,
     handleAddValue,
     handleChangeStep,
@@ -88,8 +94,15 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
       </Stack>
 
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
-        <TextField sx={{ flex: 1 }} label={t("description", { ns: "form" })} onChange={handleChangeDescription} value={description} />
+        <TextField sx={{ flex: 1 }} label={t("helperText", { ns: "form" })} onChange={handleChangeHelperText} value={helperText} />
       </Stack>
+
+      {isBooleanField && (
+        <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
+          <TextField sx={{ flex: 1 }} label="Information Vraie" onChange={handleChangeTrueMessage} value={trueMessage} />
+          <TextField sx={{ flex: 1 }} label="Information Fausse" onChange={handleChangeFalseMessage} value={falseMessage} />
+        </Stack>
+      )}
 
       <Stack paddingY={1}>
         <FormGroup>
@@ -111,7 +124,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
       {isDecisionField && (
         <>
           <h4>{t("values")}</h4>
-          {values?.map(({ value, label: labelOption, id }) => (
+          {values?.map(({ value, label: labelOption, id, message }) => (
             <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} key={id} position="relative">
               <TextField
                 label={t("label", { ns: "form" })}
@@ -128,6 +141,13 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                 value={value}
                 inputProps={{ "data-id": id }}
                 required
+              />
+              <TextField
+                label="Message"
+                sx={{ flex: 1 }}
+                onChange={handleChangeOptionMessage}
+                value={message}
+                inputProps={{ "data-id": id }}
               />
               {values.length > 1 && (
                 <Button color="warning" className={styles.IconButtonDelete} data-id={id} onClick={() => handleDeleteValue(id)}>

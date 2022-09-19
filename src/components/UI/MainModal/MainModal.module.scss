@@ -1,13 +1,6 @@
 @import "src/styles/colors.module";
 
 .Box {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   background-color: $backgroundPrimary;
   border: 1px solid $borderLight;
-  max-height: 80%;
-  overflow-y: auto;
-  max-width: 500px;
 }
