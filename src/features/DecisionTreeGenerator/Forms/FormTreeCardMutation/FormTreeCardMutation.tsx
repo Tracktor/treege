@@ -31,6 +31,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     name,
     uniqueNameErrorMessage,
     type,
+    description,
     step,
     label,
     isDecision,
@@ -39,6 +40,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeRequired,
     handleChangeName,
     handleChangeType,
+    handleChangeDescription,
     handleChangeIsDecisionField,
     handleChangeOptionLabel,
     handleDeleteValue,
@@ -85,6 +87,10 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         />
       </Stack>
 
+      <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
+        <TextField sx={{ flex: 1 }} label={t("description", { ns: "form" })} onChange={handleChangeDescription} value={description} />
+      </Stack>
+
       <Stack paddingY={1}>
         <FormGroup>
           <FormControlLabel
@@ -108,7 +114,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           {values?.map(({ value, label: labelOption, id }) => (
             <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} key={id} position="relative">
               <TextField
-                label="Label"
+                label={t("label", { ns: "form" })}
                 sx={{ flex: 1 }}
                 onChange={handleChangeOptionLabel}
                 value={labelOption}
@@ -116,7 +122,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                 required
               />
               <TextField
-                label="Valeur"
+                label={t("value", { ns: "form" })}
                 sx={{ flex: 1 }}
                 onChange={handleChangeOptionValue}
                 value={value}

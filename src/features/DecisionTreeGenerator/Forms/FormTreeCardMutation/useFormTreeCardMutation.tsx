@@ -28,6 +28,7 @@ const useFormTreeCardMutation = () => {
   const [required, setRequired] = useState(false);
   const [isDecision, setIsDecision] = useState(false);
   const [type, setType] = useState("text");
+  const [description, setDescription] = useState("");
   const [step, setStep] = useState("");
 
   // Form Error
@@ -87,6 +88,10 @@ const useFormTreeCardMutation = () => {
     setIsDecision(false);
     setRequired(false);
     setType(event.target.value);
+  };
+
+  const handleChangeDescription = (event: ChangeEvent<HTMLInputElement>) => {
+    setDescription(event.target.value);
   };
 
   const handleAddValue = () => {
@@ -152,6 +157,7 @@ const useFormTreeCardMutation = () => {
     const children = {
       attributes: {
         depth,
+        description,
         label,
         type,
         ...(isRoot && { isRoot }),
@@ -228,8 +234,10 @@ const useFormTreeCardMutation = () => {
   }, [currentHierarchyPointNode?.data.name, debouncedValue, isEditModal, t, tree]);
 
   return {
+    description,
     getDisabledValueField,
     handleAddValue,
+    handleChangeDescription,
     handleChangeIsDecisionField,
     handleChangeLabel,
     handleChangeName,
