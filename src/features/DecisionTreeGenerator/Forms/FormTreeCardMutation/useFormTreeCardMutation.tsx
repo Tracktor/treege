@@ -28,10 +28,9 @@ const useFormTreeCardMutation = () => {
   const [required, setRequired] = useState(false);
   const [isDecision, setIsDecision] = useState(false);
   const [type, setType] = useState("text");
-  const [trueMessage, setTrueMessage] = useState("");
-  const [falseMessage, setFalseMessage] = useState("");
   const [helperText, setHelperText] = useState("");
   const [step, setStep] = useState("");
+  const [messages, setMessages] = useState({ false: "", true: "" });
 
   // Form Error
   const [uniqueNameErrorMessage, setUniqueNameErrorMessage] = useState("");
@@ -97,13 +96,10 @@ const useFormTreeCardMutation = () => {
     setType(event.target.value);
   };
 
-  const handleChangeTrueMessage = (event: ChangeEvent<HTMLInputElement>) => {
-    setTrueMessage(event.target.value);
+  const handleChangeMessage = (nameMessage: string) => (event: ChangeEvent<HTMLInputElement>) => {
+    setMessages((currentState) => ({ ...currentState, [nameMessage]: event.target.value }));
   };
 
-  const handleChangeFalseMessage = (event: ChangeEvent<HTMLInputElement>) => {
-    setFalseMessage(event.target.value);
-  };
   const handleChangeHelperText = (event: ChangeEvent<HTMLInputElement>) => {
     setHelperText(event.target.value);
   };
@@ -172,10 +168,9 @@ const useFormTreeCardMutation = () => {
     const children = {
       attributes: {
         depth,
-        falseMessage,
         helperText,
         label,
-        trueMessage,
+        messages,
         type,
         ...(isRoot && { isRoot }),
         ...(isDecision && { isDecision }),
@@ -227,17 +222,18 @@ const useFormTreeCardMutation = () => {
       setLabel(currentHierarchyPointNode?.data.attributes?.label || "");
       setIsDecision(currentHierarchyPointNode?.data.attributes?.isDecision || false);
       setValues(initialValues?.length ? initialValues : defaultValues);
-      setTrueMessage(currentHierarchyPointNode?.data.attributes?.trueMessage || "");
-      setFalseMessage(currentHierarchyPointNode?.data.attributes?.falseMessage || "");
+      setMessages({
+        false: currentHierarchyPointNode?.data.attributes?.messages?.false || "",
+        true: currentHierarchyPointNode?.data.attributes?.messages?.true || "",
+      });
     }
   }, [
-    currentHierarchyPointNode?.data.attributes?.falseMessage,
+    currentHierarchyPointNode?.data.attributes?.messages,
     currentHierarchyPointNode?.data.attributes?.helperText,
     currentHierarchyPointNode?.data.attributes?.isDecision,
     currentHierarchyPointNode?.data.attributes?.label,
     currentHierarchyPointNode?.data.attributes?.required,
     currentHierarchyPointNode?.data.attributes?.step,
-    currentHierarchyPointNode?.data.attributes?.trueMessage,
     currentHierarchyPointNode?.data.attributes?.type,
     currentHierarchyPointNode?.data.attributes?.values,
     currentHierarchyPointNode?.data?.children,
@@ -264,20 +260,18 @@ const useFormTreeCardMutation = () => {
   }, [currentHierarchyPointNode?.data.name, debouncedValue, isEditModal, t, tree]);
 
   return {
-    falseMessage,
     getDisabledValueField,
     handleAddValue,
-    handleChangeFalseMessage,
     handleChangeHelperText,
     handleChangeIsDecisionField,
     handleChangeLabel,
+    handleChangeMessage,
     handleChangeName,
     handleChangeOptionLabel,
     handleChangeOptionMessage,
     handleChangeOptionValue,
     handleChangeRequired,
     handleChangeStep,
-    handleChangeTrueMessage,
     handleChangeType,
     handleDeleteValue,
     handleSubmit,
@@ -287,10 +281,10 @@ const useFormTreeCardMutation = () => {
     isDecisionField,
     isRequiredDisabled,
     label,
+    messages,
     name,
     required,
     step,
-    trueMessage,
     type,
     uniqueNameErrorMessage,
     values,

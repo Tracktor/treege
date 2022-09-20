@@ -34,8 +34,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     helperText,
     step,
     label,
-    trueMessage,
-    falseMessage,
+    messages,
     isBooleanField,
     isDecision,
     isDecisionField,
@@ -49,8 +48,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeOptionLabel,
     handleDeleteValue,
     handleChangeOptionValue,
-    handleChangeFalseMessage,
-    handleChangeTrueMessage,
+    handleChangeMessage,
     handleSubmit,
     handleAddValue,
     handleChangeStep,
@@ -99,8 +97,18 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
       {isBooleanField && (
         <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
-          <TextField sx={{ flex: 1 }} label="Information Vraie" onChange={handleChangeTrueMessage} value={trueMessage} />
-          <TextField sx={{ flex: 1 }} label="Information Fausse" onChange={handleChangeFalseMessage} value={falseMessage} />
+          <TextField
+            sx={{ flex: 1 }}
+            label={t("trueMessage", { ns: "form" })}
+            onChange={handleChangeMessage("true")}
+            value={messages?.true}
+          />
+          <TextField
+            sx={{ flex: 1 }}
+            label={t("falseMessage", { ns: "form" })}
+            onChange={handleChangeMessage("false")}
+            value={messages?.false}
+          />
         </Stack>
       )}
 
