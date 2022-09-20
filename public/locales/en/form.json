@@ -1,11 +1,12 @@
 {
   "decisionFields": "Decision fields",
-  "label": "Label",
-  "value": "Value",
+  "falseMessage": "Message (disable)",
   "helperText": "Helper text",
+  "label": "Label",
   "mustBeUnique": "Must be unique",
   "staticFields": "Static fields",
   "step": "Step",
+  "trueMessage": "Message (enable)",
   "type": {
     "address": "Address",
     "checkbox": "Checkbox",
@@ -22,5 +23,6 @@
     "text": "Text",
     "url": "URL"
   },
+  "value": "Value",
   "values": "Values"
 }
