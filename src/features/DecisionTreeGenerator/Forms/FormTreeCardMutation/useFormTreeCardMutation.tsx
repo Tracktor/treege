@@ -36,6 +36,7 @@ const useFormTreeCardMutation = () => {
   const [uniqueNameErrorMessage, setUniqueNameErrorMessage] = useState("");
 
   const debouncedValue = useDebounce(name, 200);
+  const isEditModal = modalOpen === "edit";
   const isBooleanField = ["switch", "checkbox"].includes(type);
   const isDecisionField = fields.some((field) => field.type === type && field?.isDecisionField);
   const isRequiredDisabled = fields.some((field) => field.type === type && field?.isRequiredDisabled);
@@ -241,7 +242,6 @@ const useFormTreeCardMutation = () => {
     defaultValues,
     modalOpen,
   ]);
-  const isEditModal = modalOpen === "edit";
 
   // Debounce check unique name
   useEffect(() => {
