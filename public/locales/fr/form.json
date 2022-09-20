@@ -1,15 +1,18 @@
 {
-  "decisionField":"Champs de décision",
-  "label" : "Label",
+  "decisionField": "Champs de décision",
+  "helperText": "Text d'information",
+  "label": "Label",
   "mustBeUnique": "Doit être unique",
+  "offMessage": "Message (désactiver)",
+  "onMessage": "Message (activer)",
   "staticFields": "Champs statiques",
   "step": "Étape",
   "type": {
     "address": "Adresse",
     "checkbox": "Case à cocher",
     "date": "Date",
-    "email" : "Email",
-    "file" : "Fichier",
+    "email": "Email",
+    "file": "Fichier",
     "number": "Nombre",
     "password": "Mot de passe",
     "radio": "Radio",
@@ -19,5 +22,7 @@
     "time": "Temps",
     "text": "Texte",
     "url": "URL"
-  }
+  },
+  "value": "Valeur",
+  "values": "Valeurs"
 }

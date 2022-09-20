@@ -22,35 +22,39 @@ const useFormTreeCardMutation = () => {
   const { t } = useTranslation();
 
   // Form value
-  const [values, setValues] = useState(defaultValues);
+  const [values, setValues] = useState<{ id: string; label: string; value: string; message?: string }[]>(defaultValues);
   const [name, setName] = useState("");
   const [label, setLabel] = useState("");
   const [required, setRequired] = useState(false);
   const [isDecision, setIsDecision] = useState(false);
   const [type, setType] = useState("text");
+  const [helperText, setHelperText] = useState("");
   const [step, setStep] = useState("");
+  const [messages, setMessages] = useState({ off: "", on: "" });
 
   // Form Error
   const [uniqueNameErrorMessage, setUniqueNameErrorMessage] = useState("");
 
   const debouncedValue = useDebounce(name, 200);
+  const isEditModal = modalOpen === "edit";
+  const isBooleanField = ["switch", "checkbox"].includes(type);
   const isDecisionField = fields.some((field) => field.type === type && field?.isDecisionField);
   const isRequiredDisabled = fields.some((field) => field.type === type && field?.isRequiredDisabled);
-
   const getDisabledValueField = (index: number) => !isDecisionField && index > 0;
 
-  const handlePresetValues = (event: ChangeEvent<HTMLInputElement>, predicate: "value" | "label") => {
+  const handlePresetValues = (event: ChangeEvent<HTMLInputElement>, predicate: "value" | "label" | "message") => {
     setValues((prevState) =>
-      prevState.map(({ value, label: optionLabel, id }) => {
+      prevState.map(({ value, label: optionLabel, id, message }) => {
         if (event.target.dataset.id === id) {
           return {
             id,
-            label: predicate === "value" ? optionLabel : event.target.value,
+            label: predicate === "label" ? event.target.value : optionLabel,
+            message: predicate === "message" ? event.target.value : message,
             value: predicate === "value" ? event.target.value : value,
           };
         }
 
-        return { id, label: optionLabel, value };
+        return { id, label: optionLabel, message, value };
       })
     );
   };
@@ -65,6 +69,10 @@ const useFormTreeCardMutation = () => {
 
   const handleChangeOptionValue = (event: ChangeEvent<HTMLInputElement>) => {
     handlePresetValues(event, "value");
+  };
+
+  const handleChangeOptionMessage = (event: ChangeEvent<HTMLInputElement>) => {
+    handlePresetValues(event, "message");
   };
 
   const handleChangeStep = (event: ChangeEvent<HTMLInputElement>) => {
@@ -89,11 +97,19 @@ const useFormTreeCardMutation = () => {
     setType(event.target.value);
   };
 
+  const handleChangeMessage = (nameMessage: "on" | "off") => (event: ChangeEvent<HTMLInputElement>) => {
+    setMessages((currentState) => ({ ...currentState, [nameMessage]: event.target.value }));
+  };
+
+  const handleChangeHelperText = (event: ChangeEvent<HTMLInputElement>) => {
+    setHelperText(event.target.value);
+  };
+
   const handleAddValue = () => {
     setValues((prevState) => {
       const lastId = Number(prevState[prevState.length - 1].id);
       const nextId = String(lastId + 1);
-      return [...prevState, { id: nextId, label: "", value: "" }];
+      return [...prevState, { id: nextId, label: "", message: "", value: "" }];
     });
   };
 
@@ -122,7 +138,7 @@ const useFormTreeCardMutation = () => {
 
     return values
       ?.filter((_, index) => !getDisabledValueField(index)) // filter disabled value
-      ?.map(({ value, label: optionLabel }, index) => {
+      ?.map(({ message, value, label: optionLabel }, index) => {
         const nextName = `${name}:${value}`;
         const children = getNestedChildren(currentHierarchyPointNode, index);
 
@@ -130,6 +146,7 @@ const useFormTreeCardMutation = () => {
           attributes: {
             depth: depth + 1,
             label: optionLabel,
+            message,
             value,
             ...(children.length === 0 && { isLeaf: true }),
           },
@@ -152,7 +169,9 @@ const useFormTreeCardMutation = () => {
     const children = {
       attributes: {
         depth,
+        helperText,
         label,
+        messages,
         type,
         ...(isRoot && { isRoot }),
         ...(isDecision && { isDecision }),
@@ -180,24 +199,38 @@ const useFormTreeCardMutation = () => {
   useEffect(() => {
     if (modalOpen === "edit") {
       const currentValues = currentHierarchyPointNode?.data?.attributes?.values;
+
       const initialValues =
         currentValues ||
         currentHierarchyPointNode?.data?.children
           ?.filter(({ attributes }) => !attributes?.type)
           ?.map(({ attributes }, index) => {
-            const { label: optionLabel, value } = attributes || {};
-            return { id: String(index), label: String(optionLabel), value: String(value) };
+            const { label: optionLabel, value, message } = attributes || {};
+
+            return {
+              id: String(index),
+              label: String(optionLabel),
+              message: String(message),
+              value: String(value),
+            };
           });
 
       setName(currentHierarchyPointNode?.data.name || "");
       setType(currentHierarchyPointNode?.data.attributes?.type || "");
+      setHelperText(currentHierarchyPointNode?.data.attributes?.helperText || "");
       setRequired(currentHierarchyPointNode?.data.attributes?.required || false);
       setStep(currentHierarchyPointNode?.data.attributes?.step || "");
       setLabel(currentHierarchyPointNode?.data.attributes?.label || "");
       setIsDecision(currentHierarchyPointNode?.data.attributes?.isDecision || false);
       setValues(initialValues?.length ? initialValues : defaultValues);
+      setMessages({
+        off: currentHierarchyPointNode?.data.attributes?.messages?.off || "",
+        on: currentHierarchyPointNode?.data.attributes?.messages?.on || "",
+      });
     }
   }, [
+    currentHierarchyPointNode?.data.attributes?.messages,
+    currentHierarchyPointNode?.data.attributes?.helperText,
     currentHierarchyPointNode?.data.attributes?.isDecision,
     currentHierarchyPointNode?.data.attributes?.label,
     currentHierarchyPointNode?.data.attributes?.required,
@@ -209,7 +242,6 @@ const useFormTreeCardMutation = () => {
     defaultValues,
     modalOpen,
   ]);
-  const isEditModal = modalOpen === "edit";
 
   // Debounce check unique name
   useEffect(() => {
@@ -230,20 +262,26 @@ const useFormTreeCardMutation = () => {
   return {
     getDisabledValueField,
     handleAddValue,
+    handleChangeHelperText,
     handleChangeIsDecisionField,
     handleChangeLabel,
+    handleChangeMessage,
     handleChangeName,
     handleChangeOptionLabel,
+    handleChangeOptionMessage,
     handleChangeOptionValue,
     handleChangeRequired,
     handleChangeStep,
     handleChangeType,
     handleDeleteValue,
     handleSubmit,
+    helperText,
+    isBooleanField,
     isDecision,
     isDecisionField,
     isRequiredDisabled,
     label,
+    messages,
     name,
     required,
     step,

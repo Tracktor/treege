@@ -1,15 +1,18 @@
 {
-  "decisionFields":"Decision fields",
-  "label" : "Label",
+  "decisionFields": "Decision fields",
+  "helperText": "Helper text",
+  "label": "Label",
   "mustBeUnique": "Must be unique",
+  "offMessage": "Message (disable)",
+  "onMessage": "Message (enable)",
   "staticFields": "Static fields",
   "step": "Step",
   "type": {
     "address": "Address",
     "checkbox": "Checkbox",
     "date": "Date",
-    "email" : "Email",
-    "file" : "File",
+    "email": "Email",
+    "file": "File",
     "number": "Number",
     "password": "Password",
     "radio": "Radio",
@@ -20,5 +23,6 @@
     "text": "Text",
     "url": "URL"
   },
+  "value": "Value",
   "values": "Values"
 }
