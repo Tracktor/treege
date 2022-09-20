@@ -97,18 +97,8 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
       {isBooleanField && (
         <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
-          <TextField
-            sx={{ flex: 1 }}
-            label={t("trueMessage", { ns: "form" })}
-            onChange={handleChangeMessage("true")}
-            value={messages?.true}
-          />
-          <TextField
-            sx={{ flex: 1 }}
-            label={t("falseMessage", { ns: "form" })}
-            onChange={handleChangeMessage("false")}
-            value={messages?.false}
-          />
+          <TextField sx={{ flex: 1 }} label={t("onMessage", { ns: "form" })} onChange={handleChangeMessage("on")} value={messages?.on} />
+          <TextField sx={{ flex: 1 }} label={t("offMessage", { ns: "form" })} onChange={handleChangeMessage("off")} value={messages?.off} />
         </Stack>
       )}
 

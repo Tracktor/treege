@@ -4,7 +4,7 @@ import type { CustomNodeElementProps, RawNodeDatum } from "react-d3-tree/lib/typ
 export interface TreeNodeField {
   depth: number;
   helperText?: string;
-  messages?: { true?: string; false?: string };
+  messages?: { on?: string; off?: string };
   isDecision?: boolean;
   isLeaf?: boolean;
   isRoot?: boolean;

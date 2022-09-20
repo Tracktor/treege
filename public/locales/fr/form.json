@@ -1,12 +1,12 @@
 {
   "decisionField": "Champs de décision",
-  "falseMessage": "Message (désactiver)",
   "helperText": "Text d'information",
   "label": "Label",
   "mustBeUnique": "Doit être unique",
+  "offMessage": "Message (désactiver)",
+  "onMessage": "Message (activer)",
   "staticFields": "Champs statiques",
   "step": "Étape",
-  "trueMessage": "Message (activer)",
   "type": {
     "address": "Adresse",
     "checkbox": "Case à cocher",

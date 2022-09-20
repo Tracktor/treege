@@ -1,12 +1,12 @@
 {
   "decisionFields": "Decision fields",
-  "falseMessage": "Message (disable)",
   "helperText": "Helper text",
   "label": "Label",
   "mustBeUnique": "Must be unique",
+  "offMessage": "Message (disable)",
+  "onMessage": "Message (enable)",
   "staticFields": "Static fields",
   "step": "Step",
-  "trueMessage": "Message (enable)",
   "type": {
     "address": "Address",
     "checkbox": "Checkbox",

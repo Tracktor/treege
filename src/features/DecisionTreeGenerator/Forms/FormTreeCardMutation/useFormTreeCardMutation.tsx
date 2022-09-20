@@ -30,7 +30,7 @@ const useFormTreeCardMutation = () => {
   const [type, setType] = useState("text");
   const [helperText, setHelperText] = useState("");
   const [step, setStep] = useState("");
-  const [messages, setMessages] = useState({ false: "", true: "" });
+  const [messages, setMessages] = useState({ off: "", on: "" });
 
   // Form Error
   const [uniqueNameErrorMessage, setUniqueNameErrorMessage] = useState("");
@@ -96,7 +96,7 @@ const useFormTreeCardMutation = () => {
     setType(event.target.value);
   };
 
-  const handleChangeMessage = (nameMessage: string) => (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeMessage = (nameMessage: "on" | "off") => (event: ChangeEvent<HTMLInputElement>) => {
     setMessages((currentState) => ({ ...currentState, [nameMessage]: event.target.value }));
   };
 
@@ -223,8 +223,8 @@ const useFormTreeCardMutation = () => {
       setIsDecision(currentHierarchyPointNode?.data.attributes?.isDecision || false);
       setValues(initialValues?.length ? initialValues : defaultValues);
       setMessages({
-        false: currentHierarchyPointNode?.data.attributes?.messages?.false || "",
-        true: currentHierarchyPointNode?.data.attributes?.messages?.true || "",
+        off: currentHierarchyPointNode?.data.attributes?.messages?.off || "",
+        on: currentHierarchyPointNode?.data.attributes?.messages?.on || "",
       });
     }
   }, [
