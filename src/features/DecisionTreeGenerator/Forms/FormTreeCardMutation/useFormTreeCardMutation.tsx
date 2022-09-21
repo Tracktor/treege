@@ -11,7 +11,7 @@ import {
   setIsLeaf,
   setTree,
 } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
-import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
+import type { IValues, TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 import useDebounce from "@/hooks/useDebounce";
 import { isUniqueArrayItemWithNewEntry } from "@/utils/array";
 import getTreeNames from "@/utils/getTreeNames/getTreeNames";
@@ -156,6 +156,9 @@ const useFormTreeCardMutation = () => {
       });
   };
 
+  const getValues = (arrayObj: IValues[]) =>
+    arrayObj?.reduce<IValues[]>((acc, { message, ...rest }) => [...acc, { ...rest, ...(message && { message }) }], []);
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
@@ -166,14 +169,6 @@ const useFormTreeCardMutation = () => {
     const depth = currentDepth + (isEdit || currentHierarchyPointNode === null ? 0 : 1);
     const isRoot = !currentHierarchyPointNode || depth === 0;
     const childOfChildren = getChildren(depth);
-
-    const cleanValues =
-      isDecisionField &&
-      !isDecision &&
-      values?.reduce<{ id: string; label: string; value: string; message?: string }[]>(
-        (acc, { message, ...rest }) => [...acc, { ...rest, ...(message && { message }) }],
-        []
-      );
 
     const children = {
       attributes: {
@@ -186,7 +181,7 @@ const useFormTreeCardMutation = () => {
         }),
         ...(isRoot && { isRoot }),
         ...(isDecision && { isDecision }),
-        ...(isDecisionField && !isDecision && cleanValues && { values: cleanValues }),
+        ...(isDecisionField && !isDecision && { values: getValues(values) }),
         ...(required && { required }),
         ...(step && { step }),
       },
@@ -221,8 +216,8 @@ const useFormTreeCardMutation = () => {
             return {
               id: String(index),
               label: String(optionLabel),
-              ...(message && { message: String(message) }),
               value: String(value),
+              ...(message && { message: String(message) }),
             };
           });
 
