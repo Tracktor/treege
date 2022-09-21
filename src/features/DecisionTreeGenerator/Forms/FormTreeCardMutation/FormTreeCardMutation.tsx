@@ -34,7 +34,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     helperText,
     step,
     label,
-    messages,
+    messages: { on, off },
     isBooleanField,
     isDecision,
     isDecisionField,
@@ -97,8 +97,8 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
       {isBooleanField && (
         <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
-          <TextField sx={{ flex: 1 }} label={t("onMessage", { ns: "form" })} onChange={handleChangeMessage("on")} value={messages?.on} />
-          <TextField sx={{ flex: 1 }} label={t("offMessage", { ns: "form" })} onChange={handleChangeMessage("off")} value={messages?.off} />
+          <TextField sx={{ flex: 1 }} label={t("onMessage", { ns: "form" })} onChange={handleChangeMessage("on")} value={on} />
+          <TextField sx={{ flex: 1 }} label={t("offMessage", { ns: "form" })} onChange={handleChangeMessage("off")} value={off} />
         </Stack>
       )}
 
