@@ -156,8 +156,8 @@ const useFormTreeCardMutation = () => {
       });
   };
 
-  const getValues = (arrayObj: IValues[]) =>
-    arrayObj?.reduce<IValues[]>((acc, { message, ...rest }) => [...acc, { ...rest, ...(message && { message }) }], []);
+  const getValues = (valuesData: IValues[]) =>
+    valuesData?.reduce<IValues[]>((acc, { message, ...rest }) => [...acc, { ...rest, ...(message && { message }) }], []);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
