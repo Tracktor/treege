@@ -146,8 +146,8 @@ const useFormTreeCardMutation = () => {
           attributes: {
             depth: depth + 1,
             label: optionLabel,
-            message,
             value,
+            ...(message && { message }),
             ...(children.length === 0 && { isLeaf: true }),
           },
           children,
@@ -159,6 +159,7 @@ const useFormTreeCardMutation = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
+    const { on, off } = messages;
     const currentName = currentHierarchyPointNode?.data?.name || "";
     const currentDepth = currentHierarchyPointNode?.depth || 0;
     const isEdit = modalOpen === "edit";
@@ -166,16 +167,26 @@ const useFormTreeCardMutation = () => {
     const isRoot = !currentHierarchyPointNode || depth === 0;
     const childOfChildren = getChildren(depth);
 
+    const cleanValues =
+      isDecisionField &&
+      !isDecision &&
+      values?.reduce<{ id: string; label: string; value: string; message?: string }[]>(
+        (acc, { message, ...rest }) => [...acc, { ...rest, ...(message && { message }) }],
+        []
+      );
+
     const children = {
       attributes: {
         depth,
-        helperText,
         label,
-        messages,
         type,
+        ...(helperText && { helperText }),
+        ...((off || on) && {
+          messages: { ...(off && { off }), ...(on && { on }) },
+        }),
         ...(isRoot && { isRoot }),
         ...(isDecision && { isDecision }),
-        ...(isDecisionField && !isDecision && { values }),
+        ...(isDecisionField && !isDecision && cleanValues && { values: cleanValues }),
         ...(required && { required }),
         ...(step && { step }),
       },
@@ -210,7 +221,7 @@ const useFormTreeCardMutation = () => {
             return {
               id: String(index),
               label: String(optionLabel),
-              message: String(message),
+              ...(message && { message: String(message) }),
               value: String(value),
             };
           });
