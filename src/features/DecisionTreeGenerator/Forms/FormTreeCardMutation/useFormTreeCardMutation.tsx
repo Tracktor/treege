@@ -11,13 +11,12 @@ import {
   setIsLeaf,
   setTree,
 } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
-import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
-import useDebounce from "@/hooks/useDebounce";
+import type { TreeNode, TreeValues } from "@/features/DecisionTreeGenerator/type/TreeNode";
 import { isUniqueArrayItemWithNewEntry } from "@/utils/array";
 import getTreeNames from "@/utils/getTreeNames/getTreeNames";
 
 const useFormTreeCardMutation = () => {
-  const defaultValues = useMemo(() => [{ id: "0", label: "", value: "" }], []);
+  const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
   const { tree, dispatchTree, setModalOpen, currentHierarchyPointNode, modalOpen } = useContext(DecisionTreeGeneratorContext);
   const { t } = useTranslation();
 
@@ -35,9 +34,8 @@ const useFormTreeCardMutation = () => {
   // Form Error
   const [uniqueNameErrorMessage, setUniqueNameErrorMessage] = useState("");
 
-  const debouncedValue = useDebounce(name, 200);
   const isEditModal = modalOpen === "edit";
-  const isBooleanField = ["switch", "checkbox"].includes(type);
+  const isBooleanField = fields.some((field) => field.type === type && field?.isBooleanField);
   const isDecisionField = fields.some((field) => field.type === type && field?.isDecisionField);
   const isRequiredDisabled = fields.some((field) => field.type === type && field?.isRequiredDisabled);
   const getDisabledValueField = (index: number) => !isDecisionField && index > 0;
@@ -80,7 +78,21 @@ const useFormTreeCardMutation = () => {
   };
 
   const handleChangeName = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
     setName(event.target.value);
+
+    if (!tree || !value) return;
+
+    const excludeNameOnEditModal = isEditModal && currentHierarchyPointNode?.data.name;
+    const arrayNames = getTreeNames(tree);
+    const isUnique = isUniqueArrayItemWithNewEntry(arrayNames, value, excludeNameOnEditModal);
+
+    if (isUnique) {
+      setUniqueNameErrorMessage("");
+      return;
+    }
+
+    setUniqueNameErrorMessage(t("mustBeUnique", { ns: "form" }));
   };
 
   const handleChangeRequired = (event: ChangeEvent<HTMLInputElement>) => {
@@ -146,8 +158,8 @@ const useFormTreeCardMutation = () => {
           attributes: {
             depth: depth + 1,
             label: optionLabel,
-            message,
             value,
+            ...(message && { message }),
             ...(children.length === 0 && { isLeaf: true }),
           },
           children,
@@ -156,9 +168,13 @@ const useFormTreeCardMutation = () => {
       });
   };
 
+  const getTreeValuesWithoutEmptyMessage = (valuesData: TreeValues[]) =>
+    valuesData.map(({ message, ...rest }) => ({ ...rest, ...(message && { message }) }));
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
+    const { on, off } = messages;
     const currentName = currentHierarchyPointNode?.data?.name || "";
     const currentDepth = currentHierarchyPointNode?.depth || 0;
     const isEdit = modalOpen === "edit";
@@ -169,13 +185,15 @@ const useFormTreeCardMutation = () => {
     const children = {
       attributes: {
         depth,
-        helperText,
         label,
-        messages,
         type,
+        ...(helperText && { helperText }),
+        ...((off || on) && {
+          messages: { ...(off && { off }), ...(on && { on }) },
+        }),
         ...(isRoot && { isRoot }),
         ...(isDecision && { isDecision }),
-        ...(isDecisionField && !isDecision && { values }),
+        ...(isDecisionField && !isDecision && { values: getTreeValuesWithoutEmptyMessage(values) }),
         ...(required && { required }),
         ...(step && { step }),
       },
@@ -210,8 +228,8 @@ const useFormTreeCardMutation = () => {
             return {
               id: String(index),
               label: String(optionLabel),
-              message: String(message),
               value: String(value),
+              ...(message && { message: String(message) }),
             };
           });
 
@@ -242,22 +260,6 @@ const useFormTreeCardMutation = () => {
     defaultValues,
     modalOpen,
   ]);
-
-  // Debounce check unique name
-  useEffect(() => {
-    if (!tree || !debouncedValue) return;
-
-    const excludeNameOnEditModal = isEditModal && currentHierarchyPointNode?.data.name;
-    const arrayNames = getTreeNames(tree);
-    const isUnique = isUniqueArrayItemWithNewEntry(arrayNames, debouncedValue, excludeNameOnEditModal);
-
-    if (isUnique) {
-      setUniqueNameErrorMessage("");
-      return;
-    }
-
-    setUniqueNameErrorMessage(t("mustBeUnique", { ns: "form" }));
-  }, [currentHierarchyPointNode?.data.name, debouncedValue, isEditModal, t, tree]);
 
   return {
     getDisabledValueField,
