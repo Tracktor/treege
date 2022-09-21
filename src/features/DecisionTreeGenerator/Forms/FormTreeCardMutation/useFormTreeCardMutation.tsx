@@ -11,7 +11,7 @@ import {
   setIsLeaf,
   setTree,
 } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
-import type { IValues, TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
+import type { TreeNode, TreeValues } from "@/features/DecisionTreeGenerator/type/TreeNode";
 import useDebounce from "@/hooks/useDebounce";
 import { isUniqueArrayItemWithNewEntry } from "@/utils/array";
 import getTreeNames from "@/utils/getTreeNames/getTreeNames";
@@ -156,8 +156,8 @@ const useFormTreeCardMutation = () => {
       });
   };
 
-  const getValues = (valuesData: IValues[]) =>
-    valuesData?.reduce<IValues[]>((acc, { message, ...rest }) => [...acc, { ...rest, ...(message && { message }) }], []);
+  const getTreeValuesWithoutEmptyMessage = (valuesData: TreeValues[]) =>
+    valuesData.filter(({ message, ...rest }) => ({ message, ...rest }));
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -181,7 +181,7 @@ const useFormTreeCardMutation = () => {
         }),
         ...(isRoot && { isRoot }),
         ...(isDecision && { isDecision }),
-        ...(isDecisionField && !isDecision && { values: getValues(values) }),
+        ...(isDecisionField && !isDecision && { values: getTreeValuesWithoutEmptyMessage(values) }),
         ...(required && { required }),
         ...(step && { step }),
       },
