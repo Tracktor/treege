@@ -157,7 +157,7 @@ const useFormTreeCardMutation = () => {
   };
 
   const getTreeValuesWithoutEmptyMessage = (valuesData: TreeValues[]) =>
-    valuesData.filter(({ message, ...rest }) => ({ message, ...rest }));
+    valuesData.map(({ message, ...rest }) => ({ ...rest, ...(message && { message }) }));
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
