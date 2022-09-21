@@ -11,7 +11,6 @@
     - [Listen Treege event](#Listen-Treege-event)
     - [Events listener](#Events-listener)
     - [Events message](#Events-message)
-- [Types](#Types)
 - [Generate form from Treege data](#Generate-form-from-Treege-data)
 - [Local installation](#local-installation)
 - [Available Scripts](#Available-Scripts)
@@ -75,7 +74,8 @@ function handleLoadIframe() {
       "label": "Age",
       "type": "number",
       "isRoot": true,
-      "isLeaf": true
+      "isLeaf": true,
+      "...": "..."
     },
     "children": [],
     "name": "age"
@@ -118,50 +118,6 @@ List of events that can be sent with `iframe.contentWindow.postMessage`
 | Event name | Data                                                                                         |
 |------------|----------------------------------------------------------------------------------------------|
 | setTree    | `{source: "treege", type : "setTree", tree : {{attributes: {...}, children: [], name: ""}}}` |
-
-## Types
-
-Tree data that can be provided
-
-``` typescript
-type TreeNodeAttributes = TreeNodeField | TreeNodeValues;
-```
-
-``` typescript
-interface TreeNode {
-  name: string;
-  attributes: TreeNodeAttributes;
-  children: TreeNode[];
-}
-```
-
-```typescript
-interface TreeNodeField {
-  depth: number;
-  isDecisionField?: boolean;
-  isLeaf?: boolean;
-  isRoot?: boolean;
-  label: string;
-  required?: boolean;
-  step?: string;
-  type: string;
-  value?: never;
-}
-```
-
-```typescript
-interface TreeNodeValues {
-  depth: number;
-  isDecisionField?: never;
-  isLeaf?: boolean;
-  isRoot?: never;
-  label: string;
-  required?: never;
-  step?: never;
-  type?: never;
-  value: string;
-}
-```
 
 ## Generate form from Treege data
 
