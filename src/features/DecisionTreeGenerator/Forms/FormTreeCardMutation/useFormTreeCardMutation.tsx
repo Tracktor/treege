@@ -12,7 +12,6 @@ import {
   setTree,
 } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 import type { TreeNode, TreeValues } from "@/features/DecisionTreeGenerator/type/TreeNode";
-import useDebounce from "@/hooks/useDebounce";
 import { isUniqueArrayItemWithNewEntry } from "@/utils/array";
 import getTreeNames from "@/utils/getTreeNames/getTreeNames";
 
@@ -35,7 +34,6 @@ const useFormTreeCardMutation = () => {
   // Form Error
   const [uniqueNameErrorMessage, setUniqueNameErrorMessage] = useState("");
 
-  const debouncedValue = useDebounce(name, 200);
   const isEditModal = modalOpen === "edit";
   const isBooleanField = ["switch", "checkbox"].includes(type);
   const isDecisionField = fields.some((field) => field.type === type && field?.isDecisionField);
@@ -80,7 +78,21 @@ const useFormTreeCardMutation = () => {
   };
 
   const handleChangeName = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
     setName(event.target.value);
+
+    if (!tree || !value) return;
+
+    const excludeNameOnEditModal = isEditModal && currentHierarchyPointNode?.data.name;
+    const arrayNames = getTreeNames(tree);
+    const isUnique = isUniqueArrayItemWithNewEntry(arrayNames, value, excludeNameOnEditModal);
+
+    if (isUnique) {
+      setUniqueNameErrorMessage("");
+      return;
+    }
+
+    setUniqueNameErrorMessage(t("mustBeUnique", { ns: "form" }));
   };
 
   const handleChangeRequired = (event: ChangeEvent<HTMLInputElement>) => {
@@ -248,22 +260,6 @@ const useFormTreeCardMutation = () => {
     defaultValues,
     modalOpen,
   ]);
-
-  // Debounce check unique name
-  useEffect(() => {
-    if (!tree || !debouncedValue) return;
-
-    const excludeNameOnEditModal = isEditModal && currentHierarchyPointNode?.data.name;
-    const arrayNames = getTreeNames(tree);
-    const isUnique = isUniqueArrayItemWithNewEntry(arrayNames, debouncedValue, excludeNameOnEditModal);
-
-    if (isUnique) {
-      setUniqueNameErrorMessage("");
-      return;
-    }
-
-    setUniqueNameErrorMessage(t("mustBeUnique", { ns: "form" }));
-  }, [currentHierarchyPointNode?.data.name, debouncedValue, isEditModal, t, tree]);
 
   return {
     getDisabledValueField,
