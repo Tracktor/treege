@@ -17,7 +17,7 @@ import { isUniqueArrayItemWithNewEntry } from "@/utils/array";
 import getTreeNames from "@/utils/getTreeNames/getTreeNames";
 
 const useFormTreeCardMutation = () => {
-  const defaultValues = useMemo(() => [{ id: "0", label: "", value: "" }], []);
+  const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
   const { tree, dispatchTree, setModalOpen, currentHierarchyPointNode, modalOpen } = useContext(DecisionTreeGeneratorContext);
   const { t } = useTranslation();
 
