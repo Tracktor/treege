@@ -1,7 +1,8 @@
 interface Fields {
-  isDecisionField?: boolean;
-  isRequiredDisabled?: boolean;
-  type: string;
+  readonly isDecisionField?: boolean;
+  readonly isRequiredDisabled?: boolean;
+  readonly isBooleanField?: boolean;
+  readonly type: string;
 }
 
 const fields: Fields[] = [
@@ -36,10 +37,12 @@ const fields: Fields[] = [
     type: "time",
   },
   {
+    isBooleanField: true,
     isRequiredDisabled: true,
     type: "switch",
   },
   {
+    isBooleanField: true,
     isRequiredDisabled: true,
     type: "checkbox",
   },

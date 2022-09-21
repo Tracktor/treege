@@ -35,7 +35,7 @@ const useFormTreeCardMutation = () => {
   const [uniqueNameErrorMessage, setUniqueNameErrorMessage] = useState("");
 
   const isEditModal = modalOpen === "edit";
-  const isBooleanField = ["switch", "checkbox"].includes(type);
+  const isBooleanField = fields.some((field) => field.type === type && field?.isBooleanField);
   const isDecisionField = fields.some((field) => field.type === type && field?.isDecisionField);
   const isRequiredDisabled = fields.some((field) => field.type === type && field?.isRequiredDisabled);
   const getDisabledValueField = (index: number) => !isDecisionField && index > 0;
