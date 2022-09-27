@@ -1,3 +1,5 @@
+import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
+
 export const treeWithOneField = {
   attributes: {
     depth: 0,
@@ -8,7 +10,7 @@ export const treeWithOneField = {
   },
   children: [],
   name: "name",
-};
+} as TreeNode;
 
 export const treeWithMultiFields = {
   attributes: {
@@ -52,7 +54,7 @@ export const treeWithMultiFields = {
     },
   ],
   name: "name",
-};
+} as TreeNode;
 
 export const treeWithDecisionFields = {
   attributes: {
@@ -150,7 +152,7 @@ export const treeWithDecisionFields = {
     },
   ],
   name: "name",
-};
+} as TreeNode;
 
 export const complexeTreeWithMultiDecisionFields = {
   attributes: {
@@ -276,4 +278,4 @@ export const complexeTreeWithMultiDecisionFields = {
     },
   ],
   name: "name",
-};
+} as TreeNode;

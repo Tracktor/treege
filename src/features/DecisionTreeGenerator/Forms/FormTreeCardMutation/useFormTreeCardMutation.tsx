@@ -11,7 +11,7 @@ import {
   setIsLeaf,
   setTree,
 } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
-import type { TreeNode, TreeValues } from "@/features/DecisionTreeGenerator/type/TreeNode";
+import type { TreeNode, TreeNodeField, TreeValues } from "@/features/DecisionTreeGenerator/type/TreeNode";
 import { isUniqueArrayItemWithNewEntry } from "@/utils/array";
 import getTreeNames from "@/utils/getTreeNames/getTreeNames";
 
@@ -26,7 +26,7 @@ const useFormTreeCardMutation = () => {
   const [label, setLabel] = useState("");
   const [required, setRequired] = useState(false);
   const [isDecision, setIsDecision] = useState(false);
-  const [type, setType] = useState("text");
+  const [type, setType] = useState<TreeNodeField["type"]>("text");
   const [helperText, setHelperText] = useState("");
   const [step, setStep] = useState("");
   const [messages, setMessages] = useState({ off: "", on: "" });
@@ -103,10 +103,10 @@ const useFormTreeCardMutation = () => {
     setIsDecision(event.target.checked);
   };
 
-  const handleChangeType = (event: SelectChangeEvent) => {
+  const handleChangeType = (event: SelectChangeEvent<TreeNodeField["type"]>) => {
     setIsDecision(false);
     setRequired(false);
-    setType(event.target.value);
+    setType(event.target.value as TreeNodeField["type"]);
   };
 
   const handleChangeMessage = (nameMessage: "on" | "off") => (event: ChangeEvent<HTMLInputElement>) => {
@@ -234,7 +234,7 @@ const useFormTreeCardMutation = () => {
           });
 
       setName(currentHierarchyPointNode?.data.name || "");
-      setType(currentHierarchyPointNode?.data.attributes?.type || "");
+      setType(currentHierarchyPointNode?.data.attributes?.type || "text");
       setHelperText(currentHierarchyPointNode?.data.attributes?.helperText || "");
       setRequired(currentHierarchyPointNode?.data.attributes?.required || false);
       setStep(currentHierarchyPointNode?.data.attributes?.step || "");

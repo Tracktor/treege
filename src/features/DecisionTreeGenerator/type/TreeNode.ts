@@ -1,5 +1,6 @@
 import type { HierarchyPointNode } from "d3-hierarchy";
 import type { CustomNodeElementProps, RawNodeDatum } from "react-d3-tree/lib/types/common";
+import type fields from "@/constants/fields";
 
 export interface TreeValues {
   id: string;
@@ -18,7 +19,7 @@ export interface TreeNodeField {
   label: string;
   required?: boolean;
   step?: string;
-  type: string;
+  type: typeof fields[number]["type"];
   value?: never;
   values?: TreeValues[];
   message?: never;
