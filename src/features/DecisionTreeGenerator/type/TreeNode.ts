@@ -23,6 +23,8 @@ export interface TreeNodeField {
   value?: never;
   values?: TreeValues[];
   message?: never;
+  tree?: TreeNode;
+  treePath?: string;
 }
 
 export interface TreeNodeValues {
@@ -39,6 +41,8 @@ export interface TreeNodeValues {
   value: string;
   values?: never;
   message?: string;
+  tree?: never;
+  treePath?: never;
 }
 
 export type TreeNodeAttributes = TreeNodeField | TreeNodeValues;

@@ -4,20 +4,15 @@ import { ChangeEvent, FormEvent, useContext, useEffect, useMemo, useState } from
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
-import {
-  appendTreeCard,
-  replaceTreeCard,
-  replaceTreeCardAndKeepPrevChildren,
-  setIsLeaf,
-  setTree,
-} from "@/features/DecisionTreeGenerator/reducer/treeReducer";
+import { appendTreeCard, replaceTreeCard } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 import type { TreeNode, TreeNodeField, TreeValues } from "@/features/DecisionTreeGenerator/type/TreeNode";
 import { isUniqueArrayItemWithNewEntry } from "@/utils/array";
-import getTreeNames from "@/utils/getTreeNames/getTreeNames";
+import getTreeNames from "@/utils/tree/getNodeNames/getNodeNames";
+import getTree from "@/utils/tree/getTree/getTree";
 
 const useFormTreeCardMutation = () => {
   const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
-  const { tree, dispatchTree, setModalOpen, currentHierarchyPointNode, modalOpen } = useContext(DecisionTreeGeneratorContext);
+  const { tree, dispatchTree, currentHierarchyPointNode, modalOpen, treePath, setModalOpen } = useContext(DecisionTreeGeneratorContext);
   const { t } = useTranslation();
 
   // Form value
@@ -27,6 +22,7 @@ const useFormTreeCardMutation = () => {
   const [required, setRequired] = useState(false);
   const [isDecision, setIsDecision] = useState(false);
   const [type, setType] = useState<TreeNodeField["type"]>("text");
+  const [treeSelect, setTreeSelect] = useState<TreeNode | string>("");
   const [helperText, setHelperText] = useState("");
   const [step, setStep] = useState("");
   const [messages, setMessages] = useState({ off: "", on: "" });
@@ -35,6 +31,7 @@ const useFormTreeCardMutation = () => {
   const [uniqueNameErrorMessage, setUniqueNameErrorMessage] = useState("");
 
   const isEditModal = modalOpen === "edit";
+  const isTree = type === "tree";
   const isBooleanField = fields.some((field) => field.type === type && field?.isBooleanField);
   const isDecisionField = fields.some((field) => field.type === type && field?.isDecisionField);
   const isRequiredDisabled = fields.some((field) => field.type === type && field?.isRequiredDisabled);
@@ -42,17 +39,17 @@ const useFormTreeCardMutation = () => {
 
   const handlePresetValues = (event: ChangeEvent<HTMLInputElement>, predicate: "value" | "label" | "message") => {
     setValues((prevState) =>
-      prevState.map(({ value, label: optionLabel, id, message }) => {
+      prevState.map((item) => {
+        const { id } = item;
         if (event.target.dataset.id === id) {
           return {
+            ...item,
             id,
-            label: predicate === "label" ? event.target.value : optionLabel,
-            message: predicate === "message" ? event.target.value : message,
-            value: predicate === "value" ? event.target.value : value,
+            [predicate]: event.target.value,
           };
         }
 
-        return { id, label: optionLabel, message, value };
+        return { ...item };
       })
     );
   };
@@ -79,12 +76,19 @@ const useFormTreeCardMutation = () => {
 
   const handleChangeName = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
+
     setName(event.target.value);
 
-    if (!tree || !value) return;
+    if (!tree || !value) {
+      setUniqueNameErrorMessage("");
+      return;
+    }
 
     const excludeNameOnEditModal = isEditModal && currentHierarchyPointNode?.data.name;
-    const arrayNames = getTreeNames(tree);
+    getTree(tree, treePath?.at(-1)?.path);
+    const currentTreePath = treePath?.at(-1)?.path;
+    const currentTree = getTree(tree, currentTreePath);
+    const arrayNames = getTreeNames(currentTree);
     const isUnique = isUniqueArrayItemWithNewEntry(arrayNames, value, excludeNameOnEditModal);
 
     if (isUnique) {
@@ -104,9 +108,11 @@ const useFormTreeCardMutation = () => {
   };
 
   const handleChangeType = (event: SelectChangeEvent<TreeNodeField["type"]>) => {
-    setIsDecision(false);
-    setRequired(false);
     setType(event.target.value as TreeNodeField["type"]);
+  };
+
+  const handleChangeTreeSelect = (event: SelectChangeEvent<TreeNode | string>) => {
+    setTreeSelect(event.target.value);
   };
 
   const handleChangeMessage = (nameMessage: "on" | "off") => (event: ChangeEvent<HTMLInputElement>) => {
@@ -121,7 +127,7 @@ const useFormTreeCardMutation = () => {
     setValues((prevState) => {
       const lastId = Number(prevState[prevState.length - 1].id);
       const nextId = String(lastId + 1);
-      return [...prevState, { id: nextId, label: "", message: "", value: "" }];
+      return [...prevState, { ...defaultValues[0], id: nextId }];
     });
   };
 
@@ -181,6 +187,8 @@ const useFormTreeCardMutation = () => {
     const depth = currentDepth + (isEdit || currentHierarchyPointNode === null ? 0 : 1);
     const isRoot = !currentHierarchyPointNode || depth === 0;
     const childOfChildren = getChildren(depth);
+    const currentPath = treePath?.at(-1)?.path;
+    const newPath = treePath.length ? `${currentPath}/${name}` : `/${name}`;
 
     const children = {
       attributes: {
@@ -191,6 +199,7 @@ const useFormTreeCardMutation = () => {
         ...((off || on) && {
           messages: { ...(off && { off }), ...(on && { on }) },
         }),
+        ...(isTree && { tree: { ...(treeSelect as TreeNode) }, treePath: newPath }),
         ...(isRoot && { isRoot }),
         ...(isDecision && { isDecision }),
         ...(isDecisionField && !isDecision && { values: getTreeValuesWithoutEmptyMessage(values) }),
@@ -201,13 +210,13 @@ const useFormTreeCardMutation = () => {
       name,
     };
 
-    if (currentHierarchyPointNode === null) {
-      dispatchTree(setTree(children));
-    } else if (isEdit) {
-      dispatchTree(isDecision ? replaceTreeCard(currentName, children) : replaceTreeCardAndKeepPrevChildren(currentName, children));
+    if (isEdit) {
+      dispatchTree(
+        // isDecision ? replaceTreeCard(tree, currentPath, currentName, children) : replaceTreeCardAndKeepPrevChildren(currentName, children)
+        replaceTreeCard(tree, currentPath || "", currentName, children)
+      );
     } else {
-      dispatchTree(setIsLeaf(currentName, false));
-      dispatchTree(appendTreeCard(currentName, children));
+      dispatchTree(appendTreeCard(tree, currentPath || null, currentName, children));
     }
 
     setModalOpen(null);
@@ -245,8 +254,10 @@ const useFormTreeCardMutation = () => {
         off: currentHierarchyPointNode?.data.attributes?.messages?.off || "",
         on: currentHierarchyPointNode?.data.attributes?.messages?.on || "",
       });
+      setTreeSelect(currentHierarchyPointNode?.data.attributes?.tree || "");
     }
   }, [
+    currentHierarchyPointNode?.data.attributes?.tree,
     currentHierarchyPointNode?.data.attributes?.messages,
     currentHierarchyPointNode?.data.attributes?.helperText,
     currentHierarchyPointNode?.data.attributes?.isDecision,
@@ -274,6 +285,7 @@ const useFormTreeCardMutation = () => {
     handleChangeOptionValue,
     handleChangeRequired,
     handleChangeStep,
+    handleChangeTreeSelect,
     handleChangeType,
     handleDeleteValue,
     handleSubmit,
@@ -282,11 +294,13 @@ const useFormTreeCardMutation = () => {
     isDecision,
     isDecisionField,
     isRequiredDisabled,
+    isTree,
     label,
     messages,
     name,
     required,
     step,
+    treeSelect,
     type,
     uniqueNameErrorMessage,
     values,

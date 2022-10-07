@@ -7,6 +7,7 @@
   "onMessage": "Message (enable)",
   "staticFields": "Static fields",
   "step": "Step",
+  "tree": "Tree",
   "type": {
     "address": "Address",
     "checkbox": "Checkbox",
@@ -21,6 +22,7 @@
     "tel": "Tel",
     "time": "Time",
     "text": "Text",
+    "tree": "Tree",
     "url": "URL"
   },
   "value": "Value",

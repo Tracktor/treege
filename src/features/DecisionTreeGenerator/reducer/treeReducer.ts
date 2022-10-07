@@ -1,6 +1,7 @@
-import { appendProps, changeProps, removeObject, replaceObject, returnFound } from "find-and";
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
-import { removeObjectProperty } from "@/utils/object";
+import appendChild from "@/utils/tree/appendChild/appendChild";
+import removeNode from "@/utils/tree/removeNode/removeNode";
+import updatedNode from "@/utils/tree/updatedNode/updatedNode";
 
 export const treeReducerActionType = {
   appendTreeCard: "appendTreeCard",
@@ -11,21 +12,27 @@ export const treeReducerActionType = {
   setTree: "setTree",
 } as const;
 
-export const appendTreeCard = (name: string, children: TreeNode) => ({
+export const appendTreeCard = (tree: TreeNode | null, path: string | null, name: string, children: TreeNode) => ({
   children,
   name,
+  path,
+  tree,
   type: treeReducerActionType.appendTreeCard,
 });
 
-export const deleteTreeCard = (name: string) => ({
-  name,
-  type: treeReducerActionType.deleteTreeCard,
-});
-
-export const replaceTreeCard = (name: string, children: TreeNode) => ({
+export const replaceTreeCard = (tree: TreeNode | null, path: string | null, name: string, children: TreeNode) => ({
   children,
   name,
+  path,
+  tree,
   type: treeReducerActionType.replaceTreeCard,
+});
+
+export const deleteTreeCard = (tree: TreeNode | null, path: string | "", name: string) => ({
+  name,
+  path,
+  tree,
+  type: treeReducerActionType.deleteTreeCard,
 });
 
 export const replaceTreeCardAndKeepPrevChildren = (name: string, children: TreeNode) => ({
@@ -48,71 +55,82 @@ export const setIsLeaf = (name: string, isLeaf: boolean) => ({
 const treeReducer = (state: any, action: any) => {
   switch (action.type) {
     case treeReducerActionType.appendTreeCard: {
-      const isLeaf = !action.children.attributes.isDecision;
+      // const isLeaf = !action.children.attributes.isDecision;
+      const { name, path, children, tree } = action;
 
-      return appendProps(
-        state,
-        { name: action.name },
-        {
-          children: [
-            {
-              ...action.children,
-              attributes: {
-                ...action.children.attributes,
-                isLeaf,
-              },
-            },
-          ],
-        }
-      );
+      return appendChild({
+        child: children,
+        name,
+        path,
+        tree,
+      });
     }
 
     case treeReducerActionType.deleteTreeCard: {
-      return removeObject(state, { name: action.name });
+      const { path, name, tree } = action;
+      return removeNode(tree, path, name);
     }
 
     case treeReducerActionType.replaceTreeCard: {
-      return replaceObject(state, { name: action.name }, action.children);
+      const { name, path, children, tree } = action;
+      // return replaceObject(state, { name: action.name }, action.children);
+
+      return updatedNode({
+        child: children,
+        name,
+        path,
+        tree,
+      });
     }
 
     case treeReducerActionType.replaceTreeCardAndKeepPrevChildren: {
-      const children = returnFound(state, { name: action.name }).children.filter(({ attributes }: TreeNode) => !attributes.value);
-      const isLeaf = children?.length === 0;
+      // const children = returnFound(state, { name: action.name }).children.filter(({ attributes }: TreeNode) => !attributes.value);
+      // const isLeaf = children?.length === 0;
 
-      return replaceObject(
-        state,
-        { name: action.name },
-        {
-          ...action.children,
-          attributes: {
-            ...action.children.attributes,
-            isLeaf,
-          },
-          children,
-        }
-      );
+      const { name, path, children, tree } = action;
+
+      return updatedNode({
+        child: children,
+        name,
+        path,
+        tree,
+      });
+
+      // return replaceObject(
+      //   state,
+      //   { name: action.name },
+      //   {
+      //     ...action.children,
+      //     attributes: {
+      //       ...action.children.attributes,
+      //       isLeaf,
+      //     },
+      //     children,
+      //   }
+      // );
     }
 
     case treeReducerActionType.setIsLeaf: {
-      return changeProps(
-        state,
-        { name: action.name },
-        {
-          attributes: {
-            ...removeObjectProperty(returnFound(state, { name: action.name }).attributes, "isLeaf"),
-            ...(action.isLeaf && { isLeaf: true }),
-          },
-        }
-      );
+      // return changeProps(
+      //   state,
+      //   { name: action.name },
+      //   {
+      //     attributes: {
+      //       ...removeObjectProperty(returnFound(state, { name: action.name }).attributes, "isLeaf"),
+      //       ...(action.isLeaf && { isLeaf: true }),
+      //     },
+      //   }
+      // );
+      return;
     }
 
     case treeReducerActionType.setTree: {
-      const isLeaf = !action.tree.attributes.isDecision;
+      const isLeaf = !action?.tree?.attributes?.isDecision;
 
       return {
         ...action.tree,
         attributes: {
-          ...action.tree.attributes,
+          ...action?.tree?.attributes,
           isLeaf,
         },
       };

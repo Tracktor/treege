@@ -1,12 +1,13 @@
 {
   "decisionField": "Champs de décision",
-  "helperText": "Text d'information",
+  "helperText": "Texte d'information",
   "label": "Label",
   "mustBeUnique": "Doit être unique",
   "offMessage": "Message (désactiver)",
   "onMessage": "Message (activer)",
   "staticFields": "Champs statiques",
   "step": "Étape",
+  "tree": "Arbre",
   "type": {
     "address": "Adresse",
     "checkbox": "Case à cocher",
@@ -21,6 +22,7 @@
     "tel": "Téléphone",
     "time": "Temps",
     "text": "Texte",
+    "tree": "Arbre",
     "url": "URL"
   },
   "value": "Valeur",

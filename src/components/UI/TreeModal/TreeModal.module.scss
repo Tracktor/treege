@@ -1,0 +1,16 @@
+@import "src/styles/colors.module";
+
+.Toolbar {
+  display: flex;
+  background-color: $secondaryLight;
+  box-shadow: none;
+}
+
+.Dialog {
+  background-color: $backgroundPrimary;
+}
+
+.MainContainer {
+  border: solid 1px $borderLight;
+  height: 100%;
+}

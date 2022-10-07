@@ -3,7 +3,7 @@ import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/c
 import { deleteTreeCard, setIsLeaf } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 
 const useFormTreeCardDelete = () => {
-  const { dispatchTree, setModalOpen, currentHierarchyPointNode } = useContext(DecisionTreeGeneratorContext);
+  const { dispatchTree, setModalOpen, currentHierarchyPointNode, tree, treePath } = useContext(DecisionTreeGeneratorContext);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -11,12 +11,13 @@ const useFormTreeCardDelete = () => {
     const currentName = currentHierarchyPointNode?.data?.name || "";
     const parentName = currentHierarchyPointNode?.parent?.data.name || "";
     const parentChildren = currentHierarchyPointNode?.parent?.data.children || [];
+    const currentPath = treePath?.at(-1)?.path || "";
 
     if (parentChildren.length === 1) {
       dispatchTree(setIsLeaf(parentName, true));
     }
 
-    dispatchTree(deleteTreeCard(currentName));
+    dispatchTree(deleteTreeCard(tree, currentPath, currentName));
 
     setModalOpen(null);
   };

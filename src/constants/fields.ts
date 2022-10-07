@@ -83,6 +83,12 @@ const fields = [
     isRequiredDisabled: false,
     type: "select",
   },
+  {
+    isBooleanField: false,
+    isDecisionField: false,
+    isRequiredDisabled: true,
+    type: "tree",
+  },
 ] as const;
 
 export default fields;

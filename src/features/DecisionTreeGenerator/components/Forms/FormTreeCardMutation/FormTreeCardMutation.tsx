@@ -16,7 +16,8 @@ import {
 import { useTranslation } from "react-i18next";
 import styles from "./FormTreeCardMutation.module.scss";
 import fields from "@/constants/fields";
-import useFormTreeCardMutation from "@/features/DecisionTreeGenerator/Forms/FormTreeCardMutation/useFormTreeCardMutation";
+import TreeData from "@/constants/TreeData";
+import useFormTreeCardMutation from "@/features/DecisionTreeGenerator/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
 
 interface FormTreeCardMutationProps {
   onClose?(): void;
@@ -32,13 +33,15 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     uniqueNameErrorMessage,
     type,
     helperText,
-    step,
     label,
     messages: { on, off },
     isBooleanField,
     isDecision,
     isDecisionField,
     isRequiredDisabled,
+    isTree,
+    treeSelect,
+    handleChangeTreeSelect,
     handleChangeHelperText,
     handleChangeOptionMessage,
     handleChangeRequired,
@@ -51,7 +54,6 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeMessage,
     handleSubmit,
     handleAddValue,
-    handleChangeStep,
     handleChangeLabel,
   } = useFormTreeCardMutation();
 
@@ -81,18 +83,20 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             ))}
           </Select>
         </FormControl>
-        <TextField
-          sx={{ flex: 1 }}
-          label={t("step", { ns: "form" })}
-          onChange={handleChangeStep}
-          value={step}
-          type="number"
-          inputProps={{ min: 0 }}
-        />
-      </Stack>
-
-      <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
-        <TextField sx={{ flex: 1 }} label={t("helperText", { ns: "form" })} onChange={handleChangeHelperText} value={helperText} />
+        {isTree ? (
+          <FormControl sx={{ flex: 1 }} required>
+            <InputLabel>{t("tree", { ns: "form" })}</InputLabel>
+            <Select value={treeSelect} label={t("type")} onChange={handleChangeTreeSelect}>
+              {TreeData.map(({ value: treeValue, label: treeLabel }, i) => (
+                <MenuItem key={i} value={treeValue}>
+                  {treeLabel}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        ) : (
+          <TextField sx={{ flex: 1 }} label={t("helperText", { ns: "form" })} onChange={handleChangeHelperText} value={helperText} />
+        )}
       </Stack>
 
       {isBooleanField && (
