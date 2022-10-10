@@ -6,7 +6,7 @@ import {
   treeWithTreeMatchTree,
   treeWithTreeMock,
   treeWithTreeNoMatch,
-} from "@/utils/tree/getNodeByNameInCurrentTree/mock";
+} from "@/utils/tree/getNodeByNameInCurrentTree/test/mock";
 
 describe("getNodeNames", () => {
   test("Simple tree", () => {

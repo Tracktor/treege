@@ -6,7 +6,7 @@ import {
   treeInDecisionMock,
   treeInMainTreeMock,
   treeInTreeMock,
-} from "@/utils/tree/getTree/mock";
+} from "@/utils/tree/getTree/test/mock";
 
 describe("On tree in main tree", () => {
   test("tree With one Field", () => {

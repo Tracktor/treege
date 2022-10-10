@@ -29,9 +29,6 @@ const useTreeCardContainer = () => {
 
     setTreePath((prevState) => [...prevState, currentTree]);
     setTreeModalOpen(true);
-
-    // TO REMOVE
-    setCurrentHierarchyPointNode(hierarchyPointNode);
   };
 
   const handleCloseTreeModal = () => {

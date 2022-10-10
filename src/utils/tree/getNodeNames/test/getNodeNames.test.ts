@@ -6,7 +6,7 @@ import {
   treeWithMultiFields,
   treeWithOneField,
   treeWithTree,
-} from "@/utils/tree/getNodeNames/mock";
+} from "@/utils/tree/getNodeNames/test/mock";
 
 describe("getNodeNames", () => {
   test("tree With one Field", () => {

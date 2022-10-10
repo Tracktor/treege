@@ -17,13 +17,14 @@ import TreeCardContainer from "@/features/DecisionTreeGenerator/components/TreeC
 import useTreeCardContainer from "@/features/DecisionTreeGenerator/components/TreeCardContainer/useTreeCardContainer";
 import useTreeGrid from "@/features/DecisionTreeGenerator/components/TreeGrid/useTreeGrid";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
-import getTree from "@/utils/tree/getTree/getTree";
+import { getTree } from "@/utils/tree";
 
 const TreeGrid = () => {
   const { tree, treeModalOpen, treePath } = useContext(DecisionTreeGeneratorContext);
   const { handleCloseTreeModal } = useTreeCardContainer();
   const { getTitleModalMutation, closeModal, getTitleModalDelete, handleOnSave, isModalMutationOpen, isDeleteModal } = useTreeGrid();
   const currentTreePath = treePath?.at(-1)?.path;
+  const currentTreeName = treePath?.at(-1)?.label;
   const currentTree = tree && getTree(tree, currentTreePath);
 
   return (
@@ -41,7 +42,7 @@ const TreeGrid = () => {
           <FormTreeCardDelete onClose={closeModal} />
         </MainModal>
 
-        <TreeModal open={treeModalOpen} onClose={handleCloseTreeModal} title={currentTree?.attributes.label}>
+        <TreeModal open={treeModalOpen} onClose={handleCloseTreeModal} title={currentTreeName}>
           {currentTree && <TreeForm data={currentTree} renderCustomNodeElement={TreeCardContainer} />}
         </TreeModal>
       </Main>

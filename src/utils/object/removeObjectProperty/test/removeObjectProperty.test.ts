@@ -1,5 +1,5 @@
 import { describe, expect } from "vitest";
-import { removeObjectProperty } from "./removeObjectProperty";
+import { removeObjectProperty } from "../removeObjectProperty";
 
 describe("removeObjectProperty", () => {
   test("remove property to object ", () => {

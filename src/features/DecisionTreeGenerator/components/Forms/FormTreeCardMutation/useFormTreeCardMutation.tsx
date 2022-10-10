@@ -187,7 +187,6 @@ const useFormTreeCardMutation = () => {
     const currentDepth = currentHierarchyPointNode?.depth || 0;
     const isEdit = modalOpen === "edit";
     const depth = currentDepth + (isEdit || currentHierarchyPointNode === null ? 0 : 1);
-    const isRoot = !currentHierarchyPointNode || depth === 0;
     const childOfChildren = getChildren(depth);
     const currentPath = treePath?.at(-1)?.path;
     const newPath = treePath.length ? `${currentPath}/${name}` : `/${name}`;
@@ -202,7 +201,6 @@ const useFormTreeCardMutation = () => {
           messages: { ...(off && { off }), ...(on && { on }) },
         }),
         ...(isTree && { tree: { ...getTreeById(treeSelect)?.value, treeId: treeSelect } as TreeNode, treePath: newPath }),
-        ...(isRoot && { isRoot }),
         ...(isDecision && { isDecision }),
         ...(isDecisionField && !isDecision && { values: getTreeValuesWithoutEmptyMessage(values) }),
         ...(required && { required }),

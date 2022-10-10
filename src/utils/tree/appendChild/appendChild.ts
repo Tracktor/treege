@@ -2,7 +2,7 @@ import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 import getNode from "@/utils/tree/getNode/getNode";
 
 interface AppendChildParams {
-  tree: TreeNode;
+  tree: TreeNode | null;
   path: string;
   name: string;
   child: TreeNode;
@@ -24,14 +24,11 @@ const addChildByRef = (node: TreeNode | null, child: TreeNode) => {
 };
 
 const appendChild = ({ tree, path, name, child }: AppendChildParams) => {
-  const treeCopy = structuredClone(tree);
-
-  const { isRoot } = child.attributes;
-
-  if (isRoot) {
-    return { ...child, attributes: { ...child.attributes, isLeaf: true } };
+  if (!tree) {
+    return { ...child, attributes: { ...child.attributes, isLeaf: true, isRoot: true } };
   }
 
+  const treeCopy = structuredClone(tree);
   const node = getNode(treeCopy, path, name);
 
   addChildByRef(node, child);
