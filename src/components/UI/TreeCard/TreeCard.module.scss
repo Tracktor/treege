@@ -23,8 +23,8 @@
 
 .ContainerTree {
   @extend .Container;
-  background: $secondaryLight;
-  border: solid 1px $secondaryLight;
+  background: $tertiaryMain;
+  border: solid 1px $primaryMain;
 }
 
 .Title {
