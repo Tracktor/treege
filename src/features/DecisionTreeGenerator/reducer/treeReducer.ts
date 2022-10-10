@@ -1,7 +1,5 @@
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
-import appendChild from "@/utils/tree/appendChild/appendChild";
-import removeNode from "@/utils/tree/removeNode/removeNode";
-import updatedNode from "@/utils/tree/updatedNode/updatedNode";
+import { appendChild, removeNode, updatedNode } from "@/utils/tree";
 
 export const treeReducerActionType = {
   appendTreeCard: "appendTreeCard",
@@ -49,7 +47,7 @@ export const setIsLeaf = (name: string, isLeaf: boolean) => ({
   type: treeReducerActionType.setIsLeaf,
 });
 
-const treeReducer = (state: any, action: any) => {
+const treeReducer = (tree: TreeNode, action: any) => {
   switch (action.type) {
     case treeReducerActionType.appendTreeCard: {
       const { name, path, children } = action;
@@ -58,14 +56,14 @@ const treeReducer = (state: any, action: any) => {
         child: children,
         name,
         path,
-        tree: state,
+        tree,
       });
     }
 
     case treeReducerActionType.deleteTreeCard: {
       const { path, name } = action;
 
-      return removeNode({ name, path, tree: state });
+      return removeNode({ name, path, tree });
     }
 
     case treeReducerActionType.replaceTreeCard: {
@@ -75,7 +73,7 @@ const treeReducer = (state: any, action: any) => {
         child: children,
         name,
         path,
-        tree: state,
+        tree,
       });
     }
 
