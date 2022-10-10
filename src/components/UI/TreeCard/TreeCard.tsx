@@ -25,7 +25,6 @@ interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum" | "hier
 }
 
 const getCardStyle = (type?: string | number | boolean) => {
-  console.log(type);
   const isField = !!type;
   const isTree = type === "tree";
 
