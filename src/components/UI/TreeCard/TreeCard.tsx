@@ -24,6 +24,21 @@ interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum" | "hier
   hierarchyPointNode: HierarchyPointNode<TreeNode>;
 }
 
+const getCardStyle = (type?: string | number | boolean) => {
+  const isField = !!type;
+  const isTree = type === "tree";
+
+  if (isField) {
+    return styles.ContainerField;
+  }
+
+  if (isTree) {
+    return styles.ContainerTree;
+  }
+
+  return styles.ContainerValue;
+};
+
 const TreeCard = ({
   nodeDatum,
   onAddChildren,
@@ -43,13 +58,7 @@ const TreeCard = ({
 
   return (
     <g>
-      <foreignObject
-        height={size}
-        width={size}
-        x={`-${size / 2}`}
-        y={`-${size / 2}`}
-        className={isTree ? styles.ContainerTree : isField ? styles.ContainerField : styles.ContainerValue}
-      >
+      <foreignObject height={size} width={size} x={`-${size / 2}`} y={`-${size / 2}`} className={getCardStyle(type)}>
         <Box flex={1} display="flex" p={2} height="100%" flexDirection="column" justifyContent="space-between">
           <Stack alignItems="flex-end" spacing={0.5}>
             {isField && (

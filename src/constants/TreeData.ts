@@ -1,14 +1,12 @@
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 
 const TreeData: {
+  id: string;
   label: string;
-  value: TreeNode | "new";
+  value: TreeNode;
 }[] = [
   {
-    label: "Ajouter un arbre",
-    value: "new",
-  },
-  {
+    id: "1",
     label: "User",
     value: {
       attributes: {
@@ -33,6 +31,7 @@ const TreeData: {
     },
   },
   {
+    id: "2",
     label: "Catalog",
     value: {
       attributes: {

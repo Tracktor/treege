@@ -5,8 +5,7 @@ import { setTree } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 
 const useTreeGrid = () => {
   const { t } = useTranslation("modal");
-  const { tree, currentHierarchyPointNode, modalOpen, dispatchTree, setModalOpen, treeModalOpen } =
-    useContext(DecisionTreeGeneratorContext);
+  const { tree, currentHierarchyPointNode, modalOpen, dispatchTree, setModalOpen } = useContext(DecisionTreeGeneratorContext);
   const isEditModal = modalOpen === "edit";
   const isAddModal = modalOpen === "add";
   const isDeleteModal = modalOpen === "delete";

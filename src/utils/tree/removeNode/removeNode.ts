@@ -3,14 +3,17 @@ import getNode from "@/utils/tree/getNode/getNode";
 import getParentNodeByNameInCurrentTree from "@/utils/tree/getParentNodeByNameInCurrentTree/getParentNodeByNameInCurrentTree";
 import getTree from "@/utils/tree/getTree/getTree";
 
-const removeTreeNode = (parent: TreeNode | null, node: TreeNode | null, onlyNode = false) => {
+interface RemoveNodeParams {
+  tree: TreeNode;
+  path: string;
+  name: string;
+}
+
+const removeTreeNode = (parent: TreeNode | null, node: TreeNode | null) => {
   if (!parent || !node) return null;
 
-  if (parent.children.length <= 1 && onlyNode) {
-    parent.children = [node.children];
-    return null;
-  }
-  parent.children = parent.children.filter((child) => child.name !== node.name);
+  Object.defineProperty(parent, "children", { value: parent.children.filter((child) => child.name !== node.name) });
+  Object.defineProperty(parent, "attributes", { value: { ...parent.attributes, isLeaf: true } });
 
   return null;
 };
@@ -20,8 +23,8 @@ const getParentTreeNode = (tree: TreeNode, path: string, name: string) => {
   return getParentNodeByNameInCurrentTree(currentTree, name);
 };
 
-const removeNode = (tree: TreeNode, path: string, name: string) => {
-  const treeCopy = { ...tree };
+const removeNode = ({ tree, path, name }: RemoveNodeParams) => {
+  const treeCopy = structuredClone(tree);
 
   const node = getNode(treeCopy, path, name);
   const nodeParent = getParentTreeNode(treeCopy, path, name);

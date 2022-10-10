@@ -87,8 +87,8 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           <FormControl sx={{ flex: 1 }} required>
             <InputLabel>{t("tree", { ns: "form" })}</InputLabel>
             <Select value={treeSelect} label={t("type")} onChange={handleChangeTreeSelect}>
-              {TreeData.map(({ value: treeValue, label: treeLabel }, i) => (
-                <MenuItem key={i} value={treeValue}>
+              {TreeData.map(({ label: treeLabel, id: treeId }) => (
+                <MenuItem key={treeId} value={treeId}>
                   {treeLabel}
                 </MenuItem>
               ))}

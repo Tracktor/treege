@@ -51,6 +51,7 @@ export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> 
   name: string;
   attributes: TreeNodeAttributes;
   children: TreeNode[];
+  treeId?: string;
 }
 
 export interface TreeCustomNodeElementProps extends Omit<CustomNodeElementProps, "hierarchyPointNode"> {

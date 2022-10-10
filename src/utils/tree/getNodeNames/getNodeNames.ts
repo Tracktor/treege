@@ -7,7 +7,7 @@ const getNodeNames = (tree: TreeNode | null, attributeAccumulator: string[] = []
   Object.entries(tree).forEach(([key, value]) => {
     const isName = key === "name";
     const hasChildren = key === "children" && value.length > 0;
-    const hasTree = key === "attributes" && "tree" in value;
+    // const hasTree = key === "attributes" && "tree" in value;
 
     if (isName) {
       arrayNames = [...arrayNames, value];
@@ -15,10 +15,6 @@ const getNodeNames = (tree: TreeNode | null, attributeAccumulator: string[] = []
 
     if (hasChildren) {
       arrayNames = [...arrayNames, ...value.map((child: TreeNode) => getNodeNames(child, arrayNames)).flat()];
-    }
-
-    if (hasTree) {
-      arrayNames = [...arrayNames, ...getNodeNames(value.tree, arrayNames)];
     }
   });
 

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Tree from "react-d3-tree";
 import type { RenderCustomNodeElementFn } from "react-d3-tree/lib/types/common";
 import styles from "./TreeForm.module.scss";
@@ -19,7 +20,7 @@ const TreeForm = ({
   },
 }: TreeFormProps) => {
   const { dimensions, refContainer, translate } = useTreeForm();
-  console.log("data", data);
+
   if (!data) {
     return null;
   }
@@ -40,4 +41,4 @@ const TreeForm = ({
   );
 };
 
-export default TreeForm;
+export default memo(TreeForm);

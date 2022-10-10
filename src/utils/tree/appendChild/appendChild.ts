@@ -9,22 +9,25 @@ interface AppendChildParams {
 }
 
 const addChildByRef = (node: TreeNode | null, child: TreeNode) => {
+  console.log("coucou");
   if (!node) return null;
 
   const isChildDecision = child.attributes.isDecision;
   Object.defineProperty(node, "attributes", { value: { ...node.attributes, isLeaf: false } });
 
   if (isChildDecision) {
-    Object.defineProperty(node, "children", { value: [{ ...child }] });
+    console.log("isDesicion");
+    Object.defineProperty(node, "children", { value: [{ ...child, attributes: { ...child.attributes, isLeaf: false } }] });
     return null;
   }
 
+  console.log("isNotDesicion");
   Object.defineProperty(node, "children", { value: [{ ...child, attributes: { ...child.attributes, isLeaf: true } }] });
   return null;
 };
 
 const appendChild = ({ tree, path, name, child }: AppendChildParams) => {
-  const treeCopy = { ...tree };
+  const treeCopy = structuredClone(tree);
 
   const { isRoot } = child.attributes;
 
@@ -33,8 +36,6 @@ const appendChild = ({ tree, path, name, child }: AppendChildParams) => {
   }
 
   const node = getNode(treeCopy, path, name);
-  console.log("node", node);
-  console.log("path", path);
 
   addChildByRef(node, child);
 

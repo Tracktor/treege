@@ -3,6 +3,7 @@ import type { SelectChangeEvent } from "design-system-tracktor";
 import { ChangeEvent, FormEvent, useContext, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";
+import TreeData from "@/constants/TreeData";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
 import { appendTreeCard, replaceTreeCard } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 import type { TreeNode, TreeNodeField, TreeValues } from "@/features/DecisionTreeGenerator/type/TreeNode";
@@ -22,7 +23,7 @@ const useFormTreeCardMutation = () => {
   const [required, setRequired] = useState(false);
   const [isDecision, setIsDecision] = useState(false);
   const [type, setType] = useState<TreeNodeField["type"]>("text");
-  const [treeSelect, setTreeSelect] = useState<TreeNode | string>("");
+  const [treeSelect, setTreeSelect] = useState<string>("");
   const [helperText, setHelperText] = useState("");
   const [step, setStep] = useState("");
   const [messages, setMessages] = useState({ off: "", on: "" });
@@ -85,7 +86,6 @@ const useFormTreeCardMutation = () => {
     }
 
     const excludeNameOnEditModal = isEditModal && currentHierarchyPointNode?.data.name;
-    getTree(tree, treePath?.at(-1)?.path);
     const currentTreePath = treePath?.at(-1)?.path;
     const currentTree = getTree(tree, currentTreePath);
     const arrayNames = getTreeNames(currentTree);
@@ -111,7 +111,7 @@ const useFormTreeCardMutation = () => {
     setType(event.target.value as TreeNodeField["type"]);
   };
 
-  const handleChangeTreeSelect = (event: SelectChangeEvent<TreeNode | string>) => {
+  const handleChangeTreeSelect = (event: SelectChangeEvent<string>) => {
     setTreeSelect(event.target.value);
   };
 
@@ -177,6 +177,8 @@ const useFormTreeCardMutation = () => {
   const getTreeValuesWithoutEmptyMessage = (valuesData: TreeValues[]) =>
     valuesData.map(({ message, ...rest }) => ({ ...rest, ...(message && { message }) }));
 
+  const getTreeById = (id: string) => TreeData?.find(({ id: treeId }) => treeId === id);
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
@@ -199,7 +201,7 @@ const useFormTreeCardMutation = () => {
         ...((off || on) && {
           messages: { ...(off && { off }), ...(on && { on }) },
         }),
-        ...(isTree && { tree: { ...(treeSelect as TreeNode) }, treePath: newPath }),
+        ...(isTree && { tree: { ...getTreeById(treeSelect)?.value, treeId: treeSelect } as TreeNode, treePath: newPath }),
         ...(isRoot && { isRoot }),
         ...(isDecision && { isDecision }),
         ...(isDecisionField && !isDecision && { values: getTreeValuesWithoutEmptyMessage(values) }),
@@ -211,12 +213,9 @@ const useFormTreeCardMutation = () => {
     };
 
     if (isEdit) {
-      dispatchTree(
-        // isDecision ? replaceTreeCard(tree, currentPath, currentName, children) : replaceTreeCardAndKeepPrevChildren(currentName, children)
-        replaceTreeCard(tree, currentPath || "", currentName, children)
-      );
+      dispatchTree(replaceTreeCard(currentPath || "", currentName, children));
     } else {
-      dispatchTree(appendTreeCard(tree, currentPath || null, currentName, children));
+      dispatchTree(appendTreeCard(currentPath || null, currentName, children));
     }
 
     setModalOpen(null);
@@ -254,10 +253,10 @@ const useFormTreeCardMutation = () => {
         off: currentHierarchyPointNode?.data.attributes?.messages?.off || "",
         on: currentHierarchyPointNode?.data.attributes?.messages?.on || "",
       });
-      setTreeSelect(currentHierarchyPointNode?.data.attributes?.tree || "");
+      setTreeSelect(currentHierarchyPointNode?.data.attributes?.tree?.treeId || "");
     }
   }, [
-    currentHierarchyPointNode?.data.attributes?.tree,
+    currentHierarchyPointNode?.data.attributes?.tree?.treeId,
     currentHierarchyPointNode?.data.attributes?.messages,
     currentHierarchyPointNode?.data.attributes?.helperText,
     currentHierarchyPointNode?.data.attributes?.isDecision,
