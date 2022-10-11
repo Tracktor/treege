@@ -1,6 +1,7 @@
 import { expect } from "vitest";
 import { updatedNode } from "@/utils/tree";
 import {
+  updatedAndAddDecisionInFieldWithChildrenMock,
   updatedFirstNodeInTreeMock,
   updatedNodeInComplexeTreeMock,
   updatedNodeInOtherTreeMock,
@@ -46,6 +47,18 @@ describe("getNodeNames", () => {
 
   test("Update Node in complexe Tree", () => {
     const { tree, output, treePath, newChild, name } = updatedNodeInComplexeTreeMock;
+    const result = updatedNode({
+      child: newChild,
+      name,
+      path: treePath,
+      tree,
+    });
+
+    expect(result).toEqual(output);
+  });
+
+  test("Updated and add decision in field with children", () => {
+    const { tree, output, treePath, newChild, name } = updatedAndAddDecisionInFieldWithChildrenMock;
     const result = updatedNode({
       child: newChild,
       name,

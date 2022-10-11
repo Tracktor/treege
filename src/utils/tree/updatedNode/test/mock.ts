@@ -479,4 +479,314 @@ const updatedNodeInComplexeTreeMock: Mock = {
   treePath: "/treeCatalog/conductor",
 };
 
-export { updatedFirstNodeInTreeMock, updatedNodeInOtherTreeMock, updatedTreeMock, updatedNodeInComplexeTreeMock };
+const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
+  name: "select",
+  newChild: {
+    attributes: {
+      depth: 1,
+      isDecision: true,
+      isLeaf: false,
+      isRoot: false,
+      label: "Select",
+      type: "select",
+    },
+    children: [
+      {
+        attributes: {
+          depth: 2,
+          label: "A",
+          value: "A",
+        },
+        children: [
+          {
+            attributes: {
+              depth: 3,
+              isLeaf: true,
+              label: "FieldA",
+              type: "text",
+            },
+            children: [],
+            name: "fieldA",
+          },
+        ],
+        name: "select:A",
+      },
+      {
+        attributes: {
+          depth: 2,
+          label: "B",
+          value: "B",
+        },
+        children: [
+          {
+            attributes: {
+              depth: 3,
+              isLeaf: false,
+              label: "FieldB",
+              type: "text",
+            },
+            children: [
+              {
+                attributes: {
+                  depth: 4,
+                  isLeaf: true,
+                  label: "FieldB2",
+                  type: "text",
+                },
+                children: [],
+                name: "fieldB2",
+              },
+            ],
+            name: "fieldB",
+          },
+        ],
+        name: "select:B",
+      },
+      {
+        attributes: {
+          depth: 2,
+          label: "C",
+          value: "C",
+        },
+        children: [
+          {
+            attributes: {
+              depth: 3,
+              isLeaf: true,
+              label: "FieldC",
+              type: "text",
+            },
+            children: [],
+            name: "fieldC",
+          },
+        ],
+        name: "select:C",
+      },
+      {
+        attributes: {
+          depth: 2,
+          isLeaf: true,
+          label: "D",
+          value: "D",
+        },
+        children: [],
+        name: "select:D",
+      },
+    ],
+    name: "select",
+  },
+  output: {
+    attributes: {
+      depth: 0,
+      isLeaf: false,
+      isRoot: true,
+      label: "Name",
+      type: "text",
+    },
+    children: [
+      {
+        attributes: {
+          depth: 1,
+          isDecision: true,
+          isLeaf: false,
+          isRoot: false,
+          label: "Select",
+          type: "select",
+        },
+        children: [
+          {
+            attributes: {
+              depth: 2,
+              label: "A",
+              value: "A",
+            },
+            children: [
+              {
+                attributes: {
+                  depth: 3,
+                  isLeaf: true,
+                  label: "FieldA",
+                  type: "text",
+                },
+                children: [],
+                name: "fieldA",
+              },
+            ],
+            name: "select:A",
+          },
+          {
+            attributes: {
+              depth: 2,
+              label: "B",
+              value: "B",
+            },
+            children: [
+              {
+                attributes: {
+                  depth: 3,
+                  isLeaf: false,
+                  label: "FieldB",
+                  type: "text",
+                },
+                children: [
+                  {
+                    attributes: {
+                      depth: 4,
+                      isLeaf: true,
+                      label: "FieldB2",
+                      type: "text",
+                    },
+                    children: [],
+                    name: "fieldB2",
+                  },
+                ],
+                name: "fieldB",
+              },
+            ],
+            name: "select:B",
+          },
+          {
+            attributes: {
+              depth: 2,
+              label: "C",
+              value: "C",
+            },
+            children: [
+              {
+                attributes: {
+                  depth: 3,
+                  isLeaf: true,
+                  label: "FieldC",
+                  type: "text",
+                },
+                children: [],
+                name: "fieldC",
+              },
+            ],
+            name: "select:C",
+          },
+          {
+            attributes: {
+              depth: 2,
+              isLeaf: true,
+              label: "D",
+              value: "D",
+            },
+            children: [],
+            name: "select:D",
+          },
+        ],
+        name: "select",
+      },
+    ],
+    name: "name",
+  },
+  tree: {
+    attributes: {
+      depth: 0,
+      isLeaf: false,
+      isRoot: true,
+      label: "Name",
+      type: "text",
+    },
+    children: [
+      {
+        attributes: {
+          depth: 1,
+          isDecision: true,
+          isLeaf: false,
+          isRoot: false,
+          label: "Select",
+          type: "select",
+        },
+        children: [
+          {
+            attributes: {
+              depth: 2,
+              isLeaf: false,
+              label: "A",
+              value: "A",
+            },
+            children: [
+              {
+                attributes: {
+                  depth: 3,
+                  isLeaf: true,
+                  label: "FieldA",
+                  type: "text",
+                },
+                children: [],
+                name: "fieldA",
+              },
+            ],
+            name: "select:A",
+          },
+          {
+            attributes: {
+              depth: 2,
+              isLeaf: false,
+              label: "B",
+              value: "B",
+            },
+            children: [
+              {
+                attributes: {
+                  depth: 3,
+                  isLeaf: false,
+                  label: "FieldB",
+                  type: "text",
+                },
+                children: [
+                  {
+                    attributes: {
+                      depth: 4,
+                      isLeaf: true,
+                      label: "FieldB2",
+                      type: "text",
+                    },
+                    children: [],
+                    name: "fieldB2",
+                  },
+                ],
+                name: "fieldB",
+              },
+            ],
+            name: "select:B",
+          },
+          {
+            attributes: {
+              depth: 2,
+              isLeaf: false,
+              label: "C",
+              value: "C",
+            },
+            children: [
+              {
+                attributes: {
+                  depth: 3,
+                  isLeaf: true,
+                  label: "FieldC",
+                  type: "text",
+                },
+                children: [],
+                name: "fieldC",
+              },
+            ],
+            name: "select:C",
+          },
+        ],
+        name: "select",
+      },
+    ],
+    name: "name",
+  },
+  treePath: "",
+};
+
+export {
+  updatedFirstNodeInTreeMock,
+  updatedNodeInOtherTreeMock,
+  updatedTreeMock,
+  updatedNodeInComplexeTreeMock,
+  updatedAndAddDecisionInFieldWithChildrenMock,
+};
