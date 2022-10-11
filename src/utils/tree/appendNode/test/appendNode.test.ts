@@ -6,11 +6,24 @@ import {
   addNodeInTreeMock,
   addNodeOtherTreeMock,
   AddTreeNodeMock,
+  initialiseTree,
 } from "@/utils/tree/appendNode/test/mock";
 
 describe("getNodeNames", () => {
   test("Add first node", () => {
     const { tree, output, treePath, newChild, name } = addFirstNodeInTreeMock;
+    const result = appendNode({
+      child: newChild,
+      name,
+      path: treePath,
+      tree,
+    });
+
+    expect(result).toEqual(output);
+  });
+
+  test("Initialise Tree", () => {
+    const { tree, output, treePath, newChild, name } = initialiseTree;
     const result = appendNode({
       child: newChild,
       name,

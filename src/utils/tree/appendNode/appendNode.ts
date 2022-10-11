@@ -25,6 +25,12 @@ const addChildByRef = (node: TreeNode | null, child: TreeNode) => {
 
 const appendNode = ({ tree, path, name, child }: AppendChildParams) => {
   if (!tree) {
+    // Initialise Tree
+    if (child.children) {
+      return { ...child };
+    }
+
+    // Add first element
     return { ...child, attributes: { ...child.attributes, isLeaf: true, isRoot: true } };
   }
 

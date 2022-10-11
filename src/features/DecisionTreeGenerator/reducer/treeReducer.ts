@@ -77,17 +77,6 @@ const treeReducer = (tree: TreeNode, action: any) => {
       });
     }
 
-    case treeReducerActionType.setTree: {
-      const isLeaf = !action?.tree?.attributes?.isDecision;
-
-      return {
-        ...action.tree,
-        attributes: {
-          ...action?.tree?.attributes,
-          isLeaf,
-        },
-      };
-    }
     default:
       throw new Error();
   }

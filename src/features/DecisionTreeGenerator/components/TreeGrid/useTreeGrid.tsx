@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
-import { setTree } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
+import { appendTreeCard } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
 
 const useTreeGrid = () => {
   const { t } = useTranslation("modal");
@@ -38,7 +38,7 @@ const useTreeGrid = () => {
   const handleMessage = useCallback(
     (event: MessageEvent) => {
       if (event.data?.source === "treege" && event.data?.type === "setTree") {
-        dispatchTree(setTree(event.data?.tree));
+        dispatchTree(appendTreeCard(null, "", event.data?.tree));
       }
     },
     [dispatchTree]

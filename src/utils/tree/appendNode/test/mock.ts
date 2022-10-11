@@ -30,6 +30,56 @@ const addFirstNodeInTreeMock: Mock = {
   treePath: "",
 };
 
+const initialiseTree: Mock = {
+  name: "",
+  newChild: {
+    attributes: {
+      depth: 0,
+      isLeaf: false,
+      isRoot: true,
+      label: "Username",
+      type: "text",
+    },
+    children: [
+      {
+        attributes: {
+          depth: 1,
+          isLeaf: true,
+          label: "Email",
+          type: "email",
+        },
+        children: [],
+        name: "email",
+      },
+    ],
+    name: "username",
+  },
+  output: {
+    attributes: {
+      depth: 0,
+      isLeaf: false,
+      isRoot: true,
+      label: "Username",
+      type: "text",
+    },
+    children: [
+      {
+        attributes: {
+          depth: 1,
+          isLeaf: true,
+          label: "Email",
+          type: "email",
+        },
+        children: [],
+        name: "email",
+      },
+    ],
+    name: "username",
+  },
+  tree: null,
+  treePath: "",
+};
+
 const addNodeInTreeMock: Mock = {
   name: "username",
   newChild: {
@@ -520,4 +570,4 @@ const AddTreeNodeMock: Mock = {
   treePath: "",
 };
 
-export { addFirstNodeInTreeMock, addNodeInTreeMock, addNodeOtherTreeMock, addNodeDecisionInOtherTreeMock, AddTreeNodeMock };
+export { addFirstNodeInTreeMock, addNodeInTreeMock, addNodeOtherTreeMock, addNodeDecisionInOtherTreeMock, AddTreeNodeMock, initialiseTree };
