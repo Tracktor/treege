@@ -23,7 +23,7 @@ const addChildByRef = (node: TreeNode | null, child: TreeNode) => {
   return null;
 };
 
-const appendChild = ({ tree, path, name, child }: AppendChildParams) => {
+const appendNode = ({ tree, path, name, child }: AppendChildParams) => {
   if (!tree) {
     return { ...child, attributes: { ...child.attributes, isLeaf: true, isRoot: true } };
   }
@@ -36,4 +36,4 @@ const appendChild = ({ tree, path, name, child }: AppendChildParams) => {
   return treeCopy;
 };
 
-export default appendChild;
+export default appendNode;

@@ -1,5 +1,5 @@
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
-import { appendChild, removeNode, updatedNode } from "@/utils/tree";
+import { appendNode, removeNode, updatedNode } from "@/utils/tree";
 
 export const treeReducerActionType = {
   appendTreeCard: "appendTreeCard",
@@ -52,7 +52,7 @@ const treeReducer = (tree: TreeNode, action: any) => {
     case treeReducerActionType.appendTreeCard: {
       const { name, path, children } = action;
 
-      return appendChild({
+      return appendNode({
         child: children,
         name,
         path,
