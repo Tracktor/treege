@@ -1,4 +1,4 @@
-import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
+import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
 const getParentNodeByNameInCurrentTree = (tree: TreeNode | null, name: string, parentNode: TreeNode | null = null): TreeNode | null => {
   if (!tree) return null;

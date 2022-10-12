@@ -1,4 +1,4 @@
-import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
+import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
 const getNodeNames = (tree: TreeNode | null, attributeAccumulator: string[] = []) => {
   if (!tree) return [];

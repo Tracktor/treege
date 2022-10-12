@@ -4,16 +4,16 @@ import { ChangeEvent, FormEvent, useContext, useEffect, useMemo, useState } from
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";
 import TreeData from "@/constants/TreeData";
-import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
-import { appendTreeCard, replaceTreeCard } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
-import type { TreeNode, TreeNodeField, TreeValues } from "@/features/DecisionTreeGenerator/type/TreeNode";
+import { TreegeContext } from "@/features/Treege/context/TreegeContext";
+import { appendTreeCard, replaceTreeCard } from "@/features/Treege/reducer/treeReducer";
+import type { TreeNode, TreeNodeField, TreeValues } from "@/features/Treege/type/TreeNode";
 import { isUniqueArrayItemWithNewEntry } from "@/utils/array";
 import getTreeNames from "@/utils/tree/getNodeNames/getNodeNames";
 import getTree from "@/utils/tree/getTree/getTree";
 
 const useFormTreeCardMutation = () => {
   const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
-  const { tree, dispatchTree, currentHierarchyPointNode, modalOpen, treePath, setModalOpen } = useContext(DecisionTreeGeneratorContext);
+  const { tree, dispatchTree, currentHierarchyPointNode, modalOpen, treePath, setModalOpen } = useContext(TreegeContext);
   const { t } = useTranslation();
 
   // Form value

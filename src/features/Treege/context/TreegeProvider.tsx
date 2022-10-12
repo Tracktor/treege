@@ -1,12 +1,12 @@
 import { ReactNode, useMemo, useReducer, useState } from "react";
-import { DecisionTreeGeneratorContext, treeDefaultValue } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
-import treeReducer from "@/features/DecisionTreeGenerator/reducer/treeReducer";
+import { treeDefaultValue, TreegeContext } from "@/features/Treege/context/TreegeContext";
+import treeReducer from "@/features/Treege/reducer/treeReducer";
 
-interface DecisionTreeGeneratorContextProviderProps {
+interface TreegeProviderProps {
   children: ReactNode;
 }
 
-const DecisionTreeGeneratorContextProvider = ({ children }: DecisionTreeGeneratorContextProviderProps) => {
+const TreegeProvider = ({ children }: TreegeProviderProps) => {
   const [currentHierarchyPointNode, setCurrentHierarchyPointNode] = useState(treeDefaultValue.currentHierarchyPointNode);
   const [modalOpen, setModalOpen] = useState(treeDefaultValue.modalOpen);
   const [treeModalOpen, setTreeModalOpen] = useState(treeDefaultValue.treeModalOpen);
@@ -29,7 +29,7 @@ const DecisionTreeGeneratorContextProvider = ({ children }: DecisionTreeGenerato
     [currentHierarchyPointNode, modalOpen, treeModalOpen, treePath, tree]
   );
 
-  return <DecisionTreeGeneratorContext.Provider value={value}>{children}</DecisionTreeGeneratorContext.Provider>;
+  return <TreegeContext.Provider value={value}>{children}</TreegeContext.Provider>;
 };
 
-export default DecisionTreeGeneratorContextProvider;
+export default TreegeProvider;

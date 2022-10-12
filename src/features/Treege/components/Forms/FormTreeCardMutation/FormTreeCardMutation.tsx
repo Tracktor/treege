@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 import styles from "./FormTreeCardMutation.module.scss";
 import fields from "@/constants/fields";
 import TreeData from "@/constants/TreeData";
-import useFormTreeCardMutation from "@/features/DecisionTreeGenerator/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
+import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
 
 interface FormTreeCardMutationProps {
   onClose?(): void;

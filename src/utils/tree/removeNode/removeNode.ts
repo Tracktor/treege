@@ -1,4 +1,4 @@
-import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
+import type { TreeNode } from "@/features/Treege/type/TreeNode";
 import getNode from "@/utils/tree/getNode/getNode";
 import getParentNodeByNameInCurrentTree from "@/utils/tree/getParentNodeByNameInCurrentTree/getParentNodeByNameInCurrentTree";
 import getTree from "@/utils/tree/getTree/getTree";

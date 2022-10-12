@@ -3,6 +3,24 @@
   "license": "ISC",
   "version": "1.0.0",
   "type": "module",
+  "types": "dist/main.d.ts",
+  "main": "dist/main.cjs",
+  "module": "dist/main.js",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/main.js",
+      "require": "./dist/main.cjs"
+    }
+  },
+  "repository": "git@github.com:Tracktor/treege.git",
+  "author": "Mickaël Austoni",
+  "bugs": {
+    "url": "https://github.com/Tracktor/treege/issues"
+  },
+  "homepage": "https://github.com/Tracktor/treege#readme",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -13,12 +31,6 @@
     "test:ui": "vitest --ui",
     "prepare": "husky install"
   },
-  "repository": "git@github.com:Tracktor/treege.git",
-  "author": "Mickaël Austoni",
-  "bugs": {
-    "url": "https://github.com/Tracktor/treege/issues"
-  },
-  "homepage": "https://github.com/Tracktor/treege#readme",
   "dependencies": {
     "@codemirror/lang-json": "^6.0.0",
     "@mui/icons-material": "^5.8.4",
@@ -48,6 +60,11 @@
     "jsdom": "20.0.0",
     "typescript": "^4.7.4",
     "vite": "^3.0.3",
+    "vite-plugin-dts": "^1.6.5",
     "vitest": "^0.21.0"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

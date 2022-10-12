@@ -1,4 +1,4 @@
-import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
+import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
 type Mock = { tree: TreeNode; output: TreeNode; treePath: string; newChild: TreeNode; name: string };
 

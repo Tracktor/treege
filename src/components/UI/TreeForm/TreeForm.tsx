@@ -3,7 +3,7 @@ import Tree from "react-d3-tree";
 import type { RenderCustomNodeElementFn } from "react-d3-tree/lib/types/common";
 import styles from "./TreeForm.module.scss";
 import useTreeForm from "@/components/UI/TreeForm/useTreeForm";
-import type { TreeRenderCustomNodeElementFn } from "@/features/DecisionTreeGenerator/type/TreeNode";
+import type { TreeRenderCustomNodeElementFn } from "@/features/Treege/type/TreeNode";
 
 interface TreeFormProps {
   data: any;

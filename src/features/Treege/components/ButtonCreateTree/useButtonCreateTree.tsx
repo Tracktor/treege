@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
+import { TreegeContext } from "@/features/Treege/context/TreegeContext";
 
 const useButtonCreateTree = () => {
-  const { setModalOpen } = useContext(DecisionTreeGeneratorContext);
+  const { setModalOpen } = useContext(TreegeContext);
 
   const handleClick = () => setModalOpen("add");
 

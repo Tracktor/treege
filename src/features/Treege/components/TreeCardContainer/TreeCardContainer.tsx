@@ -1,6 +1,6 @@
 import TreeCard from "@/components/UI/TreeCard/TreeCard";
-import useTreeCardContainer from "@/features/DecisionTreeGenerator/components/TreeCardContainer/useTreeCardContainer";
-import type { TreeCustomNodeElementProps } from "@/features/DecisionTreeGenerator/type/TreeNode";
+import useTreeCardContainer from "@/features/Treege/components/TreeCardContainer/useTreeCardContainer";
+import type { TreeCustomNodeElementProps } from "@/features/Treege/type/TreeNode";
 
 const TreeCardContainerConsumer = ({
   nodeDatum,

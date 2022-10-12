@@ -1,9 +1,9 @@
 import { FormEvent, useContext } from "react";
-import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
-import { deleteTreeCard } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
+import { TreegeContext } from "@/features/Treege/context/TreegeContext";
+import { deleteTreeCard } from "@/features/Treege/reducer/treeReducer";
 
 const useFormTreeCardDelete = () => {
-  const { dispatchTree, setModalOpen, currentHierarchyPointNode, treePath } = useContext(DecisionTreeGeneratorContext);
+  const { dispatchTree, setModalOpen, currentHierarchyPointNode, treePath } = useContext(TreegeContext);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();

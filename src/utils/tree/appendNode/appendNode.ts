@@ -1,4 +1,4 @@
-import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
+import type { TreeNode } from "@/features/Treege/type/TreeNode";
 import getNode from "@/utils/tree/getNode/getNode";
 
 interface AppendChildParams {

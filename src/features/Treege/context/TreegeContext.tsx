@@ -1,6 +1,6 @@
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { createContext, ReducerAction, SetStateAction } from "react";
-import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
+import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
 type ModalType = "add" | "edit" | "delete" | null;
 type TreePath = { path: string; label: string };
@@ -31,4 +31,4 @@ export const treeDefaultValue: TreeDefaultValue = {
   treePath: [],
 };
 
-export const DecisionTreeGeneratorContext = createContext(treeDefaultValue);
+export const TreegeContext = createContext(treeDefaultValue);

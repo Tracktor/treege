@@ -1,4 +1,4 @@
-import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
+import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
 const getTree = (element: TreeNode | undefined, searchPath?: string): TreeNode | null => {
   if (!element) return null;

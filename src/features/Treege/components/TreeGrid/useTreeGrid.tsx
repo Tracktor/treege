@@ -1,11 +1,11 @@
 import { useCallback, useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
-import { appendTreeCard } from "@/features/DecisionTreeGenerator/reducer/treeReducer";
+import { TreegeContext } from "@/features/Treege/context/TreegeContext";
+import { appendTreeCard } from "@/features/Treege/reducer/treeReducer";
 
 const useTreeGrid = () => {
   const { t } = useTranslation("modal");
-  const { tree, currentHierarchyPointNode, modalOpen, dispatchTree, setModalOpen } = useContext(DecisionTreeGeneratorContext);
+  const { tree, currentHierarchyPointNode, modalOpen, dispatchTree, setModalOpen } = useContext(TreegeContext);
   const isEditModal = modalOpen === "edit";
   const isAddModal = modalOpen === "add";
   const isDeleteModal = modalOpen === "delete";

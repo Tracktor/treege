@@ -1,6 +1,6 @@
 import { Button, Stack } from "design-system-tracktor";
 import { useTranslation } from "react-i18next";
-import useFormTreeCardDelete from "@/features/DecisionTreeGenerator/components/Forms/FormTreeCardDelete/useFormTreeCardDelete";
+import useFormTreeCardDelete from "@/features/Treege/components/Forms/FormTreeCardDelete/useFormTreeCardDelete";
 
 interface FormTreeCardMutationProps {
   onClose?(): void;

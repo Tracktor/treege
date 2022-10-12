@@ -10,17 +10,17 @@ import TreeForm from "@/components/UI/TreeForm/TreeForm";
 import TreeModal from "@/components/UI/TreeModal/TreeModal";
 import ViewerJSON from "@/components/UI/ViewerJSON/ViewerJSON";
 import ViewerJSONAction from "@/components/UI/ViewerJSONAction/ViewerJSONAction";
-import ButtonCreateTree from "@/features/DecisionTreeGenerator/components/ButtonCreateTree/ButtonCreateTree";
-import FormTreeCardDelete from "@/features/DecisionTreeGenerator/components/Forms/FormTreeCardDelete/FormTreeCardDelete";
-import FormTreeCardMutation from "@/features/DecisionTreeGenerator/components/Forms/FormTreeCardMutation/FormTreeCardMutation";
-import TreeCardContainer from "@/features/DecisionTreeGenerator/components/TreeCardContainer/TreeCardContainer";
-import useTreeCardContainer from "@/features/DecisionTreeGenerator/components/TreeCardContainer/useTreeCardContainer";
-import useTreeGrid from "@/features/DecisionTreeGenerator/components/TreeGrid/useTreeGrid";
-import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/context/DecisionTreeGeneratorContext";
+import ButtonCreateTree from "@/features/Treege/components/ButtonCreateTree/ButtonCreateTree";
+import FormTreeCardDelete from "@/features/Treege/components/Forms/FormTreeCardDelete/FormTreeCardDelete";
+import FormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/FormTreeCardMutation";
+import TreeCardContainer from "@/features/Treege/components/TreeCardContainer/TreeCardContainer";
+import useTreeCardContainer from "@/features/Treege/components/TreeCardContainer/useTreeCardContainer";
+import useTreeGrid from "@/features/Treege/components/TreeGrid/useTreeGrid";
+import { TreegeContext } from "@/features/Treege/context/TreegeContext";
 import { getTree } from "@/utils/tree";
 
 const TreeGrid = () => {
-  const { tree, treeModalOpen, treePath } = useContext(DecisionTreeGeneratorContext);
+  const { tree, treeModalOpen, treePath } = useContext(TreegeContext);
   const { handleCloseTreeModal } = useTreeCardContainer();
   const { getTitleModalMutation, closeModal, getTitleModalDelete, handleOnSave, isModalMutationOpen, isDeleteModal } = useTreeGrid();
   const currentTreePath = treePath?.at(-1)?.path;

@@ -12,7 +12,7 @@ import { memo } from "react";
 import type { CustomNodeElementProps, TreeNodeDatum } from "react-d3-tree/lib/types/common";
 import { useTranslation } from "react-i18next";
 import styles from "./TreeCard.module.scss";
-import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
+import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
 interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum" | "hierarchyPointNode"> {
   nodeDatum: TreeNode | TreeNodeDatum;

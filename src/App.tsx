@@ -1,12 +1,7 @@
-import DarkTheme from "@/components/Theme/DarkTheme/DarkTheme";
-import DecisionTreeGenerator from "@/features/DecisionTreeGenerator/DecisionTreeGenerator";
+import Treege from "@/features/Treege";
 import "@/styles/globals.scss";
 import "@/config/i18n";
 
-const App = () => (
-  <DarkTheme>
-    <DecisionTreeGenerator />
-  </DarkTheme>
-);
+const App = () => <Treege />;
 
 export default App;
