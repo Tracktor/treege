@@ -2,7 +2,7 @@ import { resolve } from "path";
 import react from "@vitejs/plugin-react";
 import dts from "vite-plugin-dts";
 import { defineConfig } from "vitest/config";
-import { dependencies, name, peerDependencies } from "./package.json";
+import { name } from "./package.json";
 
 export default defineConfig({
   build: {
@@ -12,7 +12,7 @@ export default defineConfig({
       name,
     },
     rollupOptions: {
-      external: [...Object.keys(dependencies), ...Object.keys(peerDependencies)],
+      external: ["react", "react-dom"],
       output: {
         globals: {
           "@codemirror/lang-json": "langJson",
