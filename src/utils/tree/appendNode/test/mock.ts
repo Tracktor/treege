@@ -7,8 +7,6 @@ const addFirstNodeInTreeMock: Mock = {
   newChild: {
     attributes: {
       depth: 0,
-      isLeaf: true,
-      isRoot: true,
       label: "Username",
       type: "text",
     },
@@ -85,7 +83,6 @@ const addNodeInTreeMock: Mock = {
   newChild: {
     attributes: {
       depth: 1,
-      isLeaf: true,
       label: "Email",
       type: "email",
     },
