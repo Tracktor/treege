@@ -26,7 +26,7 @@ const addChildByRef = (node: TreeNode | null, child: TreeNode) => {
 const appendNode = ({ tree, path, name, child }: AppendChildParams) => {
   if (!tree) {
     // Initialise Tree
-    if (child.children) {
+    if (child.children.length) {
       return { ...child };
     }
 
