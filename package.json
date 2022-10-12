@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "types": "dist/main.d.ts",
-  "main": "dist/main.cjs",
+  "main": "dist/main.umd.cjs",
   "module": "dist/main.js",
   "files": [
     "dist"
@@ -12,7 +12,7 @@
   "exports": {
     ".": {
       "import": "./dist/main.js",
-      "require": "./dist/main.cjs"
+      "require": "./dist/main.umd.cjs"
     }
   },
   "repository": "git@github.com:Tracktor/treege.git",
