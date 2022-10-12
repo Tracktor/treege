@@ -1,5 +1,5 @@
 # [Versions](https://github.com/Tracktor/treege/releases)
 
-## v0.1.0
+## v0.2.0
 
-- Treege as library
+- Add description

@@ -1,7 +1,8 @@
 {
   "name": "treege",
+  "description": "Form decision tree generator",
   "license": "ISC",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "types": "dist/main.d.ts",
   "main": "dist/main.umd.cjs",
