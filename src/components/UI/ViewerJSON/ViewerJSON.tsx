@@ -1,25 +1,38 @@
 import { json } from "@codemirror/lang-json";
 import { dracula } from "@uiw/codemirror-theme-dracula";
 import CodeMirror from "@uiw/react-codemirror";
-import styles from "./ViewerJSON.module.scss";
+import { GlobalStyles } from "design-system-tracktor";
 import useViewerJSON from "@/components/UI/ViewerJSON/useViewerJSON";
 
 interface ViewerJSONProps {
   value: any;
 }
 
+const styles = {
+  fullHeight: {
+    height: "100%",
+  },
+};
+
 const ViewerJSON = ({ value }: ViewerJSONProps) => {
   const { formatJSON } = useViewerJSON();
 
   return (
-    <div className={styles.Container}>
+    <div style={styles.fullHeight}>
+      <GlobalStyles
+        styles={{
+          ".cm-activeLine.cm-line, .cm-gutterElement.cm-activeLineGutter": {
+            backgroundColor: "transparent",
+          },
+        }}
+      />
       <CodeMirror
         value={formatJSON(value)}
         extensions={[json()]}
         editable={false}
         theme={dracula}
         height="100%"
-        className={styles.Viewer}
+        style={styles.fullHeight}
       />
     </div>
   );

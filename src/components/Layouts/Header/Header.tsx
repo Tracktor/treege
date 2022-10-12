@@ -1,13 +1,20 @@
 import { Box } from "design-system-tracktor";
 import type { ReactNode } from "react";
-import styles from "./Header.module.scss";
+import colors from "@/styles/colors.module.scss";
 
 interface HeaderProps {
   children?: ReactNode;
 }
 
+const styles = {
+  box: {
+    border: `solid 1px ${colors.borderLight}`,
+    flexGrow: 0,
+  },
+};
+
 const Header = ({ children }: HeaderProps) => (
-  <Box className={styles.Box} padding={2} component="header">
+  <Box sx={styles.box} padding={2} component="header">
     {children}
   </Box>
 );

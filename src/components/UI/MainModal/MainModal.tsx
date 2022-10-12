@@ -1,6 +1,6 @@
 import { Box, Dialog } from "design-system-tracktor";
 import type { ReactNode } from "react";
-import styles from "./MainModal.module.scss";
+import colors from "@/styles/colors.module.scss";
 
 interface TreeModalProps {
   children?: ReactNode;
@@ -9,6 +9,13 @@ interface TreeModalProps {
   open: boolean;
   onClose?(): void;
 }
+
+const styles = {
+  box: {
+    backgroundColor: colors.backgroundPrimary,
+    border: `solid 1px ${colors.borderLight}`,
+  },
+};
 
 const MainModal = ({ children, description, open, onClose, title }: TreeModalProps) => (
   <Dialog
@@ -20,7 +27,7 @@ const MainModal = ({ children, description, open, onClose, title }: TreeModalPro
     maxWidth="sm"
     fullWidth
   >
-    <Box className={styles.Box} p={4}>
+    <Box sx={styles.box} p={4}>
       <h3>{title}</h3>
       <p>{description}</p>
       {children}

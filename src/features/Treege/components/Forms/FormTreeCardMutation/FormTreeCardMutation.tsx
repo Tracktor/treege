@@ -14,14 +14,39 @@ import {
   TextField,
 } from "design-system-tracktor";
 import { useTranslation } from "react-i18next";
-import styles from "./FormTreeCardMutation.module.scss";
 import fields from "@/constants/fields";
 import TreeData from "@/constants/TreeData";
 import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
+import colors from "@/styles/colors.module.scss";
 
 interface FormTreeCardMutationProps {
   onClose?(): void;
 }
+
+const iconButtonCommonStyle = {
+  marginRight: "-20px !important",
+  minWidth: "auto !important",
+};
+
+const styles = {
+  iconButton: iconButtonCommonStyle,
+  iconButtonDelete: {
+    ...iconButtonCommonStyle,
+    "&:before": {
+      borderRadius: `50%`,
+      content: '""',
+      height: 20,
+      position: `absolute`,
+      width: 20,
+      zIndex: -1,
+    },
+    backgroundColor: colors.backgroundPrimary,
+    position: "absolute",
+    right: 0,
+    top: "50%",
+    transform: "translateY(-50%)",
+  },
+};
 
 const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
   const { t } = useTranslation(["translation", "form"]);
@@ -152,7 +177,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                 inputProps={{ "data-id": id }}
               />
               {values.length > 1 && (
-                <Button color="warning" className={styles.IconButtonDelete} data-id={id} onClick={() => handleDeleteValue(id)}>
+                <Button color="warning" sx={styles.iconButtonDelete} data-id={id} onClick={() => handleDeleteValue(id)}>
                   <RemoveCircleRoundedIcon />
                 </Button>
               )}
@@ -163,7 +188,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
       {isDecisionField && (
         <Box justifyContent="flex-end" display="flex">
-          <Button color="success" className={styles.IconButton} onClick={handleAddValue}>
+          <Button color="success" sx={styles.iconButton} onClick={handleAddValue}>
             <AddCircleRoundedIcon />
           </Button>
         </Box>

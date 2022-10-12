@@ -1258,7 +1258,7 @@
   resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.8.0.tgz#f580f9beb67176fa57aae70b08ed510e1b18980f"
   integrity sha512-G/YwXTkv7Den9mXDO7AhLWkE3q+I92B+VqAE+dYG4NGPaHZGvt3G8Q0p9vmE+sq7rTGphUbAvmQ9YpbfMQGGlA==
 
-"@emotion/react@^11.10.0":
+"@emotion/react@^11.10.0", "@emotion/react@^11.10.4":
   version "11.10.4"
   resolved "https://registry.yarnpkg.com/@emotion/react/-/react-11.10.4.tgz#9dc6bccbda5d70ff68fdb204746c0e8b13a79199"
   integrity sha512-j0AkMpr6BL8gldJZ6XQsQ8DnS9TxEQu1R+OGmDZiWjBAJtCcbt0tS3I/YffoqHXxH6MjgI7KdMbYKw3MEiU9eA==
@@ -2778,10 +2778,10 @@ dequal@^2.0.2:
   resolved "https://registry.yarnpkg.com/dequal/-/dequal-2.0.3.tgz#2644214f1997d39ed0ee0ece72335490a7ac67be"
   integrity sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==
 
-design-system-tracktor@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/design-system-tracktor/-/design-system-tracktor-1.0.5.tgz#a4d360269d24fd2a82a48551e5791c6999f9b09d"
-  integrity sha512-dcq41r/33I7/rJux7L5zZmOGK6TzAgkeOctBOWSvqH8iH9ZpBApjrZCHcP8iILan/+m+KM6+PWWhYguzcDISzw==
+design-system-tracktor@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/design-system-tracktor/-/design-system-tracktor-1.0.8.tgz#f5325e2efc7c2b202c19abc67741552eb9a179fe"
+  integrity sha512-YgmgfFaKQDK8xmiqQIqHBbjrXhlkCMYsfuT0g8EosbvADpCSj4pryGXVK7AqUlstX33/Nj8SXvjv7d5SYtVzPA==
   dependencies:
     "@emotion/react" "^11.10.0"
     "@emotion/styled" "^11.10.0"
