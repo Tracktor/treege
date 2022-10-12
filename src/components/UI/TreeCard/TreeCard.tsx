@@ -47,6 +47,9 @@ const styles = {
     border: `solid 1px ${colors.secondaryMain}`,
     borderRadius: "1rem",
   },
+  icon: {
+    color: colors.grey500,
+  },
   nodeSvg: {
     stroke: "transparent !important",
   },
@@ -132,22 +135,22 @@ const TreeCard = ({
             <Box paddingTop={0.5}>
               {isLeaf && (
                 <Tooltip title={t("isALeaf")} placement="bottom" arrow>
-                  <EnergySavingsLeafRoundedIcon color="disabled" />
+                  <EnergySavingsLeafRoundedIcon style={styles.icon} />
                 </Tooltip>
               )}
               {isRoot && (
                 <Tooltip title={t("isTheRoot")} placement="bottom" arrow>
-                  <ParkRoundedIcon color="disabled" />
+                  <ParkRoundedIcon style={styles.icon} />
                 </Tooltip>
               )}
               {isBranch && (
                 <Tooltip title={t("isABranch")} placement="bottom" arrow>
-                  <AccountTreeRoundedIcon color="disabled" />
+                  <AccountTreeRoundedIcon style={styles.icon} />
                 </Tooltip>
               )}
               {isTree && (
                 <Tooltip title={t("isATree")} placement="bottom" arrow>
-                  <ForestRoundedIcon color="disabled" />
+                  <ForestRoundedIcon style={styles.icon} />
                 </Tooltip>
               )}
             </Box>
