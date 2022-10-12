@@ -6,6 +6,8 @@
 <video src="https://user-images.githubusercontent.com/108873902/184317603-61ceafc6-a326-49b2-b0de-ffda9cf9c75e.mov"></video>
 
 - [Features](#Features)
+- [Installation](#Installation)
+- [Usage](#Usage)
 - [Embed Treege anywhere](#Embed-Treege-anywhere)
     - [Provide data to iframe](#Provide-data-to-iframe)
     - [Listen Treege event](#Listen-Treege-event)
@@ -30,6 +32,24 @@
 - 💅️ **[CSS Modules](https://github.com/css-modules/css-modules)** - CSS files in which all class names are scoped
   locally
 - 🐶 **[Husky](https://typicode.github.io/husky)** - Modern native git hooks made easy
+
+## Installation
+
+```console
+yarn add treege
+```
+
+## Usage
+
+```typescript jsx
+import { Treege } from "treege";
+
+const App = () => {
+  return <Treege />;
+};
+
+export default App;
+```
 
 ## Embed Treege anywhere
 

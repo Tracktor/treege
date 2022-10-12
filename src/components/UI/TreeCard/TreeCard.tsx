@@ -7,12 +7,12 @@ import ForestRoundedIcon from "@mui/icons-material/ForestRounded";
 import ParkRoundedIcon from "@mui/icons-material/ParkRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import type { HierarchyPointNode } from "d3-hierarchy";
-import { Box, Button, Chip, Stack, Tooltip, Typography } from "design-system-tracktor";
+import { Box, Button, Chip, GlobalStyles, Stack, Tooltip, Typography } from "design-system-tracktor";
 import { memo } from "react";
 import type { CustomNodeElementProps, TreeNodeDatum } from "react-d3-tree/lib/types/common";
 import { useTranslation } from "react-i18next";
-import styles from "./TreeCard.module.scss";
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
+import colors from "@/styles/colors.module.scss";
 
 interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum" | "hierarchyPointNode"> {
   nodeDatum: TreeNode | TreeNodeDatum;
@@ -24,19 +24,61 @@ interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum" | "hier
   hierarchyPointNode: HierarchyPointNode<TreeNode>;
 }
 
+const styles = {
+  actionButton: {
+    minWidth: "auto !important",
+  },
+  container: {
+    background: colors.backgroundPrimary,
+    borderRadius: "1rem",
+  },
+  containerField: {
+    background: colors.backgroundPrimary,
+    border: `solid 1px ${colors.primaryMain}`,
+    borderRadius: "1rem",
+  },
+  containerTree: {
+    background: colors.tertiaryMain,
+    border: `solid 1px ${colors.primaryMain}`,
+    borderRadius: "1rem",
+  },
+  containerValue: {
+    background: colors.backgroundPrimary,
+    border: `solid 1px ${colors.secondaryMain}`,
+    borderRadius: "1rem",
+  },
+  nodeSvg: {
+    stroke: "transparent !important",
+  },
+  stepChip: {
+    fontSize: ".7rem !important",
+    fontWeight: "bold",
+    height: "20px !important",
+  },
+  title: {
+    display: "-webkit-box",
+    margin: 0,
+    overflow: "hidden",
+    textAlign: "right",
+    textOverflow: "ellipsis",
+    webkitBoxOrient: "vertical",
+    webkitLineClamp: 2,
+  },
+};
+
 const getCardStyle = (type?: string | number | boolean) => {
   const isField = !!type;
   const isTree = type === "tree";
 
   if (isTree) {
-    return styles.ContainerTree;
+    return styles.containerTree;
   }
 
   if (isField) {
-    return styles.ContainerField;
+    return styles.containerField;
   }
 
-  return styles.ContainerValue;
+  return styles.containerValue;
 };
 
 const TreeCard = ({
@@ -58,17 +100,18 @@ const TreeCard = ({
 
   return (
     <g>
-      <foreignObject height={size} width={size} x={`-${size / 2}`} y={`-${size / 2}`} className={getCardStyle(type)}>
+      <GlobalStyles styles={{ ".rd3t-node svg": styles.nodeSvg }} />
+      <foreignObject height={size} width={size} x={`-${size / 2}`} y={`-${size / 2}`} style={getCardStyle(type)}>
         <Box flex={1} display="flex" p={2} height="100%" flexDirection="column" justifyContent="space-between">
           <Stack alignItems="flex-end" spacing={0.5}>
             {isField && (
               <Stack direction="row" spacing={1} alignItems="center">
                 {step && (
                   <Tooltip title={`${t("step", { ns: "form" })} ${nodeDatum?.attributes?.step}`} placement="left" arrow>
-                    <Chip color="primary" size="small" label={step} className={styles.StepChip} />
+                    <Chip color="primary" size="small" label={step} sx={styles.stepChip} />
                   </Tooltip>
                 )}
-                <Typography variant="subtitle2" className={styles.Title}>
+                <Typography variant="subtitle2" sx={styles.title}>
                   <strong>{label}</strong>
                 </Typography>
               </Stack>
@@ -81,7 +124,7 @@ const TreeCard = ({
             )}
             <Stack spacing={0.5} alignItems="flex-end">
               {isValue && (
-                <Typography variant="subtitle2" className={styles.Title}>
+                <Typography variant="subtitle2" sx={styles.title}>
                   <strong>{label}</strong>
                 </Typography>
               )}
@@ -114,7 +157,7 @@ const TreeCard = ({
               <Tooltip title={t("remove")} arrow>
                 <Button
                   variant="text"
-                  className={styles.ActionButton}
+                  sx={styles.actionButton}
                   size="small"
                   color="error"
                   onClick={() => onDeleteChildren?.(hierarchyPointNode)}
@@ -128,7 +171,7 @@ const TreeCard = ({
                 <Button
                   variant="text"
                   color="secondary"
-                  className={styles.ActionButton}
+                  sx={styles.actionButton}
                   size="small"
                   onClick={() => onEditChildren?.(hierarchyPointNode)}
                 >
@@ -141,7 +184,7 @@ const TreeCard = ({
                 <Button
                   variant="text"
                   color="success"
-                  className={styles.ActionButton}
+                  sx={styles.actionButton}
                   size="small"
                   onClick={() => onAddChildren?.(hierarchyPointNode)}
                 >
@@ -154,7 +197,7 @@ const TreeCard = ({
                 <Button
                   variant="text"
                   color="info"
-                  className={styles.ActionButton}
+                  sx={styles.actionButton}
                   size="small"
                   onClick={() => onOpenTreeModal?.(hierarchyPointNode)}
                 >

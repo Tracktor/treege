@@ -1,13 +1,20 @@
 import { Box } from "design-system-tracktor";
 import type { ReactNode } from "react";
-import styles from "./Action.module.scss";
+import colors from "@/styles/colors.module.scss";
 
 interface ActionProps {
   children?: ReactNode;
 }
 
+const styles = {
+  box: {
+    border: `solid 1px ${colors.borderLight}`,
+    flexGrow: 0,
+  },
+};
+
 const Action = ({ children }: ActionProps) => (
-  <Box className={styles.Box} p={2} role="group">
+  <Box p={2} role="group" sx={styles.box}>
     {children}
   </Box>
 );

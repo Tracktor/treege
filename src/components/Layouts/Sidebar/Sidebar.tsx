@@ -1,13 +1,21 @@
 import { Box } from "design-system-tracktor";
 import type { ReactNode } from "react";
-import styles from "./Sidebar.module.scss";
+import colors from "@/styles/colors.module.scss";
 
 interface SidebarProps {
   children?: ReactNode;
 }
 
+const styles = {
+  box: {
+    border: `solid 1px ${colors.borderLight}`,
+    flexGrow: 1,
+    overflow: "auto",
+  },
+};
+
 const Sidebar = ({ children }: SidebarProps) => (
-  <Box className={styles.Box} component="aside">
+  <Box sx={styles.box} component="aside">
     {children}
   </Box>
 );
