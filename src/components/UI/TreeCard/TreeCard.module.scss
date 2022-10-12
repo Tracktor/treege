@@ -21,6 +21,12 @@
   border: solid 1px $secondaryMain;
 }
 
+.ContainerTree {
+  @extend .Container;
+  background: $tertiaryMain;
+  border: solid 1px $primaryMain;
+}
+
 .Title {
   margin: 0;
   text-align: right;

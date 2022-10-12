@@ -4,7 +4,7 @@ import { DecisionTreeGeneratorContext } from "@/features/DecisionTreeGenerator/c
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
 
 const useTreeCardContainer = () => {
-  const { setModalOpen, setCurrentHierarchyPointNode } = useContext(DecisionTreeGeneratorContext);
+  const { setModalOpen, setCurrentHierarchyPointNode, setTreeModalOpen, setTreePath } = useContext(DecisionTreeGeneratorContext);
 
   const handleAddChildren = (hierarchyPointNode: HierarchyPointNode<TreeNode>) => {
     setCurrentHierarchyPointNode(hierarchyPointNode);
@@ -21,6 +21,21 @@ const useTreeCardContainer = () => {
     setModalOpen("edit");
   };
 
-  return { handleAddChildren, handleDeleteChildren, handleEditChildren };
+  const handleOpenTreeModal = (hierarchyPointNode: HierarchyPointNode<TreeNode>) => {
+    const currentTree = {
+      label: hierarchyPointNode?.data.attributes.label,
+      path: hierarchyPointNode?.data?.attributes?.treePath || "",
+    };
+
+    setTreePath((prevState) => [...prevState, currentTree]);
+    setTreeModalOpen(true);
+  };
+
+  const handleCloseTreeModal = () => {
+    setTreePath([]);
+    setTreeModalOpen(false);
+  };
+
+  return { handleAddChildren, handleCloseTreeModal, handleDeleteChildren, handleEditChildren, handleOpenTreeModal };
 };
 export default useTreeCardContainer;

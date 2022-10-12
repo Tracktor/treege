@@ -12,3 +12,8 @@ vi.mock("react-i18next", () => ({
     t: (str: string) => str,
   }),
 }));
+
+vi.stubGlobal(
+  "structuredClone",
+  vi.fn().mockImplementation((val) => JSON.parse(JSON.stringify(val)))
+);

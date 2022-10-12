@@ -1,122 +1,62 @@
-import { appendProps, changeProps, removeObject, replaceObject, returnFound } from "find-and";
 import type { TreeNode } from "@/features/DecisionTreeGenerator/type/TreeNode";
-import { removeObjectProperty } from "@/utils/object";
+import { appendNode, removeNode, updatedNode } from "@/utils/tree";
 
 export const treeReducerActionType = {
   appendTreeCard: "appendTreeCard",
   deleteTreeCard: "deleteTreeCard",
   replaceTreeCard: "replaceTreeCard",
-  replaceTreeCardAndKeepPrevChildren: "replaceTreeCardAndKeepPrevChildren",
-  setIsLeaf: "setIsLeaf",
-  setTree: "setTree",
 } as const;
 
-export const appendTreeCard = (name: string, children: TreeNode) => ({
+export const appendTreeCard = (path: string | null, name: string, children: TreeNode) => ({
   children,
   name,
+  path,
   type: treeReducerActionType.appendTreeCard,
 });
 
-export const deleteTreeCard = (name: string) => ({
-  name,
-  type: treeReducerActionType.deleteTreeCard,
-});
-
-export const replaceTreeCard = (name: string, children: TreeNode) => ({
+export const replaceTreeCard = (path: string | null, name: string, children: TreeNode) => ({
   children,
   name,
+  path,
   type: treeReducerActionType.replaceTreeCard,
 });
 
-export const replaceTreeCardAndKeepPrevChildren = (name: string, children: TreeNode) => ({
-  children,
+export const deleteTreeCard = (path: string | "", name: string) => ({
   name,
-  type: treeReducerActionType.replaceTreeCardAndKeepPrevChildren,
+  path,
+  type: treeReducerActionType.deleteTreeCard,
 });
 
-export const setTree = (tree: TreeNode) => ({
-  tree,
-  type: treeReducerActionType.setTree,
-});
-
-export const setIsLeaf = (name: string, isLeaf: boolean) => ({
-  isLeaf,
-  name,
-  type: treeReducerActionType.setIsLeaf,
-});
-
-const treeReducer = (state: any, action: any) => {
+const treeReducer = (tree: TreeNode, action: any) => {
   switch (action.type) {
     case treeReducerActionType.appendTreeCard: {
-      const isLeaf = !action.children.attributes.isDecision;
+      const { name, path, children } = action;
 
-      return appendProps(
-        state,
-        { name: action.name },
-        {
-          children: [
-            {
-              ...action.children,
-              attributes: {
-                ...action.children.attributes,
-                isLeaf,
-              },
-            },
-          ],
-        }
-      );
+      return appendNode({
+        child: children,
+        name,
+        path,
+        tree,
+      });
     }
 
     case treeReducerActionType.deleteTreeCard: {
-      return removeObject(state, { name: action.name });
+      const { path, name } = action;
+
+      return removeNode({ name, path, tree });
     }
 
     case treeReducerActionType.replaceTreeCard: {
-      return replaceObject(state, { name: action.name }, action.children);
+      const { name, path, children } = action;
+
+      return updatedNode({
+        child: children,
+        name,
+        path,
+        tree,
+      });
     }
 
-    case treeReducerActionType.replaceTreeCardAndKeepPrevChildren: {
-      const children = returnFound(state, { name: action.name }).children.filter(({ attributes }: TreeNode) => !attributes.value);
-      const isLeaf = children?.length === 0;
-
-      return replaceObject(
-        state,
-        { name: action.name },
-        {
-          ...action.children,
-          attributes: {
-            ...action.children.attributes,
-            isLeaf,
-          },
-          children,
-        }
-      );
-    }
-
-    case treeReducerActionType.setIsLeaf: {
-      return changeProps(
-        state,
-        { name: action.name },
-        {
-          attributes: {
-            ...removeObjectProperty(returnFound(state, { name: action.name }).attributes, "isLeaf"),
-            ...(action.isLeaf && { isLeaf: true }),
-          },
-        }
-      );
-    }
-
-    case treeReducerActionType.setTree: {
-      const isLeaf = !action.tree.attributes.isDecision;
-
-      return {
-        ...action.tree,
-        attributes: {
-          ...action.tree.attributes,
-          isLeaf,
-        },
-      };
-    }
     default:
       throw new Error();
   }
