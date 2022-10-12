@@ -1,5 +1,5 @@
 import { createTheme } from "design-system-tracktor";
-import colors from "@/styles/colors.module.scss";
+import colors from "@/constants/colors";
 
 const darkTheme = createTheme({
   palette: {

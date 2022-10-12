@@ -11,8 +11,8 @@ import { Box, Button, Chip, GlobalStyles, Stack, Tooltip, Typography } from "des
 import { memo } from "react";
 import type { CustomNodeElementProps, TreeNodeDatum } from "react-d3-tree/lib/types/common";
 import { useTranslation } from "react-i18next";
+import colors from "@/constants/colors";
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
-import colors from "@/styles/colors.module.scss";
 
 interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum" | "hierarchyPointNode"> {
   nodeDatum: TreeNode | TreeNodeDatum;

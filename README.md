@@ -8,11 +8,6 @@
 - [Features](#Features)
 - [Installation](#Installation)
 - [Usage](#Usage)
-- [Embed Treege anywhere](#Embed-Treege-anywhere)
-    - [Provide data to iframe](#Provide-data-to-iframe)
-    - [Listen Treege event](#Listen-Treege-event)
-    - [Events listener](#Events-listener)
-    - [Events message](#Events-message)
 - [Generate form from Treege data](#Generate-form-from-Treege-data)
 - [Local installation](#local-installation)
 - [Available Scripts](#Available-Scripts)
@@ -29,8 +24,6 @@
 - 🚀 **[Vitest](https://vitest.dev)** - A Vite native unit test framework. It's fast!
 - 🛠️ **[React Testing Library](https://testing-library.com/docs/react-testing-library/intro)** - React DOM testing
   utilities
-- 💅️ **[CSS Modules](https://github.com/css-modules/css-modules)** - CSS files in which all class names are scoped
-  locally
 - 🐶 **[Husky](https://typicode.github.io/husky)** - Modern native git hooks made easy
 
 ## Installation
@@ -50,94 +43,6 @@ const App = () => {
 
 export default App;
 ```
-
-## Embed Treege anywhere
-
-#### Treege can be easily embed  in any HTML page.
-
-```html
-<!doctype html>
-<html lang="en">
-<head>
-  <title>Treege Iframe</title>
-  <style>
-    html,
-    body,
-    iframe {
-      overflow: hidden;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-      border: 0;
-    }
-  </style>
-</head>
-<body>
-
-<iframe src="{{YOUR_TREEGE_URL}}"></iframe>
-
-</body>
-</html>
-```
-
-#### Provide data to iframe
-
-```javascript
-const iframe = document.querySelector("iframe");
-
-iframe.addEventListener("load", handleLoadIframe);
-
-function handleLoadIframe() {
-  const tree = {
-    "attributes": {
-      "depth": 0,
-      "label": "Age",
-      "type": "number",
-      "isRoot": true,
-      "isLeaf": true,
-      "...": "..."
-    },
-    "children": [],
-    "name": "age"
-  }
-
-  setTimeout(() => {
-    iframe.contentWindow.postMessage({ source: "treege", tree, type: "setTree" }, "*");
-  }, 100);
-}
-```
-
-#### Listen Treege event
-
-```javascript
-const iframe = document.querySelector("iframe");
-
-window.addEventListener("message", handleMessage);
-
-function handleMessage(event) {
-  // On save event is trigger from iframe
-  if (event.origin === "{{YOUR_TREEGE_URL}}" && event.data.type === "onSave" && event.data.source === "treege") {
-    // Get tree data from Treege
-    console.log(event.data.tree);
-  }
-}
-```
-
-### Events listener
-
-List of `event.data` that can be listened with`window.addEventListener("message")`
-
-| Event name | Data                                                                                        |
-|------------|---------------------------------------------------------------------------------------------|
-| onSave     | `{source: "treege", type : "onSave", tree : {{attributes: {...}, children: [], name: ""}}}` |
-
-### Events message
-
-List of events that can be sent with `iframe.contentWindow.postMessage`
-
-| Event name | Data                                                                                         |
-|------------|----------------------------------------------------------------------------------------------|
-| setTree    | `{source: "treege", type : "setTree", tree : {{attributes: {...}, children: [], name: ""}}}` |
 
 ## Generate form from Treege data
 
