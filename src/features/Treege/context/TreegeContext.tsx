@@ -16,11 +16,13 @@ export interface TreeDefaultValue {
   treeModalOpen: boolean;
   treePath: TreePath[] | [];
   tree: null | TreeNode;
+  endPoint: null | string;
 }
 
 export const treeDefaultValue: TreeDefaultValue = {
   currentHierarchyPointNode: null,
   dispatchTree: () => null,
+  endPoint: null,
   modalOpen: null,
   setCurrentHierarchyPointNode: () => null,
   setModalOpen: () => null,
