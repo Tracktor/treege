@@ -2,7 +2,7 @@ import { resolve } from "path";
 import react from "@vitejs/plugin-react";
 import dts from "vite-plugin-dts";
 import { defineConfig } from "vitest/config";
-import { name } from "./package.json";
+import { dependencies, name } from "./package.json";
 
 export default defineConfig({
   build: {
@@ -12,7 +12,7 @@ export default defineConfig({
       name,
     },
     rollupOptions: {
-      external: ["react", "react-dom"],
+      external: [...Object.keys(dependencies).filter((deps) => deps !== "react-d3-tree")],
       output: {
         globals: {
           "@codemirror/lang-json": "langJson",
