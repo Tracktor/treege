@@ -5,9 +5,6 @@ export const treeReducerActionType = {
   appendTreeCard: "appendTreeCard",
   deleteTreeCard: "deleteTreeCard",
   replaceTreeCard: "replaceTreeCard",
-  replaceTreeCardAndKeepPrevChildren: "replaceTreeCardAndKeepPrevChildren",
-  setIsLeaf: "setIsLeaf",
-  setTree: "setTree",
 } as const;
 
 export const appendTreeCard = (path: string | null, name: string, children: TreeNode) => ({
@@ -28,23 +25,6 @@ export const deleteTreeCard = (path: string | "", name: string) => ({
   name,
   path,
   type: treeReducerActionType.deleteTreeCard,
-});
-
-export const replaceTreeCardAndKeepPrevChildren = (name: string, children: TreeNode) => ({
-  children,
-  name,
-  type: treeReducerActionType.replaceTreeCardAndKeepPrevChildren,
-});
-
-export const setTree = (tree: TreeNode) => ({
-  tree,
-  type: treeReducerActionType.setTree,
-});
-
-export const setIsLeaf = (name: string, isLeaf: boolean) => ({
-  isLeaf,
-  name,
-  type: treeReducerActionType.setIsLeaf,
 });
 
 const treeReducer = (tree: TreeNode, action: any) => {
