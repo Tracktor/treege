@@ -30,7 +30,7 @@
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
-    "prepare": "husky install"
+    "prepare": "yarn run build && husky install"
   },
   "dependencies": {
     "@codemirror/lang-json": "^6.0.0",

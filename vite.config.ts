@@ -15,9 +15,14 @@ export default defineConfig({
       external: [...Object.keys(dependencies), ...Object.keys(peerDependencies)],
       output: {
         globals: {
-          "design-system-tracktor": "designSystem",
+          "@codemirror/lang-json": "langJson",
+          "@uiw/codemirror-theme-dracula": "codemirrorThemeDracula",
+          "@uiw/react-codemirror": "CodeMirror",
+          "design-system-tracktor": "designSystemTracktor",
           react: "React",
+          "react-d3-tree": "Tree",
           "react-dom": "ReactDOM",
+          "react-i18next": "reactI18next",
         },
       },
     },
