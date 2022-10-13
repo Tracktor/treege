@@ -24,7 +24,7 @@ export default defineConfig({
           "i18next-browser-languagedetector": "LanguageDetector",
           react: "React",
           "react-d3-tree": "Tree",
-          "react-dom": "ReactDom",
+          "react-dom": "ReactDOM",
           "react-i18next": "reactI18next",
         },
       },
