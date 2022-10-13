@@ -30,7 +30,7 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    exclude: ["react-d3-tree"],
+    include: ["react-dom"],
   },
   plugins: [dts(), react()],
   resolve: {
