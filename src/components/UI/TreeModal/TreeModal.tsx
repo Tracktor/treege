@@ -1,7 +1,7 @@
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { AppBar, Box, Dialog, IconButton, Slide, Toolbar, TransitionProps } from "design-system-tracktor";
 import { forwardRef, ReactElement, ReactNode, Ref } from "react";
-import colors from "@/styles/colors.module.scss";
+import colors from "@/constants/colors";
 
 interface TreeModalProps {
   children?: ReactNode;

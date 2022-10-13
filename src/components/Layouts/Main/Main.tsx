@@ -1,6 +1,6 @@
 import { Box } from "design-system-tracktor";
 import type { ReactNode } from "react";
-import colors from "@/styles/colors.module.scss";
+import colors from "@/constants/colors";
 
 interface MainProps {
   children?: ReactNode;

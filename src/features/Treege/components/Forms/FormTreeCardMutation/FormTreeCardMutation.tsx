@@ -14,10 +14,10 @@ import {
   TextField,
 } from "design-system-tracktor";
 import { useTranslation } from "react-i18next";
+import colors from "@/constants/colors";
 import fields from "@/constants/fields";
 import TreeData from "@/constants/TreeData";
 import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
-import colors from "@/styles/colors.module.scss";
 
 interface FormTreeCardMutationProps {
   onClose?(): void;

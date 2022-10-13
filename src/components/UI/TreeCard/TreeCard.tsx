@@ -11,8 +11,8 @@ import { Box, Button, Chip, GlobalStyles, Stack, Tooltip, Typography } from "des
 import { memo } from "react";
 import type { CustomNodeElementProps, TreeNodeDatum } from "react-d3-tree/lib/types/common";
 import { useTranslation } from "react-i18next";
+import colors from "@/constants/colors";
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
-import colors from "@/styles/colors.module.scss";
 
 interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum" | "hierarchyPointNode"> {
   nodeDatum: TreeNode | TreeNodeDatum;
@@ -46,6 +46,9 @@ const styles = {
     background: colors.backgroundPrimary,
     border: `solid 1px ${colors.secondaryMain}`,
     borderRadius: "1rem",
+  },
+  icon: {
+    color: colors.grey500,
   },
   nodeSvg: {
     stroke: "transparent !important",
@@ -132,22 +135,22 @@ const TreeCard = ({
             <Box paddingTop={0.5}>
               {isLeaf && (
                 <Tooltip title={t("isALeaf")} placement="bottom" arrow>
-                  <EnergySavingsLeafRoundedIcon color="disabled" />
+                  <EnergySavingsLeafRoundedIcon style={styles.icon} />
                 </Tooltip>
               )}
               {isRoot && (
                 <Tooltip title={t("isTheRoot")} placement="bottom" arrow>
-                  <ParkRoundedIcon color="disabled" />
+                  <ParkRoundedIcon style={styles.icon} />
                 </Tooltip>
               )}
               {isBranch && (
                 <Tooltip title={t("isABranch")} placement="bottom" arrow>
-                  <AccountTreeRoundedIcon color="disabled" />
+                  <AccountTreeRoundedIcon style={styles.icon} />
                 </Tooltip>
               )}
               {isTree && (
                 <Tooltip title={t("isATree")} placement="bottom" arrow>
-                  <ForestRoundedIcon color="disabled" />
+                  <ForestRoundedIcon style={styles.icon} />
                 </Tooltip>
               )}
             </Box>

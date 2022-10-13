@@ -3,8 +3,8 @@ import { memo } from "react";
 import Tree from "react-d3-tree";
 import type { RenderCustomNodeElementFn } from "react-d3-tree/lib/types/common";
 import useTreeForm from "@/components/UI/TreeForm/useTreeForm";
+import colors from "@/constants/colors";
 import type { TreeRenderCustomNodeElementFn } from "@/features/Treege/type/TreeNode";
-import colors from "@/styles/colors.module.scss";
 
 interface TreeFormProps {
   data: any;
