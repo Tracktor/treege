@@ -37,7 +37,7 @@
     "@mui/icons-material": "^5.8.4",
     "@uiw/codemirror-theme-dracula": "^4.11.4",
     "@uiw/react-codemirror": "^4.11.4",
-    "design-system-tracktor": "^1.0.9",
+    "design-system-tracktor": "^1.0.12",
     "i18next": "^21.8.14",
     "i18next-browser-languagedetector": "^6.1.4",
     "react": "^18.2.0",
