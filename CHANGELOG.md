@@ -1,5 +1,4 @@
 # [Versions](https://github.com/Tracktor/treege/releases)
 
-## v0.4.11
-- optimize deps
-- remove unused meta index
+## v0.4.12
+- optimize deps exclude react-d3-tree
