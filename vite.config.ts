@@ -21,7 +21,6 @@ export default defineConfig({
           "design-system-tracktor": "designSystemTracktor",
           react: "React",
           "react-d3-tree": "Tree",
-          "react-dom": "ReactDOM",
           "react-i18next": "reactI18next",
         },
       },
