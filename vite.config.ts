@@ -12,7 +12,7 @@ export default defineConfig({
       name,
     },
     rollupOptions: {
-      external: [...Object.keys(dependencies).filter((deps) => deps !== "react-d3-tree")],
+      external: [...Object.keys(dependencies)],
       output: {
         globals: {
           "@codemirror/lang-json": "langJson",
@@ -27,7 +27,7 @@ export default defineConfig({
       },
     },
   },
-  plugins: [dts(), react()],
+  plugins: [dts(), react({ jsxRuntime: "classic" })],
   resolve: {
     alias: [{ find: "@", replacement: resolve(__dirname, "src") }],
   },
