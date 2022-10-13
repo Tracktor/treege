@@ -13,7 +13,7 @@ export default defineConfig({
       name,
     },
     rollupOptions: {
-      external: [...Object.keys(dependencies)],
+      external: [...Object.keys(dependencies).filter((dependency) => dependency !== "react-d3-tree")],
       output: {
         globals: {
           "@codemirror/lang-json": "langJson",
@@ -24,13 +24,11 @@ export default defineConfig({
           "i18next-browser-languagedetector": "LanguageDetector",
           react: "React",
           "react-d3-tree": "Tree",
+          "react-dom": "ReactDom",
           "react-i18next": "reactI18next",
         },
       },
     },
-  },
-  optimizeDeps: {
-    include: ["react-dom"],
   },
   plugins: [dts(), react()],
   resolve: {
