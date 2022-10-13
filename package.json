@@ -2,7 +2,7 @@
   "name": "treege",
   "description": "Form decision tree generator",
   "license": "ISC",
-  "version": "0.4.8",
+  "version": "0.4.9",
   "type": "module",
   "types": "dist/main.d.ts",
   "main": "dist/main.umd.cjs",
@@ -30,7 +30,7 @@
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
-    "prepare": "yarn run build && husky install"
+    "prepare": "npm run build && husky install"
   },
   "dependencies": {
     "@codemirror/lang-json": "^6.0.0",

@@ -9,6 +9,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, "src/main.ts"),
       fileName: "[name]",
+      formats: ["umd", "es"],
       name,
     },
     rollupOptions: {
