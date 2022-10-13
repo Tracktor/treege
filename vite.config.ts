@@ -20,12 +20,17 @@ export default defineConfig({
           "@uiw/codemirror-theme-dracula": "codemirrorThemeDracula",
           "@uiw/react-codemirror": "CodeMirror",
           "design-system-tracktor": "designSystemTracktor",
+          i18next: "i18n",
+          "i18next-browser-languagedetector": "LanguageDetector",
           react: "React",
           "react-d3-tree": "Tree",
           "react-i18next": "reactI18next",
         },
       },
     },
+  },
+  optimizeDeps: {
+    include: ["react-d3-tree"],
   },
   plugins: [dts(), react()],
   resolve: {
