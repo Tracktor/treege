@@ -9,16 +9,19 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, "src/main.ts"),
       fileName: "[name]",
+      formats: ["umd", "es"],
       name,
     },
     rollupOptions: {
-      external: [...Object.keys(dependencies).filter((deps) => deps !== "react-d3-tree")],
+      external: [...Object.keys(dependencies).filter((dependency) => dependency !== "react-d3-tree")],
       output: {
         globals: {
           "@codemirror/lang-json": "langJson",
           "@uiw/codemirror-theme-dracula": "codemirrorThemeDracula",
           "@uiw/react-codemirror": "CodeMirror",
           "design-system-tracktor": "designSystemTracktor",
+          i18next: "i18n",
+          "i18next-browser-languagedetector": "LanguageDetector",
           react: "React",
           "react-d3-tree": "Tree",
           "react-dom": "ReactDOM",

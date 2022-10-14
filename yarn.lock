@@ -2748,15 +2748,14 @@ dequal@^2.0.2:
   resolved "https://registry.yarnpkg.com/dequal/-/dequal-2.0.3.tgz#2644214f1997d39ed0ee0ece72335490a7ac67be"
   integrity sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==
 
-design-system-tracktor@^1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/design-system-tracktor/-/design-system-tracktor-1.0.8.tgz#f5325e2efc7c2b202c19abc67741552eb9a179fe"
-  integrity sha512-YgmgfFaKQDK8xmiqQIqHBbjrXhlkCMYsfuT0g8EosbvADpCSj4pryGXVK7AqUlstX33/Nj8SXvjv7d5SYtVzPA==
+design-system-tracktor@^1.0.12:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/design-system-tracktor/-/design-system-tracktor-1.0.12.tgz#832d26122556da5d54b0761b6822dfa794f5004f"
+  integrity sha512-72RKHWV38vbeHP39WzLJ7aKA558MSLAVT8rttodmQvy9fvvoFLHAQ/YXCaKqnJzswvA5GY8zHvil8xCrFAdJzA==
   dependencies:
     "@emotion/react" "^11.10.0"
     "@emotion/styled" "^11.10.0"
     "@mui/material" "^5.10.1"
-    typescript "^4.7.4"
 
 diff-sequences@^29.0.0:
   version "29.0.0"
