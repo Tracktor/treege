@@ -1,4 +1,4 @@
-import TreeCard from "@/components/UI/TreeCard/TreeCard";
+import TreeCard from "@/components/DataDisplay/TreeCard/TreeCard";
 import useTreeCardContainer from "@/features/Treege/components/TreeCardContainer/useTreeCardContainer";
 import type { TreeCustomNodeElementProps } from "@/features/Treege/type/TreeNode";
 

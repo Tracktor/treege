@@ -2,7 +2,7 @@ import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import SimCardDownloadRoundedIcon from "@mui/icons-material/SimCardDownloadRounded";
 import { Box, Button, Stack, Tooltip } from "design-system-tracktor";
 import { useTranslation } from "react-i18next";
-import useViewerJSONAction from "@/components/UI/ViewerJSONAction/useViewerJSONAction";
+import useViewerJSONAction from "@/components/DataDisplay/ViewerJSONAction/useViewerJSONAction";
 
 interface ViewerJSONProps {
   value: any;

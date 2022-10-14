@@ -1,6 +1,6 @@
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 
-const useTreeForm = () => {
+const useTree = () => {
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
   const [dimensions, setDimensions] = useState({ height: 0, width: 0 });
 
@@ -20,4 +20,4 @@ const useTreeForm = () => {
   return { dimensions, refContainer, translate };
 };
 
-export default useTreeForm;
+export default useTree;
