@@ -28,33 +28,35 @@ const TreeGrid = () => {
   const currentTree = tree && getTree(tree, currentTreePath);
 
   return (
-    <MosaicLayout>
-      <Header>
-        <Logo />
-      </Header>
+    <>
+      <MosaicLayout>
+        <Header>
+          <Logo />
+        </Header>
 
-      <Main>
-        {tree ? <TreeForm data={tree} renderCustomNodeElement={TreeCardContainer} /> : <ButtonCreateTree />}
-        <MainModal open={isModalMutationOpen} onClose={closeModal} title={getTitleModalMutation()}>
-          <FormTreeCardMutation onClose={closeModal} />
-        </MainModal>
-        <MainModal open={isDeleteModal} onClose={closeModal} title={getTitleModalDelete()}>
-          <FormTreeCardDelete onClose={closeModal} />
-        </MainModal>
+        <Main>{tree ? <TreeForm data={tree} renderCustomNodeElement={TreeCardContainer} /> : <ButtonCreateTree />}</Main>
 
-        <TreeModal open={treeModalOpen} onClose={handleCloseTreeModal} title={currentTreeName}>
-          {currentTree && <TreeForm data={currentTree} renderCustomNodeElement={TreeCardContainer} />}
-        </TreeModal>
-      </Main>
+        <Sidebar>
+          <ViewerJSON value={tree} />
+        </Sidebar>
 
-      <Sidebar>
-        <ViewerJSON value={tree} />
-      </Sidebar>
+        <Action>
+          <ViewerJSONAction value={tree} />
+        </Action>
+      </MosaicLayout>
 
-      <Action>
-        <ViewerJSONAction value={tree} />
-      </Action>
-    </MosaicLayout>
+      <MainModal open={isModalMutationOpen} onClose={closeModal} title={getTitleModalMutation()}>
+        <FormTreeCardMutation onClose={closeModal} />
+      </MainModal>
+
+      <MainModal open={isDeleteModal} onClose={closeModal} title={getTitleModalDelete()}>
+        <FormTreeCardDelete onClose={closeModal} />
+      </MainModal>
+
+      <TreeModal open={treeModalOpen} onClose={handleCloseTreeModal} title={currentTreeName}>
+        {currentTree && <TreeForm data={currentTree} renderCustomNodeElement={TreeCardContainer} />}
+      </TreeModal>
+    </>
   );
 };
 

@@ -1,5 +1,5 @@
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { AppBar, Box, Dialog, IconButton, Slide, Toolbar, TransitionProps } from "design-system-tracktor";
+import { AppBar, Box, Dialog, IconButton, Slide, Stack, Toolbar, TransitionProps, Typography } from "design-system-tracktor";
 import { forwardRef, ReactElement, ReactNode, Ref } from "react";
 import colors from "@/constants/colors";
 
@@ -11,18 +11,34 @@ interface TreeModalProps {
 }
 
 const styles = {
-  mainContainer: {
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
+    margin: 1,
+  },
+  main: {
     border: `solid 1px ${colors.borderLight}`,
     height: " 100%",
+    margin: 1,
   },
   toolbar: {
-    backgroundColor: colors.secondaryLight,
+    backgroundColor: colors.backgroundPrimary,
     boxShadow: "none",
     display: "flex",
+    padding: "0 ! important",
+  },
+  toolbarBox: {
+    backgroundColor: colors.tertiaryMain,
+    border: `solid 1px ${colors.primaryMain}`,
+    margin: 1,
+    paddingX: 2,
+    paddingY: 1,
+    width: "100%",
   },
 };
 
-const Transition = (
+const TransitionRef = (
   { children, appear, in: inProps, onEnter, onExited, onFocus, role, tabIndex, timeout }: { children: ReactElement } & TransitionProps,
   ref: Ref<unknown>
 ) => (
@@ -42,32 +58,32 @@ const Transition = (
   </Slide>
 );
 
-export const TransitionRef = forwardRef(Transition);
+export const Transition = forwardRef(TransitionRef);
 
 const TreeModal = ({ children, open, onClose, title }: TreeModalProps) => (
   <Dialog
-    PaperProps={{ sx: { backgroundColor: "#0b1929", backgroundImage: "none" } }}
+    PaperProps={{ sx: { backgroundColor: colors.backgroundPrimary, backgroundImage: "none" } }}
     open={open}
     aria-labelledby="modal-modal-title"
     aria-describedby="modal-modal-description"
     fullScreen
-    TransitionComponent={TransitionRef}
+    TransitionComponent={Transition}
   >
-    <>
-      <AppBar position="sticky">
+    <Box sx={styles.container}>
+      <AppBar position="sticky" elevation={0}>
         <Toolbar sx={styles.toolbar}>
-          <Box sx={{ flex: 1, ml: 2 }}>
-            <h2>{title}</h2>
-          </Box>
-          <IconButton edge="end" color="inherit" onClick={onClose} aria-label="close">
-            <CloseRoundedIcon />
-          </IconButton>
+          <Stack direction="row" alignItems="center" justifyContent="space-between" sx={styles.toolbarBox}>
+            <Typography variant="h5">
+              <strong>{title}</strong>
+            </Typography>
+            <IconButton edge="end" color="inherit" onClick={onClose} aria-label="close">
+              <CloseRoundedIcon />
+            </IconButton>
+          </Stack>
         </Toolbar>
       </AppBar>
-      <Box sx={styles.mainContainer} m={2}>
-        {children}
-      </Box>
-    </>
+      <Box sx={styles.main}>{children}</Box>
+    </Box>
   </Dialog>
 );
 
