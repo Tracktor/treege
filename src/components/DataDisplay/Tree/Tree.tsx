@@ -1,12 +1,12 @@
 import { GlobalStyles } from "design-system-tracktor";
 import { memo } from "react";
-import Tree from "react-d3-tree";
+import D3Tree from "react-d3-tree";
 import type { RenderCustomNodeElementFn } from "react-d3-tree/lib/types/common";
-import useTreeForm from "@/components/UI/TreeForm/useTreeForm";
+import useTree from "@/components/DataDisplay/Tree/useTree";
 import colors from "@/constants/colors";
 import type { TreeRenderCustomNodeElementFn } from "@/features/Treege/type/TreeNode";
 
-interface TreeFormProps {
+interface TreeProps {
   data: any;
   nodeSize?: { x: number; y: number };
   renderCustomNodeElement?: TreeRenderCustomNodeElementFn;
@@ -24,15 +24,15 @@ const styles = {
 
 const pathClass = "tree-link";
 
-const TreeForm = ({
+const Tree = ({
   data,
   renderCustomNodeElement,
   nodeSize = {
     x: 300,
     y: 300,
   },
-}: TreeFormProps) => {
-  const { dimensions, refContainer, translate } = useTreeForm();
+}: TreeProps) => {
+  const { dimensions, refContainer, translate } = useTree();
 
   if (!data) {
     return null;
@@ -41,7 +41,7 @@ const TreeForm = ({
   return (
     <div style={styles.container} ref={refContainer}>
       <GlobalStyles styles={{ [`.${pathClass}`]: styles.treeLink }} />
-      <Tree
+      <D3Tree
         data={data}
         orientation="vertical"
         translate={translate}
@@ -55,4 +55,4 @@ const TreeForm = ({
   );
 };
 
-export default memo(TreeForm);
+export default memo(Tree);

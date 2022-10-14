@@ -2,7 +2,7 @@
   "name": "treege",
   "description": "Form decision tree generator",
   "license": "ISC",
-  "version": "0.4.15",
+  "version": "0.4.17",
   "type": "module",
   "types": "dist/main.d.ts",
   "main": "dist/main.umd.cjs",
@@ -63,7 +63,7 @@
     "vitest": "^0.24.1"
   },
   "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
   }
 }
