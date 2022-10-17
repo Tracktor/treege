@@ -23,7 +23,7 @@ const useFormTreeCardMutation = () => {
   const [required, setRequired] = useState(false);
   const [isDecision, setIsDecision] = useState(false);
   const [type, setType] = useState<TreeNodeField["type"]>("text");
-  const [treeSelect, setTreeSelect] = useState<string>("");
+  const [treeSelected, setTreeSelected] = useState<string>("");
   const [helperText, setHelperText] = useState("");
   const [step, setStep] = useState("");
   const [messages, setMessages] = useState({ off: "", on: "" });
@@ -112,7 +112,7 @@ const useFormTreeCardMutation = () => {
   };
 
   const handleChangeTreeSelect = (event: SelectChangeEvent<string>) => {
-    setTreeSelect(event.target.value);
+    setTreeSelected(event.target.value);
   };
 
   const handleChangeMessage = (nameMessage: "on" | "off") => (event: ChangeEvent<HTMLInputElement>) => {
@@ -200,7 +200,7 @@ const useFormTreeCardMutation = () => {
         ...((off || on) && {
           messages: { ...(off && { off }), ...(on && { on }) },
         }),
-        ...(isTree && { tree: { ...getTreeById(treeSelect)?.value, treeId: treeSelect } as TreeNode, treePath: newPath }),
+        ...(isTree && { tree: { ...getTreeById(treeSelected)?.value, treeId: treeSelected } as TreeNode, treePath: newPath }),
         ...(isDecision && { isDecision }),
         ...(isDecisionField && !isDecision && { values: getTreeValuesWithoutEmptyMessage(values) }),
         ...(required && { required }),
@@ -251,7 +251,7 @@ const useFormTreeCardMutation = () => {
         off: currentHierarchyPointNode?.data.attributes?.messages?.off || "",
         on: currentHierarchyPointNode?.data.attributes?.messages?.on || "",
       });
-      setTreeSelect(currentHierarchyPointNode?.data.attributes?.tree?.treeId || "");
+      setTreeSelected(currentHierarchyPointNode?.data.attributes?.tree?.treeId || "");
     }
   }, [
     currentHierarchyPointNode?.data.attributes?.tree?.treeId,
@@ -297,7 +297,7 @@ const useFormTreeCardMutation = () => {
     name,
     required,
     step,
-    treeSelect,
+    treeSelected,
     type,
     uniqueNameErrorMessage,
     values,

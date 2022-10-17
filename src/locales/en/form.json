@@ -8,6 +8,7 @@
   "staticFields": "Static fields",
   "step": "Step",
   "tree": "Tree",
+  "treeName": "Tree name",
   "type": {
     "address": "Address",
     "checkbox": "Checkbox",
