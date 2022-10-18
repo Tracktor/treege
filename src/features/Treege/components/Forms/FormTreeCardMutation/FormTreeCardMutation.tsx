@@ -14,6 +14,7 @@ import {
   TextField,
 } from "design-system-tracktor";
 import { useTranslation } from "react-i18next";
+import TreeSelect from "@/components/Inputs/TreeSelect";
 import colors from "@/constants/colors";
 import fields from "@/constants/fields";
 import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
@@ -64,9 +65,8 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     isDecisionField,
     isRequiredDisabled,
     isTree,
-    treeIdSelect,
-    workFlowsSuggestions,
-    handleChangeTreeIdSelect,
+    treeSelected,
+    handleChangeTreeSelect,
     handleChangeHelperText,
     handleChangeOptionMessage,
     handleChangeRequired,
@@ -109,16 +109,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           </Select>
         </FormControl>
         {isTree ? (
-          <FormControl sx={{ flex: 1 }} required>
-            <InputLabel>{t("tree", { ns: "form" })}</InputLabel>
-            <Select value={treeIdSelect} label={t("type")} onChange={handleChangeTreeIdSelect}>
-              {workFlowsSuggestions?.map(({ label: treeLabel, id: treeId }) => (
-                <MenuItem key={treeId} value={treeId}>
-                  {treeLabel}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <TreeSelect required value={treeSelected} onChange={handleChangeTreeSelect} />
         ) : (
           <TextField sx={{ flex: 1 }} label={t("helperText", { ns: "form" })} onChange={handleChangeHelperText} value={helperText} />
         )}

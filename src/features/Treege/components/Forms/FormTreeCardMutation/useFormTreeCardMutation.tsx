@@ -23,7 +23,7 @@ const useFormTreeCardMutation = () => {
   const [required, setRequired] = useState(false);
   const [isDecision, setIsDecision] = useState(false);
   const [type, setType] = useState<TreeNodeField["type"]>("text");
-  const [treeIdSelect, setTreeSelect] = useState<string>("");
+  const [treeSelected, setTreeSelected] = useState<string>("");
   const [helperText, setHelperText] = useState("");
   const [step, setStep] = useState("");
   const [messages, setMessages] = useState({ off: "", on: "" });
@@ -116,8 +116,8 @@ const useFormTreeCardMutation = () => {
     setRequired(false);
   };
 
-  const handleChangeTreeIdSelect = (event: SelectChangeEvent<string>) => {
-    setTreeSelect(event.target.value);
+  const handleChangeTreeSelect = (event: SelectChangeEvent<string>) => {
+    setTreeSelected(event.target.value);
   };
 
   const handleChangeMessage = (nameMessage: "on" | "off") => (event: ChangeEvent<HTMLInputElement>) => {
@@ -195,7 +195,6 @@ const useFormTreeCardMutation = () => {
     const childOfChildren = getChildren(depth);
     const currentPath = treePath?.at(-1)?.path;
     const newPath = treePath.length ? `${currentPath}/${name}` : `/${name}`;
-    const treeSelected = getWorkFlowsById(treeIdSelect);
 
     const children = {
       attributes: {
@@ -206,7 +205,7 @@ const useFormTreeCardMutation = () => {
         ...((off || on) && {
           messages: { ...(off && { off }), ...(on && { on }) },
         }),
-        ...(isTree && treeSelected && { tree: { ...treeSelected, treeId: treeIdSelect }, treePath: newPath }),
+        ...(isTree && { tree: { ...getWorkFlowsById(treeSelected), treeId: treeSelected } as TreeNode, treePath: newPath }),
         ...(isDecision && { isDecision }),
         ...(isDecisionField && !isDecision && { values: getTreeValuesWithoutEmptyMessage(values) }),
         ...(required && { required }),
@@ -257,7 +256,7 @@ const useFormTreeCardMutation = () => {
         off: currentHierarchyPointNode?.data.attributes?.messages?.off || "",
         on: currentHierarchyPointNode?.data.attributes?.messages?.on || "",
       });
-      setTreeSelect(currentHierarchyPointNode?.data.attributes?.tree?.treeId || "");
+      setTreeSelected(currentHierarchyPointNode?.data.attributes?.tree?.treeId || "");
     }
   }, [
     currentHierarchyPointNode?.data.attributes?.tree?.treeId,
@@ -288,7 +287,7 @@ const useFormTreeCardMutation = () => {
     handleChangeOptionValue,
     handleChangeRequired,
     handleChangeStep,
-    handleChangeTreeIdSelect,
+    handleChangeTreeSelect,
     handleChangeType,
     handleDeleteValue,
     handleSubmit,
@@ -303,7 +302,7 @@ const useFormTreeCardMutation = () => {
     name,
     required,
     step,
-    treeIdSelect,
+    treeSelected,
     type,
     uniqueNameErrorMessage,
     values,
