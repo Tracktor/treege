@@ -13,6 +13,7 @@ import Sidebar from "@/components/Layouts/Sidebar/Sidebar";
 import ButtonCreateTree from "@/features/Treege/components/ButtonCreateTree/ButtonCreateTree";
 import FormTreeCardDelete from "@/features/Treege/components/Forms/FormTreeCardDelete/FormTreeCardDelete";
 import FormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/FormTreeCardMutation";
+import FormTreeCardSave from "@/features/Treege/components/Forms/FormTreeCardSave/FormTreeCardSave";
 import TreeCardContainer from "@/features/Treege/components/TreeCardContainer/TreeCardContainer";
 import useTreeCardContainer from "@/features/Treege/components/TreeCardContainer/useTreeCardContainer";
 import useTreeGrid from "@/features/Treege/components/TreeGrid/useTreeGrid";
@@ -20,9 +21,13 @@ import { TreegeContext } from "@/features/Treege/context/TreegeContext";
 import { getTree } from "@/utils/tree";
 
 const TreeGrid = () => {
-  const { tree, treeModalOpen, treePath } = useContext(TreegeContext);
+  const { tree, treeModalOpen, treePath, setModalOpen } = useContext(TreegeContext);
   const { handleCloseTreeModal } = useTreeCardContainer();
-  const { getTitleModalMutation, closeModal, getTitleModalDelete, isModalMutationOpen, isDeleteModal } = useTreeGrid();
+  const { getTitleModalMutation, closeModal, getTitleModalDelete, getTitleModalSave, isModalMutationOpen, isModalSaveOpen, isDeleteModal } =
+    useTreeGrid();
+
+  const handleClick = () => setModalOpen("save");
+
   const currentTreePath = treePath?.at(-1)?.path;
   const currentTreeName = treePath?.at(-1)?.label;
   const currentTree = tree && getTree(tree, currentTreePath);
@@ -41,7 +46,7 @@ const TreeGrid = () => {
         </Sidebar>
 
         <Action>
-          <ViewerJSONAction value={tree} />
+          <ViewerJSONAction value={tree} onSave={handleClick} />
         </Action>
       </MosaicLayout>
 
@@ -51,6 +56,10 @@ const TreeGrid = () => {
 
       <MainModal open={isDeleteModal} onClose={closeModal} title={getTitleModalDelete()}>
         <FormTreeCardDelete onClose={closeModal} />
+      </MainModal>
+
+      <MainModal open={isModalSaveOpen} onClose={closeModal} title={getTitleModalSave()}>
+        <FormTreeCardSave onClose={closeModal} />
       </MainModal>
 
       <TreeModal open={treeModalOpen} onClose={handleCloseTreeModal} title={currentTreeName}>

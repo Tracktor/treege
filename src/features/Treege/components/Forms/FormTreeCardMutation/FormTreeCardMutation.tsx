@@ -16,7 +16,6 @@ import {
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
 import fields from "@/constants/fields";
-import TreeData from "@/constants/TreeData";
 import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
 
 interface FormTreeCardMutationProps {
@@ -65,8 +64,9 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     isDecisionField,
     isRequiredDisabled,
     isTree,
-    treeSelect,
-    handleChangeTreeSelect,
+    treeIdSelect,
+    workFlowsSuggestions,
+    handleChangeTreeIdSelect,
     handleChangeHelperText,
     handleChangeOptionMessage,
     handleChangeRequired,
@@ -111,8 +111,8 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         {isTree ? (
           <FormControl sx={{ flex: 1 }} required>
             <InputLabel>{t("tree", { ns: "form" })}</InputLabel>
-            <Select value={treeSelect} label={t("type")} onChange={handleChangeTreeSelect}>
-              {TreeData.map(({ label: treeLabel, id: treeId }) => (
+            <Select value={treeIdSelect} label={t("type")} onChange={handleChangeTreeIdSelect}>
+              {workFlowsSuggestions?.map(({ label: treeLabel, id: treeId }) => (
                 <MenuItem key={treeId} value={treeId}>
                   {treeLabel}
                 </MenuItem>

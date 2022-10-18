@@ -2,7 +2,7 @@ import type { HierarchyPointNode } from "d3-hierarchy";
 import { createContext, ReducerAction, SetStateAction } from "react";
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
-type ModalType = "add" | "edit" | "delete" | null;
+type ModalType = "add" | "edit" | "delete" | "save" | null;
 type TreePath = { path: string; label: string };
 
 export interface TreeDefaultValue {
@@ -16,13 +16,13 @@ export interface TreeDefaultValue {
   treeModalOpen: boolean;
   treePath: TreePath[] | [];
   tree: null | TreeNode;
-  endPoint: null | string;
+  endPoint?: string;
 }
 
 export const treeDefaultValue: TreeDefaultValue = {
   currentHierarchyPointNode: null,
   dispatchTree: () => null,
-  endPoint: null,
+  endPoint: undefined,
   modalOpen: null,
   setCurrentHierarchyPointNode: () => null,
   setModalOpen: () => null,

@@ -8,8 +8,9 @@ const useTreeGrid = () => {
   const isEditModal = modalOpen === "edit";
   const isAddModal = modalOpen === "add";
   const isDeleteModal = modalOpen === "delete";
-  const isModalMutationOpen = isEditModal || isAddModal;
+  const isModalSaveOpen = modalOpen === "save";
 
+  const isModalMutationOpen = isEditModal || isAddModal;
   const closeModal = () => setModalOpen(null);
 
   const getTitleModalMutation = () => {
@@ -30,12 +31,16 @@ const useTreeGrid = () => {
     return t("deleteTitle", { name });
   };
 
+  const getTitleModalSave = () => t("saveTree");
+
   return {
     closeModal,
     getTitleModalDelete,
     getTitleModalMutation,
+    getTitleModalSave,
     isDeleteModal,
     isModalMutationOpen,
+    isModalSaveOpen,
   };
 };
 

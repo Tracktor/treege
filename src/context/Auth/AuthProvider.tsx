@@ -1,20 +1,17 @@
-import { ReactNode, useMemo, useState } from "react";
-import { AuthContext, authDefaultValue } from "@/context/Auth/AuthConext";
+import { ReactNode, useMemo } from "react";
+import { AuthContext } from "@/context/Auth/AuthConext";
 
 interface AuthProviderProps {
   children: ReactNode;
-  token?: string;
+  authToken?: string;
 }
 
-const AuthProvider = ({ children, token }: AuthProviderProps) => {
-  const [authToken, setAuthToken] = useState(token || authDefaultValue.authToken);
-
+const AuthProvider = ({ children, authToken }: AuthProviderProps) => {
   const value = useMemo(
     () => ({
       authToken,
-      setAuthToken,
     }),
-    [authToken, setAuthToken]
+    [authToken]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

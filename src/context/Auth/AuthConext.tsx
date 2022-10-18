@@ -1,11 +1,11 @@
 import { createContext } from "react";
 
-export interface AuthDefaultValue {
-  authToken: null | string;
+export interface Auth {
+  authToken?: string;
 }
 
-export const authDefaultValue: AuthDefaultValue = {
-  authToken: null,
+export const authDefaultValue = {
+  authToken: undefined,
 };
 
-export const AuthContext = createContext(authDefaultValue);
+export const AuthContext = createContext<Auth>(authDefaultValue);
