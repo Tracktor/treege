@@ -1,14 +1,15 @@
 import type { SelectChangeEvent } from "design-system-tracktor";
 import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
-import TreeData from "@/constants/TreeData";
 import { TreegeContext } from "@/features/Treege/context/TreegeContext";
-import { resetTree, setTree } from "@/features/Treege/reducer/treeReducer";
+import { resetTree } from "@/features/Treege/reducer/treeReducer";
+import useAddWorkflowsMutation from "@/services/workflows/mutation/useAddWorkflowsMutation";
 
 const useTreeGrid = () => {
   const { t } = useTranslation("modal");
-  const { currentHierarchyPointNode, modalOpen, setModalOpen, dispatchTree } = useContext(TreegeContext);
-  const [treeSelected, setTreeSelected] = useState<string>("");
+  const { currentHierarchyPointNode, modalOpen, setModalOpen, dispatchTree, currentTree, setCurrentTree, tree } = useContext(TreegeContext);
+  const { mutate } = useAddWorkflowsMutation();
+  const [treeSelected, setTreeSelected] = useState("");
   const isEditModal = modalOpen === "edit";
   const isAddModal = modalOpen === "add";
   const isDeleteModal = modalOpen === "delete";
@@ -40,11 +41,30 @@ const useTreeGrid = () => {
     if (value === "add-new-tree") {
       setTreeSelected("");
       dispatchTree(resetTree());
+      setCurrentTree({ name: "" });
+
+      return;
+    }
+    console.log(value);
+    setTreeSelected(value);
+    // TODO get tree from api and set current tree name & id
+    // dispatchTree(setTree(TreeData[Number(value) - 1].value));
+    // setCurrentTree({ name, id });
+  };
+
+  const handleSubmit = () => {
+    const { name } = currentTree;
+
+    if (!name) {
+      setCurrentTree((prevState) => ({ ...prevState, errorName: "Champs Requis" }));
       return;
     }
 
-    setTreeSelected(value);
-    dispatchTree(setTree(TreeData[Number(value) - 1].value)); // TODO get tree from api
+    if (tree) {
+      mutate({ label: name, workflow: tree });
+      // TODO set current tree id
+      // setCurrentTree((prevState) => ({ ...prevState, id: treeId }));
+    }
   };
 
   return {
@@ -52,6 +72,7 @@ const useTreeGrid = () => {
     getTitleModalDelete,
     getTitleModalMutation,
     handleChangeTree,
+    handleSubmit,
     isDeleteModal,
     isModalMutationOpen,
     treeSelected,

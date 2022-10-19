@@ -25,8 +25,16 @@ import { getTree } from "@/utils/tree";
 const TreeGrid = () => {
   const { tree, treeModalOpen, treePath } = useContext(TreegeContext);
   const { handleCloseTreeModal } = useTreeCardContainer();
-  const { getTitleModalMutation, closeModal, getTitleModalDelete, handleChangeTree, isModalMutationOpen, isDeleteModal, treeSelected } =
-    useTreeGrid();
+  const {
+    getTitleModalMutation,
+    closeModal,
+    getTitleModalDelete,
+    handleChangeTree,
+    isModalMutationOpen,
+    isDeleteModal,
+    treeSelected,
+    handleSubmit,
+  } = useTreeGrid();
   const currentTreePath = treePath?.at(-1)?.path;
   const currentTreeName = treePath?.at(-1)?.label;
   const currentTree = tree && getTree(tree, currentTreePath);
@@ -51,7 +59,7 @@ const TreeGrid = () => {
         </Sidebar>
 
         <Action>
-          <ViewerJSONAction value={tree} />
+          <ViewerJSONAction value={tree} onSave={handleSubmit} />
         </Action>
       </MosaicLayout>
 

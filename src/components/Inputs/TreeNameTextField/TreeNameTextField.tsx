@@ -1,18 +1,20 @@
 import { TextField } from "design-system-tracktor";
 import { useTranslation } from "react-i18next";
+import useTreeNameTextField from "@/components/Inputs/TreeNameTextField/useTreeNameTextField";
 
 const TreeNameTextField = () => {
   const { t } = useTranslation("form");
+  const { name, handleChangeName, errorName } = useTreeNameTextField();
 
   return (
     <TextField
       required
-      id="standard-basic"
       label={t("treeName")}
       size="small"
-      InputLabelProps={{
-        shrink: true,
-      }}
+      onChange={handleChangeName}
+      value={name}
+      error={!!errorName}
+      helperText={errorName}
     />
   );
 };

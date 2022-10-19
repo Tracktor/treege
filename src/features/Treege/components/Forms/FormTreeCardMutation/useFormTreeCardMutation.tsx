@@ -6,7 +6,7 @@ import fields from "@/constants/fields";
 import { TreegeContext } from "@/features/Treege/context/TreegeContext";
 import { appendTreeCard, replaceTreeCard } from "@/features/Treege/reducer/treeReducer";
 import type { TreeNode, TreeNodeField, TreeValues } from "@/features/Treege/type/TreeNode";
-import useWorkflowsQuery from "@/services/workflows/query/useWorkflowsQuery";
+import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import { isUniqueArrayItemWithNewEntry } from "@/utils/array";
 import getTreeNames from "@/utils/tree/getNodeNames/getNodeNames";
 import getTree from "@/utils/tree/getTree/getTree";
@@ -15,7 +15,6 @@ const useFormTreeCardMutation = () => {
   const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
   const { tree, dispatchTree, currentHierarchyPointNode, modalOpen, treePath, setModalOpen } = useContext(TreegeContext);
   const { t } = useTranslation();
-
   // Form value
   const [values, setValues] = useState<{ id: string; label: string; value: string; message?: string }[]>(defaultValues);
   const [name, setName] = useState("");
@@ -38,7 +37,12 @@ const useFormTreeCardMutation = () => {
   const isRequiredDisabled = fields.some((field) => field.type === type && field?.isRequiredDisabled);
   const getDisabledValueField = (index: number) => !isDecisionField && index > 0;
 
-  const { data: workFlowsSuggestions, error: workFlowsError } = useWorkflowsQuery({ enabled: isTree });
+  const {
+    refetch,
+    data: workFlowSelected,
+    isError: isWorkflowFetchingError,
+    isLoading: isWorkflowLoading,
+  } = useWorkflowQuery(treeSelected);
 
   const handlePresetValues = (event: ChangeEvent<HTMLInputElement>, predicate: "value" | "label" | "message") => {
     setValues((prevState) =>
@@ -182,9 +186,7 @@ const useFormTreeCardMutation = () => {
   const getTreeValuesWithoutEmptyMessage = (valuesData: TreeValues[]) =>
     valuesData.map(({ message, ...rest }) => ({ ...rest, ...(message && { message }) }));
 
-  const getWorkFlowsById = (id: string): TreeNode | undefined => workFlowsSuggestions?.find(({ id: treeId }) => treeId === id)?.workflow;
-
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     const { on, off } = messages;
@@ -196,6 +198,13 @@ const useFormTreeCardMutation = () => {
     const currentPath = treePath?.at(-1)?.path;
     const newPath = treePath.length ? `${currentPath}/${name}` : `/${name}`;
 
+    if (isTree) {
+      await refetch();
+      if (isWorkflowFetchingError) {
+        return;
+      }
+    }
+
     const children = {
       attributes: {
         depth,
@@ -205,7 +214,7 @@ const useFormTreeCardMutation = () => {
         ...((off || on) && {
           messages: { ...(off && { off }), ...(on && { on }) },
         }),
-        ...(isTree && { tree: { ...getWorkFlowsById(treeSelected), treeId: treeSelected } as TreeNode, treePath: newPath }),
+        ...(isTree && { tree: { ...workFlowSelected, treeId: treeSelected } as TreeNode, treePath: newPath }),
         ...(isDecision && { isDecision }),
         ...(isDecisionField && !isDecision && { values: getTreeValuesWithoutEmptyMessage(values) }),
         ...(required && { required }),
@@ -297,6 +306,7 @@ const useFormTreeCardMutation = () => {
     isDecisionField,
     isRequiredDisabled,
     isTree,
+    isWorkflowLoading,
     label,
     messages,
     name,
@@ -306,8 +316,6 @@ const useFormTreeCardMutation = () => {
     type,
     uniqueNameErrorMessage,
     values,
-    workFlowsError,
-    workFlowsSuggestions,
   };
 };
 

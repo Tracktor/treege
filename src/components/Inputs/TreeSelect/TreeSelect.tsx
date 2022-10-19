@@ -8,11 +8,12 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  Skeleton,
   Typography,
 } from "design-system-tracktor";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import TreeData from "@/constants/TreeData";
+import useWorkflowsQuery from "@/services/workflows/query/useWorkflowsQuery";
 
 interface TreeSelectProps {
   arrowOnly?: boolean;
@@ -36,16 +37,32 @@ const styles = {
 
 const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, value }: TreeSelectProps) => {
   const { t } = useTranslation();
+  const { data: workflowSuggestions, isLoading, refetch } = useWorkflowsQuery();
+
+  const fetchWorkflowSuggestions = () => refetch();
 
   return (
     <FormControl size={size} required={required} sx={styles.formControl}>
       {!arrowOnly && <InputLabel>{t("tree", { ns: "form" })}</InputLabel>}
-      <Select value={value} id="tree-select" onChange={onChange} sx={arrowOnly ? styles.select : undefined} label={t("type")}>
-        {TreeData.map(({ label: treeLabel, id: treeId }) => (
-          <MenuItem key={treeId} value={treeId}>
-            {treeLabel}
+      <Select
+        value={value || ""}
+        id="tree-select"
+        onChange={onChange}
+        sx={arrowOnly ? styles.select : undefined}
+        label={t("type")}
+        onOpen={fetchWorkflowSuggestions}
+      >
+        {isLoading && (
+          <MenuItem>
+            <Skeleton width="100%" />
           </MenuItem>
-        ))}
+        )}
+        {workflowSuggestions &&
+          workflowSuggestions.map(({ label: treeLabel, id: treeId }) => (
+            <MenuItem key={treeId} value={treeId}>
+              {treeLabel}
+            </MenuItem>
+          ))}
         {showBtnAddNewTree && (
           <MenuItem disabled>
             <Box sx={{ height: 1, width: "100%" }}>

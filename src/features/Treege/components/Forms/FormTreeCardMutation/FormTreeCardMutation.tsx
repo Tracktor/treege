@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Checkbox,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -66,6 +67,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     isRequiredDisabled,
     isTree,
     treeSelected,
+    isWorkflowLoading,
     handleChangeTreeSelect,
     handleChangeHelperText,
     handleChangeOptionMessage,
@@ -189,8 +191,8 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         <Button variant="text" onClick={onClose}>
           {t("cancel")}
         </Button>
-        <Button variant="contained" type="submit" disabled={!!uniqueNameErrorMessage}>
-          {t("validate")}
+        <Button variant="contained" type="submit" disabled={!!uniqueNameErrorMessage || isWorkflowLoading}>
+          {isWorkflowLoading ? <CircularProgress size={14} /> : t("validate")}
         </Button>
       </Stack>
     </form>
