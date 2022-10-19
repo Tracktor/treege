@@ -45,7 +45,7 @@ const useTreeGrid = () => {
 
       return;
     }
-    console.log(value);
+
     setTreeSelected(value);
     // TODO get tree from api and set current tree name & id
     // dispatchTree(setTree(TreeData[Number(value) - 1].value));
