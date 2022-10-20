@@ -32,7 +32,10 @@ export default defineConfig({
   },
   plugins: [dts(), react()],
   resolve: {
-    alias: [{ find: "@", replacement: resolve(__dirname, "src") }],
+    alias: [
+      { find: "@", replacement: resolve(__dirname, "src") },
+      { find: "~", replacement: resolve(__dirname) },
+    ],
   },
   test: {
     coverage: {
