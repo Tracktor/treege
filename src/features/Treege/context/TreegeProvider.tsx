@@ -2,6 +2,7 @@ import { ReactNode, useMemo, useReducer, useState } from "react";
 import { treeDefaultValue, TreegeContext } from "@/features/Treege/context/TreegeContext";
 import treeReducer from "@/features/Treege/reducer/treeReducer";
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
+import { version } from "~/package.json";
 
 interface TreegeProviderProps {
   children: ReactNode;
@@ -33,6 +34,7 @@ const TreegeProvider = ({ children, endPoint, initialTree }: TreegeProviderProps
       tree,
       treeModalOpen,
       treePath,
+      version,
     }),
     [currentHierarchyPointNode, modalOpen, treeModalOpen, treePath, tree, endPoint, currentTree]
   );

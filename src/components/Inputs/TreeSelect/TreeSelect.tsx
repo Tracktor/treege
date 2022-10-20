@@ -13,7 +13,7 @@ import {
 } from "design-system-tracktor";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import useWorkflowsQuery from "@/services/workflows/query/useWorkflowsQuery";
+import useTreeSelect from "@/components/Inputs/TreeSelect/useTreeSelect";
 
 interface TreeSelectProps {
   arrowOnly?: boolean;
@@ -37,9 +37,7 @@ const styles = {
 
 const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, value }: TreeSelectProps) => {
   const { t } = useTranslation();
-  const { data: workflowSuggestions, isLoading, refetch } = useWorkflowsQuery();
-
-  const fetchWorkflowSuggestions = () => refetch();
+  const { fetchWorkflowSuggestions, workflowsSuggestions, workflowsSuggestionsLoading } = useTreeSelect();
 
   return (
     <FormControl size={size} required={required} sx={styles.formControl}>
@@ -52,13 +50,13 @@ const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, va
         label={t("type")}
         onOpen={fetchWorkflowSuggestions}
       >
-        {isLoading && (
+        {workflowsSuggestionsLoading && (
           <MenuItem>
             <Skeleton width="100%" />
           </MenuItem>
         )}
-        {workflowSuggestions &&
-          workflowSuggestions.map(({ label: treeLabel, id: treeId }) => (
+        {workflowsSuggestions &&
+          workflowsSuggestions.map(({ label: treeLabel, id: treeId }) => (
             <MenuItem key={treeId} value={treeId}>
               {treeLabel}
             </MenuItem>

@@ -1,18 +1,11 @@
-import { useQuery } from "react-query";
-import useSnackbar from "@/hooks/useSnackbar/useSnackbar";
-import useWorkflowQueryFetcher from "@/services/workflows/query/useWorkflowQueryFetcher";
-// { enabled }: { enabled?: boolean }
+import { useQuery, UseQueryOptions } from "react-query";
+import useWorkflowQueryFetcher, { WorkflowsResponse } from "@/services/workflows/query/useWorkflowQueryFetcher";
 
-const useWorkflowsQuery = () => {
+interface Options extends Omit<UseQueryOptions<any, any, WorkflowsResponse[], any>, "queryKey" | "queryFn"> {}
+
+const useWorkflowsQuery = (options: Options) => {
   const { getAllWorkflow } = useWorkflowQueryFetcher();
-  const { handleOpenSnackbar } = useSnackbar();
 
-  return useQuery("/v1/workflows", getAllWorkflow, {
-    enabled: false,
-    onError: () => {
-      handleOpenSnackbar("Error", "error");
-    },
-    refetchOnWindowFocus: false,
-  });
+  return useQuery("/v1/workflows", getAllWorkflow, options);
 };
 export default useWorkflowsQuery;

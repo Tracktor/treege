@@ -31,7 +31,7 @@ const ViewerJSONAction = ({ downloadedFileName = "export", onSave, value }: View
       <Tooltip title={t("save")} enterDelay={1500} disableHoverListener={!value} arrow>
         <Box>
           <Button variant="outlined" onClick={onSave} disabled={!value}>
-            {/* TODO check if tree from api */}
+            {/* TODO Icon*/}
             {id ? "Update" : <SaveRoundedIcon />}
           </Button>
         </Box>

@@ -2,7 +2,7 @@ import Treege from "@/features/Treege";
 
 const App = () => (
   <Treege
-    authToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiYWRyZSIsImV4cCI6MTY2NjE4Nzg4Nn0.zSE90zMU7eb2hlZ9BhQpMtht8fmzQImfWIaV8UQBmEY"
+    authToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiYWRyZSIsImV4cCI6MTY2NjM2NDIxN30.PNOxrkWyNXuQfgqFYdi-cQhriISrX-oPSJSHrYvLVpc"
     endPoint="https://stg.api.tracktor.fr"
   />
 );

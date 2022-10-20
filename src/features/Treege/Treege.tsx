@@ -13,7 +13,8 @@ interface TreegeProps {
   initialTree?: TreeNode;
 }
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+
 const Treege = ({ authToken, endPoint, initialTree }: TreegeProps) => (
   <QueryClientProvider client={queryClient}>
     <SnackbarProvider>
