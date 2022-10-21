@@ -1,3 +1,4 @@
+import SaveAsRoundedIcon from "@mui/icons-material/SaveAsRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import SimCardDownloadRoundedIcon from "@mui/icons-material/SimCardDownloadRounded";
 import { Box, Button, Stack, Tooltip } from "design-system-tracktor";
@@ -28,11 +29,10 @@ const ViewerJSONAction = ({ downloadedFileName = "export", onSave, value }: View
           </Button>
         </Box>
       </Tooltip>
-      <Tooltip title={t("save")} enterDelay={1500} disableHoverListener={!value} arrow>
+      <Tooltip title={id ? t("update") : t("save")} enterDelay={1500} disableHoverListener={!value} arrow>
         <Box>
           <Button variant="outlined" onClick={onSave} disabled={!value}>
-            {/* TODO Icon*/}
-            {id ? "Update" : <SaveRoundedIcon />}
+            {id ? <SaveAsRoundedIcon /> : <SaveRoundedIcon />}
           </Button>
         </Box>
       </Tooltip>

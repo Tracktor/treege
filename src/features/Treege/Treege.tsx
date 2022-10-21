@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import DarkTheme from "@/components/Theme/DarkTheme/DarkTheme";
 import AuthProvider from "@/context/Auth/AuthProvider";
@@ -17,8 +18,10 @@ interface TreegeProps {
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 
 const Treege = ({ authToken, endPoint, initialTree }: TreegeProps) => {
-  axios.defaults.baseURL = endPoint;
-  axios.defaults.headers.common.Authorization = `Bearer ${authToken}`;
+  useEffect(() => {
+    axios.defaults.baseURL = endPoint;
+    axios.defaults.headers.common.Authorization = `Bearer ${authToken}`;
+  }, [endPoint, authToken]);
 
   return (
     <QueryClientProvider client={queryClient}>

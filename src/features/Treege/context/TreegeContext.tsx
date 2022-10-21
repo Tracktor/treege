@@ -11,8 +11,8 @@ type CurrentTree = {
 };
 
 export interface TreeDefaultValue {
-  currentHierarchyPointNode: null | HierarchyPointNode<TreeNode>;
   dispatchTree(state: ReducerAction<any>): void;
+  currentHierarchyPointNode: null | HierarchyPointNode<TreeNode>;
   modalOpen: ModalType;
   setCurrentHierarchyPointNode(state: SetStateAction<null | HierarchyPointNode<TreeNode>>): void;
   setModalOpen(state: SetStateAction<ModalType>): void;
@@ -27,7 +27,7 @@ export interface TreeDefaultValue {
   currentTree: CurrentTree;
 }
 
-export const treeDefaultValue = {
+export const treeDefaultValue: TreeDefaultValue = {
   currentHierarchyPointNode: null,
   currentTree: { errorName: "", name: "" },
   dispatchTree: () => null,
@@ -44,4 +44,4 @@ export const treeDefaultValue = {
   version: undefined,
 };
 
-export const TreegeContext = createContext<TreeDefaultValue>(treeDefaultValue);
+export const TreegeContext = createContext(treeDefaultValue);

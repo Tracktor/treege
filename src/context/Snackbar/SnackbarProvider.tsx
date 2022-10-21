@@ -16,7 +16,7 @@ const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
   const { message, open, severity } = snackbar;
   const AUTO_HIDE_DURATION = 6000;
 
-  const close = () => dispatchSnackbar(closeSnackbar());
+  const handleCloseSnackbar = () => dispatchSnackbar(closeSnackbar());
 
   const value = useMemo(
     () => ({
@@ -28,8 +28,8 @@ const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
 
   return (
     <SnackbarContext.Provider value={value}>
-      <Snackbar open={open} autoHideDuration={AUTO_HIDE_DURATION} onClose={close}>
-        <Alert onClose={close} severity={severity} sx={styles.snackbarAlert}>
+      <Snackbar open={open} autoHideDuration={AUTO_HIDE_DURATION} onClose={handleCloseSnackbar}>
+        <Alert onClose={handleCloseSnackbar} severity={severity} sx={styles.snackbarAlert}>
           {message}
         </Alert>
       </Snackbar>
