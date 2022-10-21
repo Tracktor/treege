@@ -27,7 +27,7 @@ export interface TreeDefaultValue {
   currentTree: CurrentTree;
 }
 
-export const treeDefaultValue: TreeDefaultValue = {
+export const treeDefaultValue = {
   currentHierarchyPointNode: null,
   currentTree: { errorName: "", name: "" },
   dispatchTree: () => null,
@@ -44,4 +44,4 @@ export const treeDefaultValue: TreeDefaultValue = {
   version: undefined,
 };
 
-export const TreegeContext = createContext(treeDefaultValue);
+export const TreegeContext = createContext<TreeDefaultValue>(treeDefaultValue);
