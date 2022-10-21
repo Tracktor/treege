@@ -1,4 +1,4 @@
-import useApi from "@/hooks/useApi/useApi";
+import axios from "axios";
 import type { TreeNode } from "@/main";
 
 export interface WorkflowsResponse {
@@ -9,11 +9,9 @@ export interface WorkflowsResponse {
 }
 
 const useWorkflowRequest = () => {
-  const { api } = useApi();
+  const getAllWorkflow = (): Promise<WorkflowsResponse[]> => axios.get(`/v1/workflows`).then((res) => res.data);
 
-  const getAllWorkflow = (): Promise<WorkflowsResponse[]> => api.get(`/v1/workflows`).then((res) => res.data);
-
-  const getWorkflow = (id: string): Promise<WorkflowsResponse> => api.get(`/v1/workflow?id=${id}`).then((res) => res.data);
+  const getWorkflow = (id: string): Promise<WorkflowsResponse> => axios.get(`/v1/workflow?id=${id}`).then((res) => res.data);
 
   return { getAllWorkflow, getWorkflow };
 };
