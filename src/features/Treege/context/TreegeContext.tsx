@@ -44,4 +44,4 @@ export const treeDefaultValue: TreeDefaultValue = {
   version: undefined,
 };
 
-export const TreegeContext = createContext(treeDefaultValue);
+export const TreegeContext = createContext<TreeDefaultValue>(treeDefaultValue);
