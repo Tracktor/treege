@@ -12,7 +12,7 @@ import useWorkflowQueryFetcher from "@/services/workflows/query/useWorkflowQuery
 const useTreeGrid = () => {
   const { t } = useTranslation(["modal", "snackMessage"]);
   const { currentHierarchyPointNode, modalOpen, setModalOpen, dispatchTree, currentTree, setCurrentTree, tree } = useContext(TreegeContext);
-  const { handleOpenSnackbar } = useSnackbar();
+  const { open } = useSnackbar();
   const [treeSelected, setTreeSelected] = useState("");
   const isEditModal = modalOpen === "edit";
   const isAddModal = modalOpen === "add";
@@ -24,7 +24,7 @@ const useTreeGrid = () => {
   const { data: workflow } = useQuery(["/v1/workflow", treeSelected], () => getWorkflow(treeSelected), {
     enabled: !!treeSelected,
     onError: () => {
-      handleOpenSnackbar(t("error.fetchTree", { ns: "snackMessage" }), "error");
+      open(t("error.fetchTree", { ns: "snackMessage" }), "error");
     },
     refetchOnWindowFocus: false,
   });
@@ -38,20 +38,20 @@ const useTreeGrid = () => {
 
   const { mutate: addWorkflowMutate } = useAddWorkflowsMutation({
     onError: () => {
-      handleOpenSnackbar(t("error.saveTree", { ns: "snackMessage" }), "error");
+      open(t("error.saveTree", { ns: "snackMessage" }), "error");
     },
     onSuccess: (data) => {
-      handleOpenSnackbar(t("success.saveTree", { ns: "snackMessage" }));
+      open(t("success.saveTree", { ns: "snackMessage" }));
       setCurrentTree((prevState) => ({ ...prevState, id: data.workflow_id }));
     },
   });
 
   const { mutate: editWorkflowMutate } = useEditWorkflowsMutation({
     onError: () => {
-      handleOpenSnackbar(t("error.updateTree", { ns: "snackMessage" }), "error");
+      open(t("error.updateTree", { ns: "snackMessage" }), "error");
     },
     onSuccess: () => {
-      handleOpenSnackbar(t("success.updateTree", { ns: "snackMessage" }));
+      open(t("success.updateTree", { ns: "snackMessage" }));
     },
   });
 

@@ -16,7 +16,6 @@ const TreegeProvider = ({ children, endPoint, initialTree }: TreegeProviderProps
   const [treeModalOpen, setTreeModalOpen] = useState(treeDefaultValue.treeModalOpen);
   const [treePath, setTreePath] = useState(treeDefaultValue.treePath);
   const [currentTree, setCurrentTree] = useState(treeDefaultValue.currentTree);
-
   const [tree, dispatchTree] = useReducer(treeReducer, initialTree || treeDefaultValue.tree);
 
   const value = useMemo(

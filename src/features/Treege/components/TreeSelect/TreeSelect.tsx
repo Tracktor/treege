@@ -13,7 +13,7 @@ import {
 } from "design-system-tracktor";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import useTreeSelect from "@/components/Inputs/TreeSelect/useTreeSelect";
+import useTreeSelect from "@/features/Treege/components/TreeSelect/useTreeSelect";
 
 interface TreeSelectProps {
   arrowOnly?: boolean;

@@ -15,10 +15,10 @@ import {
   TextField,
 } from "design-system-tracktor";
 import { useTranslation } from "react-i18next";
-import TreeSelect from "@/components/Inputs/TreeSelect";
 import colors from "@/constants/colors";
 import fields from "@/constants/fields";
 import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
+import TreeSelect from "@/features/Treege/components/TreeSelect";
 
 interface FormTreeCardMutationProps {
   onClose?(): void;

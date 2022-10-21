@@ -15,7 +15,7 @@ import getTree from "@/utils/tree/getTree/getTree";
 const useFormTreeCardMutation = () => {
   const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
   const { tree, dispatchTree, currentHierarchyPointNode, modalOpen, treePath, setModalOpen } = useContext(TreegeContext);
-  const { handleOpenSnackbar } = useSnackbar();
+  const { open } = useSnackbar();
   const { t } = useTranslation();
   // Form value
   const [values, setValues] = useState<{ id: string; label: string; value: string; message?: string }[]>(defaultValues);
@@ -43,7 +43,7 @@ const useFormTreeCardMutation = () => {
     cacheTime: 0,
     enabled: false,
     onError: () => {
-      handleOpenSnackbar(t("error.fetchTree", { ns: "snackMessage" }), "error");
+      open(t("error.fetchTree", { ns: "snackMessage" }), "error");
     },
     refetchOnWindowFocus: false,
   });

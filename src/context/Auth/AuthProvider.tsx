@@ -1,5 +1,5 @@
 import { ReactNode, useMemo } from "react";
-import { AuthContext } from "@/context/Auth/AuthConext";
+import { AuthContext } from "@/context/Auth/AuthContext";
 
 interface AuthProviderProps {
   children: ReactNode;

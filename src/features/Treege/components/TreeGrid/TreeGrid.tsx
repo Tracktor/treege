@@ -6,8 +6,6 @@ import ViewerJSON from "@/components/DataDisplay/ViewerJSON/ViewerJSON";
 import ViewerJSONAction from "@/components/DataDisplay/ViewerJSONAction/ViewerJSONAction";
 import MainModal from "@/components/FeedBack/MainModal/MainModal";
 import TreeModal from "@/components/FeedBack/TreeModal/TreeModal";
-import TreeNameTextField from "@/components/Inputs/TreeNameTextField";
-import TreeSelect from "@/components/Inputs/TreeSelect";
 import Action from "@/components/Layouts/Action/Action";
 import Header from "@/components/Layouts/Header/Header";
 import Main from "@/components/Layouts/Main/Main";
@@ -19,6 +17,8 @@ import FormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCar
 import TreeCardContainer from "@/features/Treege/components/TreeCardContainer/TreeCardContainer";
 import useTreeCardContainer from "@/features/Treege/components/TreeCardContainer/useTreeCardContainer";
 import useTreeGrid from "@/features/Treege/components/TreeGrid/useTreeGrid";
+import TreeNameTextField from "@/features/Treege/components/TreeNameTextField";
+import TreeSelect from "@/features/Treege/components/TreeSelect";
 import { TreegeContext } from "@/features/Treege/context/TreegeContext";
 import { getTree } from "@/utils/tree";
 

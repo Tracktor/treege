@@ -1,7 +1,5 @@
 import { createContext, ReducerAction } from "react";
 
-export const AUTO_HIDE_DURATION = 6000;
-
 type Severity = "error" | "warning" | "info" | "success";
 
 export interface SnackbarState {

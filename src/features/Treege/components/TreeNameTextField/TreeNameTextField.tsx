@@ -1,6 +1,6 @@
 import { TextField } from "design-system-tracktor";
 import { useTranslation } from "react-i18next";
-import useTreeNameTextField from "@/components/Inputs/TreeNameTextField/useTreeNameTextField";
+import useTreeNameTextField from "@/features/Treege/components/TreeNameTextField/useTreeNameTextField";
 
 const TreeNameTextField = () => {
   const { t } = useTranslation("form");
