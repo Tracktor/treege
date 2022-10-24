@@ -4,10 +4,12 @@ import { initReactI18next } from "react-i18next";
 import buttonEn from "@/locales/en/button.json";
 import formEn from "@/locales/en/form.json";
 import modalEn from "@/locales/en/modal.json";
+import snackMessageEn from "@/locales/en/snackMessage.json";
 import translationEn from "@/locales/en/translation.json";
 import buttonFr from "@/locales/fr/button.json";
 import formFr from "@/locales/fr/form.json";
 import modalFr from "@/locales/fr/modal.json";
+import snackMessageFr from "@/locales/fr/snackMessage.json";
 import translationFr from "@/locales/fr/translation.json";
 
 i18n
@@ -28,12 +30,14 @@ i18n
         button: buttonEn,
         form: formEn,
         modal: modalEn,
+        snackMessage: snackMessageEn,
         translation: translationEn,
       },
       fr: {
         button: buttonFr,
         form: formFr,
         modal: modalFr,
+        snackMessage: snackMessageFr,
         translation: translationFr,
       },
     },

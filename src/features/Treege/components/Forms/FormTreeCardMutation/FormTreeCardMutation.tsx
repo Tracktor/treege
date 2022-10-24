@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Checkbox,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -16,8 +17,8 @@ import {
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
 import fields from "@/constants/fields";
-import TreeData from "@/constants/TreeData";
 import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
+import TreeSelect from "@/features/Treege/components/TreeSelect";
 
 interface FormTreeCardMutationProps {
   onClose?(): void;
@@ -65,7 +66,8 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     isDecisionField,
     isRequiredDisabled,
     isTree,
-    treeSelect,
+    treeSelected,
+    isWorkflowLoading,
     handleChangeTreeSelect,
     handleChangeHelperText,
     handleChangeOptionMessage,
@@ -109,16 +111,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           </Select>
         </FormControl>
         {isTree ? (
-          <FormControl sx={{ flex: 1 }} required>
-            <InputLabel>{t("tree", { ns: "form" })}</InputLabel>
-            <Select value={treeSelect} label={t("type")} onChange={handleChangeTreeSelect}>
-              {TreeData.map(({ label: treeLabel, id: treeId }) => (
-                <MenuItem key={treeId} value={treeId}>
-                  {treeLabel}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <TreeSelect required value={treeSelected} onChange={handleChangeTreeSelect} />
         ) : (
           <TextField sx={{ flex: 1 }} label={t("helperText", { ns: "form" })} onChange={handleChangeHelperText} value={helperText} />
         )}
@@ -198,8 +191,8 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         <Button variant="text" onClick={onClose}>
           {t("cancel")}
         </Button>
-        <Button variant="contained" type="submit" disabled={!!uniqueNameErrorMessage}>
-          {t("validate")}
+        <Button variant="contained" type="submit" disabled={!!uniqueNameErrorMessage || isWorkflowLoading}>
+          {isWorkflowLoading ? <CircularProgress size={14} /> : t("validate")}
         </Button>
       </Stack>
     </form>

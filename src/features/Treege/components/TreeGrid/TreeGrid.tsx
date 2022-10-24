@@ -1,3 +1,4 @@
+import { Stack } from "design-system-tracktor";
 import { useContext } from "react";
 import Logo from "@/components/DataDisplay/Logo/Logo";
 import Tree from "@/components/DataDisplay/Tree/Tree";
@@ -16,13 +17,24 @@ import FormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCar
 import TreeCardContainer from "@/features/Treege/components/TreeCardContainer/TreeCardContainer";
 import useTreeCardContainer from "@/features/Treege/components/TreeCardContainer/useTreeCardContainer";
 import useTreeGrid from "@/features/Treege/components/TreeGrid/useTreeGrid";
+import TreeNameTextField from "@/features/Treege/components/TreeNameTextField";
+import TreeSelect from "@/features/Treege/components/TreeSelect";
 import { TreegeContext } from "@/features/Treege/context/TreegeContext";
 import { getTree } from "@/utils/tree";
 
 const TreeGrid = () => {
   const { tree, treeModalOpen, treePath } = useContext(TreegeContext);
   const { handleCloseTreeModal } = useTreeCardContainer();
-  const { getTitleModalMutation, closeModal, getTitleModalDelete, isModalMutationOpen, isDeleteModal } = useTreeGrid();
+  const {
+    getTitleModalMutation,
+    closeModal,
+    getTitleModalDelete,
+    handleChangeTree,
+    isModalMutationOpen,
+    isDeleteModal,
+    treeSelected,
+    handleSubmit,
+  } = useTreeGrid();
   const currentTreePath = treePath?.at(-1)?.path;
   const currentTreeName = treePath?.at(-1)?.label;
   const currentTree = tree && getTree(tree, currentTreePath);
@@ -31,7 +43,13 @@ const TreeGrid = () => {
     <>
       <MosaicLayout>
         <Header>
-          <Logo />
+          <Stack justifyContent="space-between" direction="row" alignItems="center">
+            <Logo />
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <TreeNameTextField />
+              <TreeSelect size="small" arrowOnly showBtnAddNewTree onChange={handleChangeTree} value={treeSelected} />
+            </Stack>
+          </Stack>
         </Header>
 
         <Main>{tree ? <Tree data={tree} renderCustomNodeElement={TreeCardContainer} /> : <ButtonCreateTree />}</Main>
@@ -41,9 +59,11 @@ const TreeGrid = () => {
         </Sidebar>
 
         <Action>
-          <ViewerJSONAction value={tree} />
+          <ViewerJSONAction value={tree} onSave={handleSubmit} />
         </Action>
       </MosaicLayout>
+
+      {/* Modal */}
 
       <MainModal open={isModalMutationOpen} onClose={closeModal} title={getTitleModalMutation()}>
         <FormTreeCardMutation onClose={closeModal} />

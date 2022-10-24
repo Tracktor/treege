@@ -8,6 +8,7 @@
   "staticFields": "Champs statiques",
   "step": "Étape",
   "tree": "Arbre",
+  "treeName": "Nom de l'arbre",
   "type": {
     "address": "Adresse",
     "checkbox": "Case à cocher",

@@ -5,6 +5,8 @@ export const treeReducerActionType = {
   appendTreeCard: "appendTreeCard",
   deleteTreeCard: "deleteTreeCard",
   replaceTreeCard: "replaceTreeCard",
+  resetTree: "resetTree",
+  setTree: "setTree",
 } as const;
 
 export const appendTreeCard = (path: string | null, name: string, children: TreeNode) => ({
@@ -25,6 +27,15 @@ export const deleteTreeCard = (path: string | "", name: string) => ({
   name,
   path,
   type: treeReducerActionType.deleteTreeCard,
+});
+
+export const resetTree = () => ({
+  type: treeReducerActionType.resetTree,
+});
+
+export const setTree = (tree: TreeNode) => ({
+  tree,
+  type: treeReducerActionType.setTree,
 });
 
 const treeReducer = (tree: TreeNode, action: any) => {
@@ -55,6 +66,14 @@ const treeReducer = (tree: TreeNode, action: any) => {
         path,
         tree,
       });
+    }
+
+    case treeReducerActionType.resetTree: {
+      return null;
+    }
+
+    case treeReducerActionType.setTree: {
+      return action.tree;
     }
 
     default:
