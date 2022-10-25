@@ -16,22 +16,19 @@ const useTreeSelect = () => {
   const workflowId = treeSelected || currentTreeId;
 
   const { data: workflow } = useWorkflowQuery(workflowId, {
-    cacheTime: 0,
     enabled: !!workflowId,
     onError: () => open(t("error.fetchTree", { ns: "snackMessage" }), "error"),
-    refetchOnWindowFocus: false,
   });
 
   const {
     data: workflowsSuggestions,
     isLoading: workflowsSuggestionsLoading,
-    refetch,
+    refetch: refetchWorkflows,
   } = useWorkflowsQuery({
     enabled: false,
     onError: () => {
       open(t("error.fetchTree"), "error");
     },
-    refetchOnWindowFocus: false,
   });
 
   const handleChangeTree = ({ target }: SelectChangeEvent) => {
@@ -54,7 +51,7 @@ const useTreeSelect = () => {
     }
   }, [dispatchTree, setCurrentTree, workflow]);
 
-  const fetchWorkflowSuggestions = () => refetch();
+  const fetchWorkflowSuggestions = () => refetchWorkflows();
 
   return { fetchWorkflowSuggestions, handleChangeTree, setTreeSelected, treeSelected, workflowsSuggestions, workflowsSuggestionsLoading };
 };

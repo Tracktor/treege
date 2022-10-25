@@ -23,7 +23,7 @@ import { TreegeContext } from "@/features/Treege/context/TreegeContext";
 import { getTree } from "@/utils/tree";
 
 const TreeGrid = () => {
-  const { tree, treeModalOpen, treePath } = useContext(TreegeContext);
+  const { tree, treeModalOpen, treePath, endPoint } = useContext(TreegeContext);
   const { handleCloseTreeModal } = useTreeCardContainer();
   const { getTitleModalMutation, closeModal, getTitleModalDelete, isModalMutationOpen, isDeleteModal } = useTreeGrid();
   const currentTreePath = treePath?.at(-1)?.path;
@@ -36,10 +36,12 @@ const TreeGrid = () => {
         <Header>
           <Stack justifyContent="space-between" direction="row" alignItems="center">
             <Logo />
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <TreeNameTextField />
-              <TreeSelect size="small" arrowOnly showBtnAddNewTree />
-            </Stack>
+            {!!endPoint && (
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <TreeNameTextField />
+                <TreeSelect size="small" arrowOnly showBtnAddNewTree />
+              </Stack>
+            )}
           </Stack>
         </Header>
 
