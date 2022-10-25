@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useLayoutEffect } from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "react-query";
 import DarkTheme from "@/components/Theme/DarkTheme/DarkTheme";
+import queryClient from "@/config/queryClient";
 import AuthProvider from "@/context/Auth/AuthProvider";
 import SnackbarProvider from "@/context/Snackbar/SnackbarProvider";
 import TreeGrid from "@/features/Treege/components/TreeGrid/TreeGrid";
@@ -20,10 +21,14 @@ type TreegeProps =
       authToken?: string;
       endPoint?: string;
       initialTree: TreeNode;
+      initialTreeId?: never;
+    }
+  | {
+      authToken?: string;
+      endPoint?: string;
+      initialTree?: never;
       initialTreeId: string;
     };
-
-const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 
 const Treege = ({ authToken, endPoint, initialTree, initialTreeId }: TreegeProps) => {
   useLayoutEffect(() => {
