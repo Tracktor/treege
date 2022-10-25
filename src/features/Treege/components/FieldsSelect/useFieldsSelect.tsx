@@ -5,7 +5,7 @@ import { TreegeContext } from "@/features/Treege/context/TreegeContext";
 const useFieldsSelect = () => {
   const { endPoint } = useContext(TreegeContext);
 
-  const getFields = useCallback(() => fields.filter((field) => !endPoint && field.type !== "tree"), [endPoint]);
+  const getFields = useCallback(() => fields.filter((field) => !(field.type === "tree" && !endPoint)), [endPoint]);
 
   return { fields: getFields() };
 };
