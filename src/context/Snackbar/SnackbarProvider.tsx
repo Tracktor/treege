@@ -28,8 +28,13 @@ const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
 
   return (
     <SnackbarContext.Provider value={value}>
-      <Snackbar open={open} autoHideDuration={AUTO_HIDE_DURATION} onClose={handleCloseSnackbar}>
-        <Alert onClose={handleCloseSnackbar} severity={severity} sx={styles.snackbarAlert}>
+      <Snackbar
+        open={open}
+        autoHideDuration={AUTO_HIDE_DURATION}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={severity} sx={styles.snackbarAlert} variant="filled">
           {message}
         </Alert>
       </Snackbar>

@@ -9,17 +9,11 @@ import TreegeProvider from "@/features/Treege/context/TreegeProvider";
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
 import "@/config/i18n";
 
-type TreegeProps =
-  | {
-      initialTree?: TreeNode;
-      authToken?: never;
-      endPoint?: never;
-    }
-  | {
-      initialTree?: TreeNode;
-      authToken: string;
-      endPoint: string;
-    };
+interface TreegeProps {
+  initialTree?: TreeNode;
+  authToken?: string;
+  endPoint?: string;
+}
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 
@@ -31,15 +25,15 @@ const Treege = ({ authToken, endPoint, initialTree }: TreegeProps) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SnackbarProvider>
-        <AuthProvider authToken={authToken}>
-          <TreegeProvider endPoint={endPoint} initialTree={initialTree}>
-            <DarkTheme>
+      <AuthProvider authToken={authToken}>
+        <TreegeProvider endPoint={endPoint} initialTree={initialTree}>
+          <DarkTheme>
+            <SnackbarProvider>
               <TreeGrid />
-            </DarkTheme>
-          </TreegeProvider>
-        </AuthProvider>
-      </SnackbarProvider>
+            </SnackbarProvider>
+          </DarkTheme>
+        </TreegeProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 };
