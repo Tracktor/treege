@@ -12,9 +12,11 @@ const useTreeSelect = () => {
   const { open } = useSnackbar();
   const { currentTree, setCurrentTree, dispatchTree } = useContext(TreegeContext);
   const [treeSelected, setTreeSelected] = useState("");
-  const workflowId = treeSelected || String(currentTree.id);
+  const currentTreeId = currentTree.id || "";
+  const workflowId = treeSelected || currentTreeId;
 
   const { data: workflow } = useWorkflowQuery(workflowId, {
+    cacheTime: 0,
     enabled: !!workflowId,
     onError: () => open(t("error.fetchTree", { ns: "snackMessage" }), "error"),
     refetchOnWindowFocus: false,
