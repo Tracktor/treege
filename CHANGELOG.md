@@ -1,5 +1,4 @@
 # [Versions](https://github.com/Tracktor/treege/releases)
 
-## v0.4.18
-- Authentification from props
-- Snack message
+## v0.4.19
+- Improve Treege props type

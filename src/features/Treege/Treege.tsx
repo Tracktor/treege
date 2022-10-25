@@ -9,11 +9,17 @@ import TreegeProvider from "@/features/Treege/context/TreegeProvider";
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
 import "@/config/i18n";
 
-interface TreegeProps {
-  authToken?: string;
-  endPoint?: string;
-  initialTree?: TreeNode;
-}
+type TreegeProps =
+  | {
+      initialTree?: TreeNode;
+      authToken?: never;
+      endPoint?: never;
+    }
+  | {
+      initialTree?: TreeNode;
+      authToken: string;
+      endPoint: string;
+    };
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 
