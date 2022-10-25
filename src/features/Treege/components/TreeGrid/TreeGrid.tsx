@@ -23,7 +23,7 @@ import { TreegeContext } from "@/features/Treege/context/TreegeContext";
 import { getTree } from "@/utils/tree";
 
 const TreeGrid = () => {
-  const { tree, treeModalOpen, treePath } = useContext(TreegeContext);
+  const { tree, treeModalOpen, treePath, currentTree: currentTreeContext } = useContext(TreegeContext);
   const { handleCloseTreeModal } = useTreeCardContainer();
   const {
     getTitleModalMutation,
@@ -47,7 +47,14 @@ const TreeGrid = () => {
             <Logo />
             <Stack direction="row" alignItems="center" spacing={2}>
               <TreeNameTextField />
-              <TreeSelect size="small" arrowOnly showBtnAddNewTree onChange={handleChangeTree} value={treeSelected} />
+              <TreeSelect
+                size="small"
+                arrowOnly
+                showBtnAddNewTree
+                onChange={handleChangeTree}
+                value={treeSelected}
+                defaultValue={currentTreeContext.name}
+              />
             </Stack>
           </Stack>
         </Header>

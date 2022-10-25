@@ -22,6 +22,7 @@ interface TreeSelectProps {
   showBtnAddNewTree?: boolean;
   value?: string;
   onChange: (event: SelectChangeEvent) => void;
+  defaultValue?: string;
 }
 
 const styles = {
@@ -35,13 +36,13 @@ const styles = {
   },
 };
 
-const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, value }: TreeSelectProps) => {
-  const { t } = useTranslation();
+const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, value, defaultValue }: TreeSelectProps) => {
+  const { t } = useTranslation("form");
   const { fetchWorkflowSuggestions, workflowsSuggestions, workflowsSuggestionsLoading } = useTreeSelect();
 
   return (
     <FormControl size={size} required={required} sx={styles.formControl}>
-      {!arrowOnly && <InputLabel>{t("tree", { ns: "form" })}</InputLabel>}
+      {!arrowOnly && <InputLabel>{t("tree")}</InputLabel>}
       <Select
         value={value || ""}
         id="tree-select"
@@ -49,6 +50,7 @@ const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, va
         sx={arrowOnly ? styles.select : undefined}
         label={t("type")}
         onOpen={fetchWorkflowSuggestions}
+        defaultValue={defaultValue}
       >
         {workflowsSuggestionsLoading && (
           <MenuItem>
@@ -69,7 +71,7 @@ const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, va
         )}
         {showBtnAddNewTree && (
           <MenuItem value="add-new-tree">
-            <Typography mr={1}>Nouvel arbre</Typography>
+            <Typography mr={1}>{t("newTree")}</Typography>
             <AddRoundedIcon color="primary" />
           </MenuItem>
         )}

@@ -1,31 +1,27 @@
 import type { SelectChangeEvent } from "design-system-tracktor";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "react-query";
 import { TreegeContext } from "@/features/Treege/context/TreegeContext";
 import { resetTree, setTree } from "@/features/Treege/reducer/treeReducer";
 import useSnackbar from "@/hooks/useSnackbar/useSnackbar";
 import useAddWorkflowsMutation from "@/services/workflows/mutation/useAddWorkflowsMutation";
 import useEditWorkflowsMutation from "@/services/workflows/mutation/useEditWorkflowsMutation";
-import useWorkflowQueryFetcher from "@/services/workflows/query/useWorkflowQueryFetcher";
+import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 
 const useTreeGrid = () => {
-  const { t } = useTranslation(["modal", "snackMessage"]);
   const { currentHierarchyPointNode, modalOpen, setModalOpen, dispatchTree, currentTree, setCurrentTree, tree } = useContext(TreegeContext);
+  const { t } = useTranslation(["modal", "snackMessage"]);
   const { open } = useSnackbar();
   const [treeSelected, setTreeSelected] = useState("");
   const isEditModal = modalOpen === "edit";
   const isAddModal = modalOpen === "add";
   const isDeleteModal = modalOpen === "delete";
   const isModalMutationOpen = isEditModal || isAddModal;
+  const workflowId = treeSelected || String(currentTree.id);
 
-  const { getWorkflow } = useWorkflowQueryFetcher();
-
-  const { data: workflow } = useQuery(["/v1/workflow", treeSelected], () => getWorkflow(treeSelected), {
-    enabled: !!treeSelected,
-    onError: () => {
-      open(t("error.fetchTree", { ns: "snackMessage" }), "error");
-    },
+  const { data: workflow } = useWorkflowQuery(workflowId, {
+    enabled: !!workflowId,
+    onError: () => open(t("error.fetchTree", { ns: "snackMessage" }), "error"),
     refetchOnWindowFocus: false,
   });
 

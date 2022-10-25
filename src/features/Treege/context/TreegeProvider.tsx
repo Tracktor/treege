@@ -8,15 +8,18 @@ interface TreegeProviderProps {
   children: ReactNode;
   endPoint?: string;
   initialTree?: TreeNode;
+  initialTreeId?: string;
 }
 
-const TreegeProvider = ({ children, endPoint, initialTree }: TreegeProviderProps) => {
+const TreegeProvider = ({ children, endPoint, initialTree, initialTreeId }: TreegeProviderProps) => {
   const [currentHierarchyPointNode, setCurrentHierarchyPointNode] = useState(treeDefaultValue.currentHierarchyPointNode);
   const [modalOpen, setModalOpen] = useState(treeDefaultValue.modalOpen);
   const [treeModalOpen, setTreeModalOpen] = useState(treeDefaultValue.treeModalOpen);
   const [treePath, setTreePath] = useState(treeDefaultValue.treePath);
-  const [currentTree, setCurrentTree] = useState(treeDefaultValue.currentTree);
   const [tree, dispatchTree] = useReducer(treeReducer, initialTree || treeDefaultValue.tree);
+  const [currentTree, setCurrentTree] = useState(
+    initialTreeId ? { ...treeDefaultValue.currentTree, id: initialTreeId } : treeDefaultValue.currentTree
+  );
 
   const value = useMemo(
     () => ({
@@ -35,7 +38,7 @@ const TreegeProvider = ({ children, endPoint, initialTree }: TreegeProviderProps
       treePath,
       version,
     }),
-    [currentHierarchyPointNode, modalOpen, treeModalOpen, treePath, tree, endPoint, currentTree]
+    [currentHierarchyPointNode, modalOpen, treeModalOpen, treePath, tree, currentTree, endPoint]
   );
 
   return <TreegeContext.Provider value={value}>{children}</TreegeContext.Provider>;
