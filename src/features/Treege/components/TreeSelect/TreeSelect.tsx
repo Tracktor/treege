@@ -11,7 +11,7 @@ import {
   Skeleton,
   Typography,
 } from "design-system-tracktor";
-import React from "react";
+import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import useTreeSelect from "@/features/Treege/components/TreeSelect/useTreeSelect";
 
@@ -36,8 +36,10 @@ const styles = {
 };
 
 const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, value }: TreeSelectProps) => {
+  const isControlled = useMemo(() => !!onChange, [onChange]);
   const { t } = useTranslation("form");
-  const { fetchWorkflowSuggestions, handleChangeTree, workflowsSuggestions, workflowsSuggestionsLoading, treeSelected } = useTreeSelect();
+  const { fetchWorkflowSuggestions, handleChangeTree, workflowsSuggestions, workflowsSuggestionsLoading, treeSelected } =
+    useTreeSelect(isControlled);
 
   return (
     <FormControl size={size} required={required} sx={styles.formControl}>
@@ -45,7 +47,7 @@ const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, va
       <Select
         value={onChange ? value : treeSelected}
         id="tree-select"
-        onChange={(e) => (onChange ? onChange(e) : handleChangeTree(e))}
+        onChange={(e) => (isControlled ? onChange?.(e) : handleChangeTree(e))}
         sx={arrowOnly ? styles.select : undefined}
         label={t("type")}
         onOpen={fetchWorkflowSuggestions}

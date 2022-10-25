@@ -7,7 +7,7 @@ import useSnackbar from "@/hooks/useSnackbar/useSnackbar";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import useWorkflowsQuery from "@/services/workflows/query/useWorkflowsQuery";
 
-const useTreeSelect = () => {
+const useTreeSelect = (isControlled: boolean) => {
   const { t } = useTranslation("snackMessage");
   const { open } = useSnackbar();
   const { currentTree, setCurrentTree, dispatchTree } = useContext(TreegeContext);
@@ -16,8 +16,9 @@ const useTreeSelect = () => {
   const workflowId = treeSelected || currentTreeId;
 
   const { data: workflow } = useWorkflowQuery(workflowId, {
-    enabled: !!workflowId,
+    enabled: !!workflowId && !isControlled,
     onError: () => open(t("error.fetchTree", { ns: "snackMessage" }), "error"),
+    refetchOnWindowFocus: false,
   });
 
   const {
@@ -29,9 +30,10 @@ const useTreeSelect = () => {
     onError: () => {
       open(t("error.fetchTree"), "error");
     },
+    refetchOnWindowFocus: false,
   });
 
-  const handleChangeTree = ({ target }: SelectChangeEvent) => {
+  const handleChangeTree = async ({ target }: SelectChangeEvent) => {
     const { value } = target;
 
     if (value === "add-new-tree") {
