@@ -6,3 +6,4 @@
 - Default tree name props
 - Fix translation
 - Improve tree select
+- Disable some features when endpoint is not provided
