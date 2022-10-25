@@ -5,6 +5,7 @@
   "mustBeUnique": "Must be unique",
   "offMessage": "Message (disable)",
   "onMessage": "Message (enable)",
+  "repeatable": "Repeatable",
   "staticFields": "Static fields",
   "step": "Step",
   "tree": "Tree",

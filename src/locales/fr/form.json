@@ -5,6 +5,7 @@
   "mustBeUnique": "Doit être unique",
   "offMessage": "Message (désactiver)",
   "onMessage": "Message (activer)",
+  "repeatable": "Répétable",
   "staticFields": "Champs statiques",
   "step": "Étape",
   "tree": "Arbre",

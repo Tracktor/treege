@@ -28,10 +28,10 @@ const useFormTreeCardMutation = () => {
   const [helperText, setHelperText] = useState("");
   const [step, setStep] = useState("");
   const [messages, setMessages] = useState({ off: "", on: "" });
-
+  const [isRepeatable, setIsRepeatable] = useState(false);
   // Form Error
   const [uniqueNameErrorMessage, setUniqueNameErrorMessage] = useState("");
-
+  // State
   const isEditModal = modalOpen === "edit";
   const isTree = type === "tree";
   const isBooleanField = fields.some((field) => field.type === type && field?.isBooleanField);
@@ -115,6 +115,10 @@ const useFormTreeCardMutation = () => {
 
   const handleChangeIsDecisionField = (event: ChangeEvent<HTMLInputElement>) => {
     setIsDecision(event.target.checked);
+  };
+
+  const handleChangeIsRepeatable = (event: ChangeEvent<HTMLInputElement>) => {
+    setIsRepeatable(event.target.checked);
   };
 
   const handleChangeType = (event: SelectChangeEvent<TreeNodeField["type"]>) => {
@@ -220,6 +224,7 @@ const useFormTreeCardMutation = () => {
         ...(isDecisionField && !isDecision && { values: getTreeValuesWithoutEmptyMessage(values) }),
         ...(required && { required }),
         ...(step && { step }),
+        ...(isRepeatable && { isRepeatable }),
       },
       children: childOfChildren,
       name,
@@ -267,6 +272,7 @@ const useFormTreeCardMutation = () => {
         on: currentHierarchyPointNode?.data.attributes?.messages?.on || "",
       });
       setTreeSelected(currentHierarchyPointNode?.data.attributes?.tree?.treeId || "");
+      setIsRepeatable(currentHierarchyPointNode?.data.attributes?.isRepeatable || false);
     }
   }, [
     currentHierarchyPointNode?.data.attributes?.tree?.treeId,
@@ -280,6 +286,7 @@ const useFormTreeCardMutation = () => {
     currentHierarchyPointNode?.data.attributes?.values,
     currentHierarchyPointNode?.data?.children,
     currentHierarchyPointNode?.data.name,
+    currentHierarchyPointNode?.data.attributes?.isRepeatable,
     defaultValues,
     modalOpen,
   ]);
@@ -289,6 +296,7 @@ const useFormTreeCardMutation = () => {
     handleAddValue,
     handleChangeHelperText,
     handleChangeIsDecisionField,
+    handleChangeIsRepeatable,
     handleChangeLabel,
     handleChangeMessage,
     handleChangeName,
@@ -305,6 +313,7 @@ const useFormTreeCardMutation = () => {
     isBooleanField,
     isDecision,
     isDecisionField,
+    isRepeatable,
     isRequiredDisabled,
     isTree,
     isWorkflowLoading,

@@ -25,6 +25,7 @@ export interface TreeNodeField {
   message?: never;
   tree?: TreeNode;
   treePath?: string;
+  isRepeatable?: boolean;
 }
 
 export interface TreeNodeValues {
@@ -43,6 +44,7 @@ export interface TreeNodeValues {
   message?: string;
   tree?: never;
   treePath?: never;
+  isRepeatable?: never;
 }
 
 export type TreeNodeAttributes = TreeNodeField | TreeNodeValues;

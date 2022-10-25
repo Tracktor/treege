@@ -60,7 +60,6 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     type,
     helperText,
     label,
-    messages: { on, off },
     isBooleanField,
     isDecision,
     isDecisionField,
@@ -68,6 +67,8 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     isTree,
     treeSelected,
     isWorkflowLoading,
+    isRepeatable,
+    messages: { on, off },
     handleChangeTreeSelect,
     handleChangeHelperText,
     handleChangeOptionMessage,
@@ -82,6 +83,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleSubmit,
     handleAddValue,
     handleChangeLabel,
+    handleChangeIsRepeatable,
   } = useFormTreeCardMutation();
 
   return (
@@ -125,6 +127,12 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
       )}
 
       <Stack paddingY={1}>
+        <FormGroup>
+          <FormControlLabel
+            control={<Checkbox checked={isRepeatable} onChange={handleChangeIsRepeatable} />}
+            label={t("repeatable", { ns: "form" })}
+          />
+        </FormGroup>
         <FormGroup>
           <FormControlLabel
             disabled={isRequiredDisabled}
