@@ -10,15 +10,13 @@ import { TreegeContext } from "@/features/Treege/context/TreegeContext";
 interface ViewerJSONProps {
   value: any;
   downloadedFileName?: string;
-  onSave?(): void;
 }
 
-const ViewerJSONAction = ({ downloadedFileName = "export", onSave, value }: ViewerJSONProps) => {
+const ViewerJSONAction = ({ downloadedFileName = "export", value }: ViewerJSONProps) => {
   const { t } = useTranslation("button");
-  const { getDownloadLink } = useViewerJSONAction();
-  const {
-    currentTree: { id },
-  } = useContext(TreegeContext);
+  const { getDownloadLink, handleSubmit } = useViewerJSONAction();
+  const { currentTree } = useContext(TreegeContext);
+  const { id } = currentTree;
 
   return (
     <Stack direction="row" spacing={2} justifyContent="center">
@@ -31,7 +29,7 @@ const ViewerJSONAction = ({ downloadedFileName = "export", onSave, value }: View
       </Tooltip>
       <Tooltip title={id ? t("update") : t("save")} enterDelay={1500} disableHoverListener={!value} arrow>
         <Box>
-          <Button variant="outlined" onClick={onSave} disabled={!value}>
+          <Button variant="outlined" onClick={handleSubmit} disabled={!value}>
             {id ? <SaveAsRoundedIcon /> : <SaveRoundedIcon />}
           </Button>
         </Box>

@@ -21,8 +21,7 @@ interface TreeSelectProps {
   required?: boolean;
   showBtnAddNewTree?: boolean;
   value?: string;
-  onChange: (event: SelectChangeEvent) => void;
-  defaultValue?: string;
+  onChange?: (event: SelectChangeEvent) => void;
 }
 
 const styles = {
@@ -36,21 +35,20 @@ const styles = {
   },
 };
 
-const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, value, defaultValue }: TreeSelectProps) => {
+const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, value }: TreeSelectProps) => {
   const { t } = useTranslation("form");
-  const { fetchWorkflowSuggestions, workflowsSuggestions, workflowsSuggestionsLoading } = useTreeSelect();
+  const { fetchWorkflowSuggestions, handleChangeTree, workflowsSuggestions, workflowsSuggestionsLoading, treeSelected } = useTreeSelect();
 
   return (
     <FormControl size={size} required={required} sx={styles.formControl}>
       {!arrowOnly && <InputLabel>{t("tree")}</InputLabel>}
       <Select
-        value={value || ""}
+        value={onChange ? value : treeSelected}
         id="tree-select"
-        onChange={onChange}
+        onChange={(e) => (onChange ? onChange(e) : handleChangeTree(e))}
         sx={arrowOnly ? styles.select : undefined}
         label={t("type")}
         onOpen={fetchWorkflowSuggestions}
-        defaultValue={defaultValue}
       >
         {workflowsSuggestionsLoading && (
           <MenuItem>

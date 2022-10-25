@@ -23,18 +23,9 @@ import { TreegeContext } from "@/features/Treege/context/TreegeContext";
 import { getTree } from "@/utils/tree";
 
 const TreeGrid = () => {
-  const { tree, treeModalOpen, treePath, currentTree: currentTreeContext } = useContext(TreegeContext);
+  const { tree, treeModalOpen, treePath } = useContext(TreegeContext);
   const { handleCloseTreeModal } = useTreeCardContainer();
-  const {
-    getTitleModalMutation,
-    closeModal,
-    getTitleModalDelete,
-    handleChangeTree,
-    isModalMutationOpen,
-    isDeleteModal,
-    treeSelected,
-    handleSubmit,
-  } = useTreeGrid();
+  const { getTitleModalMutation, closeModal, getTitleModalDelete, isModalMutationOpen, isDeleteModal } = useTreeGrid();
   const currentTreePath = treePath?.at(-1)?.path;
   const currentTreeName = treePath?.at(-1)?.label;
   const currentTree = tree && getTree(tree, currentTreePath);
@@ -47,14 +38,7 @@ const TreeGrid = () => {
             <Logo />
             <Stack direction="row" alignItems="center" spacing={2}>
               <TreeNameTextField />
-              <TreeSelect
-                size="small"
-                arrowOnly
-                showBtnAddNewTree
-                onChange={handleChangeTree}
-                value={treeSelected}
-                defaultValue={currentTreeContext.name}
-              />
+              <TreeSelect size="small" arrowOnly showBtnAddNewTree />
             </Stack>
           </Stack>
         </Header>
@@ -66,7 +50,7 @@ const TreeGrid = () => {
         </Sidebar>
 
         <Action>
-          <ViewerJSONAction value={tree} onSave={handleSubmit} />
+          <ViewerJSONAction value={tree} />
         </Action>
       </MosaicLayout>
 
