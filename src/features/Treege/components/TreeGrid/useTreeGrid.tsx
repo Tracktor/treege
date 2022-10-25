@@ -29,13 +29,6 @@ const useTreeGrid = () => {
     refetchOnWindowFocus: false,
   });
 
-  useEffect(() => {
-    if (workflow) {
-      dispatchTree(setTree(workflow.workflow));
-      setCurrentTree({ id: workflow.id, name: workflow.label });
-    }
-  }, [dispatchTree, setCurrentTree, workflow]);
-
   const { mutate: addWorkflowMutate } = useAddWorkflowsMutation({
     onError: () => {
       open(t("error.saveTree", { ns: "snackMessage" }), "error");
@@ -80,9 +73,8 @@ const useTreeGrid = () => {
 
     if (value === "add-new-tree") {
       setTreeSelected("");
-      dispatchTree(resetTree());
       setCurrentTree({ name: "" });
-
+      dispatchTree(resetTree());
       return;
     }
 
@@ -106,6 +98,13 @@ const useTreeGrid = () => {
       addWorkflowMutate({ label: name, workflow: tree });
     }
   };
+
+  useEffect(() => {
+    if (workflow) {
+      dispatchTree(setTree(workflow.workflow));
+      setCurrentTree({ id: workflow.id, name: workflow.label });
+    }
+  }, [dispatchTree, setCurrentTree, workflow]);
 
   return {
     closeModal,

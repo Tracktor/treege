@@ -55,12 +55,11 @@ const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, va
             <Skeleton width="100%" />
           </MenuItem>
         )}
-        {workflowsSuggestions &&
-          workflowsSuggestions.map(({ label: treeLabel, id: treeId }) => (
-            <MenuItem key={treeId} value={treeId}>
-              {treeLabel}
-            </MenuItem>
-          ))}
+        {workflowsSuggestions?.map(({ label: treeLabel, id: treeId }) => (
+          <MenuItem key={treeId} value={treeId}>
+            {treeLabel}
+          </MenuItem>
+        ))}
         {showBtnAddNewTree && (
           <MenuItem disabled>
             <Box sx={{ height: 1, width: "100%" }}>
