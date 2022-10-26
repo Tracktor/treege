@@ -11,7 +11,6 @@ import Header from "@/components/Layouts/Header/Header";
 import Main from "@/components/Layouts/Main/Main";
 import MosaicLayout from "@/components/Layouts/MosaicLayout/MosaicLayout";
 import Sidebar from "@/components/Layouts/Sidebar/Sidebar";
-import ButtonCreateTree from "@/features/Treege/components/ButtonCreateTree/ButtonCreateTree";
 import FormTreeCardDelete from "@/features/Treege/components/Forms/FormTreeCardDelete/FormTreeCardDelete";
 import FormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/FormTreeCardMutation";
 import TreeCardContainer from "@/features/Treege/components/TreeCardContainer/TreeCardContainer";
@@ -45,7 +44,9 @@ const TreeGrid = () => {
           </Stack>
         </Header>
 
-        <Main>{tree ? <Tree data={tree} renderCustomNodeElement={TreeCardContainer} /> : <ButtonCreateTree />}</Main>
+        <Main>
+          <Tree data={tree} renderCustomNodeElement={TreeCardContainer} />
+        </Main>
 
         <Sidebar>
           <ViewerJSON value={tree} />

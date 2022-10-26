@@ -38,19 +38,18 @@ const styles = {
 const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, value }: TreeSelectProps) => {
   const isControlled = useMemo(() => !!onChange, [onChange]);
   const { t } = useTranslation("form");
-  const { fetchWorkflowSuggestions, handleChangeTree, workflowsSuggestions, workflowsSuggestionsLoading, treeSelected } =
-    useTreeSelect(isControlled);
+  const { handleChangeTree, handleOnOpen, workflowsSuggestions, workflowsSuggestionsLoading, treeSelected } = useTreeSelect(isControlled);
 
   return (
     <FormControl size={size} required={required} sx={styles.formControl}>
       {!arrowOnly && <InputLabel>{t("tree")}</InputLabel>}
       <Select
-        value={onChange ? value : treeSelected}
+        value={isControlled ? value : treeSelected}
         id="tree-select"
         onChange={(e) => (isControlled ? onChange?.(e) : handleChangeTree(e))}
         sx={arrowOnly ? styles.select : undefined}
         label={t("type")}
-        onOpen={fetchWorkflowSuggestions}
+        onOpen={handleOnOpen}
       >
         {workflowsSuggestionsLoading && (
           <MenuItem>

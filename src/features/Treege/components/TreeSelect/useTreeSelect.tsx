@@ -1,5 +1,5 @@
 import type { SelectChangeEvent } from "design-system-tracktor";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TreegeContext } from "@/features/Treege/context/TreegeContext";
 import { resetTree, setTree } from "@/features/Treege/reducer/treeReducer";
@@ -12,25 +12,32 @@ const useTreeSelect = (isControlled: boolean) => {
   const { open } = useSnackbar();
   const { currentTree, setCurrentTree, dispatchTree } = useContext(TreegeContext);
   const [treeSelected, setTreeSelected] = useState("");
-  const currentTreeId = currentTree.id || "";
-  const workflowId = treeSelected || currentTreeId;
 
-  const { data: workflow } = useWorkflowQuery(workflowId, {
-    enabled: !!workflowId && !isControlled,
+  useWorkflowQuery(treeSelected, {
+    enabled: !!treeSelected && !isControlled && treeSelected !== currentTree.id,
     onError: () => open(t("error.fetchTree", { ns: "snackMessage" }), "error"),
-    refetchOnWindowFocus: false,
+    onSuccess: ({ id, label, workflow }) => {
+      if (isControlled) return;
+      setCurrentTree({ id, name: label });
+      dispatchTree(setTree(workflow));
+    },
   });
 
   const {
-    data: workflowsSuggestions,
+    data: workflows,
     isLoading: workflowsSuggestionsLoading,
     refetch: refetchWorkflows,
   } = useWorkflowsQuery({
     enabled: false,
+    keepPreviousData: true,
     onError: () => {
       open(t("error.fetchTree"), "error");
     },
-    refetchOnWindowFocus: false,
+    onSuccess: () => {
+      if (currentTree.id && !treeSelected) {
+        setTreeSelected(currentTree.id);
+      }
+    },
   });
 
   const handleChangeTree = async ({ target }: SelectChangeEvent) => {
@@ -46,16 +53,20 @@ const useTreeSelect = (isControlled: boolean) => {
     setTreeSelected(value);
   };
 
-  useEffect(() => {
-    if (workflow) {
-      dispatchTree(setTree(workflow.workflow));
-      setCurrentTree({ id: workflow.id, name: workflow.label });
-    }
-  }, [dispatchTree, setCurrentTree, workflow]);
+  const handleOnOpen = () => fetchWorkflowSuggestions();
 
   const fetchWorkflowSuggestions = () => refetchWorkflows();
 
-  return { fetchWorkflowSuggestions, handleChangeTree, setTreeSelected, treeSelected, workflowsSuggestions, workflowsSuggestionsLoading };
+  return {
+    currentTree,
+    fetchWorkflowSuggestions,
+    handleChangeTree,
+    handleOnOpen,
+    setTreeSelected,
+    treeSelected,
+    workflowsSuggestions: workflows,
+    workflowsSuggestionsLoading,
+  };
 };
 
 export default useTreeSelect;

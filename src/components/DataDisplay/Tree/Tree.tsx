@@ -4,6 +4,7 @@ import D3Tree from "react-d3-tree";
 import type { RenderCustomNodeElementFn } from "react-d3-tree/lib/types/common";
 import useTree from "@/components/DataDisplay/Tree/useTree";
 import colors from "@/constants/colors";
+import ButtonCreateTree from "@/features/Treege/components/ButtonCreateTree/ButtonCreateTree";
 import type { TreeRenderCustomNodeElementFn } from "@/features/Treege/type/TreeNode";
 
 interface TreeProps {
@@ -35,7 +36,7 @@ const Tree = ({
   const { dimensions, refContainer, translate } = useTree();
 
   if (!data) {
-    return null;
+    return <ButtonCreateTree />;
   }
 
   return (

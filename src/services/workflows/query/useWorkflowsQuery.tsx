@@ -6,6 +6,9 @@ interface Options extends Omit<UseQueryOptions<any, any, WorkflowsResponse[], an
 const useWorkflowsQuery = (options: Options) => {
   const { getAllWorkflow } = useWorkflowQueryFetcher();
 
-  return useQuery("/v1/workflows", getAllWorkflow, options);
+  return useQuery("/v1/workflows", getAllWorkflow, {
+    refetchOnWindowFocus: false,
+    ...options,
+  });
 };
 export default useWorkflowsQuery;
