@@ -1,7 +1,8 @@
 import { ReactNode, useMemo, useReducer, useState } from "react";
 import { treeDefaultValue, TreegeContext } from "@/features/Treege/context/TreegeContext";
-import treeReducer from "@/features/Treege/reducer/treeReducer";
+import treeReducer, { setTree } from "@/features/Treege/reducer/treeReducer";
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
+import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import { version } from "~/package.json";
 
 interface TreegeProviderProps {
@@ -40,6 +41,15 @@ const TreegeProvider = ({ children, endPoint, initialTree, initialTreeId }: Tree
     }),
     [currentHierarchyPointNode, modalOpen, treeModalOpen, treePath, tree, currentTree, endPoint]
   );
+
+  // Fetch initial tree
+  useWorkflowQuery(currentTree.id, {
+    enabled: !!initialTreeId,
+    onSuccess: (response) => {
+      setCurrentTree({ id: response?.id, name: response?.label });
+      dispatchTree(setTree(response.workflow));
+    },
+  });
 
   return <TreegeContext.Provider value={value}>{children}</TreegeContext.Provider>;
 };

@@ -1,21 +1,8 @@
-import { useCallback, useContext, useState } from "react";
-import { TreegeContext } from "@/features/Treege/context/TreegeContext";
-import { setTree } from "@/features/Treege/reducer/treeReducer";
-import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
+import { useCallback, useState } from "react";
 
 const useTree = () => {
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
   const [dimensions, setDimensions] = useState({ height: 0, width: 0 });
-  const { currentTree, setCurrentTree, dispatchTree } = useContext(TreegeContext);
-  const { name, id } = currentTree;
-
-  useWorkflowQuery(id, {
-    enabled: !!id && !name,
-    onSuccess: (response) => {
-      setCurrentTree({ id: response?.id, name: response?.label });
-      dispatchTree(setTree(response.workflow));
-    },
-  });
 
   const refContainer = useCallback((ref: null | Element) => {
     if (!ref) {
