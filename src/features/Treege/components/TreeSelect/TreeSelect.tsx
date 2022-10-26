@@ -48,7 +48,7 @@ const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, va
         id="tree-select"
         onChange={(e) => (isControlled ? onChange?.(e) : handleChangeTree(e))}
         sx={arrowOnly ? styles.select : undefined}
-        label={t("type")}
+        label={t("tree")}
         onOpen={handleOnOpen}
       >
         {workflowsSuggestionsLoading && (
