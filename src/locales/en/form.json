@@ -3,6 +3,7 @@
   "helperText": "Helper text",
   "label": "Label",
   "mustBeUnique": "Must be unique",
+  "newTree": "Nouvel arbre",
   "offMessage": "Message (disable)",
   "onMessage": "Message (enable)",
   "repeatable": "Repeatable",

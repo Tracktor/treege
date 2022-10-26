@@ -1,22 +1,9 @@
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
-import {
-  Box,
-  Button,
-  Checkbox,
-  CircularProgress,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-  TextField,
-} from "design-system-tracktor";
+import { Box, Button, Checkbox, CircularProgress, FormControlLabel, FormGroup, Stack, TextField } from "design-system-tracktor";
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
-import fields from "@/constants/fields";
+import FieldsSelect from "@/features/Treege/components/FieldsSelect";
 import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
 import TreeSelect from "@/features/Treege/components/TreeSelect";
 
@@ -102,16 +89,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
       </Stack>
 
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
-        <FormControl sx={{ flex: 1 }} required>
-          <InputLabel>{t("type")}</InputLabel>
-          <Select value={type} label={t("type")} onChange={handleChangeType}>
-            {fields.map(({ type: fieldsType }) => (
-              <MenuItem key={fieldsType} value={fieldsType}>
-                {t(`type.${fieldsType}`, { ns: "form" })}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <FieldsSelect value={type} onChange={handleChangeType} />
         {isTree ? (
           <TreeSelect required value={treeSelected} onChange={handleChangeTreeSelect} />
         ) : (

@@ -40,12 +40,10 @@ const useFormTreeCardMutation = () => {
   const getDisabledValueField = (index: number) => !isDecisionField && index > 0;
 
   const { refetch: refetchWorkflow, isLoading: isWorkflowLoading } = useWorkflowQuery(treeSelected, {
-    cacheTime: 0,
     enabled: false,
     onError: () => {
       open(t("error.fetchTree", { ns: "snackMessage" }), "error");
     },
-    refetchOnWindowFocus: false,
   });
 
   const handlePresetValues = (event: ChangeEvent<HTMLInputElement>, predicate: "value" | "label" | "message") => {
@@ -128,7 +126,7 @@ const useFormTreeCardMutation = () => {
     setRequired(false);
   };
 
-  const handleChangeTreeSelect = (event: SelectChangeEvent<string>) => {
+  const handleChangeTreeSelect = (event: SelectChangeEvent) => {
     setTreeSelected(event.target.value);
   };
 

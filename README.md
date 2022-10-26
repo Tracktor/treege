@@ -8,6 +8,7 @@
 - [Features](#Features)
 - [Installation](#Installation)
 - [Usage](#Usage)
+  - [Options](#Options)
 - [Generate form from Treege data](#Generate-form-from-Treege-data)
 - [Local installation](#local-installation)
 - [Available Scripts](#Available-Scripts)
@@ -43,6 +44,15 @@ const App = () => {
 
 export default App;
 ```
+
+### Options
+
+| Props         | Type   | Default   | Required | Detail                                                                                        |
+|---------------|--------|-----------|----------|-----------------------------------------------------------------------------------------------|
+| authToken     | string | undefined | false    | Authentication token                                                                          |
+| endPoint      | string | undefined | false    | Endpoint for API communication                                                                |
+| initialTreeId | string | undefined | false    | If provided, this will fetch initial tree id. Cannot provided with `initialTree` in same time |
+| initialTree   | object | undefined | false    | Initial tree data. Cannot provided with `initialTreeId` in same time                          |
 
 ## Generate form from Treege data
 

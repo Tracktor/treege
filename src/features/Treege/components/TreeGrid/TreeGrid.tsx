@@ -11,7 +11,6 @@ import Header from "@/components/Layouts/Header/Header";
 import Main from "@/components/Layouts/Main/Main";
 import MosaicLayout from "@/components/Layouts/MosaicLayout/MosaicLayout";
 import Sidebar from "@/components/Layouts/Sidebar/Sidebar";
-import ButtonCreateTree from "@/features/Treege/components/ButtonCreateTree/ButtonCreateTree";
 import FormTreeCardDelete from "@/features/Treege/components/Forms/FormTreeCardDelete/FormTreeCardDelete";
 import FormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/FormTreeCardMutation";
 import TreeCardContainer from "@/features/Treege/components/TreeCardContainer/TreeCardContainer";
@@ -23,18 +22,9 @@ import { TreegeContext } from "@/features/Treege/context/TreegeContext";
 import { getTree } from "@/utils/tree";
 
 const TreeGrid = () => {
-  const { tree, treeModalOpen, treePath } = useContext(TreegeContext);
+  const { tree, treeModalOpen, treePath, endPoint } = useContext(TreegeContext);
   const { handleCloseTreeModal } = useTreeCardContainer();
-  const {
-    getTitleModalMutation,
-    closeModal,
-    getTitleModalDelete,
-    handleChangeTree,
-    isModalMutationOpen,
-    isDeleteModal,
-    treeSelected,
-    handleSubmit,
-  } = useTreeGrid();
+  const { getTitleModalMutation, closeModal, getTitleModalDelete, isModalMutationOpen, isDeleteModal } = useTreeGrid();
   const currentTreePath = treePath?.at(-1)?.path;
   const currentTreeName = treePath?.at(-1)?.label;
   const currentTree = tree && getTree(tree, currentTreePath);
@@ -45,21 +35,25 @@ const TreeGrid = () => {
         <Header>
           <Stack justifyContent="space-between" direction="row" alignItems="center">
             <Logo />
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <TreeNameTextField />
-              <TreeSelect size="small" arrowOnly showBtnAddNewTree onChange={handleChangeTree} value={treeSelected} />
-            </Stack>
+            {!!endPoint && (
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <TreeNameTextField />
+                <TreeSelect size="small" arrowOnly showBtnAddNewTree />
+              </Stack>
+            )}
           </Stack>
         </Header>
 
-        <Main>{tree ? <Tree data={tree} renderCustomNodeElement={TreeCardContainer} /> : <ButtonCreateTree />}</Main>
+        <Main>
+          <Tree data={tree} renderCustomNodeElement={TreeCardContainer} />
+        </Main>
 
         <Sidebar>
           <ViewerJSON value={tree} />
         </Sidebar>
 
         <Action>
-          <ViewerJSONAction value={tree} onSave={handleSubmit} />
+          <ViewerJSONAction value={tree} />
         </Action>
       </MosaicLayout>
 

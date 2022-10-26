@@ -6,17 +6,7 @@ const TreeNameTextField = () => {
   const { t } = useTranslation("form");
   const { name, handleChangeName, errorName } = useTreeNameTextField();
 
-  return (
-    <TextField
-      required
-      label={t("treeName")}
-      size="small"
-      onChange={handleChangeName}
-      value={name}
-      error={!!errorName}
-      helperText={errorName}
-    />
-  );
+  return <TextField required label={t("treeName")} size="small" onChange={handleChangeName} value={name} error={!!errorName} />;
 };
 
 export default TreeNameTextField;

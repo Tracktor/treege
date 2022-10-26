@@ -10,7 +10,6 @@ const useTreeNameTextField = () => {
 
     if (!value) {
       setCurrentTree((prevState) => ({ ...prevState, errorName: "Champs requis", name: e.target.value }));
-
       return;
     }
 

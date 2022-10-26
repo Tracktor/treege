@@ -1,7 +1,8 @@
 import axios from "axios";
-import { useEffect } from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { useLayoutEffect } from "react";
+import { QueryClientProvider } from "react-query";
 import DarkTheme from "@/components/Theme/DarkTheme/DarkTheme";
+import queryClient from "@/config/queryClient";
 import AuthProvider from "@/context/Auth/AuthProvider";
 import SnackbarProvider from "@/context/Snackbar/SnackbarProvider";
 import TreeGrid from "@/features/Treege/components/TreeGrid/TreeGrid";
@@ -11,35 +12,41 @@ import "@/config/i18n";
 
 type TreegeProps =
   | {
-      initialTree?: TreeNode;
-      authToken?: never;
-      endPoint?: never;
+      authToken?: string;
+      endPoint?: string;
+      initialTree?: never;
+      initialTreeId?: never;
     }
   | {
-      initialTree?: TreeNode;
-      authToken: string;
-      endPoint: string;
+      authToken?: string;
+      endPoint?: string;
+      initialTree: TreeNode;
+      initialTreeId?: never;
+    }
+  | {
+      authToken?: string;
+      endPoint?: string;
+      initialTree?: never;
+      initialTreeId: string;
     };
 
-const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
-
-const Treege = ({ authToken, endPoint, initialTree }: TreegeProps) => {
-  useEffect(() => {
+const Treege = ({ authToken, endPoint, initialTree, initialTreeId }: TreegeProps) => {
+  useLayoutEffect(() => {
     axios.defaults.baseURL = endPoint;
     axios.defaults.headers.common.Authorization = `Bearer ${authToken}`;
   }, [endPoint, authToken]);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SnackbarProvider>
-        <AuthProvider authToken={authToken}>
-          <TreegeProvider endPoint={endPoint} initialTree={initialTree}>
-            <DarkTheme>
+      <AuthProvider authToken={authToken}>
+        <TreegeProvider endPoint={endPoint} initialTree={initialTree} initialTreeId={initialTreeId}>
+          <DarkTheme>
+            <SnackbarProvider>
               <TreeGrid />
-            </DarkTheme>
-          </TreegeProvider>
-        </AuthProvider>
-      </SnackbarProvider>
+            </SnackbarProvider>
+          </DarkTheme>
+        </TreegeProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 };

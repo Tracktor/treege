@@ -29,7 +29,7 @@ export interface TreeDefaultValue {
 
 export const treeDefaultValue: TreeDefaultValue = {
   currentHierarchyPointNode: null,
-  currentTree: { errorName: "", name: "" },
+  currentTree: { errorName: "", id: "", name: "" },
   dispatchTree: () => null,
   endPoint: undefined,
   modalOpen: null,

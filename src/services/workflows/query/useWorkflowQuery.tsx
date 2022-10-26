@@ -3,10 +3,13 @@ import useWorkflowQueryFetcher, { WorkflowsResponse } from "@/services/workflows
 
 interface Options extends Omit<UseQueryOptions<any, any, WorkflowsResponse, any>, "queryKey" | "queryFn"> {}
 
-const useWorkflowQuery = (id: string, options: Options) => {
+const useWorkflowQuery = (id?: string, options?: Options) => {
   const { getWorkflow } = useWorkflowQueryFetcher();
 
-  return useQuery(["/v1/workflow", id], () => getWorkflow(id), options);
+  return useQuery(["/v1/workflow", id], () => id && getWorkflow(id), {
+    refetchOnWindowFocus: false,
+    ...options,
+  });
 };
 
 export default useWorkflowQuery;

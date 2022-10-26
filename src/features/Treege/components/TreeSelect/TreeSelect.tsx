@@ -11,7 +11,7 @@ import {
   Skeleton,
   Typography,
 } from "design-system-tracktor";
-import React from "react";
+import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import useTreeSelect from "@/features/Treege/components/TreeSelect/useTreeSelect";
 
@@ -21,7 +21,7 @@ interface TreeSelectProps {
   required?: boolean;
   showBtnAddNewTree?: boolean;
   value?: string;
-  onChange: (event: SelectChangeEvent) => void;
+  onChange?: (event: SelectChangeEvent) => void;
 }
 
 const styles = {
@@ -36,31 +36,31 @@ const styles = {
 };
 
 const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, value }: TreeSelectProps) => {
-  const { t } = useTranslation();
-  const { fetchWorkflowSuggestions, workflowsSuggestions, workflowsSuggestionsLoading } = useTreeSelect();
+  const isControlled = useMemo(() => !!onChange, [onChange]);
+  const { t } = useTranslation("form");
+  const { handleChangeTree, handleOnOpen, workflowsSuggestions, workflowsSuggestionsLoading, treeSelected } = useTreeSelect(isControlled);
 
   return (
     <FormControl size={size} required={required} sx={styles.formControl}>
-      {!arrowOnly && <InputLabel>{t("tree", { ns: "form" })}</InputLabel>}
+      {!arrowOnly && <InputLabel>{t("tree")}</InputLabel>}
       <Select
-        value={value || ""}
+        value={isControlled ? value : treeSelected}
         id="tree-select"
-        onChange={onChange}
+        onChange={(e) => (isControlled ? onChange?.(e) : handleChangeTree(e))}
         sx={arrowOnly ? styles.select : undefined}
-        label={t("type")}
-        onOpen={fetchWorkflowSuggestions}
+        label={t("tree")}
+        onOpen={handleOnOpen}
       >
         {workflowsSuggestionsLoading && (
           <MenuItem>
             <Skeleton width="100%" />
           </MenuItem>
         )}
-        {workflowsSuggestions &&
-          workflowsSuggestions.map(({ label: treeLabel, id: treeId }) => (
-            <MenuItem key={treeId} value={treeId}>
-              {treeLabel}
-            </MenuItem>
-          ))}
+        {workflowsSuggestions?.map(({ label: treeLabel, id: treeId }) => (
+          <MenuItem key={treeId} value={treeId}>
+            {treeLabel}
+          </MenuItem>
+        ))}
         {showBtnAddNewTree && (
           <MenuItem disabled>
             <Box sx={{ height: 1, width: "100%" }}>
@@ -70,7 +70,7 @@ const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, va
         )}
         {showBtnAddNewTree && (
           <MenuItem value="add-new-tree">
-            <Typography mr={1}>Nouvel arbre</Typography>
+            <Typography mr={1}>{t("newTree")}</Typography>
             <AddRoundedIcon color="primary" />
           </MenuItem>
         )}
