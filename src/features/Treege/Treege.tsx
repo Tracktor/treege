@@ -20,14 +20,14 @@ type TreegeProps =
   | {
       authToken?: string;
       endPoint?: string;
-      initialTree: TreeNode;
+      initialTree?: TreeNode;
       initialTreeId?: never;
     }
   | {
       authToken?: string;
       endPoint?: string;
       initialTree?: never;
-      initialTreeId: string;
+      initialTreeId?: string;
     };
 
 const Treege = ({ authToken, endPoint, initialTree, initialTreeId }: TreegeProps) => {
