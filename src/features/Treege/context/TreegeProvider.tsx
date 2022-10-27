@@ -45,7 +45,7 @@ const TreegeProvider = ({ children, endPoint, initialTree, initialTreeId }: Tree
   // Fetch initial tree
   useWorkflowQuery(currentTree.id, {
     enabled: !!initialTreeId,
-    onSuccess: (response) => {
+    onSuccess: async (response) => {
       setCurrentTree({ id: response?.id, name: response?.label });
       dispatchTree(setTree(response.workflow));
     },

@@ -2,3 +2,4 @@
 
 ## v0.5.1
 - Add new hook useTreegeContext
+- Add tree loader

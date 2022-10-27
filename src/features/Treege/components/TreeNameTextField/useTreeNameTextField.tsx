@@ -2,8 +2,9 @@ import type { ChangeEvent } from "react";
 import useTreegeContext from "@/hooks/useTreegeContext";
 
 const useTreeNameTextField = () => {
-  const { currentTree, setCurrentTree } = useTreegeContext();
+  const { currentTree, setCurrentTree, tree } = useTreegeContext();
   const { name, errorName, id } = currentTree;
+  const disabled = !!currentTree.id && !tree;
 
   const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -16,7 +17,7 @@ const useTreeNameTextField = () => {
     setCurrentTree((prevState) => ({ ...prevState, errorName: "", name: e.target.value }));
   };
 
-  return { errorName, handleChangeName, id, name };
+  return { disabled, errorName, handleChangeName, id, name };
 };
 
 export default useTreeNameTextField;

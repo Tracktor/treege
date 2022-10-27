@@ -1,4 +1,4 @@
-import { GlobalStyles } from "design-system-tracktor";
+import { Box, CircularProgress, GlobalStyles } from "design-system-tracktor";
 import { memo } from "react";
 import D3Tree from "react-d3-tree";
 import type { RenderCustomNodeElementFn } from "react-d3-tree/lib/types/common";
@@ -6,6 +6,7 @@ import useTree from "@/components/DataDisplay/Tree/useTree";
 import colors from "@/constants/colors";
 import ButtonCreateTree from "@/features/Treege/components/ButtonCreateTree/ButtonCreateTree";
 import type { TreeRenderCustomNodeElementFn } from "@/features/Treege/type/TreeNode";
+import useTreegeContext from "@/hooks/useTreegeContext";
 
 interface TreeProps {
   data: any;
@@ -17,6 +18,12 @@ const styles = {
   container: {
     height: "100%",
     width: "100%",
+  },
+  progressContainer: {
+    alignItems: "center",
+    display: "flex",
+    height: "100%",
+    justifyContent: "center",
   },
   treeLink: {
     stroke: `${colors.borderMedium} !important`,
@@ -34,9 +41,18 @@ const Tree = ({
   },
 }: TreeProps) => {
   const { dimensions, refContainer, translate } = useTree();
+  const { currentTree } = useTreegeContext();
 
-  if (!data) {
+  if (!data && !currentTree.id) {
     return <ButtonCreateTree />;
+  }
+
+  if (currentTree.id && !data) {
+    return (
+      <Box sx={styles.progressContainer}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
