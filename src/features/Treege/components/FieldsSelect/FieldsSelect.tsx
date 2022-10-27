@@ -15,7 +15,7 @@ const FieldsSelect = ({ onChange, value }: FieldsSelectProps) => {
   return (
     <FormControl sx={{ flex: 1 }} required>
       <InputLabel>{t("type")}</InputLabel>
-      <Select value={value} label={t("type")} onChange={onChange}>
+      <Select value={value} label={t("type")} onChange={onChange} MenuProps={{ PaperProps: { sx: { maxHeight: 300 } } }}>
         {fields.map(({ type: fieldsType }) => (
           <MenuItem key={fieldsType} value={fieldsType}>
             {t(`type.${fieldsType}`, { ns: "form" })}
