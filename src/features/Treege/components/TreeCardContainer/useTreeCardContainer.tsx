@@ -1,10 +1,9 @@
 import type { HierarchyPointNode } from "d3-hierarchy";
-import { useContext } from "react";
-import { TreegeContext } from "@/features/Treege/context/TreegeContext";
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
+import useTreegeContext from "@/hooks/useTreegeContext";
 
 const useTreeCardContainer = () => {
-  const { setModalOpen, setCurrentHierarchyPointNode, setTreeModalOpen, setTreePath } = useContext(TreegeContext);
+  const { setModalOpen, setCurrentHierarchyPointNode, setTreeModalOpen, setTreePath } = useTreegeContext();
 
   const handleAddChildren = (hierarchyPointNode: HierarchyPointNode<TreeNode>) => {
     setCurrentHierarchyPointNode(hierarchyPointNode);

@@ -1,8 +1,7 @@
-import { useContext } from "react";
-import { TreegeContext } from "@/features/Treege/context/TreegeContext";
+import useTreegeContext from "@/hooks/useTreegeContext";
 
 const useButtonCreateTree = () => {
-  const { setModalOpen } = useContext(TreegeContext);
+  const { setModalOpen } = useTreegeContext();
 
   const handleClick = () => setModalOpen("add");
 

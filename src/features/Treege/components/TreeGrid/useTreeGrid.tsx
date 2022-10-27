@@ -1,9 +1,8 @@
-import { useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { TreegeContext } from "@/features/Treege/context/TreegeContext";
+import useTreegeContext from "@/hooks/useTreegeContext";
 
 const useTreeGrid = () => {
-  const { currentHierarchyPointNode, modalOpen, setModalOpen } = useContext(TreegeContext);
+  const { currentHierarchyPointNode, modalOpen, setModalOpen } = useTreegeContext();
   const { t } = useTranslation(["modal", "snackMessage"]);
   const isEditModal = modalOpen === "edit";
   const isAddModal = modalOpen === "add";

@@ -1,8 +1,8 @@
-import { ChangeEvent, useContext } from "react";
-import { TreegeContext } from "@/features/Treege/context/TreegeContext";
+import type { ChangeEvent } from "react";
+import useTreegeContext from "@/hooks/useTreegeContext";
 
 const useTreeNameTextField = () => {
-  const { currentTree, setCurrentTree } = useContext(TreegeContext);
+  const { currentTree, setCurrentTree } = useTreegeContext();
   const { name, errorName, id } = currentTree;
 
   const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {

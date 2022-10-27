@@ -1,5 +1,4 @@
 import { Stack } from "design-system-tracktor";
-import { useContext } from "react";
 import Logo from "@/components/DataDisplay/Logo/Logo";
 import Tree from "@/components/DataDisplay/Tree/Tree";
 import ViewerJSON from "@/components/DataDisplay/ViewerJSON/ViewerJSON";
@@ -18,11 +17,11 @@ import useTreeCardContainer from "@/features/Treege/components/TreeCardContainer
 import useTreeGrid from "@/features/Treege/components/TreeGrid/useTreeGrid";
 import TreeNameTextField from "@/features/Treege/components/TreeNameTextField";
 import TreeSelect from "@/features/Treege/components/TreeSelect";
-import { TreegeContext } from "@/features/Treege/context/TreegeContext";
+import useTreegeContext from "@/hooks/useTreegeContext";
 import { getTree } from "@/utils/tree";
 
 const TreeGrid = () => {
-  const { tree, treeModalOpen, treePath, endPoint } = useContext(TreegeContext);
+  const { tree, treeModalOpen, treePath, endPoint } = useTreegeContext();
   const { handleCloseTreeModal } = useTreeCardContainer();
   const { getTitleModalMutation, closeModal, getTitleModalDelete, isModalMutationOpen, isDeleteModal } = useTreeGrid();
   const currentTreePath = treePath?.at(-1)?.path;

@@ -1,12 +1,12 @@
 import type { HierarchyPointNode } from "d3-hierarchy";
 import type { SelectChangeEvent } from "design-system-tracktor";
-import { ChangeEvent, FormEvent, useContext, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";
-import { TreegeContext } from "@/features/Treege/context/TreegeContext";
 import { appendTreeCard, replaceTreeCard } from "@/features/Treege/reducer/treeReducer";
 import type { TreeNode, TreeNodeField, TreeValues } from "@/features/Treege/type/TreeNode";
-import useSnackbar from "@/hooks/useSnackbar/useSnackbar";
+import useSnackbar from "@/hooks/useSnackbar";
+import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import { isUniqueArrayItemWithNewEntry } from "@/utils/array";
 import getTreeNames from "@/utils/tree/getNodeNames/getNodeNames";
@@ -14,7 +14,7 @@ import getTree from "@/utils/tree/getTree/getTree";
 
 const useFormTreeCardMutation = () => {
   const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
-  const { tree, dispatchTree, currentHierarchyPointNode, modalOpen, treePath, setModalOpen } = useContext(TreegeContext);
+  const { tree, dispatchTree, currentHierarchyPointNode, modalOpen, treePath, setModalOpen } = useTreegeContext();
   const { open } = useSnackbar();
   const { t } = useTranslation();
   // Form value

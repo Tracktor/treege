@@ -1,14 +1,13 @@
-import { useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { TreegeContext } from "@/features/Treege/context/TreegeContext";
-import useSnackbar from "@/hooks/useSnackbar/useSnackbar";
+import useSnackbar from "@/hooks/useSnackbar";
+import useTreegeContext from "@/hooks/useTreegeContext";
 import useAddWorkflowsMutation from "@/services/workflows/mutation/useAddWorkflowsMutation";
 import useEditWorkflowsMutation from "@/services/workflows/mutation/useEditWorkflowsMutation";
 
 const useViewerJSONAction = () => {
   const { t } = useTranslation(["snackMessage"]);
   const { open } = useSnackbar();
-  const { setCurrentTree, currentTree, tree } = useContext(TreegeContext);
+  const { setCurrentTree, currentTree, tree } = useTreegeContext();
 
   const { mutate: addWorkflowMutate } = useAddWorkflowsMutation({
     onError: () => {

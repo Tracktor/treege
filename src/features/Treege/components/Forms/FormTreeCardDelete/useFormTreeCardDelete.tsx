@@ -1,9 +1,9 @@
-import { FormEvent, useContext } from "react";
-import { TreegeContext } from "@/features/Treege/context/TreegeContext";
+import type { FormEvent } from "react";
 import { deleteTreeCard } from "@/features/Treege/reducer/treeReducer";
+import useTreegeContext from "@/hooks/useTreegeContext";
 
 const useFormTreeCardDelete = () => {
-  const { dispatchTree, setModalOpen, currentHierarchyPointNode, treePath } = useContext(TreegeContext);
+  const { dispatchTree, setModalOpen, currentHierarchyPointNode, treePath } = useTreegeContext();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();

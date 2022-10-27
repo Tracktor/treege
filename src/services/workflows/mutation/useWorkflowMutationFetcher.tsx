@@ -1,6 +1,5 @@
 import axios from "axios";
-import { useContext } from "react";
-import { TreegeContext } from "@/features/Treege/context/TreegeContext";
+import useTreegeContext from "@/hooks/useTreegeContext";
 import type { TreeNode } from "@/main";
 
 export interface WorkflowPostData {
@@ -24,7 +23,7 @@ export interface WorkflowPatchResponse {
 }
 
 const useWorkflowRequest = () => {
-  const { version } = useContext(TreegeContext);
+  const { version } = useTreegeContext();
 
   const postWorkflow = (data: WorkflowPostData): Promise<WorkflowPostResponse> =>
     axios.post(`/v1/workflow`, { ...data, version }).then((res) => res.data);

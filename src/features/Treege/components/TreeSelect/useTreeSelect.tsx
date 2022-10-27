@@ -1,16 +1,16 @@
 import type { SelectChangeEvent } from "design-system-tracktor";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { TreegeContext } from "@/features/Treege/context/TreegeContext";
 import { resetTree, setTree } from "@/features/Treege/reducer/treeReducer";
-import useSnackbar from "@/hooks/useSnackbar/useSnackbar";
+import useSnackbar from "@/hooks/useSnackbar";
+import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import useWorkflowsQuery from "@/services/workflows/query/useWorkflowsQuery";
 
 const useTreeSelect = (isControlled: boolean) => {
   const { t } = useTranslation("snackMessage");
   const { open } = useSnackbar();
-  const { currentTree, setCurrentTree, dispatchTree } = useContext(TreegeContext);
+  const { currentTree, setCurrentTree, dispatchTree } = useTreegeContext();
   const [treeSelected, setTreeSelected] = useState("");
 
   useWorkflowQuery(treeSelected, {
