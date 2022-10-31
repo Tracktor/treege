@@ -1,4 +1,4 @@
-interface TreePlusIconProps {
+export interface TreePlusIconProps {
   color?: string;
   height?: string | number;
   width?: string | number;
