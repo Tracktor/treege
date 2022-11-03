@@ -192,14 +192,14 @@ const useFormTreeCardMutation = () => {
   const getTreeValuesWithoutEmptyMessage = (valuesData: TreeValues[]) =>
     valuesData.map(({ message, ...rest }) => ({ ...rest, ...(message && { message }) }));
 
-  const getWorkFlowReq = (isTreeParam: boolean, isEdit: boolean, isOtherTree: boolean) => {
+  const getWorkFlowReq = (isTreeSelected: boolean, isEdit: boolean, isOtherTree: boolean) => {
     // make request if is Tree and not update or isOtherTree selected
-    if (isTreeParam && (!isEdit || isOtherTree)) {
+    if (isTreeSelected && (!isEdit || isOtherTree)) {
       return refetchWorkflow();
     }
 
     // don't edit tree
-    if (isTreeParam && isEdit && !isOtherTree) {
+    if (isTreeSelected && isEdit && !isOtherTree) {
       return { data: { workflow: currentHierarchyPointNode?.data.attributes?.tree }, isError: null };
     }
 
