@@ -4,8 +4,8 @@ import { Box, Button, Checkbox, CircularProgress, FormControlLabel, FormGroup, S
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
 import FieldsSelect from "@/features/Treege/components/FieldsSelect";
+import ExtraField from "@/features/Treege/components/Forms/FormTreeCardMutation/ExtraField";
 import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
-import TreeSelect from "@/features/Treege/components/TreeSelect";
 
 interface FormTreeCardMutationProps {
   onClose?(): void;
@@ -77,26 +77,6 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeHiddenValue,
   } = useFormTreeCardMutation();
 
-  const extraField = () => {
-    if (isTreeField) {
-      return <TreeSelect required value={treeSelected} onChange={handleChangeTreeSelect} />;
-    }
-
-    if (isHiddenField) {
-      return (
-        <TextField
-          required
-          sx={{ flex: 1 }}
-          label={t("hiddenValue", { ns: "form" })}
-          onChange={handleChangeHiddenValue}
-          value={hiddenValue}
-        />
-      );
-    }
-
-    return <TextField sx={{ flex: 1 }} label={t("helperText", { ns: "form" })} onChange={handleChangeHelperText} value={helperText} />;
-  };
-
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
@@ -114,7 +94,16 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
         <FieldsSelect value={type} onChange={handleChangeType} />
-        {extraField()}
+        <ExtraField
+          helperText={helperText}
+          hiddenValue={hiddenValue}
+          isHiddenField={isHiddenField}
+          isTreeField={isTreeField}
+          treeSelected={treeSelected}
+          handleChangeTreeSelect={handleChangeTreeSelect}
+          handleChangeHelperText={handleChangeHelperText}
+          handleChangeHiddenValue={handleChangeHiddenValue}
+        />
       </Stack>
 
       {isBooleanField && (
