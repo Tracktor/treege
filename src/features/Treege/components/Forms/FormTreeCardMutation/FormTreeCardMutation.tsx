@@ -47,6 +47,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     type,
     helperText,
     label,
+    hiddenValue,
     isBooleanField,
     isDecision,
     isDecisionField,
@@ -74,7 +75,6 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeLabel,
     handleChangeRepeatable,
     handleChangeHiddenValue,
-    hiddenValue,
   } = useFormTreeCardMutation();
 
   const extraField = () => {
