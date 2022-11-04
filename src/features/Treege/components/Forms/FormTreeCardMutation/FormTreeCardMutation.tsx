@@ -50,11 +50,13 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     isBooleanField,
     isDecision,
     isDecisionField,
+    isHiddenField,
     isRequiredDisabled,
-    isTree,
+    isRepeatableDisabled,
+    isTreeField,
     treeSelected,
     isWorkflowLoading,
-    isRepeatable,
+    repeatable,
     messages: { on, off },
     handleChangeTreeSelect,
     handleChangeHelperText,
@@ -70,8 +72,30 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleSubmit,
     handleAddValue,
     handleChangeLabel,
-    handleChangeIsRepeatable,
+    handleChangeRepeatable,
+    handleChangeHiddenValue,
+    hiddenValue,
   } = useFormTreeCardMutation();
+
+  const extraField = () => {
+    if (isTreeField) {
+      return <TreeSelect required value={treeSelected} onChange={handleChangeTreeSelect} />;
+    }
+
+    if (isHiddenField) {
+      return (
+        <TextField
+          required
+          sx={{ flex: 1 }}
+          label={t("hiddenValue", { ns: "form" })}
+          onChange={handleChangeHiddenValue}
+          value={hiddenValue}
+        />
+      );
+    }
+
+    return <TextField sx={{ flex: 1 }} label={t("helperText", { ns: "form" })} onChange={handleChangeHelperText} value={helperText} />;
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -90,11 +114,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
         <FieldsSelect value={type} onChange={handleChangeType} />
-        {isTree ? (
-          <TreeSelect required value={treeSelected} onChange={handleChangeTreeSelect} />
-        ) : (
-          <TextField sx={{ flex: 1 }} label={t("helperText", { ns: "form" })} onChange={handleChangeHelperText} value={helperText} />
-        )}
+        {extraField()}
       </Stack>
 
       {isBooleanField && (
@@ -107,7 +127,8 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
       <Stack paddingY={1}>
         <FormGroup>
           <FormControlLabel
-            control={<Checkbox checked={isRepeatable} onChange={handleChangeIsRepeatable} />}
+            disabled={isRepeatableDisabled}
+            control={<Checkbox checked={repeatable} onChange={handleChangeRepeatable} />}
             label={t("repeatable", { ns: "form" })}
           />
         </FormGroup>
