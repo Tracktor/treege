@@ -20,6 +20,7 @@ const useFormTreeCardMutation = () => {
   // Form value
   const [values, setValues] = useState<{ id: string; label: string; value: string; message?: string }[]>(defaultValues);
   const [name, setName] = useState("");
+  const [hiddenValue, setHiddenValue] = useState("");
   const [label, setLabel] = useState("");
   const [required, setRequired] = useState(false);
   const [isDecision, setIsDecision] = useState(false);
@@ -28,15 +29,18 @@ const useFormTreeCardMutation = () => {
   const [helperText, setHelperText] = useState("");
   const [step, setStep] = useState("");
   const [messages, setMessages] = useState({ off: "", on: "" });
-  const [isRepeatable, setIsRepeatable] = useState(false);
+  const [repeatable, setRepeatable] = useState(false);
+
   // Form Error
   const [uniqueNameErrorMessage, setUniqueNameErrorMessage] = useState("");
   // State
   const isEditModal = modalOpen === "edit";
-  const isTree = type === "tree";
+  const isTreeField = type === "tree";
+  const isHiddenField = type === "hidden";
   const isBooleanField = fields.some((field) => field.type === type && field?.isBooleanField);
   const isDecisionField = fields.some((field) => field.type === type && field?.isDecisionField);
   const isRequiredDisabled = fields.some((field) => field.type === type && field?.isRequiredDisabled);
+  const isRepeatableDisabled = fields.some((field) => field.type === type && field?.isRepeatableDisabled);
   const getDisabledValueField = (index: number) => !isDecisionField && index > 0;
 
   const { refetch: refetchWorkflow, isLoading: isWorkflowLoading } = useWorkflowQuery(treeSelected, {
@@ -61,6 +65,10 @@ const useFormTreeCardMutation = () => {
         return { ...item };
       })
     );
+  };
+
+  const handleChangeHiddenValue = (event: ChangeEvent<HTMLInputElement>) => {
+    setHiddenValue(event.target.value);
   };
 
   const handleChangeLabel = (event: ChangeEvent<HTMLInputElement>) => {
@@ -115,8 +123,8 @@ const useFormTreeCardMutation = () => {
     setIsDecision(event.target.checked);
   };
 
-  const handleChangeIsRepeatable = (event: ChangeEvent<HTMLInputElement>) => {
-    setIsRepeatable(event.target.checked);
+  const handleChangeRepeatable = (event: ChangeEvent<HTMLInputElement>) => {
+    setRepeatable(event.target.checked);
   };
 
   const handleChangeType = (event: SelectChangeEvent<TreeNodeField["type"]>) => {
@@ -124,6 +132,7 @@ const useFormTreeCardMutation = () => {
 
     setIsDecision(false);
     setRequired(false);
+    setRepeatable(false);
   };
 
   const handleChangeTreeSelect = (event: SelectChangeEvent) => {
@@ -219,7 +228,7 @@ const useFormTreeCardMutation = () => {
     const newPath = treePath.length ? `${currentPath}/${name}` : `/${name}`;
     const isOtherTree = currentHierarchyPointNode?.data.attributes?.tree?.treeId !== treeSelected;
 
-    const { data: workflow, isError } = await getWorkFlowReq(isTree, isEdit, isOtherTree);
+    const { data: workflow, isError } = await getWorkFlowReq(isTreeField, isEdit, isOtherTree);
 
     if (isError) return;
 
@@ -232,12 +241,13 @@ const useFormTreeCardMutation = () => {
         ...((off || on) && {
           messages: { ...(off && { off }), ...(on && { on }) },
         }),
-        ...(isTree && { tree: { ...workflow?.workflow, treeId: treeSelected } as TreeNode, treePath: newPath }),
+        ...(isTreeField && { tree: { ...workflow?.workflow, treeId: treeSelected } as TreeNode, treePath: newPath }),
         ...(isDecision && { isDecision }),
         ...(isDecisionField && !isDecision && { values: getTreeValuesWithoutEmptyMessage(values) }),
         ...(required && { required }),
         ...(step && { step }),
-        ...(isRepeatable && { isRepeatable }),
+        ...(repeatable && { repeatable }),
+        ...(isHiddenField && { hiddenValue }),
       },
       children: childOfChildren,
       name,
@@ -285,7 +295,8 @@ const useFormTreeCardMutation = () => {
         on: currentHierarchyPointNode?.data.attributes?.messages?.on || "",
       });
       setTreeSelected(currentHierarchyPointNode?.data.attributes?.tree?.treeId || "");
-      setIsRepeatable(currentHierarchyPointNode?.data.attributes?.isRepeatable || false);
+      setRepeatable(currentHierarchyPointNode?.data.attributes?.repeatable || false);
+      setHiddenValue(currentHierarchyPointNode?.data.attributes?.hiddenValue || "");
     }
   }, [
     currentHierarchyPointNode?.data.attributes?.tree?.treeId,
@@ -299,7 +310,8 @@ const useFormTreeCardMutation = () => {
     currentHierarchyPointNode?.data.attributes?.values,
     currentHierarchyPointNode?.data?.children,
     currentHierarchyPointNode?.data.name,
-    currentHierarchyPointNode?.data.attributes?.isRepeatable,
+    currentHierarchyPointNode?.data.attributes?.repeatable,
+    currentHierarchyPointNode?.data.attributes?.hiddenValue,
     defaultValues,
     modalOpen,
   ]);
@@ -308,14 +320,15 @@ const useFormTreeCardMutation = () => {
     getDisabledValueField,
     handleAddValue,
     handleChangeHelperText,
+    handleChangeHiddenValue,
     handleChangeIsDecisionField,
-    handleChangeIsRepeatable,
     handleChangeLabel,
     handleChangeMessage,
     handleChangeName,
     handleChangeOptionLabel,
     handleChangeOptionMessage,
     handleChangeOptionValue,
+    handleChangeRepeatable,
     handleChangeRequired,
     handleChangeStep,
     handleChangeTreeSelect,
@@ -323,16 +336,19 @@ const useFormTreeCardMutation = () => {
     handleDeleteValue,
     handleSubmit,
     helperText,
+    hiddenValue,
     isBooleanField,
     isDecision,
     isDecisionField,
-    isRepeatable,
+    isHiddenField,
+    isRepeatableDisabled,
     isRequiredDisabled,
-    isTree,
+    isTreeField,
     isWorkflowLoading,
     label,
     messages,
     name,
+    repeatable,
     required,
     step,
     treeSelected,

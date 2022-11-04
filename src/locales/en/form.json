@@ -1,6 +1,7 @@
 {
   "decisionFields": "Decision fields",
   "helperText": "Helper text",
+  "hiddenValue": "Hidden value",
   "label": "Label",
   "mustBeUnique": "Must be unique",
   "newTree": "Nouvel arbre",
@@ -25,6 +26,7 @@
     "tel": "Tel",
     "time": "Time",
     "text": "Text",
+    "hidden": "Hidden field",
     "tree": "Tree",
     "url": "URL"
   },

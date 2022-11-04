@@ -4,6 +4,8 @@
   "disabled": "Disabled",
   "edit": "Edit",
   "isALeaf": "Is a leaf",
+  "isAHidden": "Is a hidden field",
+  "isARepeatable": "Is a repeatable",
   "isABranch": "Is a branch",
   "isATree": "Is a tree",
   "isTheRoot": "Is the root",

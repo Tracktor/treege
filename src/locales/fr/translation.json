@@ -4,6 +4,8 @@
   "disabled": "Désactivé",
   "edit": "Éditer",
   "isALeaf": "Est une feuille",
+  "isAHidden": "Est un champs caché",
+  "isARepeatable": "Est répétable",
   "isABranch": "Est une branche",
   "isATree": "Est un arbre",
   "isTheRoot": "Est la racine",

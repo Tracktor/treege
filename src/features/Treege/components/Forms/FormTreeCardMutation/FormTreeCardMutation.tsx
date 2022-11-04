@@ -4,8 +4,8 @@ import { Box, Button, Checkbox, CircularProgress, FormControlLabel, FormGroup, S
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
 import FieldsSelect from "@/features/Treege/components/FieldsSelect";
+import ExtraField from "@/features/Treege/components/Forms/FormTreeCardMutation/ExtraField";
 import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
-import TreeSelect from "@/features/Treege/components/TreeSelect";
 
 interface FormTreeCardMutationProps {
   onClose?(): void;
@@ -47,14 +47,17 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     type,
     helperText,
     label,
+    hiddenValue,
     isBooleanField,
     isDecision,
     isDecisionField,
+    isHiddenField,
     isRequiredDisabled,
-    isTree,
+    isRepeatableDisabled,
+    isTreeField,
     treeSelected,
     isWorkflowLoading,
-    isRepeatable,
+    repeatable,
     messages: { on, off },
     handleChangeTreeSelect,
     handleChangeHelperText,
@@ -70,7 +73,8 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleSubmit,
     handleAddValue,
     handleChangeLabel,
-    handleChangeIsRepeatable,
+    handleChangeRepeatable,
+    handleChangeHiddenValue,
   } = useFormTreeCardMutation();
 
   return (
@@ -90,11 +94,16 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
         <FieldsSelect value={type} onChange={handleChangeType} />
-        {isTree ? (
-          <TreeSelect required value={treeSelected} onChange={handleChangeTreeSelect} />
-        ) : (
-          <TextField sx={{ flex: 1 }} label={t("helperText", { ns: "form" })} onChange={handleChangeHelperText} value={helperText} />
-        )}
+        <ExtraField
+          helperText={helperText}
+          hiddenValue={hiddenValue}
+          isHiddenField={isHiddenField}
+          isTreeField={isTreeField}
+          treeSelected={treeSelected}
+          handleChangeTreeSelect={handleChangeTreeSelect}
+          handleChangeHelperText={handleChangeHelperText}
+          handleChangeHiddenValue={handleChangeHiddenValue}
+        />
       </Stack>
 
       {isBooleanField && (
@@ -107,7 +116,8 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
       <Stack paddingY={1}>
         <FormGroup>
           <FormControlLabel
-            control={<Checkbox checked={isRepeatable} onChange={handleChangeIsRepeatable} />}
+            disabled={isRepeatableDisabled}
+            control={<Checkbox checked={repeatable} onChange={handleChangeRepeatable} />}
             label={t("repeatable", { ns: "form" })}
           />
         </FormGroup>
