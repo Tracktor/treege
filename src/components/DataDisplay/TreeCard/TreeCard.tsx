@@ -41,7 +41,7 @@ const styles = {
   },
   containerHidden: {
     background: colors.backgroundPrimary,
-    border: `solid 3px #620713`,
+    border: `solid 1px ${colors.error}`,
     borderRadius: "1rem",
   },
   containerTree: {
