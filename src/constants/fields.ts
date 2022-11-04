@@ -107,7 +107,7 @@ const fields = [
   {
     isBooleanField: false,
     isDecisionField: false,
-    isRepeatableDisabled: false,
+    isRepeatableDisabled: true,
     isRequiredDisabled: true,
     type: "tree",
   },
