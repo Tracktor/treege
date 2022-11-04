@@ -132,6 +132,7 @@ const useFormTreeCardMutation = () => {
 
     setIsDecision(false);
     setRequired(false);
+    setRepeatable(false);
   };
 
   const handleChangeTreeSelect = (event: SelectChangeEvent) => {

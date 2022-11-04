@@ -4,7 +4,9 @@ import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import EnergySavingsLeafRoundedIcon from "@mui/icons-material/EnergySavingsLeafRounded";
 import ForestRoundedIcon from "@mui/icons-material/ForestRounded";
+import LoopRoundedIcon from "@mui/icons-material/LoopRounded";
 import ParkRoundedIcon from "@mui/icons-material/ParkRounded";
+import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { Box, Button, Chip, GlobalStyles, Stack, Tooltip, Typography } from "design-system-tracktor";
@@ -35,6 +37,11 @@ const styles = {
   containerField: {
     background: colors.backgroundPrimary,
     border: `solid 1px ${colors.primaryMain}`,
+    borderRadius: "1rem",
+  },
+  containerHidden: {
+    background: colors.backgroundPrimary,
+    border: `solid 3px #620713`,
     borderRadius: "1rem",
   },
   containerTree: {
@@ -72,7 +79,11 @@ const styles = {
 const getCardStyle = (type?: string | number | boolean) => {
   const isField = !!type;
   const isTree = type === "tree";
+  const isHidden = type === "hidden";
 
+  if (isHidden) {
+    return styles.containerHidden;
+  }
   if (isTree) {
     return styles.containerTree;
   }
@@ -95,9 +106,10 @@ const TreeCard = ({
 }: TreeCardProps) => {
   const { t } = useTranslation(["translation", "form"]);
   const { attributes } = nodeDatum || {};
-  const { isRoot, isLeaf, required, step, type, label } = attributes || {};
+  const { isRoot, isLeaf, required, step, type, label, repeatable } = attributes || {};
   const isField = !!type;
   const isTree = type === "tree";
+  const isHidden = type === "hidden";
   const isValue = !isField;
   const isBranch = !isRoot && !isLeaf;
 
@@ -133,6 +145,16 @@ const TreeCard = ({
               )}
             </Stack>
             <Box paddingTop={0.5}>
+              {isHidden && (
+                <Tooltip title={t("isAHidden")} placement="bottom" arrow>
+                  <VisibilityOffRoundedIcon style={styles.icon} />
+                </Tooltip>
+              )}
+              {repeatable && (
+                <Tooltip title={t("isARepeatable")} placement="bottom" arrow>
+                  <LoopRoundedIcon style={styles.icon} />
+                </Tooltip>
+              )}
               {isLeaf && (
                 <Tooltip title={t("isALeaf")} placement="bottom" arrow>
                   <EnergySavingsLeafRoundedIcon style={styles.icon} />
