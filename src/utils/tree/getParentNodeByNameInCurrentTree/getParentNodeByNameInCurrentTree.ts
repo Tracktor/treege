@@ -12,9 +12,10 @@ const getParentNodeByNameInCurrentTree = (tree: TreeNode | null, name: string, p
   }
 
   if (hasChildren) {
-    for (let i = 0; result === null && i < tree.children.length; i += 1) {
-      result = getParentNodeByNameInCurrentTree(tree.children[i], name, tree);
-    }
+    tree.children.some((item) => {
+      result = getParentNodeByNameInCurrentTree(item, name, tree);
+      return !!result;
+    });
   }
 
   return result;
