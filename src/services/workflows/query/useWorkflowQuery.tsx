@@ -1,4 +1,4 @@
-import { useQuery, UseQueryOptions } from "react-query";
+import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import useWorkflowQueryFetcher, { WorkflowsResponse } from "@/services/workflows/query/useWorkflowQueryFetcher";
 
 interface Options extends Omit<UseQueryOptions<any, any, WorkflowsResponse, any>, "queryKey" | "queryFn"> {}

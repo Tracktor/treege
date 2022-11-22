@@ -43,7 +43,7 @@ const useFormTreeCardMutation = () => {
   const isRepeatableDisabled = fields.some((field) => field.type === type && field?.isRepeatableDisabled);
   const getDisabledValueField = (index: number) => !isDecisionField && index > 0;
 
-  const { refetch: refetchWorkflow, isLoading: isWorkflowLoading } = useWorkflowQuery(treeSelected, {
+  const { refetch: refetchWorkflow, isFetching: isWorkflowLoading } = useWorkflowQuery(treeSelected, {
     enabled: false,
     onError: () => {
       open(t("error.fetchTree", { ns: "snackMessage" }), "error");
