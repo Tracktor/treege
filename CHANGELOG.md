@@ -2,4 +2,4 @@
 
 ## v0.6.1
 - Upgrade design system
-
+- Update `test` script

@@ -27,7 +27,7 @@
     "build": "tsc && vite build",
     "lint": "eslint . && tsc --noEmit",
     "preview": "vite preview",
-    "test": "vitest",
+    "test": "yarn lint && vitest",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
     "prepare": "yarn run build && husky install"
