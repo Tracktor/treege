@@ -6,6 +6,7 @@ orbs:
 references:
   production_context: &production_context
     - npm
+    - github
 
 executors:
   publish-npm:
