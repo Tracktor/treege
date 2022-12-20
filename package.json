@@ -38,7 +38,7 @@
     "@uiw/codemirror-theme-dracula": "^4.11.4",
     "@uiw/react-codemirror": "^4.11.4",
     "axios": "^1.1.2",
-    "design-system-tracktor": "^1.8.8",
+    "design-system-tracktor": "^1.8.10",
     "i18next": "^21.8.14",
     "i18next-browser-languagedetector": "^6.1.4",
     "react": "^18.2.0",

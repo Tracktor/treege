@@ -2790,10 +2790,10 @@ dequal@^2.0.2:
   resolved "https://registry.yarnpkg.com/dequal/-/dequal-2.0.3.tgz#2644214f1997d39ed0ee0ece72335490a7ac67be"
   integrity sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==
 
-design-system-tracktor@^1.8.8:
-  version "1.8.8"
-  resolved "https://registry.yarnpkg.com/design-system-tracktor/-/design-system-tracktor-1.8.8.tgz#797316ea856f4870c74e31c555e1b64ff033d212"
-  integrity sha512-RH1Vg2gtwjh/NpFE9BepcFwFAenT4PdPGYE00q1LcRY1xfEpm+4o9tGDEmsQYPYzAabR4DlmVB9n/lOBQvk7oQ==
+design-system-tracktor@^1.8.10:
+  version "1.8.10"
+  resolved "https://registry.yarnpkg.com/design-system-tracktor/-/design-system-tracktor-1.8.10.tgz#06dc1c272fee3843bb74877c32d638c009b44713"
+  integrity sha512-zzM5+8SKdWinECGX4MyCQpAGhznHfvMzLv1DWVf7YwDVOlmvIBVRPNH10Lpp037MLSmGz8lnaUkD/r4WFCzvUA==
   dependencies:
     "@emotion/react" "^11.10.5"
     "@emotion/styled" "^11.10.5"
