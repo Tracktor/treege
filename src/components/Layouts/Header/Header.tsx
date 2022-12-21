@@ -8,7 +8,7 @@ interface HeaderProps {
 
 const styles = {
   box: {
-    border: `solid 1px ${colors.borderLight}`,
+    border: `solid 1px ${colors.borderBlue}`,
     flexGrow: 0,
   },
 };

@@ -12,8 +12,8 @@ interface TreeModalProps {
 
 const styles = {
   box: {
-    backgroundColor: colors.backgroundPrimary,
-    border: `solid 1px ${colors.borderLight}`,
+    backgroundColor: colors.background,
+    border: `solid 1px ${colors.borderBlue}`,
   },
 };
 

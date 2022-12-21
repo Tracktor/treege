@@ -28,7 +28,7 @@ const styles = {
       width: 20,
       zIndex: -1,
     },
-    backgroundColor: colors.backgroundPrimary,
+    backgroundColor: colors.background,
     position: "absolute",
     right: 0,
     top: "50%",

@@ -26,7 +26,7 @@ const styles = {
     justifyContent: "center",
   },
   treeLink: {
-    stroke: `${colors.borderMedium} !important`,
+    stroke: `${colors.borderGrey} !important`,
   },
 };
 

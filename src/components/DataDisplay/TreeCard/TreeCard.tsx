@@ -31,27 +31,27 @@ const styles = {
     minWidth: "auto !important",
   },
   container: {
-    background: colors.backgroundPrimary,
+    background: colors.background,
     borderRadius: "1rem",
   },
   containerField: {
-    background: colors.backgroundPrimary,
-    border: `solid 1px ${colors.primaryMain}`,
+    background: colors.background,
+    border: `solid 1px ${colors.primary}`,
     borderRadius: "1rem",
   },
   containerHidden: {
-    background: colors.backgroundPrimary,
-    border: `solid 1px ${colors.error}`,
+    background: colors.background,
+    border: `solid 1px ${colors.borderGrey}`,
     borderRadius: "1rem",
   },
   containerTree: {
-    background: colors.tertiaryMain,
-    border: `solid 1px ${colors.primaryMain}`,
+    background: colors.tertiary,
+    border: `solid 1px ${colors.primary}`,
     borderRadius: "1rem",
   },
   containerValue: {
-    background: colors.backgroundPrimary,
-    border: `solid 1px ${colors.secondaryMain}`,
+    background: colors.background,
+    border: `solid 1px ${colors.secondary}`,
     borderRadius: "1rem",
   },
   icon: {
@@ -116,7 +116,7 @@ const TreeCard = ({
   return (
     <g>
       <GlobalStyles styles={{ ".rd3t-node svg": styles.nodeSvg }} />
-      <foreignObject height={size} width={size} x={`-${size / 2}`} y={`-${size / 2}`} style={getCardStyle(type)}>
+      <Box component="foreignObject" height={size} width={size} x={`-${size / 2}`} y={`-${size / 2}`} sx={getCardStyle(type)}>
         <Box flex={1} display="flex" p={2} height="100%" flexDirection="column" justifyContent="space-between">
           <Stack alignItems="flex-end" spacing={0.5}>
             {isField && (
@@ -144,12 +144,7 @@ const TreeCard = ({
                 </Typography>
               )}
             </Stack>
-            <Box paddingTop={0.5}>
-              {isHidden && (
-                <Tooltip title={t("isAHidden")} placement="bottom" arrow>
-                  <VisibilityOffRoundedIcon style={styles.icon} />
-                </Tooltip>
-              )}
+            <Stack paddingTop={0.5} spacing={0.5} direction="row">
               {repeatable && (
                 <Tooltip title={t("isARepeatable")} placement="bottom" arrow>
                   <LoopRoundedIcon style={styles.icon} />
@@ -158,6 +153,11 @@ const TreeCard = ({
               {isLeaf && (
                 <Tooltip title={t("isALeaf")} placement="bottom" arrow>
                   <EnergySavingsLeafRoundedIcon style={styles.icon} />
+                </Tooltip>
+              )}
+              {isHidden && (
+                <Tooltip title={t("isAHidden")} placement="bottom" arrow>
+                  <VisibilityOffRoundedIcon style={styles.icon} />
                 </Tooltip>
               )}
               {isRoot && (
@@ -175,7 +175,7 @@ const TreeCard = ({
                   <ForestRoundedIcon style={styles.icon} />
                 </Tooltip>
               )}
-            </Box>
+            </Stack>
           </Stack>
           <Stack direction="row" justifyContent="flex-end" spacing={0} alignSelf="flex-end">
             {!isRoot && (
@@ -232,7 +232,7 @@ const TreeCard = ({
             )}
           </Stack>
         </Box>
-      </foreignObject>
+      </Box>
     </g>
   );
 };

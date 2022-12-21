@@ -18,19 +18,19 @@ const styles = {
     margin: 1,
   },
   main: {
-    border: `solid 1px ${colors.borderLight}`,
+    border: `solid 1px ${colors.borderBlue}`,
     height: " 100%",
     margin: 1,
   },
   toolbar: {
-    backgroundColor: colors.backgroundPrimary,
+    backgroundColor: colors.background,
     boxShadow: "none",
     display: "flex",
     padding: "0 ! important",
   },
   toolbarBox: {
-    backgroundColor: colors.tertiaryMain,
-    border: `solid 1px ${colors.primaryMain}`,
+    backgroundColor: colors.tertiary,
+    border: `solid 1px ${colors.primary}`,
     margin: 1,
     paddingX: 2,
     paddingY: 1,
@@ -62,7 +62,7 @@ export const Transition = forwardRef(TransitionRef);
 
 const TreeModal = ({ children, open, onClose, title }: TreeModalProps) => (
   <Dialog
-    PaperProps={{ sx: { backgroundColor: colors.backgroundPrimary, backgroundImage: "none" } }}
+    PaperProps={{ sx: { backgroundColor: colors.background, backgroundImage: "none" } }}
     open={open}
     aria-labelledby="modal-modal-title"
     aria-describedby="modal-modal-description"

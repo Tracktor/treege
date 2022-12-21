@@ -1,13 +1,11 @@
 const colors = {
-  backgroundPrimary: "#0a1929",
-  borderLight: "#0f353e",
-  borderMedium: "rgba(255, 255, 255, 0.1)",
-  error: "#620713",
+  background: "#0a1929",
+  borderBlue: "#0f353e",
+  borderGrey: "rgba(255, 255, 255, 0.1)",
   grey500: "#868c95",
-  primaryMain: "#0ed3b4",
-  secondaryLight: "rgba(255, 255, 255, 0.1)",
-  secondaryMain: "#007ef6",
-  tertiaryMain: "#0f353e",
+  primary: "#0ed3b4",
+  secondary: "#007ef6",
+  tertiary: "#0f353e",
 };
 
 export default colors;
