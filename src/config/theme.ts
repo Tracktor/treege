@@ -1,7 +1,7 @@
-import { createTheme } from "design-system-tracktor";
+import type { ThemeOptions } from "design-system-tracktor";
 import colors from "@/constants/colors";
 
-const darkTheme = createTheme({
+const darkTheme: ThemeOptions = {
   components: {
     MuiButton: {
       styleOverrides: {
@@ -24,6 +24,6 @@ const darkTheme = createTheme({
       main: colors.secondary,
     },
   },
-});
+};
 
 export default darkTheme;
