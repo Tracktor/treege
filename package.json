@@ -25,7 +25,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint . && tsc --noEmit",
+    "lint": "eslint . --max-warnings=0 && tsc --noEmit",
     "preview": "vite preview",
     "test": "yarn lint && vitest",
     "test:coverage": "vitest run --coverage",
