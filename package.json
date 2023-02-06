@@ -1,5 +1,5 @@
 {
-  "name": "treege",
+  "name": "@tracktor/treege",
   "description": "Form decision tree generator",
   "license": "ISC",
   "version": "0.6.4",
