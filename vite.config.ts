@@ -17,15 +17,17 @@ export default defineConfig({
       output: {
         globals: {
           "@codemirror/lang-json": "langJson",
+          "@tracktor/design-system": "designSystem",
           "@uiw/codemirror-theme-dracula": "codemirrorThemeDracula",
           "@uiw/react-codemirror": "CodeMirror",
-          "design-system-tracktor": "designSystemTracktor",
+          axios: "axios",
           i18next: "i18n",
           "i18next-browser-languagedetector": "LanguageDetector",
           react: "React",
           "react-d3-tree": "Tree",
           "react-dom": "ReactDOM",
           "react-i18next": "reactI18next",
+          "react-query": "reactQuery",
         },
       },
     },

@@ -30,7 +30,7 @@
 ## Installation
 
 ```console
-yarn add @tracktor/treege
+yarn add treege
 ```
 
 ## Usage
