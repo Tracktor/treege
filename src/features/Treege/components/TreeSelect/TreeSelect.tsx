@@ -10,7 +10,7 @@ import {
   SelectChangeEvent,
   Skeleton,
   Typography,
-} from "design-system-tracktor";
+} from "@tracktor/design-system";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import useTreeSelect from "@/features/Treege/components/TreeSelect/useTreeSelect";

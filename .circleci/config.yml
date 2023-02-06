@@ -29,7 +29,7 @@ jobs:
             gh release create -F CHANGELOG.md $TAG
       - run:
           name: publish on npm
-          command: yarn publish --access public
+          command: yarn publish
 
 workflows:
   release:

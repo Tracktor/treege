@@ -1,5 +1,5 @@
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { AppBar, Box, Dialog, IconButton, Slide, Stack, Toolbar, TransitionProps, Typography } from "design-system-tracktor";
+import { AppBar, Box, Dialog, IconButton, Slide, Stack, Toolbar, TransitionProps, Typography } from "@tracktor/design-system";
 import { forwardRef, ReactElement, ReactNode, Ref } from "react";
 import colors from "@/constants/colors";
 

@@ -1,4 +1,4 @@
-import type { SelectChangeEvent } from "design-system-tracktor";
+import type { SelectChangeEvent } from "@tracktor/design-system";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { resetTree, setTree } from "@/features/Treege/reducer/treeReducer";

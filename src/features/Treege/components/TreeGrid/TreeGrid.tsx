@@ -1,4 +1,4 @@
-import { Stack } from "design-system-tracktor";
+import { Stack } from "@tracktor/design-system";
 import Logo from "@/components/DataDisplay/Logo/Logo";
 import Tree from "@/components/DataDisplay/Tree/Tree";
 import ViewerJSON from "@/components/DataDisplay/ViewerJSON/ViewerJSON";

@@ -1,4 +1,4 @@
-import type { ThemeOptions } from "design-system-tracktor";
+import type { ThemeOptions } from "@tracktor/design-system";
 import colors from "@/constants/colors";
 
 const darkTheme: ThemeOptions = {

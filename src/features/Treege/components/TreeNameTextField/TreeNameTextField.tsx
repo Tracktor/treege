@@ -1,4 +1,4 @@
-import { TextField } from "design-system-tracktor";
+import { TextField } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import useTreeNameTextField from "@/features/Treege/components/TreeNameTextField/useTreeNameTextField";
 

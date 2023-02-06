@@ -1,4 +1,4 @@
-import { Button, Stack } from "design-system-tracktor";
+import { Button, Stack } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import useFormTreeCardDelete from "@/features/Treege/components/Forms/FormTreeCardDelete/useFormTreeCardDelete";
 

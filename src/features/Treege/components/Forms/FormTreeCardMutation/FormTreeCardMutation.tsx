@@ -1,6 +1,6 @@
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
-import { Box, Button, Checkbox, CircularProgress, FormControlLabel, FormGroup, Stack, TextField } from "design-system-tracktor";
+import { Box, Button, Checkbox, CircularProgress, FormControlLabel, FormGroup, Stack, TextField } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
 import FieldsSelect from "@/features/Treege/components/FieldsSelect";

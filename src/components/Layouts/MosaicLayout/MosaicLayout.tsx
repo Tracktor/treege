@@ -1,4 +1,4 @@
-import { Grid, Stack } from "design-system-tracktor";
+import { Grid, Stack } from "@tracktor/design-system";
 import { Children, ReactElement } from "react";
 
 interface GridLayoutProps {

@@ -1,7 +1,7 @@
 import { json } from "@codemirror/lang-json";
+import { GlobalStyles } from "@tracktor/design-system";
 import { dracula } from "@uiw/codemirror-theme-dracula";
 import CodeMirror from "@uiw/react-codemirror";
-import { GlobalStyles } from "design-system-tracktor";
 import useViewerJSON from "@/components/DataDisplay/ViewerJSON/useViewerJSON";
 
 interface ViewerJSONProps {

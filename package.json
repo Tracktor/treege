@@ -1,8 +1,8 @@
 {
-  "name": "@tracktor/treege",
+  "name": "treege",
   "description": "Form decision tree generator",
   "license": "ISC",
-  "version": "0.6.6",
+  "version": "0.7.0",
   "type": "module",
   "types": "dist/main.d.ts",
   "main": "dist/main.umd.cjs",
@@ -35,10 +35,10 @@
   "dependencies": {
     "@codemirror/lang-json": "^6.0.0",
     "@mui/icons-material": "^5.8.4",
+    "@tracktor/design-system": "^1.13.1",
     "@uiw/codemirror-theme-dracula": "^4.11.4",
     "@uiw/react-codemirror": "^4.11.4",
     "axios": "^1.1.2",
-    "design-system-tracktor": "^1.8.10",
     "i18next": "^21.8.14",
     "i18next-browser-languagedetector": "^6.1.4",
     "react": "^18.2.0",
@@ -56,13 +56,13 @@
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.1.0",
     "@vitest/ui": "0.24.1",
-    "eslint-config-react-tracktor": "^1.0.3",
+    "eslint-config-react-tracktor": "^1.0.5",
     "husky": "^8.0.0",
     "jsdom": "20.0.0",
     "typescript": "^4.7.4",
-    "vite": "^3.1.7",
-    "vite-plugin-dts": "^1.6.5",
-    "vitest": "^0.24.1"
+    "vite": "^4.1.1",
+    "vite-plugin-dts": "^1.7.2",
+    "vitest": "^0.28.4"
   },
   "peerDependencies": {
     "react": ">=18.0.0",

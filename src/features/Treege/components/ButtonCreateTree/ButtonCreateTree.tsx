@@ -1,4 +1,4 @@
-import { Box, Button } from "design-system-tracktor";
+import { Box, Button } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import TreePlusIcon from "@/components/DataDisplay/Icons/TreePlusIcon";
 import useButtonCreateTree from "@/features/Treege/components/ButtonCreateTree/useButtonCreateTree";

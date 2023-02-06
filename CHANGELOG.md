@@ -1,4 +1,4 @@
 # [Versions](https://github.com/Tracktor/treege/releases)
 
-## v0.6.6
-- readme update
+## v0.7.0
+- update dependencies

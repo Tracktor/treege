@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "design-system-tracktor";
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import useFieldsSelect from "@/features/Treege/components/FieldsSelect/useFieldsSelect";
 import type { TreeNodeField } from "@/features/Treege/type/TreeNode";

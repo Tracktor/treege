@@ -1,4 +1,4 @@
-import { Alert, Snackbar } from "design-system-tracktor";
+import { Alert, Snackbar } from "@tracktor/design-system";
 import { ReactNode, useMemo, useReducer } from "react";
 import { SnackbarContext, snackbarDefaultValue } from "@/context/Snackbar/SnackbarContext";
 import snackbarReducer, { closeSnackbar } from "@/context/Snackbar/snackbarReducer";

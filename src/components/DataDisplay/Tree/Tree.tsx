@@ -1,4 +1,4 @@
-import { Box, CircularProgress, GlobalStyles } from "design-system-tracktor";
+import { Box, CircularProgress, GlobalStyles } from "@tracktor/design-system";
 import { memo } from "react";
 import D3Tree from "react-d3-tree";
 import type { RenderCustomNodeElementFn } from "react-d3-tree/lib/types/common";

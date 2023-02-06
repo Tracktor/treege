@@ -1,4 +1,4 @@
-import { Box } from "design-system-tracktor";
+import { Box } from "@tracktor/design-system";
 import type { ReactNode } from "react";
 import colors from "@/constants/colors";
 

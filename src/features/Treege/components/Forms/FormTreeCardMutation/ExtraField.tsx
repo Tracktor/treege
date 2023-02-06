@@ -1,4 +1,4 @@
-import { SelectChangeEvent, TextField } from "design-system-tracktor";
+import { SelectChangeEvent, TextField } from "@tracktor/design-system";
 import type { ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 import TreeSelect from "@/features/Treege/components/TreeSelect";

@@ -1,5 +1,5 @@
+import type { SelectChangeEvent } from "@tracktor/design-system";
 import type { HierarchyPointNode } from "d3-hierarchy";
-import type { SelectChangeEvent } from "design-system-tracktor";
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";
