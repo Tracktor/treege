@@ -1,5 +1,5 @@
 import type { HierarchyPointNode } from "d3-hierarchy";
-import type { CustomNodeElementProps, RawNodeDatum } from "react-d3-tree/lib/types/common";
+import type { CustomNodeElementProps, RawNodeDatum } from "react-d3-tree/lib/types/types/common";
 import type fields from "@/constants/fields";
 
 export interface TreeValues {

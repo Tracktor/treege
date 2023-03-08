@@ -1,6 +1,6 @@
 import type { SelectChangeEvent } from "@tracktor/design-system";
 import type { HierarchyPointNode } from "d3-hierarchy";
-import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, FormEvent, MouseEvent, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";
 import { appendTreeCard, replaceTreeCard } from "@/features/Treege/reducer/treeReducer";
@@ -155,8 +155,8 @@ const useFormTreeCardMutation = () => {
     });
   };
 
-  const handleDeleteValue = (idToDelete: string) => {
-    setValues((prevState) => prevState.filter(({ id }) => idToDelete !== id));
+  const handleDeleteValue = (e: MouseEvent<HTMLButtonElement>) => {
+    setValues((prevState) => prevState.filter(({ id }) => e.currentTarget.value !== id));
   };
 
   const getNestedChildren = (hierarchyPointNode: null | HierarchyPointNode<TreeNode>, index: number) => {

@@ -1,6 +1,16 @@
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
-import { Box, Button, Checkbox, CircularProgress, FormControlLabel, FormGroup, Stack, TextField } from "@tracktor/design-system";
+import {
+  Box,
+  Button,
+  Checkbox,
+  CircularProgress,
+  FormControlLabel,
+  FormGroup,
+  IconButton,
+  Stack,
+  TextField,
+} from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
 import FieldsSelect from "@/features/Treege/components/FieldsSelect";
@@ -132,7 +142,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           <FormControlLabel
             disabled={!isDecisionField}
             control={<Checkbox checked={isDecision} onChange={handleChangeIsDecisionField} />}
-            label={t("decisionField", { ns: "form" })}
+            label={t("decisionFields", { ns: "form" })}
           />
         </FormGroup>
       </Stack>
@@ -166,9 +176,9 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                 inputProps={{ "data-id": id }}
               />
               {values.length > 1 && (
-                <Button color="warning" sx={styles.iconButtonDelete} data-id={id} onClick={() => handleDeleteValue(id)}>
+                <IconButton color="warning" sx={styles.iconButtonDelete} value={id} onClick={handleDeleteValue}>
                   <RemoveCircleRoundedIcon />
-                </Button>
+                </IconButton>
               )}
             </Stack>
           ))}
@@ -177,9 +187,9 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
       {isDecisionField && (
         <Box justifyContent="flex-end" display="flex">
-          <Button color="success" sx={styles.iconButton} onClick={handleAddValue}>
+          <IconButton color="success" sx={styles.iconButton} onClick={handleAddValue}>
             <AddCircleRoundedIcon />
-          </Button>
+          </IconButton>
         </Box>
       )}
 

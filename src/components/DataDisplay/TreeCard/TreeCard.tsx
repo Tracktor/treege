@@ -11,7 +11,7 @@ import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import { Box, Button, Chip, GlobalStyles, Stack, Tooltip, Typography } from "@tracktor/design-system";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { memo } from "react";
-import type { CustomNodeElementProps, TreeNodeDatum } from "react-d3-tree/lib/types/common";
+import type { CustomNodeElementProps, TreeNodeDatum } from "react-d3-tree/lib/types/types/common";
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
@@ -131,7 +131,7 @@ const TreeCard = ({
                 </Typography>
               </Stack>
             )}
-            {isField && <Chip color="info" size="small" label={t(`type.${type}`, { ns: "form" })} />}
+            {isField && <Chip color="info" size="small" label={t(`type.${type}` as const as any, { ns: "form" })} />}
             {required && (
               <Stack direction="row" spacing={0.5}>
                 {required && <Chip color="warning" size="small" variant="outlined" label={`${t("required")}`} />}
