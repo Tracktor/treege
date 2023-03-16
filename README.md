@@ -3,6 +3,9 @@
   <p><strong>Treege is a tools for decision tree generator</strong></p>
 </div>
 
+[![npm version](https://badge.fury.io/js/treege.svg)](https://badge.fury.io/js/treege)
+
+
 <video src="https://user-images.githubusercontent.com/108873902/184317603-61ceafc6-a326-49b2-b0de-ffda9cf9c75e.mov"></video>
 
 - [Features](#Features)
