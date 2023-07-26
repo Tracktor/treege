@@ -68,6 +68,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     treeSelected,
     isWorkflowLoading,
     repeatable,
+    isLeaf,
     messages: { on, off },
     handleChangeTreeSelect,
     handleChangeHelperText,
@@ -138,13 +139,15 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             label={t("required")}
           />
         </FormGroup>
-        <FormGroup>
-          <FormControlLabel
-            disabled={!isDecisionField}
-            control={<Checkbox checked={isDecision} onChange={handleChangeIsDecisionField} />}
-            label={t("decisionFields", { ns: "form" })}
-          />
-        </FormGroup>
+        {isLeaf && (
+          <FormGroup>
+            <FormControlLabel
+              disabled={!isDecisionField}
+              control={<Checkbox checked={isDecision} onChange={handleChangeIsDecisionField} />}
+              label={t("decisionFields", { ns: "form" })}
+            />
+          </FormGroup>
+        )}
       </Stack>
 
       {isDecisionField && (

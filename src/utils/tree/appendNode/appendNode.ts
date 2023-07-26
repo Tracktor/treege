@@ -3,7 +3,7 @@ import getNode from "@/utils/tree/getNode/getNode";
 
 interface AppendChildParams {
   tree: TreeNode | null;
-  path: string;
+  path: string | null;
   name: string;
   child: TreeNode;
 }
@@ -19,11 +19,12 @@ const addChildByRef = (node: TreeNode | null, child: TreeNode) => {
     return null;
   }
 
-  Object.defineProperty(node, "children", { value: [{ ...child, attributes: { ...child.attributes, isLeaf: true } }] });
+  Object.defineProperty(node, "children", { value: [{ ...child, attributes: { ...child.attributes, isLeaf: !node.children.length } }] });
   return null;
 };
 
 const appendNode = ({ tree, path, name, child }: AppendChildParams) => {
+  console.log("appendNode", JSON.stringify({ child, name, path, tree }));
   if (!tree) {
     // Initialise Tree
     if (child.children.length) {
@@ -37,7 +38,7 @@ const appendNode = ({ tree, path, name, child }: AppendChildParams) => {
   const treeCopy = structuredClone(tree);
   const node = getNode(treeCopy, path, name);
 
-  addChildByRef(node, child);
+  addChildByRef(node, { ...child, ...(!child.attributes.isDecision && { children: [...(getNode(tree, path, name)?.children || [])] }) });
 
   return treeCopy;
 };

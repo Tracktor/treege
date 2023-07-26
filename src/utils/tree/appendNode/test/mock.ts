@@ -1,6 +1,6 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
-type Mock = { tree: TreeNode | null; output: TreeNode; treePath: string; newChild: TreeNode; name: string };
+type Mock = { tree: TreeNode | null; output: TreeNode; treePath: string | null; newChild: TreeNode; name: string };
 
 const addFirstNodeInTreeMock: Mock = {
   name: "",
@@ -450,7 +450,7 @@ const addNodeDecisionInOtherTreeMock: Mock = {
   treePath: "/treeCatalog",
 };
 
-const AddTreeNodeMock: Mock = {
+const addTreeNodeMock: Mock = {
   name: "userName",
   newChild: {
     attributes: {
@@ -567,4 +567,56 @@ const AddTreeNodeMock: Mock = {
   treePath: "",
 };
 
-export { addFirstNodeInTreeMock, addNodeInTreeMock, addNodeOtherTreeMock, addNodeDecisionInOtherTreeMock, AddTreeNodeMock, initialiseTree };
+const addNodeBetweenNodes: Mock = {
+  name: "username",
+  newChild: { attributes: { depth: 1, label: "Email", type: "email" }, children: [], name: "email" },
+  output: {
+    attributes: {
+      depth: 0,
+      isLeaf: false,
+      isRoot: true,
+      label: "Username",
+      type: "text",
+    },
+    children: [
+      {
+        attributes: {
+          depth: 1,
+          isLeaf: false,
+          label: "Email",
+          type: "email",
+        },
+        children: [
+          {
+            attributes: {
+              depth: 1,
+              isLeaf: true,
+              label: "Password",
+              type: "text",
+            },
+            children: [],
+            name: "password",
+          },
+        ],
+        name: "email",
+      },
+    ],
+    name: "username",
+  },
+  tree: {
+    attributes: { depth: 0, isLeaf: false, isRoot: true, label: "Username", type: "text" },
+    children: [{ attributes: { depth: 1, isLeaf: true, label: "Password", type: "text" }, children: [], name: "password" }],
+    name: "username",
+  },
+  treePath: null,
+};
+
+export {
+  addNodeBetweenNodes,
+  addFirstNodeInTreeMock,
+  addNodeInTreeMock,
+  addNodeOtherTreeMock,
+  addNodeDecisionInOtherTreeMock,
+  addTreeNodeMock,
+  initialiseTree,
+};
