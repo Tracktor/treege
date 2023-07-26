@@ -52,9 +52,9 @@ const ViewerJSONAction = ({ downloadedFileName = "export", value }: ViewerJSONPr
           <DialogContentText>{t("resetTreeContent", { ns: "modal" })}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Close</Button>
+          <Button onClick={handleClose}>{t("close", { ns: "button" })}</Button>
           <Button variant="contained" color="error" onClick={handleResetTree}>
-            Clear
+            {t("reset", { ns: "button" })}
           </Button>
         </DialogActions>
       </Dialog>
