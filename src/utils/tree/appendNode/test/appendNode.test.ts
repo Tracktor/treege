@@ -2,10 +2,11 @@ import { expect } from "vitest";
 import { appendNode } from "@/utils/tree";
 import {
   addFirstNodeInTreeMock,
+  addNodeBetweenNodes,
   addNodeDecisionInOtherTreeMock,
   addNodeInTreeMock,
   addNodeOtherTreeMock,
-  AddTreeNodeMock,
+  addTreeNodeMock,
   initialiseTree,
 } from "@/utils/tree/appendNode/test/mock";
 
@@ -83,7 +84,20 @@ describe("getNodeNames", () => {
   });
 
   test("Add Tree node", () => {
-    const { tree, output, treePath, newChild, name } = AddTreeNodeMock;
+    const { tree, output, treePath, newChild, name } = addTreeNodeMock;
+    const result = appendNode({
+      child: newChild,
+      name,
+      path: treePath,
+      tree,
+    });
+
+    expect(result).toEqual(output);
+  });
+
+  test("Add node between nodes", () => {
+    const { treePath, tree, name, output, newChild } = addNodeBetweenNodes;
+
     const result = appendNode({
       child: newChild,
       name,

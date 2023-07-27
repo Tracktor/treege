@@ -1,6 +1,6 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
-const getTree = (element: TreeNode | undefined, searchPath?: string): TreeNode | null => {
+const getTree = (element: TreeNode | undefined, searchPath?: string | null): TreeNode | null => {
   if (!element) return null;
 
   if (!searchPath) return element;
