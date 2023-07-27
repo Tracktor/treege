@@ -17,7 +17,7 @@ const usePatchWorkflowsMutation = (options?: MutateOptions<PatchWorkflowResponse
   useMutation<PatchWorkflowResponse, any, PatchWorkflowVariables>(
     ["patchWorkflow"],
     async (workflow) => {
-      const { data } = await axios.post<PatchWorkflowResponse>(`/v1/workflow`, workflow);
+      const { data } = await axios.patch<PatchWorkflowResponse>(`/v1/workflow`, workflow);
       return data;
     },
     options
