@@ -1,6 +1,6 @@
+import { QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
 import { useLayoutEffect } from "react";
-import { QueryClientProvider } from "react-query";
 import DarkTheme from "@/components/Theme/DarkTheme/DarkTheme";
 import queryConfig from "@/config/query.config";
 import AuthProvider from "@/context/Auth/AuthProvider";

@@ -44,7 +44,7 @@ const useFormTreeCardMutation = () => {
   const isLeaf = currentHierarchyPointNode?.data?.attributes?.isLeaf ?? true;
   const getDisabledValueField = (index: number) => !isDecisionField && index > 0;
 
-  const { refetch: refetchWorkflow, isLoading: isWorkflowLoading } = useWorkflowQuery(treeSelected, {
+  const { refetch: fetchWorkflow, isInitialLoading: isWorkflowLoading } = useWorkflowQuery(treeSelected, {
     enabled: false,
     onError: () => {
       open(t("error.fetchTree", { ns: "snackMessage" }), "error");
@@ -205,7 +205,7 @@ const useFormTreeCardMutation = () => {
   const getWorkFlowReq = (isTreeSelected: boolean, isEdit: boolean, isOtherTree: boolean) => {
     // make request if is Tree and not update or isOtherTree selected
     if (isTreeSelected && (!isEdit || isOtherTree)) {
-      return refetchWorkflow();
+      return fetchWorkflow();
     }
 
     // don't edit tree

@@ -201,8 +201,14 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         <Button variant="text" onClick={onClose}>
           {t("cancel")}
         </Button>
-        <Button variant="contained" type="submit" disabled={!!uniqueNameErrorMessage || isWorkflowLoading}>
-          {isWorkflowLoading ? <CircularProgress size={14} /> : t("validate")}
+        <Button
+          variant="contained"
+          type="submit"
+          disabled={!!uniqueNameErrorMessage || isWorkflowLoading}
+          isLoading={isWorkflowLoading}
+          loadingIndicator={<CircularProgress size={14} />}
+        >
+          {t("validate")}
         </Button>
       </Stack>
     </form>
