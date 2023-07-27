@@ -18,8 +18,8 @@ const useWorkflowQuery = (id?: string, options?: UseQueryOptions<WorkflowRespons
       return data;
     },
     {
-      ...options,
       enabled: !!id,
+      ...options,
     }
   );
 
