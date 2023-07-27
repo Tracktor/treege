@@ -28,7 +28,7 @@ const FieldsSelect = ({ onChange, value }: FieldsSelectProps) => {
         {fields.map(({ type, isDecisionField }) => (
           <MenuItem key={type} value={type}>
             {t(`type.${type}`, { ns: "form" })}
-            {isDecisionField && <Chip label={t("decisionFields", { ns: "form" })} size="small" />}
+            {isDecisionField && <Chip label={t("decisionField", { ns: "form" })} size="small" color="info" sx={{ marginLeft: 1 }} />}
           </MenuItem>
         ))}
       </Select>

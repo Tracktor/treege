@@ -145,7 +145,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             <FormControlLabel
               disabled={!isDecisionField}
               control={<Checkbox checked={isDecision} onChange={handleChangeIsDecisionField} />}
-              label={t("decisionFields", { ns: "form" })}
+              label={t("decisionField", { ns: "form" })}
             />
           </FormGroup>
         )}

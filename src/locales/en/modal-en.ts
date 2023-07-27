@@ -1,4 +1,4 @@
-const modalEn = {
+const MODAL_EN = {
   addFirstTitle: "Add a field",
   addTitle: "Add a field to « {{name}} »",
   deleteTitle: "Are you sure to delete « {{name}} »",
@@ -7,4 +7,4 @@ const modalEn = {
   saveTree: "Save a Tree",
 } as const;
 
-export default modalEn;
+export default MODAL_EN;

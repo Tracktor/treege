@@ -1,6 +1,6 @@
 import { GlobalStyles, ThemeProvider } from "@tracktor/design-system";
 import type { ReactNode } from "react";
-import darkTheme from "@/config/theme";
+import darkTheme from "@/config/theme.config";
 
 interface DarkThemeProps {
   children?: ReactNode;

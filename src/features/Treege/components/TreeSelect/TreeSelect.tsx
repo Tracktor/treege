@@ -42,13 +42,13 @@ const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, va
 
   return (
     <FormControl size={size} required={required} sx={styles.formControl}>
-      {!arrowOnly && <InputLabel>{t("tree")}</InputLabel>}
+      {!arrowOnly && <InputLabel>{t("tree", { ns: "form" })}</InputLabel>}
       <Select
         value={isControlled ? value : treeSelected}
         id="tree-select"
         onChange={(e) => (isControlled ? onChange?.(e) : handleChangeTree(e))}
         sx={arrowOnly ? styles.select : undefined}
-        label={t("tree")}
+        label={t("tree", { ns: "form" })}
         onOpen={handleOnOpen}
       >
         {workflowsSuggestionsLoading && (
@@ -70,7 +70,7 @@ const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, va
         )}
         {showBtnAddNewTree && (
           <MenuItem value="add-new-tree">
-            <Typography mr={1}>{t("newTree")}</Typography>
+            <Typography mr={1}>{t("newTree", { ns: "form" })}</Typography>
             <AddRoundedIcon color="primary" />
           </MenuItem>
         )}

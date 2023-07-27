@@ -21,7 +21,6 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "importsNotUsedAsValues": "error",
     "noUnusedParameters": true,
     "types": [
       "vitest/globals"

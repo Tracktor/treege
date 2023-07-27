@@ -1,4 +1,4 @@
-const translationEn = {
+const TRANSLATION_EN = {
   add: "Add",
   cancel: "Cancel",
   disabled: "Disabled",
@@ -21,4 +21,4 @@ const translationEn = {
   values: "Values",
 } as const;
 
-export default translationEn;
+export default TRANSLATION_EN;

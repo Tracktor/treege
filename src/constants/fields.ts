@@ -85,20 +85,6 @@ const fields = [
   },
   {
     isBooleanField: false,
-    isDecisionField: true,
-    isRepeatableDisabled: true,
-    isRequiredDisabled: false,
-    type: "radio",
-  },
-  {
-    isBooleanField: false,
-    isDecisionField: true,
-    isRepeatableDisabled: true,
-    isRequiredDisabled: false,
-    type: "select",
-  },
-  {
-    isBooleanField: false,
     isDecisionField: false,
     isRepeatableDisabled: true,
     isRequiredDisabled: true,
@@ -110,6 +96,20 @@ const fields = [
     isRepeatableDisabled: true,
     isRequiredDisabled: true,
     type: "tree",
+  },
+  {
+    isBooleanField: false,
+    isDecisionField: true,
+    isRepeatableDisabled: true,
+    isRequiredDisabled: false,
+    type: "radio",
+  },
+  {
+    isBooleanField: false,
+    isDecisionField: true,
+    isRepeatableDisabled: true,
+    isRequiredDisabled: false,
+    type: "select",
   },
 ] as const;
 

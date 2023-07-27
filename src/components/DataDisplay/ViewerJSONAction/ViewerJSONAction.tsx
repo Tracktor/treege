@@ -33,7 +33,7 @@ const ViewerJSONAction = ({ downloadedFileName = "export", value }: ViewerJSONPr
     <Stack direction="row" spacing={2} justifyContent="center">
       <Tooltip title={t("resetTree", { ns: "button" })} enterDelay={1500} disableHoverListener={!value} arrow>
         <Box>
-          <Button disabled={!tree} onClick={handleOpen} variant="outlined">
+          <Button disabled={!tree} onClick={handleOpen} variant="outlined" color="warning">
             <RotateLeftRoundedIcon />
           </Button>
         </Box>
@@ -65,7 +65,7 @@ const ViewerJSONAction = ({ downloadedFileName = "export", value }: ViewerJSONPr
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>{t("close", { ns: "button" })}</Button>
-          <Button variant="contained" color="error" onClick={handleResetTree}>
+          <Button variant="contained" color="warning" onClick={handleResetTree}>
             {t("reset", { ns: "button" })}
           </Button>
         </DialogActions>

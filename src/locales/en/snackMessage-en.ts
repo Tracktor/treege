@@ -1,4 +1,4 @@
-const snackMessageEn = {
+const SNACK_MESSAGE_EN = {
   error: {
     fetchTree: "An error has occurred. Please try again",
     saveTree: "An error has occurred. Please try again",
@@ -10,4 +10,4 @@ const snackMessageEn = {
   },
 } as const;
 
-export default snackMessageEn;
+export default SNACK_MESSAGE_EN;

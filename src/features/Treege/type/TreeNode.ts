@@ -19,7 +19,7 @@ export interface TreeNodeField {
   label: string;
   required?: boolean;
   step?: string;
-  type: typeof fields[number]["type"];
+  type: (typeof fields)[number]["type"];
   value?: never;
   values?: TreeValues[];
   message?: never;

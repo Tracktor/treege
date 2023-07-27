@@ -9,7 +9,7 @@ const TreeNameTextField = () => {
   return (
     <TextField
       required
-      label={t("treeName")}
+      label={t("treeName", { ns: "form" })}
       size="small"
       onChange={handleChangeName}
       value={name}

@@ -10,7 +10,7 @@ const ButtonCreateTree = () => {
   return (
     <Box alignItems="center" justifyContent="center" display="flex" height="100%">
       <Button onClick={handleClick} size="medium" variant="contained" startIcon={<TreePlusIcon />}>
-        {t("createTree")}
+        {t("createTree", { ns: "button" })}
       </Button>
     </Box>
   );

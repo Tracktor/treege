@@ -1,4 +1,4 @@
-const formFr = {
+const FORM_FR = {
   decisionField: "Champs de décision",
   helperText: "Texte d'information",
   hiddenValue: "Valeur caché",
@@ -34,4 +34,4 @@ const formFr = {
   values: "Valeurs",
 } as const;
 
-export default formFr;
+export default FORM_FR;

@@ -1,4 +1,4 @@
-const snackMessageFr = {
+const SNACK_MESSAGE_FR = {
   error: {
     fetchTree: "Une erreur est survenue veuillez réessayer",
     saveTree: "Une erreur est survenue veuillez réessayer",
@@ -10,4 +10,4 @@ const snackMessageFr = {
   },
 } as const;
 
-export default snackMessageFr;
+export default SNACK_MESSAGE_FR;

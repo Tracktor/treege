@@ -1,4 +1,4 @@
-const translationFr = {
+const TRANSLATION_FR = {
   add: "Ajouter",
   cancel: "Annuler",
   disabled: "Désactivé",
@@ -21,4 +21,4 @@ const translationFr = {
   values: "Valeurs",
 } as const;
 
-export default translationFr;
+export default TRANSLATION_FR;

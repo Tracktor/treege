@@ -1,4 +1,4 @@
-const buttonFr = {
+const BUTTON_FR = {
   close: "Fermer",
   createTree: "Créer un arbre",
   downloadJSONFile: "Télécharger le fichier JSON",
@@ -8,4 +8,4 @@ const buttonFr = {
   update: "Modifier",
 } as const;
 
-export default buttonFr;
+export default BUTTON_FR;

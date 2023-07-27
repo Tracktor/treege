@@ -1,5 +1,5 @@
-const formEn = {
-  decisionFields: "Decision fields",
+const FORM_EN = {
+  decisionField: "Decision field",
   helperText: "Helper text",
   hiddenValue: "Hidden value",
   label: "Label",
@@ -34,4 +34,4 @@ const formEn = {
   values: "Values",
 } as const;
 
-export default formEn;
+export default FORM_EN;

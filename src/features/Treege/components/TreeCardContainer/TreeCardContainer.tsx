@@ -9,11 +9,13 @@ const TreeCardContainerConsumer = ({
   onNodeClick,
   onNodeMouseOver,
   onNodeMouseOut,
+  addChildren,
 }: TreeCustomNodeElementProps) => {
   const { handleDeleteChildren, handleEditChildren, handleAddChildren, handleOpenTreeModal } = useTreeCardContainer();
 
   return (
     <TreeCard
+      addChildren={addChildren}
       nodeDatum={nodeDatum}
       hierarchyPointNode={hierarchyPointNode}
       toggleNode={toggleNode}
@@ -35,8 +37,10 @@ const TreeCardContainer = ({
   onNodeClick,
   onNodeMouseOver,
   onNodeMouseOut,
+  addChildren,
 }: TreeCustomNodeElementProps) => (
   <TreeCardContainerConsumer
+    addChildren={addChildren}
     nodeDatum={nodeDatum}
     hierarchyPointNode={hierarchyPointNode}
     toggleNode={toggleNode}

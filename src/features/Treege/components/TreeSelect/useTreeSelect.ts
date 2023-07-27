@@ -31,7 +31,7 @@ const useTreeSelect = (isControlled: boolean) => {
     enabled: false,
     keepPreviousData: true,
     onError: () => {
-      open(t("error.fetchTree"), "error");
+      open(t("error.fetchTree", { ns: "snackMessage" }), "error");
     },
     onSuccess: () => {
       if (currentTree.id && !treeSelected) {

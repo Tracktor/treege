@@ -134,7 +134,7 @@ const TreeCard = ({
             {isField && <Chip color="info" size="small" label={t(`type.${type}` as const as any, { ns: "form" })} />}
             {required && (
               <Stack direction="row" spacing={0.5}>
-                {required && <Chip color="warning" size="small" variant="outlined" label={`${t("required")}`} />}
+                {required && <Chip color="warning" size="small" variant="outlined" label={t("required")} />}
               </Stack>
             )}
             <Stack spacing={0.5} alignItems="flex-end">
