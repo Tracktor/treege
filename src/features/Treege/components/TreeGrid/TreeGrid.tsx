@@ -37,7 +37,7 @@ const TreeGrid = () => {
             {!!endPoint && (
               <Stack direction="row" alignItems="center" spacing={2}>
                 <TreeNameTextField />
-                <TreeSelect size="small" arrowOnly showBtnAddNewTree />
+                <TreeSelect size="small" arrowOnly showBtnAddNewTree fetchWorkflowsOnOpen />
               </Stack>
             )}
           </Stack>

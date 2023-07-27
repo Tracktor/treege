@@ -1,5 +1,5 @@
 import type { SelectChangeEvent } from "@tracktor/design-system";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { resetTree, setTree } from "@/features/Treege/reducer/treeReducer";
 import useSnackbar from "@/hooks/useSnackbar";
@@ -7,7 +7,12 @@ import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import useWorkflowsQuery from "@/services/workflows/query/useWorkflowsQuery";
 
-const useTreeSelect = (isControlled: boolean) => {
+interface useTreeSelectProps {
+  isControlled: boolean;
+  fetchWorkflowsOnOpen?: boolean;
+}
+
+const useTreeSelect = ({ isControlled, fetchWorkflowsOnOpen }: useTreeSelectProps) => {
   const { t } = useTranslation("snackMessage");
   const { open } = useSnackbar();
   const { currentTree, setCurrentTree, dispatchTree } = useTreegeContext();
@@ -28,7 +33,7 @@ const useTreeSelect = (isControlled: boolean) => {
     isLoading: workflowsSuggestionsLoading,
     refetch: refetchWorkflows,
   } = useWorkflowsQuery({
-    enabled: false,
+    enabled: !fetchWorkflowsOnOpen,
     keepPreviousData: true,
     onError: () => {
       open(t("error.fetchTree", { ns: "snackMessage" }), "error");
@@ -53,13 +58,11 @@ const useTreeSelect = (isControlled: boolean) => {
     setTreeSelected(value);
   };
 
-  const handleOnOpen = () => fetchWorkflowSuggestions();
-
-  const fetchWorkflowSuggestions = () => refetchWorkflows();
+  const handleOnOpen = useCallback(() => refetchWorkflows(), [refetchWorkflows]);
 
   return {
     currentTree,
-    fetchWorkflowSuggestions,
+    fetchWorkflowSuggestions: refetchWorkflows,
     handleChangeTree,
     handleOnOpen,
     setTreeSelected,

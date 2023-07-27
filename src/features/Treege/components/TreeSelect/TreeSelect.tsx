@@ -22,6 +22,7 @@ interface TreeSelectProps {
   showBtnAddNewTree?: boolean;
   value?: string;
   onChange?: (event: SelectChangeEvent) => void;
+  fetchWorkflowsOnOpen?: boolean;
 }
 
 const styles = {
@@ -35,10 +36,13 @@ const styles = {
   },
 };
 
-const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, value }: TreeSelectProps) => {
+const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, value, fetchWorkflowsOnOpen }: TreeSelectProps) => {
   const { t } = useTranslation("form");
   const isControlled = useMemo(() => !!onChange, [onChange]);
-  const { handleChangeTree, handleOnOpen, workflowsSuggestions, workflowsSuggestionsLoading, treeSelected } = useTreeSelect(isControlled);
+  const { handleChangeTree, handleOnOpen, workflowsSuggestions, workflowsSuggestionsLoading, treeSelected } = useTreeSelect({
+    fetchWorkflowsOnOpen,
+    isControlled,
+  });
 
   return (
     <FormControl size={size} required={required} sx={styles.formControl}>
