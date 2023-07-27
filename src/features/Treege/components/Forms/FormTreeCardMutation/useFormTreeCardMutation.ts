@@ -41,6 +41,7 @@ const useFormTreeCardMutation = () => {
   const isDecisionField = fields.some((field) => field.type === type && field?.isDecisionField);
   const isRequiredDisabled = fields.some((field) => field.type === type && field?.isRequiredDisabled);
   const isRepeatableDisabled = fields.some((field) => field.type === type && field?.isRepeatableDisabled);
+  const isLeaf = currentHierarchyPointNode?.data?.attributes?.isLeaf ?? true;
   const getDisabledValueField = (index: number) => !isDecisionField && index > 0;
 
   const { refetch: refetchWorkflow, isLoading: isWorkflowLoading } = useWorkflowQuery(treeSelected, {
@@ -340,7 +341,9 @@ const useFormTreeCardMutation = () => {
     isBooleanField,
     isDecision,
     isDecisionField,
+    isEditModal,
     isHiddenField,
+    isLeaf,
     isRepeatableDisabled,
     isRequiredDisabled,
     isTreeField,

@@ -60,6 +60,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     hiddenValue,
     isBooleanField,
     isDecision,
+    isEditModal,
     isDecisionField,
     isHiddenField,
     isRequiredDisabled,
@@ -68,6 +69,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     treeSelected,
     isWorkflowLoading,
     repeatable,
+    isLeaf,
     messages: { on, off },
     handleChangeTreeSelect,
     handleChangeHelperText,
@@ -86,7 +88,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeRepeatable,
     handleChangeHiddenValue,
   } = useFormTreeCardMutation();
-
+  console.log(isEditModal);
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
@@ -138,13 +140,15 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             label={t("required")}
           />
         </FormGroup>
-        <FormGroup>
-          <FormControlLabel
-            disabled={!isDecisionField}
-            control={<Checkbox checked={isDecision} onChange={handleChangeIsDecisionField} />}
-            label={t("decisionFields", { ns: "form" })}
-          />
-        </FormGroup>
+        {(isLeaf || isEditModal) && (
+          <FormGroup>
+            <FormControlLabel
+              disabled={!isDecisionField}
+              control={<Checkbox checked={isDecision} onChange={handleChangeIsDecisionField} />}
+              label={t("decisionFields", { ns: "form" })}
+            />
+          </FormGroup>
+        )}
       </Stack>
 
       {isDecisionField && (
