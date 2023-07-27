@@ -1,4 +1,4 @@
 # [Versions](https://github.com/Tracktor/treege/releases)
 
-## v0.8.8
-- **[FEAT]** : Add possibility to add node between another node
+## v0.9.0
+- **[FEAT]** : Reset current tree

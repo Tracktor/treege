@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { resetTree } from "@/features/Treege/reducer/treeReducer";
 import useSnackbar from "@/hooks/useSnackbar";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useAddWorkflowsMutation from "@/services/workflows/mutation/useAddWorkflowsMutation";
@@ -7,7 +9,8 @@ import useEditWorkflowsMutation from "@/services/workflows/mutation/useEditWorkf
 const useViewerJSONAction = () => {
   const { t } = useTranslation(["snackMessage"]);
   const { open } = useSnackbar();
-  const { setCurrentTree, currentTree, tree } = useTreegeContext();
+  const { setCurrentTree, currentTree, tree, dispatchTree } = useTreegeContext();
+  const [openModal, setOpenModal] = useState(false);
 
   const { mutate: addWorkflowMutate } = useAddWorkflowsMutation({
     onError: () => {
@@ -32,6 +35,19 @@ const useViewerJSONAction = () => {
 
   const getDownloadLink = (value: any) => `data:text/json;charset=utf-8,${encodeURIComponent(formatJSON(value))}`;
 
+  const handleClose = () => {
+    setOpenModal(false);
+  };
+
+  const handleOpen = () => {
+    setOpenModal(true);
+  };
+
+  const handleResetTree = () => {
+    dispatchTree(resetTree());
+    handleClose();
+  };
+
   const handleSubmit = () => {
     const { name, id } = currentTree;
 
@@ -50,7 +66,7 @@ const useViewerJSONAction = () => {
     }
   };
 
-  return { formatJSON, getDownloadLink, handleSubmit };
+  return { formatJSON, getDownloadLink, handleClose, handleOpen, handleResetTree, handleSubmit, openModal };
 };
 
 export default useViewerJSONAction;
