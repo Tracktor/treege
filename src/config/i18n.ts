@@ -43,6 +43,18 @@ i18n
     },
     returnNull: false,
   })
-  .then();
+  .then(() => {
+    if (document.documentElement.lang === i18n.resolvedLanguage) {
+      return;
+    }
+
+    if (i18n.resolvedLanguage) {
+      document.documentElement.setAttribute("lang", i18n.resolvedLanguage);
+    }
+  });
+
+i18n.on("languageChanged", (lng) => {
+  document.documentElement.setAttribute("lang", lng);
+});
 
 export default i18n;
