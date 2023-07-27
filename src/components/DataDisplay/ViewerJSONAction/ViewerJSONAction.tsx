@@ -1,8 +1,19 @@
-import DoDisturbAltRoundedIcon from "@mui/icons-material/DoDisturbAltRounded";
+import RotateLeftRoundedIcon from "@mui/icons-material/RotateLeftRounded";
 import SaveAsRoundedIcon from "@mui/icons-material/SaveAsRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import SimCardDownloadRoundedIcon from "@mui/icons-material/SimCardDownloadRounded";
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack, Tooltip } from "@tracktor/design-system";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
+  Stack,
+  Tooltip,
+} from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import useViewerJSONAction from "@/components/DataDisplay/ViewerJSONAction/useViewerJSONAction";
 import useTreegeContext from "@/hooks/useTreegeContext";
@@ -20,6 +31,14 @@ const ViewerJSONAction = ({ downloadedFileName = "export", value }: ViewerJSONPr
 
   return (
     <Stack direction="row" spacing={2} justifyContent="center">
+      <Tooltip title={t("resetTree", { ns: "button" })} enterDelay={1500} disableHoverListener={!value} arrow>
+        <Box>
+          <Button disabled={!tree} onClick={handleOpen} variant="outlined">
+            <RotateLeftRoundedIcon />
+          </Button>
+        </Box>
+      </Tooltip>
+      <Divider orientation="vertical" flexItem />
       <Tooltip title={t("downloadJSONFile", { ns: "button" })} enterDelay={1500} disableHoverListener={!value} arrow>
         <Box>
           <Button variant="outlined" href={getDownloadLink(value)} download={`${downloadedFileName}.json`} disabled={!value}>
@@ -36,13 +55,6 @@ const ViewerJSONAction = ({ downloadedFileName = "export", value }: ViewerJSONPr
         <Box>
           <Button variant="outlined" onClick={handleSubmit} disabled={!value || !endPoint}>
             {id ? <SaveAsRoundedIcon /> : <SaveRoundedIcon />}
-          </Button>
-        </Box>
-      </Tooltip>
-      <Tooltip title={t("resetTree", { ns: "button" })} enterDelay={1500} disableHoverListener={!value} arrow>
-        <Box>
-          <Button disabled={!tree} onClick={handleOpen} variant="outlined">
-            <DoDisturbAltRoundedIcon />
           </Button>
         </Box>
       </Tooltip>
