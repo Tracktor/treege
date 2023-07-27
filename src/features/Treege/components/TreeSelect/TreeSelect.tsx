@@ -55,8 +55,8 @@ const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, va
         label={t("tree", { ns: "form" })}
         onOpen={handleOnOpen}
       >
-        {workflowsSuggestionsLoading && (
-          <MenuItem>
+        {((value && workflowsSuggestionsLoading) || workflowsSuggestionsLoading) && (
+          <MenuItem value={value}>
             <Skeleton width="100%" />
           </MenuItem>
         )}
