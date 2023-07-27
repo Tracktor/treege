@@ -32,7 +32,7 @@ export default defineConfig({
       },
     },
   },
-  plugins: [dts(), react()],
+  plugins: [dts({ insertTypesEntry: true }), react()],
   resolve: {
     alias: [
       { find: "@", replacement: resolve(__dirname, "src") },
