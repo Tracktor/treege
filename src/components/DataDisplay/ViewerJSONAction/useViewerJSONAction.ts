@@ -3,16 +3,17 @@ import { useTranslation } from "react-i18next";
 import { resetTree } from "@/features/Treege/reducer/treeReducer";
 import useSnackbar from "@/hooks/useSnackbar";
 import useTreegeContext from "@/hooks/useTreegeContext";
-import useAddWorkflowsMutation from "@/services/workflows/mutation/useAddWorkflowsMutation";
-import useEditWorkflowsMutation from "@/services/workflows/mutation/useEditWorkflowsMutation";
+import usePatchWorkflowsMutation from "@/services/workflows/mutation/usePatchWorkflowsMutation";
+import usePostWorkflowMutation from "@/services/workflows/mutation/usePostWorkflowMutation";
 
 const useViewerJSONAction = () => {
   const { t } = useTranslation(["snackMessage"]);
   const { open } = useSnackbar();
   const { setCurrentTree, currentTree, tree, dispatchTree } = useTreegeContext();
   const [openModal, setOpenModal] = useState(false);
+  const { version } = useTreegeContext();
 
-  const { mutate: addWorkflowMutate } = useAddWorkflowsMutation({
+  const { mutate: addWorkflowMutate } = usePostWorkflowMutation({
     onError: () => {
       open(t("error.saveTree", { ns: "snackMessage" }), "error");
     },
@@ -22,7 +23,7 @@ const useViewerJSONAction = () => {
     },
   });
 
-  const { mutate: editWorkflowMutate } = useEditWorkflowsMutation({
+  const { mutate: editWorkflowMutate } = usePatchWorkflowsMutation({
     onError: () => {
       open(t("error.updateTree", { ns: "snackMessage" }), "error");
     },
@@ -58,11 +59,11 @@ const useViewerJSONAction = () => {
 
     if (tree) {
       if (id) {
-        editWorkflowMutate({ id, label: name, workflow: tree });
+        editWorkflowMutate({ id, label: name, version, workflow: tree });
         return;
       }
 
-      addWorkflowMutate({ label: name, workflow: tree });
+      addWorkflowMutate({ label: name, version, workflow: tree });
     }
   };
 

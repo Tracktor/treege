@@ -2,7 +2,7 @@
   "name": "treege",
   "description": "Form decision tree generator",
   "license": "ISC",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "type": "module",
   "types": "dist/main.d.ts",
   "main": "dist/main.umd.cjs",
@@ -35,6 +35,7 @@
   "dependencies": {
     "@codemirror/lang-json": "^6.0.1",
     "@mui/icons-material": "^5.14.1",
+    "@tanstack/react-query": "^4.32.0",
     "@tracktor/design-system": "^1.38.6",
     "@uiw/codemirror-theme-dracula": "^4.21.8",
     "@uiw/react-codemirror": "^4.21.8",
@@ -44,8 +45,7 @@
     "react": "^18.2.0",
     "react-d3-tree": "^3.6.1",
     "react-dom": "^18.2.0",
-    "react-i18next": "^13.0.2",
-    "react-query": "^3.39.3"
+    "react-i18next": "^13.0.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.17.0",

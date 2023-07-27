@@ -1,15 +1,26 @@
-import { useQuery, UseQueryOptions } from "react-query";
-import useWorkflowQueryFetcher, { WorkflowsResponse } from "@/services/workflows/query/useWorkflowQueryFetcher";
+import { useQuery, UseQueryOptions } from "@tanstack/react-query";
+import axios from "axios";
+import { TreeNode } from "@/features/Treege/type/TreeNode";
 
-interface Options extends Omit<UseQueryOptions<any, any, WorkflowsResponse, any>, "queryKey" | "queryFn"> {}
+interface WorkflowResponse {
+  id: string;
+  label: string;
+  version: string;
+  workflow: TreeNode;
+}
 
-const useWorkflowQuery = (id?: string, options?: Options) => {
-  const { getWorkflow } = useWorkflowQueryFetcher();
+const useWorkflowQuery = (id?: string, options?: UseQueryOptions<WorkflowResponse>) =>
+  useQuery<WorkflowResponse>(
+    ["/v1/workflow", id],
+    async ({ signal }) => {
+      const { data } = await axios.get<WorkflowResponse>(`/v1/workflow?id=${id}`, { signal });
 
-  return useQuery(["/v1/workflow", id], () => id && getWorkflow(id), {
-    refetchOnWindowFocus: false,
-    ...options,
-  });
-};
+      return data;
+    },
+    {
+      ...options,
+      enabled: !!id,
+    }
+  );
 
 export default useWorkflowQuery;

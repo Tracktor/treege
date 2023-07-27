@@ -23,7 +23,7 @@ export interface TreeDefaultValue {
   treePath: TreePath[] | [];
   tree: null | TreeNode;
   endPoint?: string;
-  version?: string;
+  version: string;
   currentTree: CurrentTree;
 }
 
@@ -41,7 +41,7 @@ export const treeDefaultValue: TreeDefaultValue = {
   tree: null,
   treeModalOpen: false,
   treePath: [],
-  version: undefined,
+  version: "",
 };
 
 export const TreegeContext = createContext(treeDefaultValue);
