@@ -60,6 +60,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     hiddenValue,
     isBooleanField,
     isDecision,
+    isEditModal,
     isDecisionField,
     isHiddenField,
     isRequiredDisabled,
@@ -87,7 +88,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeRepeatable,
     handleChangeHiddenValue,
   } = useFormTreeCardMutation();
-
+  console.log(isEditModal);
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
@@ -139,7 +140,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             label={t("required")}
           />
         </FormGroup>
-        {isLeaf && (
+        {(isLeaf || isEditModal) && (
           <FormGroup>
             <FormControlLabel
               disabled={!isDecisionField}

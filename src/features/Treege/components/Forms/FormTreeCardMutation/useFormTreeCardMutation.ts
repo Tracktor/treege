@@ -341,6 +341,7 @@ const useFormTreeCardMutation = () => {
     isBooleanField,
     isDecision,
     isDecisionField,
+    isEditModal,
     isHiddenField,
     isLeaf,
     isRepeatableDisabled,
