@@ -1,5 +1,4 @@
 import RotateLeftRoundedIcon from "@mui/icons-material/RotateLeftRounded";
-import SaveAsRoundedIcon from "@mui/icons-material/SaveAsRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import SimCardDownloadRoundedIcon from "@mui/icons-material/SimCardDownloadRounded";
 import {
@@ -54,7 +53,7 @@ const ViewerJSONAction = ({ downloadedFileName = "export", value }: ViewerJSONPr
       >
         <Box>
           <Button variant="outlined" onClick={handleSubmit} disabled={!value || !endPoint}>
-            {id ? <SaveAsRoundedIcon /> : <SaveRoundedIcon />}
+            <SaveRoundedIcon />
           </Button>
         </Box>
       </Tooltip>
