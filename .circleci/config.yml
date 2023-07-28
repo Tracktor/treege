@@ -39,4 +39,5 @@ workflows:
         value: << pipeline.git.branch >>
     jobs:
       - publish-npm:
+          name: Publish on NPM
           context: *production_context
