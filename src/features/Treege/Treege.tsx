@@ -10,36 +10,45 @@ import TreegeProvider from "@/features/Treege/context/TreegeProvider";
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
 import "@/config/i18n.config";
 
+export interface BackendConfig {
+  baseUrl: string;
+  authToken?: string;
+  endpoints?: {
+    workflow?: string;
+    workflows?: string;
+  };
+}
+
 type TreegeProps =
   | {
-      authToken?: string;
-      endPoint?: string;
       initialTree?: never;
       initialTreeId?: never;
+      backendConfig?: BackendConfig;
     }
   | {
-      authToken?: string;
-      endPoint?: string;
       initialTree?: TreeNode;
       initialTreeId?: never;
+      backendConfig?: BackendConfig;
     }
   | {
-      authToken?: string;
-      endPoint?: string;
       initialTree?: never;
       initialTreeId?: string;
+      backendConfig?: BackendConfig;
     };
 
-const Treege = ({ authToken, endPoint, initialTree, initialTreeId }: TreegeProps) => {
+const Treege = ({ initialTree, initialTreeId, backendConfig }: TreegeProps) => {
   useLayoutEffect(() => {
-    axios.defaults.baseURL = endPoint;
-    axios.defaults.headers.common.Authorization = `Bearer ${authToken}`;
-  }, [endPoint, authToken]);
+    axios.defaults.baseURL = backendConfig?.baseUrl;
+
+    if (backendConfig?.authToken) {
+      axios.defaults.headers.common.Authorization = `Bearer ${backendConfig?.authToken}`;
+    }
+  }, [backendConfig?.authToken, backendConfig?.baseUrl]);
 
   return (
     <QueryClientProvider client={queryConfig}>
-      <AuthProvider authToken={authToken}>
-        <TreegeProvider endPoint={endPoint} initialTree={initialTree} initialTreeId={initialTreeId}>
+      <AuthProvider authToken={backendConfig?.authToken}>
+        <TreegeProvider backendConfig={backendConfig} initialTree={initialTree} initialTreeId={initialTreeId}>
           <DarkTheme>
             <SnackbarProvider>
               <TreeGrid />

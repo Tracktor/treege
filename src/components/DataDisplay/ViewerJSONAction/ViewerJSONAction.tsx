@@ -25,7 +25,7 @@ interface ViewerJSONProps {
 const ViewerJSONAction = ({ downloadedFileName = "export", value }: ViewerJSONProps) => {
   const { t } = useTranslation();
   const { getDownloadLink, handleSubmit, handleClose, handleOpen, handleResetTree, openModal } = useViewerJSONAction();
-  const { currentTree, endPoint, tree } = useTreegeContext();
+  const { currentTree, backendConfig, tree } = useTreegeContext();
   const { id } = currentTree;
 
   return (
@@ -52,7 +52,7 @@ const ViewerJSONAction = ({ downloadedFileName = "export", value }: ViewerJSONPr
         arrow
       >
         <Box>
-          <Button variant="outlined" onClick={handleSubmit} disabled={!value || !endPoint}>
+          <Button variant="outlined" onClick={handleSubmit} disabled={!value || !backendConfig?.baseUrl}>
             <SaveRoundedIcon />
           </Button>
         </Box>
