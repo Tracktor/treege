@@ -26,7 +26,7 @@ const useTreeSelect = ({ isControlled, fetchWorkflowsOnOpen }: useTreeSelectProp
   const {
     data: workflows,
     isLoading: workflowsSuggestionsLoading,
-    refetch: refetchWorkflows,
+    refetch: fetchWorkflows,
   } = useWorkflowsQuery({
     enabled: !fetchWorkflowsOnOpen,
   });
@@ -48,10 +48,12 @@ const useTreeSelect = ({ isControlled, fetchWorkflowsOnOpen }: useTreeSelectProp
   );
 
   const handleOnOpen = useCallback(async () => {
-    if (!fetchWorkflowsOnOpen) return;
+    if (!fetchWorkflowsOnOpen) {
+      return;
+    }
 
     try {
-      await refetchWorkflows();
+      await fetchWorkflows();
 
       if (currentTree.id && !treeSelected) {
         setTreeSelected(currentTree.id);
@@ -59,11 +61,15 @@ const useTreeSelect = ({ isControlled, fetchWorkflowsOnOpen }: useTreeSelectProp
     } catch (error) {
       open(t("error.fetchTree", { ns: "snackMessage" }), "error");
     }
-  }, [currentTree.id, fetchWorkflowsOnOpen, open, refetchWorkflows, t, treeSelected]);
+  }, [currentTree.id, fetchWorkflowsOnOpen, open, fetchWorkflows, t, treeSelected]);
 
   // Set current tree when treeSelected is changed
   useEffect(() => {
-    if (treeSelected !== currentTree.id && workflowData) {
+    if (!workflowData) {
+      return;
+    }
+
+    if (treeSelected !== currentTree.id) {
       const { id, label, workflow } = workflowData;
 
       setCurrentTree({ id, name: label });
@@ -73,7 +79,7 @@ const useTreeSelect = ({ isControlled, fetchWorkflowsOnOpen }: useTreeSelectProp
 
   return {
     currentTree,
-    fetchWorkflowSuggestions: refetchWorkflows,
+    fetchWorkflowSuggestions: fetchWorkflows,
     handleChangeTree,
     handleOnOpen,
     setTreeSelected,
