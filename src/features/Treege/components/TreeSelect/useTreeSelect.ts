@@ -17,9 +17,10 @@ const useTreeSelect = ({ isControlled, fetchWorkflowsOnOpen }: useTreeSelectProp
   const { open } = useSnackbar();
   const { currentTree, setCurrentTree, dispatchTree } = useTreegeContext();
   const [treeSelected, setTreeSelected] = useState("");
+  const enabled = !!treeSelected && !isControlled && treeSelected !== currentTree.id;
 
   const { data: workflowData, isError: isErrorWorkflow } = useWorkflowQuery(treeSelected, {
-    enabled: !!treeSelected && !isControlled && treeSelected !== currentTree.id,
+    enabled,
   });
 
   const {
@@ -34,6 +35,7 @@ const useTreeSelect = ({ isControlled, fetchWorkflowsOnOpen }: useTreeSelectProp
     async ({ target }: SelectChangeEvent) => {
       const { value } = target;
 
+      // Reset tree when user select "Add new tree"
       if (value === "add-new-tree") {
         setTreeSelected("");
         setCurrentTree({ name: "" });
@@ -42,8 +44,9 @@ const useTreeSelect = ({ isControlled, fetchWorkflowsOnOpen }: useTreeSelectProp
       }
 
       setTreeSelected(value);
+      setCurrentTree({ id: value, name: workflows?.find((workflow) => workflow.id === value)?.label });
     },
-    [dispatchTree, setCurrentTree]
+    [dispatchTree, setCurrentTree, workflows]
   );
 
   const handleOnOpen = useCallback(async () => {

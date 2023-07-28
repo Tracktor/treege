@@ -4,6 +4,7 @@ import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
 type ModalType = "add" | "edit" | "delete" | "save" | null;
 type TreePath = { path: string; label: string };
+
 type CurrentTree = {
   id?: string;
   name?: string;
@@ -27,6 +28,9 @@ export interface TreeDefaultValue {
    * This is the tree modal open state
    */
   treeModalOpen: boolean;
+  /**
+   * This is the tree path
+   */
   treePath: TreePath[] | [];
   /**
    * This is the tree node object

@@ -7,6 +7,7 @@ import colors from "@/constants/colors";
 import ButtonCreateTree from "@/features/Treege/components/ButtonCreateTree/ButtonCreateTree";
 import type { TreeRenderCustomNodeElementFn } from "@/features/Treege/type/TreeNode";
 import useTreegeContext from "@/hooks/useTreegeContext";
+import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 
 interface TreeProps {
   data: any;
@@ -42,12 +43,13 @@ const Tree = ({
 }: TreeProps) => {
   const { dimensions, refContainer, translate } = useTree();
   const { currentTree } = useTreegeContext();
+  const { isInitialLoading } = useWorkflowQuery(currentTree.id);
 
   if (!data && !currentTree.id) {
     return <ButtonCreateTree />;
   }
 
-  if (currentTree.id && !data) {
+  if ((currentTree.id && !data) || isInitialLoading) {
     return (
       <Box sx={styles.progressContainer}>
         <CircularProgress />
