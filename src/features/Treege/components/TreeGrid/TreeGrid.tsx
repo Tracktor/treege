@@ -21,7 +21,7 @@ import useTreegeContext from "@/hooks/useTreegeContext";
 import { getTree } from "@/utils/tree";
 
 const TreeGrid = () => {
-  const { tree, treeModalOpen, treePath, endPoint } = useTreegeContext();
+  const { tree, treeModalOpen, treePath, backendConfig } = useTreegeContext();
   const { handleCloseTreeModal } = useTreeCardContainer();
   const { getTitleModalMutation, closeModal, getTitleModalDelete, isModalMutationOpen, isDeleteModal } = useTreeGrid();
   const currentTreePath = treePath?.at(-1)?.path;
@@ -34,7 +34,7 @@ const TreeGrid = () => {
         <Header>
           <Stack justifyContent="space-between" direction="row" alignItems="center">
             <Logo />
-            {!!endPoint && (
+            {!!backendConfig?.baseUrl && (
               <Stack direction="row" alignItems="center" spacing={2}>
                 <TreeNameTextField />
                 <TreeSelect size="small" arrowOnly showBtnAddNewTree fetchWorkflowsOnOpen />

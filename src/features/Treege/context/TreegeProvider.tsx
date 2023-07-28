@@ -1,18 +1,19 @@
 import { ReactNode, useMemo, useReducer, useState } from "react";
 import { treeDefaultValue, TreegeContext } from "@/features/Treege/context/TreegeContext";
 import treeReducer, { setTree } from "@/features/Treege/reducer/treeReducer";
+import { BackendConfig } from "@/features/Treege/Treege";
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import { version } from "~/package.json";
 
 interface TreegeProviderProps {
   children: ReactNode;
-  endPoint?: string;
   initialTree?: TreeNode;
   initialTreeId?: string;
+  backendConfig?: BackendConfig;
 }
 
-const TreegeProvider = ({ children, endPoint, initialTree, initialTreeId }: TreegeProviderProps) => {
+const TreegeProvider = ({ children, initialTree, initialTreeId, backendConfig }: TreegeProviderProps) => {
   const [currentHierarchyPointNode, setCurrentHierarchyPointNode] = useState(treeDefaultValue.currentHierarchyPointNode);
   const [modalOpen, setModalOpen] = useState(treeDefaultValue.modalOpen);
   const [treeModalOpen, setTreeModalOpen] = useState(treeDefaultValue.treeModalOpen);
@@ -24,10 +25,18 @@ const TreegeProvider = ({ children, endPoint, initialTree, initialTreeId }: Tree
 
   const value = useMemo(
     () => ({
+      backendConfig: {
+        baseUrl: treeDefaultValue?.backendConfig?.baseUrl || "",
+        ...treeDefaultValue.backendConfig,
+        ...backendConfig,
+        endpoints: {
+          ...treeDefaultValue.backendConfig?.endpoints,
+          ...backendConfig?.endpoints,
+        },
+      },
       currentHierarchyPointNode,
       currentTree,
       dispatchTree,
-      endPoint,
       modalOpen,
       setCurrentHierarchyPointNode,
       setCurrentTree,
@@ -39,7 +48,7 @@ const TreegeProvider = ({ children, endPoint, initialTree, initialTreeId }: Tree
       treePath,
       version,
     }),
-    [currentHierarchyPointNode, modalOpen, treeModalOpen, treePath, tree, currentTree, endPoint]
+    [backendConfig, currentHierarchyPointNode, currentTree, modalOpen, tree, treeModalOpen, treePath]
   );
 
   // Fetch initial tree
