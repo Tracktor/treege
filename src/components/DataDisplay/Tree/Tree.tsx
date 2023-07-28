@@ -46,9 +46,9 @@ const Tree = ({
 }: TreeProps) => {
   const { dimensions, refContainer, translate } = useTree();
   const { currentTree } = useTreegeContext();
-  const { isInitialLoading } = useWorkflowQuery(currentTree.id);
+  const { isInitialLoading, data: workflow } = useWorkflowQuery(currentTree.id);
 
-  if (!data && !currentTree.id) {
+  if ((!data && !currentTree.id) || (workflow && !data)) {
     return <ButtonCreateTree />;
   }
 
