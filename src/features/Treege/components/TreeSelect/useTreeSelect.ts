@@ -18,9 +18,8 @@ const useTreeSelect = ({ isControlled, fetchWorkflowsOnOpen }: useTreeSelectProp
   const { currentTree, setCurrentTree, dispatchTree } = useTreegeContext();
   const [treeSelected, setTreeSelected] = useState("");
 
-  const { data: workflowData } = useWorkflowQuery(treeSelected, {
+  const { data: workflowData, isError: isErrorWorkflow } = useWorkflowQuery(treeSelected, {
     enabled: !!treeSelected && !isControlled && treeSelected !== currentTree.id,
-    onError: () => open(t("error.fetchTree", { ns: "snackMessage" }), "error"),
   });
 
   const {
@@ -61,7 +60,7 @@ const useTreeSelect = ({ isControlled, fetchWorkflowsOnOpen }: useTreeSelectProp
     } catch (error) {
       open(t("error.fetchTree", { ns: "snackMessage" }), "error");
     }
-  }, [currentTree.id, fetchWorkflowsOnOpen, open, fetchWorkflows, t, treeSelected]);
+  }, [fetchWorkflowsOnOpen, fetchWorkflows, currentTree.id, treeSelected, open, t]);
 
   // Set current tree when treeSelected is changed
   useEffect(() => {
@@ -76,6 +75,13 @@ const useTreeSelect = ({ isControlled, fetchWorkflowsOnOpen }: useTreeSelectProp
       dispatchTree(setTree(workflow));
     }
   }, [currentTree.id, dispatchTree, isControlled, setCurrentTree, treeSelected, workflowData]);
+
+  // Display error message when fetch workflow failed
+  useEffect(() => {
+    if (isErrorWorkflow) {
+      open(t("error.fetchTree", { ns: "snackMessage" }), "error");
+    }
+  }, [isErrorWorkflow, open, t]);
 
   return {
     currentTree,
