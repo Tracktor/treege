@@ -11,8 +11,11 @@ import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 
 interface TreeProps {
   data: any;
-  nodeSize?: { x: number; y: number };
   renderCustomNodeElement?: TreeRenderCustomNodeElementFn;
+  nodeSize?: {
+    x: number;
+    y: number;
+  };
 }
 
 const styles = {
