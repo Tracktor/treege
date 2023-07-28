@@ -1,5 +1,5 @@
 import type { SelectChangeEvent } from "@tracktor/design-system";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { resetTree, setTree } from "@/features/Treege/reducer/treeReducer";
 import useSnackbar from "@/hooks/useSnackbar";
@@ -18,14 +18,9 @@ const useTreeSelect = ({ isControlled, fetchWorkflowsOnOpen }: useTreeSelectProp
   const { currentTree, setCurrentTree, dispatchTree } = useTreegeContext();
   const [treeSelected, setTreeSelected] = useState("");
 
-  useWorkflowQuery(treeSelected, {
+  const { data: workflowData } = useWorkflowQuery(treeSelected, {
     enabled: !!treeSelected && !isControlled && treeSelected !== currentTree.id,
     onError: () => open(t("error.fetchTree", { ns: "snackMessage" }), "error"),
-    onSuccess: ({ id, label, workflow }) => {
-      if (isControlled) return;
-      setCurrentTree({ id, name: label });
-      dispatchTree(setTree(workflow));
-    },
   });
 
   const {
@@ -34,31 +29,47 @@ const useTreeSelect = ({ isControlled, fetchWorkflowsOnOpen }: useTreeSelectProp
     refetch: refetchWorkflows,
   } = useWorkflowsQuery({
     enabled: !fetchWorkflowsOnOpen,
-    keepPreviousData: true,
-    onError: () => {
-      open(t("error.fetchTree", { ns: "snackMessage" }), "error");
+  });
+
+  const handleChangeTree = useCallback(
+    async ({ target }: SelectChangeEvent) => {
+      const { value } = target;
+
+      if (value === "add-new-tree") {
+        setTreeSelected("");
+        setCurrentTree({ name: "" });
+        dispatchTree(resetTree());
+        return;
+      }
+
+      setTreeSelected(value);
     },
-    onSuccess: () => {
+    [dispatchTree, setCurrentTree]
+  );
+
+  const handleOnOpen = useCallback(async () => {
+    if (!fetchWorkflowsOnOpen) return;
+
+    try {
+      await refetchWorkflows();
+
       if (currentTree.id && !treeSelected) {
         setTreeSelected(currentTree.id);
       }
-    },
-  });
-
-  const handleChangeTree = async ({ target }: SelectChangeEvent) => {
-    const { value } = target;
-
-    if (value === "add-new-tree") {
-      setTreeSelected("");
-      setCurrentTree({ name: "" });
-      dispatchTree(resetTree());
-      return;
+    } catch (error) {
+      open(t("error.fetchTree", { ns: "snackMessage" }), "error");
     }
+  }, [currentTree.id, fetchWorkflowsOnOpen, open, refetchWorkflows, t, treeSelected]);
 
-    setTreeSelected(value);
-  };
+  // Set current tree when treeSelected is changed
+  useEffect(() => {
+    if (treeSelected !== currentTree.id && workflowData) {
+      const { id, label, workflow } = workflowData;
 
-  const handleOnOpen = useCallback(() => refetchWorkflows(), [refetchWorkflows]);
+      setCurrentTree({ id, name: label });
+      dispatchTree(setTree(workflow));
+    }
+  }, [currentTree.id, dispatchTree, isControlled, setCurrentTree, treeSelected, workflowData]);
 
   return {
     currentTree,
