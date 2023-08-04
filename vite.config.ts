@@ -2,7 +2,7 @@ import { resolve } from "path";
 import react from "@vitejs/plugin-react";
 import dts from "vite-plugin-dts";
 import { defineConfig } from "vitest/config";
-import { dependencies, name } from "./package.json";
+import { dependencies, name, peerDependencies } from "./package.json";
 
 // https://vitejs.dev/config/
 const config = ({ mode }) =>
@@ -15,7 +15,7 @@ const config = ({ mode }) =>
         name,
       },
       rollupOptions: {
-        external: ["public/**/*", ...Object.keys(dependencies)],
+        external: [...Object.keys(dependencies), ...Object.keys(peerDependencies)],
         output: {
           globals: {
             "@codemirror/lang-json": "codemirrorLangJson",
