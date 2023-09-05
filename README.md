@@ -5,10 +5,9 @@
 
 [![npm version](https://badge.fury.io/js/treege.svg)](https://badge.fury.io/js/treege)
 
+[![Video Thumbnail](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID/0.jpg)](https://user-images.githubusercontent.com/108873902/184317603-61ceafc6-a326-49b2-b0de-ffda9cf9c75e.mov)
 
-<video src="https://user-images.githubusercontent.com/108873902/184317603-61ceafc6-a326-49b2-b0de-ffda9cf9c75e.mov"></video>
 
-- [Features](#Features)
 - [Installation](#Installation)
 - [Usage](#Usage)
   - [Options](#Options)
@@ -19,16 +18,6 @@
     - [yarn build](#yarn-build)
     - [yarn preview](#yarn-preview)
 - [Convention](#Convention)
-
-## Features
-
-- 📦 **[React](https://fr.reactjs.org)** - v18+ with Hooks
-- ⚡️ **[Vite](https://vitejs.dev)** - Next Generation Frontend Tooling
-- 📐 **[ESLint](https://eslint.org)** - Code analyzer
-- 🚀 **[Vitest](https://vitest.dev)** - A Vite native unit test framework. It's fast!
-- 🛠️ **[React Testing Library](https://testing-library.com/docs/react-testing-library/intro)** - React DOM testing
-  utilities
-- 🐶 **[Husky](https://typicode.github.io/husky)** - Modern native git hooks made easy
 
 ## Installation
 

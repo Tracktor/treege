@@ -1,5 +1,5 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
-import { appendNode, removeNode, updatedNode } from "@/utils/tree";
+import { appendNode, removeNode, updateNodeInTree } from "@/utils/tree";
 
 export const treeReducerActionType = {
   appendTreeCard: "appendTreeCard",
@@ -60,7 +60,7 @@ const treeReducer = (tree: TreeNode, action: any) => {
     case treeReducerActionType.replaceTreeCard: {
       const { name, path, children } = action;
 
-      return updatedNode({
+      return updateNodeInTree({
         child: children,
         name,
         path,

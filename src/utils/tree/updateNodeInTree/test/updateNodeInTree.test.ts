@@ -1,17 +1,17 @@
 import { expect } from "vitest";
-import { updatedNode } from "@/utils/tree";
+import { updateNodeInTree } from "@/utils/tree";
 import {
   updatedAndAddDecisionInFieldWithChildrenMock,
   updatedFirstNodeInTreeMock,
   updatedNodeInComplexeTreeMock,
   updatedNodeInOtherTreeMock,
   updatedTreeMock,
-} from "@/utils/tree/updatedNode/test/mock";
+} from "@/utils/tree/updateNodeInTree/test/mock";
 
 describe("getNodeNames", () => {
   test("updated first node", () => {
     const { tree, output, treePath, newChild, name } = updatedFirstNodeInTreeMock;
-    const result = updatedNode({
+    const result = updateNodeInTree({
       child: newChild,
       name,
       path: treePath,
@@ -23,7 +23,7 @@ describe("getNodeNames", () => {
 
   test("Update node in other tree", () => {
     const { tree, output, treePath, newChild, name } = updatedNodeInOtherTreeMock;
-    const result = updatedNode({
+    const result = updateNodeInTree({
       child: newChild,
       name,
       path: treePath,
@@ -35,7 +35,7 @@ describe("getNodeNames", () => {
 
   test("Update Tree", () => {
     const { tree, output, treePath, newChild, name } = updatedTreeMock;
-    const result = updatedNode({
+    const result = updateNodeInTree({
       child: newChild,
       name,
       path: treePath,
@@ -47,7 +47,7 @@ describe("getNodeNames", () => {
 
   test("Update Node in complexe Tree", () => {
     const { tree, output, treePath, newChild, name } = updatedNodeInComplexeTreeMock;
-    const result = updatedNode({
+    const result = updateNodeInTree({
       child: newChild,
       name,
       path: treePath,
@@ -59,7 +59,7 @@ describe("getNodeNames", () => {
 
   test("Updated and add decision in field with children", () => {
     const { tree, output, treePath, newChild, name } = updatedAndAddDecisionInFieldWithChildrenMock;
-    const result = updatedNode({
+    const result = updateNodeInTree({
       child: newChild,
       name,
       path: treePath,

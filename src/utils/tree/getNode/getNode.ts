@@ -1,10 +1,16 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
-import getNodeByNameInCurrentTree from "@/utils/tree/getNodeByNameInCurrentTree/getNodeByNameInCurrentTree";
+import findNodeByNameInTree from "@/utils/tree/findNodeByNameInTree/findNodeByNameInTree";
 import getTree from "@/utils/tree/getTree/getTree";
 
-const getNode = (tree: TreeNode, path: string | null, name: string) => {
-  const currentTree = getTree(tree, path);
-  return getNodeByNameInCurrentTree(currentTree, name);
+/**
+ * Get node
+ * @param node
+ * @param path
+ * @param name
+ */
+const getNode = (node: TreeNode, path: string | null, name: string) => {
+  const currentTree = getTree(node, path);
+  return findNodeByNameInTree(currentTree, name);
 };
 
 export default getNode;

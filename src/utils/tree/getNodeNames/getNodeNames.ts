@@ -1,23 +1,30 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
-const getNodeNames = (tree: TreeNode | null, attributeAccumulator: string[] = []) => {
-  if (!tree) return [];
-  let arrayNames = [...attributeAccumulator];
+/**
+ * Get node names from tree
+ * @param tree
+ */
+const getNodeNames = (tree: TreeNode | null): string[] => {
+  if (!tree) {
+    return [];
+  }
 
-  Object.entries(tree).forEach(([key, value]) => {
-    const isName = key === "name";
-    const hasChildren = key === "children" && value.length > 0;
+  const nodeNames: string[] = [];
 
-    if (isName) {
-      arrayNames = [...arrayNames, value];
+  const extractNodeNames = (node: TreeNode) => {
+    if (node.name) {
+      nodeNames.push(node.name);
     }
-
-    if (hasChildren) {
-      arrayNames = [...arrayNames, ...value.map((child: TreeNode) => getNodeNames(child, arrayNames)).flat()];
+    if (node.children && node.children.length > 0) {
+      for (const child of node.children) {
+        extractNodeNames(child);
+      }
     }
-  });
+  };
 
-  return arrayNames;
+  extractNodeNames(tree);
+
+  return nodeNames;
 };
 
 export default getNodeNames;

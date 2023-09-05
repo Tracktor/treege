@@ -1,19 +1,10 @@
 import appendNode from "./appendNode/appendNode";
 import getNode from "./getNode/getNode";
-import getNodeByNameInCurrentTree from "./getNodeByNameInCurrentTree/getNodeByNameInCurrentTree";
 import getNodeNames from "./getNodeNames/getNodeNames";
-import getParentNodeByNameInCurrentTree from "./getParentNodeByNameInCurrentTree/getParentNodeByNameInCurrentTree";
 import getTree from "./getTree/getTree";
 import removeNode from "./removeNode/removeNode";
-import updatedNode from "./updatedNode/updatedNode";
+import findNodeByNameInTree from "@/utils/tree/findNodeByNameInTree/findNodeByNameInTree";
+import findParentNodeByNameInTree from "@/utils/tree/findParentNodeByNameInTree/findParentNodeByNameInTree";
+import updateNodeInTree from "@/utils/tree/updateNodeInTree/updateNodeInTree";
 
-export {
-  getTree,
-  updatedNode,
-  appendNode,
-  removeNode,
-  getParentNodeByNameInCurrentTree,
-  getNodeByNameInCurrentTree,
-  getNodeNames,
-  getNode,
-};
+export { getTree, updateNodeInTree, appendNode, removeNode, findParentNodeByNameInTree, findNodeByNameInTree, getNodeNames, getNode };

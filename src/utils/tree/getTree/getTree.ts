@@ -1,27 +1,40 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
-const getTree = (element: TreeNode | undefined, searchPath?: string | null): TreeNode | null => {
-  if (!element) return null;
-
-  if (!searchPath) return element;
-
-  let result = null;
-
-  const hasPath = element?.attributes?.treePath === searchPath;
-  const hasTree = element?.attributes?.tree;
-  const hasChildren = element?.children?.length;
-
-  if (hasPath) {
-    return element?.attributes?.tree || null;
+/**
+ * Get a tree node by search path within the hierarchy
+ * @param node The starting element
+ * @param searchPath The path to search for
+ */
+const getTree = (node: TreeNode | undefined, searchPath?: string | null): TreeNode | null => {
+  if (!node) {
+    return null;
   }
 
+  if (!searchPath) {
+    return node;
+  }
+
+  // Check if the current element's treePath matches with searchPath
+  if (node.attributes?.treePath === searchPath) {
+    return node.attributes?.tree || null;
+  }
+
+  // Recursively search in child elements
+  let result = null;
+  const hasTree = node.attributes?.tree;
+  const hasChildren = node.children?.length;
+
   if (hasTree) {
-    result = getTree(element.attributes?.tree, searchPath);
+    result = getTree(node.attributes?.tree, searchPath);
   }
 
   if (hasChildren) {
-    for (let i = 0; result === null && i < element.children.length; i += 1) {
-      result = getTree(element.children[i], searchPath);
+    for (const child of node.children) {
+      // If result is found, return it.
+      if (result !== null) {
+        return result;
+      }
+      result = getTree(child, searchPath);
     }
   }
 

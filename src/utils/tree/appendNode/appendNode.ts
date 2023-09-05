@@ -8,36 +8,58 @@ interface AppendChildParams {
   child: TreeNode;
 }
 
+/**
+ * Add child by reference
+ * @param node
+ * @param child
+ */
 const addChildByRef = (node: TreeNode | null, child: TreeNode) => {
-  if (!node) return null;
-
-  const isChildDecision = child.attributes.isDecision;
-  Object.defineProperty(node, "attributes", { value: { ...node.attributes, isLeaf: false } });
-
-  if (isChildDecision) {
-    Object.defineProperty(node, "children", { value: [{ ...child, attributes: { ...child.attributes, isLeaf: false } }] });
+  if (!node) {
     return null;
   }
 
-  Object.defineProperty(node, "children", { value: [{ ...child, attributes: { ...child.attributes, isLeaf: !node.children.length } }] });
+  const { attributes } = child;
+  const isChildDecision = attributes.isDecision;
+
+  // Remove isLeaf from node
+  Object.defineProperty(node, "attributes", { value: { ...node.attributes, isLeaf: false } });
+
+  if (isChildDecision) {
+    // Add child to node children list and remove isLeaf from node
+    Object.defineProperty(node, "children", { value: [{ ...child, attributes: { ...attributes, isLeaf: false } }] });
+    return null;
+  }
+
+  // Add child to node children list and remove isLeaf from node if child is not have children
+  Object.defineProperty(node, "children", { value: [{ ...child, attributes: { ...attributes, isLeaf: !node.children.length } }] });
+
   return null;
 };
 
+/**
+ * Append child to tree
+ * @param tree
+ * @param path
+ * @param name
+ * @param child
+ */
 const appendNode = ({ tree, path, name, child }: AppendChildParams) => {
+  const { attributes, children } = child;
+
   if (!tree) {
-    // Initialise Tree
-    if (child.children.length) {
+    // Initialize Tree
+    if (children.length) {
       return { ...child };
     }
 
     // Add first element
-    return { ...child, attributes: { ...child.attributes, isLeaf: true, isRoot: true } };
+    return { ...child, attributes: { ...attributes, isLeaf: true, isRoot: true } };
   }
 
   const treeCopy = structuredClone(tree);
   const node = getNode(treeCopy, path, name);
 
-  addChildByRef(node, { ...child, ...(!child.attributes.isDecision && { children: [...(getNode(tree, path, name)?.children || [])] }) });
+  addChildByRef(node, { ...child, ...(!attributes.isDecision && { children: [...(getNode(tree, path, name)?.children || [])] }) });
 
   return treeCopy;
 };
