@@ -12,8 +12,8 @@ const getNodeTags = (tree: TreeNode | null): string[] => {
   const nodeTags: Set<string> = new Set();
 
   const extractNodeNames = (node: TreeNode) => {
-    if (node?.tag) {
-      nodeTags.add(node?.tag);
+    if (node?.attributes?.tag) {
+      nodeTags.add(node?.attributes?.tag);
     }
     if (node.children && node.children.length > 0) {
       for (const child of node.children) {

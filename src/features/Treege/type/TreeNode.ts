@@ -11,6 +11,7 @@ export interface TreeValues {
 
 export interface TreeNodeField {
   depth: number;
+  tag?: string;
   helperText?: string;
   messages?: { on?: string; off?: string };
   isDecision?: boolean;
@@ -31,6 +32,7 @@ export interface TreeNodeField {
 
 export interface TreeNodeValues {
   depth: number;
+  tag?: string;
   helperText?: string;
   messages?: never;
   isDecision?: never;
@@ -53,7 +55,6 @@ export type TreeNodeAttributes = TreeNodeField | TreeNodeValues;
 
 export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> {
   name: string;
-  tag?: string;
   attributes: TreeNodeAttributes;
   children: TreeNode[];
   treeId?: string;

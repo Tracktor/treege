@@ -15,6 +15,7 @@ const TRANSLATION_FR = {
   required: "Requis",
   save: "Enregistrer",
   show: "Afficher",
+  tag: "Tag",
   type: "Type",
   validate: "Valider",
   value: "Valeur",

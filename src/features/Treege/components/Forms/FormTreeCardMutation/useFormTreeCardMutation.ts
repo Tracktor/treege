@@ -1,6 +1,6 @@
 import type { SelectChangeEvent } from "@tracktor/design-system";
 import type { HierarchyPointNode } from "d3-hierarchy";
-import { ChangeEvent, FormEvent, MouseEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, FormEvent, MouseEvent, SyntheticEvent, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";
 import { appendTreeCard, replaceTreeCard } from "@/features/Treege/reducer/treeReducer";
@@ -25,6 +25,8 @@ const useFormTreeCardMutation = () => {
   const [required, setRequired] = useState(false);
   const [isDecision, setIsDecision] = useState(false);
   const [type, setType] = useState<TreeNodeField["type"]>("text");
+  const [tag, setTag] = useState<string | null>(null);
+
   const [treeSelected, setTreeSelected] = useState<string>("");
   const [helperText, setHelperText] = useState("");
   const [step, setStep] = useState("");
@@ -66,6 +68,15 @@ const useFormTreeCardMutation = () => {
         return { ...item };
       })
     );
+  };
+
+  const handleChangeTag = (_: SyntheticEvent<Element, Event>, newValue: string | { inputValue: string; label: string } | null) => {
+    if (typeof newValue === "string") {
+      setTag(newValue);
+    } else if (newValue && newValue.inputValue) {
+      // Create a new value from the user input
+      setTag(newValue.inputValue);
+    }
   };
 
   const handleChangeHiddenValue = (event: ChangeEvent<HTMLInputElement>) => {
@@ -249,6 +260,7 @@ const useFormTreeCardMutation = () => {
         ...(step && { step }),
         ...(repeatable && { repeatable }),
         ...(isHiddenField && { hiddenValue }),
+        ...(tag && { tag }),
       },
       children: childOfChildren,
       name,
@@ -284,6 +296,7 @@ const useFormTreeCardMutation = () => {
           });
 
       setName(currentHierarchyPointNode?.data.name || "");
+      setTag(currentHierarchyPointNode?.data.attributes?.tag || null);
       setType(currentHierarchyPointNode?.data.attributes?.type || "text");
       setHelperText(currentHierarchyPointNode?.data.attributes?.helperText || "");
       setRequired(currentHierarchyPointNode?.data.attributes?.required || false);
@@ -311,6 +324,7 @@ const useFormTreeCardMutation = () => {
     currentHierarchyPointNode?.data.attributes?.values,
     currentHierarchyPointNode?.data?.children,
     currentHierarchyPointNode?.data.name,
+    currentHierarchyPointNode?.data.attributes?.tag,
     currentHierarchyPointNode?.data.attributes?.repeatable,
     currentHierarchyPointNode?.data.attributes?.hiddenValue,
     defaultValues,
@@ -332,6 +346,7 @@ const useFormTreeCardMutation = () => {
     handleChangeRepeatable,
     handleChangeRequired,
     handleChangeStep,
+    handleChangeTag,
     handleChangeTreeSelect,
     handleChangeType,
     handleDeleteValue,
@@ -354,6 +369,7 @@ const useFormTreeCardMutation = () => {
     repeatable,
     required,
     step,
+    tag,
     treeSelected,
     type,
     uniqueNameErrorMessage,

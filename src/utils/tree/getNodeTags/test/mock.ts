@@ -9,13 +9,13 @@ export const treeWithOneTag: Mock = {
       isLeaf: true,
       isRoot: true,
       label: "Name",
+      tag: "tag-name",
       type: "text",
     },
     children: [],
     name: "name",
-    tag: "tag-name",
   },
-  output: ["tag-name"].sort(),
+  output: ["tag-name"],
 };
 
 export const treeWithMultiSameTag: Mock = {
@@ -24,6 +24,7 @@ export const treeWithMultiSameTag: Mock = {
       depth: 0,
       isRoot: true,
       label: "Name",
+      tag: "tag",
       type: "text",
     },
     children: [
@@ -39,6 +40,7 @@ export const treeWithMultiSameTag: Mock = {
               depth: 2,
               isLeaf: true,
               label: "Sexe",
+              tag: "tag",
               type: "select",
               values: [
                 {
@@ -58,11 +60,9 @@ export const treeWithMultiSameTag: Mock = {
           },
         ],
         name: "age",
-        tag: "tag",
       },
     ],
     name: "name",
-    tag: "tag",
   },
   output: ["tag"],
 };
@@ -73,6 +73,7 @@ export const treeWithMultiTag: Mock = {
       depth: 0,
       isRoot: true,
       label: "Name",
+      tag: "tag-name",
       type: "text",
     },
     children: [
@@ -80,6 +81,7 @@ export const treeWithMultiTag: Mock = {
         attributes: {
           depth: 1,
           label: "Age",
+          tag: "tag-age",
           type: "number",
         },
         children: [
@@ -161,11 +163,9 @@ export const treeWithMultiTag: Mock = {
           },
         ],
         name: "age",
-        tag: "tag-age",
       },
     ],
     name: "name",
-    tag: "tag-name",
   },
   output: ["tag-age", "tag-name"],
 };
@@ -176,6 +176,7 @@ export const treeWithMultiAndSameTag: Mock = {
       depth: 0,
       isRoot: true,
       label: "Nom",
+      tag: "tag-1",
       type: "text",
     },
     children: [
@@ -191,6 +192,7 @@ export const treeWithMultiAndSameTag: Mock = {
             attributes: {
               depth: 2,
               label: "Mini-pelle",
+              tag: "tag-2",
               value: "mini_excavator",
             },
             children: [
@@ -218,7 +220,6 @@ export const treeWithMultiAndSameTag: Mock = {
               },
             ],
             name: "materials:mini_excavator",
-            tag: "tag-2",
           },
           {
             attributes: {
@@ -290,53 +291,12 @@ export const treeWithMultiAndSameTag: Mock = {
               },
             ],
             name: "materials:carrycot",
-            tag: "tag-2",
           },
         ],
         name: "materials",
-        tag: "tag-1",
       },
     ],
     name: "name",
-    tag: "tag-1",
   },
-  output: ["tag-1", "tag-2"].sort(),
-};
-
-export const treeWithTree: Mock = {
-  input: {
-    attributes: {
-      depth: 0,
-      isLeaf: true,
-      isRoot: true,
-      label: "Name",
-      tree: {
-        attributes: {
-          depth: 0,
-          isLeaf: true,
-          isRoot: true,
-          label: "Name",
-          type: "text",
-        },
-        children: [
-          {
-            attributes: {
-              depth: 0,
-              isLeaf: true,
-              isRoot: true,
-              label: "Name",
-              type: "text",
-            },
-            children: [],
-            name: "nameInTree",
-          },
-        ],
-        name: "nameInTree",
-      },
-      type: "text",
-    },
-    children: [],
-    name: "name",
-  },
-  output: ["name"].sort(),
+  output: ["tag-1", "tag-2"],
 };

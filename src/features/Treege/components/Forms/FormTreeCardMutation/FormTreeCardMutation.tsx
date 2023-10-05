@@ -13,7 +13,8 @@ import {
 } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
-import FieldsSelect from "@/features/Treege/components/FieldsSelect";
+import FieldSelectCreatable from "@/features/Treege/components/FieldCreatableSelect";
+import FieldSelect from "@/features/Treege/components/FieldSelect";
 import ExtraField from "@/features/Treege/components/Forms/FormTreeCardMutation/ExtraField";
 import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
 
@@ -53,6 +54,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     values,
     required,
     name,
+    tag,
     uniqueNameErrorMessage,
     type,
     helperText,
@@ -87,6 +89,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeLabel,
     handleChangeRepeatable,
     handleChangeHiddenValue,
+    handleChangeTag,
   } = useFormTreeCardMutation();
 
   return (
@@ -105,7 +108,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
       </Stack>
 
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
-        <FieldsSelect value={type} onChange={handleChangeType} />
+        <FieldSelect value={type} onChange={handleChangeType} />
         <ExtraField
           helperText={helperText}
           hiddenValue={hiddenValue}
@@ -116,6 +119,10 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           handleChangeHelperText={handleChangeHelperText}
           handleChangeHiddenValue={handleChangeHiddenValue}
         />
+      </Stack>
+
+      <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
+        <FieldSelectCreatable value={tag} onChange={handleChangeTag} />
       </Stack>
 
       {isBooleanField && (
