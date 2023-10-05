@@ -53,6 +53,7 @@ export type TreeNodeAttributes = TreeNodeField | TreeNodeValues;
 
 export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> {
   name: string;
+  tag?: string;
   attributes: TreeNodeAttributes;
   children: TreeNode[];
   treeId?: string;
