@@ -77,6 +77,8 @@ const useFormTreeCardMutation = () => {
       } else if (newValue && newValue.inputValue) {
         // Create a new value from the user input
         setTag(newValue.inputValue);
+      } else {
+        setTag(null);
       }
     },
     []
