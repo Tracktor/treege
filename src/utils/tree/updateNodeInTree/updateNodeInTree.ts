@@ -19,18 +19,20 @@ const updateNodeByRef = (node: TreeNode | null, newNode: TreeNode) => {
   }
 
   const isNewChildDecision = newNode.attributes.isDecision;
+  const isNodeDecision = node.attributes.isDecision;
   const isRoot = node.attributes.depth === 0;
+  const name = { value: newNode.name };
+  const isDecision = isNodeDecision || isNewChildDecision;
+  const children = isDecision ? { value: [...newNode.children] } : { value: [...node.children] };
 
-  const updatedAttributes = {
-    ...newNode.attributes,
-    isLeaf: !newNode.children.length || !isNewChildDecision,
-    isRoot,
-  };
+  const attributes = isDecision
+    ? { value: { ...newNode.attributes, isLeaf: !newNode.children.length || !isNewChildDecision, isRoot } }
+    : { value: { ...newNode.attributes, isLeaf: !node.children.length, isRoot } };
 
   Object.defineProperties(node, {
-    attributes: { value: updatedAttributes },
-    children: { value: [...newNode.children] },
-    name: { value: newNode.name },
+    attributes,
+    children,
+    name,
   });
 
   return null;
