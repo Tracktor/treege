@@ -13,8 +13,8 @@ import {
 } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
-import FieldSelectCreatable from "@/features/Treege/components/FieldCreatableSelect";
 import FieldSelect from "@/features/Treege/components/FieldSelect";
+import FieldSelectAutocompleteCreatable from "@/features/Treege/components/FieldSelectAutocompleteCreatable";
 import ExtraField from "@/features/Treege/components/Forms/FormTreeCardMutation/ExtraField";
 import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
 
@@ -122,7 +122,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
       </Stack>
 
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
-        <FieldSelectCreatable value={tag} onChange={handleChangeTag} />
+        <FieldSelectAutocompleteCreatable value={tag} onChange={handleChangeTag} />
       </Stack>
 
       {isBooleanField && (
