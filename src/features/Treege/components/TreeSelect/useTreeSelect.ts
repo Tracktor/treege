@@ -46,7 +46,7 @@ const useTreeSelect = ({ isControlled, fetchWorkflowsOnOpen }: useTreeSelectProp
       setTreeSelected(value);
       setCurrentTree({ id: value, name: workflows?.find((workflow) => workflow.id === value)?.label });
     },
-    [dispatchTree, setCurrentTree, workflows]
+    [dispatchTree, setCurrentTree, workflows],
   );
 
   const handleOnOpen = useCallback(async () => {

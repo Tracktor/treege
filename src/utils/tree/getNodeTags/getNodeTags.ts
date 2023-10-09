@@ -1,7 +1,7 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
 /**
- * Get node names from tree
+ * Get node tags from tree
  * @param tree
  */
 const getNodeTags = (tree: TreeNode | null): string[] => {
@@ -13,18 +13,19 @@ const getNodeTags = (tree: TreeNode | null): string[] => {
 
   const extractNodeNames = (node: TreeNode) => {
     if (node?.attributes?.tag) {
-      nodeTags.add(node?.attributes?.tag);
+      nodeTags.add(node.attributes.tag);
     }
-    if (node.children && node.children.length > 0) {
-      for (const child of node.children) {
-        extractNodeNames(child);
+    if (node?.children?.length) {
+      const { children } = node;
+      for (let i = 0; i < children.length; i += 1) {
+        extractNodeNames(children[i]);
       }
     }
   };
 
   extractNodeNames(tree);
 
-  return Array.from(nodeTags);
+  return [...nodeTags];
 };
 
 export default getNodeTags;

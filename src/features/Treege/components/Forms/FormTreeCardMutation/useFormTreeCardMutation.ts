@@ -66,7 +66,7 @@ const useFormTreeCardMutation = () => {
         }
 
         return { ...item };
-      })
+      }),
     );
   }, []);
 
@@ -81,7 +81,7 @@ const useFormTreeCardMutation = () => {
         setTag(null);
       }
     },
-    []
+    [],
   );
 
   const handleChangeHiddenValue = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -96,21 +96,21 @@ const useFormTreeCardMutation = () => {
     (event: ChangeEvent<HTMLInputElement>) => {
       handlePresetValues(event, "label");
     },
-    [handlePresetValues]
+    [handlePresetValues],
   );
 
   const handleChangeOptionValue = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       handlePresetValues(event, "value");
     },
-    [handlePresetValues]
+    [handlePresetValues],
   );
 
   const handleChangeOptionMessage = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       handlePresetValues(event, "message");
     },
-    [handlePresetValues]
+    [handlePresetValues],
   );
 
   const handleChangeStep = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -141,7 +141,7 @@ const useFormTreeCardMutation = () => {
 
       setUniqueNameErrorMessage(t("mustBeUnique", { ns: "form" }));
     },
-    [currentHierarchyPointNode?.data.name, isEditModal, t, tree, treePath]
+    [currentHierarchyPointNode?.data.name, isEditModal, t, tree, treePath],
   );
 
   const handleChangeRequired = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -172,7 +172,7 @@ const useFormTreeCardMutation = () => {
     (nameMessage: "on" | "off") => (event: ChangeEvent<HTMLInputElement>) => {
       setMessages((currentState) => ({ ...currentState, [nameMessage]: event.target.value }));
     },
-    []
+    [],
   );
 
   const handleChangeHelperText = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -230,12 +230,12 @@ const useFormTreeCardMutation = () => {
           };
         });
     },
-    [currentHierarchyPointNode, getDisabledValueField, getNestedChildren, isDecision, name, values]
+    [currentHierarchyPointNode, getDisabledValueField, getNestedChildren, isDecision, name, values],
   );
 
   const getTreeValuesWithoutEmptyMessage = useCallback(
     (valuesData: TreeValues[]) => valuesData.map(({ message, ...rest }) => ({ ...rest, ...(message && { message }) })),
-    []
+    [],
   );
 
   const getWorkFlowReq = useCallback(
@@ -252,7 +252,7 @@ const useFormTreeCardMutation = () => {
 
       return { data: null, isError: null };
     },
-    [currentHierarchyPointNode?.data.attributes?.tree, fetchWorkflow]
+    [currentHierarchyPointNode?.data.attributes?.tree, fetchWorkflow],
   );
 
   const handleSubmit = useCallback(
@@ -328,7 +328,7 @@ const useFormTreeCardMutation = () => {
       treeSelected,
       type,
       values,
-    ]
+    ],
   );
 
   // Set initial form data edit modal

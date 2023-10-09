@@ -23,7 +23,7 @@ const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
       dispatchSnackbar,
       snackbar,
     }),
-    [snackbar, dispatchSnackbar]
+    [snackbar, dispatchSnackbar],
   );
 
   return (

@@ -25,7 +25,7 @@ const usePatchWorkflowsMutation = (options?: MutateOptions<PatchWorkflowResponse
       const { data } = await axios.patch<PatchWorkflowResponse>(workflow, payload);
       return data;
     },
-    options
+    options,
   );
 };
 

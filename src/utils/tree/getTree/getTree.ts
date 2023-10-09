@@ -20,7 +20,7 @@ const getTree = (node: TreeNode | undefined, searchPath?: string | null): TreeNo
   }
 
   // Recursively search in child elements
-  let result = null;
+  let result: TreeNode | null = null;
   const hasTree = node.attributes?.tree;
   const hasChildren = node.children?.length;
 
@@ -29,7 +29,9 @@ const getTree = (node: TreeNode | undefined, searchPath?: string | null): TreeNo
   }
 
   if (hasChildren) {
-    for (const child of node.children) {
+    const { children } = node;
+    for (let i = 0; i < children.length; i += 1) {
+      const child = children[i];
       // If result is found, return it.
       if (result !== null) {
         return result;

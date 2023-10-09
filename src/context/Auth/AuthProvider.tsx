@@ -11,7 +11,7 @@ const AuthProvider = ({ children, authToken }: AuthProviderProps) => {
     () => ({
       authToken,
     }),
-    [authToken]
+    [authToken],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

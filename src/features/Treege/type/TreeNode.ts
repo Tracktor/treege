@@ -9,9 +9,55 @@ export interface TreeValues {
   message?: string;
 }
 
+export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> {
+  name: string;
+  attributes:
+    | {
+        depth: number;
+        tag?: string;
+        helperText?: string;
+        messages?: { on?: string; off?: string };
+        isDecision?: boolean;
+        isLeaf?: boolean;
+        isRoot?: boolean;
+        label: string;
+        required?: boolean;
+        step?: string;
+        type: (typeof fields)[number]["type"];
+        value?: never;
+        values?: TreeValues[];
+        message?: never;
+        tree?: TreeNode;
+        treePath?: string;
+        repeatable?: boolean;
+        hiddenValue?: string;
+      }
+    | {
+        depth: number;
+        tag?: string;
+        helperText?: string;
+        messages?: never;
+        isDecision?: never;
+        isLeaf?: boolean;
+        isRoot?: never;
+        label: string;
+        required?: never;
+        step?: never;
+        type?: never;
+        value: string;
+        values?: never;
+        message?: string;
+        tree?: never;
+        treePath?: never;
+        repeatable?: never;
+        hiddenValue?: never;
+      };
+  children: TreeNode[];
+  treeId?: string;
+}
+
 export interface TreeNodeField {
   depth: number;
-  tag?: string;
   helperText?: string;
   messages?: { on?: string; off?: string };
   isDecision?: boolean;
@@ -28,36 +74,6 @@ export interface TreeNodeField {
   treePath?: string;
   repeatable?: boolean;
   hiddenValue?: string;
-}
-
-export interface TreeNodeValues {
-  depth: number;
-  tag?: string;
-  helperText?: string;
-  messages?: never;
-  isDecision?: never;
-  isLeaf?: boolean;
-  isRoot?: never;
-  label: string;
-  required?: never;
-  step?: never;
-  type?: never;
-  value: string;
-  values?: never;
-  message?: string;
-  tree?: never;
-  treePath?: never;
-  repeatable?: never;
-  hiddenValue?: never;
-}
-
-export type TreeNodeAttributes = TreeNodeField | TreeNodeValues;
-
-export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> {
-  name: string;
-  attributes: TreeNodeAttributes;
-  children: TreeNode[];
-  treeId?: string;
 }
 
 export interface TreeCustomNodeElementProps extends Omit<CustomNodeElementProps, "hierarchyPointNode"> {

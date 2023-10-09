@@ -9,7 +9,7 @@ interface TagOption {
   label: string;
 }
 
-const filter = createFilterOptions<TagOption>();
+const filter = createFilterOptions<TagOption | string>();
 
 interface FieldSelectCreatableProps {
   value: string | null;
@@ -32,7 +32,8 @@ const FieldSelectCreatable = ({ value, onChange }: FieldSelectCreatableProps) =>
 
         const { inputValue } = params;
         // Suggest the creation of a new value
-        const isExisting = options.some((option) => inputValue === option.label);
+        const isExisting = options.some((option) => typeof option !== "string" && inputValue === option.label);
+
         if (inputValue !== "" && !isExisting) {
           filtered.push({
             inputValue,
@@ -59,7 +60,7 @@ const FieldSelectCreatable = ({ value, onChange }: FieldSelectCreatableProps) =>
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...props}
         >
-          {option.label}
+          {typeof option !== "string" && option.label}
         </li>
       )}
       renderInput={(params) => (
