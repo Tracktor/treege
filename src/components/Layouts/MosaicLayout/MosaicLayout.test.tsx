@@ -9,7 +9,7 @@ test("render <MosaicLayout />", () => {
     <MosaicLayout>
       <Header />
       <Header />
-    </MosaicLayout>
+    </MosaicLayout>,
   );
 
   const treeGrid = getByRole("treegrid");

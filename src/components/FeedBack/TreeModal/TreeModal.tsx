@@ -40,7 +40,7 @@ const styles = {
 
 const TransitionRef = (
   { children, appear, in: inProps, onEnter, onExited, onFocus, role, tabIndex, timeout }: { children: ReactElement } & TransitionProps,
-  ref: Ref<unknown>
+  ref: Ref<unknown>,
 ) => (
   <Slide
     direction="up"

@@ -25,7 +25,7 @@ const useWorkflowQuery = (id?: string, options?: UseQueryOptions<WorkflowRespons
     {
       enabled: !!id,
       ...options,
-    }
+    },
   );
 };
 

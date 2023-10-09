@@ -15,9 +15,11 @@ const getNodeNames = (tree: TreeNode | null): string[] => {
     if (node.name) {
       nodeNames.push(node.name);
     }
-    if (node.children && node.children.length > 0) {
-      for (const child of node.children) {
-        extractNodeNames(child);
+
+    if (node.children.length) {
+      const { children } = node;
+      for (let i = 0; i < children.length; i += 1) {
+        extractNodeNames(children[i]);
       }
     }
   };

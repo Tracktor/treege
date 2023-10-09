@@ -24,7 +24,7 @@ const usePostWorkflowMutation = (options?: MutateOptions<PostWorkflowResponse, a
       const { data } = await axios.post<PostWorkflowResponse>(workflow, payload);
       return data;
     },
-    options
+    options,
   );
 };
 

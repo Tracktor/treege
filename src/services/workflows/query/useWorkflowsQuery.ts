@@ -22,7 +22,7 @@ const useWorkflowsQuery = (options?: UseQueryOptions<WorkflowsResponse[]>) => {
 
       return data;
     },
-    options
+    options,
   );
 };
 

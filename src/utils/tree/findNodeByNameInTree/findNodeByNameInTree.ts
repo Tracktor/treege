@@ -14,7 +14,9 @@ const findNodeByNameInTree = (node: TreeNode | null, name: string): TreeNode | n
     return node;
   }
 
-  for (const child of node.children || []) {
+  const children = node.children || [];
+  for (let i = 0; i < children.length; i += 1) {
+    const child = children[i];
     const result = findNodeByNameInTree(child, name);
 
     if (result) {

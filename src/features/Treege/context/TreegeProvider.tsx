@@ -20,7 +20,7 @@ const TreegeProvider = ({ children, initialTree, initialTreeId, backendConfig }:
   const [treePath, setTreePath] = useState(treeDefaultValue.treePath);
   const [tree, dispatchTree] = useReducer(treeReducer, initialTree || treeDefaultValue.tree);
   const [currentTree, setCurrentTree] = useState(
-    initialTreeId ? { ...treeDefaultValue.currentTree, id: initialTreeId } : treeDefaultValue.currentTree
+    initialTreeId ? { ...treeDefaultValue.currentTree, id: initialTreeId } : treeDefaultValue.currentTree,
   );
 
   const value = useMemo(
@@ -48,7 +48,7 @@ const TreegeProvider = ({ children, initialTree, initialTreeId, backendConfig }:
       treePath,
       version,
     }),
-    [backendConfig, currentHierarchyPointNode, currentTree, modalOpen, tree, treeModalOpen, treePath]
+    [backendConfig, currentHierarchyPointNode, currentTree, modalOpen, tree, treeModalOpen, treePath],
   );
 
   // Fetch initial tree

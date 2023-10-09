@@ -7,7 +7,7 @@ const useFieldsSelect = () => {
 
   const getFields = useCallback(
     () => fields.filter((field) => !(field.type === "tree" && !backendConfig?.baseUrl)),
-    [backendConfig?.baseUrl]
+    [backendConfig?.baseUrl],
   );
 
   return { fields: getFields() };

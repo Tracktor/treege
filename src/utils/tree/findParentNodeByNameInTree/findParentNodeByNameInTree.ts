@@ -11,11 +11,13 @@ const findParentNodeByNameInTree = (node: TreeNode | null, name: string, parentN
     return null;
   }
 
-  if (node?.name === name) {
+  if (node.name === name) {
     return parentNode;
   }
 
-  for (const child of node.children || []) {
+  const children = node.children || [];
+  for (let i = 0; i < children.length; i += 1) {
+    const child = children[i];
     const result = findParentNodeByNameInTree(child, name, node);
     if (result !== null) {
       return result;
