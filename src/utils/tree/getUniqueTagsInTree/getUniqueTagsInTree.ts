@@ -1,10 +1,10 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
 /**
- * Get node tags from tree
+ * Get unique tags from tree
  * @param tree
  */
-const getNodeTags = (tree: TreeNode | null): string[] => {
+const getUniqueTagsInTree = (tree: TreeNode | null): string[] => {
   if (!tree) {
     return [];
   }
@@ -28,4 +28,4 @@ const getNodeTags = (tree: TreeNode | null): string[] => {
   return [...nodeTags];
 };
 
-export default getNodeTags;
+export default getUniqueTagsInTree;

@@ -2,7 +2,7 @@ import { Autocomplete, createFilterOptions, TextField } from "@tracktor/design-s
 import { SyntheticEvent } from "react";
 import { useTranslation } from "react-i18next";
 import useTreegeContext from "@/hooks/useTreegeContext";
-import getNodeTags from "@/utils/tree/getNodeTags/getNodeTags";
+import getUniqueTagsInTree from "@/utils/tree/getUniqueTagsInTree/getUniqueTagsInTree";
 
 interface TagOption {
   inputValue: string;
@@ -19,7 +19,7 @@ interface FieldSelectAutocompleteCreatableProps {
 const FieldSelectAutocompleteCreatable = ({ value, onChange }: FieldSelectAutocompleteCreatableProps) => {
   const { t } = useTranslation(["translation", "form"]);
   const { tree } = useTreegeContext();
-  const treeTags = getNodeTags(tree).reduce((acc, tag) => [...acc, { inputValue: tag, label: tag }], [] as TagOption[]);
+  const treeTags = getUniqueTagsInTree(tree).reduce((acc, tag) => [...acc, { inputValue: tag, label: tag }], [] as TagOption[]);
 
   return (
     <Autocomplete

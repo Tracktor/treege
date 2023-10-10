@@ -9,7 +9,7 @@ import useSnackbar from "@/hooks/useSnackbar";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import { isUniqueArrayItemWithNewEntry } from "@/utils/array";
-import getTreeNames from "@/utils/tree/getNodeNames/getNodeNames";
+import getTreeNames from "@/utils/tree/getNamesInTree/getNamesInTree";
 import getTree from "@/utils/tree/getTree/getTree";
 
 const useFormTreeCardMutation = () => {

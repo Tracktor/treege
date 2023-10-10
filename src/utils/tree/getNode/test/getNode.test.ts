@@ -1,4 +1,3 @@
-import { expect } from "vitest";
 import getNode from "@/utils/tree/getNode/getNode";
 import { mainTreeWithTreeMock, simpleTreeMock, treeWithFields, treeWithTreeMock } from "@/utils/tree/getNode/test/mock";
 

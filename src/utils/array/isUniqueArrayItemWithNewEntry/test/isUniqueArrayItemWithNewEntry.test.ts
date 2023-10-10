@@ -1,4 +1,3 @@
-import { expect } from "vitest";
 import { isUniqueArrayItemWithNewEntry } from "@/utils/array";
 
 describe("isUniqueArrayItemWithNewEntry", () => {
