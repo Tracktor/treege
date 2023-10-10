@@ -1,4 +1,3 @@
-import { expect } from "vitest";
 import findNodeByNameInTree from "@/utils/tree/findNodeByNameInTree/findNodeByNameInTree";
 import {
   simpleTree,

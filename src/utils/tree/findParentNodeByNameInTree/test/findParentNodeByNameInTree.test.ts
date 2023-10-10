@@ -1,4 +1,3 @@
-import { expect } from "vitest";
 import findParentNodeByNameInTree from "@/utils/tree/findParentNodeByNameInTree/findParentNodeByNameInTree";
 import {
   searchNameInOtherTreeMock,

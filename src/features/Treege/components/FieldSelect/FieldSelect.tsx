@@ -1,6 +1,6 @@
 import { Chip, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
-import useFieldsSelect from "@/features/Treege/components/FieldsSelect/useFieldsSelect";
+import useFieldSelect from "@/features/Treege/components/FieldSelect/useFieldSelect";
 import type { TreeNodeField } from "@/features/Treege/type/TreeNode";
 
 interface FieldsSelectProps {
@@ -8,9 +8,9 @@ interface FieldsSelectProps {
   onChange?: (event: SelectChangeEvent<TreeNodeField["type"]>) => void;
 }
 
-const FieldsSelect = ({ onChange, value }: FieldsSelectProps) => {
+const FieldSelect = ({ onChange, value }: FieldsSelectProps) => {
   const { t } = useTranslation(["translation", "form"]);
-  const { fields } = useFieldsSelect();
+  const { fields } = useFieldSelect();
 
   return (
     <FormControl sx={{ flex: 1 }} required>
@@ -36,4 +36,4 @@ const FieldsSelect = ({ onChange, value }: FieldsSelectProps) => {
   );
 };
 
-export default FieldsSelect;
+export default FieldSelect;
