@@ -36,7 +36,15 @@ const config = ({ mode }) =>
     },
     plugins: [
       dts({
-        exclude: "src/App.tsx",
+        exclude: [
+          "src/App.tsx",
+          "**/*.test.ts",
+          "**/*.test.tsx",
+          "**/stories/**/*",
+          "**/*.stories.tsx",
+          "**/*.stories.ts",
+          "vite.config.ts",
+        ],
         insertTypesEntry: true,
       }),
       react(),
