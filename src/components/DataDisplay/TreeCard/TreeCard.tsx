@@ -106,7 +106,7 @@ const TreeCard = ({
 }: TreeCardProps) => {
   const { t } = useTranslation(["translation", "form"]);
   const { attributes } = nodeDatum || {};
-  const { isRoot, isLeaf, required, isDecision, step, type, label, repeatable } = attributes || {};
+  const { isRoot, isLeaf, required, isDecision, step, type, label, repeatable, tag } = attributes || {};
   const isField = !!type;
   const isTree = type === "tree";
   const isHidden = type === "hidden";
@@ -132,9 +132,15 @@ const TreeCard = ({
               </Stack>
             )}
             {isField && <Chip color="info" size="small" label={t(`type.${type}` as const as any, { ns: "form" })} />}
+            {tag && <Chip variant="outlined" color="warning" size="small" label={tag} />}
+
             {required && (
               <Stack direction="row" spacing={0.5}>
-                {required && <Chip color="warning" size="small" variant="outlined" label={t("required")} />}
+                {required && (
+                  <Typography variant="body2" sx={{ color: ({ palette }) => palette.error.main }}>
+                    {t("required")}
+                  </Typography>
+                )}
               </Stack>
             )}
             <Stack spacing={0.5} alignItems="flex-end">

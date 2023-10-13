@@ -1,4 +1,4 @@
 # [Versions](https://github.com/Tracktor/treege/releases)
 
-## v0.11.5
-- **[improvement]** : export type exclude exception
+## v0.12.0
+- **[feat]** : Add possibility to add a tag to each tree node

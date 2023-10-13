@@ -1,10 +1,10 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
 /**
- * Get node names from tree
+ * Get all names from tree
  * @param tree
  */
-const getNodeNames = (tree: TreeNode | null): string[] => {
+const getNamesInTree = (tree: TreeNode | null): string[] => {
   if (!tree) {
     return [];
   }
@@ -29,4 +29,4 @@ const getNodeNames = (tree: TreeNode | null): string[] => {
   return nodeNames;
 };
 
-export default getNodeNames;
+export default getNamesInTree;

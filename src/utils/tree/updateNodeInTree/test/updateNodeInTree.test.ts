@@ -1,4 +1,3 @@
-import { expect } from "vitest";
 import { updateNodeInTree } from "@/utils/tree";
 import {
   updatedAndAddDecisionInFieldWithChildrenMock,

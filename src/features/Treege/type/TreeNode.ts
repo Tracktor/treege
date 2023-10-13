@@ -14,6 +14,7 @@ export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> 
   attributes:
     | {
         depth: number;
+        tag?: string;
         helperText?: string;
         messages?: { on?: string; off?: string };
         isDecision?: boolean;
@@ -33,6 +34,7 @@ export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> 
       }
     | {
         depth: number;
+        tag?: string;
         helperText?: string;
         messages?: never;
         isDecision?: never;
