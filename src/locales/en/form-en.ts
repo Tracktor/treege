@@ -1,5 +1,5 @@
 const FORM_EN = {
-  apiEndPoint: "Api end point",
+  apiEndPoint: "Api endpoint",
   decisionField: "Decision field",
   helperText: "Helper text",
   hiddenValue: "Hidden value",
