@@ -1,4 +1,5 @@
 const FORM_FR = {
+  apiEndPoint: "Api end point",
   decisionField: "Champs de décision",
   helperText: "Texte d'information",
   hiddenValue: "Valeur caché",
@@ -14,6 +15,7 @@ const FORM_FR = {
   treeName: "Nom de l'arbre",
   type: {
     address: "Adresse",
+    apiAutocomplete: "Autocomplétion API",
     checkbox: "Case à cocher",
     date: "Date",
     email: "Email",
@@ -32,6 +34,7 @@ const FORM_FR = {
   },
   value: "Valeur",
   values: "Valeurs",
+  warningApiAutocomplete: "La réponse de l'api doit être un tableau de type",
 } as const;
 
 export default FORM_FR;

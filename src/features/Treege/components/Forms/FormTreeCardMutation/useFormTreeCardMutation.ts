@@ -26,6 +26,7 @@ const useFormTreeCardMutation = () => {
   const [isDecision, setIsDecision] = useState(false);
   const [type, setType] = useState<TreeNodeField["type"]>("text");
   const [tag, setTag] = useState<string | null>(null);
+  const [endPoint, setEndPoint] = useState("");
 
   const [treeSelected, setTreeSelected] = useState<string>("");
   const [helperText, setHelperText] = useState("");
@@ -39,6 +40,7 @@ const useFormTreeCardMutation = () => {
   const isEditModal = modalOpen === "edit";
   const isTreeField = type === "tree";
   const isHiddenField = type === "hidden";
+  const isApiAutocomplete = type === "apiAutocomplete";
   const isBooleanField = fields.some((field) => field.type === type && field?.isBooleanField);
   const isDecisionField = fields.some((field) => field.type === type && field?.isDecisionField);
   const isRequiredDisabled = fields.some((field) => field.type === type && field?.isRequiredDisabled);
@@ -112,6 +114,10 @@ const useFormTreeCardMutation = () => {
     },
     [handlePresetValues],
   );
+
+  const handleChangeEndPoint = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setEndPoint(event.target.value);
+  }, []);
 
   const handleChangeStep = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setStep(event.target.value);
@@ -278,6 +284,7 @@ const useFormTreeCardMutation = () => {
           depth,
           label,
           type,
+          ...(isApiAutocomplete && { endPoint }),
           ...(helperText && { helperText }),
           ...((off || on) && {
             messages: { ...(off && { off }), ...(on && { on }) },
@@ -306,11 +313,13 @@ const useFormTreeCardMutation = () => {
     [
       currentHierarchyPointNode,
       dispatchTree,
+      endPoint,
       getChildren,
       getTreeValuesWithoutEmptyMessage,
       getWorkFlowReq,
       helperText,
       hiddenValue,
+      isApiAutocomplete,
       isDecision,
       isDecisionField,
       isHiddenField,
@@ -367,6 +376,7 @@ const useFormTreeCardMutation = () => {
       setTreeSelected(currentHierarchyPointNode?.data.attributes?.tree?.treeId || "");
       setRepeatable(currentHierarchyPointNode?.data.attributes?.repeatable || false);
       setHiddenValue(currentHierarchyPointNode?.data.attributes?.hiddenValue || "");
+      setEndPoint(currentHierarchyPointNode?.data.attributes?.endPoint || "");
     }
   }, [
     currentHierarchyPointNode?.data.attributes?.tree?.treeId,
@@ -385,11 +395,14 @@ const useFormTreeCardMutation = () => {
     currentHierarchyPointNode?.data.attributes?.hiddenValue,
     defaultValues,
     modalOpen,
+    currentHierarchyPointNode?.data.attributes?.endPoint,
   ]);
 
   return {
+    endPoint,
     getDisabledValueField,
     handleAddValue,
+    handleChangeEndPoint,
     handleChangeHelperText,
     handleChangeHiddenValue,
     handleChangeIsDecisionField,
@@ -409,6 +422,7 @@ const useFormTreeCardMutation = () => {
     handleSubmit,
     helperText,
     hiddenValue,
+    isApiAutocomplete,
     isBooleanField,
     isDecision,
     isDecisionField,

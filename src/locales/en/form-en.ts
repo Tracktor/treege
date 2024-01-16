@@ -1,4 +1,5 @@
 const FORM_EN = {
+  apiEndPoint: "Api end point",
   decisionField: "Decision field",
   helperText: "Helper text",
   hiddenValue: "Hidden value",
@@ -14,6 +15,7 @@ const FORM_EN = {
   treeName: "Tree name",
   type: {
     address: "Address",
+    apiAutocomplete: "Api autocomplete",
     checkbox: "Checkbox",
     date: "Date",
     email: "Email",
@@ -32,6 +34,7 @@ const FORM_EN = {
   },
   value: "Value",
   values: "Values",
+  warningApiAutocomplete: "The API response must be an array of type",
 } as const;
 
 export default FORM_EN;
