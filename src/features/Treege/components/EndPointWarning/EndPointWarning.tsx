@@ -20,6 +20,7 @@ const styles = {
 
 const EndPointWarning = () => {
   const { t } = useTranslation(["translation", "form"]);
+
   return (
     <Alert severity="warning" variant="outlined">
       <Stack>
