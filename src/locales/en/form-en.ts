@@ -34,7 +34,10 @@ const FORM_EN = {
   },
   value: "Value",
   values: "Values",
-  warningApiAutocomplete: "The API response must be an array of type",
+  warningApiAutocomplete: {
+    query: "The API endpoint should have as a parameter",
+    response: "and response",
+  },
 } as const;
 
 export default FORM_EN;

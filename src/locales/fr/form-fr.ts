@@ -34,7 +34,10 @@ const FORM_FR = {
   },
   value: "Valeur",
   values: "Valeurs",
-  warningApiAutocomplete: "La réponse de l'api doit être un tableau de type",
+  warningApiAutocomplete: {
+    query: "L'endpoint de l'API dois avoir comme paramètre",
+    response: "et réponse",
+  },
 } as const;
 
 export default FORM_FR;
