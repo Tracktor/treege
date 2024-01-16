@@ -144,7 +144,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
               }}
               placeholder="https://api.fr/enpoint"
               type="url"
-              label={t("form:apiEndPoint")}
+              label={t("form:apiRoute")}
               onChange={handleChangeUrl}
               value={url}
               required

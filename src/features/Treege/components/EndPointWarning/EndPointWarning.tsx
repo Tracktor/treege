@@ -6,7 +6,7 @@ const styles = {
     backgroundColor: "#282c34",
     borderRadius: 0.5,
     color: "#abb2bf",
-    display: "inline",
+    display: "inline-block",
     lineHeight: 1.5,
     marginBottom: 0.2,
     paddingX: 0.5,

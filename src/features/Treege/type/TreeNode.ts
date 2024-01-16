@@ -9,7 +9,7 @@ export interface TreeValues {
   message?: string;
 }
 
-export interface EndPoint {
+export interface Route {
   url: string;
   searchKey: string;
 }
@@ -36,7 +36,7 @@ export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> 
         treePath?: string;
         repeatable?: boolean;
         hiddenValue?: string;
-        endPoint?: EndPoint;
+        route?: Route;
       }
     | {
         depth: number;
@@ -57,7 +57,7 @@ export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> 
         treePath?: never;
         repeatable?: never;
         hiddenValue?: never;
-        endPoint?: EndPoint;
+        route?: Route;
       };
   children: TreeNode[];
   treeId?: string;

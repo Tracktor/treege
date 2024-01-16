@@ -26,7 +26,7 @@ const useFormTreeCardMutation = () => {
   const [isDecision, setIsDecision] = useState(false);
   const [type, setType] = useState<TreeNodeField["type"]>("text");
   const [tag, setTag] = useState<string | null>(null);
-  const [endPoint, setEndPoint] = useState({ searchKey: "q", url: "" });
+  const [route, setRoute] = useState({ searchKey: "q", url: "" });
 
   const [treeSelected, setTreeSelected] = useState<string>("");
   const [helperText, setHelperText] = useState("");
@@ -116,11 +116,11 @@ const useFormTreeCardMutation = () => {
   );
 
   const handleChangeUrl = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    setEndPoint((prevState) => ({ ...prevState, url: event.target.value }));
+    setRoute((prevState) => ({ ...prevState, url: event.target.value }));
   }, []);
 
   const handleChangeSearchKey = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    setEndPoint((prevState) => ({ ...prevState, searchKey: event.target.value }));
+    setRoute((prevState) => ({ ...prevState, searchKey: event.target.value }));
   }, []);
 
   const handleChangeStep = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -288,7 +288,7 @@ const useFormTreeCardMutation = () => {
           depth,
           label,
           type,
-          ...(isAutocomplete && { endPoint }),
+          ...(isAutocomplete && { route }),
           ...(helperText && { helperText }),
           ...((off || on) && {
             messages: { ...(off && { off }), ...(on && { on }) },
@@ -315,7 +315,7 @@ const useFormTreeCardMutation = () => {
       setModalOpen(null);
     },
     [
-      endPoint,
+      route,
       currentHierarchyPointNode,
       dispatchTree,
       getChildren,
@@ -380,9 +380,9 @@ const useFormTreeCardMutation = () => {
       setTreeSelected(currentHierarchyPointNode?.data.attributes?.tree?.treeId || "");
       setRepeatable(currentHierarchyPointNode?.data.attributes?.repeatable || false);
       setHiddenValue(currentHierarchyPointNode?.data.attributes?.hiddenValue || "");
-      setEndPoint({
-        searchKey: currentHierarchyPointNode?.data.attributes?.endPoint?.searchKey || "",
-        url: currentHierarchyPointNode?.data.attributes?.endPoint?.url || "",
+      setRoute({
+        searchKey: currentHierarchyPointNode?.data.attributes?.route?.searchKey || "",
+        url: currentHierarchyPointNode?.data.attributes?.route?.url || "",
       });
     }
   }, [
@@ -402,11 +402,10 @@ const useFormTreeCardMutation = () => {
     currentHierarchyPointNode?.data.attributes?.hiddenValue,
     defaultValues,
     modalOpen,
-    currentHierarchyPointNode?.data.attributes?.endPoint,
+    currentHierarchyPointNode?.data.attributes?.route,
   ]);
 
   return {
-    endPoint,
     getDisabledValueField,
     handleAddValue,
     handleChangeHelperText,
@@ -446,13 +445,13 @@ const useFormTreeCardMutation = () => {
     name,
     repeatable,
     required,
-    searchKey: endPoint.searchKey,
+    searchKey: route.searchKey,
     step,
     tag,
     treeSelected,
     type,
     uniqueNameErrorMessage,
-    url: endPoint.url,
+    url: route.url,
     values,
   };
 };

@@ -1,5 +1,5 @@
 const FORM_FR = {
-  apiEndPoint: "Api endpoint",
+  apiRoute: "Api route",
   decisionField: "Champs de décision",
   helperText: "Texte d'information",
   hiddenValue: "Valeur caché",
@@ -34,7 +34,7 @@ const FORM_FR = {
   },
   value: "Valeur",
   values: "Valeurs",
-  warningApiAutocomplete: { response: "dois avoir comme réponse", url: "L'Endpoint de l'API" },
+  warningApiAutocomplete: { response: "dois avoir comme réponse", url: "La route de l'API" },
 } as const;
 
 export default FORM_FR;
