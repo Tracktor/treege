@@ -1,4 +1,4 @@
-import { Alert, Box, Stack, Typography } from "@tracktor/design-system";
+import { Alert, Box, Typography } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 
 const styles = {
@@ -6,6 +6,9 @@ const styles = {
     backgroundColor: "#282c34",
     borderRadius: 0.5,
     color: "#abb2bf",
+    display: "inline",
+    lineHeight: 1.5,
+    marginBottom: 0.2,
     paddingX: 0.5,
     paddingY: 0.2,
     width: "fit-content",
@@ -18,61 +21,61 @@ const styles = {
   },
 };
 
-const EndPointWarning = () => {
+interface EndPointWarningProps {
+  endPoint: {
+    url: string;
+    searchKey: string;
+  };
+}
+
+const EndPointWarning = ({ endPoint }: EndPointWarningProps) => {
   const { t } = useTranslation(["translation", "form"]);
+  const { url, searchKey } = endPoint;
+  const fullUrl = `${url}?${searchKey}`;
 
   return (
     <Alert severity="warning" variant="outlined">
-      <Stack>
-        <Typography variant="body2" gutterBottom>
-          {t("form:warningApiAutocomplete.query")}{" "}
-          <Box component="span" sx={styles.container}>
-            {"{ "}
-            <Box component="span" sx={styles.property}>
-              q
-            </Box>
-            :{" "}
-            <Box component="span" sx={styles.type}>
-              string
-            </Box>
-            {"; }"}
+      <Typography variant="body2" gutterBottom sx={{ lineHeight: 2 }}>
+        {t("form:warningApiAutocomplete.url")}{" "}
+        {url && (
+          <>
+            <Box component="span" sx={styles.container}>
+              {fullUrl}
+            </Box>{" "}
+          </>
+        )}
+        {t("form:warningApiAutocomplete.response")}
+        <Box sx={styles.container}>
+          {"{ "}
+          <Box component="span" sx={styles.property}>
+            label
           </Box>
-        </Typography>
-
-        <Typography variant="body2" gutterBottom>
-          {t("form:warningApiAutocomplete.response")}{" "}
-          <Box component="span" sx={styles.container}>
-            {"{ "}
-            <Box component="span" sx={styles.property}>
-              label
-            </Box>
-            :{" "}
-            <Box component="span" sx={styles.type}>
-              string
-            </Box>
-            ;{" "}
-            <Box component="span" sx={styles.property}>
-              value
-            </Box>
-            :{" "}
-            <Box component="span" sx={styles.type}>
-              string
-            </Box>
-            ;{" "}
-            <Box component="span" sx={styles.property}>
-              img
-            </Box>
-            <Box component="span" className="semicolon">
-              ?
-            </Box>
-            :{" "}
-            <Box component="span" sx={styles.type}>
-              string
-            </Box>
-            {"; }"}
+          :{" "}
+          <Box component="span" sx={styles.type}>
+            string
           </Box>
-        </Typography>
-      </Stack>
+          ;{" "}
+          <Box component="span" sx={styles.property}>
+            value
+          </Box>
+          :{" "}
+          <Box component="span" sx={styles.type}>
+            string
+          </Box>
+          ;{" "}
+          <Box component="span" sx={styles.property}>
+            img
+          </Box>
+          <Box component="span" className="semicolon">
+            ?
+          </Box>
+          :{" "}
+          <Box component="span" sx={styles.type}>
+            string
+          </Box>
+          {"; }"}
+        </Box>
+      </Typography>
     </Alert>
   );
 };

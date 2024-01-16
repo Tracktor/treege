@@ -15,7 +15,7 @@ const FORM_EN = {
   treeName: "Tree name",
   type: {
     address: "Address",
-    apiAutocomplete: "Api autocomplete",
+    autocomplete: "Autocomplete",
     checkbox: "Checkbox",
     date: "Date",
     email: "Email",
@@ -34,10 +34,7 @@ const FORM_EN = {
   },
   value: "Value",
   values: "Values",
-  warningApiAutocomplete: {
-    query: "The API endpoint should have as a parameter",
-    response: "and response",
-  },
+  warningApiAutocomplete: { response: "should have as a response", url: "The API Endpoint" },
 } as const;
 
 export default FORM_EN;

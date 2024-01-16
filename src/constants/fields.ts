@@ -116,7 +116,7 @@ const fields = [
     isDecisionField: false,
     isRepeatableDisabled: true,
     isRequiredDisabled: false,
-    type: "apiAutocomplete",
+    type: "autocomplete",
   },
 ] as const;
 

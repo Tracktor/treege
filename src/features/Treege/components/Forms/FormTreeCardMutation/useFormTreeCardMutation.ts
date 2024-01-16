@@ -26,7 +26,7 @@ const useFormTreeCardMutation = () => {
   const [isDecision, setIsDecision] = useState(false);
   const [type, setType] = useState<TreeNodeField["type"]>("text");
   const [tag, setTag] = useState<string | null>(null);
-  const [endPoint, setEndPoint] = useState("");
+  const [endPoint, setEndPoint] = useState({ searchKey: "q", url: "" });
 
   const [treeSelected, setTreeSelected] = useState<string>("");
   const [helperText, setHelperText] = useState("");
@@ -40,7 +40,7 @@ const useFormTreeCardMutation = () => {
   const isEditModal = modalOpen === "edit";
   const isTreeField = type === "tree";
   const isHiddenField = type === "hidden";
-  const isApiAutocomplete = type === "apiAutocomplete";
+  const isAutocomplete = type === "autocomplete";
   const isBooleanField = fields.some((field) => field.type === type && field?.isBooleanField);
   const isDecisionField = fields.some((field) => field.type === type && field?.isDecisionField);
   const isRequiredDisabled = fields.some((field) => field.type === type && field?.isRequiredDisabled);
@@ -115,8 +115,12 @@ const useFormTreeCardMutation = () => {
     [handlePresetValues],
   );
 
-  const handleChangeEndPoint = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    setEndPoint(event.target.value);
+  const handleChangeUrl = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setEndPoint((prevState) => ({ ...prevState, url: event.target.value }));
+  }, []);
+
+  const handleChangeSearchKey = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setEndPoint((prevState) => ({ ...prevState, searchKey: event.target.value }));
   }, []);
 
   const handleChangeStep = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -284,7 +288,7 @@ const useFormTreeCardMutation = () => {
           depth,
           label,
           type,
-          ...(isApiAutocomplete && { endPoint }),
+          ...(isAutocomplete && { endPoint }),
           ...(helperText && { helperText }),
           ...((off || on) && {
             messages: { ...(off && { off }), ...(on && { on }) },
@@ -311,15 +315,15 @@ const useFormTreeCardMutation = () => {
       setModalOpen(null);
     },
     [
+      endPoint,
       currentHierarchyPointNode,
       dispatchTree,
-      endPoint,
       getChildren,
       getTreeValuesWithoutEmptyMessage,
       getWorkFlowReq,
       helperText,
       hiddenValue,
-      isApiAutocomplete,
+      isAutocomplete,
       isDecision,
       isDecisionField,
       isHiddenField,
@@ -376,7 +380,10 @@ const useFormTreeCardMutation = () => {
       setTreeSelected(currentHierarchyPointNode?.data.attributes?.tree?.treeId || "");
       setRepeatable(currentHierarchyPointNode?.data.attributes?.repeatable || false);
       setHiddenValue(currentHierarchyPointNode?.data.attributes?.hiddenValue || "");
-      setEndPoint(currentHierarchyPointNode?.data.attributes?.endPoint || "");
+      setEndPoint({
+        searchKey: currentHierarchyPointNode?.data.attributes?.endPoint?.searchKey || "",
+        url: currentHierarchyPointNode?.data.attributes?.endPoint?.url || "",
+      });
     }
   }, [
     currentHierarchyPointNode?.data.attributes?.tree?.treeId,
@@ -402,7 +409,6 @@ const useFormTreeCardMutation = () => {
     endPoint,
     getDisabledValueField,
     handleAddValue,
-    handleChangeEndPoint,
     handleChangeHelperText,
     handleChangeHiddenValue,
     handleChangeIsDecisionField,
@@ -414,15 +420,17 @@ const useFormTreeCardMutation = () => {
     handleChangeOptionValue,
     handleChangeRepeatable,
     handleChangeRequired,
+    handleChangeSearchKey,
     handleChangeStep,
     handleChangeTag,
     handleChangeTreeSelect,
     handleChangeType,
+    handleChangeUrl,
     handleDeleteValue,
     handleSubmit,
     helperText,
     hiddenValue,
-    isApiAutocomplete,
+    isAutocomplete,
     isBooleanField,
     isDecision,
     isDecisionField,
@@ -438,11 +446,13 @@ const useFormTreeCardMutation = () => {
     name,
     repeatable,
     required,
+    searchKey: endPoint.searchKey,
     step,
     tag,
     treeSelected,
     type,
     uniqueNameErrorMessage,
+    url: endPoint.url,
     values,
   };
 };

@@ -1,5 +1,6 @@
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
+import QuestionMarkRoundedIcon from "@mui/icons-material/QuestionMarkRounded";
 import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
 import {
   Box,
@@ -70,7 +71,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     isHiddenField,
     isRequiredDisabled,
     isRepeatableDisabled,
-    isApiAutocomplete,
+    isAutocomplete,
     isTreeField,
     treeSelected,
     isWorkflowLoading,
@@ -94,8 +95,10 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeRepeatable,
     handleChangeHiddenValue,
     handleChangeTag,
-    handleChangeEndPoint,
-    endPoint,
+    handleChangeSearchKey,
+    handleChangeUrl,
+    url,
+    searchKey,
   } = useFormTreeCardMutation();
 
   return (
@@ -127,11 +130,11 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         />
       </Stack>
 
-      {isApiAutocomplete && (
+      {isAutocomplete && (
         <Stack spacing={1} paddingY={1}>
-          <Stack spacing={1} direction={{ sm: "row", xs: "column" }}>
+          <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
             <TextField
-              sx={{ flex: 1 }}
+              sx={{ flex: 4 }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -142,12 +145,14 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
               placeholder="https://api.fr/enpoint"
               type="url"
               label={t("form:apiEndPoint")}
-              onChange={handleChangeEndPoint}
-              value={endPoint}
+              onChange={handleChangeUrl}
+              value={url}
               required
             />
+            <QuestionMarkRoundedIcon />
+            <TextField sx={{ flex: 1 }} placeholder="q" type="text" onChange={handleChangeSearchKey} value={searchKey} required />
           </Stack>
-          <EndPointWarning />
+          <EndPointWarning endPoint={{ searchKey, url }} />
         </Stack>
       )}
 
