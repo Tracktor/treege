@@ -17,6 +17,7 @@ const styles = {
     color: "#c678dd",
   },
 };
+
 const EndPointWarning = () => {
   const { t } = useTranslation(["translation", "form"]);
   return (
