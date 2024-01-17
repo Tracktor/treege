@@ -9,6 +9,11 @@ export interface TreeValues {
   message?: string;
 }
 
+export interface Route {
+  url: string;
+  searchKey: string;
+}
+
 export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> {
   name: string;
   attributes:
@@ -31,6 +36,7 @@ export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> 
         treePath?: string;
         repeatable?: boolean;
         hiddenValue?: string;
+        route?: Route;
       }
     | {
         depth: number;
@@ -51,6 +57,7 @@ export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> 
         treePath?: never;
         repeatable?: never;
         hiddenValue?: never;
+        route?: Route;
       };
   children: TreeNode[];
   treeId?: string;

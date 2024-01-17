@@ -1,4 +1,5 @@
 const FORM_EN = {
+  apiRoute: "Api route",
   decisionField: "Decision field",
   helperText: "Helper text",
   hiddenValue: "Hidden value",
@@ -14,6 +15,7 @@ const FORM_EN = {
   treeName: "Tree name",
   type: {
     address: "Address",
+    autocomplete: "Autocomplete",
     checkbox: "Checkbox",
     date: "Date",
     email: "Email",
@@ -32,6 +34,7 @@ const FORM_EN = {
   },
   value: "Value",
   values: "Values",
+  warningApiAutocomplete: { response: "should have as a response", url: "The API Route" },
 } as const;
 
 export default FORM_EN;

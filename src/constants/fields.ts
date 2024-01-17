@@ -111,6 +111,13 @@ const fields = [
     isRequiredDisabled: false,
     type: "select",
   },
+  {
+    isBooleanField: false,
+    isDecisionField: false,
+    isRepeatableDisabled: true,
+    isRequiredDisabled: false,
+    type: "autocomplete",
+  },
 ] as const;
 
 export default fields;

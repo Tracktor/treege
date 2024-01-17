@@ -26,6 +26,7 @@ const useFormTreeCardMutation = () => {
   const [isDecision, setIsDecision] = useState(false);
   const [type, setType] = useState<TreeNodeField["type"]>("text");
   const [tag, setTag] = useState<string | null>(null);
+  const [route, setRoute] = useState({ searchKey: "q", url: "" });
 
   const [treeSelected, setTreeSelected] = useState<string>("");
   const [helperText, setHelperText] = useState("");
@@ -39,6 +40,7 @@ const useFormTreeCardMutation = () => {
   const isEditModal = modalOpen === "edit";
   const isTreeField = type === "tree";
   const isHiddenField = type === "hidden";
+  const isAutocomplete = type === "autocomplete";
   const isBooleanField = fields.some((field) => field.type === type && field?.isBooleanField);
   const isDecisionField = fields.some((field) => field.type === type && field?.isDecisionField);
   const isRequiredDisabled = fields.some((field) => field.type === type && field?.isRequiredDisabled);
@@ -112,6 +114,14 @@ const useFormTreeCardMutation = () => {
     },
     [handlePresetValues],
   );
+
+  const handleChangeUrl = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setRoute((prevState) => ({ ...prevState, url: event.target.value }));
+  }, []);
+
+  const handleChangeSearchKey = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setRoute((prevState) => ({ ...prevState, searchKey: event.target.value }));
+  }, []);
 
   const handleChangeStep = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setStep(event.target.value);
@@ -278,6 +288,7 @@ const useFormTreeCardMutation = () => {
           depth,
           label,
           type,
+          ...(isAutocomplete && { route }),
           ...(helperText && { helperText }),
           ...((off || on) && {
             messages: { ...(off && { off }), ...(on && { on }) },
@@ -304,6 +315,7 @@ const useFormTreeCardMutation = () => {
       setModalOpen(null);
     },
     [
+      route,
       currentHierarchyPointNode,
       dispatchTree,
       getChildren,
@@ -311,6 +323,7 @@ const useFormTreeCardMutation = () => {
       getWorkFlowReq,
       helperText,
       hiddenValue,
+      isAutocomplete,
       isDecision,
       isDecisionField,
       isHiddenField,
@@ -367,6 +380,10 @@ const useFormTreeCardMutation = () => {
       setTreeSelected(currentHierarchyPointNode?.data.attributes?.tree?.treeId || "");
       setRepeatable(currentHierarchyPointNode?.data.attributes?.repeatable || false);
       setHiddenValue(currentHierarchyPointNode?.data.attributes?.hiddenValue || "");
+      setRoute({
+        searchKey: currentHierarchyPointNode?.data.attributes?.route?.searchKey || "",
+        url: currentHierarchyPointNode?.data.attributes?.route?.url || "",
+      });
     }
   }, [
     currentHierarchyPointNode?.data.attributes?.tree?.treeId,
@@ -385,6 +402,7 @@ const useFormTreeCardMutation = () => {
     currentHierarchyPointNode?.data.attributes?.hiddenValue,
     defaultValues,
     modalOpen,
+    currentHierarchyPointNode?.data.attributes?.route,
   ]);
 
   return {
@@ -401,14 +419,17 @@ const useFormTreeCardMutation = () => {
     handleChangeOptionValue,
     handleChangeRepeatable,
     handleChangeRequired,
+    handleChangeSearchKey,
     handleChangeStep,
     handleChangeTag,
     handleChangeTreeSelect,
     handleChangeType,
+    handleChangeUrl,
     handleDeleteValue,
     handleSubmit,
     helperText,
     hiddenValue,
+    isAutocomplete,
     isBooleanField,
     isDecision,
     isDecisionField,
@@ -424,11 +445,13 @@ const useFormTreeCardMutation = () => {
     name,
     repeatable,
     required,
+    searchKey: route.searchKey,
     step,
     tag,
     treeSelected,
     type,
     uniqueNameErrorMessage,
+    url: route.url,
     values,
   };
 };

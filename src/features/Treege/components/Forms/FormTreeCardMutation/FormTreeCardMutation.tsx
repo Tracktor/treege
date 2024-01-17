@@ -1,4 +1,6 @@
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
+import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
+import QuestionMarkRoundedIcon from "@mui/icons-material/QuestionMarkRounded";
 import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
 import {
   Box,
@@ -8,18 +10,20 @@ import {
   FormControlLabel,
   FormGroup,
   IconButton,
+  InputAdornment,
   Stack,
   TextField,
 } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
+import EndPointWarning from "@/features/Treege/components/EndPointWarning";
 import FieldSelect from "@/features/Treege/components/FieldSelect";
 import FieldSelectAutocompleteCreatable from "@/features/Treege/components/FieldSelectAutocompleteCreatable";
 import ExtraField from "@/features/Treege/components/Forms/FormTreeCardMutation/ExtraField";
 import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
 
 interface FormTreeCardMutationProps {
-  onClose?(): void;
+  onClose(): void;
 }
 
 const iconButtonCommonStyle = {
@@ -67,6 +71,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     isHiddenField,
     isRequiredDisabled,
     isRepeatableDisabled,
+    isAutocomplete,
     isTreeField,
     treeSelected,
     isWorkflowLoading,
@@ -90,6 +95,10 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeRepeatable,
     handleChangeHiddenValue,
     handleChangeTag,
+    handleChangeSearchKey,
+    handleChangeUrl,
+    url,
+    searchKey,
   } = useFormTreeCardMutation();
 
   return (
@@ -121,6 +130,32 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         />
       </Stack>
 
+      {isAutocomplete && (
+        <Stack spacing={1} paddingY={1}>
+          <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
+            <TextField
+              sx={{ flex: 4 }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LinkRoundedIcon />
+                  </InputAdornment>
+                ),
+              }}
+              placeholder="https://api.fr/enpoint"
+              type="url"
+              label={t("form:apiRoute")}
+              onChange={handleChangeUrl}
+              value={url}
+              required
+            />
+            <QuestionMarkRoundedIcon />
+            <TextField sx={{ flex: 1 }} placeholder="q" type="text" onChange={handleChangeSearchKey} value={searchKey} required />
+          </Stack>
+          <EndPointWarning endPoint={{ searchKey, url }} />
+        </Stack>
+      )}
+
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
         <FieldSelectAutocompleteCreatable value={tag} onChange={handleChangeTag} />
       </Stack>
@@ -135,27 +170,24 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
       <Stack paddingY={1}>
         <FormGroup>
           <FormControlLabel
-            disabled={isRepeatableDisabled}
-            control={<Checkbox checked={repeatable} onChange={handleChangeRepeatable} />}
-            label={t("repeatable", { ns: "form" })}
-          />
-        </FormGroup>
-        <FormGroup>
-          <FormControlLabel
             disabled={isRequiredDisabled}
             control={<Checkbox checked={required} onChange={handleChangeRequired} />}
             label={t("required")}
           />
-        </FormGroup>
-        {(isLeaf || isEditModal) && (
-          <FormGroup>
+          <FormControlLabel
+            disabled={isRepeatableDisabled}
+            control={<Checkbox checked={repeatable} onChange={handleChangeRepeatable} />}
+            label={t("repeatable", { ns: "form" })}
+          />
+
+          {(isLeaf || isEditModal) && (
             <FormControlLabel
               disabled={!isDecisionField}
               control={<Checkbox checked={isDecision} onChange={handleChangeIsDecisionField} />}
               label={t("decisionField", { ns: "form" })}
             />
-          </FormGroup>
-        )}
+          )}
+        </FormGroup>
       </Stack>
 
       {isDecisionField && (

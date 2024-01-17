@@ -9,7 +9,9 @@ const useTreeGrid = () => {
   const isDeleteModal = modalOpen === "delete";
   const isModalMutationOpen = isEditModal || isAddModal;
 
-  const closeModal = () => setModalOpen(null);
+  const closeModal = () => {
+    setModalOpen(null);
+  };
 
   const getTitleModalMutation = () => {
     const name = currentHierarchyPointNode?.data?.attributes.label;
