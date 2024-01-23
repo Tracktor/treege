@@ -18,7 +18,7 @@ const FORM_EN = {
     autocomplete: "Autocomplete",
     checkbox: "Checkbox",
     date: "Date",
-    dateRangePicker: "Date range",
+    dateRange: "Date range",
     email: "Email",
     file: "File",
     hidden: "Hidden field",

@@ -67,7 +67,7 @@ const fields = [
     isDecisionField: false,
     isRepeatableDisabled: false,
     isRequiredDisabled: false,
-    type: "dateRangePicker",
+    type: "dateRange",
   },
   {
     isBooleanField: false,
