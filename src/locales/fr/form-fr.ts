@@ -18,6 +18,7 @@ const FORM_FR = {
     autocomplete: "Autocomplétion",
     checkbox: "Case à cocher",
     date: "Date",
+    dateRange: "Plage de dates",
     email: "Email",
     file: "Fichier",
     hidden: "Champs caché",
