@@ -12,6 +12,12 @@ export interface TreeValues {
 export interface Route {
   url: string;
   searchKey: string;
+  dataPath?: {
+    object?: string;
+    value?: string;
+    label?: string;
+    image?: string;
+  };
 }
 
 export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> {

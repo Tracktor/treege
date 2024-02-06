@@ -97,7 +97,12 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeTag,
     handleChangeSearchKey,
     handleChangeUrl,
+    handleChangePath,
     url,
+    routeLabel,
+    routeValue,
+    routeImage,
+    routeObject,
     searchKey,
   } = useFormTreeCardMutation();
 
@@ -152,7 +157,50 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             <QuestionMarkRoundedIcon />
             <TextField sx={{ flex: 1 }} placeholder="q" type="text" onChange={handleChangeSearchKey} value={searchKey} required />
           </Stack>
+
           <EndPointWarning endPoint={{ searchKey, url }} />
+          <Stack spacing={1} paddingY={1}>
+            <Stack spacing={3} sx={{ p: 1 }} direction={{ sm: "row", xs: "column" }} alignItems="center">
+              <TextField
+                sx={{ flex: 3 }}
+                InputLabelProps={{ shrink: true }}
+                label="Object Array Path"
+                value={routeObject}
+                onChange={(event) => handleChangePath("object", event)}
+                placeholder="elements.features[]"
+                type="text"
+              />
+              <TextField
+                sx={{ flex: 3 }}
+                InputLabelProps={{ shrink: true }}
+                label="Label Path"
+                value={routeLabel}
+                onChange={(event) => handleChangePath("label", event)}
+                placeholder="client.name"
+                type="text"
+              />
+            </Stack>
+            <Stack spacing={3} sx={{ p: 1 }} direction={{ sm: "row", xs: "column" }} alignItems="center">
+              <TextField
+                sx={{ flex: 3 }}
+                InputLabelProps={{ shrink: true }}
+                label="Value Path"
+                value={routeValue}
+                onChange={(event) => handleChangePath("value", event)}
+                placeholder="client.id"
+                type="text"
+              />
+              <TextField
+                sx={{ flex: 3 }}
+                InputLabelProps={{ shrink: true }}
+                label="Image Path"
+                value={routeImage}
+                onChange={(event) => handleChangePath("image", event)}
+                placeholder="client.src.profile"
+                type="text"
+              />
+            </Stack>
+          </Stack>
         </Stack>
       )}
 

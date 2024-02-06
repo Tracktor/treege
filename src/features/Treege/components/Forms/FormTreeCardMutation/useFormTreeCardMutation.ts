@@ -26,7 +26,7 @@ const useFormTreeCardMutation = () => {
   const [isDecision, setIsDecision] = useState(false);
   const [type, setType] = useState<TreeNodeField["type"]>("text");
   const [tag, setTag] = useState<string | null>(null);
-  const [route, setRoute] = useState({ searchKey: "q", url: "" });
+  const [route, setRoute] = useState({ dataPath: { image: "", label: "", object: "", value: "" }, searchKey: "q", url: "" });
 
   const [treeSelected, setTreeSelected] = useState<string>("");
   const [helperText, setHelperText] = useState("");
@@ -122,6 +122,19 @@ const useFormTreeCardMutation = () => {
   const handleChangeSearchKey = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setRoute((prevState) => ({ ...prevState, searchKey: event.target.value }));
   }, []);
+
+  const handleChangePath = useCallback(
+    <T extends HTMLInputElement | HTMLTextAreaElement>(property: string, event: ChangeEvent<T>) => {
+      setRoute((prevState) => ({
+        ...prevState,
+        dataPath: {
+          ...prevState.dataPath,
+          [property]: event.target.value,
+        },
+      }));
+    },
+    [setRoute],
+  );
 
   const handleChangeStep = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setStep(event.target.value);
@@ -381,6 +394,12 @@ const useFormTreeCardMutation = () => {
       setRepeatable(currentHierarchyPointNode?.data.attributes?.repeatable || false);
       setHiddenValue(currentHierarchyPointNode?.data.attributes?.hiddenValue || "");
       setRoute({
+        dataPath: {
+          image: currentHierarchyPointNode?.data.attributes?.route?.dataPath?.image || "",
+          label: currentHierarchyPointNode?.data.attributes?.route?.dataPath?.label || "",
+          object: currentHierarchyPointNode?.data.attributes?.route?.dataPath?.object || "",
+          value: currentHierarchyPointNode?.data.attributes?.route?.dataPath?.value || "",
+        },
         searchKey: currentHierarchyPointNode?.data.attributes?.route?.searchKey || "",
         url: currentHierarchyPointNode?.data.attributes?.route?.url || "",
       });
@@ -417,6 +436,7 @@ const useFormTreeCardMutation = () => {
     handleChangeOptionLabel,
     handleChangeOptionMessage,
     handleChangeOptionValue,
+    handleChangePath,
     handleChangeRepeatable,
     handleChangeRequired,
     handleChangeSearchKey,
@@ -445,6 +465,10 @@ const useFormTreeCardMutation = () => {
     name,
     repeatable,
     required,
+    routeImage: route.dataPath.image,
+    routeLabel: route.dataPath.label,
+    routeObject: route.dataPath.object,
+    routeValue: route.dataPath.value,
     searchKey: route.searchKey,
     step,
     tag,
