@@ -91,14 +91,17 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeMessage,
     handleSubmit,
     handleAddValue,
+    handleAddParams,
     handleChangeLabel,
     handleChangeRepeatable,
     handleChangeHiddenValue,
     handleChangeTag,
     handleChangeSearchKey,
     handleChangeUrl,
+    handleChangeParam,
     handleChangePath,
     url,
+    params,
     routeLabel,
     routeValue,
     routeImage,
@@ -160,7 +163,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
           <EndPointWarning endPoint={{ searchKey, url }} />
           <Stack spacing={1} paddingY={1}>
-            <Stack spacing={3} sx={{ p: 1 }} direction={{ sm: "row", xs: "column" }} alignItems="center">
+            <Stack spacing={1} sx={{ pb: 1 }} direction={{ sm: "row", xs: "column" }} alignItems="center">
               <TextField
                 sx={{ flex: 3 }}
                 InputLabelProps={{ shrink: true }}
@@ -180,7 +183,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                 type="text"
               />
             </Stack>
-            <Stack spacing={3} sx={{ p: 1 }} direction={{ sm: "row", xs: "column" }} alignItems="center">
+            <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
               <TextField
                 sx={{ flex: 3 }}
                 InputLabelProps={{ shrink: true }}
@@ -201,10 +204,41 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
               />
             </Stack>
           </Stack>
+          <>
+            <h4>Extra Params</h4>
+            {params?.map(({ id, key, value }, index) => (
+              <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} key={id} position="relative">
+                <TextField
+                  label="Key"
+                  sx={{ flex: 1 }}
+                  onChange={(event) => handleChangeParam(index, "key", event)}
+                  value={key}
+                  inputProps={{ "data-id": index }}
+                />
+                <TextField
+                  label={t("value", { ns: "form" })}
+                  sx={{ flex: 1 }}
+                  onChange={(event) => handleChangeParam(index, "value", event)}
+                  value={value}
+                  inputProps={{ "data-id": index }}
+                />
+                {values.length > 1 && (
+                  <IconButton color="warning" sx={styles.iconButtonDelete} value={index} onClick={handleDeleteValue}>
+                    <RemoveCircleRoundedIcon />
+                  </IconButton>
+                )}
+              </Stack>
+            ))}
+          </>
+          <Box justifyContent="flex-end" display="flex">
+            <IconButton color="success" sx={styles.iconButton} onClick={handleAddParams}>
+              <AddCircleRoundedIcon />
+            </IconButton>
+          </Box>
         </Stack>
       )}
 
-      <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
+      <Stack spacing={1} direction={{ sm: "row", xs: "column" }}>
         <FieldSelectAutocompleteCreatable value={tag} onChange={handleChangeTag} />
       </Stack>
 

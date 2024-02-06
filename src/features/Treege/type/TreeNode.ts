@@ -9,15 +9,22 @@ export interface TreeValues {
   message?: string;
 }
 
+export interface Params {
+  id: string;
+  key: string;
+  value: string;
+}
+
 export interface Route {
   url: string;
   searchKey: string;
-  dataPath?: {
+  pathKey?: {
     object?: string;
     value?: string;
     label?: string;
     image?: string;
   };
+  params: Params[];
 }
 
 export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> {

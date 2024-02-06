@@ -4,7 +4,7 @@ import { ChangeEvent, FormEvent, MouseEvent, SyntheticEvent, useCallback, useEff
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";
 import { appendTreeCard, replaceTreeCard } from "@/features/Treege/reducer/treeReducer";
-import type { TreeNode, TreeNodeField, TreeValues } from "@/features/Treege/type/TreeNode";
+import type { Params, TreeNode, TreeNodeField, TreeValues } from "@/features/Treege/type/TreeNode";
 import useSnackbar from "@/hooks/useSnackbar";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
@@ -26,7 +26,13 @@ const useFormTreeCardMutation = () => {
   const [isDecision, setIsDecision] = useState(false);
   const [type, setType] = useState<TreeNodeField["type"]>("text");
   const [tag, setTag] = useState<string | null>(null);
-  const [route, setRoute] = useState({ dataPath: { image: "", label: "", object: "", value: "" }, searchKey: "q", url: "" });
+  const defaultParams = useMemo(() => [{ id: "0", key: "", value: "" }], []);
+  const [route, setRoute] = useState({
+    params: defaultParams,
+    pathKey: { image: "", label: "", object: "", value: "" },
+    searchKey: "q",
+    url: "",
+  });
 
   const [treeSelected, setTreeSelected] = useState<string>("");
   const [helperText, setHelperText] = useState("");
@@ -127,11 +133,29 @@ const useFormTreeCardMutation = () => {
     <T extends HTMLInputElement | HTMLTextAreaElement>(property: string, event: ChangeEvent<T>) => {
       setRoute((prevState) => ({
         ...prevState,
-        dataPath: {
-          ...prevState.dataPath,
+        pathKey: {
+          ...prevState.pathKey,
           [property]: event.target.value,
         },
       }));
+    },
+    [setRoute],
+  );
+
+  const handleChangeParam = useCallback(
+    (index: number, property: keyof Params, event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setRoute((prevState) => {
+        const updatedParams = [...prevState.params];
+        updatedParams[index] = {
+          ...updatedParams[index],
+          [property]: event.target.value,
+        };
+
+        return {
+          ...prevState,
+          params: updatedParams,
+        };
+      });
     },
     [setRoute],
   );
@@ -209,6 +233,17 @@ const useFormTreeCardMutation = () => {
       return [...prevState, { ...defaultValues[0], id: nextId }];
     });
   }, [defaultValues]);
+
+  const handleAddParams = useCallback(() => {
+    setRoute((prevRoute) => {
+      const lastId = Number(prevRoute.params[prevRoute.params.length - 1]?.id || 0);
+      const nextId = String(lastId + 1);
+
+      const newParams = [...prevRoute.params, { id: nextId, key: "", value: "" }];
+
+      return { ...prevRoute, params: newParams };
+    });
+  }, []);
 
   const handleDeleteValue = useCallback((e: MouseEvent<HTMLButtonElement>) => {
     setValues((prevState) => prevState.filter(({ id }) => e.currentTarget.value !== id));
@@ -394,11 +429,12 @@ const useFormTreeCardMutation = () => {
       setRepeatable(currentHierarchyPointNode?.data.attributes?.repeatable || false);
       setHiddenValue(currentHierarchyPointNode?.data.attributes?.hiddenValue || "");
       setRoute({
-        dataPath: {
-          image: currentHierarchyPointNode?.data.attributes?.route?.dataPath?.image || "",
-          label: currentHierarchyPointNode?.data.attributes?.route?.dataPath?.label || "",
-          object: currentHierarchyPointNode?.data.attributes?.route?.dataPath?.object || "",
-          value: currentHierarchyPointNode?.data.attributes?.route?.dataPath?.value || "",
+        params: currentHierarchyPointNode?.data.attributes?.route?.params || [],
+        pathKey: {
+          image: currentHierarchyPointNode?.data.attributes?.route?.pathKey?.image || "",
+          label: currentHierarchyPointNode?.data.attributes?.route?.pathKey?.label || "",
+          object: currentHierarchyPointNode?.data.attributes?.route?.pathKey?.object || "",
+          value: currentHierarchyPointNode?.data.attributes?.route?.pathKey?.value || "",
         },
         searchKey: currentHierarchyPointNode?.data.attributes?.route?.searchKey || "",
         url: currentHierarchyPointNode?.data.attributes?.route?.url || "",
@@ -426,6 +462,7 @@ const useFormTreeCardMutation = () => {
 
   return {
     getDisabledValueField,
+    handleAddParams,
     handleAddValue,
     handleChangeHelperText,
     handleChangeHiddenValue,
@@ -436,6 +473,7 @@ const useFormTreeCardMutation = () => {
     handleChangeOptionLabel,
     handleChangeOptionMessage,
     handleChangeOptionValue,
+    handleChangeParam,
     handleChangePath,
     handleChangeRepeatable,
     handleChangeRequired,
@@ -463,12 +501,13 @@ const useFormTreeCardMutation = () => {
     label,
     messages,
     name,
+    params: route.params,
     repeatable,
     required,
-    routeImage: route.dataPath.image,
-    routeLabel: route.dataPath.label,
-    routeObject: route.dataPath.object,
-    routeValue: route.dataPath.value,
+    routeImage: route.pathKey.image,
+    routeLabel: route.pathKey.label,
+    routeObject: route.pathKey.object,
+    routeValue: route.pathKey.value,
     searchKey: route.searchKey,
     step,
     tag,
