@@ -15,16 +15,18 @@ export interface Params {
   value: string;
 }
 
+export interface PathKey {
+  object?: string;
+  value?: string;
+  label?: string;
+  image?: string;
+}
+
 export interface Route {
   url: string;
   searchKey: string;
-  pathKey?: {
-    object?: string;
-    value?: string;
-    label?: string;
-    image?: string;
-  };
-  params: Params[];
+  pathKey?: PathKey;
+  params?: Params[];
 }
 
 export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> {

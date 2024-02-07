@@ -87,6 +87,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeIsDecisionField,
     handleChangeOptionLabel,
     handleDeleteValue,
+    handleDeleteParam,
     handleChangeOptionValue,
     handleChangeMessage,
     handleSubmit,
@@ -100,14 +101,11 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeUrl,
     handleChangeParam,
     handleChangePath,
-    url,
-    params,
-    routeLabel,
-    routeValue,
-    routeImage,
-    routeObject,
-    searchKey,
+    route,
   } = useFormTreeCardMutation();
+
+  const { searchKey, url, pathKey, params } = route || {};
+  const { object: routeObject, label: routeLabel, value: routeValue, image: routeImage } = pathKey || {};
 
   return (
     <form onSubmit={handleSubmit}>
@@ -206,6 +204,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           </Stack>
           <>
             <h4>Extra Params</h4>
+
             {params?.map(({ id, key, value }, index) => (
               <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} key={id} position="relative">
                 <TextField
@@ -213,17 +212,17 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                   sx={{ flex: 1 }}
                   onChange={(event) => handleChangeParam(index, "key", event)}
                   value={key}
-                  inputProps={{ "data-id": index }}
+                  inputProps={{ "data-id": id }}
                 />
                 <TextField
                   label={t("value", { ns: "form" })}
                   sx={{ flex: 1 }}
                   onChange={(event) => handleChangeParam(index, "value", event)}
                   value={value}
-                  inputProps={{ "data-id": index }}
+                  inputProps={{ "data-id": id }}
                 />
-                {values.length > 1 && (
-                  <IconButton color="warning" sx={styles.iconButtonDelete} value={index} onClick={handleDeleteValue}>
+                {params.length > 0 && (
+                  <IconButton color="warning" sx={styles.iconButtonDelete} value={id as string} onClick={handleDeleteParam}>
                     <RemoveCircleRoundedIcon />
                   </IconButton>
                 )}
