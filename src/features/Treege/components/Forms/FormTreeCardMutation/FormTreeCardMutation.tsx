@@ -87,19 +87,25 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeIsDecisionField,
     handleChangeOptionLabel,
     handleDeleteValue,
+    handleDeleteParam,
     handleChangeOptionValue,
     handleChangeMessage,
     handleSubmit,
     handleAddValue,
+    handleAddParams,
     handleChangeLabel,
     handleChangeRepeatable,
     handleChangeHiddenValue,
     handleChangeTag,
     handleChangeSearchKey,
     handleChangeUrl,
-    url,
-    searchKey,
+    handleChangeParam,
+    handleChangePath,
+    route,
   } = useFormTreeCardMutation();
+
+  const { searchKey, url, pathKey, params } = route || {};
+  const { object: routeObject = "", label: routeLabel = "", value: routeValue = "", image: routeImage = "" } = pathKey || {};
 
   return (
     <form onSubmit={handleSubmit}>
@@ -152,11 +158,86 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             <QuestionMarkRoundedIcon />
             <TextField sx={{ flex: 1 }} placeholder="q" type="text" onChange={handleChangeSearchKey} value={searchKey} required />
           </Stack>
+
           <EndPointWarning endPoint={{ searchKey, url }} />
+          <Stack spacing={1} paddingY={1}>
+            <Stack spacing={1} sx={{ pb: 1 }} direction={{ sm: "row", xs: "column" }} alignItems="center">
+              <TextField
+                sx={{ flex: 3 }}
+                InputLabelProps={{ shrink: true }}
+                label="Object Array Path"
+                value={routeObject}
+                onChange={(event) => handleChangePath("object", event)}
+                placeholder="elements.features[]"
+                type="text"
+              />
+              <TextField
+                sx={{ flex: 3 }}
+                InputLabelProps={{ shrink: true }}
+                label="Label Path"
+                value={routeLabel}
+                onChange={(event) => handleChangePath("label", event)}
+                placeholder="client.name"
+                type="text"
+              />
+            </Stack>
+            <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
+              <TextField
+                sx={{ flex: 3 }}
+                InputLabelProps={{ shrink: true }}
+                label="Value Path"
+                value={routeValue}
+                onChange={(event) => handleChangePath("value", event)}
+                placeholder="client.id"
+                type="text"
+              />
+              <TextField
+                sx={{ flex: 3 }}
+                InputLabelProps={{ shrink: true }}
+                label="Image Path"
+                value={routeImage}
+                onChange={(event) => handleChangePath("image", event)}
+                placeholder="client.src.profile"
+                type="text"
+              />
+            </Stack>
+          </Stack>
+          <>
+            <h4>Extra Params</h4>
+
+            {params?.map(({ id, key, value }, index) => (
+              <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} key={id} position="relative">
+                <TextField
+                  label="Key"
+                  sx={{ flex: 1 }}
+                  onChange={(event) => handleChangeParam(index, "key", event)}
+                  value={key}
+                  inputProps={{ "data-id": id }}
+                />
+                <TextField
+                  label={t("value", { ns: "form" })}
+                  sx={{ flex: 1 }}
+                  onChange={(event) => handleChangeParam(index, "value", event)}
+                  value={value}
+                  inputProps={{ "data-id": id }}
+                />
+                {params.length > 0 && (
+                  <IconButton color="warning" sx={styles.iconButtonDelete} value={id as string} onClick={handleDeleteParam}>
+                    <RemoveCircleRoundedIcon />
+                  </IconButton>
+                )}
+              </Stack>
+            ))}
+          </>
+          <Box justifyContent="flex-end" display="flex">
+            <IconButton color="success" sx={styles.iconButton} onClick={handleAddParams}>
+              <AddCircleRoundedIcon />
+            </IconButton>
+          </Box>
         </Stack>
       )}
 
-      <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
+      <Stack spacing={1} direction={{ sm: "row", xs: "column" }}>
         <FieldSelectAutocompleteCreatable value={tag} onChange={handleChangeTag} />
       </Stack>
 
