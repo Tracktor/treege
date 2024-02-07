@@ -35,7 +35,7 @@ const EndPointWarning = ({ endPoint }: EndPointWarningProps) => {
 
   return (
     <Alert severity="warning" variant="outlined">
-      <Typography variant="body2" gutterBottom sx={{ lineHeight: 2 }}>
+      <Typography component="div" variant="body2" gutterBottom sx={{ lineHeight: 2 }}>
         {t("form:warningApiAutocomplete.url")}{" "}
         {url && (
           <>
