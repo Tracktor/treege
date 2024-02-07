@@ -105,7 +105,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
   } = useFormTreeCardMutation();
 
   const { searchKey, url, pathKey, params } = route || {};
-  const { object: routeObject, label: routeLabel, value: routeValue, image: routeImage } = pathKey || {};
+  const { object: routeObject = "", label: routeLabel = "", value: routeValue = "", image: routeImage = "" } = pathKey || {};
 
   return (
     <form onSubmit={handleSubmit}>
