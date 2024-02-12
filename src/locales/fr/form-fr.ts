@@ -19,6 +19,7 @@ const FORM_FR = {
     checkbox: "Case à cocher",
     date: "Date",
     dateRange: "Plage de dates",
+    dynamicSelect: "Sélection dynamique",
     email: "Email",
     file: "Fichier",
     hidden: "Champs caché",
@@ -35,7 +36,15 @@ const FORM_FR = {
   },
   value: "Valeur",
   values: "Valeurs",
-  warningApiAutocomplete: { response: "dois avoir comme réponse", url: "La route de l'API" },
+  warningApiAutocomplete: {
+    response: "dois avoir comme réponse",
+    url: "La route de l'API",
+  },
+  warningApiSelect: {
+    response: "à l'emplacement de votre variable.",
+    url: "Pour intégrer automatiquement la valeur du parent dans l'URL",
+    warning: "placez {{}}",
+  },
 } as const;
 
 export default FORM_FR;

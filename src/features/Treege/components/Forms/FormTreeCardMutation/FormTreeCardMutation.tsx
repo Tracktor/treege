@@ -1,8 +1,12 @@
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
 import QuestionMarkRoundedIcon from "@mui/icons-material/QuestionMarkRounded";
 import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
 import {
+  Accordion,
+  AccordionSummary,
   Box,
   Button,
   Checkbox,
@@ -13,9 +17,12 @@ import {
   InputAdornment,
   Stack,
   TextField,
+  Typography,
 } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
+import DynamicSelectFieldFromTree from "@/features/Treege/components/DynamicSelectFieldFromTree";
+import DynamicSelectWarning from "@/features/Treege/components/DynamicSelectWarning";
 import EndPointWarning from "@/features/Treege/components/EndPointWarning";
 import FieldSelect from "@/features/Treege/components/FieldSelect";
 import FieldSelectAutocompleteCreatable from "@/features/Treege/components/FieldSelectAutocompleteCreatable";
@@ -72,6 +79,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     isRequiredDisabled,
     isRepeatableDisabled,
     isAutocomplete,
+    isDynamicSelect,
     isTreeField,
     treeSelected,
     isWorkflowLoading,
@@ -99,8 +107,11 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeTag,
     handleChangeSearchKey,
     handleChangeUrl,
+    handleChangeUrlSelect,
     handleChangeParam,
     handleChangePath,
+    handleChangeParentRef,
+    parentRef,
     route,
   } = useFormTreeCardMutation();
 
@@ -158,53 +169,100 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             <QuestionMarkRoundedIcon />
             <TextField sx={{ flex: 1 }} placeholder="q" type="text" onChange={handleChangeSearchKey} value={searchKey} required />
           </Stack>
+        </Stack>
+      )}
 
-          <EndPointWarning endPoint={{ searchKey, url }} />
-          <Stack spacing={1} paddingY={1}>
-            <Stack spacing={1} sx={{ pb: 1 }} direction={{ sm: "row", xs: "column" }} alignItems="center">
-              <TextField
-                sx={{ flex: 3 }}
-                InputLabelProps={{ shrink: true }}
-                label="Object Array Path"
-                value={routeObject}
-                onChange={(event) => handleChangePath("object", event)}
-                placeholder="elements.features[]"
-                type="text"
-              />
-              <TextField
-                sx={{ flex: 3 }}
-                InputLabelProps={{ shrink: true }}
-                label="Label Path"
-                value={routeLabel}
-                onChange={(event) => handleChangePath("label", event)}
-                placeholder="client.name"
-                type="text"
-              />
-            </Stack>
-            <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
-              <TextField
-                sx={{ flex: 3 }}
-                InputLabelProps={{ shrink: true }}
-                label="Value Path"
-                value={routeValue}
-                onChange={(event) => handleChangePath("value", event)}
-                placeholder="client.id"
-                type="text"
-              />
-              <TextField
-                sx={{ flex: 3 }}
-                InputLabelProps={{ shrink: true }}
-                label="Image Path"
-                value={routeImage}
-                onChange={(event) => handleChangePath("image", event)}
-                placeholder="client.src.profile"
-                type="text"
-              />
-            </Stack>
+      {isDynamicSelect && (
+        <Stack spacing={1} paddingY={1}>
+          <h4>Set your endpoint</h4>
+          <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
+            <DynamicSelectFieldFromTree value={parentRef} onChange={handleChangeParentRef} />
+            <ArrowForwardIcon />
+            <TextField
+              sx={{ flex: 3 }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LinkRoundedIcon />
+                  </InputAdornment>
+                ),
+              }}
+              placeholder={`https://api.fr/{{${parentRef || ""}}}/enpoint`}
+              type="url"
+              label={t("form:apiRoute")}
+              onChange={handleChangeUrlSelect}
+              value={url}
+            />
           </Stack>
-          <>
-            <h4>Extra Params</h4>
+          {url && <DynamicSelectWarning value={parentRef} />}
+        </Stack>
+      )}
 
+      {(isAutocomplete || isDynamicSelect) && (
+        <Stack spacing={1} paddingY={1}>
+          <Accordion>
+            <AccordionSummary expandIcon={<KeyboardArrowDownIcon />} aria-controls="panel1a-content" id="panel1a-header">
+              <Typography>Data mapping</Typography>
+            </AccordionSummary>
+            <Stack spacing={1} paddingY={1}>
+              <Stack spacing={1} sx={{ pb: 1 }} direction={{ sm: "row", xs: "column" }} alignItems="center">
+                <TextField
+                  sx={{ flex: 3 }}
+                  InputLabelProps={{ shrink: true }}
+                  label="Object Array Path"
+                  value={routeObject}
+                  onChange={(event) => handleChangePath("object", event)}
+                  placeholder="elements.features[]"
+                  type="text"
+                />
+                <TextField
+                  sx={{ flex: 3 }}
+                  InputLabelProps={{ shrink: true }}
+                  label="Label Path"
+                  value={routeLabel}
+                  onChange={(event) => handleChangePath("label", event)}
+                  placeholder="client.name"
+                  type="text"
+                />
+              </Stack>
+              <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
+                <TextField
+                  sx={{ flex: 3 }}
+                  InputLabelProps={{ shrink: true }}
+                  label="Value Path"
+                  value={routeValue}
+                  onChange={(event) => handleChangePath("value", event)}
+                  placeholder="client.id"
+                  type="text"
+                />
+                <TextField
+                  sx={{ flex: 3 }}
+                  InputLabelProps={{ shrink: true }}
+                  label="Image Path"
+                  value={routeImage}
+                  onChange={(event) => handleChangePath("image", event)}
+                  placeholder="client.src.profile"
+                  type="text"
+                />
+              </Stack>
+              <EndPointWarning endPoint={{ searchKey: searchKey || "", url }} />
+            </Stack>
+          </Accordion>
+          <Stack>
+            <Stack
+              spacing={1}
+              paddingY={1}
+              direction={{ sm: "row", xs: "column" }}
+              position="relative"
+              alignItems={{ sm: "center", xs: "flex-start" }}
+            >
+              <h4>Additional Params</h4>
+              <Box justifyContent="flex-end">
+                <IconButton color="success" sx={styles.iconButton} onClick={handleAddParams}>
+                  <AddCircleRoundedIcon />
+                </IconButton>
+              </Box>
+            </Stack>
             {params?.map(({ id, key, value }, index) => (
               <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} key={id} position="relative">
                 <TextField
@@ -228,12 +286,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                 )}
               </Stack>
             ))}
-          </>
-          <Box justifyContent="flex-end" display="flex">
-            <IconButton color="success" sx={styles.iconButton} onClick={handleAddParams}>
-              <AddCircleRoundedIcon />
-            </IconButton>
-          </Box>
+          </Stack>
         </Stack>
       )}
 

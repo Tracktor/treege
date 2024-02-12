@@ -19,6 +19,7 @@ const FORM_EN = {
     checkbox: "Checkbox",
     date: "Date",
     dateRange: "Date range",
+    dynamicSelect: "Dynamic select",
     email: "Email",
     file: "File",
     hidden: "Hidden field",
@@ -35,7 +36,15 @@ const FORM_EN = {
   },
   value: "Value",
   values: "Values",
-  warningApiAutocomplete: { response: "should have as a response", url: "The API Route" },
+  warningApiAutocomplete: {
+    response: "should have as a response",
+    url: "The API Route",
+  },
+  warningApiSelect: {
+    response: "at the location specified in the API URL.",
+    url: "To automatically include the parent value in the API URL: add",
+    warning: "{{}}",
+  },
 } as const;
 
 export default FORM_EN;

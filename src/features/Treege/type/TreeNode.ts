@@ -24,7 +24,7 @@ export interface PathKey {
 
 export interface Route {
   url: string;
-  searchKey: string;
+  searchKey?: string;
   pathKey?: PathKey;
   params?: Params[];
 }
@@ -52,6 +52,7 @@ export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> 
         repeatable?: boolean;
         hiddenValue?: string;
         route?: Route;
+        parentRef?: string;
       }
     | {
         depth: number;
@@ -73,6 +74,7 @@ export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> 
         repeatable?: never;
         hiddenValue?: never;
         route?: Route;
+        parentRef?: string;
       };
   children: TreeNode[];
   treeId?: string;
