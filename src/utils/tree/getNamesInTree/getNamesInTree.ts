@@ -18,6 +18,7 @@ const getNamesInTree = (tree: TreeNode | null): string[] => {
 
     if (node.children.length) {
       const { children } = node;
+
       for (let i = 0; i < children.length; i += 1) {
         extractNodeNames(children[i]);
       }

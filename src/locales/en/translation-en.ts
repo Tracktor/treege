@@ -11,6 +11,7 @@ const TRANSLATION_EN = {
   isTheRoot: "Is the root",
   label: "Label",
   name: "Name",
+  parentRef: "Parent element",
   remove: "Remove",
   required: "Required",
   save: "Save",

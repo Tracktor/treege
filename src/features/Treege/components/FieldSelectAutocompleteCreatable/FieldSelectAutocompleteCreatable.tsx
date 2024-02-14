@@ -19,7 +19,16 @@ interface FieldSelectAutocompleteCreatableProps {
 const FieldSelectAutocompleteCreatable = ({ value, onChange }: FieldSelectAutocompleteCreatableProps) => {
   const { t } = useTranslation(["translation", "form"]);
   const { tree } = useTreegeContext();
-  const treeTags = getUniqueTagsInTree(tree).reduce((acc, tag) => [...acc, { inputValue: tag, label: tag }], [] as TagOption[]);
+  const treeTags = getUniqueTagsInTree(tree).reduce(
+    (acc, tag) => [
+      ...acc,
+      {
+        inputValue: tag,
+        label: tag,
+      },
+    ],
+    [] as TagOption[],
+  );
 
   return (
     <Autocomplete

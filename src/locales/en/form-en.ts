@@ -1,11 +1,15 @@
 const FORM_EN = {
+  additionalParams: "Additional parameters",
+  ancestor: "Ancestor",
   apiRoute: "Api route",
+  dataMapping: "Data mapping",
   decisionField: "Decision field",
   helperText: "Helper text",
   hiddenValue: "Hidden value",
   label: "Label",
   mustBeUnique: "Must be unique",
   newTree: "Nouvel arbre",
+  noAncestorFound: "No parents found",
   offMessage: "Message (disable)",
   onMessage: "Message (enable)",
   repeatable: "Repeatable",
@@ -19,6 +23,7 @@ const FORM_EN = {
     checkbox: "Checkbox",
     date: "Date",
     dateRange: "Date range",
+    dynamicSelect: "Dynamic select",
     email: "Email",
     file: "File",
     hidden: "Hidden field",
@@ -33,9 +38,18 @@ const FORM_EN = {
     tree: "Tree",
     url: "URL",
   },
+  urlConstruction: "URL construction",
   value: "Value",
   values: "Values",
-  warningApiAutocomplete: { response: "should have as a response", url: "The API Route" },
+  warningApiAutocomplete: {
+    response: "should have as a response",
+    url: "The API Route",
+  },
+  warningApiSelect: {
+    response: "at the location specified in the API URL.",
+    url: "To automatically include the parent value in the API URL: add",
+    warning: "{{}}",
+  },
 } as const;
 
 export default FORM_EN;
