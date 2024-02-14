@@ -85,7 +85,6 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     isWorkflowLoading,
     repeatable,
     isLeaf,
-    messages: { on, off },
     handleChangeTreeSelect,
     handleChangeHelperText,
     handleChangeOptionMessage,
@@ -113,6 +112,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeParentRef,
     parentRef,
     route,
+    messages: { on, off },
   } = useFormTreeCardMutation();
 
   const { searchKey, url, pathKey, params } = route || {};
@@ -174,9 +174,9 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
       {isDynamicSelect && (
         <Stack spacing={1} paddingY={1}>
-          <h4>Set your endpoint</h4>
+          <h4>{t("form:urlConstruction")}</h4>
           <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
-            <DynamicSelectFieldFromTree value={parentRef} onChange={handleChangeParentRef} />
+            <DynamicSelectFieldFromTree value={parentRef} onChange={handleChangeParentRef} currentName={name} />
             <ArrowForwardIcon />
             <TextField
               sx={{ flex: 3 }}
@@ -200,9 +200,20 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
       {(isAutocomplete || isDynamicSelect) && (
         <Stack spacing={1} paddingY={1}>
-          <Accordion>
-            <AccordionSummary expandIcon={<KeyboardArrowDownIcon />} aria-controls="panel1a-content" id="panel1a-header">
-              <Typography>Data mapping</Typography>
+          <Accordion elevation={0} square>
+            <AccordionSummary
+              expandIcon={<KeyboardArrowDownIcon />}
+              aria-controls="panel-content"
+              sx={{
+                "& .MuiAccordionSummary-content": {
+                  flexGrow: 0,
+                },
+                display: "inline-flex",
+                justifyContent: "flex-start",
+                padding: 0,
+              }}
+            >
+              <Typography sx={{ textDecoration: "underline" }}>{t("form:dataMapping")}</Typography>
             </AccordionSummary>
             <Stack spacing={1} paddingY={1}>
               <Stack spacing={1} sx={{ pb: 1 }} direction={{ sm: "row", xs: "column" }} alignItems="center">
@@ -256,7 +267,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
               position="relative"
               alignItems={{ sm: "center", xs: "flex-start" }}
             >
-              <h4>Additional Params</h4>
+              <h4>{t("form:additionalParams")}</h4>
               <Box justifyContent="flex-end">
                 <IconButton color="success" sx={styles.iconButton} onClick={handleAddParams}>
                   <AddCircleRoundedIcon />

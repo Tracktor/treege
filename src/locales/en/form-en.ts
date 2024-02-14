@@ -1,11 +1,15 @@
 const FORM_EN = {
+  additionalParams: "Additional parameters",
+  ancestor: "Ancestor",
   apiRoute: "Api route",
+  dataMapping: "Data mapping",
   decisionField: "Decision field",
   helperText: "Helper text",
   hiddenValue: "Hidden value",
   label: "Label",
   mustBeUnique: "Must be unique",
   newTree: "Nouvel arbre",
+  noAncestorFound: "No parents found",
   offMessage: "Message (disable)",
   onMessage: "Message (enable)",
   repeatable: "Repeatable",
@@ -34,6 +38,7 @@ const FORM_EN = {
     tree: "Tree",
     url: "URL",
   },
+  urlConstruction: "URL construction",
   value: "Value",
   values: "Values",
   warningApiAutocomplete: {

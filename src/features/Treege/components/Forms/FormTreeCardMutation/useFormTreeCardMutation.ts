@@ -4,7 +4,7 @@ import { ChangeEvent, FormEvent, MouseEvent, SyntheticEvent, useCallback, useEff
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";
 import { appendTreeCard, replaceTreeCard } from "@/features/Treege/reducer/treeReducer";
-import type { Route, Params, TreeNode, TreeNodeField, TreeValues } from "@/features/Treege/type/TreeNode";
+import type { Params, Route, TreeNode, TreeNodeField, TreeValues } from "@/features/Treege/type/TreeNode";
 import useSnackbar from "@/hooks/useSnackbar";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
@@ -17,6 +17,7 @@ const useFormTreeCardMutation = () => {
   const { tree, dispatchTree, currentHierarchyPointNode, modalOpen, treePath, setModalOpen } = useTreegeContext();
   const { open } = useSnackbar();
   const { t } = useTranslation();
+
   // Form value
   const [values, setValues] = useState<
     {
@@ -34,9 +35,7 @@ const useFormTreeCardMutation = () => {
   const [type, setType] = useState<TreeNodeField["type"]>("text");
   const [tag, setTag] = useState<string | null>(null);
   const [parentRef, setParentRef] = useState<string | null>(null);
-  const defaultParams = useMemo(() => [{ id: "0", key: "", value: "" }], []);
   const [route, setRoute] = useState<Route>({ url: "" });
-
   const [treeSelected, setTreeSelected] = useState<string>("");
   const [helperText, setHelperText] = useState("");
   const [step, setStep] = useState("");
@@ -45,6 +44,7 @@ const useFormTreeCardMutation = () => {
 
   // Form Error
   const [uniqueNameErrorMessage, setUniqueNameErrorMessage] = useState("");
+
   // State
   const isEditModal = modalOpen === "edit";
   const isTreeField = type === "tree";
@@ -96,11 +96,11 @@ const useFormTreeCardMutation = () => {
   );
 
   const handleChangeParentRef = useCallback((_: SelectChangeEvent<string | undefined>, newValue: string | undefined) => {
-    if (newValue !== undefined) {
-      setParentRef(newValue);
-    } else {
-      setParentRef(null);
-    }
+    setRoute((prevState) => ({
+      ...prevState,
+      url: prevState.url ? prevState.url.replace(/{{[^{}]+}}/, `{{${newValue || ""}}}`) : `https://example.com/{{${newValue || ""}}}`,
+    }));
+    setParentRef(newValue ?? null);
   }, []);
 
   const handleChangeHiddenValue = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -209,7 +209,7 @@ const useFormTreeCardMutation = () => {
     (event: ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
 
-      setName(event.target.value);
+      setName(value);
 
       if (!tree || !value) {
         setUniqueNameErrorMessage("");
@@ -512,26 +512,28 @@ const useFormTreeCardMutation = () => {
       setParentRef(currentHierarchyPointNode?.data.attributes?.parentRef || null);
     }
   }, [
-    currentHierarchyPointNode?.data.attributes?.tree?.treeId,
-    currentHierarchyPointNode?.data.attributes?.messages,
     currentHierarchyPointNode?.data.attributes?.helperText,
+    currentHierarchyPointNode?.data.attributes?.hiddenValue,
     currentHierarchyPointNode?.data.attributes?.isDecision,
     currentHierarchyPointNode?.data.attributes?.label,
+    currentHierarchyPointNode?.data.attributes?.messages?.off,
+    currentHierarchyPointNode?.data.attributes?.messages?.on,
+    currentHierarchyPointNode?.data.attributes?.parentRef,
+    currentHierarchyPointNode?.data.attributes?.repeatable,
     currentHierarchyPointNode?.data.attributes?.required,
+    currentHierarchyPointNode?.data.attributes?.route?.params,
+    currentHierarchyPointNode?.data.attributes?.route?.pathKey,
+    currentHierarchyPointNode?.data.attributes?.route?.searchKey,
+    currentHierarchyPointNode?.data.attributes?.route?.url,
     currentHierarchyPointNode?.data.attributes?.step,
+    currentHierarchyPointNode?.data.attributes?.tag,
+    currentHierarchyPointNode?.data.attributes?.tree?.treeId,
     currentHierarchyPointNode?.data.attributes?.type,
     currentHierarchyPointNode?.data.attributes?.values,
     currentHierarchyPointNode?.data?.children,
     currentHierarchyPointNode?.data.name,
-    currentHierarchyPointNode?.data.attributes?.tag,
-    currentHierarchyPointNode?.data.attributes?.repeatable,
-    currentHierarchyPointNode?.data.attributes?.hiddenValue,
-    currentHierarchyPointNode?.data.attributes?.route,
-    currentHierarchyPointNode?.data.attributes?.parentRef,
     defaultValues,
-    defaultParams,
     modalOpen,
-    name,
   ]);
 
   return {

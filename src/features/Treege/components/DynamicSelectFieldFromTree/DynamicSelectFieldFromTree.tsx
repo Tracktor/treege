@@ -1,40 +1,38 @@
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@tracktor/design-system";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import { getNamesInTree } from "@/utils/tree";
-
-// import getNamesInBranch from "@/utils/tree/getNamesInBranch/getNamesInBranch";
 
 interface DynamicSelectFieldFromTreeProps {
   value: string | null;
   onChange?: (event: SelectChangeEvent<string | undefined>, newValue: string | undefined) => void;
+  currentName: string;
 }
 
-const DynamicSelectFieldFromTree = ({ value, onChange }: DynamicSelectFieldFromTreeProps) => {
+const filterNamesWithTwoPoints = (branchNames: string[]): string[] => branchNames.filter((name) => !name.includes(":"));
+
+const DynamicSelectFieldFromTree = ({ value, onChange, currentName }: DynamicSelectFieldFromTreeProps) => {
+  const { t } = useTranslation(["form"]);
   const { tree } = useTreegeContext();
   const [selectedValue, setSelectedValue] = useState<string | undefined>(value || "");
-
-  const filterNamesWithTwoPoints = (branchNames: string[]): string[] => branchNames.filter((name) => !name.includes(":"));
-
   const treeNames = getNamesInTree(tree);
-  const filteredTreeNames = filterNamesWithTwoPoints(treeNames);
+  const filteredTreeNames = filterNamesWithTwoPoints(treeNames).filter((name) => name !== currentName);
 
   const handleChange = (event: SelectChangeEvent<string | undefined>) => {
     const newValue = event.target.value;
-    setSelectedValue(newValue);
 
-    if (onChange) {
-      onChange(event, newValue);
-    }
+    setSelectedValue(newValue);
+    onChange?.(event, newValue);
   };
 
   return (
     <FormControl sx={{ flex: 1.5 }} required>
-      <InputLabel>Parent value</InputLabel>
+      <InputLabel>{t("form:ancestor")}</InputLabel>
       <Select
         sx={{ flex: 2 }}
         value={selectedValue}
-        label="Parent value"
+        label={t("form:ancestor")}
         onChange={handleChange}
         MenuProps={{
           PaperProps: {
@@ -42,11 +40,19 @@ const DynamicSelectFieldFromTree = ({ value, onChange }: DynamicSelectFieldFromT
           },
         }}
       >
-        {filteredTreeNames && filteredTreeNames.length > 0 ? (
-          filteredTreeNames.map((name) => <MenuItem value={name}>{name}</MenuItem>)
+        {filteredTreeNames.length ? (
+          filteredTreeNames.map((name, index) => {
+            const key = `${name}-${index}`;
+
+            return (
+              <MenuItem key={key} value={name}>
+                {name}
+              </MenuItem>
+            );
+          })
         ) : (
           <MenuItem disabled value="">
-            No parents found
+            {t("form:noAncestorFound")}
           </MenuItem>
         )}
       </Select>
