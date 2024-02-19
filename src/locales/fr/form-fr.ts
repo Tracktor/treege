@@ -4,6 +4,7 @@ const FORM_FR = {
   apiRoute: "Api route",
   dataMapping: "Mapping de données",
   decisionField: "Champs de décision",
+  fieldConstruction: "Construction à partir de l'ancêtre",
   helperText: "Texte d'information",
   hiddenValue: "Valeur caché",
   label: "Label",

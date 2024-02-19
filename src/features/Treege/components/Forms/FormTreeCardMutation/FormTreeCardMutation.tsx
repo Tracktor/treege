@@ -18,8 +18,14 @@ import {
   Stack,
   TextField,
   Typography,
+  Tab,
+  Tabs,
+  MenuItem,
+  Select,
 } from "@tracktor/design-system";
+import { SyntheticEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
+import TabPanel from "@/components/Layouts/TabPanel/TabPanel";
 import colors from "@/constants/colors";
 import DynamicSelectFieldFromTree from "@/features/Treege/components/DynamicSelectFieldFromTree";
 import DynamicSelectWarning from "@/features/Treege/components/DynamicSelectWarning";
@@ -59,6 +65,11 @@ const styles = {
 };
 
 const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
+  const [panelValue, setPanelValue] = useState<number>(0);
+  const handleChange = (_: SyntheticEvent, newValue: number) => {
+    setPanelValue(newValue);
+  };
+
   const { t } = useTranslation(["translation", "form"]);
 
   const {
@@ -110,13 +121,21 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeParam,
     handleChangePath,
     handleChangeParentRef,
+    handleParentFieldChange,
+    parentFieldValue,
     parentRef,
     route,
     messages: { on, off },
   } = useFormTreeCardMutation();
 
   const { searchKey, url, pathKey, params } = route || {};
-  const { object: routeObject = "", label: routeLabel = "", value: routeValue = "", image: routeImage = "" } = pathKey || {};
+  const {
+    object: routeObject = "",
+    label: routeLabel = "",
+    value: routeValue = "",
+    image: routeImage = "",
+    extraValue = "",
+  } = pathKey || {};
 
   return (
     <form onSubmit={handleSubmit}>
@@ -174,26 +193,40 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
       {isDynamicSelect && (
         <Stack spacing={1} paddingY={1}>
-          <h4>{t("form:urlConstruction")}</h4>
-          <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
-            <DynamicSelectFieldFromTree value={parentRef} onChange={handleChangeParentRef} currentName={name} />
-            <ArrowForwardIcon />
-            <TextField
-              sx={{ flex: 3 }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <LinkRoundedIcon />
-                  </InputAdornment>
-                ),
-              }}
-              placeholder={`https://api.fr/{{${parentRef || ""}}}/enpoint`}
-              type="url"
-              label={t("form:apiRoute")}
-              onChange={handleChangeUrlSelect}
-              value={url}
-            />
-          </Stack>
+          <Tabs value={panelValue} onChange={handleChange} aria-label="basic tabs example">
+            <Tab label={t("form:urlConstruction")} />
+            <Tab label={t("form:fieldConstruction")} />
+          </Tabs>
+          <TabPanel value={panelValue} index={0}>
+            <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
+              <DynamicSelectFieldFromTree value={parentRef} onChange={handleChangeParentRef} currentName={name} />
+              <ArrowForwardIcon />
+              <TextField
+                sx={{ flex: 3 }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LinkRoundedIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                type="url"
+                label={t("form:apiRoute")}
+                onChange={handleChangeUrlSelect}
+                value={url}
+              />
+            </Stack>
+          </TabPanel>
+          <TabPanel value={panelValue} index={1}>
+            <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
+              <DynamicSelectFieldFromTree value={parentRef} onChange={handleChangeParentRef} currentName={name} />
+              <ArrowForwardIcon />
+              <Select value={parentFieldValue} sx={{ flex: 3 }} onChange={handleParentFieldChange}>
+                <MenuItem value="value">value</MenuItem>
+                <MenuItem value="extra-value">extra-value</MenuItem>
+              </Select>
+            </Stack>
+          </TabPanel>
           {url && <DynamicSelectWarning value={parentRef} />}
         </Stack>
       )}
@@ -216,16 +249,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
               <Typography sx={{ textDecoration: "underline" }}>{t("form:dataMapping")}</Typography>
             </AccordionSummary>
             <Stack spacing={1} paddingY={1}>
-              <Stack spacing={1} sx={{ pb: 1 }} direction={{ sm: "row", xs: "column" }} alignItems="center">
-                <TextField
-                  sx={{ flex: 3 }}
-                  InputLabelProps={{ shrink: true }}
-                  label="Object Array Path"
-                  value={routeObject}
-                  onChange={(event) => handleChangePath("object", event)}
-                  placeholder="elements.features[]"
-                  type="text"
-                />
+              <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
                 <TextField
                   sx={{ flex: 3 }}
                   InputLabelProps={{ shrink: true }}
@@ -235,8 +259,6 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                   placeholder="client.name"
                   type="text"
                 />
-              </Stack>
-              <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
                 <TextField
                   sx={{ flex: 3 }}
                   InputLabelProps={{ shrink: true }}
@@ -257,6 +279,28 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                 />
               </Stack>
               <EndPointWarning endPoint={{ searchKey: searchKey || "", url }} />
+              <Stack spacing={1} paddingY={1}>
+                <Stack spacing={1} sx={{ pb: 1 }} direction={{ sm: "row", xs: "column" }} alignItems="center">
+                  <TextField
+                    sx={{ flex: 3 }}
+                    InputLabelProps={{ shrink: true }}
+                    label="Object Array Path"
+                    value={routeObject}
+                    onChange={(event) => handleChangePath("object", event)}
+                    placeholder="elements.features[]"
+                    type="text"
+                  />
+                  <TextField
+                    sx={{ flex: 3 }}
+                    InputLabelProps={{ shrink: true }}
+                    label="Additional children value"
+                    value={extraValue}
+                    onChange={(event) => handleChangePath("extraValue", event)}
+                    placeholder="items.options[]"
+                    type="text"
+                  />
+                </Stack>
+              </Stack>
             </Stack>
           </Accordion>
           <Stack>

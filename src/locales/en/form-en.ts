@@ -4,6 +4,7 @@ const FORM_EN = {
   apiRoute: "Api route",
   dataMapping: "Data mapping",
   decisionField: "Decision field",
+  fieldConstruction: "Construction from parent",
   helperText: "Helper text",
   hiddenValue: "Hidden value",
   label: "Label",
