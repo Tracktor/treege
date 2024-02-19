@@ -35,6 +35,8 @@ const useFormTreeCardMutation = () => {
   const [type, setType] = useState<TreeNodeField["type"]>("text");
   const [tag, setTag] = useState<string | null>(null);
   const [parentRef, setParentRef] = useState<string | null>(null);
+  const [parentFieldValue, setParentFieldValue] = useState<string>("");
+  const [useExtraParentValue, setUseExtraParentValue] = useState<boolean>(false);
   const [route, setRoute] = useState<Route>({ url: "" });
   const [treeSelected, setTreeSelected] = useState<string>("");
   const [helperText, setHelperText] = useState("");
@@ -98,9 +100,20 @@ const useFormTreeCardMutation = () => {
   const handleChangeParentRef = useCallback((_: SelectChangeEvent<string | undefined>, newValue: string | undefined) => {
     setRoute((prevState) => ({
       ...prevState,
-      url: prevState.url ? prevState.url.replace(/{{[^{}]+}}/, `{{${newValue || ""}}}`) : `https://example.com/{{${newValue || ""}}}`,
+      url: prevState.url && prevState.url.replace(/{{[^{}]+}}/, `{{${newValue || ""}}}`),
     }));
     setParentRef(newValue ?? null);
+  }, []);
+
+  const handleParentFieldChange = useCallback((event: SelectChangeEvent<string>) => {
+    const targetValue = event.target.value;
+    setParentFieldValue(targetValue);
+
+    if (targetValue === "value") {
+      setUseExtraParentValue(false);
+    } else {
+      setUseExtraParentValue(true);
+    }
   }, []);
 
   const handleChangeHiddenValue = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -419,6 +432,7 @@ const useFormTreeCardMutation = () => {
           ...(isHiddenField && { hiddenValue }),
           ...(tag && { tag }),
           ...(parentRef && { parentRef }),
+          ...(useExtraParentValue && { useExtraParentValue }),
         },
         children: childOfChildren,
         name,
@@ -461,6 +475,7 @@ const useFormTreeCardMutation = () => {
       type,
       values,
       parentRef,
+      useExtraParentValue,
     ],
   );
 
@@ -510,6 +525,8 @@ const useFormTreeCardMutation = () => {
       }));
 
       setParentRef(currentHierarchyPointNode?.data.attributes?.parentRef || null);
+
+      setUseExtraParentValue(currentHierarchyPointNode?.data.attributes?.useExtraParentValue || false);
     }
   }, [
     currentHierarchyPointNode?.data.attributes?.helperText,
@@ -519,6 +536,7 @@ const useFormTreeCardMutation = () => {
     currentHierarchyPointNode?.data.attributes?.messages?.off,
     currentHierarchyPointNode?.data.attributes?.messages?.on,
     currentHierarchyPointNode?.data.attributes?.parentRef,
+    currentHierarchyPointNode?.data.attributes?.useExtraParentValue,
     currentHierarchyPointNode?.data.attributes?.repeatable,
     currentHierarchyPointNode?.data.attributes?.required,
     currentHierarchyPointNode?.data.attributes?.route?.params,
@@ -563,6 +581,7 @@ const useFormTreeCardMutation = () => {
     handleChangeUrlSelect,
     handleDeleteParam,
     handleDeleteValue,
+    handleParentFieldChange,
     handleSubmit,
     helperText,
     hiddenValue,
@@ -581,6 +600,7 @@ const useFormTreeCardMutation = () => {
     label,
     messages,
     name,
+    parentFieldValue,
     parentRef,
     repeatable,
     required,
@@ -590,6 +610,7 @@ const useFormTreeCardMutation = () => {
     treeSelected,
     type,
     uniqueNameErrorMessage,
+    useExtraParentValue,
     values,
   };
 };

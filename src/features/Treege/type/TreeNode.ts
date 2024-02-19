@@ -16,10 +16,11 @@ export interface Params {
 }
 
 export interface PathKey {
-  object?: string;
   value?: string;
   label?: string;
   image?: string;
+  object?: string;
+  extraValue?: string;
 }
 
 export interface Route {
@@ -53,6 +54,7 @@ export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> 
         hiddenValue?: string;
         route?: Route;
         parentRef?: string;
+        useExtraParentValue?: boolean;
       }
     | {
         depth: number;
@@ -75,6 +77,7 @@ export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> 
         hiddenValue?: never;
         route?: Route;
         parentRef?: string;
+        useExtraParentValue?: boolean;
       };
   children: TreeNode[];
   treeId?: string;
