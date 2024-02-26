@@ -1,4 +1,4 @@
 # [Versions](https://github.com/Tracktor/treege/releases)
 
-## v0.15.0
-- **[feat]** : Dynamic select field
+## v0.16.0
+- **[feat]** : Add multiple file upload support

@@ -85,6 +85,8 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     isWorkflowLoading,
     repeatable,
     isLeaf,
+    isMultiplePossible,
+    isMultiple,
     handleChangeTreeSelect,
     handleChangeHelperText,
     handleChangeOptionMessage,
@@ -109,6 +111,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeUrlSelect,
     handleChangeParam,
     handleChangePath,
+    handleChangeMultiple,
     handleChangeParentRef,
     parentRef,
     route,
@@ -314,6 +317,9 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
       <Stack paddingY={1}>
         <FormGroup>
+          {isMultiplePossible && (
+            <FormControlLabel control={<Checkbox checked={isMultiple} onChange={handleChangeMultiple} />} label={t("multiple")} />
+          )}
           <FormControlLabel
             disabled={isRequiredDisabled}
             control={<Checkbox checked={required} onChange={handleChangeRequired} />}

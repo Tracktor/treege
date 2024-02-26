@@ -10,6 +10,7 @@ const TRANSLATION_FR = {
   isATree: "Est un arbre",
   isTheRoot: "Est la racine",
   label: "Label",
+  multiple: "Multiple",
   name: "Nom",
   parentRef: "Element parent",
   remove: "Supprimer",
