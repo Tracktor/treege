@@ -129,6 +129,7 @@ const fields = [
   {
     isBooleanField: false,
     isDecisionField: false,
+    isMultiple: false,
     isRepeatableDisabled: false,
     isRequiredDisabled: false,
     type: "dynamicSelect",
