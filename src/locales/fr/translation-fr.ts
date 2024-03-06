@@ -3,6 +3,7 @@ const TRANSLATION_FR = {
   cancel: "Annuler",
   disabled: "Désactivé",
   edit: "Éditer",
+  initialQueryEnable: "Activer un appel API intiale",
   isABranch: "Est une branche",
   isAHidden: "Est un champs caché",
   isALeaf: "Est une feuille",

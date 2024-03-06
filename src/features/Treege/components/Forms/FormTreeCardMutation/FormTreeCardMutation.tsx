@@ -87,6 +87,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     isLeaf,
     isMultiplePossible,
     isMultiple,
+    initialQuery,
     handleChangeTreeSelect,
     handleChangeHelperText,
     handleChangeOptionMessage,
@@ -113,6 +114,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangePath,
     handleChangeMultiple,
     handleChangeParentRef,
+    handleChangeInitialQuery,
     parentRef,
     route,
     messages: { on, off },
@@ -319,6 +321,12 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         <FormGroup>
           {isMultiplePossible && (
             <FormControlLabel control={<Checkbox checked={isMultiple} onChange={handleChangeMultiple} />} label={t("multiple")} />
+          )}
+          {isAutocomplete && (
+            <FormControlLabel
+              control={<Checkbox checked={initialQuery} onChange={handleChangeInitialQuery} />}
+              label={t("initialQueryEnable")}
+            />
           )}
           <FormControlLabel
             disabled={isRequiredDisabled}

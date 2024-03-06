@@ -53,6 +53,7 @@ export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> 
         hiddenValue?: string;
         route?: Route;
         parentRef?: string;
+        initialQuery?: boolean;
       }
     | {
         depth: number;
@@ -75,6 +76,7 @@ export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> 
         hiddenValue?: never;
         route?: Route;
         parentRef?: string;
+        initialQuery?: boolean;
       };
   children: TreeNode[];
   treeId?: string;

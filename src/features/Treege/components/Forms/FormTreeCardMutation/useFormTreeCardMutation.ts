@@ -48,6 +48,7 @@ const useFormTreeCardMutation = () => {
   const [step, setStep] = useState("");
   const [messages, setMessages] = useState({ off: "", on: "" });
   const [repeatable, setRepeatable] = useState(false);
+  const [initialQuery, setInitialQuery] = useState(false);
 
   // Form Error
   const [uniqueNameErrorMessage, setUniqueNameErrorMessage] = useState("");
@@ -246,6 +247,10 @@ const useFormTreeCardMutation = () => {
     setRequired(event.target.checked);
   }, []);
 
+  const handleChangeInitialQuery = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setInitialQuery(event.target.checked);
+  }, []);
+
   const handleChangeIsDecisionField = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setIsDecision(event.target.checked);
   }, []);
@@ -434,6 +439,7 @@ const useFormTreeCardMutation = () => {
           ...(tag && { tag }),
           ...(parentRef && { parentRef }),
           ...(isMultiple && isMultiplePossible && { isMultiple }),
+          ...(initialQuery && { initialQuery }),
         },
         children: childOfChildren,
         name,
@@ -478,6 +484,7 @@ const useFormTreeCardMutation = () => {
       treeSelected,
       type,
       values,
+      initialQuery,
     ],
   );
 
@@ -529,8 +536,11 @@ const useFormTreeCardMutation = () => {
       }));
 
       setIsMultiple(isMultipleAttribute || false);
+
+      setInitialQuery(currentHierarchyPointNode?.data.attributes?.initialQuery || false);
     }
   }, [
+    currentHierarchyPointNode?.data.attributes?.initialQuery,
     currentHierarchyPointNode?.data.attributes?.helperText,
     currentHierarchyPointNode?.data.attributes?.hiddenValue,
     currentHierarchyPointNode?.data.attributes?.isDecision,
@@ -562,6 +572,7 @@ const useFormTreeCardMutation = () => {
     handleAddValue,
     handleChangeHelperText,
     handleChangeHiddenValue,
+    handleChangeInitialQuery,
     handleChangeIsDecisionField,
     handleChangeLabel,
     handleChangeMessage,
@@ -587,6 +598,7 @@ const useFormTreeCardMutation = () => {
     handleSubmit,
     helperText,
     hiddenValue,
+    initialQuery,
     isAutocomplete,
     isBooleanField,
     isDecision,
