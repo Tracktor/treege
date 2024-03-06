@@ -143,7 +143,6 @@ const TreeCard = ({
                 )}
               </Stack>
             )}
-
             <Stack spacing={0.5} alignItems="flex-end">
               {isValue && (
                 <Typography variant="subtitle2" sx={styles.title}>
