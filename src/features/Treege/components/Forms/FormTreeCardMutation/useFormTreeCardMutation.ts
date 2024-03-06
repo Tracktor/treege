@@ -48,7 +48,7 @@ const useFormTreeCardMutation = () => {
   const [step, setStep] = useState("");
   const [messages, setMessages] = useState({ off: "", on: "" });
   const [repeatable, setRepeatable] = useState(false);
-  const [hasDefaultValues, setHasDefaultValues] = useState(false);
+  const [initialQuery, setInitialQuery] = useState(false);
 
   // Form Error
   const [uniqueNameErrorMessage, setUniqueNameErrorMessage] = useState("");
@@ -247,8 +247,8 @@ const useFormTreeCardMutation = () => {
     setRequired(event.target.checked);
   }, []);
 
-  const handleChangeHasDefaultValues = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    setHasDefaultValues(event.target.checked);
+  const handleChangeInitialQuery = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setInitialQuery(event.target.checked);
   }, []);
 
   const handleChangeIsDecisionField = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -439,7 +439,7 @@ const useFormTreeCardMutation = () => {
           ...(tag && { tag }),
           ...(parentRef && { parentRef }),
           ...(isMultiple && isMultiplePossible && { isMultiple }),
-          ...(hasDefaultValues && { hasDefaultValues }),
+          ...(initialQuery && { initialQuery }),
         },
         children: childOfChildren,
         name,
@@ -484,7 +484,7 @@ const useFormTreeCardMutation = () => {
       treeSelected,
       type,
       values,
-      hasDefaultValues,
+      initialQuery,
     ],
   );
 
@@ -537,10 +537,10 @@ const useFormTreeCardMutation = () => {
 
       setIsMultiple(isMultipleAttribute || false);
 
-      setHasDefaultValues(currentHierarchyPointNode?.data.attributes?.hasDefaultValues || false);
+      setInitialQuery(currentHierarchyPointNode?.data.attributes?.initialQuery || false);
     }
   }, [
-    currentHierarchyPointNode?.data.attributes?.hasDefaultValues,
+    currentHierarchyPointNode?.data.attributes?.initialQuery,
     currentHierarchyPointNode?.data.attributes?.helperText,
     currentHierarchyPointNode?.data.attributes?.hiddenValue,
     currentHierarchyPointNode?.data.attributes?.isDecision,
@@ -570,9 +570,9 @@ const useFormTreeCardMutation = () => {
     getDisabledValueField,
     handleAddParams,
     handleAddValue,
-    handleChangeHasDefaultValues,
     handleChangeHelperText,
     handleChangeHiddenValue,
+    handleChangeInitialQuery,
     handleChangeIsDecisionField,
     handleChangeLabel,
     handleChangeMessage,
@@ -596,9 +596,9 @@ const useFormTreeCardMutation = () => {
     handleDeleteParam,
     handleDeleteValue,
     handleSubmit,
-    hasDefaultValues,
     helperText,
     hiddenValue,
+    initialQuery,
     isAutocomplete,
     isBooleanField,
     isDecision,
