@@ -3,6 +3,7 @@ const TRANSLATION_EN = {
   cancel: "Cancel",
   disabled: "Disabled",
   edit: "Edit",
+  hasDefaultValues: "Has default values",
   isABranch: "Is a branch",
   isAHidden: "Is a hidden field",
   isALeaf: "Is a leaf",

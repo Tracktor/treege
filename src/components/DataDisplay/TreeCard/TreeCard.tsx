@@ -19,10 +19,15 @@ import type { TreeNode } from "@/features/Treege/type/TreeNode";
 interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum" | "hierarchyPointNode"> {
   nodeDatum: TreeNode | TreeNodeDatum;
   size?: number;
+
   onAddChildren?(hierarchyPointNode: HierarchyPointNode<TreeNode>): void;
+
   onEditChildren?(hierarchyPointNode: HierarchyPointNode<TreeNode>): void;
+
   onDeleteChildren?(hierarchyPointNode: HierarchyPointNode<TreeNode>): void;
+
   onOpenTreeModal?(hierarchyPointNode: HierarchyPointNode<TreeNode>): void;
+
   hierarchyPointNode: HierarchyPointNode<TreeNode>;
 }
 
@@ -143,6 +148,7 @@ const TreeCard = ({
                 )}
               </Stack>
             )}
+
             <Stack spacing={0.5} alignItems="flex-end">
               {isValue && (
                 <Typography variant="subtitle2" sx={styles.title}>

@@ -3,6 +3,7 @@ const TRANSLATION_FR = {
   cancel: "Annuler",
   disabled: "Désactivé",
   edit: "Éditer",
+  hasDefaultValues: "A des valeurs par défaut",
   isABranch: "Est une branche",
   isAHidden: "Est un champs caché",
   isALeaf: "Est une feuille",

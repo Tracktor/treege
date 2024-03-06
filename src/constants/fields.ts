@@ -120,6 +120,7 @@ const fields = [
     type: "select",
   },
   {
+    hasDefaultValues: true,
     isBooleanField: false,
     isDecisionField: false,
     isRepeatableDisabled: true,
