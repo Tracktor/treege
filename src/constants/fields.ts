@@ -78,6 +78,13 @@ const fields = [
     type: "time",
   },
   {
+    isBooleanField: false,
+    isDecisionField: false,
+    isRepeatableDisabled: false,
+    isRequiredDisabled: false,
+    type: "timeRange",
+  },
+  {
     isBooleanField: true,
     isDecisionField: false,
     isRepeatableDisabled: true,

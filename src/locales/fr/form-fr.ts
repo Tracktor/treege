@@ -35,6 +35,7 @@ const FORM_FR = {
     tel: "Téléphone",
     text: "Texte",
     time: "Temps",
+    timeRange: "Plage de temps",
     tree: "Arbre",
     url: "URL",
   },
