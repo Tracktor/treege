@@ -1,16 +1,15 @@
 import { Box, CircularProgress, GlobalStyles } from "@tracktor/design-system";
 import { memo } from "react";
-import D3Tree from "react-d3-tree";
-import type { RenderCustomNodeElementFn } from "react-d3-tree/lib/types/types/common";
+import D3Tree, { RawNodeDatum, RenderCustomNodeElementFn } from "react-d3-tree";
 import useTree from "@/components/DataDisplay/Tree/useTree";
 import colors from "@/constants/colors";
 import ButtonCreateTree from "@/features/Treege/components/ButtonCreateTree/ButtonCreateTree";
-import type { TreeRenderCustomNodeElementFn } from "@/features/Treege/type/TreeNode";
+import type { TreeNode, TreeRenderCustomNodeElementFn } from "@/features/Treege/type/TreeNode";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 
 interface TreeProps {
-  data: any;
+  data: TreeNode | null;
   renderCustomNodeElement?: TreeRenderCustomNodeElementFn;
   nodeSize?: {
     x: number;
@@ -64,7 +63,7 @@ const Tree = ({
     <div style={styles.container} ref={refContainer}>
       <GlobalStyles styles={{ [`.${pathClass}`]: styles.treeLink }} />
       <D3Tree
-        data={data}
+        data={data as unknown as RawNodeDatum}
         orientation="vertical"
         translate={translate}
         dimensions={dimensions}
