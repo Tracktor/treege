@@ -11,7 +11,7 @@ references:
 executors:
   publish-npm:
     docker:
-      - image: cimg/node:16.17.0
+      - image: cimg/node:20.9.0
 
 jobs:
   publish-npm:
