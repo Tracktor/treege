@@ -23,7 +23,7 @@ import { getTree } from "@/utils/tree";
 const TreeGrid = () => {
   const { tree, treeModalOpen, treePath, backendConfig } = useTreegeContext();
   const { handleCloseTreeModal } = useTreeCardContainer();
-  const { getTitleModalMutation, closeModal, getTitleModalDelete, isModalMutationOpen, isDeleteModal } = useTreeGrid();
+  const { getTitleModalMutation, closeModal, getTitleModalDelete, isModalMutationOpen, isDeleteModal, handleChangeTree } = useTreeGrid();
   const currentTreePath = treePath?.at(-1)?.path;
   const currentTreeName = treePath?.at(-1)?.label;
   const currentTree = tree && getTree(tree, currentTreePath);
@@ -48,7 +48,7 @@ const TreeGrid = () => {
         </Main>
 
         <Sidebar>
-          <ViewerJSON value={tree} />
+          <ViewerJSON value={tree} onChange={handleChangeTree} />
         </Sidebar>
 
         <Action>

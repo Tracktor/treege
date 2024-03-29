@@ -5,7 +5,8 @@ import CodeMirror from "@uiw/react-codemirror";
 import useViewerJSON from "@/components/DataDisplay/ViewerJSON/useViewerJSON";
 
 interface ViewerJSONProps {
-  value: any;
+  value: unknown;
+  onChange?: (value: any) => void;
 }
 
 const styles = {
@@ -14,7 +15,7 @@ const styles = {
   },
 };
 
-const ViewerJSON = ({ value }: ViewerJSONProps) => {
+const ViewerJSON = ({ value, onChange }: ViewerJSONProps) => {
   const { formatJSON } = useViewerJSON();
 
   return (
@@ -27,12 +28,13 @@ const ViewerJSON = ({ value }: ViewerJSONProps) => {
         }}
       />
       <CodeMirror
+        editable
         value={formatJSON(value)}
         extensions={[json()]}
-        editable={false}
         theme={dracula}
         height="100%"
         style={styles.fullHeight}
+        onChange={onChange}
       />
     </div>
   );

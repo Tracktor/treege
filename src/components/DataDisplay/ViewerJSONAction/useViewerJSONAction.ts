@@ -36,6 +36,11 @@ const useViewerJSONAction = () => {
 
   const getDownloadLink = (value: any) => `data:text/json;charset=utf-8,${encodeURIComponent(formatJSON(value))}`;
 
+  const copyToClipboard = (value: unknown) => () => {
+    navigator.clipboard.writeText(formatJSON(value)).then();
+    open(t("success.copyToClipboard", { ns: "snackMessage" }));
+  };
+
   const handleClose = () => {
     setOpenModal(false);
   };
@@ -67,7 +72,16 @@ const useViewerJSONAction = () => {
     }
   };
 
-  return { formatJSON, getDownloadLink, handleClose, handleOpen, handleResetTree, handleSubmit, openModal };
+  return {
+    copyToClipboard,
+    formatJSON,
+    getDownloadLink,
+    handleClose,
+    handleOpen,
+    handleResetTree,
+    handleSubmit,
+    openModal,
+  };
 };
 
 export default useViewerJSONAction;

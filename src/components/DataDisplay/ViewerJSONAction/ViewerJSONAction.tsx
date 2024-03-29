@@ -1,3 +1,4 @@
+import FileCopyRoundedIcon from "@mui/icons-material/FileCopyRounded";
 import RotateLeftRoundedIcon from "@mui/icons-material/RotateLeftRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import SimCardDownloadRoundedIcon from "@mui/icons-material/SimCardDownloadRounded";
@@ -10,6 +11,7 @@ import {
   DialogContentText,
   DialogTitle,
   Divider,
+  IconButton,
   Stack,
   Tooltip,
 } from "@tracktor/design-system";
@@ -24,25 +26,34 @@ interface ViewerJSONProps {
 
 const ViewerJSONAction = ({ downloadedFileName = "export", value }: ViewerJSONProps) => {
   const { t } = useTranslation();
-  const { getDownloadLink, handleSubmit, handleClose, handleOpen, handleResetTree, openModal } = useViewerJSONAction();
+  const { getDownloadLink, handleSubmit, handleClose, handleOpen, handleResetTree, copyToClipboard, openModal } = useViewerJSONAction();
   const { currentTree, backendConfig, tree } = useTreegeContext();
   const { id } = currentTree;
 
   return (
-    <Stack direction="row" spacing={2} justifyContent="center">
+    <Stack direction="row" spacing={1} justifyContent="center">
       <Tooltip title={t("resetTree", { ns: "button" })} enterDelay={1500} disableHoverListener={!value} arrow>
         <Box>
-          <Button disabled={!tree} onClick={handleOpen} variant="outlined" color="warning">
+          <IconButton disabled={!tree} onClick={handleOpen} color="warning">
             <RotateLeftRoundedIcon />
-          </Button>
+          </IconButton>
         </Box>
       </Tooltip>
+
       <Divider orientation="vertical" flexItem />
+
+      <Tooltip title={t("copyToClipboard", { ns: "button" })} enterDelay={1500} disableHoverListener={!value} arrow>
+        <Box>
+          <IconButton href="" download={`${downloadedFileName}.json`} disabled={!value} onClick={copyToClipboard(value)}>
+            <FileCopyRoundedIcon />
+          </IconButton>
+        </Box>
+      </Tooltip>
       <Tooltip title={t("downloadJSONFile", { ns: "button" })} enterDelay={1500} disableHoverListener={!value} arrow>
         <Box>
-          <Button variant="outlined" href={getDownloadLink(value)} download={`${downloadedFileName}.json`} disabled={!value}>
+          <IconButton href={getDownloadLink(value)} download={`${downloadedFileName}.json`} disabled={!value}>
             <SimCardDownloadRoundedIcon />
-          </Button>
+          </IconButton>
         </Box>
       </Tooltip>
       <Tooltip
@@ -52,9 +63,9 @@ const ViewerJSONAction = ({ downloadedFileName = "export", value }: ViewerJSONPr
         arrow
       >
         <Box>
-          <Button variant="outlined" onClick={handleSubmit} disabled={!value || !backendConfig?.baseUrl}>
+          <IconButton onClick={handleSubmit} disabled={!value || !backendConfig?.baseUrl}>
             <SaveRoundedIcon />
-          </Button>
+          </IconButton>
         </Box>
       </Tooltip>
       <Dialog maxWidth="xs" fullWidth open={openModal} onClose={handleClose}>

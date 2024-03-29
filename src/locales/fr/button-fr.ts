@@ -1,5 +1,6 @@
 const BUTTON_FR = {
   close: "Fermer",
+  copyToClipboard: "Copier l'arbre dans le presse-papiers",
   createTree: "Créer un arbre",
   downloadJSONFile: "Télécharger le fichier JSON",
   reset: "Réinitialiser",

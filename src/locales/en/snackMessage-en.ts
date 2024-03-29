@@ -5,6 +5,7 @@ const SNACK_MESSAGE_EN = {
     updateTree: "An error has occurred. Please try again",
   },
   success: {
+    copyToClipboard: "Copied to clipboard",
     saveTree: "Tree registered",
     updateTree: "Tree updated",
   },
