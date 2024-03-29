@@ -7,6 +7,7 @@ const darkTheme: ThemeOptions = {
       styleOverrides: {
         root: ({ ownerState }) => ({
           ...(ownerState.color === "primary" && ownerState.variant === "contained" && { color: `${colors.tertiary} !important` }),
+          ...(ownerState.disabled && ownerState.variant === "contained" && { color: `white` }),
         }),
       },
     },
