@@ -1,17 +1,17 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
-type Mock = { tree: TreeNode | null; output: TreeNode; treePath: string | null; newChild: TreeNode; name: string };
+type Mock = { tree: TreeNode | null; output: TreeNode; treePath: string | null; newChild: TreeNode; uuid: string };
 
 const addFirstNodeInTreeMock: Mock = {
-  name: "",
   newChild: {
     attributes: {
       depth: 0,
       label: "Username",
+      name: "username",
       type: "text",
     },
     children: [],
-    name: "username",
+    uuid: "username",
   },
   output: {
     attributes: {
@@ -19,23 +19,25 @@ const addFirstNodeInTreeMock: Mock = {
       isLeaf: true,
       isRoot: true,
       label: "Username",
+      name: "username",
       type: "text",
     },
     children: [],
-    name: "username",
+    uuid: "username",
   },
   tree: null,
   treePath: "",
+  uuid: "",
 };
 
 const initialiseTree: Mock = {
-  name: "",
   newChild: {
     attributes: {
       depth: 0,
       isLeaf: false,
       isRoot: true,
       label: "Username",
+      name: "username",
       type: "text",
     },
     children: [
@@ -44,13 +46,14 @@ const initialiseTree: Mock = {
           depth: 1,
           isLeaf: true,
           label: "Email",
+          name: "email",
           type: "email",
         },
         children: [],
-        name: "email",
+        uuid: "email",
       },
     ],
-    name: "username",
+    uuid: "username",
   },
   output: {
     attributes: {
@@ -58,6 +61,7 @@ const initialiseTree: Mock = {
       isLeaf: false,
       isRoot: true,
       label: "Username",
+      name: "username",
       type: "text",
     },
     children: [
@@ -66,28 +70,30 @@ const initialiseTree: Mock = {
           depth: 1,
           isLeaf: true,
           label: "Email",
+          name: "email",
           type: "email",
         },
         children: [],
-        name: "email",
+        uuid: "email",
       },
     ],
-    name: "username",
+    uuid: "username",
   },
   tree: null,
   treePath: "",
+  uuid: "",
 };
 
 const addNodeInTreeMock: Mock = {
-  name: "username",
   newChild: {
     attributes: {
       depth: 1,
       label: "Email",
+      name: "email",
       type: "email",
     },
     children: [],
-    name: "email",
+    uuid: "email",
   },
   output: {
     attributes: {
@@ -95,6 +101,7 @@ const addNodeInTreeMock: Mock = {
       isLeaf: false,
       isRoot: true,
       label: "Username",
+      name: "username",
       type: "text",
     },
     children: [
@@ -103,13 +110,14 @@ const addNodeInTreeMock: Mock = {
           depth: 1,
           isLeaf: true,
           label: "Email",
+          name: "email",
           type: "email",
         },
         children: [],
-        name: "email",
+        uuid: "email",
       },
     ],
-    name: "username",
+    uuid: "username",
   },
   tree: {
     attributes: {
@@ -117,21 +125,23 @@ const addNodeInTreeMock: Mock = {
       isLeaf: true,
       isRoot: true,
       label: "Username",
+      name: "username",
       type: "text",
     },
     children: [],
-    name: "username",
+    uuid: "username",
   },
   treePath: "",
+  uuid: "username",
 };
 
 const addNodeOtherTreeMock: Mock = {
-  name: "userName",
   newChild: {
     attributes: {
       depth: 0,
       isRoot: true,
       label: "Nom de la machine",
+      name: "treeCatalog",
       type: "text",
     },
     children: [
@@ -142,6 +152,7 @@ const addNodeOtherTreeMock: Mock = {
           isLeaf: false,
           isRoot: false,
           label: "Type",
+          name: "machineName",
           type: "select",
         },
         children: [
@@ -153,7 +164,7 @@ const addNodeOtherTreeMock: Mock = {
               value: "minipelle",
             },
             children: [],
-            name: "type:minipelle",
+            uuid: "type:minipelle",
           },
           {
             attributes: {
@@ -163,14 +174,14 @@ const addNodeOtherTreeMock: Mock = {
               value: "nacelle",
             },
             children: [],
-            name: "type:nacelle",
+            uuid: "type:nacelle",
           },
         ],
-        name: "type",
+        uuid: "type",
       },
     ],
-    name: "machineName",
     treeId: "2",
+    uuid: "machineName",
   },
   output: {
     attributes: {
@@ -178,6 +189,7 @@ const addNodeOtherTreeMock: Mock = {
       isLeaf: false,
       isRoot: true,
       label: "Username",
+      name: "userName",
       type: "text",
     },
     children: [
@@ -186,11 +198,13 @@ const addNodeOtherTreeMock: Mock = {
           depth: 1,
           isLeaf: true,
           label: "Tree Catalog",
+          name: "treeCatalog",
           tree: {
             attributes: {
               depth: 0,
               isRoot: true,
               label: "Nom de la machine",
+              name: "machineName",
               type: "text",
             },
             children: [
@@ -201,6 +215,7 @@ const addNodeOtherTreeMock: Mock = {
                   isLeaf: false,
                   isRoot: false,
                   label: "Type",
+                  name: "type",
                   type: "select",
                 },
                 children: [
@@ -212,7 +227,7 @@ const addNodeOtherTreeMock: Mock = {
                       value: "minipelle",
                     },
                     children: [],
-                    name: "type:minipelle",
+                    uuid: "type:minipelle",
                   },
                   {
                     attributes: {
@@ -222,23 +237,23 @@ const addNodeOtherTreeMock: Mock = {
                       value: "nacelle",
                     },
                     children: [],
-                    name: "type:nacelle",
+                    uuid: "type:nacelle",
                   },
                 ],
-                name: "type",
+                uuid: "type",
               },
             ],
-            name: "machineName",
             treeId: "2",
+            uuid: "machineName",
           },
           treePath: "/treeCatalog",
           type: "tree",
         },
         children: [],
-        name: "treeCatalog",
+        uuid: "treeCatalog",
       },
     ],
-    name: "userName",
+    uuid: "userName",
   },
   tree: {
     attributes: {
@@ -246,6 +261,7 @@ const addNodeOtherTreeMock: Mock = {
       isLeaf: false,
       isRoot: true,
       label: "Username",
+      name: "userName",
       type: "text",
     },
     children: [
@@ -254,11 +270,13 @@ const addNodeOtherTreeMock: Mock = {
           depth: 1,
           isLeaf: true,
           label: "Tree Catalog",
+          name: "treeCatalog",
           tree: {
             attributes: {
               depth: 0,
               isRoot: true,
               label: "Nom de la machine",
+              name: "machineName",
               type: "text",
             },
             children: [
@@ -269,6 +287,7 @@ const addNodeOtherTreeMock: Mock = {
                   isLeaf: false,
                   isRoot: false,
                   label: "Type",
+                  name: "type",
                   type: "select",
                 },
                 children: [
@@ -280,7 +299,7 @@ const addNodeOtherTreeMock: Mock = {
                       value: "minipelle",
                     },
                     children: [],
-                    name: "type:minipelle",
+                    uuid: "type:minipelle",
                   },
                   {
                     attributes: {
@@ -290,37 +309,38 @@ const addNodeOtherTreeMock: Mock = {
                       value: "nacelle",
                     },
                     children: [],
-                    name: "type:nacelle",
+                    uuid: "type:nacelle",
                   },
                 ],
-                name: "type",
+                uuid: "type",
               },
             ],
-            name: "machineName",
             treeId: "2",
+            uuid: "machineName",
           },
           treePath: "/treeCatalog",
           type: "tree",
         },
         children: [],
-        name: "treeCatalog",
+        uuid: "treeCatalog",
       },
     ],
-    name: "userName",
+    uuid: "userName",
   },
   treePath: "/treeCatalog",
+  uuid: "userName",
 };
 
 const addNodeDecisionInOtherTreeMock: Mock = {
-  name: "type",
   newChild: {
     attributes: {
       depth: 2,
       label: "Prix",
+      name: "price",
       type: "number",
     },
     children: [],
-    name: "price",
+    uuid: "price",
   },
   output: {
     attributes: {
@@ -328,6 +348,7 @@ const addNodeDecisionInOtherTreeMock: Mock = {
       isLeaf: false,
       isRoot: true,
       label: "Username",
+      name: "userName",
       type: "text",
     },
     children: [
@@ -336,11 +357,13 @@ const addNodeDecisionInOtherTreeMock: Mock = {
           depth: 1,
           isLeaf: true,
           label: "Tree Catalog",
+          name: "treeCatalog",
           tree: {
             attributes: {
               depth: 0,
               isRoot: true,
               label: "Nom de la machine",
+              name: "machineName",
               type: "text",
             },
             children: [
@@ -349,6 +372,7 @@ const addNodeDecisionInOtherTreeMock: Mock = {
                   depth: 1,
                   isLeaf: false,
                   label: "Type",
+                  name: "type",
                   type: "select",
                   values: [
                     {
@@ -369,26 +393,27 @@ const addNodeDecisionInOtherTreeMock: Mock = {
                       depth: 2,
                       isLeaf: true,
                       label: "Prix",
+                      name: "price",
                       type: "number",
                     },
                     children: [],
-                    name: "price",
+                    uuid: "price",
                   },
                 ],
-                name: "type",
+                uuid: "type",
               },
             ],
-            name: "machineName",
             treeId: "2",
+            uuid: "machineName",
           },
           treePath: "/treeCatalog",
           type: "tree",
         },
         children: [],
-        name: "treeCatalog",
+        uuid: "treeCatalog",
       },
     ],
-    name: "userName",
+    uuid: "userName",
   },
   tree: {
     attributes: {
@@ -396,6 +421,7 @@ const addNodeDecisionInOtherTreeMock: Mock = {
       isLeaf: false,
       isRoot: true,
       label: "Username",
+      name: "userName",
       type: "text",
     },
     children: [
@@ -404,11 +430,13 @@ const addNodeDecisionInOtherTreeMock: Mock = {
           depth: 1,
           isLeaf: true,
           label: "Tree Catalog",
+          name: "treeCatalog",
           tree: {
             attributes: {
               depth: 0,
               isRoot: true,
               label: "Nom de la machine",
+              name: "machineName",
               type: "text",
             },
             children: [
@@ -417,6 +445,7 @@ const addNodeDecisionInOtherTreeMock: Mock = {
                   depth: 1,
                   isLeaf: true,
                   label: "Type",
+                  name: "type",
                   type: "select",
                   values: [
                     {
@@ -432,35 +461,37 @@ const addNodeDecisionInOtherTreeMock: Mock = {
                   ],
                 },
                 children: [],
-                name: "type",
+                uuid: "type",
               },
             ],
-            name: "machineName",
             treeId: "2",
+            uuid: "machineName",
           },
           treePath: "/treeCatalog",
           type: "tree",
         },
         children: [],
-        name: "treeCatalog",
+        uuid: "treeCatalog",
       },
     ],
-    name: "userName",
+    uuid: "userName",
   },
   treePath: "/treeCatalog",
+  uuid: "type",
 };
 
 const addTreeNodeMock: Mock = {
-  name: "userName",
   newChild: {
     attributes: {
       depth: 1,
       label: "Tree Catalog",
+      name: "treeCatalog",
       tree: {
         attributes: {
           depth: 0,
           isRoot: true,
           label: "Nom de la machine",
+          name: "machineName",
           type: "text",
         },
         children: [
@@ -469,6 +500,7 @@ const addTreeNodeMock: Mock = {
               depth: 1,
               isLeaf: true,
               label: "Type",
+              name: "type",
               type: "select",
               values: [
                 {
@@ -484,17 +516,17 @@ const addTreeNodeMock: Mock = {
               ],
             },
             children: [],
-            name: "type",
+            uuid: "type",
           },
         ],
-        name: "machineName",
         treeId: "2",
+        uuid: "machineName",
       },
       treePath: "/treeCatalog",
       type: "tree",
     },
     children: [],
-    name: "treeCatalog",
+    uuid: "treeCatalog",
   },
   output: {
     attributes: {
@@ -502,6 +534,7 @@ const addTreeNodeMock: Mock = {
       isLeaf: false,
       isRoot: true,
       label: "Username",
+      name: "userName",
       type: "text",
     },
     children: [
@@ -510,11 +543,13 @@ const addTreeNodeMock: Mock = {
           depth: 1,
           isLeaf: true,
           label: "Tree Catalog",
+          name: "treeCatalog",
           tree: {
             attributes: {
               depth: 0,
               isRoot: true,
               label: "Nom de la machine",
+              name: "machineName",
               type: "text",
             },
             children: [
@@ -523,6 +558,7 @@ const addTreeNodeMock: Mock = {
                   depth: 1,
                   isLeaf: true,
                   label: "Type",
+                  name: "type",
                   type: "select",
                   values: [
                     {
@@ -538,20 +574,20 @@ const addTreeNodeMock: Mock = {
                   ],
                 },
                 children: [],
-                name: "type",
+                uuid: "type",
               },
             ],
-            name: "machineName",
             treeId: "2",
+            uuid: "machineName",
           },
           treePath: "/treeCatalog",
           type: "tree",
         },
         children: [],
-        name: "treeCatalog",
+        uuid: "treeCatalog",
       },
     ],
-    name: "userName",
+    uuid: "userName",
   },
   tree: {
     attributes: {
@@ -559,23 +595,34 @@ const addTreeNodeMock: Mock = {
       isLeaf: true,
       isRoot: true,
       label: "Username",
+      name: "userName",
       type: "text",
     },
     children: [],
-    name: "userName",
+    uuid: "userName",
   },
   treePath: "",
+  uuid: "userName",
 };
 
 const addNodeBetweenNodes: Mock = {
-  name: "username",
-  newChild: { attributes: { depth: 1, label: "Email", type: "email" }, children: [], name: "email" },
+  newChild: {
+    attributes: {
+      depth: 1,
+      label: "Email",
+      name: "email",
+      type: "email",
+    },
+    children: [],
+    uuid: "email",
+  },
   output: {
     attributes: {
       depth: 0,
       isLeaf: false,
       isRoot: true,
       label: "Username",
+      name: "username",
       type: "text",
     },
     children: [
@@ -584,6 +631,7 @@ const addNodeBetweenNodes: Mock = {
           depth: 1,
           isLeaf: false,
           label: "Email",
+          name: "email",
           type: "email",
         },
         children: [
@@ -592,23 +640,44 @@ const addNodeBetweenNodes: Mock = {
               depth: 1,
               isLeaf: true,
               label: "Password",
+              name: "password",
               type: "text",
             },
             children: [],
-            name: "password",
+            uuid: "password",
           },
         ],
-        name: "email",
+        uuid: "email",
       },
     ],
-    name: "username",
+    uuid: "username",
   },
   tree: {
-    attributes: { depth: 0, isLeaf: false, isRoot: true, label: "Username", type: "text" },
-    children: [{ attributes: { depth: 1, isLeaf: true, label: "Password", type: "text" }, children: [], name: "password" }],
-    name: "username",
+    attributes: {
+      depth: 0,
+      isLeaf: false,
+      isRoot: true,
+      label: "Username",
+      name: "username",
+      type: "text",
+    },
+    children: [
+      {
+        attributes: {
+          depth: 1,
+          isLeaf: true,
+          label: "Password",
+          name: "password",
+          type: "text",
+        },
+        children: [],
+        uuid: "password",
+      },
+    ],
+    uuid: "username",
   },
   treePath: null,
+  uuid: "username",
 };
 
 export {

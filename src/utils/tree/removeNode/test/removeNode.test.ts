@@ -8,44 +8,44 @@ import {
 
 describe("removeNode", () => {
   test("remove node", () => {
-    const { tree, output, treePath, name } = removeNodeInTreeMock;
+    const { tree, output, treePath, uuid } = removeNodeInTreeMock;
     const result = removeNode({
-      name,
       path: treePath,
       tree,
+      uuid,
     });
 
     expect(result).toEqual(output);
   });
 
   test("remove tree", () => {
-    const { tree, output, treePath, name } = removeTreeInTreeMock;
+    const { tree, output, treePath, uuid } = removeTreeInTreeMock;
     const result = removeNode({
-      name,
       path: treePath,
       tree,
+      uuid,
     });
 
     expect(result).toEqual(output);
   });
 
   test("remove decision", () => {
-    const { tree, output, treePath, name } = removeDecisionInTreeMock;
+    const { tree, output, treePath, uuid } = removeDecisionInTreeMock;
     const result = removeNode({
-      name,
       path: treePath,
       tree,
+      uuid,
     });
 
     expect(result).toEqual(output);
   });
 
   test("remove decision Field", () => {
-    const { tree, output, treePath, name } = removeDecisionFieldInTreeMock;
+    const { tree, output, treePath, uuid } = removeDecisionFieldInTreeMock;
     const result = removeNode({
-      name,
       path: treePath,
       tree,
+      uuid,
     });
 
     expect(result).toEqual(output);

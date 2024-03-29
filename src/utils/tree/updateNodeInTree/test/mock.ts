@@ -1,19 +1,19 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
-type Mock = { tree: TreeNode; output: TreeNode; treePath: string; newChild: TreeNode; name: string };
+type Mock = { tree: TreeNode; output: TreeNode; treePath: string; newChild: TreeNode; uuid: string };
 
 const updatedFirstNodeInTreeMock: Mock = {
-  name: "userName",
   newChild: {
     attributes: {
       depth: 0,
       isLeaf: true,
       isRoot: true,
       label: "Email",
+      name: "email",
       type: "email",
     },
     children: [],
-    name: "email",
+    uuid: "email",
   },
   output: {
     attributes: {
@@ -21,10 +21,11 @@ const updatedFirstNodeInTreeMock: Mock = {
       isLeaf: true,
       isRoot: true,
       label: "Email",
+      name: "email",
       type: "email",
     },
     children: [],
-    name: "email",
+    uuid: "email",
   },
   tree: {
     attributes: {
@@ -32,22 +33,24 @@ const updatedFirstNodeInTreeMock: Mock = {
       isLeaf: true,
       isRoot: true,
       label: "Username",
+      name: "userName",
       type: "text",
     },
     children: [],
-    name: "userName",
+    uuid: "userName",
   },
   treePath: "",
+  uuid: "userName",
 };
 
 const updatedNodeInOtherTreeMock: Mock = {
-  name: "type",
   newChild: {
     attributes: {
       depth: 1,
       isLeaf: true,
       isRoot: false,
       label: "Type",
+      name: "type",
       type: "radio",
       values: [
         {
@@ -63,7 +66,7 @@ const updatedNodeInOtherTreeMock: Mock = {
       ],
     },
     children: [],
-    name: "type",
+    uuid: "type",
   },
   output: {
     attributes: {
@@ -71,6 +74,7 @@ const updatedNodeInOtherTreeMock: Mock = {
       isLeaf: false,
       isRoot: true,
       label: "Username",
+      name: "userName",
       type: "text",
     },
     children: [
@@ -79,11 +83,13 @@ const updatedNodeInOtherTreeMock: Mock = {
           depth: 1,
           isLeaf: true,
           label: "Tree Catalog",
+          name: "treeCatalog",
           tree: {
             attributes: {
               depth: 0,
               isRoot: true,
               label: "Nom de la machine",
+              name: "machineName",
               type: "text",
             },
             children: [
@@ -93,6 +99,7 @@ const updatedNodeInOtherTreeMock: Mock = {
                   isLeaf: true,
                   isRoot: false,
                   label: "Type",
+                  name: "type",
                   type: "radio",
                   values: [
                     {
@@ -108,20 +115,20 @@ const updatedNodeInOtherTreeMock: Mock = {
                   ],
                 },
                 children: [],
-                name: "type",
+                uuid: "type",
               },
             ],
-            name: "machineName",
             treeId: "2",
+            uuid: "machineName",
           },
           treePath: "/treeCatalog",
           type: "tree",
         },
         children: [],
-        name: "treeCatalog",
+        uuid: "treeCatalog",
       },
     ],
-    name: "userName",
+    uuid: "userName",
   },
   tree: {
     attributes: {
@@ -129,6 +136,7 @@ const updatedNodeInOtherTreeMock: Mock = {
       isLeaf: false,
       isRoot: true,
       label: "Username",
+      name: "userName",
       type: "text",
     },
     children: [
@@ -137,11 +145,13 @@ const updatedNodeInOtherTreeMock: Mock = {
           depth: 1,
           isLeaf: true,
           label: "Tree Catalog",
+          name: "treeCatalog",
           tree: {
             attributes: {
               depth: 0,
               isRoot: true,
               label: "Nom de la machine",
+              name: "machineName",
               type: "text",
             },
             children: [
@@ -150,6 +160,7 @@ const updatedNodeInOtherTreeMock: Mock = {
                   depth: 1,
                   isLeaf: true,
                   label: "Type",
+                  name: "type",
                   type: "select",
                   values: [
                     {
@@ -165,36 +176,37 @@ const updatedNodeInOtherTreeMock: Mock = {
                   ],
                 },
                 children: [],
-                name: "type",
+                uuid: "type",
               },
             ],
-            name: "machineName",
             treeId: "2",
+            uuid: "machineName",
           },
           treePath: "/treeCatalog",
           type: "tree",
         },
         children: [],
-        name: "treeCatalog",
+        uuid: "treeCatalog",
       },
     ],
-    name: "userName",
+    uuid: "userName",
   },
   treePath: "/treeCatalog",
+  uuid: "type",
 };
 
 const updatedTreeMock: Mock = {
-  name: "treeCatalog",
   newChild: {
     attributes: {
       depth: 0,
       isLeaf: true,
       isRoot: true,
       label: "Name",
+      name: "name",
       type: "text",
     },
     children: [],
-    name: "name",
+    uuid: "name",
   },
   output: {
     attributes: {
@@ -202,10 +214,11 @@ const updatedTreeMock: Mock = {
       isLeaf: true,
       isRoot: true,
       label: "Name",
+      name: "name",
       type: "text",
     },
     children: [],
-    name: "name",
+    uuid: "name",
   },
   tree: {
     attributes: {
@@ -213,11 +226,13 @@ const updatedTreeMock: Mock = {
       isLeaf: true,
       isRoot: true,
       label: "TreeCatalog",
+      name: "treeCatalog",
       tree: {
         attributes: {
           depth: 0,
           isRoot: true,
           label: "Nom de la machine",
+          name: "machineName",
           type: "text",
         },
         children: [
@@ -226,6 +241,7 @@ const updatedTreeMock: Mock = {
               depth: 1,
               isLeaf: true,
               label: "Type",
+              name: "type",
               type: "select",
               values: [
                 {
@@ -241,33 +257,34 @@ const updatedTreeMock: Mock = {
               ],
             },
             children: [],
-            name: "type",
+            uuid: "type",
           },
         ],
-        name: "machineName",
         treeId: "2",
+        uuid: "machineName",
       },
       treePath: "/treeCatalog",
       type: "tree",
     },
     children: [],
-    name: "treeCatalog",
+    uuid: "treeCatalog",
   },
   treePath: "",
+  uuid: "treeCatalog",
 };
 
 const updatedNodeInComplexeTreeMock: Mock = {
-  name: "password",
   newChild: {
     attributes: {
       depth: 1,
       isLeaf: true,
       isRoot: false,
       label: "Telephone",
+      name: "phoneNumber",
       type: "tel",
     },
     children: [],
-    name: "phoneNumber",
+    uuid: "phoneNumber",
   },
   output: {
     attributes: {
@@ -275,6 +292,7 @@ const updatedNodeInComplexeTreeMock: Mock = {
       isLeaf: false,
       isRoot: true,
       label: "Name",
+      name: "username",
       type: "text",
     },
     children: [
@@ -284,6 +302,7 @@ const updatedNodeInComplexeTreeMock: Mock = {
           isLeaf: false,
           isRoot: false,
           label: "Adresse",
+          name: "address",
           type: "email",
         },
         children: [
@@ -292,11 +311,13 @@ const updatedNodeInComplexeTreeMock: Mock = {
               depth: 2,
               isLeaf: true,
               label: "Tree Catalog",
+              name: "treeCatalog",
               tree: {
                 attributes: {
                   depth: 0,
                   isRoot: true,
                   label: "Nom de la machine",
+                  name: "machineName",
                   type: "text",
                 },
                 children: [
@@ -305,6 +326,7 @@ const updatedNodeInComplexeTreeMock: Mock = {
                       depth: 1,
                       isLeaf: false,
                       label: "Type",
+                      name: "type",
                       type: "select",
                       values: [
                         {
@@ -325,11 +347,13 @@ const updatedNodeInComplexeTreeMock: Mock = {
                           depth: 2,
                           isLeaf: true,
                           label: "Contact conducteur",
+                          name: "conductor",
                           tree: {
                             attributes: {
                               depth: 0,
                               isRoot: true,
                               label: "Username",
+                              name: "username",
                               type: "text",
                             },
                             children: [
@@ -339,39 +363,40 @@ const updatedNodeInComplexeTreeMock: Mock = {
                                   isLeaf: true,
                                   isRoot: false,
                                   label: "Telephone",
+                                  name: "phoneNumber",
                                   type: "tel",
                                 },
                                 children: [],
-                                name: "phoneNumber",
+                                uuid: "phoneNumber",
                               },
                             ],
-                            name: "username",
                             treeId: "1",
+                            uuid: "username",
                           },
                           treePath: "/treeCatalog/conductor",
                           type: "tree",
                         },
                         children: [],
-                        name: "conductor",
+                        uuid: "conductor",
                       },
                     ],
-                    name: "type",
+                    uuid: "type",
                   },
                 ],
-                name: "machineName",
                 treeId: "2",
+                uuid: "machineName",
               },
               treePath: "/treeCatalog",
               type: "tree",
             },
             children: [],
-            name: "treeCatalog",
+            uuid: "treeCatalog",
           },
         ],
-        name: "address",
+        uuid: "address",
       },
     ],
-    name: "name",
+    uuid: "name",
   },
   tree: {
     attributes: {
@@ -379,6 +404,7 @@ const updatedNodeInComplexeTreeMock: Mock = {
       isLeaf: false,
       isRoot: true,
       label: "Name",
+      name: "username",
       type: "text",
     },
     children: [
@@ -388,6 +414,7 @@ const updatedNodeInComplexeTreeMock: Mock = {
           isLeaf: false,
           isRoot: false,
           label: "Adresse",
+          name: "address",
           type: "email",
         },
         children: [
@@ -396,11 +423,13 @@ const updatedNodeInComplexeTreeMock: Mock = {
               depth: 2,
               isLeaf: true,
               label: "Tree Catalog",
+              name: "treeCatalog",
               tree: {
                 attributes: {
                   depth: 0,
                   isRoot: true,
                   label: "Nom de la machine",
+                  name: "machineName",
                   type: "text",
                 },
                 children: [
@@ -409,6 +438,7 @@ const updatedNodeInComplexeTreeMock: Mock = {
                       depth: 1,
                       isLeaf: false,
                       label: "Type",
+                      name: "type",
                       type: "select",
                       values: [
                         {
@@ -429,11 +459,13 @@ const updatedNodeInComplexeTreeMock: Mock = {
                           depth: 2,
                           isLeaf: true,
                           label: "Contact conducteur",
+                          name: "conductor",
                           tree: {
                             attributes: {
                               depth: 0,
                               isRoot: true,
                               label: "Username",
+                              name: "username",
                               type: "text",
                             },
                             children: [
@@ -442,45 +474,46 @@ const updatedNodeInComplexeTreeMock: Mock = {
                                   depth: 1,
                                   isLeaf: true,
                                   label: "Password",
+                                  name: "username",
                                   type: "text",
                                 },
                                 children: [],
-                                name: "password",
+                                uuid: "password",
                               },
                             ],
-                            name: "username",
                             treeId: "1",
+                            uuid: "username",
                           },
                           treePath: "/treeCatalog/conductor",
                           type: "tree",
                         },
                         children: [],
-                        name: "conductor",
+                        uuid: "conductor",
                       },
                     ],
-                    name: "type",
+                    uuid: "type",
                   },
                 ],
-                name: "machineName",
                 treeId: "2",
+                uuid: "machineName",
               },
               treePath: "/treeCatalog",
               type: "tree",
             },
             children: [],
-            name: "treeCatalog",
+            uuid: "treeCatalog",
           },
         ],
-        name: "address",
+        uuid: "address",
       },
     ],
-    name: "name",
+    uuid: "name",
   },
   treePath: "/treeCatalog/conductor",
+  uuid: "password",
 };
 
 const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
-  name: "select",
   newChild: {
     attributes: {
       depth: 1,
@@ -488,6 +521,7 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
       isLeaf: false,
       isRoot: false,
       label: "Select",
+      name: "select",
       type: "select",
     },
     children: [
@@ -503,13 +537,14 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
               depth: 3,
               isLeaf: true,
               label: "FieldA",
+              name: "fieldA",
               type: "text",
             },
             children: [],
-            name: "fieldA",
+            uuid: "fieldA",
           },
         ],
-        name: "select:A",
+        uuid: "select:A",
       },
       {
         attributes: {
@@ -523,6 +558,7 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
               depth: 3,
               isLeaf: false,
               label: "FieldB",
+              name: "fieldB",
               type: "text",
             },
             children: [
@@ -531,16 +567,17 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
                   depth: 4,
                   isLeaf: true,
                   label: "FieldB2",
+                  name: "fieldB2",
                   type: "text",
                 },
                 children: [],
-                name: "fieldB2",
+                uuid: "fieldB2",
               },
             ],
-            name: "fieldB",
+            uuid: "fieldB",
           },
         ],
-        name: "select:B",
+        uuid: "select:B",
       },
       {
         attributes: {
@@ -554,13 +591,14 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
               depth: 3,
               isLeaf: true,
               label: "FieldC",
+              name: "fieldC",
               type: "text",
             },
             children: [],
-            name: "fieldC",
+            uuid: "fieldC",
           },
         ],
-        name: "select:C",
+        uuid: "select:C",
       },
       {
         attributes: {
@@ -570,10 +608,10 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
           value: "D",
         },
         children: [],
-        name: "select:D",
+        uuid: "select:D",
       },
     ],
-    name: "select",
+    uuid: "select",
   },
   output: {
     attributes: {
@@ -581,6 +619,7 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
       isLeaf: false,
       isRoot: true,
       label: "Name",
+      name: "name",
       type: "text",
     },
     children: [
@@ -591,6 +630,7 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
           isLeaf: false,
           isRoot: false,
           label: "Select",
+          name: "select",
           type: "select",
         },
         children: [
@@ -606,13 +646,14 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
                   depth: 3,
                   isLeaf: true,
                   label: "FieldA",
+                  name: "fieldA",
                   type: "text",
                 },
                 children: [],
-                name: "fieldA",
+                uuid: "fieldA",
               },
             ],
-            name: "select:A",
+            uuid: "select:A",
           },
           {
             attributes: {
@@ -626,6 +667,7 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
                   depth: 3,
                   isLeaf: false,
                   label: "FieldB",
+                  name: "fieldB",
                   type: "text",
                 },
                 children: [
@@ -634,16 +676,17 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
                       depth: 4,
                       isLeaf: true,
                       label: "FieldB2",
+                      name: "fieldB2",
                       type: "text",
                     },
                     children: [],
-                    name: "fieldB2",
+                    uuid: "fieldB2",
                   },
                 ],
-                name: "fieldB",
+                uuid: "fieldB",
               },
             ],
-            name: "select:B",
+            uuid: "select:B",
           },
           {
             attributes: {
@@ -657,13 +700,14 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
                   depth: 3,
                   isLeaf: true,
                   label: "FieldC",
+                  name: "fieldC",
                   type: "text",
                 },
                 children: [],
-                name: "fieldC",
+                uuid: "fieldC",
               },
             ],
-            name: "select:C",
+            uuid: "select:C",
           },
           {
             attributes: {
@@ -673,13 +717,13 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
               value: "D",
             },
             children: [],
-            name: "select:D",
+            uuid: "select:D",
           },
         ],
-        name: "select",
+        uuid: "select",
       },
     ],
-    name: "name",
+    uuid: "name",
   },
   tree: {
     attributes: {
@@ -687,6 +731,7 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
       isLeaf: false,
       isRoot: true,
       label: "Name",
+      name: "name",
       type: "text",
     },
     children: [
@@ -697,6 +742,7 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
           isLeaf: false,
           isRoot: false,
           label: "Select",
+          name: "select",
           type: "select",
         },
         children: [
@@ -713,13 +759,14 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
                   depth: 3,
                   isLeaf: true,
                   label: "FieldA",
+                  name: "fieldA",
                   type: "text",
                 },
                 children: [],
-                name: "fieldA",
+                uuid: "fieldA",
               },
             ],
-            name: "select:A",
+            uuid: "select:A",
           },
           {
             attributes: {
@@ -734,6 +781,7 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
                   depth: 3,
                   isLeaf: false,
                   label: "FieldB",
+                  name: "fieldB",
                   type: "text",
                 },
                 children: [
@@ -742,16 +790,17 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
                       depth: 4,
                       isLeaf: true,
                       label: "FieldB2",
+                      name: "fieldB2",
                       type: "text",
                     },
                     children: [],
-                    name: "fieldB2",
+                    uuid: "fieldB2",
                   },
                 ],
-                name: "fieldB",
+                uuid: "fieldB",
               },
             ],
-            name: "select:B",
+            uuid: "select:B",
           },
           {
             attributes: {
@@ -766,21 +815,23 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
                   depth: 3,
                   isLeaf: true,
                   label: "FieldC",
+                  name: "fieldC",
                   type: "text",
                 },
                 children: [],
-                name: "fieldC",
+                uuid: "fieldC",
               },
             ],
-            name: "select:C",
+            uuid: "select:C",
           },
         ],
-        name: "select",
+        uuid: "select",
       },
     ],
-    name: "name",
+    uuid: "name",
   },
   treePath: "",
+  uuid: "select",
 };
 
 export {

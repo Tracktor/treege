@@ -64,12 +64,13 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
   const {
     values,
     required,
-    name,
+    uuid,
     tag,
     uniqueNameErrorMessage,
     type,
     helperText,
     label,
+    name,
     hiddenValue,
     isBooleanField,
     isDecision,
@@ -115,6 +116,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeMultiple,
     handleChangeParentRef,
     handleChangeInitialQuery,
+    handleChangeUUID,
     parentRef,
     route,
     messages: { on, off },
@@ -126,7 +128,15 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
   return (
     <form onSubmit={handleSubmit}>
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
-        <TextField sx={{ flex: 1 }} label={t("label", { ns: "form" })} onChange={handleChangeLabel} value={label} required />
+        <TextField
+          label={t("uuid")}
+          sx={{ flex: 1 }}
+          onChange={handleChangeUUID}
+          value={uuid}
+          error={!!uniqueNameErrorMessage}
+          helperText={uniqueNameErrorMessage}
+          required
+        />
         <TextField
           label={t("name")}
           sx={{ flex: 1 }}
@@ -136,6 +146,11 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           helperText={uniqueNameErrorMessage}
           required
         />
+      </Stack>
+
+      <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
+        <TextField label={t("label", { ns: "form" })} onChange={handleChangeLabel} value={label} fullWidth />
+        <FieldSelectAutocompleteCreatable value={tag} onChange={handleChangeTag} />
       </Stack>
 
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
@@ -181,7 +196,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         <Stack spacing={1} paddingY={1}>
           <h4>{t("form:urlConstruction")}</h4>
           <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
-            <DynamicSelectFieldFromTree value={parentRef} onChange={handleChangeParentRef} currentName={name} />
+            <DynamicSelectFieldFromTree value={parentRef} onChange={handleChangeParentRef} currentUUID={uuid} />
             <ArrowForwardIcon />
             <TextField
               sx={{ flex: 3 }}
@@ -306,10 +321,6 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         </Stack>
       )}
 
-      <Stack spacing={1} direction={{ sm: "row", xs: "column" }}>
-        <FieldSelectAutocompleteCreatable value={tag} onChange={handleChangeTag} />
-      </Stack>
-
       {isBooleanField && (
         <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
           <TextField sx={{ flex: 1 }} label={t("onMessage", { ns: "form" })} onChange={handleChangeMessage("on")} value={on} />
@@ -338,7 +349,6 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             control={<Checkbox checked={repeatable} onChange={handleChangeRepeatable} />}
             label={t("repeatable", { ns: "form" })}
           />
-
           {(isLeaf || isEditModal) && (
             <FormControlLabel
               disabled={!isDecisionField}

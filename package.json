@@ -2,7 +2,7 @@
   "name": "treege",
   "description": "Form decision tree generator",
   "license": "ISC",
-  "version": "0.20.1",
+  "version": "0.21.0",
   "type": "module",
   "types": "./dist/main.d.ts",
   "main": "./dist/main.umd.cjs",
@@ -29,7 +29,6 @@
     "lint:fix": "eslint . --fix",
     "preview": "vite preview",
     "test": "yarn lint && vitest",
-    "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
     "prepare": "yarn run build && husky install"
   },
@@ -63,7 +62,7 @@
     "typescript": "^5.2.2",
     "vite": "^5.2.7",
     "vite-plugin-dts": "^3.8.1",
-    "vitest": "^0.34.6"
+    "vitest": "^1.4.0"
   },
   "peerDependencies": {
     "react": ">=18.0.0",

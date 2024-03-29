@@ -9,10 +9,11 @@ export const treeWithOneField: Mock = {
       isLeaf: true,
       isRoot: true,
       label: "Name",
+      name: "name",
       type: "text",
     },
     children: [],
-    name: "name",
+    uuid: "name",
   },
   output: ["name"].sort(),
 };
@@ -23,6 +24,7 @@ export const treeWithMultiFields: Mock = {
       depth: 0,
       isRoot: true,
       label: "Name",
+      name: "name",
       type: "text",
     },
     children: [
@@ -30,6 +32,7 @@ export const treeWithMultiFields: Mock = {
         attributes: {
           depth: 1,
           label: "Age",
+          name: "age",
           type: "number",
         },
         children: [
@@ -38,6 +41,7 @@ export const treeWithMultiFields: Mock = {
               depth: 2,
               isLeaf: true,
               label: "Sexe",
+              name: "age",
               type: "select",
               values: [
                 {
@@ -53,13 +57,13 @@ export const treeWithMultiFields: Mock = {
               ],
             },
             children: [],
-            name: "gender",
+            uuid: "gender",
           },
         ],
-        name: "age",
+        uuid: "age",
       },
     ],
-    name: "name",
+    uuid: "name",
   },
   output: ["name", "age", "gender"].sort(),
 };
@@ -70,6 +74,7 @@ export const treeWithDecisionFields: Mock = {
       depth: 0,
       isRoot: true,
       label: "Name",
+      name: "name",
       type: "text",
     },
     children: [
@@ -77,6 +82,7 @@ export const treeWithDecisionFields: Mock = {
         attributes: {
           depth: 1,
           label: "Age",
+          name: "age",
           type: "number",
         },
         children: [
@@ -86,6 +92,7 @@ export const treeWithDecisionFields: Mock = {
               isDecision: true,
               isLeaf: false,
               label: "Matériels",
+              name: "age",
               type: "select",
             },
             children: [
@@ -101,6 +108,7 @@ export const treeWithDecisionFields: Mock = {
                       depth: 4,
                       isLeaf: true,
                       label: "Type",
+                      name: "mini_excavator_type",
                       type: "select",
                       values: [
                         {
@@ -116,10 +124,10 @@ export const treeWithDecisionFields: Mock = {
                       ],
                     },
                     children: [],
-                    name: "mini_excavator_type",
+                    uuid: "mini_excavator_type",
                   },
                 ],
-                name: "materials:mini_excavator",
+                uuid: "materials:mini_excavator",
               },
               {
                 attributes: {
@@ -133,6 +141,7 @@ export const treeWithDecisionFields: Mock = {
                       depth: 4,
                       isLeaf: true,
                       label: "Type",
+                      name: "carrycot_type",
                       type: "select",
                       values: [
                         {
@@ -148,19 +157,19 @@ export const treeWithDecisionFields: Mock = {
                       ],
                     },
                     children: [],
-                    name: "carrycot_type",
+                    uuid: "carrycot_type",
                   },
                 ],
-                name: "materials:carrycot",
+                uuid: "materials:carrycot",
               },
             ],
-            name: "materials",
+            uuid: "materials",
           },
         ],
-        name: "age",
+        uuid: "age",
       },
     ],
-    name: "name",
+    uuid: "name",
   },
   output: ["name", "age", "mini_excavator_type", "carrycot_type", "materials:carrycot", "materials:mini_excavator", "materials"].sort(),
 };
@@ -171,6 +180,7 @@ export const complexeTreeWithMultiDecisionFields: Mock = {
       depth: 0,
       isRoot: true,
       label: "Nom",
+      name: "name",
       type: "text",
     },
     children: [
@@ -179,6 +189,7 @@ export const complexeTreeWithMultiDecisionFields: Mock = {
           depth: 1,
           isDecision: true,
           label: "Matériels",
+          name: "age",
           type: "select",
         },
         children: [
@@ -194,6 +205,7 @@ export const complexeTreeWithMultiDecisionFields: Mock = {
                   depth: 3,
                   isLeaf: true,
                   label: "Type",
+                  name: "mini_excavator_type",
                   type: "select",
                   values: [
                     {
@@ -209,10 +221,10 @@ export const complexeTreeWithMultiDecisionFields: Mock = {
                   ],
                 },
                 children: [],
-                name: "mini_excavator_type",
+                uuid: "mini_excavator_type",
               },
             ],
-            name: "materials:mini_excavator",
+            uuid: "materials:mini_excavator",
           },
           {
             attributes: {
@@ -226,6 +238,7 @@ export const complexeTreeWithMultiDecisionFields: Mock = {
                   depth: 3,
                   isDecision: true,
                   label: "Type",
+                  name: "carrycot_type",
                   type: "select",
                 },
                 children: [
@@ -237,7 +250,7 @@ export const complexeTreeWithMultiDecisionFields: Mock = {
                       value: "carrycot_8",
                     },
                     children: [],
-                    name: "carrycot_type:carrycot_8",
+                    uuid: "carrycot_type:carrycot_8",
                   },
                   {
                     attributes: {
@@ -251,13 +264,14 @@ export const complexeTreeWithMultiDecisionFields: Mock = {
                           depth: 5,
                           isLeaf: true,
                           label: "Permission",
+                          name: "carrycot_10_permission",
                           type: "text",
                         },
                         children: [],
-                        name: "carrycot_10_permission",
+                        uuid: "carrycot_10_permission",
                       },
                     ],
-                    name: "carrycot_type:carrycot_10",
+                    uuid: "carrycot_type:carrycot_10",
                   },
                   {
                     attributes: {
@@ -271,25 +285,26 @@ export const complexeTreeWithMultiDecisionFields: Mock = {
                           depth: 5,
                           isLeaf: true,
                           label: "Permission",
+                          name: "carrycot_20_permission",
                           type: "text",
                         },
                         children: [],
-                        name: "carrycot_20_permission",
+                        uuid: "carrycot_20_permission",
                       },
                     ],
-                    name: "carrycot_type:carrycot_20",
+                    uuid: "carrycot_type:carrycot_20",
                   },
                 ],
-                name: "carrycot_type",
+                uuid: "carrycot_type",
               },
             ],
-            name: "materials:carrycot",
+            uuid: "materials:carrycot",
           },
         ],
-        name: "materials",
+        uuid: "materials",
       },
     ],
-    name: "name",
+    uuid: "name",
   },
   output: [
     "name",
@@ -313,12 +328,14 @@ export const treeWithTree: Mock = {
       isLeaf: true,
       isRoot: true,
       label: "Name",
+      name: "name",
       tree: {
         attributes: {
           depth: 0,
           isLeaf: true,
           isRoot: true,
           label: "Name",
+          name: "nameInTree",
           type: "text",
         },
         children: [
@@ -328,18 +345,19 @@ export const treeWithTree: Mock = {
               isLeaf: true,
               isRoot: true,
               label: "Name",
+              name: "nameInTree",
               type: "text",
             },
             children: [],
-            name: "nameInTree",
+            uuid: "nameInTree",
           },
         ],
-        name: "nameInTree",
+        uuid: "nameInTree",
       },
       type: "text",
     },
     children: [],
-    name: "name",
+    uuid: "name",
   },
   output: ["name"].sort(),
 };

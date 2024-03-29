@@ -1,19 +1,19 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
-type Mock = { tree: TreeNode; output: TreeNode; treePath: string; name: string };
+type Mock = { tree: TreeNode; output: TreeNode; treePath: string; uuid: string };
 
 const removeNodeInTreeMock: Mock = {
-  name: "email",
   output: {
     attributes: {
       depth: 0,
       isLeaf: true,
       isRoot: true,
       label: "Username",
+      name: "username",
       type: "text",
     },
     children: [],
-    name: "username",
+    uuid: "username",
   },
   tree: {
     attributes: {
@@ -21,6 +21,7 @@ const removeNodeInTreeMock: Mock = {
       isLeaf: false,
       isRoot: true,
       label: "Username",
+      name: "username",
       type: "text",
     },
     children: [
@@ -29,29 +30,31 @@ const removeNodeInTreeMock: Mock = {
           depth: 1,
           isLeaf: true,
           label: "Email",
+          name: "email",
           type: "text",
         },
         children: [],
-        name: "email",
+        uuid: "email",
       },
     ],
-    name: "username",
+    uuid: "username",
   },
   treePath: "",
+  uuid: "email",
 };
 
 const removeTreeInTreeMock: Mock = {
-  name: "userTree",
   output: {
     attributes: {
       depth: 0,
       isLeaf: true,
       isRoot: true,
       label: "Username",
+      name: "username",
       type: "text",
     },
     children: [],
-    name: "username",
+    uuid: "username",
   },
   tree: {
     attributes: {
@@ -59,6 +62,7 @@ const removeTreeInTreeMock: Mock = {
       isLeaf: false,
       isRoot: true,
       label: "Username",
+      name: "username",
       type: "text",
     },
     children: [
@@ -67,11 +71,13 @@ const removeTreeInTreeMock: Mock = {
           depth: 1,
           isLeaf: true,
           label: "User Tree",
+          name: "userTree",
           tree: {
             attributes: {
               depth: 0,
               isRoot: true,
               label: "Username",
+              name: "userTree",
               type: "text",
             },
             children: [
@@ -80,29 +86,30 @@ const removeTreeInTreeMock: Mock = {
                   depth: 1,
                   isLeaf: true,
                   label: "Password",
+                  name: "username",
                   type: "text",
                 },
                 children: [],
-                name: "password",
+                uuid: "password",
               },
             ],
-            name: "username",
             treeId: "1",
+            uuid: "username",
           },
           treePath: "/userTree",
           type: "tree",
         },
         children: [],
-        name: "userTree",
+        uuid: "userTree",
       },
     ],
-    name: "username",
+    uuid: "username",
   },
   treePath: "",
+  uuid: "userTree",
 };
 
 const removeDecisionInTreeMock: Mock = {
-  name: "decisionField:B",
   output: {
     attributes: {
       depth: 0,
@@ -110,6 +117,7 @@ const removeDecisionInTreeMock: Mock = {
       isLeaf: true,
       isRoot: true,
       label: "Decision field",
+      name: "decisionField",
       type: "select",
     },
     children: [
@@ -121,7 +129,7 @@ const removeDecisionInTreeMock: Mock = {
           value: "A",
         },
         children: [],
-        name: "decisionField:A",
+        uuid: "decisionField:A",
       },
       {
         attributes: {
@@ -131,10 +139,10 @@ const removeDecisionInTreeMock: Mock = {
           value: "C",
         },
         children: [],
-        name: "decisionField:C",
+        uuid: "decisionField:C",
       },
     ],
-    name: "decisionField",
+    uuid: "decisionField",
   },
   tree: {
     attributes: {
@@ -143,6 +151,7 @@ const removeDecisionInTreeMock: Mock = {
       isLeaf: true,
       isRoot: true,
       label: "Decision field",
+      name: "decisionField",
       type: "select",
     },
     children: [
@@ -154,7 +163,7 @@ const removeDecisionInTreeMock: Mock = {
           value: "A",
         },
         children: [],
-        name: "decisionField:A",
+        uuid: "decisionField:A",
       },
       {
         attributes: {
@@ -169,13 +178,14 @@ const removeDecisionInTreeMock: Mock = {
               depth: 2,
               isLeaf: true,
               label: "FieldB",
+              name: "fieldA",
               type: "text",
             },
             children: [],
-            name: "fieldB",
+            uuid: "fieldB",
           },
         ],
-        name: "decisionField:B",
+        uuid: "decisionField:B",
       },
       {
         attributes: {
@@ -185,26 +195,27 @@ const removeDecisionInTreeMock: Mock = {
           value: "C",
         },
         children: [],
-        name: "decisionField:C",
+        uuid: "decisionField:C",
       },
     ],
-    name: "decisionField",
+    uuid: "decisionField",
   },
   treePath: "",
+  uuid: "decisionField:B",
 };
 
 const removeDecisionFieldInTreeMock: Mock = {
-  name: "DecisionField",
   output: {
     attributes: {
       depth: 0,
       isLeaf: true,
       isRoot: true,
       label: "Username",
+      name: "username",
       type: "text",
     },
     children: [],
-    name: "username",
+    uuid: "username",
   },
   tree: {
     attributes: {
@@ -212,6 +223,7 @@ const removeDecisionFieldInTreeMock: Mock = {
       isLeaf: false,
       isRoot: true,
       label: "Username",
+      name: "username",
       type: "text",
     },
     children: [
@@ -222,6 +234,7 @@ const removeDecisionFieldInTreeMock: Mock = {
           isLeaf: false,
           isRoot: false,
           label: "DecisionField",
+          name: "DecisionField",
           type: "select",
         },
         children: [
@@ -233,7 +246,7 @@ const removeDecisionFieldInTreeMock: Mock = {
               value: "A",
             },
             children: [],
-            name: "DecisionField:A",
+            uuid: "DecisionField:A",
           },
           {
             attributes: {
@@ -243,7 +256,7 @@ const removeDecisionFieldInTreeMock: Mock = {
               value: "B",
             },
             children: [],
-            name: "DecisionField:B",
+            uuid: "DecisionField:B",
           },
           {
             attributes: {
@@ -253,15 +266,16 @@ const removeDecisionFieldInTreeMock: Mock = {
               value: "C",
             },
             children: [],
-            name: "DecisionField:C",
+            uuid: "DecisionField:C",
           },
         ],
-        name: "DecisionField",
+        uuid: "DecisionField",
       },
     ],
-    name: "username",
+    uuid: "username",
   },
   treePath: "",
+  uuid: "DecisionField",
 };
 
 export { removeNodeInTreeMock, removeTreeInTreeMock, removeDecisionInTreeMock, removeDecisionFieldInTreeMock };

@@ -4,7 +4,7 @@ import getNode from "@/utils/tree/getNode/getNode";
 interface AppendChildParams {
   tree: TreeNode | null;
   path: string | null;
-  name: string;
+  uuid: string;
   child: TreeNode;
 }
 
@@ -40,10 +40,10 @@ const addChildByRef = (node: TreeNode | null, child: TreeNode) => {
  * Append child to tree
  * @param tree
  * @param path
- * @param name
+ * @param uuid
  * @param child
  */
-const appendNode = ({ tree, path, name, child }: AppendChildParams) => {
+const appendNode = ({ tree, path, uuid, child }: AppendChildParams) => {
   const { attributes, children } = child;
 
   if (!tree) {
@@ -57,9 +57,9 @@ const appendNode = ({ tree, path, name, child }: AppendChildParams) => {
   }
 
   const treeCopy = structuredClone(tree);
-  const node = getNode(treeCopy, path, name);
+  const node = getNode(treeCopy, path, uuid);
 
-  addChildByRef(node, { ...child, ...(!attributes.isDecision && { children: [...(getNode(tree, path, name)?.children || [])] }) });
+  addChildByRef(node, { ...child, ...(!attributes.isDecision && { children: [...(getNode(tree, path, uuid)?.children || [])] }) });
 
   return treeCopy;
 };

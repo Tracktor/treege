@@ -8,7 +8,7 @@ const useFormTreeCardDelete = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    const currentName = currentHierarchyPointNode?.data?.name || "";
+    const currentName = currentHierarchyPointNode?.data?.uuid || "";
     const currentPath = treePath?.at(-1)?.path || "";
 
     dispatchTree(deleteTreeCard(currentPath, currentName));

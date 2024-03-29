@@ -7,6 +7,7 @@ const treeWithTree: TreeNode = {
     depth: 0,
     isRoot: true,
     label: "Username",
+    name: "username",
     type: "text",
   },
   children: [
@@ -14,6 +15,7 @@ const treeWithTree: TreeNode = {
       attributes: {
         depth: 1,
         label: "Email",
+        name: "email",
         type: "text",
       },
       children: [
@@ -23,11 +25,13 @@ const treeWithTree: TreeNode = {
             isDecision: true,
             isLeaf: true,
             label: "TreeCatalog",
+            name: "treeCatalog",
             tree: {
               attributes: {
                 depth: 0,
                 isRoot: true,
                 label: "Nom de la machine",
+                name: "machineName",
                 type: "text",
               },
               children: [
@@ -36,6 +40,7 @@ const treeWithTree: TreeNode = {
                     depth: 1,
                     isLeaf: true,
                     label: "Type",
+                    name: "type",
                     type: "select",
                     values: [
                       {
@@ -51,22 +56,22 @@ const treeWithTree: TreeNode = {
                     ],
                   },
                   children: [],
-                  name: "type",
+                  uuid: "type",
                 },
               ],
-              name: "machineName",
+              uuid: "machineName",
             },
             treePath: "/treeCatalog",
             type: "tree",
           },
           children: [],
-          name: "treeCatalog",
+          uuid: "treeCatalog",
         },
       ],
-      name: "email",
+      uuid: "email",
     },
   ],
-  name: "username",
+  uuid: "username",
 };
 
 const simpleTree: TreeNode = {
@@ -75,10 +80,11 @@ const simpleTree: TreeNode = {
     isLeaf: true,
     isRoot: true,
     label: "Username",
+    name: "userName",
     type: "text",
   },
   children: [],
-  name: "userName",
+  uuid: "userName",
 };
 
 const simpleTreeMock: Mock = {
@@ -94,6 +100,7 @@ const treeWithFields: Mock = {
       depth: 0,
       isRoot: true,
       label: "Username",
+      name: "username",
       type: "text",
     },
     children: [
@@ -101,23 +108,25 @@ const treeWithFields: Mock = {
         attributes: {
           depth: 1,
           label: "Email",
+          name: "email",
           type: "text",
         },
         children: [],
-        name: "email",
+        uuid: "email",
       },
     ],
-    name: "username",
+    uuid: "username",
   },
   name: "email",
   output: {
     attributes: {
       depth: 1,
       label: "Email",
+      name: "email",
       type: "text",
     },
     children: [],
-    name: "email",
+    uuid: "email",
   },
   treePath: "",
 };
@@ -130,6 +139,7 @@ const treeWithTreeMock: Mock = {
       depth: 0,
       isRoot: true,
       label: "Nom de la machine",
+      name: "machineName",
       type: "text",
     },
     children: [
@@ -138,6 +148,7 @@ const treeWithTreeMock: Mock = {
           depth: 1,
           isLeaf: true,
           label: "Type",
+          name: "type",
           type: "select",
           values: [
             {
@@ -153,10 +164,10 @@ const treeWithTreeMock: Mock = {
           ],
         },
         children: [],
-        name: "type",
+        uuid: "type",
       },
     ],
-    name: "machineName",
+    uuid: "machineName",
   },
   treePath: "/treeCatalog",
 };
@@ -168,6 +179,7 @@ const mainTreeWithTreeMock: Mock = {
     attributes: {
       depth: 1,
       label: "Email",
+      name: "email",
       type: "text",
     },
     children: [
@@ -177,11 +189,13 @@ const mainTreeWithTreeMock: Mock = {
           isDecision: true,
           isLeaf: true,
           label: "TreeCatalog",
+          name: "treeCatalog",
           tree: {
             attributes: {
               depth: 0,
               isRoot: true,
               label: "Nom de la machine",
+              name: "machineName",
               type: "text",
             },
             children: [
@@ -190,6 +204,7 @@ const mainTreeWithTreeMock: Mock = {
                   depth: 1,
                   isLeaf: true,
                   label: "Type",
+                  name: "type",
                   type: "select",
                   values: [
                     {
@@ -205,19 +220,19 @@ const mainTreeWithTreeMock: Mock = {
                   ],
                 },
                 children: [],
-                name: "type",
+                uuid: "type",
               },
             ],
-            name: "machineName",
+            uuid: "machineName",
           },
           treePath: "/treeCatalog",
           type: "tree",
         },
         children: [],
-        name: "treeCatalog",
+        uuid: "treeCatalog",
       },
     ],
-    name: "email",
+    uuid: "email",
   },
   treePath: "",
 };

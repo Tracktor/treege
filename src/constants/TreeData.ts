@@ -13,6 +13,7 @@ const TreeData: {
         depth: 0,
         isRoot: true,
         label: "Username",
+        name: "username",
         type: "text",
       },
       children: [
@@ -21,13 +22,14 @@ const TreeData: {
             depth: 1,
             isLeaf: true,
             label: "Password",
+            name: "email",
             type: "text",
           },
           children: [],
-          name: "password",
+          uuid: "password",
         },
       ],
-      name: "username",
+      uuid: "username",
     },
   },
   {
@@ -38,6 +40,7 @@ const TreeData: {
         depth: 0,
         isRoot: true,
         label: "Nom de la machine",
+        name: "catalog",
         type: "text",
       },
       children: [
@@ -46,6 +49,7 @@ const TreeData: {
             depth: 1,
             isLeaf: true,
             label: "Type",
+            name: "machineName",
             type: "select",
             values: [
               {
@@ -61,10 +65,10 @@ const TreeData: {
             ],
           },
           children: [],
-          name: "type",
+          uuid: "type",
         },
       ],
-      name: "machineName",
+      uuid: "machineName",
     },
   },
 ];

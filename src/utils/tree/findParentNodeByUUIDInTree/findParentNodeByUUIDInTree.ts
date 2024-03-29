@@ -1,24 +1,25 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
 /**
- * Get parent node by name in current tree
+ * Get parent node by uuid in current tree
  * @param node
- * @param name
+ * @param uuid
  * @param parentNode
  */
-const findParentNodeByNameInTree = (node: TreeNode | null, name: string, parentNode: TreeNode | null = null): TreeNode | null => {
+const findParentNodeByUUIDInTree = (node: TreeNode | null, uuid: string, parentNode: TreeNode | null = null): TreeNode | null => {
   if (!node) {
     return null;
   }
 
-  if (node.name === name) {
+  if (node.uuid === uuid) {
     return parentNode;
   }
 
   const children = node.children || [];
   for (let i = 0; i < children.length; i += 1) {
     const child = children[i];
-    const result = findParentNodeByNameInTree(child, name, node);
+    const result = findParentNodeByUUIDInTree(child, uuid, node);
+
     if (result !== null) {
       return result;
     }
@@ -27,4 +28,4 @@ const findParentNodeByNameInTree = (node: TreeNode | null, name: string, parentN
   return null;
 };
 
-export default findParentNodeByNameInTree;
+export default findParentNodeByUUIDInTree;

@@ -9,24 +9,24 @@ export const treeReducerActionType = {
   setTree: "setTree",
 } as const;
 
-export const appendTreeCard = (path: string | null, name: string, children: TreeNode) => ({
+export const appendTreeCard = (path: string | null, uuid: string, children: TreeNode) => ({
   children,
-  name,
   path,
   type: treeReducerActionType.appendTreeCard,
+  uuid,
 });
 
-export const replaceTreeCard = (path: string | null, name: string, children: TreeNode) => ({
+export const replaceTreeCard = (path: string | null, uuid: string, children: TreeNode) => ({
   children,
-  name,
   path,
   type: treeReducerActionType.replaceTreeCard,
+  uuid,
 });
 
-export const deleteTreeCard = (path: string | "", name: string) => ({
-  name,
+export const deleteTreeCard = (path: string | "", uuid: string) => ({
   path,
   type: treeReducerActionType.deleteTreeCard,
+  uuid,
 });
 
 export const resetTree = () => ({
@@ -41,30 +41,30 @@ export const setTree = (tree: TreeNode) => ({
 const treeReducer = (tree: TreeNode, action: any) => {
   switch (action.type) {
     case treeReducerActionType.appendTreeCard: {
-      const { name, path, children } = action;
+      const { uuid, path, children } = action;
 
       return appendNode({
         child: children,
-        name,
         path,
         tree,
+        uuid,
       });
     }
 
     case treeReducerActionType.deleteTreeCard: {
-      const { path, name } = action;
+      const { path, uuid } = action;
 
-      return removeNode({ name, path, tree });
+      return removeNode({ path, tree, uuid });
     }
 
     case treeReducerActionType.replaceTreeCard: {
-      const { name, path, children } = action;
+      const { uuid, path, children } = action;
 
       return updateNodeInTree({
         child: children,
-        name,
         path,
         tree,
+        uuid,
       });
     }
 

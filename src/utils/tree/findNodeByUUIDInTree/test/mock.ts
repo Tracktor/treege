@@ -7,6 +7,7 @@ const treeWithTree: TreeNode = {
     depth: 0,
     isRoot: true,
     label: "Username",
+    name: "username",
     type: "text",
   },
   children: [
@@ -14,6 +15,7 @@ const treeWithTree: TreeNode = {
       attributes: {
         depth: 1,
         label: "Email",
+        name: "email",
         type: "text",
       },
       children: [
@@ -23,11 +25,13 @@ const treeWithTree: TreeNode = {
             isDecision: true,
             isLeaf: true,
             label: "TreeCatalog",
+            name: "machineName",
             tree: {
               attributes: {
                 depth: 0,
                 isRoot: true,
                 label: "Nom de la machine",
+                name: "machineName",
                 type: "text",
               },
               children: [
@@ -36,6 +40,7 @@ const treeWithTree: TreeNode = {
                     depth: 1,
                     isLeaf: true,
                     label: "Type",
+                    name: "type",
                     type: "select",
                     values: [
                       {
@@ -51,22 +56,22 @@ const treeWithTree: TreeNode = {
                     ],
                   },
                   children: [],
-                  name: "type",
+                  uuid: "type",
                 },
               ],
-              name: "machineName",
+              uuid: "machineName",
             },
             treePath: "/treeCatalog",
             type: "tree",
           },
           children: [],
-          name: "treeCatalog",
+          uuid: "treeCatalog",
         },
       ],
-      name: "email",
+      uuid: "email",
     },
   ],
-  name: "username",
+  uuid: "username",
 };
 
 export const simpleTree: Mock = {
@@ -75,6 +80,7 @@ export const simpleTree: Mock = {
       depth: 0,
       isRoot: true,
       label: "userName",
+      name: "username",
       type: "text",
     },
     children: [
@@ -82,6 +88,7 @@ export const simpleTree: Mock = {
         attributes: {
           depth: 1,
           label: "Email",
+          name: "email",
           type: "email",
         },
         children: [
@@ -90,6 +97,7 @@ export const simpleTree: Mock = {
               depth: 2,
               isLeaf: true,
               label: "Gender",
+              name: "gender",
               type: "select",
               values: [
                 {
@@ -105,19 +113,20 @@ export const simpleTree: Mock = {
               ],
             },
             children: [],
-            name: "gender",
+            uuid: "gender",
           },
         ],
-        name: "email",
+        uuid: "email",
       },
     ],
-    name: "UserName",
+    uuid: "UserName",
   },
   output: {
     attributes: {
       depth: 2,
       isLeaf: true,
       label: "Gender",
+      name: "gender",
       type: "select",
       values: [
         {
@@ -133,7 +142,7 @@ export const simpleTree: Mock = {
       ],
     },
     children: [],
-    name: "gender",
+    uuid: "gender",
   },
   searchName: "gender",
 };
@@ -144,6 +153,7 @@ export const treeWithDecision: Mock = {
       depth: 0,
       isRoot: true,
       label: "Username",
+      name: "username",
       type: "text",
     },
     children: [
@@ -151,6 +161,7 @@ export const treeWithDecision: Mock = {
         attributes: {
           depth: 1,
           label: "Email",
+          name: "email",
           type: "text",
         },
         children: [
@@ -160,6 +171,7 @@ export const treeWithDecision: Mock = {
               isDecision: true,
               isLeaf: false,
               label: "Gender",
+              name: "gender",
               type: "select",
             },
             children: [
@@ -175,13 +187,14 @@ export const treeWithDecision: Mock = {
                       depth: 4,
                       isLeaf: true,
                       label: "MaleField",
+                      name: "maleField",
                       type: "text",
                     },
                     children: [],
-                    name: "maleField",
+                    uuid: "maleField",
                   },
                 ],
-                name: "gender:male",
+                uuid: "gender:male",
               },
               {
                 attributes: {
@@ -195,32 +208,34 @@ export const treeWithDecision: Mock = {
                       depth: 4,
                       isLeaf: true,
                       label: "FemaleField",
+                      name: "femaleField",
                       type: "text",
                     },
                     children: [],
-                    name: "femaleField",
+                    uuid: "femaleField",
                   },
                 ],
-                name: "gender:female",
+                uuid: "gender:female",
               },
             ],
-            name: "gender",
+            uuid: "gender",
           },
         ],
-        name: "email",
+        uuid: "email",
       },
     ],
-    name: "username",
+    uuid: "username",
   },
   output: {
     attributes: {
       depth: 4,
       isLeaf: true,
       label: "MaleField",
+      name: "maleField",
       type: "text",
     },
     children: [],
-    name: "maleField",
+    uuid: "maleField",
   },
   searchName: "maleField",
 };
@@ -245,11 +260,13 @@ export const treeWithTreeMatchTree: Mock = {
       isDecision: true,
       isLeaf: true,
       label: "TreeCatalog",
+      name: "machineName",
       tree: {
         attributes: {
           depth: 0,
           isRoot: true,
           label: "Nom de la machine",
+          name: "machineName",
           type: "text",
         },
         children: [
@@ -258,6 +275,7 @@ export const treeWithTreeMatchTree: Mock = {
               depth: 1,
               isLeaf: true,
               label: "Type",
+              name: "type",
               type: "select",
               values: [
                 {
@@ -273,16 +291,16 @@ export const treeWithTreeMatchTree: Mock = {
               ],
             },
             children: [],
-            name: "type",
+            uuid: "type",
           },
         ],
-        name: "machineName",
+        uuid: "machineName",
       },
       treePath: "/treeCatalog",
       type: "tree",
     },
     children: [],
-    name: "treeCatalog",
+    uuid: "treeCatalog",
   },
   searchName: "treeCatalog",
 };

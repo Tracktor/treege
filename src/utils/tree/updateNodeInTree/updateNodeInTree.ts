@@ -4,7 +4,7 @@ import getNode from "@/utils/tree/getNode/getNode";
 interface UpdatedNodeParams {
   tree: TreeNode;
   path: string;
-  name: string;
+  uuid: string;
   child: TreeNode;
 }
 
@@ -21,7 +21,7 @@ const updateNodeByRef = (node: TreeNode | null, newNode: TreeNode) => {
   const isNewChildDecision = newNode.attributes.isDecision;
   const isNodeDecision = node.attributes.isDecision;
   const isRoot = node.attributes.depth === 0;
-  const name = { value: newNode.name };
+  const uuid = { value: newNode.uuid };
   const isDecision = isNodeDecision || isNewChildDecision;
   const children = isDecision ? { value: [...newNode.children] } : { value: [...node.children] };
 
@@ -32,7 +32,7 @@ const updateNodeByRef = (node: TreeNode | null, newNode: TreeNode) => {
   Object.defineProperties(node, {
     attributes,
     children,
-    name,
+    uuid,
   });
 
   return null;
@@ -42,12 +42,12 @@ const updateNodeByRef = (node: TreeNode | null, newNode: TreeNode) => {
  * Update node in tree
  * @param tree
  * @param path
- * @param name
+ * @param uuid
  * @param child
  */
-const updateNodeInTree = ({ tree, path, name, child }: UpdatedNodeParams) => {
+const updateNodeInTree = ({ tree, path, uuid, child }: UpdatedNodeParams) => {
   const treeCopy = structuredClone(tree);
-  const node = getNode(treeCopy, path, name);
+  const node = getNode(treeCopy, path, uuid);
 
   updateNodeByRef(node, child);
 

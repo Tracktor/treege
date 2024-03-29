@@ -2,22 +2,22 @@ import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@t
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import useTreegeContext from "@/hooks/useTreegeContext";
-import { getNamesInTree } from "@/utils/tree";
+import { getUuidsInTree } from "@/utils/tree";
 
 interface DynamicSelectFieldFromTreeProps {
   value: string | null;
   onChange?: (event: SelectChangeEvent<string | undefined>, newValue: string | undefined) => void;
-  currentName: string;
+  currentUUID: string;
 }
 
 const filterNamesWithTwoPoints = (branchNames: string[]): string[] => branchNames.filter((name) => !name.includes(":"));
 
-const DynamicSelectFieldFromTree = ({ value, onChange, currentName }: DynamicSelectFieldFromTreeProps) => {
+const DynamicSelectFieldFromTree = ({ value, onChange, currentUUID }: DynamicSelectFieldFromTreeProps) => {
   const { t } = useTranslation(["form"]);
   const { tree } = useTreegeContext();
   const [selectedValue, setSelectedValue] = useState<string | undefined>(value || "");
-  const treeNames = getNamesInTree(tree);
-  const filteredTreeNames = filterNamesWithTwoPoints(treeNames).filter((name) => name !== currentName);
+  const treeNames = getUuidsInTree(tree);
+  const filteredTreeNames = filterNamesWithTwoPoints(treeNames).filter((name) => name !== currentUUID);
 
   const handleChange = (event: SelectChangeEvent<string | undefined>) => {
     const newValue = event.target.value;

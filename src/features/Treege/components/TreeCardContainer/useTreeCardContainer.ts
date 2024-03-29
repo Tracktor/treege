@@ -22,7 +22,7 @@ const useTreeCardContainer = () => {
 
   const handleOpenTreeModal = (hierarchyPointNode: HierarchyPointNode<TreeNode>) => {
     const currentTree = {
-      label: hierarchyPointNode?.data.attributes.label,
+      label: hierarchyPointNode?.data.attributes?.label || "",
       path: hierarchyPointNode?.data?.attributes?.treePath || "",
     };
 

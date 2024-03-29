@@ -20,6 +20,7 @@ const TRANSLATION_FR = {
   show: "Afficher",
   tag: "Tag",
   type: "Type",
+  uuid: "UUID",
   validate: "Valider",
   value: "Valeur",
   values: "Valeurs",

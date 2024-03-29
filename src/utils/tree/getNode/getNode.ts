@@ -1,5 +1,5 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
-import findNodeByNameInTree from "@/utils/tree/findNodeByNameInTree/findNodeByNameInTree";
+import findNodeByUUIDInTree from "@/utils/tree/findNodeByUUIDInTree/findNodeByUUIDInTree";
 import getTree from "@/utils/tree/getTree/getTree";
 
 /**
@@ -10,7 +10,7 @@ import getTree from "@/utils/tree/getTree/getTree";
  */
 const getNode = (node: TreeNode, path: string | null, name: string) => {
   const currentTree = getTree(node, path);
-  return findNodeByNameInTree(currentTree, name);
+  return findNodeByUUIDInTree(currentTree, name);
 };
 
 export default getNode;

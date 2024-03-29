@@ -1,5 +1,5 @@
 import type { HierarchyPointNode } from "d3-hierarchy";
-import type { CustomNodeElementProps, RawNodeDatum } from "react-d3-tree/lib/types/types/common";
+import type { CustomNodeElementProps } from "react-d3-tree/lib/types/types/common";
 import type fields from "@/constants/fields";
 
 export interface TreeValues {
@@ -29,18 +29,22 @@ export interface Route {
   params?: Params[];
 }
 
-export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> {
-  name: string;
+export interface TreeNode {
+  uuid: string;
   attributes:
     | {
         depth: number;
         tag?: string;
         helperText?: string;
-        messages?: { on?: string; off?: string };
+        messages?: {
+          on?: string;
+          off?: string;
+        };
         isDecision?: boolean;
         isLeaf?: boolean;
         isRoot?: boolean;
-        label: string;
+        label?: string;
+        name: string;
         required?: boolean;
         step?: string;
         type: (typeof fields)[number]["type"];
@@ -63,7 +67,8 @@ export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> 
         isDecision?: never;
         isLeaf?: boolean;
         isRoot?: never;
-        label: string;
+        label?: string;
+        name?: never;
         required?: never;
         step?: never;
         type?: never;
@@ -85,11 +90,15 @@ export interface TreeNode extends Omit<RawNodeDatum, "attributes" | "children"> 
 export interface TreeNodeField {
   depth: number;
   helperText?: string;
-  messages?: { on?: string; off?: string };
+  messages?: {
+    on?: string;
+    off?: string;
+  };
   isDecision?: boolean;
   isLeaf?: boolean;
   isRoot?: boolean;
-  label: string;
+  label?: string;
+  name?: string;
   required?: boolean;
   step?: string;
   type: (typeof fields)[number]["type"];
