@@ -28,11 +28,12 @@ const useTreeGrid = () => {
 
   const getTitleModalDelete = () => {
     const name = currentHierarchyPointNode?.data?.attributes?.label;
+    const uuid = currentHierarchyPointNode?.data?.uuid;
 
-    return t("deleteTitle", { name, ns: "modal" });
+    return t("deleteTitle", { name: name || uuid, ns: "modal" });
   };
 
-  const handleChangeTree = (tree: any) => {
+  const handleChangeTree = (tree: string) => {
     try {
       dispatchTree(setTree(JSON.parse(tree)));
     } catch (e) {

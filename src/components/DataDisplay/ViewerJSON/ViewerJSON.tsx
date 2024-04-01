@@ -6,7 +6,7 @@ import useViewerJSON from "@/components/DataDisplay/ViewerJSON/useViewerJSON";
 
 interface ViewerJSONProps {
   value: unknown;
-  onChange?: (value: any) => void;
+  onChange?: (value: string) => void;
 }
 
 const styles = {
