@@ -66,7 +66,6 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     required,
     uuid,
     tag,
-    uniqueNameErrorMessage,
     type,
     helperText,
     label,
@@ -116,7 +115,6 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeMultiple,
     handleChangeParentRef,
     handleChangeInitialQuery,
-    handleChangeUUID,
     parentRef,
     route,
     messages: { on, off },
@@ -127,34 +125,17 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
-        <TextField
-          label={t("uuid")}
-          sx={{ flex: 1 }}
-          onChange={handleChangeUUID}
-          value={uuid}
-          error={!!uniqueNameErrorMessage}
-          helperText={uniqueNameErrorMessage}
-          required
-        />
-        <TextField
-          label={t("name")}
-          sx={{ flex: 1 }}
-          onChange={handleChangeName}
-          value={name}
-          error={!!uniqueNameErrorMessage}
-          helperText={uniqueNameErrorMessage}
-          required
-        />
-      </Stack>
-
-      <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
-        <TextField label={t("label", { ns: "form" })} onChange={handleChangeLabel} value={label} fullWidth />
-        <FieldSelectAutocompleteCreatable value={tag} onChange={handleChangeTag} />
-      </Stack>
-
-      <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
+      <Box marginBottom={1}>
         <FieldSelect value={type} onChange={handleChangeType} />
+      </Box>
+
+      <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
+        <TextField label={t("name")} sx={{ flex: 1 }} onChange={handleChangeName} value={name} required />
+        <TextField sx={{ flex: 1 }} label={t("label", { ns: "form" })} onChange={handleChangeLabel} value={label} />
+      </Stack>
+
+      <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
+        <FieldSelectAutocompleteCreatable value={tag} onChange={handleChangeTag} />
         <ExtraField
           helperText={helperText}
           hiddenValue={hiddenValue}
@@ -412,7 +393,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         <Button
           variant="contained"
           type="submit"
-          disabled={!!uniqueNameErrorMessage || isWorkflowLoading}
+          disabled={isWorkflowLoading}
           isLoading={isWorkflowLoading}
           loadingIndicator={<CircularProgress size={14} />}
         >

@@ -13,7 +13,7 @@ const FieldSelect = ({ onChange, value }: FieldsSelectProps) => {
   const { fields } = useFieldSelect();
 
   return (
-    <FormControl sx={{ flex: 1 }} required>
+    <FormControl sx={{ flex: 1 }} required fullWidth>
       <InputLabel>{t("type")}</InputLabel>
       <Select
         value={value}

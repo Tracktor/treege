@@ -1,6 +1,6 @@
 import type { SelectChangeEvent } from "@tracktor/design-system";
 import type { HierarchyPointNode } from "d3-hierarchy";
-import { ChangeEvent, FormEvent, MouseEvent, SyntheticEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, FormEvent, MouseEvent, SyntheticEvent, useCallback, useEffect, useId, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";
 import { appendTreeCard, replaceTreeCard } from "@/features/Treege/reducer/treeReducer";
@@ -8,13 +8,10 @@ import type { Params, Route, TreeNode, TreeNodeField, TreeValues } from "@/featu
 import useSnackbar from "@/hooks/useSnackbar";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
-import { isUniqueArrayItemWithNewEntry } from "@/utils/array";
-import getTree from "@/utils/tree/getTree/getTree";
-import getTreeNames from "@/utils/tree/getUuidsInTree/getUuidsInTree";
 
 const useFormTreeCardMutation = () => {
   const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
-  const { tree, dispatchTree, currentHierarchyPointNode, modalOpen, treePath, setModalOpen } = useTreegeContext();
+  const { dispatchTree, currentHierarchyPointNode, modalOpen, treePath, setModalOpen } = useTreegeContext();
   const { open } = useSnackbar();
   const { t } = useTranslation();
   const isMultipleAttribute =
@@ -33,7 +30,7 @@ const useFormTreeCardMutation = () => {
       message?: string;
     }[]
   >(defaultValues);
-  const [uuid, setUuid] = useState("");
+  const uuid = useId();
   const [hiddenValue, setHiddenValue] = useState("");
   const [label, setLabel] = useState("");
   const [name, setName] = useState("");
@@ -50,9 +47,6 @@ const useFormTreeCardMutation = () => {
   const [messages, setMessages] = useState({ off: "", on: "" });
   const [repeatable, setRepeatable] = useState(false);
   const [initialQuery, setInitialQuery] = useState(false);
-
-  // Form Error
-  const [uniqueNameErrorMessage, setUniqueNameErrorMessage] = useState("");
 
   // State
   const isEditModal = modalOpen === "edit";
@@ -216,33 +210,6 @@ const useFormTreeCardMutation = () => {
   const handleChangeStep = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setStep(event.target.value);
   }, []);
-
-  const handleChangeUUID = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const { value } = event.target;
-
-      setUuid(value);
-
-      if (!tree || !value) {
-        setUniqueNameErrorMessage("");
-        return;
-      }
-
-      const excludeNameOnEditModal = isEditModal && currentHierarchyPointNode?.data.uuid;
-      const currentTreePath = treePath?.at(-1)?.path;
-      const currentTree = getTree(tree, currentTreePath);
-      const arrayNames = getTreeNames(currentTree);
-      const isUnique = isUniqueArrayItemWithNewEntry(arrayNames, value, excludeNameOnEditModal);
-
-      if (isUnique) {
-        setUniqueNameErrorMessage("");
-        return;
-      }
-
-      setUniqueNameErrorMessage(t("mustBeUnique", { ns: "form" }));
-    },
-    [currentHierarchyPointNode?.data.uuid, isEditModal, t, tree, treePath],
-  );
 
   const handleChangeMultiple = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setIsMultiple(event.target.checked);
@@ -420,9 +387,9 @@ const useFormTreeCardMutation = () => {
       const children = {
         attributes: {
           depth,
-          label,
           name,
           type,
+          ...(label && { label }),
           ...(isAutocomplete && { route }),
           ...(isDynamicSelect && { route }),
           ...(helperText && { helperText }),
@@ -510,7 +477,6 @@ const useFormTreeCardMutation = () => {
             };
           });
 
-      setUuid(currentHierarchyPointNode?.data.uuid || "");
       setTag(currentHierarchyPointNode?.data.attributes?.tag || null);
       setType(currentHierarchyPointNode?.data.attributes?.type || "text");
       setHelperText(currentHierarchyPointNode?.data.attributes?.helperText || "");
@@ -597,7 +563,6 @@ const useFormTreeCardMutation = () => {
     handleChangeType,
     handleChangeUrl,
     handleChangeUrlSelect,
-    handleChangeUUID,
     handleDeleteParam,
     handleDeleteValue,
     handleSubmit,
@@ -629,7 +594,6 @@ const useFormTreeCardMutation = () => {
     tag,
     treeSelected,
     type,
-    uniqueNameErrorMessage,
     uuid,
     values,
   };

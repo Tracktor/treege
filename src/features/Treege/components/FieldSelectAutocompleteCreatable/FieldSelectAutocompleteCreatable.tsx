@@ -32,6 +32,7 @@ const FieldSelectAutocompleteCreatable = ({ value, onChange }: FieldSelectAutoco
 
   return (
     <Autocomplete
+      sx={{ flex: 1 }}
       freeSolo
       fullWidth
       value={value}
