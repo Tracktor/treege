@@ -411,7 +411,7 @@ const useFormTreeCardMutation = () => {
           }),
         },
         children: childOfChildren,
-        uuid,
+        uuid: isEdit ? currentUuid : uuid,
       };
 
       if (isEdit) {

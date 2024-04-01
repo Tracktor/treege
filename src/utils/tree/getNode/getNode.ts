@@ -6,11 +6,11 @@ import getTree from "@/utils/tree/getTree/getTree";
  * Get node
  * @param node
  * @param path
- * @param name
+ * @param uuid
  */
-const getNode = (node: TreeNode, path: string | null, name: string) => {
+const getNode = (node: TreeNode, path: string | null, uuid: string) => {
   const currentTree = getTree(node, path);
-  return findNodeByUUIDInTree(currentTree, name);
+  return findNodeByUUIDInTree(currentTree, uuid);
 };
 
 export default getNode;

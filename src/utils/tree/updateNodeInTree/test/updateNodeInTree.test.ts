@@ -11,7 +11,7 @@ describe("getNodeNames", () => {
   test("updated first node", () => {
     const { tree, output, treePath, newChild, uuid } = updatedFirstNodeInTreeMock;
     const result = updateNodeInTree({
-      child: newChild,
+      children: newChild,
       path: treePath,
       tree,
       uuid,
@@ -23,7 +23,7 @@ describe("getNodeNames", () => {
   test("Update node in other tree", () => {
     const { tree, output, treePath, newChild, uuid } = updatedNodeInOtherTreeMock;
     const result = updateNodeInTree({
-      child: newChild,
+      children: newChild,
       path: treePath,
       tree,
       uuid,
@@ -35,7 +35,7 @@ describe("getNodeNames", () => {
   test("Update Tree", () => {
     const { tree, output, treePath, newChild, uuid } = updatedTreeMock;
     const result = updateNodeInTree({
-      child: newChild,
+      children: newChild,
       path: treePath,
       tree,
       uuid,
@@ -47,7 +47,7 @@ describe("getNodeNames", () => {
   test("Update Node in complexe Tree", () => {
     const { tree, output, treePath, newChild, uuid } = updatedNodeInComplexeTreeMock;
     const result = updateNodeInTree({
-      child: newChild,
+      children: newChild,
       path: treePath,
       tree,
       uuid,
@@ -59,7 +59,7 @@ describe("getNodeNames", () => {
   test("Updated and add decision in field with children", () => {
     const { tree, output, treePath, newChild, uuid } = updatedAndAddDecisionInFieldWithChildrenMock;
     const result = updateNodeInTree({
-      child: newChild,
+      children: newChild,
       path: treePath,
       tree,
       uuid,

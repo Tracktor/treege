@@ -61,7 +61,7 @@ const treeReducer = (tree: TreeNode, action: any) => {
       const { uuid, path, children } = action;
 
       return updateNodeInTree({
-        child: children,
+        children,
         path,
         tree,
         uuid,

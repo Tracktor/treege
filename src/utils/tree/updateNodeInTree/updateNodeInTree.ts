@@ -5,7 +5,7 @@ interface UpdatedNodeParams {
   tree: TreeNode;
   path: string;
   uuid: string;
-  child: TreeNode;
+  children: TreeNode;
 }
 
 /**
@@ -26,8 +26,20 @@ const updateNodeByRef = (node: TreeNode | null, newNode: TreeNode) => {
   const children = isDecision ? { value: [...newNode.children] } : { value: [...node.children] };
 
   const attributes = isDecision
-    ? { value: { ...newNode.attributes, isLeaf: !newNode.children.length || !isNewChildDecision, isRoot } }
-    : { value: { ...newNode.attributes, isLeaf: !node.children.length, isRoot } };
+    ? {
+        value: {
+          ...newNode.attributes,
+          ...(isRoot && { isRoot: true }),
+          isLeaf: !newNode.children.length || !isNewChildDecision,
+        },
+      }
+    : {
+        value: {
+          ...newNode.attributes,
+          ...(isRoot && { isRoot: true }),
+          isLeaf: !node.children.length,
+        },
+      };
 
   Object.defineProperties(node, {
     attributes,
@@ -43,13 +55,13 @@ const updateNodeByRef = (node: TreeNode | null, newNode: TreeNode) => {
  * @param tree
  * @param path
  * @param uuid
- * @param child
+ * @param children
  */
-const updateNodeInTree = ({ tree, path, uuid, child }: UpdatedNodeParams) => {
+const updateNodeInTree = ({ tree, path, uuid, children }: UpdatedNodeParams) => {
   const treeCopy = structuredClone(tree);
   const node = getNode(treeCopy, path, uuid);
 
-  updateNodeByRef(node, child);
+  updateNodeByRef(node, children);
 
   return treeCopy;
 };
