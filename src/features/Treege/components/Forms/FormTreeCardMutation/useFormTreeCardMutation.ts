@@ -10,6 +10,7 @@ import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 
 const useFormTreeCardMutation = () => {
+  const uuid = useId();
   const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
   const { dispatchTree, currentHierarchyPointNode, modalOpen, treePath, setModalOpen } = useTreegeContext();
   const { open } = useSnackbar();
@@ -30,7 +31,7 @@ const useFormTreeCardMutation = () => {
       message?: string;
     }[]
   >(defaultValues);
-  const uuid = useId();
+
   const [hiddenValue, setHiddenValue] = useState("");
   const [label, setLabel] = useState("");
   const [name, setName] = useState("");
