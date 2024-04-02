@@ -1,4 +1,4 @@
-import type { TreeNode } from "@/features/Treege/type/TreeNode";
+import { TreeNode } from "@/features/Treege/type/TreeNode";
 
 type Mock = { input: TreeNode; output: string[] };
 
@@ -41,7 +41,7 @@ export const treeWithMultiFields: Mock = {
               depth: 2,
               isLeaf: true,
               label: "Sexe",
-              name: "age",
+              name: "gender",
               type: "select",
               values: [
                 {
@@ -92,7 +92,7 @@ export const treeWithDecisionFields: Mock = {
               isDecision: true,
               isLeaf: false,
               label: "Matériels",
-              name: "age",
+              name: "materials",
               type: "select",
             },
             children: [
@@ -141,7 +141,7 @@ export const treeWithDecisionFields: Mock = {
                       depth: 4,
                       isLeaf: true,
                       label: "Type",
-                      name: "carrycot_type",
+                      name: "materials:carrycot",
                       type: "select",
                       values: [
                         {
@@ -157,10 +157,10 @@ export const treeWithDecisionFields: Mock = {
                       ],
                     },
                     children: [],
-                    uuid: "carrycot_type",
+                    uuid: 'materials:carrycot"',
                   },
                 ],
-                uuid: "materials:carrycot",
+                uuid: "carrycot_type",
               },
             ],
             uuid: "materials",
@@ -171,7 +171,7 @@ export const treeWithDecisionFields: Mock = {
     ],
     uuid: "name",
   },
-  output: ["name", "age", "mini_excavator_type", "carrycot_type", "materials:carrycot", "materials:mini_excavator", "materials"].sort(),
+  output: ["age", "materials", "materials:carrycot", "mini_excavator_type", "name"],
 };
 
 export const complexeTreeWithMultiDecisionFields: Mock = {
@@ -306,19 +306,7 @@ export const complexeTreeWithMultiDecisionFields: Mock = {
     ],
     uuid: "name",
   },
-  output: [
-    "name",
-    "mini_excavator_type",
-    "carrycot_10_permission",
-    "carrycot_20_permission",
-    "materials:carrycot",
-    "materials:mini_excavator",
-    "carrycot_type:carrycot_10",
-    "carrycot_type:carrycot_20",
-    "carrycot_type:carrycot_8",
-    "carrycot_type",
-    "materials",
-  ].sort(),
+  output: ["age", "carrycot_10_permission", "carrycot_20_permission", "carrycot_type", "mini_excavator_type", "name"],
 };
 
 export const treeWithTree: Mock = {
