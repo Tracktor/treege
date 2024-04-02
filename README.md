@@ -7,7 +7,6 @@
 
 [![Video Thumbnail](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID/0.jpg)](https://user-images.githubusercontent.com/108873902/184317603-61ceafc6-a326-49b2-b0de-ffda9cf9c75e.mov)
 
-
 - [Installation](#Installation)
 - [Usage](#Usage)
   - [Options](#Options)
