@@ -1,6 +1,6 @@
 import { Chip, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
-import useFieldSelect from "@/features/Treege/components/FieldSelect/useFieldSelect";
+import useFieldSelect from "@/features/Treege/components/Inputs/FieldSelect/useFieldSelect";
 import type { TreeNodeField } from "@/features/Treege/type/TreeNode";
 
 interface FieldsSelectProps {

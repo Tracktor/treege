@@ -21,13 +21,13 @@ import {
 } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
-import DynamicSelectFieldFromTree from "@/features/Treege/components/DynamicSelectFieldFromTree";
-import DynamicSelectWarning from "@/features/Treege/components/DynamicSelectWarning";
-import EndPointWarning from "@/features/Treege/components/EndPointWarning";
-import FieldSelect from "@/features/Treege/components/FieldSelect";
-import FieldSelectAutocompleteCreatable from "@/features/Treege/components/FieldSelectAutocompleteCreatable";
+import DynamicSelectWarning from "@/features/Treege/components/Feedback/DynamicSelectWarning";
+import EndPointWarning from "@/features/Treege/components/Feedback/EndPointWarning";
 import ExtraField from "@/features/Treege/components/Forms/FormTreeCardMutation/ExtraField";
 import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
+import DynamicSelectFieldFromTree from "@/features/Treege/components/Inputs/DynamicSelectFieldFromTree";
+import FieldSelect from "@/features/Treege/components/Inputs/FieldSelect";
+import FieldSelectAutocompleteCreatable from "@/features/Treege/components/Inputs/FieldSelectAutocompleteCreatable";
 
 interface FormTreeCardMutationProps {
   onClose(): void;

@@ -1,19 +1,19 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
 /**
- * Get all uuid from tree
+ * Get all names from tree
  * @param tree
  */
-const getUuidsInTree = (tree: TreeNode | null): string[] => {
+const getNamesFromTree = (tree: TreeNode | null): string[] => {
   if (!tree) {
     return [];
   }
 
-  const nodeNames: string[] = [];
+  const names: string[] = [];
 
   const extractNodeNames = (node: TreeNode) => {
-    if (node.uuid) {
-      nodeNames.push(node.uuid);
+    if (node.attributes?.name) {
+      names.push(node?.attributes?.name);
     }
 
     if (node.children.length) {
@@ -27,7 +27,7 @@ const getUuidsInTree = (tree: TreeNode | null): string[] => {
 
   extractNodeNames(tree);
 
-  return nodeNames;
+  return [...new Set(names)];
 };
 
-export default getUuidsInTree;
+export default getNamesFromTree;

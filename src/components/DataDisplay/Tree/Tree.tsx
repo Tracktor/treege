@@ -3,7 +3,7 @@ import { memo } from "react";
 import D3Tree, { RawNodeDatum, RenderCustomNodeElementFn } from "react-d3-tree";
 import useTree from "@/components/DataDisplay/Tree/useTree";
 import colors from "@/constants/colors";
-import ButtonCreateTree from "@/features/Treege/components/ButtonCreateTree/ButtonCreateTree";
+import ButtonCreateTree from "@/features/Treege/components/Inputs/ButtonCreateTree/ButtonCreateTree";
 import type { TreeNode, TreeRenderCustomNodeElementFn } from "@/features/Treege/type/TreeNode";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
