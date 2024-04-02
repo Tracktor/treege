@@ -529,6 +529,7 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
         attributes: {
           depth: 2,
           label: "A",
+          name: "select:A",
           value: "A",
         },
         children: [
@@ -550,6 +551,7 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
         attributes: {
           depth: 2,
           label: "B",
+          name: "select:B",
           value: "B",
         },
         children: [
@@ -583,6 +585,7 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
         attributes: {
           depth: 2,
           label: "C",
+          name: "select:C",
           value: "C",
         },
         children: [
@@ -605,6 +608,7 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
           depth: 2,
           isLeaf: true,
           label: "D",
+          name: "select:D",
           value: "D",
         },
         children: [],
@@ -638,6 +642,7 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
             attributes: {
               depth: 2,
               label: "A",
+              name: "select:A",
               value: "A",
             },
             children: [
@@ -659,6 +664,7 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
             attributes: {
               depth: 2,
               label: "B",
+              name: "select:B",
               value: "B",
             },
             children: [
@@ -692,6 +698,7 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
             attributes: {
               depth: 2,
               label: "C",
+              name: "select:C",
               value: "C",
             },
             children: [
@@ -714,6 +721,7 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
               depth: 2,
               isLeaf: true,
               label: "D",
+              name: "select:D",
               value: "D",
             },
             children: [],
@@ -751,6 +759,7 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
               depth: 2,
               isLeaf: false,
               label: "A",
+              name: "select:A",
               value: "A",
             },
             children: [
@@ -773,6 +782,7 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
               depth: 2,
               isLeaf: false,
               label: "B",
+              name: "select:B",
               value: "B",
             },
             children: [
@@ -807,6 +817,7 @@ const updatedAndAddDecisionInFieldWithChildrenMock: Mock = {
               depth: 2,
               isLeaf: false,
               label: "C",
+              name: "select:C",
               value: "C",
             },
             children: [

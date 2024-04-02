@@ -9,6 +9,13 @@ import useSnackbar from "@/hooks/useSnackbar";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 
+interface Values {
+  id: string;
+  label: string;
+  value: string;
+  message?: string;
+}
+
 const useFormTreeCardMutation = () => {
   const uuid = useId();
   const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
@@ -23,15 +30,7 @@ const useFormTreeCardMutation = () => {
       : null;
 
   // Form value
-  const [values, setValues] = useState<
-    {
-      id: string;
-      label: string;
-      value: string;
-      message?: string;
-    }[]
-  >(defaultValues);
-
+  const [values, setValues] = useState<Values[]>(defaultValues);
   const [hiddenValue, setHiddenValue] = useState("");
   const [label, setLabel] = useState("");
   const [name, setName] = useState("");
@@ -313,16 +312,17 @@ const useFormTreeCardMutation = () => {
 
       return values
         ?.filter((_, index) => !getDisabledValueField(index)) // filter disabled value
-        ?.map(({ message, value, label: optionLabel }, index) => {
-          const nextUuid = `${uuid}:${value}`;
+        ?.map(({ message: decisionMessage, value: decisionValue, label: decisionLabel }, index) => {
+          const nextUuid = `${uuid}:${decisionValue}`;
           const children = getNestedChildren(currentHierarchyPointNode, index);
 
           return {
             attributes: {
               depth: depth + 1,
-              label: optionLabel,
-              value,
-              ...(message && { message }),
+              label: decisionLabel,
+              name: `${name}:${decisionValue}`,
+              value: decisionValue,
+              ...(decisionMessage && { message: decisionMessage }),
               ...(children.length === 0 && { isLeaf: true }),
             },
             children,
@@ -330,7 +330,7 @@ const useFormTreeCardMutation = () => {
           };
         });
     },
-    [currentHierarchyPointNode, getDisabledValueField, getNestedChildren, isDecision, uuid, values],
+    [currentHierarchyPointNode, getDisabledValueField, getNestedChildren, isDecision, name, uuid, values],
   );
 
   const getTreeValuesWithoutEmptyMessage = useCallback(

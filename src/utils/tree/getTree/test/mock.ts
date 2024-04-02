@@ -524,6 +524,7 @@ const treeInDecisionMock: Mock = {
               depth: 2,
               isLeaf: true,
               label: "Male",
+              name: "gender:male",
               value: "male",
             },
             children: [],
@@ -533,6 +534,7 @@ const treeInDecisionMock: Mock = {
             attributes: {
               depth: 2,
               label: "Female",
+              name: "gender:female",
               value: "female",
             },
             children: [
@@ -678,6 +680,7 @@ const complexeMockWithDecisionMock: Mock = {
                           depth: 3,
                           isLeaf: true,
                           label: "Value1",
+                          name: "password:Value1",
                           value: "Value1",
                         },
                         children: [],
@@ -687,6 +690,7 @@ const complexeMockWithDecisionMock: Mock = {
                         attributes: {
                           depth: 3,
                           label: "Value2",
+                          name: "password:Value2",
                           value: "Value2",
                         },
                         children: [

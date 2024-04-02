@@ -100,6 +100,7 @@ export const treeWithDecisionFields: Mock = {
                 attributes: {
                   depth: 3,
                   label: "Mini-pelle",
+                  name: "materials:mini_excavator",
                   value: "mini_excavator",
                 },
                 children: [
@@ -133,6 +134,7 @@ export const treeWithDecisionFields: Mock = {
                 attributes: {
                   depth: 3,
                   label: "Nacelle",
+                  name: "materials:carrycot",
                   value: "carrycot",
                 },
                 children: [
@@ -171,7 +173,7 @@ export const treeWithDecisionFields: Mock = {
     ],
     uuid: "name",
   },
-  output: ["age", "materials", "materials:carrycot", "mini_excavator_type", "name"],
+  output: ["age", "materials", "materials:carrycot", "materials:mini_excavator", "mini_excavator_type", "name"],
 };
 
 export const complexeTreeWithMultiDecisionFields: Mock = {
@@ -189,7 +191,7 @@ export const complexeTreeWithMultiDecisionFields: Mock = {
           depth: 1,
           isDecision: true,
           label: "Matériels",
-          name: "age",
+          name: "materials",
           type: "select",
         },
         children: [
@@ -197,6 +199,7 @@ export const complexeTreeWithMultiDecisionFields: Mock = {
             attributes: {
               depth: 2,
               label: "Mini-pelle",
+              name: "materials:mini_excavator",
               value: "mini_excavator",
             },
             children: [
@@ -230,6 +233,7 @@ export const complexeTreeWithMultiDecisionFields: Mock = {
             attributes: {
               depth: 2,
               label: "Nacelle",
+              name: "materials:carrycot",
               value: "carrycot",
             },
             children: [
@@ -247,6 +251,7 @@ export const complexeTreeWithMultiDecisionFields: Mock = {
                       depth: 4,
                       isLeaf: true,
                       label: "Nacelle 8m",
+                      name: "carrycot_8",
                       value: "carrycot_8",
                     },
                     children: [],
@@ -256,6 +261,7 @@ export const complexeTreeWithMultiDecisionFields: Mock = {
                     attributes: {
                       depth: 4,
                       label: "Nacelle 10m",
+                      name: "carrycot_10",
                       value: "carrycot_10",
                     },
                     children: [
@@ -277,6 +283,7 @@ export const complexeTreeWithMultiDecisionFields: Mock = {
                     attributes: {
                       depth: 4,
                       label: "Nacelle 20m",
+                      name: "carrycot_20",
                       value: "carrycot_20",
                     },
                     children: [
@@ -306,7 +313,19 @@ export const complexeTreeWithMultiDecisionFields: Mock = {
     ],
     uuid: "name",
   },
-  output: ["age", "carrycot_10_permission", "carrycot_20_permission", "carrycot_type", "mini_excavator_type", "name"],
+  output: [
+    "carrycot_10",
+    "carrycot_10_permission",
+    "carrycot_20",
+    "carrycot_20_permission",
+    "carrycot_8",
+    "carrycot_type",
+    "materials",
+    "materials:carrycot",
+    "materials:mini_excavator",
+    "mini_excavator_type",
+    "name",
+  ],
 };
 
 export const treeWithTree: Mock = {

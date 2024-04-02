@@ -36,10 +36,6 @@ export interface TreeNode {
         depth: number;
         tag?: string;
         helperText?: string;
-        messages?: {
-          on?: string;
-          off?: string;
-        };
         isDecision?: boolean;
         isLeaf?: boolean;
         isRoot?: boolean;
@@ -58,6 +54,10 @@ export interface TreeNode {
         route?: Route;
         parentRef?: string;
         initialQuery?: boolean;
+        messages?: {
+          on?: string;
+          off?: string;
+        };
       }
     | {
         depth: number;
@@ -68,7 +68,7 @@ export interface TreeNode {
         isLeaf?: boolean;
         isRoot?: never;
         label?: string;
-        name?: never;
+        name: string;
         required?: never;
         step?: never;
         type?: never;

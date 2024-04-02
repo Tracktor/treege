@@ -179,6 +179,7 @@ export const treeWithDecision: Mock = {
                 attributes: {
                   depth: 3,
                   label: "Male",
+                  name: "gender:maleField",
                   value: "male",
                 },
                 children: [
@@ -200,6 +201,7 @@ export const treeWithDecision: Mock = {
                 attributes: {
                   depth: 3,
                   label: "Female",
+                  name: "gender:female",
                   value: "female",
                 },
                 children: [

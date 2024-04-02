@@ -7,6 +7,7 @@ const FORM_FR = {
   helperText: "Texte d'information",
   hiddenValue: "Valeur caché",
   label: "Label",
+  message: "Message",
   mustBeUnique: "Doit être unique",
   newTree: "Nouvel arbre",
   noAncestorFound: "Aucun parent trouvé",

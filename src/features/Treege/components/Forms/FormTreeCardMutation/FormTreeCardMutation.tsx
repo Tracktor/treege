@@ -343,33 +343,33 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
       {isDecisionField && (
         <>
           <h4>{t("values")}</h4>
-          {values?.map(({ value, label: labelOption, id, message }) => (
-            <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} key={id} position="relative">
+          {values?.map(({ value: decisionValue, label: decisionLabel, id: decisionId, message: decisionMessage }) => (
+            <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} key={decisionId} position="relative">
               <TextField
                 label={t("label", { ns: "form" })}
                 sx={{ flex: 1 }}
                 onChange={handleChangeOptionLabel}
-                value={labelOption}
-                inputProps={{ "data-id": id }}
+                value={decisionLabel}
+                inputProps={{ "data-id": decisionId }}
                 required
               />
               <TextField
                 label={t("value", { ns: "form" })}
                 sx={{ flex: 1 }}
                 onChange={handleChangeOptionValue}
-                value={value}
-                inputProps={{ "data-id": id }}
+                value={decisionValue}
+                inputProps={{ "data-id": decisionId }}
                 required
               />
               <TextField
-                label="Message"
+                label={t("message", { ns: "form" })}
                 sx={{ flex: 1 }}
                 onChange={handleChangeOptionMessage}
-                value={message}
-                inputProps={{ "data-id": id }}
+                value={decisionMessage}
+                inputProps={{ "data-id": decisionId }}
               />
               {values.length > 1 && (
-                <IconButton color="warning" sx={styles.iconButtonDelete} value={id} onClick={handleDeleteValue}>
+                <IconButton color="warning" sx={styles.iconButtonDelete} value={decisionId} onClick={handleDeleteValue}>
                   <RemoveCircleRoundedIcon />
                 </IconButton>
               )}

@@ -105,6 +105,7 @@ export const treeWithMultiTag: Mock = {
                 attributes: {
                   depth: 3,
                   label: "Mini-pelle",
+                  name: "materials:mini_excavator",
                   value: "mini_excavator",
                 },
                 children: [
@@ -138,6 +139,7 @@ export const treeWithMultiTag: Mock = {
                 attributes: {
                   depth: 3,
                   label: "Nacelle",
+                  name: "materials:carrycot",
                   value: "carrycot",
                 },
                 children: [
@@ -195,7 +197,7 @@ export const treeWithMultiAndSameTag: Mock = {
           depth: 1,
           isDecision: true,
           label: "Matériels",
-          name: "age",
+          name: "materials",
           type: "select",
         },
         children: [
@@ -203,6 +205,7 @@ export const treeWithMultiAndSameTag: Mock = {
             attributes: {
               depth: 2,
               label: "Mini-pelle",
+              name: "materials:mini_excavator",
               tag: "tag-2",
               value: "mini_excavator",
             },
@@ -237,6 +240,7 @@ export const treeWithMultiAndSameTag: Mock = {
             attributes: {
               depth: 2,
               label: "Nacelle",
+              name: "materials:carrycot",
               value: "carrycot",
             },
             children: [
@@ -254,6 +258,7 @@ export const treeWithMultiAndSameTag: Mock = {
                       depth: 4,
                       isLeaf: true,
                       label: "Nacelle 8m",
+                      name: "carrycot_type:carrycot_8",
                       value: "carrycot_8",
                     },
                     children: [],
@@ -263,6 +268,7 @@ export const treeWithMultiAndSameTag: Mock = {
                     attributes: {
                       depth: 4,
                       label: "Nacelle 10m",
+                      name: "carrycot_type:carrycot_10",
                       value: "carrycot_10",
                     },
                     children: [
@@ -284,6 +290,7 @@ export const treeWithMultiAndSameTag: Mock = {
                     attributes: {
                       depth: 4,
                       label: "Nacelle 20m",
+                      name: "carrycot_type:carrycot_20",
                       value: "carrycot_20",
                     },
                     children: [
