@@ -1,10 +1,21 @@
 import appendNode from "./appendNode/appendNode";
+import findNodeByUUIDInTree from "./findNodeByUUIDInTree/findNodeByUUIDInTree";
+import findParentNodeByUUIDInTree from "./findParentNodeByUUIDInTree/findParentNodeByUUIDInTree";
 import getNode from "./getNode/getNode";
 import getTree from "./getTree/getTree";
 import removeNode from "./removeNode/removeNode";
-import findNodeByUUIDInTree from "@/utils/tree/findNodeByUUIDInTree/findNodeByUUIDInTree";
-import findParentNodeByUUIDInTree from "@/utils/tree/findParentNodeByUUIDInTree/findParentNodeByUUIDInTree";
-import getNamesFromTree from "@/utils/tree/getNamesFromTree/getNamesFromTree";
-import updateNodeInTree from "@/utils/tree/updateNodeInTree/updateNodeInTree";
+import updateNodeInTree from "./updateNodeInTree/updateNodeInTree";
+import getAllAncestorNamesFromTree from "@/utils/tree/getAllAncestorNamesFromTree/getAllAncestorNamesFromTree";
+import getAllNamesFromTree from "@/utils/tree/getAllNamesFromTree/getAllNamesFromTree";
 
-export { getTree, updateNodeInTree, appendNode, removeNode, findParentNodeByUUIDInTree, findNodeByUUIDInTree, getNamesFromTree, getNode };
+export {
+  getTree,
+  updateNodeInTree,
+  appendNode,
+  removeNode,
+  findParentNodeByUUIDInTree,
+  findNodeByUUIDInTree,
+  getAllNamesFromTree,
+  getAllAncestorNamesFromTree,
+  getNode,
+};

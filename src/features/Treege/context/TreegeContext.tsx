@@ -22,24 +22,34 @@ export interface TreeDefaultValue {
    */
   currentHierarchyPointNode: null | HierarchyPointNode<TreeNode>;
   /**
-   * This is the function to set the current node selected
-   * @param state
-   */
-  /**
    * This is the current tree information
-   * This is not the node to display tree
    */
   currentTree: CurrentTree;
+  /**
+   * This is the tree node object
+   */
+  tree: null | TreeNode;
+  /**
+   * This is the tree modal open state
+   */
+  treeModalOpen: boolean;
+  /**
+   * This is the tree path
+   */
+  treePath: TreePath[] | [];
+  /**
+   * This is the modal open state
+   */
+  modalOpen: ModalType;
+  /**
+   * This is the version of Treege
+   */
+  version: string;
   /**
    * This is the tree node dispatch function
    * @param state
    */
   dispatchTree(state: ReducerAction<any>): void;
-  /**
-   * This is the modal open state
-   */
-  modalOpen: ModalType;
-
   /**
    * This is the function to set the modal open state
    * @param state
@@ -66,22 +76,6 @@ export interface TreeDefaultValue {
    * @param state
    */
   setTreePath(state: SetStateAction<TreePath[] | []>): void;
-  /**
-   * This is the tree node object
-   */
-  tree: null | TreeNode;
-  /**
-   * This is the tree modal open state
-   */
-  treeModalOpen: boolean;
-  /**
-   * This is the tree path
-   */
-  treePath: TreePath[] | [];
-  /**
-   * This is the version of Treege
-   */
-  version: string;
 }
 
 export const treeDefaultValue: TreeDefaultValue = {

@@ -64,7 +64,6 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
   const {
     values,
     required,
-    uuid,
     tag,
     type,
     helperText,
@@ -177,7 +176,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         <Stack spacing={1} paddingY={1}>
           <h4>{t("form:urlConstruction")}</h4>
           <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
-            <DynamicSelectFieldFromTree value={parentRef} onChange={handleChangeParentRef} currentUUID={uuid} />
+            <DynamicSelectFieldFromTree value={parentRef} onChange={handleChangeParentRef} />
             <ArrowForwardIcon />
             <TextField
               sx={{ flex: 3 }}
