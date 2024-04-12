@@ -1,4 +1,4 @@
 # [Versions](https://github.com/Tracktor/treege/releases)
 
-## v1.0.2
-- **[fix]** : select ancestor `name`
+## v1.0.3
+- **[fix]** : Dynamic select ancestor name inside children tree

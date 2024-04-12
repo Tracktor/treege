@@ -2,7 +2,7 @@ import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@t
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import useTreegeContext from "@/hooks/useTreegeContext";
-import { getAllAncestorNamesFromTree } from "@/utils/tree";
+import { getAllAncestorNamesFromTree, getTree } from "@/utils/tree";
 
 interface DynamicSelectFieldFromTreeProps {
   value: string | null;
@@ -12,9 +12,10 @@ interface DynamicSelectFieldFromTreeProps {
 const DynamicSelectFieldFromTree = ({ value, onChange }: DynamicSelectFieldFromTreeProps) => {
   const [selectedValue, setSelectedValue] = useState<string | undefined>(value || "");
   const { t } = useTranslation(["form"]);
-  const { tree, currentHierarchyPointNode } = useTreegeContext();
+  const { tree, treePath, currentHierarchyPointNode } = useTreegeContext();
   const { uuid } = currentHierarchyPointNode?.data || {};
-  const ancestorsName = getAllAncestorNamesFromTree(tree, uuid);
+  const currentTree = getTree(tree, treePath?.at(-1)?.path);
+  const ancestorsName = getAllAncestorNamesFromTree(currentTree, uuid);
 
   const handleChange = (event: SelectChangeEvent<string | undefined>) => {
     const newValue = event.target.value;

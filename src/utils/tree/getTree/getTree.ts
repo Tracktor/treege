@@ -2,10 +2,11 @@ import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
 /**
  * Get a tree node by search path within the hierarchy
+ * If searchPath is not provided, return the current node
  * @param node The starting element
  * @param searchPath The path to search for
  */
-const getTree = (node: TreeNode | undefined, searchPath?: string | null): TreeNode | null => {
+const getTree = (node: TreeNode | null | undefined, searchPath?: string | null): TreeNode | null => {
   if (!node) {
     return null;
   }

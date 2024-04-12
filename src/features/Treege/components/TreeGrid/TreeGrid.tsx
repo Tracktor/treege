@@ -24,9 +24,10 @@ const TreeGrid = () => {
   const { tree, treeModalOpen, treePath, backendConfig } = useTreegeContext();
   const { handleCloseTreeModal } = useTreeCardContainer();
   const { getTitleModalMutation, closeModal, getTitleModalDelete, isModalMutationOpen, isDeleteModal, handleChangeTree } = useTreeGrid();
-  const currentTreePath = treePath?.at(-1)?.path;
-  const currentTreeName = treePath?.at(-1)?.label;
-  const currentTree = tree && getTree(tree, currentTreePath);
+  const lastTreePath = treePath?.at(-1);
+  const currentTreePath = lastTreePath?.path;
+  const currentTreeName = lastTreePath?.label;
+  const currentTree = getTree(tree, currentTreePath);
 
   return (
     <>
@@ -56,18 +57,19 @@ const TreeGrid = () => {
         </Action>
       </MosaicLayout>
 
-      {/* Modal */}
-
+      {/* Modal tree node mutation */}
       <MainModal open={isModalMutationOpen} onClose={closeModal} title={getTitleModalMutation()}>
         <FormTreeCardMutation onClose={closeModal} />
       </MainModal>
 
+      {/* Modal confirm delete tree node */}
       <MainModal open={isDeleteModal} onClose={closeModal} title={getTitleModalDelete()}>
         <FormTreeCardDelete onClose={closeModal} />
       </MainModal>
 
+      {/* Tree modal viewer */}
       <TreeModal open={treeModalOpen} onClose={handleCloseTreeModal} title={currentTreeName}>
-        {currentTree && <Tree data={currentTree} renderCustomNodeElement={TreeCardContainer} />}
+        <Tree data={currentTree} renderCustomNodeElement={TreeCardContainer} />
       </TreeModal>
     </>
   );

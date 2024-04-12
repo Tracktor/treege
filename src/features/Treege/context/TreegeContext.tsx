@@ -23,6 +23,10 @@ export interface TreeDefaultValue {
   currentHierarchyPointNode: null | HierarchyPointNode<TreeNode>;
   /**
    * This is the current tree information
+   * {
+   *     "id": "treeId",
+   *     "name": "Tree name"
+   * }
    */
   currentTree: CurrentTree;
   /**
@@ -35,6 +39,12 @@ export interface TreeDefaultValue {
   treeModalOpen: boolean;
   /**
    * This is the tree path
+   * [
+   *     {
+   *         "label": "Tree name",
+   *         "path": "uuid"
+   *     }
+   * ]
    */
   treePath: TreePath[] | [];
   /**

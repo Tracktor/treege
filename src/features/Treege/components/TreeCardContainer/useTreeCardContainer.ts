@@ -35,6 +35,12 @@ const useTreeCardContainer = () => {
     setTreeModalOpen(false);
   };
 
-  return { handleAddChildren, handleCloseTreeModal, handleDeleteChildren, handleEditChildren, handleOpenTreeModal };
+  return {
+    handleAddChildren,
+    handleCloseTreeModal,
+    handleDeleteChildren,
+    handleEditChildren,
+    handleOpenTreeModal,
+  };
 };
 export default useTreeCardContainer;
