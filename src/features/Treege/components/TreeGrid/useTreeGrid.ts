@@ -15,22 +15,21 @@ const useTreeGrid = () => {
   };
 
   const getTitleModalMutation = () => {
-    const name = currentHierarchyPointNode?.data?.attributes.label;
+    const { label, name } = currentHierarchyPointNode?.data?.attributes || {};
 
-    if (!name) {
-      return t("addFirstTitle", { name, ns: "modal" });
+    if (!isEditModal) {
+      return t("addFirstTitle", { ns: "modal" });
     }
 
     const translateKey = isEditModal ? "editTitle" : "addTitle";
 
-    return t(translateKey, { name, ns: "modal" });
+    return t(translateKey, { name: label || name, ns: "modal" });
   };
 
   const getTitleModalDelete = () => {
-    const name = currentHierarchyPointNode?.data?.attributes?.label;
-    const uuid = currentHierarchyPointNode?.data?.uuid;
+    const { label, name } = currentHierarchyPointNode?.data?.attributes || {};
 
-    return t("deleteTitle", { name: name || uuid, ns: "modal" });
+    return t("deleteTitle", { name: label || name, ns: "modal" });
   };
 
   const handleChangeTree = (tree: string) => {
