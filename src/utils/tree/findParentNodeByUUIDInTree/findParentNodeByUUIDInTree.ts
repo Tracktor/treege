@@ -16,6 +16,7 @@ const findParentNodeByUUIDInTree = (node: TreeNode | null, uuid: string, parentN
   }
 
   const children = node.children || [];
+
   for (let i = 0; i < children.length; i += 1) {
     const child = children[i];
     const result = findParentNodeByUUIDInTree(child, uuid, node);

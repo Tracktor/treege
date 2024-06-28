@@ -114,7 +114,7 @@ const removeDecisionInTreeMock: Mock = {
     attributes: {
       depth: 0,
       isDecision: true,
-      isLeaf: true,
+      isLeaf: false,
       isRoot: true,
       label: "Decision field",
       name: "decisionField",

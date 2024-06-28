@@ -12,15 +12,43 @@ interface RemoveNodeParams {
 /**
  * Remove tree node
  * @param parent
- * @param node
+ * @param nodeToRemove
  */
-const removeTreeNode = (parent: TreeNode | null, node: TreeNode | null) => {
-  if (!parent || !node) {
+const removeTreeNode = (parent: TreeNode | null, nodeToRemove: TreeNode | null) => {
+  if (!parent || !nodeToRemove) {
     return null;
   }
 
-  Object.defineProperty(parent, "children", { value: parent.children.filter((child) => child.uuid !== node.uuid) });
-  Object.defineProperty(parent, "attributes", { value: { ...parent.attributes, isLeaf: true } });
+  // if parent or nodeToRemove is a Decision, then remove node and its children
+  if (parent.attributes.isDecision || nodeToRemove.attributes.isDecision) {
+    // Remove node and its children
+    Object.defineProperty(parent, "children", {
+      value: [...parent.children.filter((child) => child.uuid !== nodeToRemove.uuid)],
+    });
+
+    // Set isLeaf to parent node if it has no children
+    Object.defineProperty(parent, "attributes", {
+      value: {
+        ...parent.attributes,
+        isLeaf: !parent.children.length,
+      },
+    });
+
+    return null;
+  }
+
+  // Remove node and append its children to parent node
+  Object.defineProperty(parent, "children", {
+    value: [...parent.children.filter((child) => child.uuid !== nodeToRemove.uuid), ...nodeToRemove.children],
+  });
+
+  // Set isLeaf to parent node if nodeToRemove has no children
+  Object.defineProperty(parent, "attributes", {
+    value: {
+      ...parent.attributes,
+      isLeaf: !nodeToRemove.children.length,
+    },
+  });
 
   return null;
 };
@@ -44,11 +72,10 @@ const getParentTreeNode = (tree: TreeNode, path: string, uuid: string) => {
  */
 const removeNode = ({ tree, path, uuid }: RemoveNodeParams) => {
   const treeCopy = structuredClone(tree);
+  const nodeToRemove = getNode(treeCopy, path, uuid);
+  const parentNodeToRemove = getParentTreeNode(treeCopy, path, uuid);
 
-  const node = getNode(treeCopy, path, uuid);
-  const nodeParent = getParentTreeNode(treeCopy, path, uuid);
-
-  removeTreeNode(nodeParent, node);
+  removeTreeNode(parentNodeToRemove, nodeToRemove);
 
   return treeCopy;
 };
