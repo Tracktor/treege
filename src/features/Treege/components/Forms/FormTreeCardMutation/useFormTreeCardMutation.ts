@@ -1,6 +1,6 @@
 import type { SelectChangeEvent } from "@tracktor/design-system";
 import type { HierarchyPointNode } from "d3-hierarchy";
-import { ChangeEvent, FormEvent, MouseEvent, SyntheticEvent, useCallback, useEffect, useId, useMemo, useState } from "react";
+import { ChangeEvent, FormEvent, MouseEvent, SyntheticEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";
 import { appendTreeCard, replaceTreeCard } from "@/features/Treege/reducer/treeReducer";
@@ -8,6 +8,7 @@ import type { Params, Route, TreeNode, TreeNodeField, TreeValues } from "@/featu
 import useSnackbar from "@/hooks/useSnackbar";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
+import { getUUID } from "@/utils";
 
 interface Values {
   id: string;
@@ -17,7 +18,7 @@ interface Values {
 }
 
 const useFormTreeCardMutation = () => {
-  const uuid = useId();
+  const uuid = getUUID();
   const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
   const { dispatchTree, currentHierarchyPointNode, modalOpen, treePath, setModalOpen } = useTreegeContext();
   const { open } = useSnackbar();
