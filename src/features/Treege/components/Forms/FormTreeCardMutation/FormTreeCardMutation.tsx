@@ -151,7 +151,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         <Stack spacing={1} paddingY={1}>
           <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
             <TextField
-              sx={{ flex: 4 }}
+              sx={{ flex: 3 }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -167,7 +167,15 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
               required
             />
             <QuestionMarkRoundedIcon />
-            <TextField sx={{ flex: 1 }} placeholder="q" type="text" onChange={handleChangeSearchKey} value={searchKey} required />
+            <TextField
+              InputLabelProps={{ shrink: true }}
+              sx={{ flex: 1 }}
+              placeholder={t("form:searchKeyPlaceholder")}
+              type="text"
+              label={t("form:key")}
+              onChange={handleChangeSearchKey}
+              value={searchKey}
+            />
           </Stack>
         </Stack>
       )}
