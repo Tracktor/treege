@@ -12,11 +12,12 @@ interface TagOption {
 const filter = createFilterOptions<TagOption | string>();
 
 interface FieldSelectAutocompleteCreatableProps {
+  id: string;
   value: string | null;
   onChange?: (_: SyntheticEvent<Element, Event>, newValue: string | TagOption | null) => void;
 }
 
-const FieldSelectAutocompleteCreatable = ({ value, onChange }: FieldSelectAutocompleteCreatableProps) => {
+const FieldSelectAutocompleteCreatable = ({ id, value, onChange }: FieldSelectAutocompleteCreatableProps) => {
   const { t } = useTranslation(["translation", "form"]);
   const { tree } = useTreegeContext();
   const treeTags = getUniqueTagsInTree(tree).reduce(
@@ -32,6 +33,7 @@ const FieldSelectAutocompleteCreatable = ({ value, onChange }: FieldSelectAutoco
 
   return (
     <Autocomplete
+      id={id}
       sx={{ flex: 1 }}
       freeSolo
       fullWidth

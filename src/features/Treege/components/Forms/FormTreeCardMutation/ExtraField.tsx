@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import TreeSelect from "@/features/Treege/components/TreeSelect";
 
 interface ExtraFieldProps {
+  id: string;
   helperText: string;
   hiddenValue: string;
   isHiddenField: boolean;
@@ -15,6 +16,7 @@ interface ExtraFieldProps {
 }
 
 const ExtraField = ({
+  id,
   helperText,
   hiddenValue,
   isHiddenField,
@@ -34,6 +36,7 @@ const ExtraField = ({
     return (
       <TextField
         required
+        id={id}
         sx={{ flex: 1 }}
         label={t("hiddenValue", { ns: "form" })}
         onChange={handleChangeHiddenValue}

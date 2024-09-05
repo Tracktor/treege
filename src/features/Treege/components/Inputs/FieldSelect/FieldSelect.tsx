@@ -4,18 +4,22 @@ import useFieldSelect from "@/features/Treege/components/Inputs/FieldSelect/useF
 import type { TreeNodeField } from "@/features/Treege/type/TreeNode";
 
 interface FieldsSelectProps {
+  id: string;
   value: TreeNodeField["type"];
   onChange?: (event: SelectChangeEvent<TreeNodeField["type"]>) => void;
 }
 
-const FieldSelect = ({ onChange, value }: FieldsSelectProps) => {
+const FieldSelect = ({ id, onChange, value }: FieldsSelectProps) => {
   const { t } = useTranslation(["translation", "form"]);
   const { fields } = useFieldSelect();
 
   return (
     <FormControl sx={{ flex: 1 }} required fullWidth>
-      <InputLabel>{t("type")}</InputLabel>
+      <InputLabel id="typeLabel">{t("type")}</InputLabel>
       <Select
+        id={id}
+        labelId="typeLabel"
+        variant="outlined"
         value={value}
         label={t("type")}
         onChange={onChange}

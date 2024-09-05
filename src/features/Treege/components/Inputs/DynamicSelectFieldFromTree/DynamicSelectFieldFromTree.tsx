@@ -5,11 +5,12 @@ import useTreegeContext from "@/hooks/useTreegeContext";
 import { getAllAncestorNamesFromTree, getTree } from "@/utils/tree";
 
 interface DynamicSelectFieldFromTreeProps {
+  id: string;
   value: string | null;
   onChange?: (event: SelectChangeEvent<string | undefined>, newValue: string | undefined) => void;
 }
 
-const DynamicSelectFieldFromTree = ({ value, onChange }: DynamicSelectFieldFromTreeProps) => {
+const DynamicSelectFieldFromTree = ({ id, value, onChange }: DynamicSelectFieldFromTreeProps) => {
   const [selectedValue, setSelectedValue] = useState<string | undefined>(value || "");
   const { t } = useTranslation(["form"]);
   const { tree, treePath, currentHierarchyPointNode } = useTreegeContext();
@@ -28,6 +29,8 @@ const DynamicSelectFieldFromTree = ({ value, onChange }: DynamicSelectFieldFromT
     <FormControl sx={{ flex: 1.5 }} required>
       <InputLabel>{t("form:ancestor")}</InputLabel>
       <Select
+        id={id}
+        variant="outlined"
         sx={{ flex: 2 }}
         value={selectedValue}
         label={t("form:ancestor")}

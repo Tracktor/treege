@@ -125,17 +125,18 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
   return (
     <form onSubmit={handleSubmit}>
       <Box marginBottom={1}>
-        <FieldSelect value={type} onChange={handleChangeType} />
+        <FieldSelect id="type" value={type} onChange={handleChangeType} />
       </Box>
 
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
-        <TextField label={t("name")} sx={{ flex: 1 }} onChange={handleChangeName} value={name} required />
-        <TextField sx={{ flex: 1 }} label={t("label", { ns: "form" })} onChange={handleChangeLabel} value={label} />
+        <TextField autoComplete="off" id="name" label={t("name")} sx={{ flex: 1 }} onChange={handleChangeName} value={name} required />
+        <TextField id="label" sx={{ flex: 1 }} label={t("label", { ns: "form" })} onChange={handleChangeLabel} value={label} />
       </Stack>
 
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
-        <FieldSelectAutocompleteCreatable value={tag} onChange={handleChangeTag} />
+        <FieldSelectAutocompleteCreatable id="tag" value={tag} onChange={handleChangeTag} />
         <ExtraField
+          id="helperText"
           helperText={helperText}
           hiddenValue={hiddenValue}
           isHiddenField={isHiddenField}
@@ -151,6 +152,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         <Stack spacing={1} paddingY={1}>
           <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
             <TextField
+              id="url"
               sx={{ flex: 3 }}
               InputProps={{
                 startAdornment: (
@@ -168,6 +170,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             />
             <QuestionMarkRoundedIcon />
             <TextField
+              id="searchKey"
               InputLabelProps={{ shrink: true }}
               sx={{ flex: 1 }}
               placeholder={t("form:searchKeyPlaceholder")}
@@ -184,9 +187,10 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         <Stack spacing={1} paddingY={1}>
           <h4>{t("form:urlConstruction")}</h4>
           <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
-            <DynamicSelectFieldFromTree value={parentRef} onChange={handleChangeParentRef} />
+            <DynamicSelectFieldFromTree id="parentRef" value={parentRef} onChange={handleChangeParentRef} />
             <ArrowForwardIcon />
             <TextField
+              id="urlSelect"
               sx={{ flex: 3 }}
               InputProps={{
                 startAdornment: (
@@ -226,6 +230,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             <Stack spacing={1} paddingY={1}>
               <Stack spacing={1} sx={{ pb: 1 }} direction={{ sm: "row", xs: "column" }} alignItems="center">
                 <TextField
+                  id="objectArrayPath"
                   sx={{ flex: 3 }}
                   InputLabelProps={{ shrink: true }}
                   label="Object Array Path"
@@ -235,6 +240,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                   type="text"
                 />
                 <TextField
+                  id="labelPath"
                   sx={{ flex: 3 }}
                   InputLabelProps={{ shrink: true }}
                   label="Label Path"
@@ -246,6 +252,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
               </Stack>
               <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
                 <TextField
+                  id="valuePath"
                   sx={{ flex: 3 }}
                   InputLabelProps={{ shrink: true }}
                   label="Value Path"
@@ -255,6 +262,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                   type="text"
                 />
                 <TextField
+                  id="imagePath"
                   sx={{ flex: 3 }}
                   InputLabelProps={{ shrink: true }}
                   label="Image Path"
@@ -285,6 +293,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             {params?.map(({ id, key, value }, index) => (
               <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} key={id} position="relative">
                 <TextField
+                  id={`param-key-${id}`}
                   label="Key"
                   sx={{ flex: 1 }}
                   onChange={(event) => handleChangeParam(index, "key", event)}
@@ -292,6 +301,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                   inputProps={{ "data-id": id }}
                 />
                 <TextField
+                  id={`param-value-${id}`}
                   label={t("value", { ns: "form" })}
                   sx={{ flex: 1 }}
                   onChange={(event) => handleChangeParam(index, "value", event)}
@@ -311,8 +321,20 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
       {isBooleanField && (
         <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
-          <TextField sx={{ flex: 1 }} label={t("onMessage", { ns: "form" })} onChange={handleChangeMessage("on")} value={on} />
-          <TextField sx={{ flex: 1 }} label={t("offMessage", { ns: "form" })} onChange={handleChangeMessage("off")} value={off} />
+          <TextField
+            id="onMessage"
+            sx={{ flex: 1 }}
+            label={t("onMessage", { ns: "form" })}
+            onChange={handleChangeMessage("on")}
+            value={on}
+          />
+          <TextField
+            id="offMessage"
+            sx={{ flex: 1 }}
+            label={t("offMessage", { ns: "form" })}
+            onChange={handleChangeMessage("off")}
+            value={off}
+          />
         </Stack>
       )}
 
@@ -323,24 +345,24 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           )}
           {isAutocomplete && (
             <FormControlLabel
-              control={<Checkbox checked={initialQuery} onChange={handleChangeInitialQuery} />}
+              control={<Checkbox id="isInitialQuery" checked={initialQuery} onChange={handleChangeInitialQuery} />}
               label={t("initialQueryEnable")}
             />
           )}
           <FormControlLabel
             disabled={isRequiredDisabled}
-            control={<Checkbox checked={required} onChange={handleChangeRequired} />}
+            control={<Checkbox id="isRequired" checked={required} onChange={handleChangeRequired} />}
             label={t("required")}
           />
           <FormControlLabel
             disabled={isRepeatableDisabled}
-            control={<Checkbox checked={repeatable} onChange={handleChangeRepeatable} />}
+            control={<Checkbox id="isRepeatable" checked={repeatable} onChange={handleChangeRepeatable} />}
             label={t("repeatable", { ns: "form" })}
           />
           {(isLeaf || isEditModal) && (
             <FormControlLabel
               disabled={!isDecisionField}
-              control={<Checkbox checked={isDecision} onChange={handleChangeIsDecisionField} />}
+              control={<Checkbox id="isDecision" checked={isDecision} onChange={handleChangeIsDecisionField} />}
               label={t("decisionField", { ns: "form" })}
             />
           )}
@@ -353,6 +375,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           {values?.map(({ value: decisionValue, label: decisionLabel, id: decisionId, message: decisionMessage }) => (
             <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} key={decisionId} position="relative">
               <TextField
+                id={`decision-label-${decisionId}`}
                 label={t("label", { ns: "form" })}
                 sx={{ flex: 1 }}
                 onChange={handleChangeOptionLabel}
@@ -361,6 +384,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                 required
               />
               <TextField
+                id={`decision-value-${decisionId}`}
                 label={t("value", { ns: "form" })}
                 sx={{ flex: 1 }}
                 onChange={handleChangeOptionValue}
@@ -369,6 +393,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                 required
               />
               <TextField
+                id={`decision-message-${decisionId}`}
                 label={t("message", { ns: "form" })}
                 sx={{ flex: 1 }}
                 onChange={handleChangeOptionMessage}
