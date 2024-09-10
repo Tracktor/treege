@@ -51,6 +51,7 @@ export interface TreeNode {
         treePath?: string;
         repeatable?: boolean;
         hiddenValue?: string;
+        isDisabledPast?: boolean;
         route?: Route;
         parentRef?: string;
         initialQuery?: boolean;
@@ -79,6 +80,7 @@ export interface TreeNode {
         treePath?: never;
         repeatable?: never;
         hiddenValue?: never;
+        isDisabledPast?: boolean;
         route?: Route;
         parentRef?: string;
         initialQuery?: boolean;
