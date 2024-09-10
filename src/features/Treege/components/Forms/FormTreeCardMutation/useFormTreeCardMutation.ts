@@ -35,7 +35,9 @@ const useFormTreeCardMutation = () => {
   const [hiddenValue, setHiddenValue] = useState("");
   const [label, setLabel] = useState("");
   const [name, setName] = useState("");
+  const [isDisabledPast, setIsDisabledPast] = useState(false);
   const [required, setRequired] = useState(false);
+
   const [isDecision, setIsDecision] = useState(false);
   const [isMultiple, setIsMultiple] = useState(false);
   const [type, setType] = useState<TreeNodeField["type"]>("text");
@@ -54,6 +56,7 @@ const useFormTreeCardMutation = () => {
   const isTreeField = type === "tree";
   const isHiddenField = type === "hidden";
   const isAutocomplete = type === "autocomplete";
+  const isDateRangePicker = type === "dateRange";
   const isDynamicSelect = type === "dynamicSelect";
   const isBooleanField = fields.some((field) => field.type === type && field?.isBooleanField);
   const isDecisionField = fields.some((field) => field.type === type && field?.isDecisionField);
@@ -228,6 +231,10 @@ const useFormTreeCardMutation = () => {
     setIsDecision(event.target.checked);
   }, []);
 
+  const handleChangeIsDisabledPast = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setIsDisabledPast(event.target.checked);
+  }, []);
+
   const handleChangeRepeatable = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setRepeatable(event.target.checked);
   }, []);
@@ -237,6 +244,7 @@ const useFormTreeCardMutation = () => {
     setIsDecision(false);
     setRequired(false);
     setRepeatable(false);
+    setIsDisabledPast(false);
   }, []);
 
   const handleChangeTreeSelect = useCallback((event: SelectChangeEvent) => {
@@ -397,6 +405,7 @@ const useFormTreeCardMutation = () => {
           ...(helperText && { helperText }),
           ...(isDecision && { isDecision }),
           ...(required && { required }),
+          ...(isDisabledPast && isDateRangePicker && { isDisabledPast }),
           ...(step && { step }),
           ...(repeatable && { repeatable }),
           ...(isHiddenField && { hiddenValue }),
@@ -433,18 +442,17 @@ const useFormTreeCardMutation = () => {
       treeSelected,
       getWorkFlowReq,
       isTreeField,
-      label,
       name,
       type,
+      label,
       isAutocomplete,
       route,
       isDynamicSelect,
       helperText,
       isDecision,
-      isDecisionField,
-      getTreeValuesWithoutEmptyMessage,
-      values,
       required,
+      isDisabledPast,
+      isDateRangePicker,
       step,
       repeatable,
       isHiddenField,
@@ -454,6 +462,9 @@ const useFormTreeCardMutation = () => {
       isMultiple,
       isMultiplePossible,
       initialQuery,
+      isDecisionField,
+      getTreeValuesWithoutEmptyMessage,
+      values,
       setModalOpen,
       dispatchTree,
     ],
@@ -483,6 +494,7 @@ const useFormTreeCardMutation = () => {
       setType(currentHierarchyPointNode?.data.attributes?.type || "text");
       setHelperText(currentHierarchyPointNode?.data.attributes?.helperText || "");
       setRequired(currentHierarchyPointNode?.data.attributes?.required || false);
+      setIsDisabledPast(currentHierarchyPointNode?.data.attributes?.isDisabledPast || false);
       setStep(currentHierarchyPointNode?.data.attributes?.step || "");
       setLabel(currentHierarchyPointNode?.data.attributes?.label || "");
       setName(currentHierarchyPointNode?.data.attributes?.name || "");
@@ -515,6 +527,7 @@ const useFormTreeCardMutation = () => {
     currentHierarchyPointNode?.data.attributes?.hiddenValue,
     currentHierarchyPointNode?.data.attributes?.initialQuery,
     currentHierarchyPointNode?.data.attributes?.isDecision,
+    currentHierarchyPointNode?.data.attributes?.isDisabledPast,
     currentHierarchyPointNode?.data.attributes?.label,
     currentHierarchyPointNode?.data.attributes?.messages?.off,
     currentHierarchyPointNode?.data.attributes?.messages?.on,
@@ -546,6 +559,7 @@ const useFormTreeCardMutation = () => {
     handleChangeHiddenValue,
     handleChangeInitialQuery,
     handleChangeIsDecisionField,
+    handleChangeIsDisabledPast,
     handleChangeLabel,
     handleChangeMessage,
     handleChangeMultiple,
@@ -573,8 +587,10 @@ const useFormTreeCardMutation = () => {
     initialQuery,
     isAutocomplete,
     isBooleanField,
+    isDateRangePicker,
     isDecision,
     isDecisionField,
+    isDisabledPast,
     isDynamicSelect,
     isEditModal,
     isHiddenField,

@@ -4,6 +4,7 @@ const FORM_EN = {
   apiRoute: "Api route",
   dataMapping: "Data mapping",
   decisionField: "Decision field",
+  disabledPast: "Disabled Past",
   helperText: "Helper text",
   hiddenValue: "Hidden value",
   key: "Key",

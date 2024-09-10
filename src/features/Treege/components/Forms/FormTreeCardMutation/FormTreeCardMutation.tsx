@@ -71,6 +71,8 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     name,
     hiddenValue,
     isBooleanField,
+    isDisabledPast,
+    handleChangeIsDisabledPast,
     isDecision,
     isEditModal,
     isDecisionField,
@@ -78,6 +80,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     isRequiredDisabled,
     isRepeatableDisabled,
     isAutocomplete,
+    isDateRangePicker,
     isDynamicSelect,
     isTreeField,
     treeSelected,
@@ -364,6 +367,12 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
               disabled={!isDecisionField}
               control={<Checkbox id="isDecision" checked={isDecision} onChange={handleChangeIsDecisionField} />}
               label={t("decisionField", { ns: "form" })}
+            />
+          )}
+          {isDateRangePicker && (
+            <FormControlLabel
+              control={<Checkbox id="disabledPast" checked={isDisabledPast} onChange={handleChangeIsDisabledPast} />}
+              label={t("disabledPast", { ns: "form" })}
             />
           )}
         </FormGroup>
