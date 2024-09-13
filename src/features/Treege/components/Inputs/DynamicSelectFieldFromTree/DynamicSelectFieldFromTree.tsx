@@ -31,6 +31,7 @@ const DynamicSelectFieldFromTree = ({ id, value, onChange }: DynamicSelectFieldF
       <Select
         id={id}
         variant="outlined"
+        size="small"
         sx={{ flex: 2 }}
         value={selectedValue}
         label={t("form:ancestor")}

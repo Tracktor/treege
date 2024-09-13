@@ -9,6 +9,7 @@ import ParkRoundedIcon from "@mui/icons-material/ParkRounded";
 import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import { Box, Button, Chip, GlobalStyles, Stack, Tooltip, Typography } from "@tracktor/design-system";
+import { brown } from "@tracktor/design-system/colors";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { memo } from "react";
 import type { CustomNodeElementProps, TreeNodeDatum } from "react-d3-tree/lib/types/types/common";
@@ -42,6 +43,11 @@ const styles = {
   containerHidden: {
     background: colors.background,
     border: `solid 1px ${colors.borderGrey}`,
+    borderRadius: "1rem",
+  },
+  containerTitle: {
+    background: brown[700],
+    border: `solid 1px ${brown[400]}`,
     borderRadius: "1rem",
   },
   containerTree: {
@@ -80,6 +86,11 @@ const getCardStyle = (type?: string | number | boolean) => {
   const isField = !!type;
   const isTree = type === "tree";
   const isHidden = type === "hidden";
+  const isTitle = type === "title";
+
+  if (isTitle) {
+    return styles.containerTitle;
+  }
 
   if (isHidden) {
     return styles.containerHidden;

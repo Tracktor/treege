@@ -142,6 +142,13 @@ const fields = [
     isRequiredDisabled: false,
     type: "dynamicSelect",
   },
+  {
+    isBooleanField: false,
+    isDecisionField: false,
+    isRepeatableDisabled: true,
+    isRequiredDisabled: true,
+    type: "title",
+  },
 ] as const;
 
 export default fields;

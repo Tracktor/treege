@@ -25,8 +25,8 @@ import DynamicSelectWarning from "@/features/Treege/components/Feedback/DynamicS
 import EndPointWarning from "@/features/Treege/components/Feedback/EndPointWarning";
 import ExtraField from "@/features/Treege/components/Forms/FormTreeCardMutation/ExtraField";
 import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
+import AutocompleteSelectType from "@/features/Treege/components/Inputs/AutocompleteSelectType";
 import DynamicSelectFieldFromTree from "@/features/Treege/components/Inputs/DynamicSelectFieldFromTree";
-import FieldSelect from "@/features/Treege/components/Inputs/FieldSelect";
 import FieldSelectAutocompleteCreatable from "@/features/Treege/components/Inputs/FieldSelectAutocompleteCreatable";
 
 interface FormTreeCardMutationProps {
@@ -127,17 +127,25 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Box marginBottom={1}>
-        <FieldSelect id="type" value={type} onChange={handleChangeType} />
-      </Box>
+      <AutocompleteSelectType id="type" value={type} onChange={handleChangeType} sx={{ marginBottom: 1 }} />
 
+      {/* Name and label */}
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
-        <TextField autoComplete="off" id="name" label={t("name")} sx={{ flex: 1 }} onChange={handleChangeName} value={name} required />
-        <TextField id="label" sx={{ flex: 1 }} label={t("label", { ns: "form" })} onChange={handleChangeLabel} value={label} />
+        <TextField
+          autoComplete="off"
+          id="name"
+          label={t("name")}
+          sx={{ flex: 1 }}
+          onChange={handleChangeName}
+          value={name}
+          size="small"
+          required
+        />
+        <TextField id="label" sx={{ flex: 1 }} label={t("label", { ns: "form" })} onChange={handleChangeLabel} value={label} size="small" />
       </Stack>
 
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
-        <FieldSelectAutocompleteCreatable id="tag" value={tag} onChange={handleChangeTag} />
+        {type !== "title" && <FieldSelectAutocompleteCreatable id="tag" value={tag} onChange={handleChangeTag} />}
         <ExtraField
           id="helperText"
           helperText={helperText}
@@ -151,11 +159,13 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         />
       </Stack>
 
+      {/* Api route */}
       {isAutocomplete && (
         <Stack spacing={1} paddingY={1}>
           <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
             <TextField
               id="url"
+              size="small"
               sx={{ flex: 3 }}
               InputProps={{
                 startAdornment: (
@@ -174,6 +184,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             <QuestionMarkRoundedIcon />
             <TextField
               id="searchKey"
+              size="small"
               InputLabelProps={{ shrink: true }}
               sx={{ flex: 1 }}
               placeholder={t("form:searchKeyPlaceholder")}
@@ -186,6 +197,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         </Stack>
       )}
 
+      {/* Dynamic select */}
       {isDynamicSelect && (
         <Stack spacing={1} paddingY={1}>
           <h4>{t("form:urlConstruction")}</h4>
@@ -194,6 +206,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
             <ArrowForwardIcon />
             <TextField
               id="urlSelect"
+              size="small"
               sx={{ flex: 3 }}
               InputProps={{
                 startAdornment: (
@@ -234,6 +247,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
               <Stack spacing={1} sx={{ pb: 1 }} direction={{ sm: "row", xs: "column" }} alignItems="center">
                 <TextField
                   id="objectArrayPath"
+                  size="small"
                   sx={{ flex: 3 }}
                   InputLabelProps={{ shrink: true }}
                   label="Object Array Path"
@@ -244,6 +258,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                 />
                 <TextField
                   id="labelPath"
+                  size="small"
                   sx={{ flex: 3 }}
                   InputLabelProps={{ shrink: true }}
                   label="Label Path"
@@ -256,6 +271,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
               <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
                 <TextField
                   id="valuePath"
+                  size="small"
                   sx={{ flex: 3 }}
                   InputLabelProps={{ shrink: true }}
                   label="Value Path"
@@ -266,6 +282,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                 />
                 <TextField
                   id="imagePath"
+                  size="small"
                   sx={{ flex: 3 }}
                   InputLabelProps={{ shrink: true }}
                   label="Image Path"
@@ -298,6 +315,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                 <TextField
                   id={`param-key-${id}`}
                   label="Key"
+                  size="small"
                   sx={{ flex: 1 }}
                   onChange={(event) => handleChangeParam(index, "key", event)}
                   value={key}
@@ -306,6 +324,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                 <TextField
                   id={`param-value-${id}`}
                   label={t("value", { ns: "form" })}
+                  size="small"
                   sx={{ flex: 1 }}
                   onChange={(event) => handleChangeParam(index, "value", event)}
                   value={value}
@@ -322,10 +341,12 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         </Stack>
       )}
 
+      {/* Boolean field */}
       {isBooleanField && (
         <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
           <TextField
             id="onMessage"
+            size="small"
             sx={{ flex: 1 }}
             label={t("onMessage", { ns: "form" })}
             onChange={handleChangeMessage("on")}
@@ -333,6 +354,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           />
           <TextField
             id="offMessage"
+            size="small"
             sx={{ flex: 1 }}
             label={t("offMessage", { ns: "form" })}
             onChange={handleChangeMessage("off")}
@@ -386,6 +408,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
               <TextField
                 id={`decision-label-${decisionId}`}
                 label={t("label", { ns: "form" })}
+                size="small"
                 sx={{ flex: 1 }}
                 onChange={handleChangeOptionLabel}
                 value={decisionLabel}
@@ -395,6 +418,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
               <TextField
                 id={`decision-value-${decisionId}`}
                 label={t("value", { ns: "form" })}
+                size="small"
                 sx={{ flex: 1 }}
                 onChange={handleChangeOptionValue}
                 value={decisionValue}
@@ -404,6 +428,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
               <TextField
                 id={`decision-message-${decisionId}`}
                 label={t("message", { ns: "form" })}
+                size="small"
                 sx={{ flex: 1 }}
                 onChange={handleChangeOptionMessage}
                 value={decisionMessage}

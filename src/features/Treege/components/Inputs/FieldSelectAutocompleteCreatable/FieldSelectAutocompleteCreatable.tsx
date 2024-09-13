@@ -33,10 +33,11 @@ const FieldSelectAutocompleteCreatable = ({ id, value, onChange }: FieldSelectAu
 
   return (
     <Autocomplete
-      id={id}
-      sx={{ flex: 1 }}
       freeSolo
       fullWidth
+      id={id}
+      sx={{ flex: 1 }}
+      size="small"
       value={value}
       onChange={onChange}
       filterOptions={(options, params) => {

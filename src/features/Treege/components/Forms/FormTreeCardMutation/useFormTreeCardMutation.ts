@@ -239,8 +239,8 @@ const useFormTreeCardMutation = () => {
     setRepeatable(event.target.checked);
   }, []);
 
-  const handleChangeType = useCallback((event: SelectChangeEvent<TreeNodeField["type"]>) => {
-    setType(event.target.value as TreeNodeField["type"]);
+  const handleChangeType = useCallback((_: SyntheticEvent, value: (typeof fields)[number]) => {
+    setType(value.type);
     setIsDecision(false);
     setRequired(false);
     setRepeatable(false);

@@ -40,6 +40,7 @@ const FORM_EN = {
     text: "Text",
     time: "Time",
     timeRange: "Time range",
+    title: "Title",
     tree: "Tree",
     url: "URL",
   },

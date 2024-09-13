@@ -40,6 +40,7 @@ const FORM_FR = {
     text: "Texte",
     time: "Temps",
     timeRange: "Plage de temps",
+    title: "Titre",
     tree: "Arbre",
     url: "URL",
   },

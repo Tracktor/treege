@@ -36,6 +36,7 @@ const ExtraField = ({
     return (
       <TextField
         required
+        size="small"
         id={id}
         sx={{ flex: 1 }}
         label={t("hiddenValue", { ns: "form" })}
@@ -45,7 +46,9 @@ const ExtraField = ({
     );
   }
 
-  return <TextField sx={{ flex: 1 }} label={t("helperText", { ns: "form" })} onChange={handleChangeHelperText} value={helperText} />;
+  return (
+    <TextField sx={{ flex: 1 }} label={t("helperText", { ns: "form" })} size="small" onChange={handleChangeHelperText} value={helperText} />
+  );
 };
 
 export default ExtraField;
