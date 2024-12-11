@@ -1,11 +1,10 @@
-import type { SelectChangeEvent } from "@tracktor/design-system";
+import { SelectChangeEvent, useSnackbar } from "@tracktor/design-system";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { ChangeEvent, FormEvent, MouseEvent, SyntheticEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";
 import { appendTreeCard, replaceTreeCard } from "@/features/Treege/reducer/treeReducer";
 import type { Params, Route, TreeNode, TreeNodeField, TreeValues } from "@/features/Treege/type/TreeNode";
-import useSnackbar from "@/hooks/useSnackbar";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import { getUUID } from "@/utils";
@@ -21,7 +20,7 @@ const useFormTreeCardMutation = () => {
   const uuid = getUUID();
   const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
   const { dispatchTree, currentHierarchyPointNode, modalOpen, treePath, setModalOpen } = useTreegeContext();
-  const { open } = useSnackbar();
+  const { openSnackbar } = useSnackbar();
   const { t } = useTranslation();
   const isMultipleAttribute =
     currentHierarchyPointNode?.data &&
@@ -358,7 +357,10 @@ const useFormTreeCardMutation = () => {
         try {
           return fetchWorkflow();
         } catch (e) {
-          open(t("error.fetchTree", { ns: "snackMessage" }), "error");
+          openSnackbar({
+            message: t("error.fetchTree", { ns: "snackMessage" }),
+            severity: "error",
+          });
         }
       }
 
@@ -372,7 +374,7 @@ const useFormTreeCardMutation = () => {
 
       return { data: null, isError: null };
     },
-    [currentHierarchyPointNode?.data.attributes?.tree, fetchWorkflow, open, t],
+    [currentHierarchyPointNode?.data.attributes?.tree, fetchWorkflow, openSnackbar, t],
   );
 
   const handleSubmit = useCallback(

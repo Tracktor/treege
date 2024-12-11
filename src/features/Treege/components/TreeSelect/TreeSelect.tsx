@@ -39,6 +39,7 @@ const styles = {
 const TreeSelect = ({ arrowOnly, required, size, showBtnAddNewTree, onChange, value, fetchWorkflowsOnOpen }: TreeSelectProps) => {
   const { t } = useTranslation("form");
   const isControlled = useMemo(() => !!onChange, [onChange]);
+
   const { handleChangeTree, handleOnOpen, workflowsSuggestions, workflowsSuggestionsLoading, treeSelected } = useTreeSelect({
     fetchWorkflowsOnOpen,
     isControlled,

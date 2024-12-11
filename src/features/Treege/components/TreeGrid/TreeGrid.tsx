@@ -1,6 +1,6 @@
 import { Stack } from "@tracktor/design-system";
 import Logo from "@/components/DataDisplay/Logo/Logo";
-import Tree from "@/components/DataDisplay/Tree/Tree";
+import TreeViewer from "@/components/DataDisplay/TreeViewer/TreeViewer";
 import ViewerJSON from "@/components/DataDisplay/ViewerJSON/ViewerJSON";
 import ViewerJSONAction from "@/components/DataDisplay/ViewerJSONAction/ViewerJSONAction";
 import MainModal from "@/components/FeedBack/MainModal/MainModal";
@@ -12,22 +12,24 @@ import MosaicLayout from "@/components/Layouts/MosaicLayout/MosaicLayout";
 import Sidebar from "@/components/Layouts/Sidebar/Sidebar";
 import FormTreeCardDelete from "@/features/Treege/components/Forms/FormTreeCardDelete/FormTreeCardDelete";
 import FormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/FormTreeCardMutation";
-import TreeCardContainer from "@/features/Treege/components/TreeCardContainer/TreeCardContainer";
 import useTreeCardContainer from "@/features/Treege/components/TreeCardContainer/useTreeCardContainer";
 import useTreeGrid from "@/features/Treege/components/TreeGrid/useTreeGrid";
 import TreeNameTextField from "@/features/Treege/components/TreeNameTextField";
 import TreeSelect from "@/features/Treege/components/TreeSelect";
 import useTreegeContext from "@/hooks/useTreegeContext";
+import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import { getTree } from "@/utils/tree";
 
 const TreeGrid = () => {
-  const { tree, treeModalOpen, treePath, backendConfig } = useTreegeContext();
+  const { tree, treeModalOpen, treePath, backendConfig, currentTree } = useTreegeContext();
   const { handleCloseTreeModal } = useTreeCardContainer();
   const { getTitleModalMutation, closeModal, getTitleModalDelete, isModalMutationOpen, isDeleteModal, handleChangeTree } = useTreeGrid();
+  const { data: workflow, isFetching: isPendingWorkflow } = useWorkflowQuery(currentTree.id);
   const lastTreePath = treePath?.at(-1);
   const currentTreePath = lastTreePath?.path;
   const currentTreeName = lastTreePath?.label;
-  const currentTree = getTree(tree, currentTreePath);
+  const openTree = getTree(tree, currentTreePath);
+  const isLoading = isPendingWorkflow || (workflow && !tree);
 
   return (
     <>
@@ -45,7 +47,7 @@ const TreeGrid = () => {
         </Header>
 
         <Main>
-          <Tree data={tree} renderCustomNodeElement={TreeCardContainer} />
+          <TreeViewer data={tree} isLoading={isLoading} />
         </Main>
 
         <Sidebar>
@@ -69,7 +71,7 @@ const TreeGrid = () => {
 
       {/* Tree modal viewer */}
       <TreeModal open={treeModalOpen} onClose={handleCloseTreeModal} title={currentTreeName}>
-        <Tree data={currentTree} renderCustomNodeElement={TreeCardContainer} />
+        <TreeViewer data={openTree} />
       </TreeModal>
     </>
   );
