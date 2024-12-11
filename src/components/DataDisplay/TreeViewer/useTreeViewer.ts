@@ -36,7 +36,10 @@ const calculateGraphLayout = (nodes: Node[], edges: Edge[], direction = "TB") =>
     };
   });
 
-  return { edges, nodes: positionedNodes };
+  return {
+    edges,
+    nodes: positionedNodes,
+  };
 };
 
 const useTreeViewer = (treeData: TreeNode | null) => {
