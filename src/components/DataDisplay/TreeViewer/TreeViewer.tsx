@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from "@tracktor/design-system";
+import { Box, CircularProgress, GlobalStyles } from "@tracktor/design-system";
 import { Background, Controls, MiniMap, ReactFlow } from "@xyflow/react";
 import { memo } from "react";
 import { nodeTypes } from "@/components/DataDisplay/Nodes";
@@ -27,7 +27,7 @@ const styles = {
 };
 
 const TreeViewer = ({ data, isLoading }: TreeViewerProps) => {
-  const { nodes, edges, onConnect, onNodesChange, onEdgesChange } = useTreeViewer();
+  const { nodes, edges, onConnect, onNodesChange, onEdgesChange } = useTreeViewer(data);
 
   if (!data) {
     return <ButtonCreateTree />;
@@ -43,6 +43,13 @@ const TreeViewer = ({ data, isLoading }: TreeViewerProps) => {
 
   return (
     <div style={styles.container}>
+      <GlobalStyles
+        styles={{
+          ".react-flow__panel a ": {
+            display: "none",
+          },
+        }}
+      />
       <ReactFlow
         fitView
         nodes={nodes}

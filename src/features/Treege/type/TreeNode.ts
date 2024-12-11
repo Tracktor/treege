@@ -1,5 +1,3 @@
-import type { HierarchyPointNode } from "d3-hierarchy";
-import type { CustomNodeElementProps } from "react-d3-tree/lib/types/types/common";
 import type fields from "@/constants/fields";
 
 export interface TreeValues {
@@ -112,9 +110,3 @@ export interface TreeNodeField {
   repeatable?: boolean;
   hiddenValue?: string;
 }
-
-export interface TreeCustomNodeElementProps extends Omit<CustomNodeElementProps, "hierarchyPointNode"> {
-  hierarchyPointNode: HierarchyPointNode<TreeNode>;
-}
-
-export type TreeRenderCustomNodeElementFn = (rd3tNodeProps: TreeCustomNodeElementProps) => JSX.Element;
