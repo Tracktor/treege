@@ -1,9 +1,9 @@
 import dagre from "@dagrejs/dagre";
 import { addEdge, ConnectionLineType, Edge, Node, Position, useEdgesState, useNodesState } from "@xyflow/react";
 import { Connection } from "@xyflow/system/dist/esm/types/general";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect } from "react";
 import { TreeNode } from "@/features/Treege/type/TreeNode";
-import useTreeTransformer from "@/hooks/useTreeTransformer";
+import transformTreeToFlow from "@/utils/tree/transformTreeToFlow/transformTreeToFlow";
 
 const dagreGraph = new dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
 const nodeWidth = 172;
@@ -33,36 +33,27 @@ const calculateGraphLayout = (nodes: Node[], edges: Edge[], direction = "TB") =>
       },
       sourcePosition: isHorizontal ? Position.Right : Position.Bottom,
       targetPosition: isHorizontal ? Position.Left : Position.Top,
-    };
+    } as Node;
   });
 
-  return {
-    edges,
-    nodes: positionedNodes,
-  };
+  return { edges, nodes: positionedNodes };
 };
 
-const useTreeViewer = (treeData: TreeNode | null) => {
-  // Transform data
-  const transformedData = useTreeTransformer(treeData);
+const useTreeViewer = (treeData?: TreeNode | null) => {
+  const { nodes: initialNodes, edges: initialEdges } = transformTreeToFlow(treeData);
+  const { nodes: layoutedNodes, edges: layoutedEdges } = calculateGraphLayout(initialNodes as Node[], initialEdges);
 
-  // Memoize the layout calculation
-  const graphLayout = useMemo(
-    () => calculateGraphLayout(transformedData.nodes as Node[], transformedData.edges),
-    [transformedData.nodes, transformedData.edges],
-  );
+  const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
 
-  // Setup states with memoized layout
-  const [nodes, setNodes, onNodesChange] = useNodesState(graphLayout.nodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(graphLayout.edges);
-
-  // Update only when layout changes
   useEffect(() => {
-    if (JSON.stringify(nodes) !== JSON.stringify(graphLayout.nodes)) {
-      setNodes(graphLayout.nodes);
-      setEdges(graphLayout.edges);
+    if (treeData) {
+      const { nodes: newNodes, edges: newEdges } = transformTreeToFlow(treeData);
+      const { nodes: layoutedNewNodes, edges: layoutedNewEdges } = calculateGraphLayout(newNodes as Node[], newEdges);
+      setNodes(layoutedNewNodes);
+      setEdges(layoutedNewEdges);
     }
-  }, [graphLayout, setNodes, setEdges, nodes]);
+  }, [setEdges, setNodes, treeData]);
 
   const onConnect = useCallback(
     (params: Connection) =>
