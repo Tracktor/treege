@@ -64,7 +64,7 @@ const createFlowEdge = (parentId: string, childId: string): FlowEdge => ({
 /**
  * Recursively transforms a tree node and its children into flow elements
  */
-const transformNode = (treeNode?: TreeNode | null, parentId?: string): { nodes: FlowNode[]; edges: FlowEdge[] } => {
+const transformTreeToFlow = (treeNode?: TreeNode | null, parentId?: string): TransformedData => {
   if (!treeNode) {
     return { edges: [], nodes: [] };
   }
@@ -72,17 +72,12 @@ const transformNode = (treeNode?: TreeNode | null, parentId?: string): { nodes: 
   const currentNode = createFlowNode(treeNode);
   const currentEdge = parentId ? [createFlowEdge(parentId, currentNode.id)] : [];
 
-  const childrenTransformations = treeNode.children?.map((child) => transformNode(child, currentNode.id)) || [];
+  const childrenTransformations = treeNode.children?.map((child) => transformTreeToFlow(child, currentNode.id)) || [];
 
   return {
     edges: [...currentEdge, ...childrenTransformations.flatMap((transform) => transform.edges)],
     nodes: [currentNode, ...childrenTransformations.flatMap((transform) => transform.nodes)],
   };
 };
-
-/**
- * Transforms a tree structure into React Flow compatible format
- */
-export const transformTreeToFlow = (tree?: TreeNode | null): TransformedData => transformNode(tree);
 
 export default transformTreeToFlow;
