@@ -3,6 +3,7 @@ import { Background, Controls, MiniMap, ReactFlow } from "@xyflow/react";
 import { memo } from "react";
 import { nodeTypes } from "@/components/DataDisplay/Nodes";
 import useTreeViewer from "@/components/DataDisplay/TreeViewer/useTreeViewer";
+import colors from "@/constants/colors";
 import ButtonCreateTree from "@/features/Treege/components/Inputs/ButtonCreateTree/ButtonCreateTree";
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
 import "@xyflow/react/dist/style.css";
@@ -61,7 +62,7 @@ const TreeViewer = ({ data, isLoading }: TreeViewerProps) => {
         className="antialiased"
         colorMode="dark"
       >
-        <Background />
+        <Background color={colors.primary} bgColor={colors.background} />
         <MiniMap />
         <Controls />
       </ReactFlow>
