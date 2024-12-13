@@ -2,19 +2,21 @@ import dagre from "@dagrejs/dagre";
 import { addEdge, ConnectionLineType, Edge, Node, Position, useEdgesState, useNodesState } from "@xyflow/react";
 import { Connection } from "@xyflow/system/dist/esm/types/general";
 import { useCallback, useEffect } from "react";
+import { NODE_HEIGHT, NODE_WIDTH } from "@/constants/node";
 import { TreeNode } from "@/features/Treege/type/TreeNode";
 import transformTreeToFlow from "@/utils/tree/transformTreeToFlow/transformTreeToFlow";
 
 const dagreGraph = new dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
-const nodeWidth = 172;
-const nodeHeight = 36;
 
 const calculateGraphLayout = (nodes: Node[], edges: Edge[], direction = "TB") => {
   const isHorizontal = direction === "LR";
   dagreGraph.setGraph({ rankdir: direction });
 
   nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, { height: nodeHeight, width: nodeWidth });
+    dagreGraph.setNode(node.id, {
+      height: NODE_HEIGHT,
+      width: NODE_WIDTH,
+    });
   });
 
   edges.forEach((edge) => {
@@ -28,8 +30,8 @@ const calculateGraphLayout = (nodes: Node[], edges: Edge[], direction = "TB") =>
     return {
       ...node,
       position: {
-        x: nodeWithPosition.x - nodeWidth / 2,
-        y: nodeWithPosition.y - nodeHeight / 2,
+        x: nodeWithPosition.x - NODE_WIDTH / 2,
+        y: nodeWithPosition.y - NODE_HEIGHT / 2,
       },
       sourcePosition: isHorizontal ? Position.Right : Position.Bottom,
       targetPosition: isHorizontal ? Position.Left : Position.Top,
@@ -41,17 +43,17 @@ const calculateGraphLayout = (nodes: Node[], edges: Edge[], direction = "TB") =>
 
 const useTreeViewer = (treeData?: TreeNode | null) => {
   const { nodes: initialNodes, edges: initialEdges } = transformTreeToFlow(treeData);
-  const { nodes: layoutedNodes, edges: layoutedEdges } = calculateGraphLayout(initialNodes as Node[], initialEdges);
+  const { nodes: calculatedNodes, edges: calculateEdges } = calculateGraphLayout(initialNodes as Node[], initialEdges);
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
+  const [nodes, setNodes, onNodesChange] = useNodesState(calculatedNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(calculateEdges);
 
   useEffect(() => {
     if (treeData) {
       const { nodes: newNodes, edges: newEdges } = transformTreeToFlow(treeData);
-      const { nodes: layoutedNewNodes, edges: layoutedNewEdges } = calculateGraphLayout(newNodes as Node[], newEdges);
-      setNodes(layoutedNewNodes);
-      setEdges(layoutedNewEdges);
+      const { nodes: calculatedNewNodes, edges: calculateNewEdges } = calculateGraphLayout(newNodes as Node[], newEdges);
+      setNodes(calculatedNewNodes);
+      setEdges(calculateNewEdges);
     }
   }, [setEdges, setNodes, treeData]);
 

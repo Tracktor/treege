@@ -130,19 +130,6 @@ const TreeCard = ({
       <Box component="foreignObject" height={size} width={size} x={`-${size / 2}`} y={`-${size / 2}`} sx={getCardStyle(type)}>
         <Box flex={1} display="flex" p={2} height="100%" flexDirection="column" justifyContent="space-between">
           <Stack alignItems="flex-end" spacing={0.5}>
-            {isField && (
-              <Stack direction="row" spacing={1} alignItems="center">
-                {step && (
-                  <Tooltip title={`${t("step", { ns: "form" })} ${nodeDatum?.attributes?.step}`} placement="left" arrow>
-                    <Chip color="primary" size="small" label={step} sx={styles.stepChip} />
-                  </Tooltip>
-                )}
-                <Typography variant="subtitle2" sx={styles.title}>
-                  <strong>{label}</strong>
-                </Typography>
-              </Stack>
-            )}
-            {isField && <Chip color="info" size="small" label={t(`type.${type}` as const as any, { ns: "form" })} />}
             {tag && <Chip variant="outlined" color="warning" size="small" label={tag} />}
 
             {required && (

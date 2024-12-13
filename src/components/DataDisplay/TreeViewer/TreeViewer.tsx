@@ -46,7 +46,13 @@ const TreeViewer = ({ data, isLoading }: TreeViewerProps) => {
     <div style={styles.container}>
       <GlobalStyles
         styles={{
-          ".react-flow__panel a ": {
+          ".react-flow__node": {
+            backgroundColor: "transparent !important",
+            border: "0 !important",
+            padding: "0 !important",
+            width: "auto !important",
+          },
+          ".react-flow__panel a": {
             display: "none",
           },
         }}

@@ -1,9 +1,11 @@
 import type { Node, NodeTypes } from "@xyflow/react";
-import DefaultNodeComponent from "@/components/DataDisplay/Nodes/DefaultNode";
+import DefaultNode from "@/components/DataDisplay/Nodes/DefaultNode";
 import { TreeNode } from "@/features/Treege/type/TreeNode";
 
 export const nodeTypes = {
-  default: DefaultNodeComponent,
+  default: DefaultNode,
+  input: DefaultNode,
+  output: DefaultNode,
 } satisfies NodeTypes;
 
 export type AppNode = Node<TreeNode["attributes"]>;
