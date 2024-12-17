@@ -1,26 +1,64 @@
 import AccountTreeRoundedIcon from "@mui/icons-material/AccountTreeRounded";
+import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
+import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import EnergySavingsLeafRoundedIcon from "@mui/icons-material/EnergySavingsLeafRounded";
 import ForestRoundedIcon from "@mui/icons-material/ForestRounded";
 import LocalOfferRoundedIcon from "@mui/icons-material/LocalOfferRounded";
 import LoopRoundedIcon from "@mui/icons-material/LoopRounded";
 import ParkRoundedIcon from "@mui/icons-material/ParkRounded";
 import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
-import { Card, Chip, Stack, Theme, Tooltip, Typography } from "@tracktor/design-system";
-import { Handle, type NodeProps, Position } from "@xyflow/react";
+import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
+import { Card, Chip, IconButton, Stack, Theme, Tooltip, Typography } from "@tracktor/design-system";
+import { Handle, Position } from "@xyflow/react";
 import { useTranslation } from "react-i18next";
 import { AppNode } from "@/components/DataDisplay/Nodes";
 import { NODE_HEIGHT, NODE_WIDTH } from "@/constants/node";
 
+interface DefaultNodeProps {
+  data: AppNode["data"];
+  nodeType: string;
+  onDeleteChildren?: (data: any) => void;
+  onAddChildren?: (data: any) => void;
+  onEditChildren?: (data: any) => void;
+  onOpenTreeModal?: (data: any) => void;
+}
+
 const styles = {
+  card: {
+    "&:hover": {
+      boxShadow: `
+            0 0 5px rgba(14, 211, 180, 0.5),
+            0 0 10px rgba(14, 211, 180, 0.4),
+            0 0 15px rgba(14, 211, 180, 0.3),
+            0 0 20px rgba(14, 211, 180, 0.2),
+            inset 0 0 5px rgba(14, 211, 180, 0.1)
+          `,
+    },
+    border: "1px solid #0ed3b4",
+    borderRadius: "3px",
+    boxShadow: `
+          0 0 5px rgba(14, 211, 180, 0.3),
+          0 0 10px rgba(14, 211, 180, 0.2),
+          0 0 15px rgba(14, 211, 180, 0.1),
+          0 0 20px rgba(14, 211, 180, 0.05),
+          inset 0 0 5px rgba(14, 211, 180, 0.05)
+        `,
+    height: NODE_HEIGHT,
+    paddingX: 2,
+    paddingY: 1,
+    textAlign: "left",
+    width: NODE_WIDTH,
+  },
   icon: {
     color: ({ palette }: Theme) => palette.text.secondary,
     fontSize: 12,
   },
 };
 
-const DefaultNode = ({ data }: NodeProps<AppNode>) => {
+const DefaultNode = ({ data, onEditChildren, onDeleteChildren, onAddChildren, onOpenTreeModal, nodeType }: DefaultNodeProps) => {
   const { t } = useTranslation(["translation", "form"]);
-  const { isRoot, isLeaf, required, isDecision, step, type, label, repeatable, tag } = data;
+  const { isRoot, isLeaf, required, isDecision, type, label, repeatable, tag } = data || {};
   const isField = !!type;
   const isTree = type === "tree";
   const isHidden = type === "hidden";
@@ -28,33 +66,7 @@ const DefaultNode = ({ data }: NodeProps<AppNode>) => {
   const isBranch = !isRoot && !isLeaf;
 
   return (
-    <Card
-      sx={{
-        "&:hover": {
-          boxShadow: `
-            0 0 5px rgba(14, 211, 180, 0.5),
-            0 0 10px rgba(14, 211, 180, 0.4),
-            0 0 15px rgba(14, 211, 180, 0.3),
-            0 0 20px rgba(14, 211, 180, 0.2),
-            inset 0 0 5px rgba(14, 211, 180, 0.1)
-          `,
-        },
-        border: "1px solid #0ed3b4",
-        borderRadius: "3px",
-        boxShadow: `
-          0 0 5px rgba(14, 211, 180, 0.3),
-          0 0 10px rgba(14, 211, 180, 0.2),
-          0 0 15px rgba(14, 211, 180, 0.1),
-          0 0 20px rgba(14, 211, 180, 0.05),
-          inset 0 0 5px rgba(14, 211, 180, 0.05)
-        `,
-        height: NODE_HEIGHT,
-        paddingX: 2,
-        paddingY: 1,
-        textAlign: "left",
-        width: NODE_WIDTH,
-      }}
-    >
+    <Card sx={styles.card}>
       <Stack justifyContent="space-between" height="100%">
         {/* Header */}
         <Stack>
@@ -62,7 +74,7 @@ const DefaultNode = ({ data }: NodeProps<AppNode>) => {
           {isField && (
             <Stack direction="row" alignItems="center" spacing={1}>
               <Typography whiteSpace="nowrap" variant="body2" overflow="hidden" textOverflow="ellipsis">
-                {data.label}
+                {label}
                 {required && " *"}
               </Typography>
             </Stack>
@@ -101,30 +113,63 @@ const DefaultNode = ({ data }: NodeProps<AppNode>) => {
               </Tooltip>
             )}
           </Stack>
+
+          {/* Type and tag */}
+          <Stack direction="row" spacing={0.5} marginTop={1}>
+            <Chip variant="rounded" color="info" size="xSmall" label={t(`type.${type}` as const as any, { ns: "form" })} />
+            {tag && (
+              <Chip
+                variant="outlined-rounded"
+                color="warning"
+                size="xSmall"
+                label={tag}
+                icon={
+                  <LocalOfferRoundedIcon
+                    sx={{
+                      fontSize: 10,
+                    }}
+                  />
+                }
+              />
+            )}
+          </Stack>
         </Stack>
 
-        <Stack direction="row" spacing={0.5}>
-          <Chip variant="rounded" color="info" size="xSmall" label={t(`type.${type}` as const as any, { ns: "form" })} />
-          {tag && (
-            <Chip
-              variant="outlined-rounded"
-              color="warning"
-              size="xSmall"
-              label={tag}
-              icon={
-                <LocalOfferRoundedIcon
-                  sx={{
-                    fontSize: 10,
-                  }}
-                />
-              }
-            />
+        {/* Actions */}
+        <Stack direction="row" justifyContent="flex-end" spacing={0} alignSelf="flex-end">
+          {!isRoot && (
+            <Tooltip title={t("remove")} arrow>
+              <IconButton size="small" color="error" onClick={() => onDeleteChildren?.({})}>
+                <DeleteOutlineRoundedIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          {!isValue && (
+            <Tooltip title={t("edit")} arrow>
+              <IconButton color="secondary" size="small" onClick={() => onEditChildren?.({})}>
+                <EditRoundedIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          {!isDecision && (
+            <Tooltip title={t("add")} arrow>
+              <IconButton color="success" size="small" onClick={() => onAddChildren?.({})}>
+                <AddBoxRoundedIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          {isTree && (
+            <Tooltip title={t("show")} arrow>
+              <IconButton color="info" size="small" onClick={() => onOpenTreeModal?.({})}>
+                <VisibilityRoundedIcon />
+              </IconButton>
+            </Tooltip>
           )}
         </Stack>
       </Stack>
 
       {/* Handles dragging the node */}
-      <Handle type="target" position={Position.Top} />
+      {nodeType !== "input" && <Handle type="target" position={Position.Top} />}
       <Handle type="source" position={Position.Bottom} />
     </Card>
   );

@@ -4,7 +4,7 @@ import useTreegeContext from "@/hooks/useTreegeContext";
 
 const useTreeGrid = () => {
   const { t } = useTranslation(["modal", "snackMessage"]);
-  const { currentHierarchyPointNode, modalOpen, setModalOpen, dispatchTree } = useTreegeContext();
+  const { currentHierarchyPointNode, modalOpen, setModalOpen, dispatchTree, setTreePath, setTreeModalOpen } = useTreegeContext();
   const isEditModal = modalOpen === "edit";
   const isAddModal = modalOpen === "add";
   const isDeleteModal = modalOpen === "delete";
@@ -41,11 +41,17 @@ const useTreeGrid = () => {
     return undefined;
   };
 
+  const handleCloseTreeModal = () => {
+    setTreePath([]);
+    setTreeModalOpen(false);
+  };
+
   return {
     closeModal,
     getTitleModalDelete,
     getTitleModalMutation,
     handleChangeTree,
+    handleCloseTreeModal,
     isDeleteModal,
     isModalMutationOpen,
   };

@@ -110,3 +110,5 @@ export interface TreeNodeField {
   repeatable?: boolean;
   hiddenValue?: string;
 }
+
+export type TreeNodeAttributes = TreeNode["attributes"];

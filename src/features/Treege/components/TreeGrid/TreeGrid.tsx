@@ -12,7 +12,6 @@ import MosaicLayout from "@/components/Layouts/MosaicLayout/MosaicLayout";
 import Sidebar from "@/components/Layouts/Sidebar/Sidebar";
 import FormTreeCardDelete from "@/features/Treege/components/Forms/FormTreeCardDelete/FormTreeCardDelete";
 import FormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/FormTreeCardMutation";
-import useTreeCardContainer from "@/features/Treege/components/TreeCardContainer/useTreeCardContainer";
 import useTreeGrid from "@/features/Treege/components/TreeGrid/useTreeGrid";
 import TreeNameTextField from "@/features/Treege/components/TreeNameTextField";
 import TreeSelect from "@/features/Treege/components/TreeSelect";
@@ -21,9 +20,17 @@ import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import { getTree } from "@/utils/tree";
 
 const TreeGrid = () => {
+  const {
+    getTitleModalMutation,
+    closeModal,
+    getTitleModalDelete,
+    isModalMutationOpen,
+    isDeleteModal,
+    handleChangeTree,
+    handleCloseTreeModal,
+  } = useTreeGrid();
+
   const { tree, treeModalOpen, treePath, backendConfig, currentTree } = useTreegeContext();
-  const { handleCloseTreeModal } = useTreeCardContainer();
-  const { getTitleModalMutation, closeModal, getTitleModalDelete, isModalMutationOpen, isDeleteModal, handleChangeTree } = useTreeGrid();
   const { data: workflow, isFetching: isPendingWorkflow } = useWorkflowQuery(currentTree.id);
   const lastTreePath = treePath?.at(-1);
   const currentTreePath = lastTreePath?.path;
