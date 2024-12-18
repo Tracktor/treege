@@ -10,18 +10,16 @@ import ParkRoundedIcon from "@mui/icons-material/ParkRounded";
 import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import { Card, Chip, IconButton, Stack, Theme, Tooltip, Typography } from "@tracktor/design-system";
-import { Handle, Position } from "@xyflow/react";
+import { Handle, NodeProps, Position } from "@xyflow/react";
 import { useTranslation } from "react-i18next";
 import { AppNode } from "@/components/DataDisplay/Nodes";
 import { NODE_HEIGHT, NODE_WIDTH } from "@/constants/node";
 
-interface DefaultNodeProps {
-  data: AppNode["data"];
-  nodeType: string;
-  onDeleteChildren?: (data: any) => void;
-  onAddChildren?: (data: any) => void;
-  onEditChildren?: (data: any) => void;
-  onOpenTreeModal?: (data: any) => void;
+interface DefaultNodeProps extends NodeProps<AppNode> {
+  onDeleteChildren?: (data: NodeProps<AppNode>) => void;
+  onAddChildren?: (data: NodeProps<AppNode>) => void;
+  onEditChildren?: (data: NodeProps<AppNode>) => void;
+  onOpenTreeModal?: (data: NodeProps<AppNode>) => void;
 }
 
 const styles = {
@@ -56,9 +54,9 @@ const styles = {
   },
 };
 
-const DefaultNode = ({ data, onEditChildren, onDeleteChildren, onAddChildren, onOpenTreeModal, nodeType }: DefaultNodeProps) => {
+const DefaultNode = ({ onDeleteChildren, onAddChildren, onEditChildren, onOpenTreeModal, ...props }: DefaultNodeProps) => {
   const { t } = useTranslation(["translation", "form"]);
-  const { isRoot, isLeaf, required, isDecision, type, label, repeatable, tag } = data || {};
+  const { isRoot, isLeaf, required, isDecision, type, label, repeatable, tag } = props?.data || {};
   const isField = !!type;
   const isTree = type === "tree";
   const isHidden = type === "hidden";
@@ -139,28 +137,28 @@ const DefaultNode = ({ data, onEditChildren, onDeleteChildren, onAddChildren, on
         <Stack direction="row" justifyContent="flex-end" spacing={0} alignSelf="flex-end">
           {!isRoot && (
             <Tooltip title={t("remove")} arrow>
-              <IconButton size="small" color="error" onClick={() => onDeleteChildren?.({})}>
+              <IconButton size="small" color="error" onClick={() => onDeleteChildren?.(props)}>
                 <DeleteOutlineRoundedIcon />
               </IconButton>
             </Tooltip>
           )}
           {!isValue && (
             <Tooltip title={t("edit")} arrow>
-              <IconButton color="secondary" size="small" onClick={() => onEditChildren?.({})}>
+              <IconButton color="secondary" size="small" onClick={() => onEditChildren?.(props)}>
                 <EditRoundedIcon />
               </IconButton>
             </Tooltip>
           )}
           {!isDecision && (
             <Tooltip title={t("add")} arrow>
-              <IconButton color="success" size="small" onClick={() => onAddChildren?.({})}>
+              <IconButton color="success" size="small" onClick={() => onAddChildren?.(props)}>
                 <AddBoxRoundedIcon />
               </IconButton>
             </Tooltip>
           )}
           {isTree && (
             <Tooltip title={t("show")} arrow>
-              <IconButton color="info" size="small" onClick={() => onOpenTreeModal?.({})}>
+              <IconButton color="info" size="small" onClick={() => onOpenTreeModal?.(props)}>
                 <VisibilityRoundedIcon />
               </IconButton>
             </Tooltip>
@@ -169,7 +167,7 @@ const DefaultNode = ({ data, onEditChildren, onDeleteChildren, onAddChildren, on
       </Stack>
 
       {/* Handles dragging the node */}
-      {nodeType !== "input" && <Handle type="target" position={Position.Top} />}
+      {props?.type !== "input" && <Handle type="target" position={Position.Top} />}
       <Handle type="source" position={Position.Bottom} />
     </Card>
   );

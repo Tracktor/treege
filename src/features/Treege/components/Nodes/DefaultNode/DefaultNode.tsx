@@ -3,28 +3,29 @@ import { AppNode } from "@/components/DataDisplay/Nodes";
 import DefaultNodeComponent from "@/components/DataDisplay/Nodes/DefaultNode";
 import useTreegeContext from "@/hooks/useTreegeContext";
 
-const DefaultNode = ({ data, type }: NodeProps<AppNode>) => {
+const DefaultNode = (props: NodeProps<AppNode>) => {
   const { setModalOpen, setCurrentHierarchyPointNode, setTreeModalOpen, setTreePath } = useTreegeContext();
 
-  const handleAddChildren = (hierarchyPointNode: any) => {
-    setCurrentHierarchyPointNode(hierarchyPointNode);
+  const handleAddChildren = (nodeProps: NodeProps<AppNode>) => {
+    console.log("handleAddChildren", nodeProps);
+    setCurrentHierarchyPointNode(nodeProps);
     setModalOpen("add");
   };
 
-  const handleDeleteChildren = (hierarchyPointNode: any) => {
-    setCurrentHierarchyPointNode(hierarchyPointNode);
+  const handleDeleteChildren = (nodeProps: NodeProps<AppNode>) => {
+    setCurrentHierarchyPointNode(nodeProps);
     setModalOpen("delete");
   };
 
-  const handleEditChildren = (hierarchyPointNode: any) => {
-    setCurrentHierarchyPointNode(hierarchyPointNode);
+  const handleEditChildren = (nodeProps: NodeProps<AppNode>) => {
+    setCurrentHierarchyPointNode(nodeProps);
     setModalOpen("edit");
   };
 
-  const handleOpenTreeModal = (hierarchyPointNode: any) => {
+  const handleOpenTreeModal = (nodeProps: NodeProps<AppNode>) => {
     const currentTree = {
-      label: hierarchyPointNode?.data.attributes?.label || "",
-      path: hierarchyPointNode?.data?.attributes?.treePath || "",
+      label: nodeProps?.data.label || "",
+      path: nodeProps?.data?.treePath || "",
     };
 
     setTreePath((prevState) => [...prevState, currentTree]);
@@ -33,12 +34,11 @@ const DefaultNode = ({ data, type }: NodeProps<AppNode>) => {
 
   return (
     <DefaultNodeComponent
-      data={data}
-      nodeType={type}
+      onAddChildren={handleAddChildren}
       onDeleteChildren={handleDeleteChildren}
       onEditChildren={handleEditChildren}
-      onAddChildren={handleAddChildren}
       onOpenTreeModal={handleOpenTreeModal}
+      {...props}
     />
   );
 };
