@@ -2,24 +2,15 @@ import { NodeProps } from "@xyflow/react";
 import { AppNode } from "@/components/DataDisplay/Nodes";
 import DefaultNodeComponent from "@/components/DataDisplay/Nodes/DefaultNode";
 import useTreegeContext from "@/hooks/useTreegeContext";
+import transformToHierarchyNode from "@/utils/tree/transformToHierarchyNode/transformToHierarchyNode";
 
 const DefaultNode = (props: NodeProps<AppNode>) => {
   const { setModalOpen, setCurrentHierarchyPointNode, setTreeModalOpen, setTreePath } = useTreegeContext();
 
-  const handleAddChildren = (nodeProps: NodeProps<AppNode>) => {
-    console.log("handleAddChildren", nodeProps);
-    setCurrentHierarchyPointNode(nodeProps);
-    setModalOpen("add");
-  };
-
-  const handleDeleteChildren = (nodeProps: NodeProps<AppNode>) => {
-    setCurrentHierarchyPointNode(nodeProps);
-    setModalOpen("delete");
-  };
-
-  const handleEditChildren = (nodeProps: NodeProps<AppNode>) => {
-    setCurrentHierarchyPointNode(nodeProps);
-    setModalOpen("edit");
+  const handleNodeOperation = (type: "edit" | "delete" | "add") => (nodeProps: NodeProps<AppNode>) => {
+    const hierarchyNode = transformToHierarchyNode(nodeProps);
+    setCurrentHierarchyPointNode(hierarchyNode);
+    setModalOpen(type);
   };
 
   const handleOpenTreeModal = (nodeProps: NodeProps<AppNode>) => {
@@ -34,11 +25,12 @@ const DefaultNode = (props: NodeProps<AppNode>) => {
 
   return (
     <DefaultNodeComponent
-      onAddChildren={handleAddChildren}
-      onDeleteChildren={handleDeleteChildren}
-      onEditChildren={handleEditChildren}
-      onOpenTreeModal={handleOpenTreeModal}
+      // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
+      onAddChildren={handleNodeOperation("add")}
+      onDeleteChildren={handleNodeOperation("delete")}
+      onEditChildren={handleNodeOperation("edit")}
+      onOpenTreeModal={handleOpenTreeModal}
     />
   );
 };

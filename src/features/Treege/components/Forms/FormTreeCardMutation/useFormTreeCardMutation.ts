@@ -1,5 +1,4 @@
 import { SelectChangeEvent, useSnackbar } from "@tracktor/design-system";
-import type { HierarchyPointNode } from "d3-hierarchy";
 import { ChangeEvent, FormEvent, MouseEvent, SyntheticEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";
@@ -8,6 +7,7 @@ import type { Params, Route, TreeNode, TreeNodeField, TreeValues } from "@/featu
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import { getUUID } from "@/utils";
+import { HierarchyPointNode } from "@/utils/tree/transformToHierarchyNode/transformToHierarchyNode";
 
 interface Values {
   id: string;

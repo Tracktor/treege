@@ -26,9 +26,9 @@ const TreegeProvider = ({ children, initialTree, initialTreeId, backendConfig }:
   const value = useMemo(
     () => ({
       backendConfig: {
-        baseUrl: treeDefaultValue?.backendConfig?.baseUrl || "",
         ...treeDefaultValue.backendConfig,
         ...backendConfig,
+        baseUrl: treeDefaultValue?.backendConfig?.baseUrl || "",
         endpoints: {
           ...treeDefaultValue.backendConfig?.endpoints,
           ...backendConfig?.endpoints,

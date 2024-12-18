@@ -12,31 +12,8 @@ const useViewerJSONAction = () => {
   const { setCurrentTree, currentTree, tree, dispatchTree } = useTreegeContext();
   const [openModal, setOpenModal] = useState(false);
   const { version } = useTreegeContext();
-
-  const { mutate: addWorkflowMutate } = usePostWorkflowMutation({
-    onError: () => {
-      openSnackbar({
-        message: t("error.saveTree", { ns: "snackMessage" }),
-        severity: "error",
-      });
-    },
-    onSuccess: (data) => {
-      openSnackbar({ message: t("success.saveTree", { ns: "snackMessage" }) });
-      setCurrentTree((prevState) => ({ ...prevState, id: data.workflow_id }));
-    },
-  });
-
-  const { mutate: editWorkflowMutate } = usePatchWorkflowsMutation({
-    onError: () => {
-      openSnackbar({
-        message: t("error.updateTree", { ns: "snackMessage" }),
-        severity: "error",
-      });
-    },
-    onSuccess: () => {
-      openSnackbar({ message: t("success.updateTree", { ns: "snackMessage" }) });
-    },
-  });
+  const { mutate: addWorkflowMutate } = usePostWorkflowMutation();
+  const { mutate: editWorkflowMutate } = usePatchWorkflowsMutation();
 
   const formatJSON = (value: any): string => JSON.stringify(value, null, 2);
 
@@ -70,11 +47,37 @@ const useViewerJSONAction = () => {
 
     if (tree) {
       if (id) {
-        editWorkflowMutate({ id, label: name, version, workflow: tree });
+        editWorkflowMutate(
+          { id, label: name, version, workflow: tree },
+          {
+            onError: () => {
+              openSnackbar({
+                message: t("error.updateTree", { ns: "snackMessage" }),
+                severity: "error",
+              });
+            },
+            onSuccess: () => {
+              openSnackbar({ message: t("success.updateTree", { ns: "snackMessage" }) });
+            },
+          },
+        );
         return;
       }
 
-      addWorkflowMutate({ label: name, version, workflow: tree });
+      addWorkflowMutate(
+        { label: name, version, workflow: tree },
+        {
+          onError: () => {
+            openSnackbar({
+              message: t("error.updateTree", { ns: "snackMessage" }),
+              severity: "error",
+            });
+          },
+          onSuccess: () => {
+            openSnackbar({ message: t("success.updateTree", { ns: "snackMessage" }) });
+          },
+        },
+      );
     }
   };
 
