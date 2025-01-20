@@ -69,14 +69,12 @@ const DefaultNode = ({ onDeleteChildren, onAddChildren, onEditChildren, onOpenTr
         {/* Header */}
         <Stack>
           {/* Label and type */}
-          {isField && (
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Typography whiteSpace="nowrap" variant="body2" overflow="hidden" textOverflow="ellipsis">
-                {label}
-                {required && " *"}
-              </Typography>
-            </Stack>
-          )}
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <Typography whiteSpace="nowrap" variant="body2" overflow="hidden" textOverflow="ellipsis">
+              {label}
+              {required && " *"}
+            </Typography>
+          </Stack>
 
           {/* Icon */}
           <Stack paddingTop={0.5} spacing={0.5} direction="row" fontSize={4}>
@@ -114,7 +112,7 @@ const DefaultNode = ({ onDeleteChildren, onAddChildren, onEditChildren, onOpenTr
 
           {/* Type and tag */}
           <Stack direction="row" spacing={0.5} marginTop={1}>
-            <Chip variant="rounded" color="info" size="xSmall" label={t(`type.${type}` as const as any, { ns: "form" })} />
+            {isField && <Chip variant="rounded" color="info" size="xSmall" label={t(`type.${type}` as const as any, { ns: "form" })} />}
             {tag && (
               <Chip
                 variant="outlined-rounded"
