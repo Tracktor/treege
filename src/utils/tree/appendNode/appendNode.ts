@@ -1,4 +1,5 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
+import defineNodePosition from "@/utils/tree/defineNodePosition/defineNodePosition";
 import getNode from "@/utils/tree/getNode/getNode";
 
 interface AppendChildParams {
@@ -44,29 +45,35 @@ const addChildByRef = (node: TreeNode | null, child: TreeNode) => {
  * @param child
  */
 const appendNode = ({ tree, path, uuid, child }: AppendChildParams) => {
-  const { attributes, children } = child;
-
   if (!tree) {
-    // Initialize Tree
-    if (children.length) {
-      return { ...child };
-    }
+    const hasChildren = child.children.length > 0;
 
-    // Add first element
     return {
       ...child,
-      attributes: {
-        ...attributes,
-        isLeaf: true,
+      attributes: defineNodePosition({
+        attributes: child.attributes,
+        hasChildren,
         isRoot: true,
-      },
+      }),
     };
   }
-
   const treeCopy = structuredClone(tree);
   const node = getNode(treeCopy, path, uuid);
 
-  addChildByRef(node, { ...child, ...(!attributes.isDecision && { children: [...(getNode(tree, path, uuid)?.children || [])] }) });
+  if (node) {
+    const hasChildren = child.children.length > 0;
+
+    addChildByRef(node, {
+      ...child,
+      ...(!child.attributes.isDecision && {
+        children: [...(getNode(tree, path, uuid)?.children || [])],
+      }),
+      attributes: defineNodePosition({
+        attributes: child.attributes,
+        hasChildren,
+      }),
+    });
+  }
 
   return treeCopy;
 };

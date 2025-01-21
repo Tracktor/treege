@@ -1,4 +1,5 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
+import defineNodePosition from "@/utils/tree/defineNodePosition/defineNodePosition";
 import findParentNodeByUUIDInTree from "@/utils/tree/findParentNodeByUUIDInTree/findParentNodeByUUIDInTree";
 import getNode from "@/utils/tree/getNode/getNode";
 import getTree from "@/utils/tree/getTree/getTree";
@@ -21,33 +22,34 @@ const removeTreeNode = (parent: TreeNode | null, nodeToRemove: TreeNode | null) 
 
   // if parent or nodeToRemove is a Decision, then remove node and its children
   if (parent.attributes.isDecision || nodeToRemove.attributes.isDecision) {
-    // Remove node and its children
+    const newChildren = parent.children.filter((child) => child.uuid !== nodeToRemove.uuid);
+
     Object.defineProperty(parent, "children", {
-      value: [...parent.children.filter((child) => child.uuid !== nodeToRemove.uuid)],
+      value: newChildren,
     });
 
-    // Set isLeaf to parent node if it has no children
     Object.defineProperty(parent, "attributes", {
-      value: {
-        ...parent.attributes,
-        isLeaf: !parent.children.length,
-      },
+      value: defineNodePosition({
+        attributes: parent.attributes,
+        hasChildren: newChildren.length > 0,
+      }),
     });
 
     return null;
   }
 
   // Remove node and append its children to parent node
+  const newChildren = [...parent.children.filter((child) => child.uuid !== nodeToRemove.uuid), ...nodeToRemove.children];
+
   Object.defineProperty(parent, "children", {
-    value: [...parent.children.filter((child) => child.uuid !== nodeToRemove.uuid), ...nodeToRemove.children],
+    value: newChildren,
   });
 
-  // Set isLeaf to parent node if nodeToRemove has no children
   Object.defineProperty(parent, "attributes", {
-    value: {
-      ...parent.attributes,
-      isLeaf: !nodeToRemove.children.length,
-    },
+    value: defineNodePosition({
+      attributes: parent.attributes,
+      hasChildren: nodeToRemove.children.length > 0,
+    }),
   });
 
   return null;

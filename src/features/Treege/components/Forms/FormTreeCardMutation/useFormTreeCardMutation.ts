@@ -312,34 +312,30 @@ const useFormTreeCardMutation = () => {
     }));
   }, []);
 
-  const getChildren = useCallback(
-    (depth: number) => {
-      if (!isDecision) {
-        return [];
-      }
+  const getChildren = useCallback(() => {
+    if (!isDecision) {
+      return [];
+    }
 
-      return values
-        ?.filter((_, index) => !getDisabledValueField(index)) // filter disabled value
-        ?.map(({ message: decisionMessage, value: decisionValue, label: decisionLabel }, index) => {
-          const nextUuid = `${uuid}:${decisionValue}`;
-          const children = getNestedChildren(currentHierarchyPointNode, index);
+    return values
+      ?.filter((_, index) => !getDisabledValueField(index)) // filter disabled value
+      ?.map(({ message: decisionMessage, value: decisionValue, label: decisionLabel }, index) => {
+        const nextUuid = `${uuid}:${decisionValue}`;
+        const children = getNestedChildren(currentHierarchyPointNode, index);
 
-          return {
-            attributes: {
-              depth: depth + 1,
-              label: decisionLabel,
-              name: `${name}:${decisionValue}`,
-              value: decisionValue,
-              ...(decisionMessage && { message: decisionMessage }),
-              ...(children.length === 0 && { isLeaf: true }),
-            },
-            children,
-            uuid: nextUuid,
-          };
-        });
-    },
-    [currentHierarchyPointNode, getDisabledValueField, getNestedChildren, isDecision, name, uuid, values],
-  );
+        return {
+          attributes: {
+            label: decisionLabel,
+            name: `${name}:${decisionValue}`,
+            value: decisionValue,
+            ...(decisionMessage && { message: decisionMessage }),
+            ...(children.length === 0 && { isLeaf: true }),
+          },
+          children,
+          uuid: nextUuid,
+        };
+      });
+  }, [currentHierarchyPointNode, getDisabledValueField, getNestedChildren, isDecision, name, uuid, values]);
 
   const getTreeValuesWithoutEmptyMessage = useCallback(
     (valuesData: TreeValues[]) =>
@@ -383,10 +379,8 @@ const useFormTreeCardMutation = () => {
 
       const { on, off } = messages;
       const currentUuid = currentHierarchyPointNode?.data?.uuid || "";
-      const currentDepth = currentHierarchyPointNode?.depth || 0;
       const isEdit = modalOpen === "edit";
-      const depth = currentDepth + (isEdit || currentHierarchyPointNode === null ? 0 : 1);
-      const childOfChildren = getChildren(depth);
+      const childOfChildren = getChildren();
       const currentPath = treePath?.at(-1)?.path;
       const newPath = treePath.length ? `${currentPath}/${uuid}` : `/${uuid}`;
       const isOtherTree = currentHierarchyPointNode?.data.attributes?.tree?.treeId !== treeSelected;
@@ -398,7 +392,6 @@ const useFormTreeCardMutation = () => {
 
       const children = {
         attributes: {
-          depth,
           name,
           type,
           ...(label && { label }),

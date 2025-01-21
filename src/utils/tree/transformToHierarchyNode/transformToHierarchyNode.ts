@@ -4,7 +4,6 @@ import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
 export interface HierarchyPointNode<T> {
   data: T;
-  depth: number;
   x: number;
   y: number;
   children?: HierarchyPointNode<T>[];
@@ -44,7 +43,6 @@ const transformToHierarchyNode = (nodeProps: NodeProps<AppNode>, allNodes: AppNo
       })),
       uuid: nodeProps.id,
     },
-    depth: nodeProps.data.depth,
     x: nodeProps.positionAbsoluteX,
     y: nodeProps.positionAbsoluteY,
   };

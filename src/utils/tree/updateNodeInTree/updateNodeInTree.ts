@@ -1,4 +1,5 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
+import defineNodePosition from "@/utils/tree/defineNodePosition/defineNodePosition";
 import getNode from "@/utils/tree/getNode/getNode";
 
 interface UpdatedNodeParams {
@@ -20,26 +21,18 @@ const updateNodeByRef = (node: TreeNode | null, newNode: TreeNode) => {
 
   const isNewChildDecision = newNode.attributes.isDecision;
   const isNodeDecision = node.attributes.isDecision;
-  const isRoot = node.attributes.depth === 0;
   const uuid = { value: newNode.uuid };
   const isDecision = isNodeDecision || isNewChildDecision;
   const children = isDecision ? { value: [...newNode.children] } : { value: [...node.children] };
 
-  const attributes = isDecision
-    ? {
-        value: {
-          ...newNode.attributes,
-          ...(isRoot && { isRoot: true }),
-          isLeaf: !newNode.children.length || !isNewChildDecision,
-        },
-      }
-    : {
-        value: {
-          ...newNode.attributes,
-          ...(isRoot && { isRoot: true }),
-          isLeaf: !node.children.length,
-        },
-      };
+  const hasChildren = newNode.children.length > 0;
+
+  const attributes = {
+    value: defineNodePosition({
+      attributes: newNode.attributes,
+      hasChildren,
+    }),
+  };
 
   Object.defineProperties(node, {
     attributes,

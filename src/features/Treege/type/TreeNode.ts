@@ -31,7 +31,6 @@ export interface TreeNode {
   uuid: string;
   attributes:
     | {
-        depth: number;
         tag?: string;
         helperText?: string;
         isDecision?: boolean;
@@ -59,13 +58,12 @@ export interface TreeNode {
         };
       }
     | {
-        depth: number;
         tag?: string;
         helperText?: string;
         messages?: never;
         isDecision?: never;
         isLeaf?: boolean;
-        isRoot?: never;
+        isRoot?: boolean;
         label?: string;
         name: string;
         required?: never;
@@ -88,7 +86,6 @@ export interface TreeNode {
 }
 
 export interface TreeNodeField {
-  depth: number;
   helperText?: string;
   messages?: {
     on?: string;
