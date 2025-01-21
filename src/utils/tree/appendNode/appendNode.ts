@@ -53,7 +53,14 @@ const appendNode = ({ tree, path, uuid, child }: AppendChildParams) => {
     }
 
     // Add first element
-    return { ...child, attributes: { ...attributes, isLeaf: true, isRoot: true } };
+    return {
+      ...child,
+      attributes: {
+        ...attributes,
+        isLeaf: true,
+        isRoot: true,
+      },
+    };
   }
 
   const treeCopy = structuredClone(tree);
