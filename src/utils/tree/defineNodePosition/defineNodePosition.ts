@@ -6,7 +6,7 @@ interface defineNodePositionParams {
   isRoot?: boolean;
 }
 
-const defineNodePosition = ({ attributes, isRoot, hasChildren }: defineNodePositionParams): TreeNode["attributes"] => ({
+export const defineNodePosition = ({ attributes, isRoot, hasChildren }: defineNodePositionParams): TreeNode["attributes"] => ({
   ...attributes,
   ...(!hasChildren && !attributes.isDecision && { isLeaf: true }),
   ...(isRoot && { isRoot: true }),

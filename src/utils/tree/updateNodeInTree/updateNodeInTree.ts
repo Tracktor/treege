@@ -50,7 +50,7 @@ const updateNodeByRef = (node: TreeNode | null, newNode: TreeNode) => {
  * @param uuid
  * @param children
  */
-const updateNodeInTree = ({ tree, path, uuid, children }: UpdatedNodeParams) => {
+export const updateNodeInTree = ({ tree, path, uuid, children }: UpdatedNodeParams) => {
   const treeCopy = structuredClone(tree);
   const node = getNode(treeCopy, path, uuid);
 

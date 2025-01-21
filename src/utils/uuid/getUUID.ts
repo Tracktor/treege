@@ -1,7 +1,7 @@
 /**
  * Generate a UUID
  */
-const getUUID = () => {
+export const getUUID = () => {
   const now = Date.now();
   const highResTime = performance.now();
 

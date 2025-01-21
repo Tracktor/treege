@@ -72,7 +72,7 @@ const getParentTreeNode = (tree: TreeNode, path: string, uuid: string) => {
  * @param path
  * @param uuid
  */
-const removeNode = ({ tree, path, uuid }: RemoveNodeParams) => {
+export const removeNode = ({ tree, path, uuid }: RemoveNodeParams) => {
   const treeCopy = structuredClone(tree);
   const nodeToRemove = getNode(treeCopy, path, uuid);
   const parentNodeToRemove = getParentTreeNode(treeCopy, path, uuid);

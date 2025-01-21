@@ -17,7 +17,7 @@ import TreeNameTextField from "@/features/Treege/components/TreeNameTextField";
 import TreeSelect from "@/features/Treege/components/TreeSelect";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
-import { getTree } from "@/utils/tree";
+import getTree from "@/utils/tree/getTree/getTree";
 
 const TreeGrid = () => {
   const {

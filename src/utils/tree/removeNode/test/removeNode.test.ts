@@ -1,4 +1,4 @@
-import { removeNode } from "@/utils/tree";
+import removeNode from "@/utils/tree/removeNode/removeNode";
 import {
   removeDecisionFieldInTreeMock,
   removeDecisionInTreeMock,

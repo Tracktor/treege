@@ -5,7 +5,7 @@ import type { TreeNode } from "@/features/Treege/type/TreeNode";
  * @param tree
  * @param uuid
  */
-const getAllAncestorNamesFromTree = (tree: TreeNode | null, uuid: string | undefined): string[] => {
+export const getAllAncestorNamesFromTree = (tree: TreeNode | null, uuid: string | undefined): string[] => {
   if (!tree) {
     return [];
   }

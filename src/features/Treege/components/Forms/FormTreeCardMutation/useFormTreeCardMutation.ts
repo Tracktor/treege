@@ -6,8 +6,8 @@ import { appendTreeCard, replaceTreeCard } from "@/features/Treege/reducer/treeR
 import type { Params, Route, TreeNode, TreeNodeField, TreeValues } from "@/features/Treege/type/TreeNode";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
-import { getUUID } from "@/utils";
 import { HierarchyPointNode } from "@/utils/tree/transformToHierarchyNode/transformToHierarchyNode";
+import getUUID from "@/utils/uuid/getUUID";
 
 interface Values {
   id: string;

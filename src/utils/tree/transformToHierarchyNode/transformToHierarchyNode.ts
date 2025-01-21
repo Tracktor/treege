@@ -9,7 +9,7 @@ export interface HierarchyPointNode<T> {
   children?: HierarchyPointNode<T>[];
 }
 
-const convertToNodeProps = (node: AppNode): NodeProps<AppNode> => ({
+export const convertToNodeProps = (node: AppNode): NodeProps<AppNode> => ({
   data: node.data,
   deletable: true,
   draggable: true,

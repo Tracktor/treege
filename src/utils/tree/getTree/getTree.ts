@@ -6,7 +6,7 @@ import type { TreeNode } from "@/features/Treege/type/TreeNode";
  * @param node The starting element
  * @param searchPath The path to search for
  */
-const getTree = (node: TreeNode | null | undefined, searchPath?: string | null): TreeNode | null => {
+export const getTree = (node: TreeNode | null | undefined, searchPath?: string | null): TreeNode | null => {
   if (!node) {
     return null;
   }

@@ -64,7 +64,7 @@ const createFlowEdge = (parentId: string, childId: string): FlowEdge => ({
 /**
  * Recursively transforms a tree node and its children into flow elements
  */
-const transformTreeToFlow = (treeNode?: TreeNode | null, parentId?: string): TransformedData => {
+export const transformTreeToFlow = (treeNode?: TreeNode | null, parentId?: string): TransformedData => {
   if (!treeNode) {
     return { edges: [], nodes: [] };
   }
