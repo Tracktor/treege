@@ -1,4 +1,4 @@
-import { NodeProps } from "@xyflow/react";
+import { NodeProps, useReactFlow } from "@xyflow/react";
 import { AppNode } from "@/components/DataDisplay/Nodes";
 import DefaultNodeComponent from "@/components/DataDisplay/Nodes/DefaultNode";
 import useTreegeContext from "@/hooks/useTreegeContext";
@@ -6,9 +6,13 @@ import transformToHierarchyNode from "@/utils/tree/transformToHierarchyNode/tran
 
 const DefaultNode = (props: NodeProps<AppNode>) => {
   const { setModalOpen, setCurrentHierarchyPointNode, setTreeModalOpen, setTreePath } = useTreegeContext();
+  const reactFlow = useReactFlow<AppNode>();
 
   const handleNodeOperation = (type: "edit" | "delete" | "add") => (nodeProps: NodeProps<AppNode>) => {
-    const hierarchyNode = transformToHierarchyNode(nodeProps);
+    const nodes = reactFlow.getNodes();
+    const edges = reactFlow.getEdges();
+
+    const hierarchyNode = transformToHierarchyNode(nodeProps, nodes, edges);
     setCurrentHierarchyPointNode(hierarchyNode);
     setModalOpen(type);
   };
