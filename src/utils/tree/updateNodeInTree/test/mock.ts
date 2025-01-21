@@ -5,7 +5,7 @@ type Mock = { tree: TreeNode; output: TreeNode; treePath: string; newChild: Tree
 const updatedFirstNodeInTreeMock: Mock = {
   newChild: {
     attributes: {
-      isLeaf: true,
+      isLeaf: false,
       isRoot: true,
       label: "Email",
       name: "email",
@@ -16,7 +16,7 @@ const updatedFirstNodeInTreeMock: Mock = {
   },
   output: {
     attributes: {
-      isLeaf: true,
+      isLeaf: false,
       isRoot: true,
       label: "Email",
       name: "email",
@@ -27,7 +27,7 @@ const updatedFirstNodeInTreeMock: Mock = {
   },
   tree: {
     attributes: {
-      isLeaf: true,
+      isLeaf: false,
       isRoot: true,
       label: "Username",
       name: "userName",
@@ -186,7 +186,7 @@ const updatedNodeInOtherTreeMock: Mock = {
 const updatedTreeMock: Mock = {
   newChild: {
     attributes: {
-      isLeaf: true,
+      isLeaf: false,
       isRoot: true,
       label: "Name",
       name: "name",
@@ -197,7 +197,7 @@ const updatedTreeMock: Mock = {
   },
   output: {
     attributes: {
-      isLeaf: true,
+      isLeaf: false,
       isRoot: true,
       label: "Name",
       name: "name",
@@ -208,7 +208,7 @@ const updatedTreeMock: Mock = {
   },
   tree: {
     attributes: {
-      isLeaf: true,
+      isLeaf: false,
       isRoot: true,
       label: "TreeCatalog",
       name: "treeCatalog",

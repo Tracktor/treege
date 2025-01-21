@@ -23,14 +23,18 @@ const updateNodeByRef = (node: TreeNode | null, newNode: TreeNode) => {
   const isNodeDecision = node.attributes.isDecision;
   const uuid = { value: newNode.uuid };
   const isDecision = isNodeDecision || isNewChildDecision;
+
+  // Determine which children to keep
   const children = isDecision ? { value: [...newNode.children] } : { value: [...node.children] };
 
-  const hasChildren = newNode.children.length > 0;
+  // For the root node, we keep existing children and never set it as a leaf
+  const { isRoot } = node.attributes;
 
   const attributes = {
     value: defineNodePosition({
       attributes: newNode.attributes,
-      hasChildren,
+      hasChildren: isRoot ? true : children.value.length > 0,
+      isRoot,
     }),
   };
 
@@ -43,13 +47,6 @@ const updateNodeByRef = (node: TreeNode | null, newNode: TreeNode) => {
   return null;
 };
 
-/**
- * Update node in tree
- * @param tree
- * @param path
- * @param uuid
- * @param children
- */
 export const updateNodeInTree = ({ tree, path, uuid, children }: UpdatedNodeParams) => {
   const treeCopy = structuredClone(tree);
   const node = getNode(treeCopy, path, uuid);

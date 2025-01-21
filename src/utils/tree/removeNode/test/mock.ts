@@ -103,6 +103,7 @@ const removeDecisionInTreeMock: Mock = {
   output: {
     attributes: {
       isDecision: true,
+      isLeaf: false,
       isRoot: true,
       label: "Decision field",
       name: "decisionField",
