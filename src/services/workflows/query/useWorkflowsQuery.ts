@@ -10,20 +10,19 @@ export interface WorkflowsResponse {
   workflow: TreeNode;
 }
 
-const useWorkflowsQuery = (options?: UseQueryOptions<WorkflowsResponse[]>) => {
+const useWorkflowsQuery = (options?: Omit<UseQueryOptions<WorkflowsResponse[]>, "queryFn" | "queryKey">) => {
   const { backendConfig } = useTreegeContext();
   const { endpoints } = backendConfig || {};
   const { workflows = "" } = endpoints || {};
 
-  return useQuery<WorkflowsResponse[]>(
-    ["workflows"],
-    async ({ signal }) => {
+  return useQuery({
+    queryFn: async ({ signal }) => {
       const { data } = await axios.get<WorkflowsResponse[]>(workflows, { signal });
-
       return data;
     },
-    options,
-  );
+    queryKey: ["workflows"],
+    ...options,
+  });
 };
 
 export default useWorkflowsQuery;

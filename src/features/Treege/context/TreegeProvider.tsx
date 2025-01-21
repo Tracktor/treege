@@ -1,4 +1,4 @@
-import { ReactNode, useMemo, useReducer, useState } from "react";
+import { ReactNode, useEffect, useMemo, useReducer, useState } from "react";
 import { treeDefaultValue, TreegeContext } from "@/features/Treege/context/TreegeContext";
 import treeReducer, { setTree } from "@/features/Treege/reducer/treeReducer";
 import { BackendConfig } from "@/features/Treege/Treege";
@@ -23,12 +23,21 @@ const TreegeProvider = ({ children, initialTree, initialTreeId, backendConfig }:
     initialTreeId ? { ...treeDefaultValue.currentTree, id: initialTreeId } : treeDefaultValue.currentTree,
   );
 
+  const { data: workflowData } = useWorkflowQuery(initialTreeId, { enabled: !!initialTreeId });
+
+  useEffect(() => {
+    if (workflowData) {
+      setCurrentTree({ id: workflowData.id, name: workflowData.label });
+      dispatchTree(setTree(workflowData.workflow || null));
+    }
+  }, [workflowData]);
+
   const value = useMemo(
     () => ({
       backendConfig: {
-        baseUrl: treeDefaultValue?.backendConfig?.baseUrl || "",
         ...treeDefaultValue.backendConfig,
         ...backendConfig,
+        baseUrl: treeDefaultValue?.backendConfig?.baseUrl || "",
         endpoints: {
           ...treeDefaultValue.backendConfig?.endpoints,
           ...backendConfig?.endpoints,
@@ -50,19 +59,6 @@ const TreegeProvider = ({ children, initialTree, initialTreeId, backendConfig }:
     }),
     [backendConfig, currentHierarchyPointNode, currentTree, modalOpen, tree, treeModalOpen, treePath],
   );
-
-  // Fetch initial tree
-  useWorkflowQuery(currentTree.id, {
-    enabled: !!initialTreeId,
-    onSuccess: async (response) => {
-      if (!response) {
-        return;
-      }
-
-      setCurrentTree({ id: response?.id, name: response?.label });
-      dispatchTree(setTree(response?.workflow || null));
-    },
-  });
 
   return <TreegeContext.Provider value={value}>{children}</TreegeContext.Provider>;
 };

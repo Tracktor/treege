@@ -5,7 +5,6 @@ type Mock = { tree: TreeNode | null; output: TreeNode; treePath: string | null; 
 const addFirstNodeInTreeMock: Mock = {
   newChild: {
     attributes: {
-      depth: 0,
       label: "Username",
       name: "username",
       type: "text",
@@ -15,7 +14,6 @@ const addFirstNodeInTreeMock: Mock = {
   },
   output: {
     attributes: {
-      depth: 0,
       isLeaf: true,
       isRoot: true,
       label: "Username",
@@ -33,7 +31,6 @@ const addFirstNodeInTreeMock: Mock = {
 const initialiseTree: Mock = {
   newChild: {
     attributes: {
-      depth: 0,
       isLeaf: false,
       isRoot: true,
       label: "Username",
@@ -43,7 +40,6 @@ const initialiseTree: Mock = {
     children: [
       {
         attributes: {
-          depth: 1,
           isLeaf: true,
           label: "Email",
           name: "email",
@@ -57,7 +53,6 @@ const initialiseTree: Mock = {
   },
   output: {
     attributes: {
-      depth: 0,
       isLeaf: false,
       isRoot: true,
       label: "Username",
@@ -67,7 +62,6 @@ const initialiseTree: Mock = {
     children: [
       {
         attributes: {
-          depth: 1,
           isLeaf: true,
           label: "Email",
           name: "email",
@@ -87,7 +81,6 @@ const initialiseTree: Mock = {
 const addNodeInTreeMock: Mock = {
   newChild: {
     attributes: {
-      depth: 1,
       label: "Email",
       name: "email",
       type: "email",
@@ -97,7 +90,6 @@ const addNodeInTreeMock: Mock = {
   },
   output: {
     attributes: {
-      depth: 0,
       isLeaf: false,
       isRoot: true,
       label: "Username",
@@ -107,7 +99,6 @@ const addNodeInTreeMock: Mock = {
     children: [
       {
         attributes: {
-          depth: 1,
           isLeaf: true,
           label: "Email",
           name: "email",
@@ -121,7 +112,6 @@ const addNodeInTreeMock: Mock = {
   },
   tree: {
     attributes: {
-      depth: 0,
       isLeaf: true,
       isRoot: true,
       label: "Username",
@@ -138,7 +128,6 @@ const addNodeInTreeMock: Mock = {
 const addNodeOtherTreeMock: Mock = {
   newChild: {
     attributes: {
-      depth: 0,
       isRoot: true,
       label: "Nom de la machine",
       name: "treeCatalog",
@@ -147,7 +136,6 @@ const addNodeOtherTreeMock: Mock = {
     children: [
       {
         attributes: {
-          depth: 1,
           isDecision: true,
           isLeaf: false,
           isRoot: false,
@@ -158,7 +146,6 @@ const addNodeOtherTreeMock: Mock = {
         children: [
           {
             attributes: {
-              depth: 2,
               isLeaf: true,
               label: "Mini-pelle",
               name: "machineName:minipelle",
@@ -169,7 +156,6 @@ const addNodeOtherTreeMock: Mock = {
           },
           {
             attributes: {
-              depth: 2,
               isLeaf: true,
               label: "Nacelle",
               name: "machineName:nacelle",
@@ -187,7 +173,6 @@ const addNodeOtherTreeMock: Mock = {
   },
   output: {
     attributes: {
-      depth: 0,
       isLeaf: false,
       isRoot: true,
       label: "Username",
@@ -197,13 +182,11 @@ const addNodeOtherTreeMock: Mock = {
     children: [
       {
         attributes: {
-          depth: 1,
           isLeaf: true,
           label: "Tree Catalog",
           name: "treeCatalog",
           tree: {
             attributes: {
-              depth: 0,
               isRoot: true,
               label: "Nom de la machine",
               name: "machineName",
@@ -212,7 +195,6 @@ const addNodeOtherTreeMock: Mock = {
             children: [
               {
                 attributes: {
-                  depth: 1,
                   isDecision: true,
                   isLeaf: false,
                   isRoot: false,
@@ -223,7 +205,6 @@ const addNodeOtherTreeMock: Mock = {
                 children: [
                   {
                     attributes: {
-                      depth: 2,
                       isLeaf: true,
                       label: "Mini-pelle",
                       name: "type:minipelle",
@@ -234,7 +215,6 @@ const addNodeOtherTreeMock: Mock = {
                   },
                   {
                     attributes: {
-                      depth: 2,
                       isLeaf: true,
                       label: "Nacelle",
                       name: "type:nacelle",
@@ -261,7 +241,6 @@ const addNodeOtherTreeMock: Mock = {
   },
   tree: {
     attributes: {
-      depth: 0,
       isLeaf: false,
       isRoot: true,
       label: "Username",
@@ -271,13 +250,11 @@ const addNodeOtherTreeMock: Mock = {
     children: [
       {
         attributes: {
-          depth: 1,
           isLeaf: true,
           label: "Tree Catalog",
           name: "treeCatalog",
           tree: {
             attributes: {
-              depth: 0,
               isRoot: true,
               label: "Nom de la machine",
               name: "machineName",
@@ -286,7 +263,6 @@ const addNodeOtherTreeMock: Mock = {
             children: [
               {
                 attributes: {
-                  depth: 1,
                   isDecision: true,
                   isLeaf: false,
                   isRoot: false,
@@ -297,7 +273,6 @@ const addNodeOtherTreeMock: Mock = {
                 children: [
                   {
                     attributes: {
-                      depth: 2,
                       isLeaf: true,
                       label: "Mini-pelle",
                       name: "type:minipelle",
@@ -308,7 +283,6 @@ const addNodeOtherTreeMock: Mock = {
                   },
                   {
                     attributes: {
-                      depth: 2,
                       isLeaf: true,
                       label: "Nacelle",
                       name: "type:nacelle",
@@ -340,7 +314,6 @@ const addNodeOtherTreeMock: Mock = {
 const addNodeDecisionInOtherTreeMock: Mock = {
   newChild: {
     attributes: {
-      depth: 2,
       label: "Prix",
       name: "price",
       type: "number",
@@ -350,7 +323,6 @@ const addNodeDecisionInOtherTreeMock: Mock = {
   },
   output: {
     attributes: {
-      depth: 0,
       isLeaf: false,
       isRoot: true,
       label: "Username",
@@ -360,13 +332,11 @@ const addNodeDecisionInOtherTreeMock: Mock = {
     children: [
       {
         attributes: {
-          depth: 1,
           isLeaf: true,
           label: "Tree Catalog",
           name: "treeCatalog",
           tree: {
             attributes: {
-              depth: 0,
               isRoot: true,
               label: "Nom de la machine",
               name: "machineName",
@@ -375,7 +345,6 @@ const addNodeDecisionInOtherTreeMock: Mock = {
             children: [
               {
                 attributes: {
-                  depth: 1,
                   isLeaf: false,
                   label: "Type",
                   name: "type",
@@ -396,7 +365,6 @@ const addNodeDecisionInOtherTreeMock: Mock = {
                 children: [
                   {
                     attributes: {
-                      depth: 2,
                       isLeaf: true,
                       label: "Prix",
                       name: "price",
@@ -423,7 +391,6 @@ const addNodeDecisionInOtherTreeMock: Mock = {
   },
   tree: {
     attributes: {
-      depth: 0,
       isLeaf: false,
       isRoot: true,
       label: "Username",
@@ -433,13 +400,11 @@ const addNodeDecisionInOtherTreeMock: Mock = {
     children: [
       {
         attributes: {
-          depth: 1,
           isLeaf: true,
           label: "Tree Catalog",
           name: "treeCatalog",
           tree: {
             attributes: {
-              depth: 0,
               isRoot: true,
               label: "Nom de la machine",
               name: "machineName",
@@ -448,7 +413,6 @@ const addNodeDecisionInOtherTreeMock: Mock = {
             children: [
               {
                 attributes: {
-                  depth: 1,
                   isLeaf: true,
                   label: "Type",
                   name: "type",
@@ -489,12 +453,10 @@ const addNodeDecisionInOtherTreeMock: Mock = {
 const addTreeNodeMock: Mock = {
   newChild: {
     attributes: {
-      depth: 1,
       label: "Tree Catalog",
       name: "treeCatalog",
       tree: {
         attributes: {
-          depth: 0,
           isRoot: true,
           label: "Nom de la machine",
           name: "machineName",
@@ -503,7 +465,6 @@ const addTreeNodeMock: Mock = {
         children: [
           {
             attributes: {
-              depth: 1,
               isLeaf: true,
               label: "Type",
               name: "type",
@@ -536,7 +497,6 @@ const addTreeNodeMock: Mock = {
   },
   output: {
     attributes: {
-      depth: 0,
       isLeaf: false,
       isRoot: true,
       label: "Username",
@@ -546,13 +506,11 @@ const addTreeNodeMock: Mock = {
     children: [
       {
         attributes: {
-          depth: 1,
           isLeaf: true,
           label: "Tree Catalog",
           name: "treeCatalog",
           tree: {
             attributes: {
-              depth: 0,
               isRoot: true,
               label: "Nom de la machine",
               name: "machineName",
@@ -561,7 +519,6 @@ const addTreeNodeMock: Mock = {
             children: [
               {
                 attributes: {
-                  depth: 1,
                   isLeaf: true,
                   label: "Type",
                   name: "type",
@@ -597,7 +554,6 @@ const addTreeNodeMock: Mock = {
   },
   tree: {
     attributes: {
-      depth: 0,
       isLeaf: true,
       isRoot: true,
       label: "Username",
@@ -614,7 +570,6 @@ const addTreeNodeMock: Mock = {
 const addNodeBetweenNodes: Mock = {
   newChild: {
     attributes: {
-      depth: 1,
       label: "Email",
       name: "email",
       type: "email",
@@ -624,7 +579,6 @@ const addNodeBetweenNodes: Mock = {
   },
   output: {
     attributes: {
-      depth: 0,
       isLeaf: false,
       isRoot: true,
       label: "Username",
@@ -634,7 +588,6 @@ const addNodeBetweenNodes: Mock = {
     children: [
       {
         attributes: {
-          depth: 1,
           isLeaf: false,
           label: "Email",
           name: "email",
@@ -643,7 +596,6 @@ const addNodeBetweenNodes: Mock = {
         children: [
           {
             attributes: {
-              depth: 1,
               isLeaf: true,
               label: "Password",
               name: "password",
@@ -660,7 +612,6 @@ const addNodeBetweenNodes: Mock = {
   },
   tree: {
     attributes: {
-      depth: 0,
       isLeaf: false,
       isRoot: true,
       label: "Username",
@@ -670,7 +621,6 @@ const addNodeBetweenNodes: Mock = {
     children: [
       {
         attributes: {
-          depth: 1,
           isLeaf: true,
           label: "Password",
           name: "password",

@@ -1,4 +1,3 @@
-import { updateNodeInTree } from "@/utils/tree";
 import {
   updatedAndAddDecisionInFieldWithChildrenMock,
   updatedFirstNodeInTreeMock,
@@ -6,6 +5,7 @@ import {
   updatedNodeInOtherTreeMock,
   updatedTreeMock,
 } from "@/utils/tree/updateNodeInTree/test/mock";
+import updateNodeInTree from "@/utils/tree/updateNodeInTree/updateNodeInTree";
 
 describe("getNodeNames", () => {
   test("updated first node", () => {

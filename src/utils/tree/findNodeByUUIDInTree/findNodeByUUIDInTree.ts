@@ -5,7 +5,7 @@ import type { TreeNode } from "@/features/Treege/type/TreeNode";
  * @param node
  * @param uuid
  */
-const findNodeByUUIDInTree = (node: TreeNode | null, uuid: string): TreeNode | null => {
+export const findNodeByUUIDInTree = (node: TreeNode | null, uuid: string): TreeNode | null => {
   if (!node) {
     return null;
   }

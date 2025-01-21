@@ -1,4 +1,4 @@
-import { getAllNamesFromTree } from "@/utils/tree";
+import getAllNamesFromTree from "@/utils/tree/getAllNamesFromTree/getAllNamesFromTree";
 import {
   complexeTreeWithMultiDecisionFields,
   treeWithDecisionFields,

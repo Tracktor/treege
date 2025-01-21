@@ -1,4 +1,5 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
+import defineNodePosition from "@/utils/tree/defineNodePosition/defineNodePosition";
 import getNode from "@/utils/tree/getNode/getNode";
 
 interface AppendChildParams {
@@ -20,22 +21,48 @@ const addChildByRef = (node: TreeNode | null, child: TreeNode) => {
 
   const { attributes } = child;
   const isChildDecision = attributes.isDecision;
+  const existingChildren = node.children;
 
-  // Remove isLeaf from node
-  Object.defineProperty(node, "attributes", { value: { ...node.attributes, isLeaf: false } });
+  // Set parent node attributes
+  Object.defineProperty(node, "attributes", {
+    value: defineNodePosition({
+      attributes: node.attributes,
+      hasChildren: true, // Node will have a child, so hasChildren = true
+    }),
+  });
 
   if (isChildDecision) {
-    // Add child to node children list and remove isLeaf from node
-    Object.defineProperty(node, "children", { value: [{ ...child, attributes: { ...attributes, isLeaf: false } }] });
+    Object.defineProperty(node, "children", {
+      value: [
+        {
+          ...child,
+          attributes: defineNodePosition({
+            attributes,
+            hasChildren: child.children.length > 0,
+          }),
+        },
+      ],
+    });
     return null;
   }
 
-  // Add child to node children list and remove isLeaf from node if child is not have children
-  Object.defineProperty(node, "children", { value: [{ ...child, attributes: { ...attributes, isLeaf: !node.children.length } }] });
+  // For a regular node
+  Object.defineProperty(node, "children", {
+    value: [
+      {
+        ...child,
+        // Keep existing children
+        attributes: defineNodePosition({
+          attributes,
+          hasChildren: child.children.length > 0 || existingChildren.length > 0,
+        }),
+        children: existingChildren,
+      },
+    ],
+  });
 
   return null;
 };
-
 /**
  * Append child to tree
  * @param tree
@@ -44,22 +71,35 @@ const addChildByRef = (node: TreeNode | null, child: TreeNode) => {
  * @param child
  */
 const appendNode = ({ tree, path, uuid, child }: AppendChildParams) => {
-  const { attributes, children } = child;
-
   if (!tree) {
-    // Initialize Tree
-    if (children.length) {
-      return { ...child };
-    }
+    const hasChildren = child.children.length > 0;
 
-    // Add first element
-    return { ...child, attributes: { ...attributes, isLeaf: true, isRoot: true } };
+    return {
+      ...child,
+      attributes: defineNodePosition({
+        attributes: child.attributes,
+        hasChildren,
+        isRoot: true,
+      }),
+    };
   }
-
   const treeCopy = structuredClone(tree);
   const node = getNode(treeCopy, path, uuid);
 
-  addChildByRef(node, { ...child, ...(!attributes.isDecision && { children: [...(getNode(tree, path, uuid)?.children || [])] }) });
+  if (node) {
+    const hasChildren = child.children.length > 0;
+
+    addChildByRef(node, {
+      ...child,
+      ...(!child.attributes.isDecision && {
+        children: [...(getNode(tree, path, uuid)?.children || [])],
+      }),
+      attributes: defineNodePosition({
+        attributes: child.attributes,
+        hasChildren,
+      }),
+    });
+  }
 
   return treeCopy;
 };

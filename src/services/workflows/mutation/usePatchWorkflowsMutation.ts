@@ -1,4 +1,4 @@
-import { MutateOptions, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { TreeNode } from "@/features/Treege/type/TreeNode";
 import useTreegeContext from "@/hooks/useTreegeContext";
@@ -14,19 +14,18 @@ interface PatchWorkflowResponse {
   status: string;
 }
 
-const usePatchWorkflowsMutation = (options?: MutateOptions<PatchWorkflowResponse, any, PatchWorkflowVariables>) => {
+const usePatchWorkflowsMutation = () => {
   const { backendConfig } = useTreegeContext();
   const { endpoints } = backendConfig || {};
   const { workflow = "" } = endpoints || {};
 
-  return useMutation<PatchWorkflowResponse, any, PatchWorkflowVariables>(
-    ["patchWorkflow"],
-    async (payload) => {
+  return useMutation({
+    mutationFn: async (payload: PatchWorkflowVariables) => {
       const { data } = await axios.patch<PatchWorkflowResponse>(workflow, payload);
       return data;
     },
-    options,
-  );
+    mutationKey: ["patchWorkflow"],
+  });
 };
 
 export default usePatchWorkflowsMutation;

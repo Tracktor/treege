@@ -1,5 +1,7 @@
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
-import { appendNode, removeNode, updateNodeInTree } from "@/utils/tree";
+import appendNode from "@/utils/tree/appendNode/appendNode";
+import removeNode from "@/utils/tree/removeNode/removeNode";
+import updateNodeInTree from "@/utils/tree/updateNodeInTree/updateNodeInTree";
 
 export const treeReducerActionType = {
   appendTreeCard: "appendTreeCard",

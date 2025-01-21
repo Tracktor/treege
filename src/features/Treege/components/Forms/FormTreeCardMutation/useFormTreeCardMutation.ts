@@ -1,14 +1,13 @@
-import type { SelectChangeEvent } from "@tracktor/design-system";
-import type { HierarchyPointNode } from "d3-hierarchy";
+import { SelectChangeEvent, useSnackbar } from "@tracktor/design-system";
 import { ChangeEvent, FormEvent, MouseEvent, SyntheticEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";
 import { appendTreeCard, replaceTreeCard } from "@/features/Treege/reducer/treeReducer";
 import type { Params, Route, TreeNode, TreeNodeField, TreeValues } from "@/features/Treege/type/TreeNode";
-import useSnackbar from "@/hooks/useSnackbar";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
-import { getUUID } from "@/utils";
+import { HierarchyPointNode } from "@/utils/tree/transformToHierarchyNode/transformToHierarchyNode";
+import getUUID from "@/utils/uuid/getUUID";
 
 interface Values {
   id: string;
@@ -21,7 +20,7 @@ const useFormTreeCardMutation = () => {
   const uuid = getUUID();
   const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
   const { dispatchTree, currentHierarchyPointNode, modalOpen, treePath, setModalOpen } = useTreegeContext();
-  const { open } = useSnackbar();
+  const { openSnackbar } = useSnackbar();
   const { t } = useTranslation();
   const isMultipleAttribute =
     currentHierarchyPointNode?.data &&
@@ -313,34 +312,30 @@ const useFormTreeCardMutation = () => {
     }));
   }, []);
 
-  const getChildren = useCallback(
-    (depth: number) => {
-      if (!isDecision) {
-        return [];
-      }
+  const getChildren = useCallback(() => {
+    if (!isDecision) {
+      return [];
+    }
 
-      return values
-        ?.filter((_, index) => !getDisabledValueField(index)) // filter disabled value
-        ?.map(({ message: decisionMessage, value: decisionValue, label: decisionLabel }, index) => {
-          const nextUuid = `${uuid}:${decisionValue}`;
-          const children = getNestedChildren(currentHierarchyPointNode, index);
+    return values
+      ?.filter((_, index) => !getDisabledValueField(index)) // filter disabled value
+      ?.map(({ message: decisionMessage, value: decisionValue, label: decisionLabel }, index) => {
+        const nextUuid = `${uuid}:${decisionValue}`;
+        const children = getNestedChildren(currentHierarchyPointNode, index);
 
-          return {
-            attributes: {
-              depth: depth + 1,
-              label: decisionLabel,
-              name: `${name}:${decisionValue}`,
-              value: decisionValue,
-              ...(decisionMessage && { message: decisionMessage }),
-              ...(children.length === 0 && { isLeaf: true }),
-            },
-            children,
-            uuid: nextUuid,
-          };
-        });
-    },
-    [currentHierarchyPointNode, getDisabledValueField, getNestedChildren, isDecision, name, uuid, values],
-  );
+        return {
+          attributes: {
+            label: decisionLabel,
+            name: `${name}:${decisionValue}`,
+            value: decisionValue,
+            ...(decisionMessage && { message: decisionMessage }),
+            ...(children.length === 0 && { isLeaf: true }),
+          },
+          children,
+          uuid: nextUuid,
+        };
+      });
+  }, [currentHierarchyPointNode, getDisabledValueField, getNestedChildren, isDecision, name, uuid, values]);
 
   const getTreeValuesWithoutEmptyMessage = useCallback(
     (valuesData: TreeValues[]) =>
@@ -358,7 +353,10 @@ const useFormTreeCardMutation = () => {
         try {
           return fetchWorkflow();
         } catch (e) {
-          open(t("error.fetchTree", { ns: "snackMessage" }), "error");
+          openSnackbar({
+            message: t("error.fetchTree", { ns: "snackMessage" }),
+            severity: "error",
+          });
         }
       }
 
@@ -372,7 +370,7 @@ const useFormTreeCardMutation = () => {
 
       return { data: null, isError: null };
     },
-    [currentHierarchyPointNode?.data.attributes?.tree, fetchWorkflow, open, t],
+    [currentHierarchyPointNode?.data.attributes?.tree, fetchWorkflow, openSnackbar, t],
   );
 
   const handleSubmit = useCallback(
@@ -381,10 +379,8 @@ const useFormTreeCardMutation = () => {
 
       const { on, off } = messages;
       const currentUuid = currentHierarchyPointNode?.data?.uuid || "";
-      const currentDepth = currentHierarchyPointNode?.depth || 0;
       const isEdit = modalOpen === "edit";
-      const depth = currentDepth + (isEdit || currentHierarchyPointNode === null ? 0 : 1);
-      const childOfChildren = getChildren(depth);
+      const childOfChildren = getChildren();
       const currentPath = treePath?.at(-1)?.path;
       const newPath = treePath.length ? `${currentPath}/${uuid}` : `/${uuid}`;
       const isOtherTree = currentHierarchyPointNode?.data.attributes?.tree?.treeId !== treeSelected;
@@ -396,7 +392,6 @@ const useFormTreeCardMutation = () => {
 
       const children = {
         attributes: {
-          depth,
           name,
           type,
           ...(label && { label }),

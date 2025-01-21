@@ -1,4 +1,4 @@
-import { getAllAncestorNamesFromTree } from "@/utils/tree";
+import getAllAncestorNamesFromTree from "@/utils/tree/getAllAncestorNamesFromTree/getAllAncestorNamesFromTree";
 import getAllAncestorNamesFromTreeMock from "@/utils/tree/getAllAncestorNamesFromTree/test/mock";
 
 describe("get Names In Tree", () => {

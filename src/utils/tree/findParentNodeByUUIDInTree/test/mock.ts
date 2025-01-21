@@ -5,7 +5,6 @@ type Mock = { input: TreeNode; output: TreeNode | null; name: string };
 const simpleTreeMock: Mock = {
   input: {
     attributes: {
-      depth: 0,
       isLeaf: true,
       isRoot: true,
       label: "Name",
@@ -15,7 +14,6 @@ const simpleTreeMock: Mock = {
     children: [
       {
         attributes: {
-          depth: 0,
           isLeaf: true,
           isRoot: true,
           label: "Email",
@@ -31,7 +29,6 @@ const simpleTreeMock: Mock = {
   name: "email",
   output: {
     attributes: {
-      depth: 0,
       isLeaf: true,
       isRoot: true,
       label: "Name",
@@ -41,7 +38,6 @@ const simpleTreeMock: Mock = {
     children: [
       {
         attributes: {
-          depth: 0,
           isLeaf: true,
           isRoot: true,
           label: "Email",
@@ -59,7 +55,6 @@ const simpleTreeMock: Mock = {
 const treeInTreeMock: Mock = {
   input: {
     attributes: {
-      depth: 0,
       isLeaf: false,
       isRoot: true,
       label: "Name",
@@ -69,7 +64,6 @@ const treeInTreeMock: Mock = {
     children: [
       {
         attributes: {
-          depth: 1,
           isLeaf: false,
           label: "Email",
           name: "email",
@@ -78,13 +72,11 @@ const treeInTreeMock: Mock = {
         children: [
           {
             attributes: {
-              depth: 2,
               isLeaf: true,
               label: "UserTree",
               name: "userTree",
               tree: {
                 attributes: {
-                  depth: 0,
                   isRoot: true,
                   label: "Username",
                   name: "username",
@@ -93,7 +85,6 @@ const treeInTreeMock: Mock = {
                 children: [
                   {
                     attributes: {
-                      depth: 1,
                       isLeaf: true,
                       label: "Password",
                       name: "password",
@@ -121,7 +112,6 @@ const treeInTreeMock: Mock = {
   name: "userTree",
   output: {
     attributes: {
-      depth: 1,
       isLeaf: false,
       label: "Email",
       name: "email",
@@ -130,13 +120,11 @@ const treeInTreeMock: Mock = {
     children: [
       {
         attributes: {
-          depth: 2,
           isLeaf: true,
           label: "UserTree",
           name: "userTree",
           tree: {
             attributes: {
-              depth: 0,
               isRoot: true,
               label: "Username",
               name: "username",
@@ -145,7 +133,6 @@ const treeInTreeMock: Mock = {
             children: [
               {
                 attributes: {
-                  depth: 1,
                   isLeaf: true,
                   label: "Password",
                   name: "password",
@@ -172,7 +159,6 @@ const treeInTreeMock: Mock = {
 const treeInTreeNoNameMock: Mock = {
   input: {
     attributes: {
-      depth: 0,
       isLeaf: false,
       isRoot: true,
       label: "Name",
@@ -182,7 +168,6 @@ const treeInTreeNoNameMock: Mock = {
     children: [
       {
         attributes: {
-          depth: 1,
           isLeaf: false,
           label: "Email",
           name: "email",
@@ -191,13 +176,11 @@ const treeInTreeNoNameMock: Mock = {
         children: [
           {
             attributes: {
-              depth: 2,
               isLeaf: true,
               label: "UserTree",
               name: "userTree",
               tree: {
                 attributes: {
-                  depth: 0,
                   isRoot: true,
                   label: "Username",
                   name: "username",
@@ -206,7 +189,6 @@ const treeInTreeNoNameMock: Mock = {
                 children: [
                   {
                     attributes: {
-                      depth: 1,
                       isLeaf: true,
                       label: "Password",
                       name: "password",
@@ -238,7 +220,6 @@ const treeInTreeNoNameMock: Mock = {
 const searchNameInOtherTreeMock: Mock = {
   input: {
     attributes: {
-      depth: 0,
       isLeaf: false,
       isRoot: true,
       label: "Name",
@@ -248,7 +229,6 @@ const searchNameInOtherTreeMock: Mock = {
     children: [
       {
         attributes: {
-          depth: 1,
           isLeaf: false,
           label: "Email",
           name: "email",
@@ -257,13 +237,11 @@ const searchNameInOtherTreeMock: Mock = {
         children: [
           {
             attributes: {
-              depth: 2,
               isLeaf: true,
               label: "UserTree",
               name: "userTree",
               tree: {
                 attributes: {
-                  depth: 0,
                   isRoot: true,
                   label: "Username",
                   name: "username",
@@ -272,7 +250,6 @@ const searchNameInOtherTreeMock: Mock = {
                 children: [
                   {
                     attributes: {
-                      depth: 1,
                       isLeaf: true,
                       label: "Password",
                       name: "password",

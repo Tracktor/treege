@@ -1,7 +1,7 @@
-import type { HierarchyPointNode } from "d3-hierarchy";
 import { createContext, ReducerAction, SetStateAction } from "react";
 import { BackendConfig } from "@/features/Treege/Treege";
 import type { TreeNode } from "@/features/Treege/type/TreeNode";
+import { HierarchyPointNode } from "@/utils/tree/transformToHierarchyNode/transformToHierarchyNode";
 
 type ModalType = "add" | "edit" | "delete" | "save" | null;
 type TreePath = { path: string; label: string };

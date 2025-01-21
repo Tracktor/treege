@@ -8,7 +8,7 @@ import getTree from "@/utils/tree/getTree/getTree";
  * @param path
  * @param uuid
  */
-const getNode = (node: TreeNode, path: string | null, uuid: string) => {
+export const getNode = (node: TreeNode, path: string | null, uuid: string) => {
   const currentTree = getTree(node, path);
   return findNodeByUUIDInTree(currentTree, uuid);
 };

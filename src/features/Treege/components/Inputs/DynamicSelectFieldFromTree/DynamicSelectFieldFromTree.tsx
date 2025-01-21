@@ -2,7 +2,8 @@ import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@t
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import useTreegeContext from "@/hooks/useTreegeContext";
-import { getAllAncestorNamesFromTree, getTree } from "@/utils/tree";
+import getAllAncestorNamesFromTree from "@/utils/tree/getAllAncestorNamesFromTree/getAllAncestorNamesFromTree";
+import getTree from "@/utils/tree/getTree/getTree";
 
 interface DynamicSelectFieldFromTreeProps {
   id: string;

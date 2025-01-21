@@ -4,7 +4,7 @@ import type { TreeNode } from "@/features/Treege/type/TreeNode";
  * Get unique tags from tree
  * @param tree
  */
-const getUniqueTagsInTree = (tree: TreeNode | null): string[] => {
+export const getUniqueTagsInTree = (tree: TreeNode | null): string[] => {
   if (!tree) {
     return [];
   }

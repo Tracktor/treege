@@ -1,4 +1,4 @@
-import { appendNode } from "@/utils/tree";
+import appendNode from "@/utils/tree/appendNode/appendNode";
 import {
   addFirstNodeInTreeMock,
   addNodeBetweenNodes,

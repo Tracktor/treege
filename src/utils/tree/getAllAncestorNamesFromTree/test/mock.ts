@@ -2,7 +2,6 @@ import { TreeNode } from "@/features/Treege/type/TreeNode";
 
 const getAllAncestorNamesFromTreeMock: TreeNode = {
   attributes: {
-    depth: 0,
     isLeaf: false,
     isRoot: true,
     label: "A",
@@ -12,7 +11,6 @@ const getAllAncestorNamesFromTreeMock: TreeNode = {
   children: [
     {
       attributes: {
-        depth: 1,
         isLeaf: false,
         label: "B",
         name: "b",
@@ -21,7 +19,6 @@ const getAllAncestorNamesFromTreeMock: TreeNode = {
       children: [
         {
           attributes: {
-            depth: 2,
             isLeaf: true,
             label: "C",
             name: "c",
