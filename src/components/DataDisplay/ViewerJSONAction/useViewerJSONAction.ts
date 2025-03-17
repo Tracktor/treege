@@ -1,36 +1,19 @@
+import { useSnackbar } from "@tracktor/design-system";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { resetTree } from "@/features/Treege/reducer/treeReducer";
-import useSnackbar from "@/hooks/useSnackbar";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import usePatchWorkflowsMutation from "@/services/workflows/mutation/usePatchWorkflowsMutation";
 import usePostWorkflowMutation from "@/services/workflows/mutation/usePostWorkflowMutation";
 
 const useViewerJSONAction = () => {
   const { t } = useTranslation(["snackMessage"]);
-  const { open } = useSnackbar();
+  const { openSnackbar } = useSnackbar();
   const { setCurrentTree, currentTree, tree, dispatchTree } = useTreegeContext();
   const [openModal, setOpenModal] = useState(false);
   const { version } = useTreegeContext();
-
-  const { mutate: addWorkflowMutate } = usePostWorkflowMutation({
-    onError: () => {
-      open(t("error.saveTree", { ns: "snackMessage" }), "error");
-    },
-    onSuccess: (data) => {
-      open(t("success.saveTree", { ns: "snackMessage" }));
-      setCurrentTree((prevState) => ({ ...prevState, id: data.workflow_id }));
-    },
-  });
-
-  const { mutate: editWorkflowMutate } = usePatchWorkflowsMutation({
-    onError: () => {
-      open(t("error.updateTree", { ns: "snackMessage" }), "error");
-    },
-    onSuccess: () => {
-      open(t("success.updateTree", { ns: "snackMessage" }));
-    },
-  });
+  const { mutate: addWorkflowMutate } = usePostWorkflowMutation();
+  const { mutate: editWorkflowMutate } = usePatchWorkflowsMutation();
 
   const formatJSON = (value: any): string => JSON.stringify(value, null, 2);
 
@@ -38,7 +21,7 @@ const useViewerJSONAction = () => {
 
   const copyToClipboard = (value: unknown) => () => {
     navigator.clipboard.writeText(formatJSON(value)).then();
-    open(t("success.copyToClipboard", { ns: "snackMessage" }));
+    openSnackbar({ message: t("success.copyToClipboard", { ns: "snackMessage" }) });
   };
 
   const handleClose = () => {
@@ -64,11 +47,37 @@ const useViewerJSONAction = () => {
 
     if (tree) {
       if (id) {
-        editWorkflowMutate({ id, label: name, version, workflow: tree });
+        editWorkflowMutate(
+          { id, label: name, version, workflow: tree },
+          {
+            onError: () => {
+              openSnackbar({
+                message: t("error.updateTree", { ns: "snackMessage" }),
+                severity: "error",
+              });
+            },
+            onSuccess: () => {
+              openSnackbar({ message: t("success.updateTree", { ns: "snackMessage" }) });
+            },
+          },
+        );
         return;
       }
 
-      addWorkflowMutate({ label: name, version, workflow: tree });
+      addWorkflowMutate(
+        { label: name, version, workflow: tree },
+        {
+          onError: () => {
+            openSnackbar({
+              message: t("error.updateTree", { ns: "snackMessage" }),
+              severity: "error",
+            });
+          },
+          onSuccess: () => {
+            openSnackbar({ message: t("success.updateTree", { ns: "snackMessage" }) });
+          },
+        },
+      );
     }
   };
 

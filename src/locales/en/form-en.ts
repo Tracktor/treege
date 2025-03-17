@@ -15,6 +15,8 @@ const FORM_EN = {
   noAncestorFound: "No parents found",
   offMessage: "Message (disable)",
   onMessage: "Message (enable)",
+  pattern: "Pattern",
+  patternMessage: "Pattern message",
   repeatable: "Repeatable",
   searchKeyPlaceholder: "text",
   staticFields: "Static fields",

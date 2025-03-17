@@ -55,6 +55,8 @@ export interface TreeNode {
         route?: Route;
         parentRef?: string;
         initialQuery?: boolean;
+        pattern?: string;
+        patternMessage?: string;
         messages?: {
           on?: string;
           off?: string;
@@ -84,6 +86,8 @@ export interface TreeNode {
         route?: Route;
         parentRef?: string;
         initialQuery?: boolean;
+        pattern?: string;
+        patternMessage?: string;
       };
   children: TreeNode[];
   treeId?: string;

@@ -15,6 +15,8 @@ const FORM_FR = {
   noAncestorFound: "Aucun parent trouvé",
   offMessage: "Message (désactiver)",
   onMessage: "Message (activer)",
+  pattern: "Expression régulière",
+  patternMessage: "Message d'aide invalide",
   repeatable: "Répétable",
   searchKeyPlaceholder: "text",
   staticFields: "Champs statiques",
