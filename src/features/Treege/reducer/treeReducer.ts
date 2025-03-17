@@ -1,4 +1,4 @@
-import type { TreeNode } from "@/features/Treege/type/TreeNode";
+import { TreeNode } from "@tracktor/types-treege";
 import { appendNode, removeNode, updateNodeInTree } from "@/utils/tree";
 
 export const treeReducerActionType = {

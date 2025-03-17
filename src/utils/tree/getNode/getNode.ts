@@ -1,4 +1,4 @@
-import type { TreeNode } from "@/features/Treege/type/TreeNode";
+import { TreeNode } from "@tracktor/types-treege";
 import findNodeByUUIDInTree from "@/utils/tree/findNodeByUUIDInTree/findNodeByUUIDInTree";
 import getTree from "@/utils/tree/getTree/getTree";
 

@@ -1,10 +1,10 @@
 import type { SelectChangeEvent } from "@tracktor/design-system";
+import { Params, Route, TreeNode, TreeNodeField, TreeValues } from "@tracktor/types-treege";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { ChangeEvent, FormEvent, MouseEvent, SyntheticEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";
 import { appendTreeCard, replaceTreeCard } from "@/features/Treege/reducer/treeReducer";
-import type { Params, Route, TreeNode, TreeNodeField, TreeValues } from "@/features/Treege/type/TreeNode";
 import useSnackbar from "@/hooks/useSnackbar";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";

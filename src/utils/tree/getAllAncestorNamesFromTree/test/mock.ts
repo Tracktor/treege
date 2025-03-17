@@ -1,4 +1,4 @@
-import { TreeNode } from "@/features/Treege/type/TreeNode";
+import { TreeNode } from "@tracktor/types-treege";
 
 const getAllAncestorNamesFromTreeMock: TreeNode = {
   attributes: {

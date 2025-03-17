@@ -1,8 +1,8 @@
+import { TreeNode } from "@tracktor/types-treege";
 import { ReactNode, useEffect, useMemo, useReducer, useState } from "react";
 import { treeDefaultValue, TreegeContext } from "@/features/Treege/context/TreegeContext";
 import treeReducer, { setTree } from "@/features/Treege/reducer/treeReducer";
 import { BackendConfig } from "@/features/Treege/Treege";
-import type { TreeNode } from "@/features/Treege/type/TreeNode";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import { version } from "~/package.json";
 

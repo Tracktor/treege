@@ -37,6 +37,7 @@
     "@mui/icons-material": "^5.16.14",
     "@tanstack/react-query": "^5.68.0",
     "@tracktor/design-system": "^2.7.16",
+    "@tracktor/types-treege": "^0.1.0",
     "@uiw/codemirror-theme-dracula": "^4.21.19",
     "@uiw/react-codemirror": "^4.21.19",
     "axios": "^1.8.3",

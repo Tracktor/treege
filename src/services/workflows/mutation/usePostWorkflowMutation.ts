@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
+import { TreeNode } from "@tracktor/types-treege";
 import axios from "axios";
-import { TreeNode } from "@/features/Treege/type/TreeNode";
 import useTreegeContext from "@/hooks/useTreegeContext";
 
 interface PostWorkflowVariables {

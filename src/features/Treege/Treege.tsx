@@ -1,4 +1,5 @@
 import { QueryClientProvider } from "@tanstack/react-query";
+import { TreeNode } from "@tracktor/types-treege";
 import axios from "axios";
 import { useLayoutEffect } from "react";
 import DarkTheme from "@/components/Theme/DarkTheme/DarkTheme";
@@ -7,7 +8,6 @@ import AuthProvider from "@/context/Auth/AuthProvider";
 import SnackbarProvider from "@/context/Snackbar/SnackbarProvider";
 import TreeGrid from "@/features/Treege/components/TreeGrid/TreeGrid";
 import TreegeProvider from "@/features/Treege/context/TreegeProvider";
-import type { TreeNode } from "@/features/Treege/type/TreeNode";
 import "@/config/i18n.config";
 
 export interface BackendConfig {

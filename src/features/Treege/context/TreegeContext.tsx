@@ -1,16 +1,7 @@
+import type { CurrentTree, ModalType, TreeNode, TreePath } from "@tracktor/types-treege";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { createContext, ReducerAction, SetStateAction } from "react";
 import { BackendConfig } from "@/features/Treege/Treege";
-import type { TreeNode } from "@/features/Treege/type/TreeNode";
-
-type ModalType = "add" | "edit" | "delete" | "save" | null;
-type TreePath = { path: string; label: string };
-
-type CurrentTree = {
-  id?: string;
-  name?: string;
-  errorName?: string;
-};
 
 export interface TreeDefaultValue {
   /**

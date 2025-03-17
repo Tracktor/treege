@@ -1,4 +1,4 @@
-import type { TreeNode } from "@/features/Treege/type/TreeNode";
+import type { TreeNode } from "@tracktor/types-treege";
 
 /**
  * Get all ancestor names from tree

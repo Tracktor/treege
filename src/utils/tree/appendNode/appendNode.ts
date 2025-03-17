@@ -1,4 +1,4 @@
-import type { TreeNode } from "@/features/Treege/type/TreeNode";
+import { TreeNode } from "@tracktor/types-treege";
 import getNode from "@/utils/tree/getNode/getNode";
 
 interface AppendChildParams {
