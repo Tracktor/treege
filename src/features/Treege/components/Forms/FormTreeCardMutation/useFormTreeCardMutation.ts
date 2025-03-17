@@ -22,7 +22,8 @@ const useFormTreeCardMutation = () => {
   const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
   const { dispatchTree, currentHierarchyPointNode, modalOpen, treePath, setModalOpen } = useTreegeContext();
   const { open } = useSnackbar();
-  const { t } = useTranslation();
+  const { t } = useTranslation(["translation", "form"]);
+
   const isMultipleAttribute =
     currentHierarchyPointNode?.data &&
     currentHierarchyPointNode?.data?.attributes &&
@@ -48,7 +49,7 @@ const useFormTreeCardMutation = () => {
   const [messages, setMessages] = useState({ off: "", on: "" });
   const [repeatable, setRepeatable] = useState(false);
   const [initialQuery, setInitialQuery] = useState(false);
-  const [pattern, setPattern] = useState("");
+  const [pattern, setPattern] = useState<string | null | { label: string; value: string }>("");
   const [patternMessage, setPatternMessage] = useState("");
 
   // State
@@ -64,8 +65,23 @@ const useFormTreeCardMutation = () => {
   const isRepeatableDisabled = fields.some((field) => field.type === type && field?.isRepeatableDisabled);
   const isLeaf = currentHierarchyPointNode?.data?.attributes?.isLeaf ?? true;
   const isMultiplePossible = fields.some((field) => field.type === type && "isMultiple" in field);
-  const { refetch: fetchWorkflow, isLoading: isWorkflowLoading } = useWorkflowQuery(treeSelected, { enabled: false });
   const getDisabledValueField = useCallback((index: number) => !isDecisionField && index > 0, [isDecisionField]);
+
+  const { refetch: fetchWorkflow, isLoading: isWorkflowLoading } = useWorkflowQuery(treeSelected, { enabled: false });
+
+  const patternOptions = useMemo(
+    () => [
+      { label: t("form:email"), value: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" },
+      { label: t("form:phoneNumber"), value: "^\\+?[1-9]\\d{1,14}$" },
+      { label: t("form:firstNameAndLastName"), value: "^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$" },
+      { label: t("form:cardNumber"), value: "^\\d{16}$" },
+      { label: t("form:number"), value: "^\\d+$" },
+      { label: t("form:letter"), value: "^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$" },
+      { label: t("form:numberAndLetter"), value: "^[A-Za-z0-9]+$" },
+      { label: t("form:url"), value: "^(https?:\\/\\/)?(www\\.)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(/.*)?$" },
+    ],
+    [t],
+  );
 
   const handlePresetValues = useCallback(
     (predicate: "value" | "label" | "message") => (event: ChangeEvent<HTMLInputElement>) => {
@@ -189,8 +205,8 @@ const useFormTreeCardMutation = () => {
     [setRoute],
   );
 
-  const handleChangePattern = useCallback(({ target }: ChangeEvent<HTMLInputElement>) => {
-    setPattern(target.value);
+  const handleChangePattern = useCallback((_: SyntheticEvent, value: null | string | { label: string; value: string }) => {
+    setPattern(value);
   }, []);
 
   const handleChangePatternMessage = useCallback(({ target }: ChangeEvent<HTMLInputElement>) => {
@@ -397,6 +413,8 @@ const useFormTreeCardMutation = () => {
           ...(initialQuery && { initialQuery }),
           ...(isDecisionField && !isDecision && { values: getTreeValuesWithoutEmptyMessage(values) }),
           ...((off || on) && { messages: { ...(off && { off }), ...(on && { on }) } }),
+          ...(pattern && { pattern: typeof pattern === "object" ? pattern.value : pattern }),
+          ...(patternMessage && { patternMessage }),
           ...(isTreeField && {
             tree: { ...workflow?.workflow, treeId: treeSelected } as TreeNode,
             treePath: newPath,
@@ -415,39 +433,41 @@ const useFormTreeCardMutation = () => {
       setModalOpen(null);
     },
     [
-      messages,
       currentHierarchyPointNode,
-      modalOpen,
+      dispatchTree,
       getChildren,
-      treePath,
-      uuid,
-      treeSelected,
+      getTreeValuesWithoutEmptyMessage,
       getWorkFlowReq,
-      isTreeField,
-      name,
-      type,
-      label,
-      isAutocomplete,
-      route,
-      isDynamicSelect,
       helperText,
-      isDecision,
-      required,
-      isDisabledPast,
-      isDateRangePicker,
-      repeatable,
-      isHiddenField,
       hiddenValue,
-      tag,
-      parentRef,
+      initialQuery,
+      isAutocomplete,
+      isDateRangePicker,
+      isDecision,
+      isDecisionField,
+      isDisabledPast,
+      isDynamicSelect,
+      isHiddenField,
       isMultiple,
       isMultiplePossible,
-      initialQuery,
-      isDecisionField,
-      getTreeValuesWithoutEmptyMessage,
-      values,
+      isTreeField,
+      label,
+      messages,
+      modalOpen,
+      name,
+      parentRef,
+      pattern,
+      patternMessage,
+      repeatable,
+      required,
+      route,
       setModalOpen,
-      dispatchTree,
+      tag,
+      treePath,
+      treeSelected,
+      type,
+      uuid,
+      values,
     ],
   );
 
@@ -484,6 +504,12 @@ const useFormTreeCardMutation = () => {
       setRepeatable(currentHierarchyPointNode?.data.attributes?.repeatable || false);
       setHiddenValue(currentHierarchyPointNode?.data.attributes?.hiddenValue || "");
       setParentRef(currentHierarchyPointNode?.data.attributes?.parentRef || null);
+      setPattern(
+        patternOptions.find(({ value }) => value === currentHierarchyPointNode?.data.attributes?.pattern) ||
+          currentHierarchyPointNode?.data.attributes?.pattern ||
+          "",
+      );
+      setPatternMessage(currentHierarchyPointNode?.data.attributes?.patternMessage || "");
 
       setMessages({
         off: currentHierarchyPointNode?.data.attributes?.messages?.off || "",
@@ -513,22 +539,23 @@ const useFormTreeCardMutation = () => {
     currentHierarchyPointNode?.data.attributes?.messages?.on,
     currentHierarchyPointNode?.data.attributes?.name,
     currentHierarchyPointNode?.data.attributes?.parentRef,
+    currentHierarchyPointNode?.data.attributes?.pattern,
+    currentHierarchyPointNode?.data.attributes?.patternMessage,
     currentHierarchyPointNode?.data.attributes?.repeatable,
     currentHierarchyPointNode?.data.attributes?.required,
     currentHierarchyPointNode?.data.attributes?.route?.params,
     currentHierarchyPointNode?.data.attributes?.route?.pathKey,
     currentHierarchyPointNode?.data.attributes?.route?.searchKey,
     currentHierarchyPointNode?.data.attributes?.route?.url,
-    currentHierarchyPointNode?.data.attributes?.step,
     currentHierarchyPointNode?.data.attributes?.tag,
     currentHierarchyPointNode?.data.attributes?.tree?.treeId,
     currentHierarchyPointNode?.data.attributes?.type,
     currentHierarchyPointNode?.data.attributes?.values,
     currentHierarchyPointNode?.data?.children,
-    currentHierarchyPointNode?.data.uuid,
     defaultValues,
     isMultipleAttribute,
     modalOpen,
+    patternOptions,
   ]);
 
   return {
@@ -586,6 +613,7 @@ const useFormTreeCardMutation = () => {
     parentRef,
     pattern,
     patternMessage,
+    patternOptions,
     repeatable,
     required,
     route,

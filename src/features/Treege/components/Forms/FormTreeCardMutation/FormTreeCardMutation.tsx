@@ -7,6 +7,7 @@ import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
 import {
   Accordion,
   AccordionSummary,
+  Autocomplete,
   Box,
   Button,
   Checkbox,
@@ -62,6 +63,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
   const { t } = useTranslation(["translation", "form"]);
 
   const {
+    patternOptions,
     values,
     required,
     tag,
@@ -164,7 +166,21 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
 
       {/* Pattern */}
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
-        <TextField id="pattern" label={t("form:pattern")} sx={{ flex: 1 }} onChange={handleChangePattern} value={pattern} size="small" />
+        <Autocomplete
+          freeSolo
+          id="patternMessage"
+          size="small"
+          sx={{ flex: 1 }}
+          onChange={handleChangePattern}
+          onInputChange={handleChangePattern}
+          value={pattern}
+          options={patternOptions}
+          renderInput={(props) => (
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            <TextField {...props} label={t("form:pattern")} />
+          )}
+        />
+
         <TextField
           id="patternMessage"
           label={t("form:patternMessage")}
@@ -172,7 +188,6 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           onChange={handleChangePatternMessage}
           value={patternMessage}
           size="small"
-          required={!!pattern}
         />
       </Stack>
 
