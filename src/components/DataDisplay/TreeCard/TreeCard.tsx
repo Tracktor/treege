@@ -10,12 +10,12 @@ import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import { Box, Button, Chip, GlobalStyles, Stack, Tooltip, Typography } from "@tracktor/design-system";
 import { brown } from "@tracktor/design-system/colors";
+import type { TreeNode } from "@tracktor/types-treege";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { memo } from "react";
-import type { CustomNodeElementProps, TreeNodeDatum } from "react-d3-tree/lib/types/types/common";
+import { CustomNodeElementProps, TreeNodeDatum } from "react-d3-tree/lib/types/types/common";
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
-import type { TreeNode } from "@/features/Treege/type/TreeNode";
 
 interface TreeCardProps extends Omit<CustomNodeElementProps, "nodeDatum" | "hierarchyPointNode"> {
   nodeDatum: TreeNode | TreeNodeDatum;

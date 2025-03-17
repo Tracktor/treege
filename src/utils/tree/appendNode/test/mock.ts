@@ -1,4 +1,4 @@
-import type { TreeNode } from "@/features/Treege/type/TreeNode";
+import type { TreeNode } from "@tracktor/types-treege";
 
 type Mock = { tree: TreeNode | null; output: TreeNode; treePath: string | null; newChild: TreeNode; uuid: string };
 

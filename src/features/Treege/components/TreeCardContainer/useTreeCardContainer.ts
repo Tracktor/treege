@@ -1,5 +1,5 @@
+import type { TreeNode } from "@tracktor/types-treege";
 import type { HierarchyPointNode } from "d3-hierarchy";
-import type { TreeNode } from "@/features/Treege/type/TreeNode";
 import useTreegeContext from "@/hooks/useTreegeContext";
 
 const useTreeCardContainer = () => {

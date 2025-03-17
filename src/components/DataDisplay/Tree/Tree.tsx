@@ -1,12 +1,15 @@
 import { Box, CircularProgress, GlobalStyles } from "@tracktor/design-system";
-import { memo } from "react";
+import type { TreeNode } from "@tracktor/types-treege";
+import { memo, ReactElement } from "react";
 import D3Tree, { RawNodeDatum, RenderCustomNodeElementFn } from "react-d3-tree";
 import useTree from "@/components/DataDisplay/Tree/useTree";
 import colors from "@/constants/colors";
 import ButtonCreateTree from "@/features/Treege/components/Inputs/ButtonCreateTree/ButtonCreateTree";
-import type { TreeNode, TreeRenderCustomNodeElementFn } from "@/features/Treege/type/TreeNode";
+import { TreeCustomNodeElementProps } from "@/features/Treege/components/TreeCardContainer/TreeCardContainer";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
+
+export type TreeRenderCustomNodeElementFn = (rd3tNodeProps: TreeCustomNodeElementProps) => ReactElement;
 
 interface TreeProps {
   data: TreeNode | null;
@@ -45,13 +48,13 @@ const Tree = ({
 }: TreeProps) => {
   const { dimensions, refContainer, translate } = useTree();
   const { currentTree } = useTreegeContext();
-  const { isInitialLoading, data: workflow } = useWorkflowQuery(currentTree.id);
+  const { isLoading, data: workflow } = useWorkflowQuery(currentTree.id);
 
   if ((!data && !currentTree.id) || (workflow && !data)) {
     return <ButtonCreateTree />;
   }
 
-  if ((currentTree.id && !data) || isInitialLoading) {
+  if ((currentTree.id && !data) || isLoading) {
     return (
       <Box sx={styles.progressContainer}>
         <CircularProgress />

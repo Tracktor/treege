@@ -7,6 +7,7 @@ import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
 import {
   Accordion,
   AccordionSummary,
+  Autocomplete,
   Box,
   Button,
   Checkbox,
@@ -62,6 +63,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
   const { t } = useTranslation(["translation", "form"]);
 
   const {
+    patternOptions,
     values,
     required,
     tag,
@@ -92,15 +94,12 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     initialQuery,
     handleChangeTreeSelect,
     handleChangeHelperText,
-    handleChangeOptionMessage,
     handleChangeRequired,
     handleChangeName,
     handleChangeType,
     handleChangeIsDecisionField,
-    handleChangeOptionLabel,
     handleDeleteValue,
     handleDeleteParam,
-    handleChangeOptionValue,
     handleChangeMessage,
     handleSubmit,
     handleAddValue,
@@ -119,6 +118,11 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     handleChangeInitialQuery,
     parentRef,
     route,
+    handlePresetValues,
+    patternMessage,
+    pattern,
+    handleChangePattern,
+    handleChangePatternMessage,
     messages: { on, off },
   } = useFormTreeCardMutation();
 
@@ -144,6 +148,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
         <TextField id="label" sx={{ flex: 1 }} label={t("label", { ns: "form" })} onChange={handleChangeLabel} value={label} size="small" />
       </Stack>
 
+      {/* Tag & helper text */}
       <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
         {type !== "title" && <FieldSelectAutocompleteCreatable id="tag" value={tag} onChange={handleChangeTag} />}
         <ExtraField
@@ -156,6 +161,33 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
           handleChangeTreeSelect={handleChangeTreeSelect}
           handleChangeHelperText={handleChangeHelperText}
           handleChangeHiddenValue={handleChangeHiddenValue}
+        />
+      </Stack>
+
+      {/* Pattern */}
+      <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
+        <Autocomplete
+          freeSolo
+          id="patternMessage"
+          size="small"
+          sx={{ flex: 1 }}
+          onChange={handleChangePattern}
+          onInputChange={handleChangePattern}
+          value={pattern}
+          options={patternOptions}
+          renderInput={(props) => (
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            <TextField {...props} label={t("form:pattern")} />
+          )}
+        />
+
+        <TextField
+          id="patternMessage"
+          label={t("form:patternMessage")}
+          sx={{ flex: 1 }}
+          onChange={handleChangePatternMessage}
+          value={patternMessage}
+          size="small"
         />
       </Stack>
 
@@ -410,7 +442,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                 label={t("label", { ns: "form" })}
                 size="small"
                 sx={{ flex: 1 }}
-                onChange={handleChangeOptionLabel}
+                onChange={handlePresetValues("label")}
                 value={decisionLabel}
                 inputProps={{ "data-id": decisionId }}
                 required
@@ -420,7 +452,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                 label={t("value", { ns: "form" })}
                 size="small"
                 sx={{ flex: 1 }}
-                onChange={handleChangeOptionValue}
+                onChange={handlePresetValues("value")}
                 value={decisionValue}
                 inputProps={{ "data-id": decisionId }}
                 required
@@ -430,7 +462,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                 label={t("message", { ns: "form" })}
                 size="small"
                 sx={{ flex: 1 }}
-                onChange={handleChangeOptionMessage}
+                onChange={handlePresetValues("message")}
                 value={decisionMessage}
                 inputProps={{ "data-id": decisionId }}
               />

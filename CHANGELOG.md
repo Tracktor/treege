@@ -1,4 +1,4 @@
 # [Versions](https://github.com/Tracktor/treege/releases)
 
-## v1.2.0
-- **[feat]** : Add title field
+## v1.3.0
+- **[feat]** : Add form validation

@@ -1,9 +1,9 @@
 import { Autocomplete, Chip, MenuItem, SxProps, TextField } from "@tracktor/design-system";
+import type { TreeNodeField } from "@tracktor/types-treege";
 import { SyntheticEvent } from "react";
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";
 import useAutocompleteSelectType from "@/features/Treege/components/Inputs/AutocompleteSelectType/useAutocompleteSelectType";
-import { TreeNodeField } from "@/features/Treege/type/TreeNode";
 
 export interface FieldsSelectProps {
   id: string;

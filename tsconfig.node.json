@@ -7,14 +7,14 @@
     "resolveJsonModule": true,
     "esModuleInterop": true
   },
+  "include": [
+    "vite.config.ts"
+  ],
   "files": [
     "package.json"
   ],
   "exclude": [
     "node_modules",
     "dist"
-  ],
-  "include": [
-    "vite.config.ts"
   ]
 }
