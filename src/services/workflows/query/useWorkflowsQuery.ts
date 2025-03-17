@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { TreeNode } from "@tracktor/types-treege";
+import type { TreeNode } from "@tracktor/types-treege";
 import axios from "axios";
 import useTreegeContext from "@/hooks/useTreegeContext";
 

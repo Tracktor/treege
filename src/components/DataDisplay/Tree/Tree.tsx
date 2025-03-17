@@ -1,5 +1,5 @@
 import { Box, CircularProgress, GlobalStyles } from "@tracktor/design-system";
-import { TreeNode } from "@tracktor/types-treege";
+import type { TreeNode } from "@tracktor/types-treege";
 import { memo, ReactElement } from "react";
 import D3Tree, { RawNodeDatum, RenderCustomNodeElementFn } from "react-d3-tree";
 import useTree from "@/components/DataDisplay/Tree/useTree";

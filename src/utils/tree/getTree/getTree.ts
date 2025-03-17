@@ -1,4 +1,4 @@
-import { TreeNode } from "@tracktor/types-treege";
+import type { TreeNode } from "@tracktor/types-treege";
 
 /**
  * Get a tree node by search path within the hierarchy

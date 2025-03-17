@@ -1,4 +1,4 @@
-import { TreeNode } from "@tracktor/types-treege";
+import type { TreeNode } from "@tracktor/types-treege";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { CustomNodeElementProps } from "react-d3-tree/lib/types/types/common";
 import TreeCard from "@/components/DataDisplay/TreeCard/TreeCard";

@@ -10,7 +10,7 @@ import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import { Box, Button, Chip, GlobalStyles, Stack, Tooltip, Typography } from "@tracktor/design-system";
 import { brown } from "@tracktor/design-system/colors";
-import { TreeNode } from "@tracktor/types-treege";
+import type { TreeNode } from "@tracktor/types-treege";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { memo } from "react";
 import { CustomNodeElementProps, TreeNodeDatum } from "react-d3-tree/lib/types/types/common";

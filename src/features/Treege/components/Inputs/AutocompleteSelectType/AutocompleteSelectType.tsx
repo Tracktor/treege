@@ -1,5 +1,5 @@
 import { Autocomplete, Chip, MenuItem, SxProps, TextField } from "@tracktor/design-system";
-import { TreeNodeField } from "@tracktor/types-treege";
+import type { TreeNodeField } from "@tracktor/types-treege";
 import { SyntheticEvent } from "react";
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";

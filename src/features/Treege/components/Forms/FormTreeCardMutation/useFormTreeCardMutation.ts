@@ -1,5 +1,5 @@
 import type { SelectChangeEvent } from "@tracktor/design-system";
-import { Params, Route, TreeNode, TreeNodeField, TreeValues } from "@tracktor/types-treege";
+import type { Params, Route, TreeNode, TreeNodeField, TreeValues } from "@tracktor/types-treege";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { ChangeEvent, FormEvent, MouseEvent, SyntheticEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
