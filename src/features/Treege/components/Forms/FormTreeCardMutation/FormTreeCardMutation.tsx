@@ -324,7 +324,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
                   type="text"
                 />
               </Stack>
-              <EndPointWarning endPoint={{ searchKey: searchKey || "", url }} />
+              <EndPointWarning endPoint={{ searchKey: searchKey || "", url: url || "" }} />
             </Stack>
           </Accordion>
           <Stack>

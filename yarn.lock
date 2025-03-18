@@ -1868,10 +1868,10 @@
     "@emotion/styled" "^11.13.0"
     "@mui/material" "^5.16.7"
 
-"@tracktor/types-treege@^0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@tracktor/types-treege/-/types-treege-0.1.4.tgz#81ce3049be905220f3a764bf78eb2f768556d964"
-  integrity sha512-0qBliDsFe7stkYacDW2eM+YScuOEjzG8DSauVbofblEy5KwG8LRIeAIMJuV8nhQS6067ZuDWHteUstj+QZd/hw==
+"@tracktor/types-treege@^0.1.8":
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/@tracktor/types-treege/-/types-treege-0.1.8.tgz#c1e9e730a7a394ba305c38f82b6acc7869c7a95f"
+  integrity sha512-jj4QaZZxdql+SWxi/sZJlHM85BlcWsLuqrpD1RyhR0PZnr58uE+EqkA2lVXIuAuZzpYYaKl+wJE2YwItBVLQEA==
 
 "@types/argparse@1.0.38":
   version "1.0.38"
