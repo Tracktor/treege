@@ -71,14 +71,10 @@ const useFormTreeCardMutation = () => {
 
   const patternOptions = useMemo(
     () => [
-      { label: t("form:email"), value: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" },
-      { label: t("form:phoneNumber"), value: "^\\+?[1-9]\\d{1,14}$" },
-      { label: t("form:firstNameAndLastName"), value: "^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$" },
-      { label: t("form:cardNumber"), value: "^\\d{16}$" },
       { label: t("form:number"), value: "^\\d+$" },
       { label: t("form:letter"), value: "^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$" },
       { label: t("form:numberAndLetter"), value: "^[A-Za-z0-9]+$" },
-      { label: t("form:url"), value: "^(https?:\\/\\/)?(www\\.)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(/.*)?$" },
+      { label: t("form:cardNumber"), value: "^\\d{16}$" },
     ],
     [t],
   );
