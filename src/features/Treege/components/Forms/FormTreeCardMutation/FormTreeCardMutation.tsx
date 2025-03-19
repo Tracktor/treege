@@ -90,6 +90,7 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
     repeatable,
     isLeaf,
     isMultiplePossible,
+    isPatternEnabled,
     isMultiple,
     initialQuery,
     handleChangeTreeSelect,
@@ -165,31 +166,33 @@ const FormTreeCardMutation = ({ onClose }: FormTreeCardMutationProps) => {
       </Stack>
 
       {/* Pattern */}
-      <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
-        <Autocomplete
-          freeSolo
-          id="patternMessage"
-          size="small"
-          sx={{ flex: 1 }}
-          onChange={handleChangePattern}
-          onInputChange={handleChangePattern}
-          value={pattern}
-          options={patternOptions}
-          renderInput={(props) => (
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            <TextField {...props} label={t("form:pattern")} />
-          )}
-        />
+      {isPatternEnabled && (
+        <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
+          <Autocomplete
+            freeSolo
+            id="patternMessage"
+            size="small"
+            sx={{ flex: 1 }}
+            onChange={handleChangePattern}
+            onInputChange={handleChangePattern}
+            value={pattern}
+            options={patternOptions}
+            renderInput={(props) => (
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              <TextField {...props} label={t("form:pattern")} />
+            )}
+          />
 
-        <TextField
-          id="patternMessage"
-          label={t("form:patternMessage")}
-          sx={{ flex: 1 }}
-          onChange={handleChangePatternMessage}
-          value={patternMessage}
-          size="small"
-        />
-      </Stack>
+          <TextField
+            id="patternMessage"
+            label={t("form:patternMessage")}
+            sx={{ flex: 1 }}
+            onChange={handleChangePatternMessage}
+            value={patternMessage}
+            size="small"
+          />
+        </Stack>
+      )}
 
       {/* Api route */}
       {isAutocomplete && (
