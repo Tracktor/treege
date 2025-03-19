@@ -63,6 +63,7 @@ const useFormTreeCardMutation = () => {
   const isDecisionField = fields.some((field) => field.type === type && field?.isDecisionField);
   const isRequiredDisabled = fields.some((field) => field.type === type && field?.isRequiredDisabled);
   const isRepeatableDisabled = fields.some((field) => field.type === type && field?.isRepeatableDisabled);
+  const isPatternEnabled = fields.some((field) => field.type === type && field?.isPatternEnabled);
   const isLeaf = currentHierarchyPointNode?.data?.attributes?.isLeaf ?? true;
   const isMultiplePossible = fields.some((field) => field.type === type && "isMultiple" in field);
   const getDisabledValueField = useCallback((index: number) => !isDecisionField && index > 0, [isDecisionField]);
@@ -75,6 +76,7 @@ const useFormTreeCardMutation = () => {
       { label: t("form:letter"), value: "^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$" },
       { label: t("form:numberAndLetter"), value: "^[A-Za-z0-9]+$" },
       { label: t("form:cardNumber"), value: "^\\d{16}$" },
+      { label: t("form:type.date"), value: "\\d{4}-\\d{2}-\\d{2}" },
     ],
     [t],
   );
@@ -599,6 +601,7 @@ const useFormTreeCardMutation = () => {
     isLeaf,
     isMultiple,
     isMultiplePossible,
+    isPatternEnabled,
     isRepeatableDisabled,
     isRequiredDisabled,
     isTreeField,

@@ -2,6 +2,7 @@ const fields = [
   {
     isBooleanField: false,
     isDecisionField: false,
+    isPatternEnabled: true,
     isRepeatableDisabled: false,
     isRequiredDisabled: false,
     type: "text",
@@ -9,6 +10,7 @@ const fields = [
   {
     isBooleanField: false,
     isDecisionField: false,
+    isPatternEnabled: true,
     isRepeatableDisabled: false,
     isRequiredDisabled: false,
     type: "number",
@@ -16,6 +18,7 @@ const fields = [
   {
     isBooleanField: false,
     isDecisionField: false,
+    isPatternEnabled: true,
     isRepeatableDisabled: false,
     isRequiredDisabled: false,
     type: "email",
@@ -24,6 +27,7 @@ const fields = [
     isBooleanField: false,
     isDecisionField: false,
     isMultiple: false,
+    isPatternEnabled: true,
     isRepeatableDisabled: false,
     isRequiredDisabled: false,
     type: "file",
@@ -31,6 +35,7 @@ const fields = [
   {
     isBooleanField: false,
     isDecisionField: false,
+    isPatternEnabled: true,
     isRepeatableDisabled: false,
     isRequiredDisabled: false,
     type: "password",
@@ -38,6 +43,7 @@ const fields = [
   {
     isBooleanField: false,
     isDecisionField: false,
+    isPatternEnabled: true,
     isRepeatableDisabled: false,
     isRequiredDisabled: false,
     type: "tel",
@@ -45,6 +51,7 @@ const fields = [
   {
     isBooleanField: false,
     isDecisionField: false,
+    isPatternEnabled: true,
     isRepeatableDisabled: false,
     isRequiredDisabled: false,
     type: "address",
@@ -52,6 +59,7 @@ const fields = [
   {
     isBooleanField: false,
     isDecisionField: false,
+    isPatternEnabled: true,
     isRepeatableDisabled: false,
     isRequiredDisabled: false,
     type: "url",
@@ -59,6 +67,7 @@ const fields = [
   {
     isBooleanField: false,
     isDecisionField: false,
+    isPatternEnabled: true,
     isRepeatableDisabled: false,
     isRequiredDisabled: false,
     type: "date",
@@ -66,6 +75,7 @@ const fields = [
   {
     isBooleanField: false,
     isDecisionField: false,
+    isPatternEnabled: true,
     isRepeatableDisabled: false,
     isRequiredDisabled: false,
     type: "dateRange",
@@ -73,6 +83,7 @@ const fields = [
   {
     isBooleanField: false,
     isDecisionField: false,
+    isPatternEnabled: true,
     isRepeatableDisabled: false,
     isRequiredDisabled: false,
     type: "time",
@@ -80,6 +91,7 @@ const fields = [
   {
     isBooleanField: false,
     isDecisionField: false,
+    isPatternEnabled: true,
     isRepeatableDisabled: false,
     isRequiredDisabled: false,
     type: "timeRange",
@@ -87,6 +99,7 @@ const fields = [
   {
     isBooleanField: true,
     isDecisionField: false,
+    isPatternEnabled: false,
     isRepeatableDisabled: true,
     isRequiredDisabled: true,
     type: "switch",
@@ -94,6 +107,7 @@ const fields = [
   {
     isBooleanField: true,
     isDecisionField: false,
+    isPatternEnabled: false,
     isRepeatableDisabled: true,
     isRequiredDisabled: true,
     type: "checkbox",
@@ -101,6 +115,7 @@ const fields = [
   {
     isBooleanField: false,
     isDecisionField: false,
+    isPatternEnabled: false,
     isRepeatableDisabled: true,
     isRequiredDisabled: true,
     type: "hidden",
@@ -108,6 +123,7 @@ const fields = [
   {
     isBooleanField: false,
     isDecisionField: false,
+    isPatternEnabled: false,
     isRepeatableDisabled: true,
     isRequiredDisabled: true,
     type: "tree",
@@ -115,6 +131,7 @@ const fields = [
   {
     isBooleanField: false,
     isDecisionField: true,
+    isPatternEnabled: false,
     isRepeatableDisabled: true,
     isRequiredDisabled: false,
     type: "radio",
@@ -122,6 +139,7 @@ const fields = [
   {
     isBooleanField: false,
     isDecisionField: true,
+    isPatternEnabled: false,
     isRepeatableDisabled: true,
     isRequiredDisabled: false,
     type: "select",
@@ -130,6 +148,7 @@ const fields = [
     initialQueryEnable: true,
     isBooleanField: false,
     isDecisionField: false,
+    isPatternEnabled: false,
     isRepeatableDisabled: true,
     isRequiredDisabled: false,
     type: "autocomplete",
@@ -138,6 +157,7 @@ const fields = [
     isBooleanField: false,
     isDecisionField: false,
     isMultiple: false,
+    isPatternEnabled: false,
     isRepeatableDisabled: false,
     isRequiredDisabled: false,
     type: "dynamicSelect",
@@ -145,6 +165,7 @@ const fields = [
   {
     isBooleanField: false,
     isDecisionField: false,
+    isPatternEnabled: false,
     isRepeatableDisabled: true,
     isRequiredDisabled: true,
     type: "title",
