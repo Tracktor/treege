@@ -11,7 +11,7 @@ import TreegeProvider from "@/features/Treege/context/TreegeProvider";
 import "@/config/i18n.config";
 
 export interface BackendConfig {
-  baseUrl: string;
+  baseUrl?: string;
   authToken?: string;
   endpoints?: {
     workflow?: string;
@@ -37,6 +37,9 @@ type TreegeProps =
     };
 
 const Treege = ({ initialTree, initialTreeId, backendConfig }: TreegeProps) => {
+  /**
+   * Set the axios base URL and the Authorization header if the authToken is provided
+   */
   useLayoutEffect(() => {
     axios.defaults.baseURL = backendConfig?.baseUrl;
 
