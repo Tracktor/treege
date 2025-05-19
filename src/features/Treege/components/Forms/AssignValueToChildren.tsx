@@ -1,5 +1,16 @@
-import { FormControl, Select, Stack, TextField, Typography, InputLabel, MenuItem, Switch } from "@tracktor/design-system";
-import { useState } from "react";
+import {
+  FormControl,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+  InputLabel,
+  MenuItem,
+  Switch,
+  SelectChangeEvent,
+} from "@tracktor/design-system";
+import type { DefaultValueFromAncestor } from "@tracktor/types-treege";
+import { useState, ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 
 const options = [
@@ -10,9 +21,43 @@ const options = [
   { label: "Address", value: "address" },
 ];
 
-const AssignValueToChildren = () => {
+interface AssignValueToChildrenProps {
+  uuid: string;
+  onChange?: ({ inputObjectKey, outputModel }: DefaultValueFromAncestor) => void;
+}
+
+const AssignValueToChildren = ({ uuid, onChange }: AssignValueToChildrenProps) => {
   const { t } = useTranslation(["form"]);
-  const [modelValue, setModelValue] = useState<string | null>(null);
+  const [outputModel, setOutputModel] = useState<string | null>(null);
+  const [inputObjectKey, setInputObjectKey] = useState<string | boolean | null>(null);
+
+  const handleOutputModelChange = (event: SelectChangeEvent<string | null>) => {
+    const newValue = event.target.value;
+    setOutputModel(newValue);
+    onChange?.({ inputObjectKey: inputObjectKey ? String(inputObjectKey) : undefined, outputModel: String(newValue), uuid });
+  };
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { checked } = event.target;
+
+    setInputObjectKey(checked);
+    onChange?.({
+      inputObjectKey: checked ? String(checked) : undefined,
+      outputModel: outputModel ?? undefined,
+      uuid,
+    });
+  };
+
+  const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+
+    setInputObjectKey(value);
+    onChange?.({
+      inputObjectKey: value,
+      outputModel: outputModel ?? undefined,
+      uuid,
+    });
+  };
 
   return (
     <Stack spacing={1} pb={2}>
@@ -26,14 +71,7 @@ const AssignValueToChildren = () => {
           }}
         >
           <InputLabel>Data model</InputLabel>
-          <Select
-            label="Data model"
-            value={modelValue}
-            onChange={(event) => {
-              const newValue = event.target.value;
-              setModelValue(newValue);
-            }}
-          >
+          <Select label="Data model" value={outputModel} onChange={handleOutputModelChange}>
             {options.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
@@ -41,33 +79,39 @@ const AssignValueToChildren = () => {
             ))}
           </Select>
         </FormControl>
-        {["numeric", "string"].includes(modelValue!) && (
+        {["numeric", "string"].includes(outputModel!) && (
           <TextField
+            value={inputObjectKey}
+            onChange={handleTextChange}
             sx={{
               width: "65%",
             }}
             label={t("staticValue")}
           />
         )}
-        {["boolean"].includes(modelValue!) && (
+        {["boolean"].includes(outputModel!) && (
           <Stack direction="row" alignItems="center" spacing={1}>
             <InputLabel>{t("staticValue")}</InputLabel>
-            <Switch />
+            <Switch value={!!inputObjectKey} onChange={handleInputChange} />
           </Stack>
         )}
-        {["api"].includes(modelValue!) && (
+        {["api"].includes(outputModel!) && (
           <TextField
             sx={{
               width: "65%",
             }}
+            value={inputObjectKey}
             label={t("keyPath")}
+            onChange={handleTextChange}
           />
         )}{" "}
-        {["address"].includes(modelValue!) && (
+        {["address"].includes(outputModel!) && (
           <TextField
             sx={{
               width: "65%",
             }}
+            value={inputObjectKey}
+            onChange={handleTextChange}
             label={t("keyPathObject")}
           />
         )}

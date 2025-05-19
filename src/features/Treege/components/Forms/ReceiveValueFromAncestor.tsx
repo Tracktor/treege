@@ -11,7 +11,7 @@ interface ReceiveValueFromParentProps {
   onSelectValue?: (value: boolean) => void;
 }
 
-const ReceiveValueFromParent = ({ value, onChange, id, onSelectValue }: ReceiveValueFromParentProps) => {
+const ReceiveValueFromAncestor = ({ value, onChange, id, onSelectValue }: ReceiveValueFromParentProps) => {
   const { t } = useTranslation(["form"]);
   const [selectedValue, setSelectedValue] = useState<string | undefined>(value || "");
   const { tree, treePath, currentHierarchyPointNode } = useTreegeContext();
@@ -29,7 +29,7 @@ const ReceiveValueFromParent = ({ value, onChange, id, onSelectValue }: ReceiveV
   };
 
   return (
-    <Stack width="50%" spacing={1} pb={2}>
+    <Stack spacing={1} pb={2}>
       <Typography variant="body2" pb={1} sx={{ textDecoration: "underline" }}>
         {t("receiveValueFromParent")}
       </Typography>
@@ -65,4 +65,4 @@ const ReceiveValueFromParent = ({ value, onChange, id, onSelectValue }: ReceiveV
   );
 };
 
-export default ReceiveValueFromParent;
+export default ReceiveValueFromAncestor;

@@ -27,7 +27,7 @@ import DynamicSelectWarning from "@/features/Treege/components/Feedback/DynamicS
 import AssignValueToChildren from "@/features/Treege/components/Forms/AssignValueToChildren";
 import ExtraField from "@/features/Treege/components/Forms/FormTreeCardMutation/ExtraField";
 import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
-import ReceiveValueFromParent from "@/features/Treege/components/Forms/ReceiveValueFromParent";
+import ReceiveValueFromAncestor from "@/features/Treege/components/Forms/ReceiveValueFromAncestor";
 import AutocompleteSelectType from "@/features/Treege/components/Inputs/AutocompleteSelectType";
 import DynamicSelectFieldFromTree from "@/features/Treege/components/Inputs/DynamicSelectFieldFromTree";
 import FieldSelectAutocompleteCreatable from "@/features/Treege/components/Inputs/FieldSelectAutocompleteCreatable";
@@ -132,6 +132,8 @@ const FormTreeCardMutation = ({ onClose, title, isOpen }: FormTreeCardMutationPr
     openSmartData,
     handleHasPrentValue,
     hasParents,
+    handleValueFromAncestor,
+    uuid,
   } = useFormTreeCardMutation();
 
   const { searchKey, url, pathKey, params } = route || {};
@@ -333,7 +335,7 @@ const FormTreeCardMutation = ({ onClose, title, isOpen }: FormTreeCardMutationPr
               )}
 
               {hasParents && (
-                <ReceiveValueFromParent
+                <ReceiveValueFromAncestor
                   id="receive-value"
                   value={parentRef}
                   onChange={handleChangeParentRef}
@@ -554,7 +556,7 @@ const FormTreeCardMutation = ({ onClose, title, isOpen }: FormTreeCardMutationPr
                   </Stack>
                 )}
 
-                <AssignValueToChildren />
+                <AssignValueToChildren uuid={uuid} onChange={handleValueFromAncestor} />
               </DialogContent>
             </Grid2>
           )}

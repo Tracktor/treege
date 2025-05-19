@@ -1,5 +1,5 @@
 import type { SelectChangeEvent } from "@tracktor/design-system";
-import type { Params, Route, TreeNode, TreeNodeField, TreeValues } from "@tracktor/types-treege";
+import type { Params, Route, TreeNode, TreeNodeField, TreeValues, DefaultValueFromAncestor } from "@tracktor/types-treege";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { ChangeEvent, FormEvent, MouseEvent, SyntheticEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -10,6 +10,20 @@ import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import { getUUID } from "@/utils";
 import { getAllAncestorNamesFromTree, getTree } from "@/utils/tree";
+
+const textOrBooleanField = [
+  "text",
+  "switch",
+  "number",
+  "checkbox",
+  "radio",
+  "email",
+  "tel",
+  "url",
+  "autocomplete",
+  "dynamicSelect",
+  "address",
+];
 
 interface Values {
   id: string;
@@ -53,6 +67,7 @@ const useFormTreeCardMutation = () => {
   const [initialQuery, setInitialQuery] = useState(false);
   const [pattern, setPattern] = useState<string | null | { label: string; value: string }>("");
   const [patternMessage, setPatternMessage] = useState("");
+  const [defaultValueFromAncestor, setDefaultValueFromAncestor] = useState<DefaultValueFromAncestor | null>(null);
 
   // State
   const isEditModal = modalOpen === "edit";
@@ -73,9 +88,10 @@ const useFormTreeCardMutation = () => {
   const currentTree = getTree(tree, treePath?.at(-1)?.path);
   const ancestorsName = getAllAncestorNamesFromTree(currentTree, uuid);
   const hasParents = !!ancestorsName.length;
+  const isTextOrBooleanField = textOrBooleanField.includes(type);
 
   const getDisabledValueField = useCallback((index: number) => !isDecisionField && index > 0, [isDecisionField]);
-  const openSmartData = isAutocomplete || isDynamicSelect || hasParentValue;
+  const openSmartData = isAutocomplete || isDynamicSelect || hasParentValue || isTextOrBooleanField;
 
   const { refetch: fetchWorkflow, isLoading: isWorkflowLoading } = useWorkflowQuery(treeSelected, { enabled: false });
 
@@ -381,6 +397,13 @@ const useFormTreeCardMutation = () => {
     [currentHierarchyPointNode?.data.attributes?.tree, fetchWorkflow, open, t],
   );
 
+  const handleValueFromAncestor = useCallback(
+    ({ inputObjectKey, outputModel }: DefaultValueFromAncestor) => {
+      setDefaultValueFromAncestor({ inputObjectKey, outputModel, uuid });
+    },
+    [uuid],
+  );
+
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
@@ -400,7 +423,7 @@ const useFormTreeCardMutation = () => {
         return;
       }
 
-      const children = {
+      const children: TreeNode = {
         attributes: {
           depth,
           name,
@@ -422,6 +445,7 @@ const useFormTreeCardMutation = () => {
           ...((off || on) && { messages: { ...(off && { off }), ...(on && { on }) } }),
           ...(pattern && { pattern: typeof pattern === "object" ? pattern.value : pattern }),
           ...(patternMessage && { patternMessage }),
+          ...(defaultValueFromAncestor && { defaultValueFromAncestor }),
           ...(isTreeField && {
             tree: { ...workflow?.workflow, treeId: treeSelected } as TreeNode,
             treePath: newPath,
@@ -441,6 +465,7 @@ const useFormTreeCardMutation = () => {
     },
     [
       currentHierarchyPointNode,
+      defaultValueFromAncestor,
       dispatchTree,
       getChildren,
       getTreeValuesWithoutEmptyMessage,
@@ -534,8 +559,11 @@ const useFormTreeCardMutation = () => {
       setIsMultiple(isMultipleAttribute || false);
 
       setInitialQuery(currentHierarchyPointNode?.data.attributes?.initialQuery || false);
+
+      setDefaultValueFromAncestor(currentHierarchyPointNode?.data?.attributes?.defaultValueFromAncestor || null);
     }
   }, [
+    currentHierarchyPointNode?.data.attributes?.defaultValueFromAncestor,
     currentHierarchyPointNode?.data.attributes?.helperText,
     currentHierarchyPointNode?.data.attributes?.hiddenValue,
     currentHierarchyPointNode?.data.attributes?.initialQuery,
@@ -600,6 +628,7 @@ const useFormTreeCardMutation = () => {
     handleHasPrentValue,
     handlePresetValues,
     handleSubmit,
+    handleValueFromAncestor,
     hasParents,
     helperText,
     hiddenValue,
