@@ -9,6 +9,7 @@ import useSnackbar from "@/hooks/useSnackbar";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import { getUUID } from "@/utils";
+import { getAllAncestorNamesFromTree, getTree } from "@/utils/tree";
 
 interface Values {
   id: string;
@@ -20,7 +21,7 @@ interface Values {
 const useFormTreeCardMutation = () => {
   const uuid = getUUID();
   const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
-  const { dispatchTree, currentHierarchyPointNode, modalOpen, treePath, setModalOpen } = useTreegeContext();
+  const { dispatchTree, currentHierarchyPointNode, modalOpen, treePath, setModalOpen, tree } = useTreegeContext();
   const { open } = useSnackbar();
   const { t } = useTranslation(["translation", "form"]);
 
@@ -32,6 +33,7 @@ const useFormTreeCardMutation = () => {
       : null;
 
   // Form value
+  const [hasParentValue, setHasPrentValue] = useState(false);
   const [values, setValues] = useState<Values[]>(defaultValues);
   const [hiddenValue, setHiddenValue] = useState("");
   const [label, setLabel] = useState("");
@@ -66,7 +68,14 @@ const useFormTreeCardMutation = () => {
   const isPatternEnabled = fields.some((field) => field.type === type && field?.isPatternEnabled);
   const isLeaf = currentHierarchyPointNode?.data?.attributes?.isLeaf ?? true;
   const isMultiplePossible = fields.some((field) => field.type === type && "isMultiple" in field);
+
+  // Tree state
+  const currentTree = getTree(tree, treePath?.at(-1)?.path);
+  const ancestorsName = getAllAncestorNamesFromTree(currentTree, uuid);
+  const hasParents = !!ancestorsName.length;
+
   const getDisabledValueField = useCallback((index: number) => !isDecisionField && index > 0, [isDecisionField]);
+  const openSmartData = isAutocomplete || isDynamicSelect || hasParentValue;
 
   const { refetch: fetchWorkflow, isLoading: isWorkflowLoading } = useWorkflowQuery(treeSelected, { enabled: false });
 
@@ -556,6 +565,10 @@ const useFormTreeCardMutation = () => {
     patternOptions,
   ]);
 
+  const handleHasPrentValue = (parentValueExist: boolean) => {
+    setHasPrentValue(parentValueExist);
+  };
+
   return {
     getDisabledValueField,
     handleAddParams,
@@ -584,8 +597,10 @@ const useFormTreeCardMutation = () => {
     handleChangeUrlSelect,
     handleDeleteParam,
     handleDeleteValue,
+    handleHasPrentValue,
     handlePresetValues,
     handleSubmit,
+    hasParents,
     helperText,
     hiddenValue,
     initialQuery,
@@ -609,6 +624,7 @@ const useFormTreeCardMutation = () => {
     label,
     messages,
     name,
+    openSmartData,
     parentRef,
     pattern,
     patternMessage,

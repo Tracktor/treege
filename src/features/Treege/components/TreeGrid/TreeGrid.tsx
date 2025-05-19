@@ -58,9 +58,7 @@ const TreeGrid = () => {
       </MosaicLayout>
 
       {/* Modal tree node mutation */}
-      <MainModal open={isModalMutationOpen} onClose={closeModal} title={getTitleModalMutation()}>
-        <FormTreeCardMutation onClose={closeModal} />
-      </MainModal>
+      <FormTreeCardMutation isOpen={isModalMutationOpen} onClose={closeModal} title={getTitleModalMutation()} />
 
       {/* Modal confirm delete tree node */}
       <MainModal open={isDeleteModal} onClose={closeModal} title={getTitleModalDelete()}>

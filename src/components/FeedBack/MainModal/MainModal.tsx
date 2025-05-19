@@ -1,4 +1,4 @@
-import { Box, Dialog } from "@tracktor/design-system";
+import { Dialog, DialogContent, Typography } from "@tracktor/design-system";
 import type { ReactNode } from "react";
 import colors from "@/constants/colors";
 
@@ -10,28 +10,30 @@ interface TreeModalProps {
   onClose?(): void;
 }
 
-const styles = {
-  box: {
-    backgroundColor: colors.background,
-    border: `solid 1px ${colors.borderBlue}`,
-  },
-};
-
 const MainModal = ({ children, description, open, onClose, title }: TreeModalProps) => (
   <Dialog
     open={open}
     onClose={onClose}
     aria-labelledby="modal-modal-title"
     aria-describedby="modal-modal-description"
-    scroll="body"
     maxWidth="sm"
     fullWidth
+    scroll="paper"
   >
-    <Box sx={styles.box} p={4}>
-      <h3>{title}</h3>
-      <p>{description}</p>
+    <DialogContent
+      sx={{
+        backgroundColor: colors.background,
+        border: `solid 1px ${colors.borderBlue}`,
+        maxHeight: "80vh",
+        overflowY: "auto",
+      }}
+    >
+      <Typography variant="h3" pb={2}>
+        {title}
+      </Typography>
+      <Typography pb={2}>{description}</Typography>
       {children}
-    </Box>
+    </DialogContent>
   </Dialog>
 );
 
