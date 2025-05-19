@@ -6,13 +6,12 @@ import { getAllAncestorNamesFromTree, getTree } from "@/utils/tree";
 
 interface ReceiveValueFromParentProps {
   id: string;
-  value: string | null;
-  onChange?: (event: SelectChangeEvent<string | undefined>, newValue: string | undefined) => void;
+  onChange?: (ancestorId: string) => void;
 }
 
-const ReceiveValueFromAncestor = ({ value, onChange, id }: ReceiveValueFromParentProps) => {
+const ReceiveValueFromAncestor = ({ onChange, id }: ReceiveValueFromParentProps) => {
   const { t } = useTranslation(["form"]);
-  const [selectedValue, setSelectedValue] = useState<string | undefined>(value || "");
+  const [selectedValue, setSelectedValue] = useState<string | undefined>("");
   const { tree, treePath, currentHierarchyPointNode } = useTreegeContext();
   const { uuid } = currentHierarchyPointNode?.data || {};
   const currentTree = getTree(tree, treePath?.at(-1)?.path);
@@ -22,7 +21,7 @@ const ReceiveValueFromAncestor = ({ value, onChange, id }: ReceiveValueFromParen
     const newValue = event.target.value;
 
     setSelectedValue(newValue);
-    onChange?.(event, uuid);
+    uuid && onChange?.(uuid);
   };
 
   return (

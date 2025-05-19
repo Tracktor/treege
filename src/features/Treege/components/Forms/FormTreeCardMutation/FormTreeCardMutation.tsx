@@ -132,7 +132,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
     hasParents,
     handleValueFromAncestor,
     defaultValueFromAncestor,
-    uuid,
+    handleAncestorId,
   } = useFormTreeCardMutation({ setIsLarge });
 
   const { searchKey, url, pathKey, params } = route || {};
@@ -152,7 +152,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
               {title}
             </Typography>
 
-            <AutocompleteSelectType key={uuid} id="type" value={type} onChange={handleChangeType} sx={{ marginBottom: 1 }} />
+            <AutocompleteSelectType id="type" value={type} onChange={handleChangeType} sx={{ marginBottom: 1 }} />
 
             {/* Name and label */}
             <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
@@ -324,7 +324,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
               </>
             )}
 
-            {hasParents && <ReceiveValueFromAncestor id="receive-value" value={parentRef} onChange={handleChangeParentRef} />}
+            {hasParents && <ReceiveValueFromAncestor id="receive-value" onChange={handleAncestorId} />}
 
             {isDecisionField && (
               <Box justifyContent="flex-end" display="flex">
@@ -540,7 +540,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                 </Stack>
               )}
 
-              <AssignValueToChildren uuid={uuid} onChange={handleValueFromAncestor} value={defaultValueFromAncestor} />
+              <AssignValueToChildren onChange={handleValueFromAncestor} value={defaultValueFromAncestor} />
             </DialogContent>
           </Grid2>
         )}

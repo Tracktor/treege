@@ -22,41 +22,27 @@ const options = [
 ];
 
 interface AssignValueToChildrenProps {
-  uuid: string;
   value?: DefaultValueFromAncestor | null;
-  onChange?: ({ inputObjectKey, outputModel }: DefaultValueFromAncestor) => void;
+  onChange?: (inputObjectKey: string, outputModel: string) => void;
 }
 
-const AssignValueToChildren = ({ uuid, onChange, value }: AssignValueToChildrenProps) => {
+const AssignValueToChildren = ({ onChange, value }: AssignValueToChildrenProps) => {
   const { t } = useTranslation(["form"]);
   const { outputModel, inputObjectKey } = value || {};
 
   const handleOutputModelChange = (event: SelectChangeEvent<string | null>) => {
     const newValue = event.target.value;
-    console.log("uuid", uuid);
-    onChange?.({ inputObjectKey: inputObjectKey ? String(inputObjectKey) : undefined, outputModel: String(newValue), uuid });
+    onChange?.(inputObjectKey || "", String(newValue));
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { checked } = event.target;
-
-    uuid &&
-      onChange?.({
-        inputObjectKey: checked ? String(checked) : undefined,
-        outputModel: outputModel ?? undefined,
-        uuid,
-      });
+    onChange?.(String(checked), outputModel || "");
   };
 
   const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newText = event.target.value;
-
-    uuid &&
-      onChange?.({
-        inputObjectKey: newText,
-        outputModel: outputModel ?? undefined,
-        uuid,
-      });
+    onChange?.(newText, outputModel || "");
   };
 
   return (

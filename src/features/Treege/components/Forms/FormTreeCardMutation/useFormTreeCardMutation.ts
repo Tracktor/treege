@@ -51,7 +51,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
       : null;
 
   // Form value
-  const [ancestorId, setAncestorId] = useState<string | null>(null);
   const [values, setValues] = useState<Values[]>(defaultValues);
   const [hiddenValue, setHiddenValue] = useState("");
   const [label, setLabel] = useState("");
@@ -71,6 +70,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   const [initialQuery, setInitialQuery] = useState(false);
   const [pattern, setPattern] = useState<string | null | { label: string; value: string }>("");
   const [patternMessage, setPatternMessage] = useState("");
+  const [ancestorId, setAncestorId] = useState<string | null>(null);
   const [defaultValueFromAncestor, setDefaultValueFromAncestor] = useState<DefaultValueFromAncestor | null>(null);
 
   // State
@@ -152,6 +152,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   }, []);
 
   const handleAncestorId = useCallback((id: string | null) => {
+    console.log("id", id);
     setAncestorId(id);
   }, []);
 
@@ -406,7 +407,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   );
 
   const handleValueFromAncestor = useCallback(
-    ({ inputObjectKey, outputModel }: DefaultValueFromAncestor) => {
+    (inputObjectKey: string, outputModel: string) => {
       setDefaultValueFromAncestor({ inputObjectKey, outputModel, uuid });
     },
     [uuid],
@@ -431,7 +432,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
         return;
       }
 
-      const children: TreeNode = {
+      const children = {
         attributes: {
           depth,
           name,
