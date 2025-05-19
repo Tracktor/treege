@@ -129,10 +129,11 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
     handleChangePatternMessage,
     messages: { on, off },
     isLargeView,
-    hasParents,
     handleValueFromAncestor,
     defaultValueFromAncestor,
-    handleAncestorId,
+    handleAncestor,
+    selectAncestorName,
+    hasAncestors,
   } = useFormTreeCardMutation({ setIsLarge });
 
   const { searchKey, url, pathKey, params } = route || {};
@@ -324,7 +325,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
               </>
             )}
 
-            {hasParents && <ReceiveValueFromAncestor id="receive-value" onChange={handleAncestorId} />}
+            {hasAncestors && <ReceiveValueFromAncestor id="receive-value" onChange={handleAncestor} value={selectAncestorName} />}
 
             {isDecisionField && (
               <Box justifyContent="flex-end" display="flex">
