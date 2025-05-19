@@ -8,10 +8,9 @@ interface ReceiveValueFromParentProps {
   id: string;
   value: string | null;
   onChange?: (event: SelectChangeEvent<string | undefined>, newValue: string | undefined) => void;
-  onSelectValue?: (value: boolean) => void;
 }
 
-const ReceiveValueFromAncestor = ({ value, onChange, id, onSelectValue }: ReceiveValueFromParentProps) => {
+const ReceiveValueFromAncestor = ({ value, onChange, id }: ReceiveValueFromParentProps) => {
   const { t } = useTranslation(["form"]);
   const [selectedValue, setSelectedValue] = useState<string | undefined>(value || "");
   const { tree, treePath, currentHierarchyPointNode } = useTreegeContext();
@@ -23,9 +22,7 @@ const ReceiveValueFromAncestor = ({ value, onChange, id, onSelectValue }: Receiv
     const newValue = event.target.value;
 
     setSelectedValue(newValue);
-
-    onSelectValue?.(!!newValue);
-    onChange?.(event, newValue);
+    onChange?.(event, uuid);
   };
 
   return (

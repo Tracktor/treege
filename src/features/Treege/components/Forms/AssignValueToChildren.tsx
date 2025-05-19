@@ -10,7 +10,7 @@ import {
   SelectChangeEvent,
 } from "@tracktor/design-system";
 import type { DefaultValueFromAncestor } from "@tracktor/types-treege";
-import { useState, ChangeEvent } from "react";
+import { ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 
 const options = [
@@ -23,40 +23,40 @@ const options = [
 
 interface AssignValueToChildrenProps {
   uuid: string;
+  value?: DefaultValueFromAncestor | null;
   onChange?: ({ inputObjectKey, outputModel }: DefaultValueFromAncestor) => void;
 }
 
-const AssignValueToChildren = ({ uuid, onChange }: AssignValueToChildrenProps) => {
+const AssignValueToChildren = ({ uuid, onChange, value }: AssignValueToChildrenProps) => {
   const { t } = useTranslation(["form"]);
-  const [outputModel, setOutputModel] = useState<string | null>(null);
-  const [inputObjectKey, setInputObjectKey] = useState<string | boolean | null>(null);
+  const { outputModel, inputObjectKey } = value || {};
 
   const handleOutputModelChange = (event: SelectChangeEvent<string | null>) => {
     const newValue = event.target.value;
-    setOutputModel(newValue);
+    console.log("uuid", uuid);
     onChange?.({ inputObjectKey: inputObjectKey ? String(inputObjectKey) : undefined, outputModel: String(newValue), uuid });
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { checked } = event.target;
 
-    setInputObjectKey(checked);
-    onChange?.({
-      inputObjectKey: checked ? String(checked) : undefined,
-      outputModel: outputModel ?? undefined,
-      uuid,
-    });
+    uuid &&
+      onChange?.({
+        inputObjectKey: checked ? String(checked) : undefined,
+        outputModel: outputModel ?? undefined,
+        uuid,
+      });
   };
 
   const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
+    const newText = event.target.value;
 
-    setInputObjectKey(value);
-    onChange?.({
-      inputObjectKey: value,
-      outputModel: outputModel ?? undefined,
-      uuid,
-    });
+    uuid &&
+      onChange?.({
+        inputObjectKey: newText,
+        outputModel: outputModel ?? undefined,
+        uuid,
+      });
   };
 
   return (
@@ -71,7 +71,7 @@ const AssignValueToChildren = ({ uuid, onChange }: AssignValueToChildrenProps) =
           }}
         >
           <InputLabel>Data model</InputLabel>
-          <Select label="Data model" value={outputModel} onChange={handleOutputModelChange}>
+          <Select label="Data model" value={outputModel ?? ""} onChange={handleOutputModelChange}>
             {options.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
@@ -81,7 +81,7 @@ const AssignValueToChildren = ({ uuid, onChange }: AssignValueToChildrenProps) =
         </FormControl>
         {["numeric", "string"].includes(outputModel!) && (
           <TextField
-            value={inputObjectKey}
+            value={inputObjectKey ?? ""}
             onChange={handleTextChange}
             sx={{
               width: "65%",
@@ -92,7 +92,7 @@ const AssignValueToChildren = ({ uuid, onChange }: AssignValueToChildrenProps) =
         {["boolean"].includes(outputModel!) && (
           <Stack direction="row" alignItems="center" spacing={1}>
             <InputLabel>{t("staticValue")}</InputLabel>
-            <Switch value={!!inputObjectKey} onChange={handleInputChange} />
+            <Switch value={inputObjectKey ?? false} onChange={handleInputChange} />
           </Stack>
         )}
         {["api"].includes(outputModel!) && (
@@ -100,7 +100,7 @@ const AssignValueToChildren = ({ uuid, onChange }: AssignValueToChildrenProps) =
             sx={{
               width: "65%",
             }}
-            value={inputObjectKey}
+            value={inputObjectKey ?? ""}
             label={t("keyPath")}
             onChange={handleTextChange}
           />
@@ -110,7 +110,7 @@ const AssignValueToChildren = ({ uuid, onChange }: AssignValueToChildrenProps) =
             sx={{
               width: "65%",
             }}
-            value={inputObjectKey}
+            value={inputObjectKey ?? ""}
             onChange={handleTextChange}
             label={t("keyPathObject")}
           />

@@ -32,7 +32,11 @@ interface Values {
   message?: string;
 }
 
-const useFormTreeCardMutation = () => {
+interface UseFormTreeCardMutationParams {
+  setIsLarge?(largeModal: boolean): void;
+}
+
+const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) => {
   const uuid = getUUID();
   const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
   const { dispatchTree, currentHierarchyPointNode, modalOpen, treePath, setModalOpen, tree } = useTreegeContext();
@@ -47,7 +51,7 @@ const useFormTreeCardMutation = () => {
       : null;
 
   // Form value
-  const [hasParentValue, setHasPrentValue] = useState(false);
+  const [ancestorId, setAncestorId] = useState<string | null>(null);
   const [values, setValues] = useState<Values[]>(defaultValues);
   const [hiddenValue, setHiddenValue] = useState("");
   const [label, setLabel] = useState("");
@@ -89,9 +93,9 @@ const useFormTreeCardMutation = () => {
   const ancestorsName = getAllAncestorNamesFromTree(currentTree, uuid);
   const hasParents = !!ancestorsName.length;
   const isTextOrBooleanField = textOrBooleanField.includes(type);
-
   const getDisabledValueField = useCallback((index: number) => !isDecisionField && index > 0, [isDecisionField]);
-  const openSmartData = isAutocomplete || isDynamicSelect || hasParentValue || isTextOrBooleanField;
+  const hasAncestors = !!ancestorsName.length;
+  const isLargeView = isAutocomplete || isDynamicSelect || hasAncestors || isTextOrBooleanField;
 
   const { refetch: fetchWorkflow, isLoading: isWorkflowLoading } = useWorkflowQuery(treeSelected, { enabled: false });
 
@@ -145,6 +149,10 @@ const useFormTreeCardMutation = () => {
       url: prevState.url ? prevState.url.replace(/{{[^{}]+}}/, `{{${newValue || ""}}}`) : `https://example.com/{{${newValue || ""}}}`,
     }));
     setParentRef(newValue ?? null);
+  }, []);
+
+  const handleAncestorId = useCallback((id: string | null) => {
+    setAncestorId(id);
   }, []);
 
   const handleChangeHiddenValue = useCallback(({ target }: ChangeEvent<HTMLInputElement>) => {
@@ -446,6 +454,7 @@ const useFormTreeCardMutation = () => {
           ...(pattern && { pattern: typeof pattern === "object" ? pattern.value : pattern }),
           ...(patternMessage && { patternMessage }),
           ...(defaultValueFromAncestor && { defaultValueFromAncestor }),
+          ...(ancestorId && { ancestorId }),
           ...(isTreeField && {
             tree: { ...workflow?.workflow, treeId: treeSelected } as TreeNode,
             treePath: newPath,
@@ -464,6 +473,7 @@ const useFormTreeCardMutation = () => {
       setModalOpen(null);
     },
     [
+      ancestorId,
       currentHierarchyPointNode,
       defaultValueFromAncestor,
       dispatchTree,
@@ -561,8 +571,10 @@ const useFormTreeCardMutation = () => {
       setInitialQuery(currentHierarchyPointNode?.data.attributes?.initialQuery || false);
 
       setDefaultValueFromAncestor(currentHierarchyPointNode?.data?.attributes?.defaultValueFromAncestor || null);
+      setAncestorId(currentHierarchyPointNode?.data.attributes?.ancestorId || null);
     }
   }, [
+    currentHierarchyPointNode?.data.attributes?.ancestorId,
     currentHierarchyPointNode?.data.attributes?.defaultValueFromAncestor,
     currentHierarchyPointNode?.data.attributes?.helperText,
     currentHierarchyPointNode?.data.attributes?.hiddenValue,
@@ -593,14 +605,19 @@ const useFormTreeCardMutation = () => {
     patternOptions,
   ]);
 
-  const handleHasPrentValue = (parentValueExist: boolean) => {
-    setHasPrentValue(parentValueExist);
-  };
+  // Adapt parent size Dialog view
+  useEffect(() => {
+    if (setIsLarge) {
+      setIsLarge(isLargeView);
+    }
+  }, [isLargeView, setIsLarge]);
 
   return {
+    defaultValueFromAncestor,
     getDisabledValueField,
     handleAddParams,
     handleAddValue,
+    handleAncestorId,
     handleChangeHelperText,
     handleChangeHiddenValue,
     handleChangeInitialQuery,
@@ -625,7 +642,6 @@ const useFormTreeCardMutation = () => {
     handleChangeUrlSelect,
     handleDeleteParam,
     handleDeleteValue,
-    handleHasPrentValue,
     handlePresetValues,
     handleSubmit,
     handleValueFromAncestor,
@@ -642,6 +658,7 @@ const useFormTreeCardMutation = () => {
     isDynamicSelect,
     isEditModal,
     isHiddenField,
+    isLargeView,
     isLeaf,
     isMultiple,
     isMultiplePossible,
@@ -653,7 +670,6 @@ const useFormTreeCardMutation = () => {
     label,
     messages,
     name,
-    openSmartData,
     parentRef,
     pattern,
     patternMessage,

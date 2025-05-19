@@ -1,4 +1,4 @@
-import { Stack } from "@tracktor/design-system";
+import { Stack, Dialog } from "@tracktor/design-system";
 import Logo from "@/components/DataDisplay/Logo/Logo";
 import Tree from "@/components/DataDisplay/Tree/Tree";
 import ViewerJSON from "@/components/DataDisplay/ViewerJSON/ViewerJSON";
@@ -23,7 +23,16 @@ import { getTree } from "@/utils/tree";
 const TreeGrid = () => {
   const { tree, treeModalOpen, treePath, backendConfig } = useTreegeContext();
   const { handleCloseTreeModal } = useTreeCardContainer();
-  const { getTitleModalMutation, closeModal, getTitleModalDelete, isModalMutationOpen, isDeleteModal, handleChangeTree } = useTreeGrid();
+  const {
+    getTitleModalMutation,
+    closeModal,
+    getTitleModalDelete,
+    isModalMutationOpen,
+    isDeleteModal,
+    handleChangeTree,
+    isLargeView,
+    setIsLargeView,
+  } = useTreeGrid();
   const lastTreePath = treePath?.at(-1);
   const currentTreePath = lastTreePath?.path;
   const currentTreeName = lastTreePath?.label;
@@ -58,7 +67,17 @@ const TreeGrid = () => {
       </MosaicLayout>
 
       {/* Modal tree node mutation */}
-      <FormTreeCardMutation isOpen={isModalMutationOpen} onClose={closeModal} title={getTitleModalMutation()} />
+      <Dialog
+        open={isModalMutationOpen}
+        onClose={closeModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        maxWidth={isLargeView ? "md" : "sm"}
+        fullWidth
+        scroll="paper"
+      >
+        <FormTreeCardMutation setIsLarge={setIsLargeView} onClose={closeModal} title={getTitleModalMutation()} />
+      </Dialog>
 
       {/* Modal confirm delete tree node */}
       <MainModal open={isDeleteModal} onClose={closeModal} title={getTitleModalDelete()}>
