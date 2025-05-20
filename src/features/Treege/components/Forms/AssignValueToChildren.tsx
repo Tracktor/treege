@@ -24,9 +24,10 @@ const options = [
 interface AssignValueToChildrenProps {
   value?: DefaultValueFromAncestor | null;
   onChange?: (inputObjectKey: string, outputModel: string) => void;
+  ancestorName: string;
 }
 
-const AssignValueToChildren = ({ onChange, value }: AssignValueToChildrenProps) => {
+const AssignValueToChildren = ({ onChange, value, ancestorName }: AssignValueToChildrenProps) => {
   const { t } = useTranslation(["form"]);
   const { outputModel, inputObjectKey } = value || {};
 
@@ -48,7 +49,7 @@ const AssignValueToChildren = ({ onChange, value }: AssignValueToChildrenProps) 
   return (
     <Stack spacing={1} pb={2}>
       <Typography variant="body2" pb={1} sx={{ textDecoration: "underline" }}>
-        {t("assignValueToChildren")}
+        {t("ancestorValue", { ancestorName })}
       </Typography>
       <Stack spacing={1} direction="row" alignItems="center" justifyContent="space-between">
         <FormControl
@@ -81,24 +82,14 @@ const AssignValueToChildren = ({ onChange, value }: AssignValueToChildrenProps) 
             <Switch value={inputObjectKey ?? false} onChange={handleInputChange} />
           </Stack>
         )}
-        {["api"].includes(outputModel!) && (
+        {["api", "address"].includes(outputModel!) && (
           <TextField
             sx={{
               width: "65%",
             }}
             value={inputObjectKey ?? ""}
-            label={t("keyPath")}
-            onChange={handleTextChange}
-          />
-        )}{" "}
-        {["address"].includes(outputModel!) && (
-          <TextField
-            sx={{
-              width: "65%",
-            }}
-            value={inputObjectKey ?? ""}
-            onChange={handleTextChange}
             label={t("keyPathObject")}
+            onChange={handleTextChange}
           />
         )}
       </Stack>

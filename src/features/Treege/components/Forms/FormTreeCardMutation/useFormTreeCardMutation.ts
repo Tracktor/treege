@@ -11,20 +11,6 @@ import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import { getUUID } from "@/utils";
 import { findNodeByUUIDInTree, getAllAncestorNamesFromTree, getTree } from "@/utils/tree";
 
-const textOrBooleanField = [
-  "text",
-  "switch",
-  "number",
-  "checkbox",
-  "radio",
-  "email",
-  "tel",
-  "url",
-  "autocomplete",
-  "dynamicSelect",
-  "address",
-];
-
 interface Values {
   id: string;
   label: string;
@@ -71,7 +57,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   const [initialQuery, setInitialQuery] = useState(false);
   const [pattern, setPattern] = useState<string | null | { label: string; value: string }>("");
   const [patternMessage, setPatternMessage] = useState("");
-  const [ancestorId, setAncestorId] = useState<string | null>(null);
   const [defaultValueFromAncestor, setDefaultValueFromAncestor] = useState<DefaultValueFromAncestor | null>(null);
   const [selectAncestorName, setSelectAncestorName] = useState<string | undefined>("");
 
@@ -91,12 +76,12 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   const isMultiplePossible = fields.some((field) => field.type === type && "isMultiple" in field);
 
   // Tree state
+  const currentUuid = currentHierarchyPointNode?.data?.uuid || "";
   const currentTree = getTree(tree, treePath?.at(-1)?.path);
   const ancestorsName = getAllAncestorNamesFromTree(currentTree, uuid);
-  const isTextOrBooleanField = textOrBooleanField.includes(type);
   const getDisabledValueField = useCallback((index: number) => !isDecisionField && index > 0, [isDecisionField]);
   const hasAncestors = !!ancestorsName.length;
-  const isLargeView = isAutocomplete || isDynamicSelect || hasAncestors || isTextOrBooleanField;
+  const isLargeView = isAutocomplete || isDynamicSelect || !!selectAncestorName;
 
   const { refetch: fetchWorkflow, isLoading: isWorkflowLoading } = useWorkflowQuery(treeSelected, { enabled: false });
 
@@ -150,11 +135,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
       url: prevState.url ? prevState.url.replace(/{{[^{}]+}}/, `{{${newValue || ""}}}`) : `https://example.com/{{${newValue || ""}}}`,
     }));
     setParentRef(newValue ?? null);
-  }, []);
-
-  const handleAncestor = useCallback((id: string | null, ancestorName: string | null) => {
-    setAncestorId(id);
-    ancestorName && setSelectAncestorName(ancestorName);
   }, []);
 
   const handleChangeHiddenValue = useCallback(({ target }: ChangeEvent<HTMLInputElement>) => {
@@ -407,19 +387,28 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     [currentHierarchyPointNode?.data.attributes?.tree, fetchWorkflow, open, t],
   );
 
-  const handleValueFromAncestor = useCallback(
-    (inputObjectKey: string, outputModel: string) => {
-      setDefaultValueFromAncestor({ inputObjectKey, outputModel, uuid });
-    },
-    [uuid],
-  );
+  const handleValueFromAncestor = useCallback((inputObjectKey: string, outputModel: string) => {
+    setDefaultValueFromAncestor((prevState) => ({
+      ...prevState,
+      inputObjectKey,
+      outputModel,
+    }));
+  }, []);
+
+  const handleAncestorRef = useCallback((ancestorUuid: string, ancestorName: string) => {
+    setDefaultValueFromAncestor((prevState) => ({
+      ...prevState,
+      name: ancestorName,
+      uuid: ancestorUuid,
+    }));
+    setSelectAncestorName(ancestorName);
+  }, []);
 
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
 
       const { on, off } = messages;
-      const currentUuid = currentHierarchyPointNode?.data?.uuid || "";
       const currentDepth = currentHierarchyPointNode?.depth || 0;
       const isEdit = modalOpen === "edit";
       const depth = currentDepth + (isEdit || currentHierarchyPointNode === null ? 0 : 1);
@@ -456,7 +445,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
           ...(pattern && { pattern: typeof pattern === "object" ? pattern.value : pattern }),
           ...(patternMessage && { patternMessage }),
           ...(defaultValueFromAncestor && { defaultValueFromAncestor }),
-          ...(ancestorId && { ancestorId }),
           ...(isTreeField && {
             tree: { ...workflow?.workflow, treeId: treeSelected } as TreeNode,
             treePath: newPath,
@@ -475,8 +463,8 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
       setModalOpen(null);
     },
     [
-      ancestorId,
       currentHierarchyPointNode,
+      currentUuid,
       defaultValueFromAncestor,
       dispatchTree,
       getChildren,
@@ -535,7 +523,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
             };
           });
 
-      const ancestorIdToSearch = currentHierarchyPointNode?.data?.attributes?.ancestorId;
+      const ancestorIdToSearch = currentHierarchyPointNode?.data?.attributes?.defaultValueFromAncestor?.uuid;
       const ancestor = findNodeByUUIDInTree(currentTree, ancestorIdToSearch!);
       const savedAncestor = ancestor?.attributes?.name;
       setSelectAncestorName(savedAncestor);
@@ -580,10 +568,8 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
       setInitialQuery(currentHierarchyPointNode?.data.attributes?.initialQuery || false);
 
       setDefaultValueFromAncestor(currentHierarchyPointNode?.data?.attributes?.defaultValueFromAncestor || null);
-      setAncestorId(currentHierarchyPointNode?.data.attributes?.ancestorId || null);
     }
   }, [
-    currentHierarchyPointNode?.data.attributes?.ancestorId,
     currentHierarchyPointNode?.data.attributes?.defaultValueFromAncestor,
     currentHierarchyPointNode?.data.attributes?.helperText,
     currentHierarchyPointNode?.data.attributes?.hiddenValue,
@@ -627,7 +613,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     getDisabledValueField,
     handleAddParams,
     handleAddValue,
-    handleAncestor,
+    handleAncestorRef,
     handleChangeHelperText,
     handleChangeHiddenValue,
     handleChangeInitialQuery,

@@ -1,8 +1,8 @@
 const FORM_EN = {
   additionalParams: "Additional parameters",
   ancestor: "Ancestor",
+  ancestorValue: "Mapping of {{ancestorName}}",
   apiRoute: "Api route",
-  assignValueToChildren: "Assign value to children",
   cardNumber: "Card number",
   dataMapping: "Option mapping",
   decisionField: "Decision field",

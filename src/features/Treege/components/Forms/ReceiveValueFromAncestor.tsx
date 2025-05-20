@@ -5,7 +5,7 @@ import { getAllAncestorNamesFromTree, getTree } from "@/utils/tree";
 
 interface ReceiveValueFromParentProps {
   id: string;
-  onChange?: (id: string | null, ancestorName: string | null) => void;
+  onChange?: (ancestorUuid: string, ancestorName: string) => void;
   value?: string | null;
 }
 
@@ -19,7 +19,9 @@ const ReceiveValueFromAncestor = ({ onChange, id, value }: ReceiveValueFromParen
   const handleChange = (event: SelectChangeEvent<string | undefined>) => {
     const newValue = event.target.value;
 
-    onChange?.(uuid || null, newValue || null);
+    if (!newValue) return;
+
+    uuid && onChange?.(uuid, newValue);
   };
 
   return (

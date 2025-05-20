@@ -131,7 +131,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
     isLargeView,
     handleValueFromAncestor,
     defaultValueFromAncestor,
-    handleAncestor,
+    handleAncestorRef,
     selectAncestorName,
     hasAncestors,
   } = useFormTreeCardMutation({ setIsLarge });
@@ -325,7 +325,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
               </>
             )}
 
-            {hasAncestors && <ReceiveValueFromAncestor id="receive-value" onChange={handleAncestor} value={selectAncestorName} />}
+            {hasAncestors && <ReceiveValueFromAncestor id="receive-value" onChange={handleAncestorRef} value={selectAncestorName} />}
 
             {isDecisionField && (
               <Box justifyContent="flex-end" display="flex">
@@ -541,7 +541,13 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                 </Stack>
               )}
 
-              <AssignValueToChildren onChange={handleValueFromAncestor} value={defaultValueFromAncestor} />
+              {selectAncestorName && (
+                <AssignValueToChildren
+                  ancestorName={selectAncestorName}
+                  onChange={handleValueFromAncestor}
+                  value={defaultValueFromAncestor}
+                />
+              )}
             </DialogContent>
           </Grid2>
         )}
