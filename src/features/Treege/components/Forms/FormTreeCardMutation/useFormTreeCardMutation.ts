@@ -78,7 +78,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   // Tree state
   const currentUuid = currentHierarchyPointNode?.data?.uuid || "";
   const currentTree = getTree(tree, treePath?.at(-1)?.path);
-  const ancestorsName = getAllAncestorNamesFromTree(currentTree, uuid);
+  const ancestorsName = getAllAncestorNamesFromTree(currentTree, currentUuid);
   const getDisabledValueField = useCallback((index: number) => !isDecisionField && index > 0, [isDecisionField]);
   const hasAncestors = !!ancestorsName.length;
   const isLargeView = isAutocomplete || isDynamicSelect || !!selectAncestorName;

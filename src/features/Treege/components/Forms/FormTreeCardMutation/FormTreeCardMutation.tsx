@@ -140,9 +140,9 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
   const { object: routeObject = "", label: routeLabel = "", value: routeValue = "", image: routeImage = "" } = pathKey || {};
 
   return (
-    <Box component="form" onSubmit={handleSubmit}>
-      <Grid2 container display="flex">
-        <Grid2 size={isLargeView ? 6 : 12}>
+    <Box component="form" onSubmit={handleSubmit} sx={{ maxHeight: "100%", overflow: "hidden" }}>
+      <Grid2 container height="100%">
+        <Grid2 size={isLargeView ? 6 : 12} sx={{ maxHeight: "100%", overflowY: "auto" }}>
           <DialogContent
             sx={{
               backgroundColor: colors.background,
@@ -365,7 +365,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
         {isLargeView && (
           <Grid2
             size={6}
-            maxHeight={500}
+            maxHeight={600}
             sx={{
               overflowY: "auto",
               scrollbarGutter: "stable",
