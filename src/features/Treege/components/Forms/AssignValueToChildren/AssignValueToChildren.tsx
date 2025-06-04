@@ -99,7 +99,7 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, currentTypeField
 
   return (
     <Grid2 container>
-      <Grid2 size={12}>
+      <Grid2 size={12} pt={2}>
         <Typography variant="h5" gutterBottom>
           {t("ancestorValue", { ancestorName })}
         </Typography>
@@ -175,7 +175,6 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, currentTypeField
             {["select", "radio"].includes(currentTypeField || "") && (
               <TextField fullWidth label={t("staticValue")} value={sourceValue ?? ""} onChange={handleTextChange} />
             )}
-
             <Typography>
               Output type: <strong>{currentTypeField}</strong>
             </Typography>
