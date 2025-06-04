@@ -387,18 +387,16 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     [currentHierarchyPointNode?.data.attributes?.tree, fetchWorkflow, open, t],
   );
 
-  const handleValueFromAncestor = useCallback((inputObjectKey: string, outputModel: string) => {
+  const handleValueFromAncestor = useCallback((sourceValue?: string) => {
     setDefaultValueFromAncestor((prevState) => ({
       ...prevState,
-      inputObjectKey,
-      outputModel,
+      sourceValue,
     }));
   }, []);
 
   const handleAncestorRef = useCallback((ancestorUuid: string, ancestorName: string) => {
     setDefaultValueFromAncestor((prevState) => ({
       ...prevState,
-      name: ancestorName,
       uuid: ancestorUuid,
     }));
     setSelectAncestorName(ancestorName);

@@ -23,7 +23,7 @@ import {
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
 import DynamicSelectWarning from "@/features/Treege/components/Feedback/DynamicSelectWarning";
-import AssignValueToChildren from "@/features/Treege/components/Forms/AssignValueToChildren";
+import AssignValueToChildren from "@/features/Treege/components/Forms/AssignValueToChildren/AssignValueToChildren";
 import ExtraField from "@/features/Treege/components/Forms/FormTreeCardMutation/ExtraField";
 import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
 import ReceiveValueFromAncestor from "@/features/Treege/components/Forms/ReceiveValueFromAncestor";
@@ -325,8 +325,6 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
               </>
             )}
 
-            {hasAncestors && <ReceiveValueFromAncestor id="receive-value" onChange={handleAncestorRef} value={selectAncestorName} />}
-
             {isDecisionField && (
               <Box justifyContent="flex-end" display="flex">
                 <IconButton color="success" sx={styles.iconButton} onClick={handleAddValue}>
@@ -334,6 +332,8 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                 </IconButton>
               </Box>
             )}
+
+            {hasAncestors && <ReceiveValueFromAncestor id="receive-value" onChange={handleAncestorRef} value={selectAncestorName} />}
 
             <DialogActions
               sx={{
@@ -546,6 +546,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                   ancestorName={selectAncestorName}
                   onChange={handleValueFromAncestor}
                   value={defaultValueFromAncestor}
+                  currentTypeField={type}
                 />
               )}
             </DialogContent>
