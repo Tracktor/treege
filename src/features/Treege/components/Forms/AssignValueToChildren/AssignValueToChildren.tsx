@@ -1,4 +1,17 @@
-import { Typography, Alert, Grid2, TextField, Checkbox, FormControlLabel, Box, Divider, Collapse } from "@tracktor/design-system";
+import { KeyboardArrowDown } from "@mui/icons-material";
+import {
+  Typography,
+  Alert,
+  Grid2,
+  TextField,
+  Checkbox,
+  FormControlLabel,
+  Box,
+  Divider,
+  Collapse,
+  IconButton,
+  Stack,
+} from "@tracktor/design-system";
 import type { DefaultValueFromAncestor } from "@tracktor/types-treege";
 import { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -99,18 +112,22 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, currentTypeField
 
         {ObjectType.includes(ancestorType || "") && (
           <Box component="section" sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-            <Typography variant="body2" gutterBottom>
-              a
-            </Typography>
-            <TextField fullWidth label={t("keyPathObject")} value={sourceValue ?? ""} onChange={handleTextChange} />
+            <Stack>
+              <Typography>{t("mapObject")}</Typography>
+              <TextField fullWidth label={t("keyPathObject")} value={sourceValue ?? ""} onChange={handleTextChange} />
+            </Stack>
 
             <FormControlLabel
               control={
-                <Checkbox
-                  id="isRequired"
-                  checked={openObjectMappingExample}
-                  onChange={() => setOpenObjectMappingExample((prev) => !prev)}
-                />
+                <IconButton
+                  onClick={() => setOpenObjectMappingExample((prev) => !prev)}
+                  sx={{
+                    transform: openObjectMappingExample ? "rotate(180deg)" : "rotate(0deg)",
+                    transition: "transform 0.3s",
+                  }}
+                >
+                  <KeyboardArrowDown />
+                </IconButton>
               }
               label={t("objectDemo")}
             />
