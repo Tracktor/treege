@@ -8,7 +8,7 @@ const FORM_FR = {
   dataMapping: "Mapping des options",
   decisionField: "Champs de décision",
   disabledPast: "Passé désactivé",
-  dynamicSelectStructureHint: "Un type de sélection dynamique doit être :",
+  dynamicSelectStructureHint: "Assurez-vous que le champ accepte la valeur de l'ancêtre.",
   email: "Email",
   firstNameAndLastName: "Prénom et nom",
   helperText: "Texte d'information",
@@ -38,7 +38,7 @@ const FORM_FR = {
   selectStructureHint: "Doit être une valeur existante dans les options de valeurs.",
   staticFields: "Champs statiques",
   staticValue: "(Option) Valeur statique",
-  staticValueDescription: "Par défaut, il affichera la valeur de l'ancêtre, mais vous pouvez assigner une valeur statique.",
+  staticValueDescription: "Par défaut, il utilisera la valeur de l'ancêtre, mais vous pouvez assigner une valeur statique.",
   step: "Étape",
   tree: "Arbre",
   treeName: "Nom de l'arbre",
@@ -68,6 +68,7 @@ const FORM_FR = {
   typeStructureWarning: "Le type d'input doit être : {{type}}",
   url: "URL",
   urlConstruction: "Construction de l'URL",
+  useAncestorValueAsParam: "Utiliser la valeur de l'ancêtre comme paramètre API",
   value: "Valeur",
   values: "Valeurs",
   warningApiAutocomplete: {
@@ -76,7 +77,7 @@ const FORM_FR = {
   },
   warningApiSelect: {
     response: "à l'emplacement de votre variable.",
-    url: "Pour intégrer automatiquement la valeur du parent dans l'URL",
+    url: "Pour intégrer la valeur du parent dans l'URL",
     warning: "placez {{}}",
   },
 } as const;

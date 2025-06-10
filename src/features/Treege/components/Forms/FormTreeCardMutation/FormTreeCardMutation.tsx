@@ -1,5 +1,5 @@
+import { KeyboardArrowDown } from "@mui/icons-material";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
 import QuestionMarkRoundedIcon from "@mui/icons-material/QuestionMarkRounded";
 import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
@@ -19,6 +19,7 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
+  Collapse,
 } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
@@ -28,7 +29,6 @@ import ExtraField from "@/features/Treege/components/Forms/FormTreeCardMutation/
 import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
 import ReceiveValueFromAncestor from "@/features/Treege/components/Forms/ReceiveValueFromAncestor";
 import AutocompleteSelectType from "@/features/Treege/components/Inputs/AutocompleteSelectType";
-import DynamicSelectFieldFromTree from "@/features/Treege/components/Inputs/DynamicSelectFieldFromTree";
 import FieldSelectAutocompleteCreatable from "@/features/Treege/components/Inputs/FieldSelectAutocompleteCreatable";
 
 interface FormTreeCardMutationProps {
@@ -120,7 +120,6 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
     handleChangeMultiple,
     handleChangeParentRef,
     handleChangeInitialQuery,
-    parentRef,
     route,
     handlePresetValues,
     patternMessage,
@@ -134,21 +133,20 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
     handleAncestorRef,
     selectAncestorName,
     hasAncestors,
+    collapseOptions,
+    setCollapseOptions,
+    useAncestorAsParam,
+    setUseAncestorAsParam,
   } = useFormTreeCardMutation({ setIsLarge });
 
   const { searchKey, url, pathKey, params } = route || {};
   const { object: routeObject = "", label: routeLabel = "", value: routeValue = "", image: routeImage = "" } = pathKey || {};
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ maxHeight: "100%", overflow: "hidden" }}>
-      <Grid2 container height="100%">
-        <Grid2 size={isLargeView ? 6 : 12} sx={{ maxHeight: "100%", overflowY: "auto" }}>
-          <DialogContent
-            sx={{
-              backgroundColor: colors.background,
-              border: `solid 1px ${colors.borderBlue}`,
-            }}
-          >
+    <Box component="form" onSubmit={handleSubmit}>
+      <Grid2 container height={600}>
+        <Grid2 size={isLargeView ? 6 : 12} sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+          <DialogContent>
             <Typography variant="h3" pb={2}>
               {title}
             </Typography>
@@ -245,7 +243,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
             )}
 
             <Stack paddingY={1}>
-              <FormGroup>
+              <FormGroup row>
                 {isMultiplePossible && (
                   <FormControlLabel control={<Checkbox checked={isMultiple} onChange={handleChangeMultiple} />} label={t("multiple")} />
                 )}
@@ -265,7 +263,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                   control={<Checkbox id="isRepeatable" checked={repeatable} onChange={handleChangeRepeatable} />}
                   label={t("repeatable", { ns: "form" })}
                 />
-                {(isLeaf || isEditModal) && (
+                {isDecisionField && (
                   <FormControlLabel
                     disabled={!isDecisionField}
                     control={<Checkbox id="isDecision" checked={isDecision} onChange={handleChangeIsDecisionField} />}
@@ -285,7 +283,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
               <>
                 <h4>{t("values")}</h4>
                 {values?.map(({ value: decisionValue, label: decisionLabel, id: decisionId, message: decisionMessage }) => (
-                  <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} key={decisionId} position="relative">
+                  <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} position="relative">
                     <TextField
                       id={`decision-label-${decisionId}`}
                       label={t("label", { ns: "form" })}
@@ -334,32 +332,22 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
             )}
 
             {hasAncestors && <ReceiveValueFromAncestor id="receive-value" onChange={handleAncestorRef} value={selectAncestorName} />}
-
-            <DialogActions
-              sx={{
-                backgroundColor: colors.background,
-                borderTop: `1px solid ${colors.borderBlue}`,
-                bottom: 0,
-                padding: 3,
-                position: "sticky",
-                zIndex: 1,
-              }}
-            >
-              <Button variant="text" onClick={onClose}>
-                {t("cancel")}
-              </Button>
-              <Button
-                variant="contained"
-                type="submit"
-                disabled={isWorkflowLoading}
-                isLoading={isWorkflowLoading}
-                loadingIndicator={<CircularProgress size={14} />}
-                onClick={handleSubmit}
-              >
-                {t("validate")}
-              </Button>
-            </DialogActions>
           </DialogContent>
+          <DialogActions>
+            <Button variant="text" onClick={onClose}>
+              {t("cancel")}
+            </Button>
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={isWorkflowLoading}
+              isLoading={isWorkflowLoading}
+              loadingIndicator={<CircularProgress size={14} />}
+              onClick={handleSubmit}
+            >
+              {t("validate")}
+            </Button>
+          </DialogActions>
         </Grid2>
 
         {isLargeView && (
@@ -367,14 +355,14 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
             size={6}
             maxHeight={600}
             sx={{
-              overflowY: "auto",
-              scrollbarGutter: "stable",
+              display: "flex",
+              flexDirection: "column",
             }}
           >
             <DialogContent>
               {isAutocomplete && (
                 <Stack spacing={1} paddingY={1}>
-                  <h4>{t("form:urlConstruction")}</h4>
+                  <Typography variant="h4">{t("form:urlConstruction")}</Typography>
                   <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
                     <TextField
                       id="url"
@@ -412,34 +400,51 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
 
               {isDynamicSelect && (
                 <Stack spacing={1} paddingY={1}>
-                  <h4>{t("form:urlConstruction")}</h4>
-                  <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
-                    <DynamicSelectFieldFromTree id="parentRef" value={parentRef} onChange={handleChangeParentRef} />
-                    <ArrowForwardIcon />
-                    <TextField
-                      id="urlSelect"
-                      size="small"
-                      sx={{ flex: 3 }}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <LinkRoundedIcon />
-                          </InputAdornment>
-                        ),
-                      }}
-                      placeholder={`https://api.fr/{{${parentRef || ""}}}/enpoint`}
-                      type="url"
-                      label={t("form:apiRoute")}
-                      onChange={handleChangeUrlSelect}
-                      value={url}
+                  <Typography variant="h5" pb={1}>
+                    {t("form:urlConstruction")}
+                  </Typography>
+
+                  <TextField
+                    id="urlSelect"
+                    size="small"
+                    sx={{ flex: 3 }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LinkRoundedIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                    placeholder={useAncestorAsParam ? `https://api.com/text={{${"parentRef" || ""}}}` : `https://api.com`}
+                    type="url"
+                    label={t("form:apiRoute")}
+                    onChange={handleChangeUrlSelect}
+                    value={url}
+                  />
+
+                  {selectAncestorName && (
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          id="useAncestorAsParam"
+                          checked={useAncestorAsParam}
+                          onChange={(event) => setUseAncestorAsParam(event.target.checked)}
+                        />
+                      }
+                      label={
+                        <Typography variant="body2" color="textSecondary">
+                          {t("useAncestorValueAsParam", { ns: "form" })}
+                        </Typography>
+                      }
                     />
-                  </Stack>
-                  {url && <DynamicSelectWarning value={parentRef} />}
+                  )}
+
+                  {useAncestorAsParam && <DynamicSelectWarning value="parentRef" />}
                 </Stack>
               )}
 
               {(isAutocomplete || isDynamicSelect) && (
-                <Stack spacing={1} paddingY={1}>
+                <>
                   <Stack>
                     <Stack
                       spacing={1}
@@ -448,7 +453,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                       position="relative"
                       alignItems={{ sm: "center", xs: "flex-start" }}
                     >
-                      <h4>{t("form:additionalParams")}</h4>
+                      <Typography variant="h5">{t("form:additionalParams")}</Typography>
                       <Box justifyContent="flex-end">
                         <IconButton color="success" sx={styles.iconButton} onClick={handleAddParams}>
                           <AddCircleRoundedIcon />
@@ -456,7 +461,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                       </Box>
                     </Stack>
                     {params?.map(({ id, key, value }, index) => (
-                      <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} key={id} position="relative">
+                      <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} position="relative">
                         <TextField
                           id={`param-key-${id}`}
                           label="Key"
@@ -484,61 +489,75 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                     ))}
                   </Stack>
 
-                  <Typography sx={{ textDecoration: "underline" }} pb={1}>
-                    {t("form:dataMapping")}
-                  </Typography>
-                  <Stack spacing={1} paddingY={1}>
-                    <Stack spacing={1} sx={{ pb: 1 }} direction={{ sm: "row", xs: "column" }} alignItems="center">
-                      <TextField
-                        id="objectArrayPath"
-                        size="small"
-                        sx={{ flex: 3 }}
-                        InputLabelProps={{ shrink: true }}
-                        label="Object Array Path"
-                        value={routeObject}
-                        onChange={(event) => handleChangePath("object", event)}
-                        placeholder="elements.features[]"
-                        type="text"
-                      />
-                      <TextField
-                        id="labelPath"
-                        size="small"
-                        sx={{ flex: 3 }}
-                        InputLabelProps={{ shrink: true }}
-                        label="Label Path"
-                        value={routeLabel}
-                        onChange={(event) => handleChangePath("label", event)}
-                        placeholder="client.name"
-                        type="text"
-                      />
-                    </Stack>
+                  <FormControlLabel
+                    control={
+                      <IconButton
+                        onClick={() => setCollapseOptions((prev) => !prev)}
+                        sx={{
+                          transform: collapseOptions ? "rotate(180deg)" : "rotate(0deg)",
+                          transition: "transform 0.3s",
+                        }}
+                      >
+                        <KeyboardArrowDown />
+                      </IconButton>
+                    }
+                    label={t("form:dataMapping")}
+                  />
 
-                    <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
-                      <TextField
-                        id="valuePath"
-                        size="small"
-                        sx={{ flex: 3 }}
-                        InputLabelProps={{ shrink: true }}
-                        label="Value Path"
-                        value={routeValue}
-                        onChange={(event) => handleChangePath("value", event)}
-                        placeholder="client.id"
-                        type="text"
-                      />
-                      <TextField
-                        id="imagePath"
-                        size="small"
-                        sx={{ flex: 3 }}
-                        InputLabelProps={{ shrink: true }}
-                        label="Image Path"
-                        value={routeImage}
-                        onChange={(event) => handleChangePath("image", event)}
-                        placeholder="client.src.profile"
-                        type="text"
-                      />
+                  <Collapse in={collapseOptions}>
+                    <Stack spacing={1} paddingY={1}>
+                      <Stack spacing={1} sx={{ pb: 1 }} direction={{ sm: "row", xs: "column" }} alignItems="center">
+                        <TextField
+                          id="objectArrayPath"
+                          size="small"
+                          sx={{ flex: 3 }}
+                          InputLabelProps={{ shrink: true }}
+                          label="Object Array Path"
+                          value={routeObject}
+                          onChange={(event) => handleChangePath("object", event)}
+                          placeholder="elements.features[]"
+                          type="text"
+                        />
+                        <TextField
+                          id="labelPath"
+                          size="small"
+                          sx={{ flex: 3 }}
+                          InputLabelProps={{ shrink: true }}
+                          label="Label Path"
+                          value={routeLabel}
+                          onChange={(event) => handleChangePath("label", event)}
+                          placeholder="client.name"
+                          type="text"
+                        />
+                      </Stack>
+
+                      <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
+                        <TextField
+                          id="valuePath"
+                          size="small"
+                          sx={{ flex: 3 }}
+                          InputLabelProps={{ shrink: true }}
+                          label="Value Path"
+                          value={routeValue}
+                          onChange={(event) => handleChangePath("value", event)}
+                          placeholder="client.id"
+                          type="text"
+                        />
+                        <TextField
+                          id="imagePath"
+                          size="small"
+                          sx={{ flex: 3 }}
+                          InputLabelProps={{ shrink: true }}
+                          label="Image Path"
+                          value={routeImage}
+                          onChange={(event) => handleChangePath("image", event)}
+                          placeholder="client.src.profile"
+                          type="text"
+                        />
+                      </Stack>
                     </Stack>
-                  </Stack>
-                </Stack>
+                  </Collapse>
+                </>
               )}
 
               {selectAncestorName && (
@@ -547,6 +566,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                   onChange={handleValueFromAncestor}
                   value={defaultValueFromAncestor}
                   currentTypeField={type}
+                  ancestorUseAsApiParams={!useAncestorAsParam}
                 />
               )}
             </DialogContent>

@@ -48,7 +48,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   const [isMultiple, setIsMultiple] = useState(false);
   const [type, setType] = useState<TreeNodeField["type"]>("text");
   const [tag, setTag] = useState<string | null>(null);
-  const [parentRef, setParentRef] = useState<string | null>(null);
   const [route, setRoute] = useState<Route>({ url: "" });
   const [treeSelected, setTreeSelected] = useState<string>("");
   const [helperText, setHelperText] = useState("");
@@ -59,6 +58,8 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   const [patternMessage, setPatternMessage] = useState("");
   const [defaultValueFromAncestor, setDefaultValueFromAncestor] = useState<DefaultValueFromAncestor | null>(null);
   const [selectAncestorName, setSelectAncestorName] = useState<string | undefined>("");
+  const [collapseOptions, setCollapseOptions] = useState<boolean>(false);
+  const [useAncestorAsParam, setUseAncestorAsParam] = useState<boolean>(false);
 
   // State
   const isEditModal = modalOpen === "edit";
@@ -134,7 +135,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
       ...prevState,
       url: prevState.url ? prevState.url.replace(/{{[^{}]+}}/, `{{${newValue || ""}}}`) : `https://example.com/{{${newValue || ""}}}`,
     }));
-    setParentRef(newValue ?? null);
   }, []);
 
   const handleChangeHiddenValue = useCallback(({ target }: ChangeEvent<HTMLInputElement>) => {
@@ -153,24 +153,24 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     setRoute((prevState) => ({ ...prevState, url: target.value }));
   }, []);
 
-  const handleChangeUrlSelect = useCallback(
-    ({ target }: ChangeEvent<HTMLInputElement>) => {
-      const newValue = target.value;
-      if (newValue.includes("{{}}")) {
-        const addParentInBracket = newValue.replace("{{}}", `{{${parentRef || ""}}}`);
-        setRoute((prevState) => ({ ...prevState, url: addParentInBracket }));
-      } else if (newValue.includes("{{")) {
-        const replaceTextWithParentRef = newValue.replace(/{{[^{}]+}}/, `{{${parentRef || ""}}}`);
-        setRoute((prevState) => ({
-          ...prevState,
-          url: replaceTextWithParentRef,
-        }));
-      } else {
-        setRoute((prevState) => ({ ...prevState, url: newValue }));
-      }
-    },
-    [parentRef],
-  );
+  const handleChangeUrlSelect = useCallback(({ target }: ChangeEvent<HTMLInputElement>) => {
+    const newValue = target.value;
+    const parentRef = "toto";
+
+    // todo: remove parentRef
+    if (newValue.includes("{{}}")) {
+      const addParentInBracket = newValue.replace("{{}}", `{{${parentRef || ""}}}`);
+      setRoute((prevState) => ({ ...prevState, url: addParentInBracket }));
+    } else if (newValue.includes("{{")) {
+      const replaceTextWithParentRef = newValue.replace(/{{[^{}]+}}/, `{{${parentRef || ""}}}`);
+      setRoute((prevState) => ({
+        ...prevState,
+        url: replaceTextWithParentRef,
+      }));
+    } else {
+      setRoute((prevState) => ({ ...prevState, url: newValue }));
+    }
+  }, []);
 
   const handleChangeSearchKey = useCallback(({ target }: ChangeEvent<HTMLInputElement>) => {
     setRoute((prevState) => ({
@@ -435,7 +435,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
           ...(repeatable && { repeatable }),
           ...(isHiddenField && { hiddenValue }),
           ...(tag && { tag }),
-          ...(parentRef && { parentRef }),
           ...(isMultiple && isMultiplePossible && { isMultiple }),
           ...(initialQuery && { initialQuery }),
           ...(isDecisionField && !isDecision && { values: getTreeValuesWithoutEmptyMessage(values) }),
@@ -485,7 +484,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
       messages,
       modalOpen,
       name,
-      parentRef,
       pattern,
       patternMessage,
       repeatable,
@@ -540,7 +538,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
       setTreeSelected(currentHierarchyPointNode?.data.attributes?.tree?.treeId || "");
       setRepeatable(currentHierarchyPointNode?.data.attributes?.repeatable || false);
       setHiddenValue(currentHierarchyPointNode?.data.attributes?.hiddenValue || "");
-      setParentRef(currentHierarchyPointNode?.data.attributes?.parentRef || null);
       setPattern(
         patternOptions.find(({ value }) => value === currentHierarchyPointNode?.data.attributes?.pattern) ||
           currentHierarchyPointNode?.data.attributes?.pattern ||
@@ -578,7 +575,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     currentHierarchyPointNode?.data.attributes?.messages?.off,
     currentHierarchyPointNode?.data.attributes?.messages?.on,
     currentHierarchyPointNode?.data.attributes?.name,
-    currentHierarchyPointNode?.data.attributes?.parentRef,
     currentHierarchyPointNode?.data.attributes?.pattern,
     currentHierarchyPointNode?.data.attributes?.patternMessage,
     currentHierarchyPointNode?.data.attributes?.repeatable,
@@ -607,6 +603,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   }, [isLargeView, setIsLarge]);
 
   return {
+    collapseOptions,
     defaultValueFromAncestor,
     getDisabledValueField,
     handleAddParams,
@@ -664,7 +661,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     label,
     messages,
     name,
-    parentRef,
     pattern,
     patternMessage,
     patternOptions,
@@ -672,9 +668,12 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     required,
     route,
     selectAncestorName,
+    setCollapseOptions,
+    setUseAncestorAsParam,
     tag,
     treeSelected,
     type,
+    useAncestorAsParam,
     uuid,
     values,
   };

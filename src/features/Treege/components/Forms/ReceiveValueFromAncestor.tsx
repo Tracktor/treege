@@ -25,7 +25,7 @@ const ReceiveValueFromAncestor = ({ onChange, id, value }: ReceiveValueFromParen
   };
 
   return (
-    <Stack spacing={1} pb={2}>
+    <Stack spacing={1} pb={2} pt={3}>
       <Typography variant="body2" pb={1} sx={{ textDecoration: "underline" }}>
         {t("receiveValueFromParent")}
       </Typography>

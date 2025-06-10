@@ -30,17 +30,14 @@ const DynamicSelectWarning = ({ value }: EndPointWarningProps) => {
 
   return (
     <Alert severity="warning" variant="outlined">
-      <Typography component="div" variant="body2" gutterBottom sx={{ lineHeight: 2 }}>
+      <Typography variant="body2">
         {t("form:warningApiSelect.url")} {t("form:warningApiSelect.warning")} {t("form:warningApiSelect.response")}
         <Box sx={styles.container}>
-          https://api.example.com/{"{{"}
+          https://api.com/text={"{{"}
           <Box component="span" sx={styles.type}>
             {value || "value"}
           </Box>
-          <Box component="span" sx={styles.property}>
-            : string
-          </Box>
-          {"}}"}/endpoint <Box component="span" sx={styles.property} />
+          {"}}"} <Box component="span" sx={styles.property} />
         </Box>
       </Typography>
     </Alert>
