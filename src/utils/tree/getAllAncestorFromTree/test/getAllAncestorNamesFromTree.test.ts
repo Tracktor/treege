@@ -1,5 +1,5 @@
 import { getAllAncestorNamesFromTree } from "@/utils/tree";
-import getAllAncestorNamesFromTreeMock from "@/utils/tree/getAllAncestorNamesFromTree/test/mock";
+import getAllAncestorNamesFromTreeMock from "@/utils/tree/getAllAncestorFromTree/test/mock";
 
 describe("get Names In Tree", () => {
   test("Get ancestor name without given uuid", () => {

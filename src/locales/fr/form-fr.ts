@@ -1,5 +1,5 @@
 const FORM_FR = {
-  additionalParams: "Paramètres statics additionnels",
+  additionalParams: "Paramètres API",
   addressStructureHint: "Un type d'adresse doit être :",
   ancestor: "Ancêtre",
   ancestorValue: "Récupération de la valeur de : {{ancestorName}}",
@@ -15,6 +15,8 @@ const FORM_FR = {
   hiddenValue: "Valeur caché",
   key: "Clé",
   keyPath: "Chemin de la clé (string | number)",
+  keyPathApiDescription:
+    "(Option) Pour insérer dynamiquement une valeur dans une URL, utilisez la syntaxe {{paramName}}. Par exemple : http://api.com/userId={{userId}} remplacera {{userId}} par sa valeur réelle. Assurez-vous que chaque paramètre entre accolades correspond à une clé disponible dans les données.",
   keyPathAssignment: "Chemin vers la valeur : {{keyPath}}",
   keyPathObject: "Clé vers la valeur",
   label: "Label",
@@ -68,7 +70,7 @@ const FORM_FR = {
   typeStructureWarning: "Le type d'input doit être : {{type}}",
   url: "URL",
   urlConstruction: "Construction de l'URL",
-  useAncestorValueAsParam: "Utiliser {{ancestorValue}} comme paramètre API",
+  useAncestorValueAsParam: "Utiliser un ancètre comme paramètre API",
   value: "Valeur",
   values: "Valeurs",
   warningApiAutocomplete: {

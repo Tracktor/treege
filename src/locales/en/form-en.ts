@@ -1,5 +1,5 @@
 const FORM_EN = {
-  additionalParams: "Additional statics parameters",
+  additionalParams: "Api parameters",
   addressStructureHint: "An address type must be:",
   ancestor: "Ancestor",
   ancestorValue: "Get value from: {{ancestorName}}",
@@ -15,6 +15,8 @@ const FORM_EN = {
   hiddenValue: "Hidden value",
   key: "Key",
   keyPath: "Key path (string | number)",
+  keyPathApiDescription:
+    "(Option) To dynamically insert a value into a URL, use the {{paramName}} syntax. For example: http://api.com/userId={{userId}} will replace {{userId}} with its actual value. Make sure that each parameter enclosed in double curly braces corresponds to a key available in the data.",
   keyPathAssignment: "Key path to value: {{keyPath}}",
   keyPathObject: "Key path to value",
   label: "Label",
@@ -68,7 +70,7 @@ const FORM_EN = {
   typeStructureWarning: "Type structure must be: {{type}}",
   url: "URL",
   urlConstruction: "URL construction",
-  useAncestorValueAsParam: "Use {{ancestorValue}} as API parameter",
+  useAncestorValueAsParam: "Use Ancestor value as param",
   value: "Value",
   values: "Values",
   warningApiAutocomplete: {

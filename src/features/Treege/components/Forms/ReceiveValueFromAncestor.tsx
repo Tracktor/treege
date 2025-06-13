@@ -1,11 +1,11 @@
 import { Typography, Select, MenuItem, Stack, SelectChangeEvent } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import useTreegeContext from "@/hooks/useTreegeContext";
-import { getAllAncestorNamesFromTree, getTree } from "@/utils/tree";
+import { getAllAncestorFromTree, getTree } from "@/utils/tree";
 
 interface ReceiveValueFromParentProps {
   id: string;
-  onChange?: (ancestorUuid: string, ancestorName: string) => void;
+  onChange?: (ancestorUuid?: string, ancestorName?: string) => void;
   value?: string | null;
 }
 
@@ -14,14 +14,12 @@ const ReceiveValueFromAncestor = ({ onChange, id, value }: ReceiveValueFromParen
   const { tree, treePath, currentHierarchyPointNode } = useTreegeContext();
   const { uuid } = currentHierarchyPointNode?.data || {};
   const currentTree = getTree(tree, treePath?.at(-1)?.path);
-  const ancestorsName = getAllAncestorNamesFromTree(currentTree, uuid);
+  const ancestors = getAllAncestorFromTree(currentTree, uuid);
 
   const handleChange = (event: SelectChangeEvent<string | undefined>) => {
     const newValue = event.target.value;
 
-    if (!newValue) return;
-
-    uuid && onChange?.(uuid, newValue);
+    onChange?.(uuid, newValue);
   };
 
   return (
@@ -41,8 +39,10 @@ const ReceiveValueFromAncestor = ({ onChange, id, value }: ReceiveValueFromParen
           },
         }}
       >
-        {ancestorsName.length ? (
-          ancestorsName.map((name, index) => {
+        <MenuItem value="">&nbsp;</MenuItem>
+
+        {ancestors.length ? (
+          ancestors.map(({ name }, index) => {
             const key = `${name}-${index}`;
 
             return (

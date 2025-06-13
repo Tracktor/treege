@@ -9,7 +9,7 @@ import useSnackbar from "@/hooks/useSnackbar";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import { getUUID } from "@/utils";
-import { findNodeByUUIDInTree, getAllAncestorNamesFromTree, getTree } from "@/utils/tree";
+import { findNodeByUUIDInTree, getAllAncestorFromTree, getTree } from "@/utils/tree";
 
 interface Values {
   id: string;
@@ -77,7 +77,8 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   // Tree state
   const currentUuid = currentHierarchyPointNode?.data?.uuid || "";
   const currentTree = getTree(tree, treePath?.at(-1)?.path);
-  const ancestorsName = getAllAncestorNamesFromTree(currentTree, currentUuid);
+  const ancestors = getAllAncestorFromTree(currentTree, currentUuid);
+  const ancestorsName = useMemo(() => ancestors.map(({ name: getNames }) => getNames || ""), [ancestors]);
   const getDisabledValueField = useCallback((index: number) => !isDecisionField && index > 0, [isDecisionField]);
   const hasAncestors = !!ancestorsName.length;
   const isLargeView = isAutocomplete || isDynamicSelect || !!selectAncestorName;
@@ -176,12 +177,12 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   );
 
   const handleChangeParam = useCallback(
-    (index: number, property: keyof Params, event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    (index: number, property: keyof Params, value: string | boolean) => {
       setRoute((prevState) => {
         const updatedParams = [...(prevState.params ?? [])];
         updatedParams[index] = {
           ...updatedParams[index],
-          [property]: event.target.value,
+          [property]: value,
         };
         return {
           ...prevState,
@@ -366,7 +367,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     }));
   };
 
-  const handleAncestorRef = (ancestorUuid: string, ancestorName: string) => {
+  const handleAncestorRef = (ancestorUuid?: string, ancestorName?: string) => {
     setDefaultValueFromAncestor((prevState) => ({
       ...prevState,
       uuid: ancestorUuid,
@@ -543,7 +544,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
       setInitialQuery(currentHierarchyPointNode?.data.attributes?.initialQuery || false);
 
       setDefaultValueFromAncestor(currentHierarchyPointNode?.data?.attributes?.defaultValueFromAncestor || null);
-      setUseAncestorAsParam(currentHierarchyPointNode?.data.attributes?.defaultValueFromAncestor?.useSourceValueAsAPIParam || false);
     }
   }, [
     currentHierarchyPointNode?.data.attributes?.defaultValueFromAncestor,
@@ -584,7 +584,10 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   }, [isLargeView, setIsLarge]);
 
   return {
+    ancestors,
+    ancestorsName,
     collapseOptions,
+    currentTree,
     defaultValueFromAncestor,
     getDisabledValueField,
     handleAddParams,

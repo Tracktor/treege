@@ -5,8 +5,7 @@ import getNode from "./getNode/getNode";
 import getTree from "./getTree/getTree";
 import removeNode from "./removeNode/removeNode";
 import updateNodeInTree from "./updateNodeInTree/updateNodeInTree";
-import getAllAncestorNamesFromTree from "@/utils/tree/getAllAncestorNamesFromTree/getAllAncestorNamesFromTree";
-import getAllNamesFromTree from "@/utils/tree/getAllNamesFromTree/getAllNamesFromTree";
+import getAllAncestorFromTree from "@/utils/tree/getAllAncestorFromTree/getAllAncestorFromTree";
 
 export {
   getTree,
@@ -15,7 +14,6 @@ export {
   removeNode,
   findParentNodeByUUIDInTree,
   findNodeByUUIDInTree,
-  getAllNamesFromTree,
-  getAllAncestorNamesFromTree,
+  getAllAncestorFromTree,
   getNode,
 };
