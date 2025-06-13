@@ -1,5 +1,5 @@
 const FORM_FR = {
-  additionalParams: "Paramètres additionnels",
+  additionalParams: "Paramètres statics additionnels",
   addressStructureHint: "Un type d'adresse doit être :",
   ancestor: "Ancêtre",
   ancestorValue: "Récupération de la valeur de : {{ancestorName}}",
@@ -68,7 +68,7 @@ const FORM_FR = {
   typeStructureWarning: "Le type d'input doit être : {{type}}",
   url: "URL",
   urlConstruction: "Construction de l'URL",
-  useAncestorValueAsParam: "Utiliser la valeur de l'ancêtre comme paramètre API",
+  useAncestorValueAsParam: "Utiliser {{ancestorValue}} comme paramètre API",
   value: "Valeur",
   values: "Valeurs",
   warningApiAutocomplete: {

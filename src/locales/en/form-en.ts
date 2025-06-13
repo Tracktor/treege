@@ -1,5 +1,5 @@
 const FORM_EN = {
-  additionalParams: "Additional parameters",
+  additionalParams: "Additional statics parameters",
   addressStructureHint: "An address type must be:",
   ancestor: "Ancestor",
   ancestorValue: "Get value from: {{ancestorName}}",
@@ -68,7 +68,7 @@ const FORM_EN = {
   typeStructureWarning: "Type structure must be: {{type}}",
   url: "URL",
   urlConstruction: "URL construction",
-  useAncestorValueAsParam: "Use ancestor value as API parameter",
+  useAncestorValueAsParam: "Use {{ancestorValue}} as API parameter",
   value: "Value",
   values: "Values",
   warningApiAutocomplete: {

@@ -24,12 +24,12 @@ interface AssignValueToChildrenProps {
   onChange?: (sourceValue?: string) => void;
   ancestorName: string;
   currentTypeField?: string;
-  ancestorUseAsApiParams?: boolean;
+  displayTopDivier?: boolean;
 }
 
 const ObjectType = ["address", "dynamicSelect", "autocomplete"];
 
-const AssignValueToChildren = ({ onChange, value, ancestorName, currentTypeField, ancestorUseAsApiParams }: AssignValueToChildrenProps) => {
+const AssignValueToChildren = ({ onChange, value, ancestorName, currentTypeField, displayTopDivier }: AssignValueToChildrenProps) => {
   const { t } = useTranslation(["form"]);
   const { tree } = useTreegeContext();
   const node = tree && getNode(tree, null, value?.uuid || "");
@@ -47,7 +47,7 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, currentTypeField
   const renderAlertContent = () => {
     if (currentTypeField === "address") {
       return (
-        <>
+        <Alert severity="warning" variant="outlined">
           <Typography variant="subtitle2" gutterBottom>
             {t("addressStructureHint")}
           </Typography>
@@ -64,33 +64,37 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, currentTypeField
               2,
             )}
           </Box>
-        </>
+        </Alert>
       );
     }
 
     if (currentTypeField === "dynamicSelect") {
       return (
-        <Typography variant="subtitle2" gutterBottom>
-          {t("dynamicSelectStructureHint")}
-        </Typography>
+        <Alert severity="warning" variant="outlined">
+          <Typography variant="subtitle2" gutterBottom>
+            {t("dynamicSelectStructureHint")}
+          </Typography>
+        </Alert>
       );
     }
 
     if (currentTypeField === "select" || currentTypeField === "radio") {
       return (
-        <Typography variant="subtitle2" gutterBottom>
-          {t("selectStructureHint")}
-        </Typography>
+        <Alert severity="warning" variant="outlined">
+          <Typography variant="subtitle2" gutterBottom>
+            {t("selectStructureHint")}
+          </Typography>
+        </Alert>
       );
     }
 
-    return <Typography variant="body2">{t("typeStructureWarning", { type: currentTypeField })}</Typography>;
+    return null;
   };
 
   return (
     <Grid2 container>
       <Grid2 size={12} pt={2}>
-        <Divider sx={{ my: 2 }} />
+        {displayTopDivier && <Divider sx={{ my: 2 }} />}
         <Typography variant="h5" gutterBottom>
           {t("ancestorValue", { ancestorName })}
         </Typography>
@@ -161,9 +165,7 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, currentTypeField
               />
             )}
 
-            <Alert severity="warning" variant="outlined">
-              {renderAlertContent()}
-            </Alert>
+            {renderAlertContent()}
           </Box>
         )}
       </Grid2>

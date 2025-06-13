@@ -23,7 +23,7 @@ import {
 } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
-import DynamicSelectWarning from "@/features/Treege/components/Feedback/DynamicSelectWarning";
+import AncestorAsParamsWarning from "@/features/Treege/components/Feedback/AncestorAsParamsWarning";
 import AssignValueToChildren from "@/features/Treege/components/Forms/AssignValueToChildren/AssignValueToChildren";
 import ExtraField from "@/features/Treege/components/Forms/FormTreeCardMutation/ExtraField";
 import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
@@ -79,7 +79,6 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
     isDisabledPast,
     handleChangeIsDisabledPast,
     isDecision,
-    isEditModal,
     isDecisionField,
     isHiddenField,
     isRequiredDisabled,
@@ -91,7 +90,6 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
     treeSelected,
     isWorkflowLoading,
     repeatable,
-    isLeaf,
     isMultiplePossible,
     isPatternEnabled,
     isMultiple,
@@ -99,6 +97,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
     handleChangeTreeSelect,
     handleChangeHelperText,
     handleChangeRequired,
+    handleUseAncestorAsParam,
     handleChangeName,
     handleChangeType,
     handleChangeIsDecisionField,
@@ -113,12 +112,10 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
     handleChangeHiddenValue,
     handleChangeTag,
     handleChangeSearchKey,
-    handleChangeUrl,
     handleChangeUrlSelect,
     handleChangeParam,
     handleChangePath,
     handleChangeMultiple,
-    handleChangeParentRef,
     handleChangeInitialQuery,
     route,
     handlePresetValues,
@@ -136,7 +133,6 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
     collapseOptions,
     setCollapseOptions,
     useAncestorAsParam,
-    setUseAncestorAsParam,
   } = useFormTreeCardMutation({ setIsLarge });
 
   const { searchKey, url, pathKey, params } = route || {};
@@ -265,7 +261,6 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                 />
                 {isDecisionField && (
                   <FormControlLabel
-                    disabled={!isDecisionField}
                     control={<Checkbox id="isDecision" checked={isDecision} onChange={handleChangeIsDecisionField} />}
                     label={t("decisionField", { ns: "form" })}
                   />
@@ -360,87 +355,67 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
             }}
           >
             <DialogContent>
-              {isAutocomplete && (
-                <Stack spacing={1} paddingY={1}>
-                  <Typography variant="h4">{t("form:urlConstruction")}</Typography>
-                  <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
-                    <TextField
-                      id="url"
-                      size="small"
-                      sx={{ flex: 3 }}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <LinkRoundedIcon />
-                          </InputAdornment>
-                        ),
-                      }}
-                      placeholder="https://api.fr/enpoint"
-                      type="url"
-                      label={t("form:apiRoute")}
-                      onChange={handleChangeUrl}
-                      value={url}
-                      required
-                    />
-                    <QuestionMarkRoundedIcon />
-                    <TextField
-                      id="searchKey"
-                      size="small"
-                      InputLabelProps={{ shrink: true }}
-                      sx={{ flex: 1 }}
-                      placeholder={t("form:searchKeyPlaceholder")}
-                      type="text"
-                      label={t("form:key")}
-                      onChange={handleChangeSearchKey}
-                      value={searchKey}
-                    />
-                  </Stack>
-                </Stack>
-              )}
-
-              {isDynamicSelect && (
-                <Stack spacing={1} paddingY={1}>
+              {(isDynamicSelect || isAutocomplete) && (
+                <Grid2 container spacing={1} paddingY={1}>
                   <Typography variant="h5" pb={1}>
                     {t("form:urlConstruction")}
                   </Typography>
 
-                  <TextField
-                    id="urlSelect"
-                    size="small"
-                    sx={{ flex: 3 }}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <LinkRoundedIcon />
-                        </InputAdornment>
-                      ),
-                    }}
-                    placeholder={useAncestorAsParam ? `https://api.com/text={{${"parentRef" || ""}}}` : `https://api.com`}
-                    type="url"
-                    label={t("form:apiRoute")}
-                    onChange={handleChangeUrlSelect}
-                    value={url}
-                  />
+                  <Grid2 container spacing={1} alignItems="center">
+                    <Grid2 size={isAutocomplete ? 7 : 12}>
+                      <TextField
+                        id="urlSelect"
+                        size="small"
+                        sx={{ flex: 3 }}
+                        fullWidth
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <LinkRoundedIcon />
+                            </InputAdornment>
+                          ),
+                        }}
+                        placeholder={useAncestorAsParam ? `https://api.com/params={{${selectAncestorName} || ""}}}` : `https://api.com`}
+                        type="url"
+                        label={t("form:apiRoute")}
+                        onChange={handleChangeUrlSelect}
+                        value={url}
+                      />
+                    </Grid2>
+
+                    {isAutocomplete && (
+                      <Grid2 size={5}>
+                        <Stack direction="row" spacing={1} alignItems="center">
+                          <QuestionMarkRoundedIcon />
+                          <TextField
+                            id="searchKey"
+                            size="small"
+                            InputLabelProps={{ shrink: true }}
+                            sx={{ flex: 1, minWidth: 0 }}
+                            placeholder={t("form:searchKeyPlaceholder")}
+                            type="text"
+                            label={t("form:key")}
+                            onChange={handleChangeSearchKey}
+                            value={searchKey}
+                          />
+                        </Stack>
+                      </Grid2>
+                    )}
+                  </Grid2>
 
                   {selectAncestorName && (
                     <FormControlLabel
-                      control={
-                        <Checkbox
-                          id="useAncestorAsParam"
-                          checked={useAncestorAsParam}
-                          onChange={(event) => setUseAncestorAsParam(event.target.checked)}
-                        />
-                      }
+                      control={<Checkbox id="useAncestorAsParam" checked={useAncestorAsParam} onChange={handleUseAncestorAsParam} />}
                       label={
                         <Typography variant="body2" color="textSecondary">
-                          {t("useAncestorValueAsParam", { ns: "form" })}
+                          {t("form:useAncestorValueAsParam", { ancestorValue: selectAncestorName })}
                         </Typography>
                       }
                     />
                   )}
 
-                  {useAncestorAsParam && <DynamicSelectWarning value="parentRef" />}
-                </Stack>
+                  {useAncestorAsParam && <AncestorAsParamsWarning />}
+                </Grid2>
               )}
 
               {(isAutocomplete || isDynamicSelect) && (
@@ -566,7 +541,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                   onChange={handleValueFromAncestor}
                   value={defaultValueFromAncestor}
                   currentTypeField={type}
-                  ancestorUseAsApiParams={!useAncestorAsParam}
+                  displayTopDivier={isAutocomplete || isDynamicSelect}
                 />
               )}
             </DialogContent>

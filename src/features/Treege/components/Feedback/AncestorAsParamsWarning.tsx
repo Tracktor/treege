@@ -21,27 +21,17 @@ const styles = {
   },
 };
 
-interface EndPointWarningProps {
-  value: string | null;
-}
-
-const DynamicSelectWarning = ({ value }: EndPointWarningProps) => {
+const AncestorAsParamsWarning = () => {
   const { t } = useTranslation(["translation", "form"]);
 
   return (
     <Alert severity="warning" variant="outlined">
       <Typography variant="body2">
         {t("form:warningApiSelect.url")} {t("form:warningApiSelect.warning")} {t("form:warningApiSelect.response")}
-        <Box sx={styles.container}>
-          https://api.com/text={"{{"}
-          <Box component="span" sx={styles.type}>
-            {value || "value"}
-          </Box>
-          {"}}"} <Box component="span" sx={styles.property} />
-        </Box>
+        <Box sx={styles.container}>https://api.com/params={"{{}}"}</Box>
       </Typography>
     </Alert>
   );
 };
 
-export default DynamicSelectWarning;
+export default AncestorAsParamsWarning;
