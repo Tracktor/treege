@@ -1,5 +1,6 @@
 import { KeyboardArrowDown } from "@mui/icons-material";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
 import QuestionMarkRoundedIcon from "@mui/icons-material/QuestionMarkRounded";
 import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
@@ -23,6 +24,7 @@ import {
   Select,
   MenuItem,
   Tooltip,
+  Paper,
 } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
@@ -347,14 +349,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
         </Grid2>
 
         {isLargeView && (
-          <Grid2
-            size={6}
-            maxHeight={600}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
+          <Grid2 size={6} maxHeight={600} sx={{ display: "flex" }}>
             <DialogContent>
               {(isDynamicSelect || isAutocomplete) && (
                 <Grid2 container spacing={1} paddingY={1}>
@@ -424,77 +419,81 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                     </Stack>
 
                     {params?.map(({ id, key, staticValue, ancestorUuid, useAncestorValue }, index) => (
-                      <Grid2 key={id} container spacing={1}>
-                        <Grid2 size={6}>
-                          <Tooltip title={useAncestorValue && !key.length ? t("form:keyPathApiDescription") : ""}>
-                            <TextField
-                              id={`param-key-${id}`}
-                              label="Key"
-                              size="small"
-                              onChange={({ target }) => handleChangeParam(index, "key", target.value)}
-                              value={key}
-                              inputProps={{ "data-id": id }}
-                            />
-                          </Tooltip>
-                        </Grid2>
+                      <Paper elevation={1} sx={{ marginY: 1 }}>
+                        <Grid2 key={id} container pb={2} justifyContent="space-between" alignItems="center" padding={1} spacing={1}>
+                          <Grid2 size={6}>
+                            <Tooltip title={useAncestorValue && !key.length ? t("form:keyPathApiDescription") : ""}>
+                              <TextField
+                                id={`param-key-${id}`}
+                                label="Key"
+                                size="small"
+                                onChange={({ target }) => handleChangeParam(index, "key", target.value)}
+                                value={key}
+                                inputProps={{ "data-id": id }}
+                              />
+                            </Tooltip>
+                          </Grid2>
 
-                        <Grid2 size={6}>
-                          {useAncestorValue ? (
-                            <Select
-                              fullWidth
-                              id={id}
-                              variant="outlined"
-                              size="small"
-                              value={ancestorUuid !== undefined ? ancestorUuid : ""}
-                              onChange={({ target }) => handleChangeParam(index, "ancestorUuid", target.value)}
-                              MenuProps={{
-                                PaperProps: {
-                                  sx: { maxHeight: 300 },
-                                },
-                              }}
-                            >
-                              <MenuItem value="">&nbsp;</MenuItem>
-                              {ancestors.length ? (
-                                ancestors.map(({ name: ancestorName, uuid: ancestorId }) => (
-                                  <MenuItem key={ancestorId} value={ancestorId}>
-                                    {ancestorName}
+                          <Grid2 size={6}>
+                            {useAncestorValue ? (
+                              <Select
+                                fullWidth
+                                id={id}
+                                variant="outlined"
+                                size="small"
+                                value={ancestorUuid !== undefined ? ancestorUuid : ""}
+                                onChange={({ target }) => handleChangeParam(index, "ancestorUuid", target.value)}
+                                MenuProps={{
+                                  PaperProps: {
+                                    sx: { maxHeight: 300 },
+                                  },
+                                }}
+                              >
+                                <MenuItem value="">&nbsp;</MenuItem>
+                                {ancestors.length ? (
+                                  ancestors.map(({ name: ancestorName, uuid: ancestorId }) => (
+                                    <MenuItem key={ancestorId} value={ancestorId}>
+                                      {ancestorName}
+                                    </MenuItem>
+                                  ))
+                                ) : (
+                                  <MenuItem disabled value="">
+                                    {t("form:noAncestorFound")}
                                   </MenuItem>
-                                ))
-                              ) : (
-                                <MenuItem disabled value="">
-                                  {t("form:noAncestorFound")}
-                                </MenuItem>
-                              )}
-                            </Select>
-                          ) : (
-                            <TextField
-                              id={`param-value-${id}`}
-                              label={t("value", { ns: "form" })}
-                              size="small"
-                              onChange={({ target }) => handleChangeParam(index, "staticValue", target.value)}
-                              value={staticValue}
-                              inputProps={{ "data-id": id }}
-                            />
-                          )}
-                        </Grid2>
+                                )}
+                              </Select>
+                            ) : (
+                              <TextField
+                                id={`param-value-${id}`}
+                                label={t("value", { ns: "form" })}
+                                size="small"
+                                fullWidth
+                                onChange={({ target }) => handleChangeParam(index, "staticValue", target.value)}
+                                value={staticValue}
+                                inputProps={{ "data-id": id }}
+                              />
+                            )}
+                          </Grid2>
 
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              id={`useAncestorAsParam-${id}`}
-                              onChange={({ target }) => handleChangeParam(index, "useAncestorValue", target.checked)}
-                            />
-                          }
-                          label={
-                            <Typography variant="body2" color="textSecondary">
-                              {t("form:useAncestorValueAsParam")}
-                            </Typography>
-                          }
-                        />
-                        <IconButton color="warning" value={id} onClick={handleDeleteParam}>
-                          <RemoveCircleRoundedIcon />
-                        </IconButton>
-                      </Grid2>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                id={`useAncestorAsParam-${id}`}
+                                checked={useAncestorValue}
+                                onChange={({ target }) => handleChangeParam(index, "useAncestorValue", target.checked)}
+                              />
+                            }
+                            label={
+                              <Typography variant="body2" color="textSecondary">
+                                {t("form:useAncestorValueAsParam")}
+                              </Typography>
+                            }
+                          />
+                          <IconButton color="error" value={id} onClick={handleDeleteParam}>
+                            <DeleteOutlineIcon />
+                          </IconButton>
+                        </Grid2>
+                      </Paper>
                     ))}
                   </Stack>
 

@@ -70,7 +70,7 @@ const FORM_EN = {
   typeStructureWarning: "Type structure must be: {{type}}",
   url: "URL",
   urlConstruction: "URL construction",
-  useAncestorValueAsParam: "Use Ancestor value as param",
+  useAncestorValueAsParam: "Use Ancestor value",
   value: "Value",
   values: "Values",
   warningApiAutocomplete: {

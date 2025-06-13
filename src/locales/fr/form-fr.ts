@@ -70,7 +70,7 @@ const FORM_FR = {
   typeStructureWarning: "Le type d'input doit être : {{type}}",
   url: "URL",
   urlConstruction: "Construction de l'URL",
-  useAncestorValueAsParam: "Utiliser un ancètre comme paramètre API",
+  useAncestorValueAsParam: "Utiliser une valeur ancètre",
   value: "Valeur",
   values: "Valeurs",
   warningApiAutocomplete: {
