@@ -422,7 +422,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
           ...(pattern && { pattern: typeof pattern === "object" ? pattern.value : pattern }),
           ...(patternMessage && { patternMessage }),
           ...(defaultValueFromAncestor && { defaultValueFromAncestor }),
-          ...(useAncestorAsParam && { useSourceValueAsAPIParam: useAncestorAsParam }),
           ...(isTreeField && {
             tree: { ...workflow?.workflow, treeId: treeSelected } as TreeNode,
             treePath: newPath,
@@ -475,7 +474,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
       treePath,
       treeSelected,
       type,
-      useAncestorAsParam,
       uuid,
       values,
     ],
