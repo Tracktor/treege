@@ -137,9 +137,7 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, currentTypeField
 
             <Typography>{t("keyPathAssignment", { keyPath: sourceValue || "" })}</Typography>
 
-            <Alert severity="warning" variant="outlined">
-              {renderAlertContent()}
-            </Alert>
+            {renderAlertContent()}
           </Box>
         )}
 

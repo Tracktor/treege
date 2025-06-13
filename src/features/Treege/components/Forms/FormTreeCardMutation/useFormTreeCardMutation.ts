@@ -59,7 +59,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   const [defaultValueFromAncestor, setDefaultValueFromAncestor] = useState<DefaultValueFromAncestor | null>(null);
   const [selectAncestorName, setSelectAncestorName] = useState<string | undefined>("");
   const [collapseOptions, setCollapseOptions] = useState<boolean>(false);
-  const [useAncestorAsParam, setUseAncestorAsParam] = useState<boolean>(false);
 
   // State
   const isTreeField = type === "tree";
@@ -375,14 +374,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     setSelectAncestorName(ancestorName);
   };
 
-  const handleUseAncestorAsParam = (event: ChangeEvent<HTMLInputElement>) => {
-    setUseAncestorAsParam(event.target.checked);
-    setDefaultValueFromAncestor((prevState) => ({
-      ...prevState,
-      useSourceValueAsAPIParam: event.target.checked,
-    }));
-  };
-
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
@@ -585,7 +576,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
 
   return {
     ancestors,
-    ancestorsName,
     collapseOptions,
     currentTree,
     defaultValueFromAncestor,
@@ -617,7 +607,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     handleDeleteValue,
     handlePresetValues,
     handleSubmit,
-    handleUseAncestorAsParam,
     handleValueFromAncestor,
     hasAncestors,
     helperText,
@@ -653,7 +642,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     tag,
     treeSelected,
     type,
-    useAncestorAsParam,
     uuid,
     values,
   };
