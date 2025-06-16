@@ -448,7 +448,6 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                                 },
                               }}
                             >
-                              <MenuItem value="">&nbsp;</MenuItem>
                               {ancestors.length ? (
                                 ancestors.map(({ name: ancestorName, uuid: ancestorId }) => (
                                   <MenuItem key={ancestorId} value={ancestorId}>
@@ -468,26 +467,29 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                               size="small"
                               fullWidth
                               onChange={({ target }) => handleChangeParam(index, "staticValue", target.value)}
-                              value={staticValue}
+                              value={staticValue || ""}
                               inputProps={{ "data-id": id }}
                             />
                           )}
                         </Grid2>
 
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              id={`useAncestorAsParam-${id}`}
-                              checked={useAncestorValue || false}
-                              onChange={({ target }) => handleChangeParam(index, "useAncestorValue", target.checked)}
-                            />
-                          }
-                          label={
-                            <Typography variant="body2" color="textSecondary">
-                              {t("form:useAncestorValueAsParam")}
-                            </Typography>
-                          }
-                        />
+                        {!!ancestors.length && (
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                id={`useAncestorAsParam-${id}`}
+                                disabled={!ancestors.length}
+                                checked={useAncestorValue || false}
+                                onChange={({ target }) => handleChangeParam(index, "useAncestorValue", target.checked)}
+                              />
+                            }
+                            label={
+                              <Typography variant="body2" color="textSecondary">
+                                {t("form:useAncestorValueAsParam")}
+                              </Typography>
+                            }
+                          />
+                        )}
                         <IconButton color="error" value={id} onClick={handleDeleteParam}>
                           <DeleteOutlineIcon />
                         </IconButton>

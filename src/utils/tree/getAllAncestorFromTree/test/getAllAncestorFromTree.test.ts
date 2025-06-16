@@ -11,7 +11,10 @@ describe("getAllAncestorFromTree", () => {
   test("should return all ancestors up to the node with given uuid", () => {
     const result = getAllAncestorFromTree(getAllAncestorNamesFromTreeMock, ":r2n:");
 
-    expect(result).toEqual([{ name: "a", uuid: ":r21:" }]);
+    expect(result).toEqual([
+      { name: "a", uuid: ":r21:" },
+      { name: "b", uuid: ":r2n:" },
+    ]);
   });
 
   test("should return all ancestors up to a leaf node", () => {
@@ -20,6 +23,7 @@ describe("getAllAncestorFromTree", () => {
     expect(result).toEqual([
       { name: "a", uuid: ":r21:" },
       { name: "b", uuid: ":r2n:" },
+      { name: "c", uuid: ":r3d:" },
     ]);
   });
 

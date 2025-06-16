@@ -32,6 +32,7 @@ const getAllAncestorFromTree = (tree: TreeNode | null, uuid: string | undefined)
   };
 
   extractNode(tree);
-  return path.slice(0, -1);
+  return path || [];
 };
+
 export default getAllAncestorFromTree;
