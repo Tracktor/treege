@@ -18,8 +18,10 @@ const ReceiveValueFromAncestor = ({ onChange, id, value }: ReceiveValueFromParen
 
   const handleChange = (event: SelectChangeEvent<string | undefined>) => {
     const newValue = event.target.value;
+    const selectedAncestor = ancestors.find((a) => a.name === newValue);
+    const selectedUuid = selectedAncestor?.uuid;
 
-    onChange?.(uuid, newValue);
+    onChange?.(selectedUuid, newValue);
   };
 
   return (

@@ -17,22 +17,22 @@ import { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ObjectMappingExample from "@/features/Treege/components/Forms/AssignValueToChildren/Examples/ObjectMappingExample";
 import useTreegeContext from "@/hooks/useTreegeContext";
-import { getNode } from "@/utils/tree";
+import { findNodeByUUIDInTree } from "@/utils/tree";
 
 interface AssignValueToChildrenProps {
   value?: DefaultValueFromAncestor | null;
   onChange?: (sourceValue?: string) => void;
   ancestorName: string;
-  currentTypeField?: string;
   displayTopDivier?: boolean;
 }
 
 const ObjectType = ["address", "dynamicSelect", "autocomplete"];
 
-const AssignValueToChildren = ({ onChange, value, ancestorName, currentTypeField, displayTopDivier }: AssignValueToChildrenProps) => {
+const AssignValueToChildren = ({ onChange, value, ancestorName, displayTopDivier }: AssignValueToChildrenProps) => {
   const { t } = useTranslation(["form"]);
   const { tree } = useTreegeContext();
-  const node = tree && getNode(tree, null, value?.uuid || "");
+  const node = findNodeByUUIDInTree(tree, value?.uuid || "");
+
   const ancestorType = node?.attributes?.type || "";
   const [openObjectMappingExample, setOpenObjectMappingExample] = useState<boolean>(false);
   const [isChecked, setIsChecked] = useState<boolean>(false);
@@ -45,7 +45,7 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, currentTypeField
   };
 
   const renderAlertContent = () => {
-    if (currentTypeField === "address") {
+    if (ancestorType === "address") {
       return (
         <Alert severity="warning" variant="outlined">
           <Typography variant="subtitle2" gutterBottom>
@@ -68,7 +68,7 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, currentTypeField
       );
     }
 
-    if (currentTypeField === "dynamicSelect") {
+    if (ancestorType === "dynamicSelect") {
       return (
         <Alert severity="warning" variant="outlined">
           <Typography variant="subtitle2" gutterBottom>
@@ -78,7 +78,7 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, currentTypeField
       );
     }
 
-    if (currentTypeField === "select" || currentTypeField === "radio") {
+    if (ancestorType === "select" || ancestorType === "radio") {
       return (
         <Alert severity="warning" variant="outlined">
           <Typography variant="subtitle2" gutterBottom>
@@ -132,7 +132,7 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, currentTypeField
             </Collapse>
 
             <Typography>
-              Output type: <strong>{currentTypeField}</strong>
+              Output type: <strong>{ancestorType}</strong>
             </Typography>
 
             <Typography>{t("keyPathAssignment", { keyPath: sourceValue || "" })}</Typography>
@@ -144,11 +144,11 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, currentTypeField
         {["text", "number", "email", "tel", "url", "switch", "checkbox", "radio", "select"].includes(ancestorType || "") && (
           <Box component="section" sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
             <Typography variant="body2">{t("staticValueDescription")}</Typography>
-            {!["switch", "checkbox"].includes(currentTypeField || "") && (
+            {!["switch", "checkbox"].includes(ancestorType || "") && (
               <TextField fullWidth label={t("staticValue")} value={sourceValue ?? ""} onChange={handleTextChange} />
             )}
 
-            {["switch", "checkbox"].includes(currentTypeField || "") && (
+            {["switch", "checkbox"].includes(ancestorType || "") && (
               <FormControlLabel
                 control={
                   <Checkbox

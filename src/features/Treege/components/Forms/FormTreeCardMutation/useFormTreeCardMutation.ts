@@ -82,8 +82,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   const hasAncestors = !!ancestorsName.length;
   const isLargeView = isAutocomplete || isDynamicSelect || !!selectAncestorName;
 
-  console.log("ancestors", ancestors, uuid);
-
   const { refetch: fetchWorkflow, isLoading: isWorkflowLoading } = useWorkflowQuery(treeSelected, { enabled: false });
 
   const patternOptions = useMemo(

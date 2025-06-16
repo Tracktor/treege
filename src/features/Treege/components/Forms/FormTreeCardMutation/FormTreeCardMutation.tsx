@@ -573,7 +573,6 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                   ancestorName={selectAncestorName}
                   onChange={handleValueFromAncestor}
                   value={defaultValueFromAncestor}
-                  currentTypeField={type}
                   displayTopDivier={isAutocomplete || isDynamicSelect}
                 />
               )}
