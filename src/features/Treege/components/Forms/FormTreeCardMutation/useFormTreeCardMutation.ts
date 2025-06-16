@@ -1,5 +1,5 @@
 import type { SelectChangeEvent } from "@tracktor/design-system";
-import type { Params, Route, TreeNode, TreeNodeField, TreeValues, DefaultValueFromAncestor } from "@tracktor/types-treege";
+import type { Route, TreeNode, TreeNodeField, TreeValues, DefaultValueFromAncestor, Params } from "@tracktor/types-treege";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { ChangeEvent, FormEvent, MouseEvent, SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -261,7 +261,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     setRoute((prevRoute) => {
       const lastId = Number(prevRoute.params?.[prevRoute.params.length - 1]?.id || 0);
       const nextId = String(lastId + 1);
-      const newParams = [...(prevRoute.params || []), { id: nextId, key: "", value: "" }];
+      const newParams = [...(prevRoute.params || []), { id: nextId, key: "" }];
       return { ...prevRoute, params: newParams };
     });
   };

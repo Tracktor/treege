@@ -39,7 +39,7 @@ const ReceiveValueFromAncestor = ({ onChange, id, value }: ReceiveValueFromParen
           },
         }}
       >
-        <MenuItem value="">&nbsp;</MenuItem>
+        {ancestors.length && <MenuItem value="">&nbsp;</MenuItem>}
 
         {ancestors.length ? (
           ancestors.map(({ name }, index) => {

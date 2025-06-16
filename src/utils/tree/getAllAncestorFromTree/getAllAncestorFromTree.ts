@@ -15,12 +15,10 @@ const getAllAncestorFromTree = (tree: TreeNode | null, uuid: string | undefined)
   const extractNode = (node: TreeNode): boolean => {
     const { attributes, uuid: uuidNode } = node;
 
-    if (attributes?.name) {
-      path.push({ name: attributes?.name, uuid: uuidNode });
-    }
+    path.push({ name: attributes?.name, uuid: uuidNode });
 
     if (uuidNode === uuid) {
-      return false;
+      return true;
     }
 
     const foundInChildren = node.children.some((child) => extractNode(child));
@@ -34,8 +32,6 @@ const getAllAncestorFromTree = (tree: TreeNode | null, uuid: string | undefined)
   };
 
   extractNode(tree);
-
-  return path;
+  return path.slice(0, -1);
 };
-
 export default getAllAncestorFromTree;
