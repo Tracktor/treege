@@ -24,11 +24,12 @@ interface AssignValueToChildrenProps {
   onChange?: (sourceValue?: string) => void;
   ancestorName: string;
   displayTopDivier?: boolean;
+  currentType?: string;
 }
 
 const ObjectType = ["address", "dynamicSelect", "autocomplete"];
 
-const AssignValueToChildren = ({ onChange, value, ancestorName, displayTopDivier }: AssignValueToChildrenProps) => {
+const AssignValueToChildren = ({ onChange, value, ancestorName, displayTopDivier, currentType }: AssignValueToChildrenProps) => {
   const { t } = useTranslation(["form"]);
   const { tree } = useTreegeContext();
   const node = findNodeByUUIDInTree(tree, value?.uuid || "");
@@ -45,7 +46,7 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, displayTopDivier
   };
 
   const renderAlertContent = () => {
-    if (ancestorType === "address") {
+    if (currentType === "address") {
       return (
         <Alert severity="warning" variant="outlined">
           <Typography variant="subtitle2" gutterBottom>
@@ -68,7 +69,7 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, displayTopDivier
       );
     }
 
-    if (ancestorType === "dynamicSelect") {
+    if (currentType === "dynamicSelect") {
       return (
         <Alert severity="warning" variant="outlined">
           <Typography variant="subtitle2" gutterBottom>
@@ -78,7 +79,7 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, displayTopDivier
       );
     }
 
-    if (ancestorType === "select" || ancestorType === "radio") {
+    if (currentType === "select" || ancestorType === "radio") {
       return (
         <Alert severity="warning" variant="outlined">
           <Typography variant="subtitle2" gutterBottom>
@@ -132,10 +133,8 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, displayTopDivier
             </Collapse>
 
             <Typography>
-              Output type: <strong>{ancestorType}</strong>
+              Output type: <strong>{currentType}</strong>
             </Typography>
-
-            <Typography>{t("keyPathAssignment", { keyPath: sourceValue || "" })}</Typography>
 
             {renderAlertContent()}
           </Box>

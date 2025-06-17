@@ -281,7 +281,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
               <>
                 <Typography variant="h4">{t("values")}</Typography>
                 {values?.map(({ value: decisionValue, label: decisionLabel, id: decisionId, message: decisionMessage }) => (
-                  <Stack direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} position="relative">
+                  <Stack key={decisionId} direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} position="relative">
                     <TextField
                       id={`decision-label-${decisionId}`}
                       label={t("label", { ns: "form" })}
@@ -574,6 +574,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                   onChange={handleValueFromAncestor}
                   value={defaultValueFromAncestor}
                   displayTopDivier={isAutocomplete || isDynamicSelect}
+                  currentType={type}
                 />
               )}
             </DialogContent>
