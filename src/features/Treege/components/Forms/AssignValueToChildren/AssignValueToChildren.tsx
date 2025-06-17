@@ -140,7 +140,7 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, displayTopDivier
           </Box>
         )}
 
-        {["text", "number", "email", "tel", "url", "switch", "checkbox", "radio", "select"].includes(ancestorType || "") && (
+        {["text", "number", "email", "tel", "url", "switch", "checkbox", "radio", "select", "date"].includes(ancestorType || "") && (
           <Box component="section" sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
             <Typography variant="body2">{t("staticValueDescription")}</Typography>
             {!["switch", "checkbox"].includes(ancestorType || "") && (
