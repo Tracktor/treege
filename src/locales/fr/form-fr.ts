@@ -16,7 +16,7 @@ const FORM_FR = {
   key: "Clé",
   keyPath: "Chemin de la clé (string | number)",
   keyPathApiDescription:
-    "(Option) Pour insérer dynamiquement une valeur dans une URL, utilisez la syntaxe {{paramName}}. Par exemple : http://api.com/userId={{userId}} remplacera {{userId}} par sa valeur réelle. Assurez-vous que chaque paramètre entre accolades correspond à une clé disponible dans les données.",
+    "Pour insérer une valeur dans une URL, utilisez la syntaxe {paramName}. Par exemple : http://api.com/userId={userId}, ajouter {userId} en params.",
   keyPathAssignment: "Chemin vers la valeur : {{keyPath}}",
   keyPathObject: "Clé vers la valeur",
   label: "Label",
@@ -70,7 +70,7 @@ const FORM_FR = {
   typeStructureWarning: "Le type d'input doit être : {{type}}",
   url: "URL",
   urlConstruction: "Construction de l'URL",
-  useAncestorValueAsParam: "Utiliser une valeur ancètre",
+  useAncestorValueAsParam: "Utiliser une valeur ancêtre",
   value: "Valeur",
   values: "Valeurs",
   warningApiAutocomplete: {

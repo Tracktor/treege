@@ -16,7 +16,7 @@ const FORM_EN = {
   key: "Key",
   keyPath: "Key path (string | number)",
   keyPathApiDescription:
-    "(Option) To dynamically insert a value into a URL, use the {{paramName}} syntax. For example: http://api.com/userId={{userId}} will replace {{userId}} with its actual value. Make sure that each parameter enclosed in double curly braces corresponds to a key available in the data.",
+    "(Option) To insert a value in a URL, use the syntax {paramName}. For example: http://api.com/userId={userId}, add {userId} in params.",
   keyPathAssignment: "Key path to value: {{keyPath}}",
   keyPathObject: "Key path to value",
   label: "Label",
