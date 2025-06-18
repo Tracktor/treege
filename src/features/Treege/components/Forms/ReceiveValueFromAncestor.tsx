@@ -49,15 +49,11 @@ const ReceiveValueFromAncestor = ({ onChange, id, value }: ReceiveValueFromParen
         {ancestors.length && <MenuItem value="">&nbsp;</MenuItem>}
 
         {ancestors.length ? (
-          ancestors.map(({ name }, index) => {
-            const key = `${name}-${index}`;
-
-            return (
-              <MenuItem key={key} value={name}>
-                {name}
-              </MenuItem>
-            );
-          })
+          ancestors.map(({ name }) => (
+            <MenuItem key={`${name}-${uuid}`} value={name}>
+              {name}
+            </MenuItem>
+          ))
         ) : (
           <MenuItem disabled value="">
             {t("form:noAncestorFound")}
