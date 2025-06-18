@@ -152,9 +152,11 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, displayTopDivide
                 control={
                   <Checkbox
                     checked={isChecked}
-                    onChange={() => {
-                      setIsChecked((prev) => !prev);
-                      onChange?.(isChecked ? undefined : "true");
+                    onChange={(e) => {
+                      const { checked } = e.target;
+
+                      setIsChecked(checked);
+                      onChange?.(checked ? String(checked) : undefined);
                     }}
                   />
                 }
