@@ -21,7 +21,7 @@ const getAllAncestorFromTree = (tree: TreeNode | null, uuid: string | undefined)
       return true;
     }
 
-    const foundInChildren = node.children.some((child) => extractNode(child));
+    const foundInChildren = node.children?.some((child) => extractNode(child)) ?? false;
 
     if (foundInChildren) {
       return true;
