@@ -13,6 +13,11 @@ const ReceiveValueFromAncestor = ({ onChange, id, value }: ReceiveValueFromParen
   const { t } = useTranslation(["form"]);
   const { tree, treePath, currentHierarchyPointNode } = useTreegeContext();
   const { uuid } = currentHierarchyPointNode?.data || {};
+
+  if (!tree || !uuid) {
+    return null;
+  }
+
   const currentTree = getTree(tree, treePath?.at(-1)?.path);
   const ancestors = getAllAncestorFromTree(currentTree, uuid);
 
