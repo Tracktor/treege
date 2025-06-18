@@ -180,7 +180,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
       setRoute((prevState) => {
         const updatedParams = [...(prevState.params ?? [])];
         updatedParams[index] = {
-          ...updatedParams[index],
+          ...(updatedParams[index] ?? {}),
           [property]: value,
         };
         return {
@@ -362,14 +362,14 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
 
   const handleValueFromAncestor = (sourceValue?: string) => {
     setDefaultValueFromAncestor((prevState) => ({
-      ...prevState,
+      ...(prevState ?? {}),
       sourceValue,
     }));
   };
 
   const handleAncestorRef = (ancestorUuid?: string, ancestorName?: string) => {
     setDefaultValueFromAncestor((prevState) => ({
-      ...prevState,
+      ...(prevState ?? {}),
       uuid: ancestorUuid,
     }));
     setSelectAncestorName(ancestorName);
