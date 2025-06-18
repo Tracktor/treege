@@ -15,6 +15,7 @@ const useTreeGrid = () => {
 
   const closeModal = () => {
     setModalOpen(null);
+    setIsLargeView(false);
   };
 
   const getTitleModalMutation = () => {
