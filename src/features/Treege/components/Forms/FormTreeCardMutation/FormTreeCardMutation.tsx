@@ -195,7 +195,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
               <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
                 <Autocomplete
                   freeSolo
-                  id="patternMessage"
+                  id="autoCompletePatternMessage"
                   size="small"
                   sx={{ flex: 1 }}
                   onChange={handleChangePattern}
@@ -209,7 +209,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                 />
 
                 <TextField
-                  id="patternMessage"
+                  id="patternMessageText"
                   label={t("form:patternMessage")}
                   sx={{ flex: 1 }}
                   onChange={handleChangePatternMessage}
@@ -496,20 +496,16 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                     </Paper>
                   ))}
 
-                  <FormControlLabel
-                    control={
-                      <IconButton
-                        onClick={() => setCollapseOptions((prev) => !prev)}
-                        sx={{
-                          transform: collapseOptions ? "rotate(180deg)" : "rotate(0deg)",
-                          transition: "transform 0.3s",
-                        }}
-                      >
-                        <KeyboardArrowDown />
-                      </IconButton>
-                    }
-                    label={t("form:dataMapping")}
-                  />
+                  <Box display="flex" alignItems="center">
+                    <IconButton
+                      aria-label={t("form:dataMapping")}
+                      onClick={() => setCollapseOptions((prev) => !prev)}
+                      sx={{ transform: collapseOptions ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.3s" }}
+                    >
+                      <KeyboardArrowDown />
+                    </IconButton>
+                    <Typography sx={{ ml: 1 }}>{t("form:dataMapping")}</Typography>
+                  </Box>
 
                   <Collapse in={collapseOptions}>
                     <Stack spacing={1} paddingY={1}>
