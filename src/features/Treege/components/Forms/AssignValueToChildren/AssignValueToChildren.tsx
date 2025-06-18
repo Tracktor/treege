@@ -23,13 +23,13 @@ interface AssignValueToChildrenProps {
   value?: DefaultValueFromAncestor | null;
   onChange?: (sourceValue?: string) => void;
   ancestorName: string;
-  displayTopDivier?: boolean;
+  displayTopDivider?: boolean;
   currentType?: string;
 }
 
 const ObjectType = ["address", "dynamicSelect", "autocomplete"];
 
-const AssignValueToChildren = ({ onChange, value, ancestorName, displayTopDivier, currentType }: AssignValueToChildrenProps) => {
+const AssignValueToChildren = ({ onChange, value, ancestorName, displayTopDivider, currentType }: AssignValueToChildrenProps) => {
   const { t } = useTranslation(["form"]);
   const { tree } = useTreegeContext();
   const node = findNodeByUUIDInTree(tree, value?.uuid || "");
@@ -95,7 +95,7 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, displayTopDivier
   return (
     <Grid2 container>
       <Grid2 size={12} pt={2}>
-        {displayTopDivier && <Divider sx={{ my: 2 }} />}
+        {displayTopDivider && <Divider sx={{ my: 2 }} />}
         <Typography variant="h5" gutterBottom>
           {t("ancestorValue", { ancestorName })}
         </Typography>
