@@ -493,7 +493,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
           });
 
       const ancestorIdToSearch = currentHierarchyPointNode?.data?.attributes?.defaultValueFromAncestor?.uuid;
-      const ancestor = ancestorIdToSearch ? findNodeByUUIDInTree(currentTree, ancestorIdToSearch) : null;
+      const ancestor = ancestorIdToSearch ? findNodeByUUIDInTree(currentTree, ancestorIdToSearch) : undefined;
       const savedAncestor = ancestor?.attributes?.name;
 
       setSelectAncestorName(savedAncestor);
