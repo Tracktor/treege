@@ -261,7 +261,8 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     setRoute((prevRoute) => {
       const lastId = Number(prevRoute.params?.[prevRoute.params.length - 1]?.id || 0);
       const nextId = String(lastId + 1);
-      const newParams = [...(prevRoute.params || []), { id: nextId, key: "" }];
+      const newParams = [...(prevRoute.params || []), { ancestorUuid: "", id: nextId, key: "", staticValue: "", useAncestorValue: false }];
+
       return { ...prevRoute, params: newParams };
     });
   };
@@ -492,12 +493,11 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
           });
 
       const ancestorIdToSearch = currentHierarchyPointNode?.data?.attributes?.defaultValueFromAncestor?.uuid;
-      const ancestor = findNodeByUUIDInTree(currentTree, ancestorIdToSearch!);
+      const ancestor = ancestorIdToSearch ? findNodeByUUIDInTree(currentTree, ancestorIdToSearch) : null;
       const savedAncestor = ancestor?.attributes?.name;
+
       setSelectAncestorName(savedAncestor);
-
       setDefaultValueFromAncestor(currentHierarchyPointNode?.data?.attributes?.defaultValueFromAncestor || null);
-
       setTag(currentHierarchyPointNode?.data.attributes?.tag || null);
       setType(currentHierarchyPointNode?.data.attributes?.type || "text");
       setHelperText(currentHierarchyPointNode?.data.attributes?.helperText || "");
