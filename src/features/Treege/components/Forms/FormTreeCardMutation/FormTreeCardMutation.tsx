@@ -341,7 +341,6 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
               disabled={isWorkflowLoading}
               isLoading={isWorkflowLoading}
               loadingIndicator={<CircularProgress size={14} />}
-              onClick={handleSubmit}
             >
               {t("validate")}
             </Button>
