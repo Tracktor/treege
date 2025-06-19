@@ -1,4 +1,4 @@
-import { Typography, Select, MenuItem, Stack, SelectChangeEvent } from "@tracktor/design-system";
+import { InputLabel, Select, MenuItem, Stack, SelectChangeEvent } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import useTreegeContext from "@/hooks/useTreegeContext";
 
@@ -13,13 +13,14 @@ const ReceiveValueFromAncestor = ({ onChange, id, value, ancestors }: ReceiveVal
   const { t } = useTranslation(["form"]);
   const { tree, currentHierarchyPointNode } = useTreegeContext();
   const { uuid } = currentHierarchyPointNode?.data || {};
+  const labelId = `label-${id}`;
 
   if (!tree || !uuid) {
     return null;
   }
 
   const handleChange = (event: SelectChangeEvent<string | undefined>) => {
- const { value: newValue } = event.target;
+    const { value: newValue } = event.target;
     const selectedAncestor = ancestors.find((a) => a.name === newValue);
     const selectedUuid = selectedAncestor?.uuid;
 
@@ -28,7 +29,7 @@ const ReceiveValueFromAncestor = ({ onChange, id, value, ancestors }: ReceiveVal
 
   return (
     <Stack spacing={1} pb={2} pt={3}>
-  <InputLabel id={labelId}> {t("receiveValueFromParent")}</InputLabel>
+      <InputLabel id={labelId}> {t("receiveValueFromParent")}</InputLabel>
       <Select
         id={id}
         variant="outlined"
