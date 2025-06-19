@@ -28,9 +28,7 @@ const ReceiveValueFromAncestor = ({ onChange, id, value, ancestors }: ReceiveVal
 
   return (
     <Stack spacing={1} pb={2} pt={3}>
-      <Typography variant="body2" pb={1} sx={{ textDecoration: "underline" }}>
-        {t("receiveValueFromParent")}
-      </Typography>
+  <InputLabel id={labelId}> {t("receiveValueFromParent")}</InputLabel>
       <Select
         id={id}
         variant="outlined"
