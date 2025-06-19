@@ -32,6 +32,7 @@ const ReceiveValueFromAncestor = ({ onChange, id, value, ancestors }: ReceiveVal
       <InputLabel id={labelId}> {t("receiveValueFromParent")}</InputLabel>
       <Select
         id={id}
+        labelId={labelId}
         variant="outlined"
         size="xSmall"
         value={value || ""}
