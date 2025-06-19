@@ -117,7 +117,7 @@ const TreeCard = ({
 }: TreeCardProps) => {
   const { t } = useTranslation(["translation", "form"]);
   const { attributes } = nodeDatum || {};
-  const { isRoot, isLeaf, required, isDecision, step, type, label, repeatable, tag } = attributes || {};
+  const { isRoot, isLeaf, required, isDecision, step, type, label, repeatable, tag, name } = attributes || {};
   const isField = !!type;
   const isTree = type === "tree";
   const isHidden = type === "hidden";
@@ -138,7 +138,7 @@ const TreeCard = ({
                   </Tooltip>
                 )}
                 <Typography variant="subtitle2" sx={styles.title}>
-                  <strong>{label}</strong>
+                  <strong>{label || name}</strong>
                 </Typography>
               </Stack>
             )}

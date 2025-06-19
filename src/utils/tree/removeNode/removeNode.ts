@@ -1,4 +1,4 @@
-import type { TreeNode } from "@tracktor/types-treege";
+import type { Params, TreeNode } from "@tracktor/types-treege";
 import findParentNodeByUUIDInTree from "@/utils/tree/findParentNodeByUUIDInTree/findParentNodeByUUIDInTree";
 import getNode from "@/utils/tree/getNode/getNode";
 import getTree from "@/utils/tree/getTree/getTree";
@@ -64,6 +64,29 @@ const getParentTreeNode = (tree: TreeNode, path: string, uuid: string) => {
   return findParentNodeByUUIDInTree(currentTree, uuid);
 };
 
+const removeAncestorReferences = (node: TreeNode, uuidToRemove: string): TreeNode => {
+  const updatedAttributes = { ...node.attributes };
+
+  if (updatedAttributes.defaultValueFromAncestor?.uuid === uuidToRemove) {
+    delete updatedAttributes.defaultValueFromAncestor;
+  }
+
+  if (updatedAttributes.route?.params) {
+    updatedAttributes.route = {
+      ...updatedAttributes.route,
+      params: updatedAttributes.route.params.filter((param: Params) => param.ancestorUuid !== uuidToRemove),
+    };
+  }
+
+  const updatedChildren = node.children?.map((child) => removeAncestorReferences(child, uuidToRemove)) || [];
+
+  return {
+    ...node,
+    attributes: updatedAttributes,
+    children: updatedChildren,
+  };
+};
+
 /**
  * Remove node from tree
  * @param tree
@@ -77,7 +100,7 @@ const removeNode = ({ tree, path, uuid }: RemoveNodeParams) => {
 
   removeTreeNode(parentNodeToRemove, nodeToRemove);
 
-  return treeCopy;
+  return removeAncestorReferences(treeCopy, uuid);
 };
 
 export default removeNode;

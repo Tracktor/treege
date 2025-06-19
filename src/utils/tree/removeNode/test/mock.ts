@@ -286,4 +286,175 @@ const removeDecisionFieldInTreeMock: Mock = {
   uuid: "DecisionField",
 };
 
-export { removeNodeInTreeMock, removeTreeInTreeMock, removeDecisionInTreeMock, removeDecisionFieldInTreeMock };
+const removeNodeWithAncestorReferencesMock: Mock = {
+  output: {
+    attributes: {
+      depth: 0,
+      isLeaf: false,
+      isRoot: true,
+      label: "a",
+      name: "a",
+      type: "text",
+    },
+    children: [
+      {
+        attributes: {
+          depth: 2,
+          isLeaf: true,
+          label: "c",
+          name: "c",
+          type: "text",
+        },
+        children: [],
+        uuid: "1750330116220babkh4p17458.099999964237",
+      },
+    ],
+    uuid: "1750330099878oo8zrsr1116",
+  },
+  tree: {
+    attributes: {
+      depth: 0,
+      isLeaf: false,
+      isRoot: true,
+      label: "a",
+      name: "a",
+      type: "text",
+    },
+    children: [
+      {
+        attributes: {
+          defaultValueFromAncestor: {
+            sourceValue: "staticValue",
+            uuid: "1750330099878oo8zrsr1116",
+          },
+          depth: 1,
+          isLeaf: false,
+          label: "b",
+          name: "b",
+          type: "text",
+        },
+        children: [
+          {
+            attributes: {
+              defaultValueFromAncestor: {
+                sourceValue: "blabla",
+                uuid: "1750330104325rew2ouz5563.300000011921",
+              },
+              depth: 2,
+              isLeaf: true,
+              label: "c",
+              name: "c",
+              type: "text",
+            },
+            children: [],
+            uuid: "1750330116220babkh4p17458.099999964237",
+          },
+        ],
+        uuid: "1750330104325rew2ouz5563.300000011921",
+      },
+    ],
+    uuid: "1750330099878oo8zrsr1116",
+  },
+  treePath: "",
+  uuid: "1750330104325rew2ouz5563.300000011921",
+};
+
+const removeNodeWithParamsAncestorReferencesMock: Mock = {
+  output: {
+    attributes: {
+      depth: 0,
+      isLeaf: false,
+      isRoot: true,
+      label: "a",
+      name: "a",
+      type: "text",
+    },
+    children: [
+      {
+        attributes: {
+          depth: 2,
+          isLeaf: true,
+          label: "c",
+          name: "c",
+          route: {
+            params: [
+              {
+                id: "2",
+                key: "keyB",
+                staticValue: "staticValue",
+              },
+            ],
+            url: "http://localhost:5173/",
+          },
+          type: "autocomplete",
+        },
+        children: [],
+        uuid: "1750329316942903kq6m17973.69999998808",
+      },
+    ],
+    uuid: "1750329307993cq2qtr39024",
+  },
+  tree: {
+    attributes: {
+      depth: 0,
+      isLeaf: false,
+      isRoot: true,
+      label: "a",
+      name: "a",
+      type: "text",
+    },
+    children: [
+      {
+        attributes: {
+          depth: 1,
+          isLeaf: false,
+          label: "b",
+          name: "b",
+          type: "text",
+        },
+        children: [
+          {
+            attributes: {
+              depth: 2,
+              isLeaf: true,
+              label: "c",
+              name: "c",
+              route: {
+                params: [
+                  {
+                    ancestorUuid: "175032931237694ccrne13407.699999988079",
+                    id: "1",
+                    key: "keyA",
+                    useAncestorValue: true,
+                  },
+                  {
+                    id: "2",
+                    key: "keyB",
+                    staticValue: "staticValue",
+                  },
+                ],
+                url: "http://localhost:5173/",
+              },
+              type: "autocomplete",
+            },
+            children: [],
+            uuid: "1750329316942903kq6m17973.69999998808",
+          },
+        ],
+        uuid: "175032931237694ccrne13407.699999988079",
+      },
+    ],
+    uuid: "1750329307993cq2qtr39024",
+  },
+  treePath: "",
+  uuid: "175032931237694ccrne13407.699999988079",
+};
+
+export {
+  removeNodeInTreeMock,
+  removeTreeInTreeMock,
+  removeDecisionInTreeMock,
+  removeDecisionFieldInTreeMock,
+  removeNodeWithAncestorReferencesMock,
+  removeNodeWithParamsAncestorReferencesMock,
+};

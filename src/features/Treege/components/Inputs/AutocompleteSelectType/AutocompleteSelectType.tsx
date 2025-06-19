@@ -29,13 +29,18 @@ const AutocompleteSelectType = ({ id, onChange, value, sx }: FieldsSelectProps) 
       getOptionLabel={(option) => t(`form:type.${option.type}`)}
       // eslint-disable-next-line react/jsx-props-no-spreading
       renderInput={(params) => <TextField {...params} required size="small" label={t("type")} />}
-      renderOption={(props, option) => (
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        <MenuItem {...props}>
-          {t(`form:type.${option.type}`)}
-          {option.isDecisionField && <Chip label={t("decisionField", { ns: "form" })} size="small" color="info" sx={{ marginLeft: 1 }} />}
-        </MenuItem>
-      )}
+      renderOption={(props, option) => {
+        // eslint-disable-next-line react/prop-types
+        const { key, ...rest } = props;
+
+        return (
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          <MenuItem key={key} {...rest}>
+            {t(`form:type.${option.type}`)}
+            {option.isDecisionField && <Chip label={t("decisionField", { ns: "form" })} size="small" color="info" sx={{ marginLeft: 1 }} />}
+          </MenuItem>
+        );
+      }}
     />
   );
 };
