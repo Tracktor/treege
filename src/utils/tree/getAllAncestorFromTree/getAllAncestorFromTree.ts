@@ -4,8 +4,13 @@ import type { TreeNode } from "@tracktor/types-treege";
  * Get all ancestor names from tree
  * @param tree
  * @param uuid
+ * @param excludeUuid
  */
-const getAllAncestorFromTree = (tree: TreeNode | null, uuid: string | undefined): { uuid: string; name?: string }[] => {
+const getAllAncestorFromTree = (
+  tree: TreeNode | null,
+  uuid: string | undefined,
+  excludeUuid?: string,
+): { uuid: string; name?: string }[] => {
   if (!tree || !uuid) {
     return [];
   }
@@ -32,7 +37,8 @@ const getAllAncestorFromTree = (tree: TreeNode | null, uuid: string | undefined)
   };
 
   extractNode(tree);
-  return path || [];
+
+  return excludeUuid ? path.filter((node) => node.uuid !== excludeUuid) : path;
 };
 
 export default getAllAncestorFromTree;

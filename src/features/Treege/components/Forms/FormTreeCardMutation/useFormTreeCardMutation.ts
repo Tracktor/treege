@@ -72,11 +72,14 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   const isRepeatableDisabled = fields.some((field) => field.type === type && field?.isRepeatableDisabled);
   const isPatternEnabled = fields.some((field) => field.type === type && field?.isPatternEnabled);
   const isMultiplePossible = fields.some((field) => field.type === type && "isMultiple" in field);
+  const isEditModal = modalOpen === "edit";
 
   // Tree state
   const currentUuid = currentHierarchyPointNode?.data?.uuid || "";
   const currentTree = getTree(tree, treePath?.at(-1)?.path);
-  const ancestors = getAllAncestorFromTree(currentTree, currentUuid);
+  const displayAncestorOnNewNodeWithAncestor = !isEditModal && !!currentUuid;
+  const hideCurrentUuid = displayAncestorOnNewNodeWithAncestor ? undefined : currentUuid;
+  const ancestors = getAllAncestorFromTree(currentTree, currentUuid, hideCurrentUuid);
   const ancestorsName = useMemo(() => ancestors.map(({ name: getNames }) => getNames || ""), [ancestors]);
   const getDisabledValueField = useCallback((index: number) => !isDecisionField && index > 0, [isDecisionField]);
   const hasAncestors = !!ancestorsName.length;
@@ -381,13 +384,12 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
 
       const { on, off } = messages;
       const currentDepth = currentHierarchyPointNode?.depth || 0;
-      const isEdit = modalOpen === "edit";
-      const depth = currentDepth + (isEdit || currentHierarchyPointNode === null ? 0 : 1);
+      const depth = currentDepth + (isEditModal || currentHierarchyPointNode === null ? 0 : 1);
       const childOfChildren = getChildren(depth);
       const currentPath = treePath?.at(-1)?.path;
       const newPath = treePath.length ? `${currentPath}/${uuid}` : `/${uuid}`;
       const isOtherTree = currentHierarchyPointNode?.data.attributes?.tree?.treeId !== treeSelected;
-      const { data: workflow, isError } = await getWorkFlowReq(isTreeField, isEdit, isOtherTree);
+      const { data: workflow, isError } = await getWorkFlowReq(isTreeField, isEditModal, isOtherTree);
 
       if (isError) {
         return;
@@ -421,18 +423,20 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
           }),
         },
         children: childOfChildren,
-        uuid: isEdit ? currentUuid : uuid,
+        uuid: isEditModal ? currentUuid : uuid,
       };
 
-      if (isEdit) {
+      if (isEditModal) {
         dispatchTree(replaceTreeCard(currentPath || "", currentUuid, children));
       } else {
         dispatchTree(appendTreeCard(currentPath || null, currentUuid, children));
       }
 
       setModalOpen(null);
+      uuidRef.current = "";
     },
     [
+      isEditModal,
       currentHierarchyPointNode,
       currentUuid,
       defaultValueFromAncestor,
@@ -455,7 +459,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
       isTreeField,
       label,
       messages,
-      modalOpen,
       name,
       pattern,
       patternMessage,

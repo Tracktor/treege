@@ -329,7 +329,9 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
               </Box>
             )}
 
-            {hasAncestors && <ReceiveValueFromAncestor id="receive-value" onChange={handleAncestorRef} value={selectAncestorName} />}
+            {hasAncestors && (
+              <ReceiveValueFromAncestor id="receive-value" onChange={handleAncestorRef} value={selectAncestorName} ancestors={ancestors} />
+            )}
           </DialogContent>
           <DialogActions>
             <Button variant="text" onClick={onClose}>

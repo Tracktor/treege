@@ -1,25 +1,22 @@
 import { Typography, Select, MenuItem, Stack, SelectChangeEvent } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import useTreegeContext from "@/hooks/useTreegeContext";
-import { getAllAncestorFromTree, getTree } from "@/utils/tree";
 
 interface ReceiveValueFromParentProps {
   id: string;
+  ancestors: { uuid: string; name?: string }[];
   onChange?: (ancestorUuid?: string, ancestorName?: string) => void;
   value?: string | null;
 }
 
-const ReceiveValueFromAncestor = ({ onChange, id, value }: ReceiveValueFromParentProps) => {
+const ReceiveValueFromAncestor = ({ onChange, id, value, ancestors }: ReceiveValueFromParentProps) => {
   const { t } = useTranslation(["form"]);
-  const { tree, treePath, currentHierarchyPointNode } = useTreegeContext();
+  const { tree, currentHierarchyPointNode } = useTreegeContext();
   const { uuid } = currentHierarchyPointNode?.data || {};
 
   if (!tree || !uuid) {
     return null;
   }
-
-  const currentTree = getTree(tree, treePath?.at(-1)?.path);
-  const ancestors = getAllAncestorFromTree(currentTree, uuid);
 
   const handleChange = (event: SelectChangeEvent<string | undefined>) => {
     const newValue = event.target.value;
