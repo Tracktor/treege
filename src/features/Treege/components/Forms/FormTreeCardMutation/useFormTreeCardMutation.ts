@@ -482,8 +482,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
         uuid: isEditModal ? currentUuid : uuid,
       };
 
-      // console.log(children);
-
       if (isEditModal) {
         dispatchTree(replaceTreeCard(currentPath || "", currentUuid, children));
       } else {

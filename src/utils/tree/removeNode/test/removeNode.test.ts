@@ -4,6 +4,8 @@ import {
   removeDecisionInTreeMock,
   removeNodeInTreeMock,
   removeTreeInTreeMock,
+  removeNodeWithParamsAncestorReferencesMock,
+  removeNodeWithAncestorReferencesMock,
 } from "@/utils/tree/removeNode/test/mock";
 
 describe("removeNode", () => {
@@ -42,6 +44,28 @@ describe("removeNode", () => {
 
   test("remove decision Field", () => {
     const { tree, output, treePath, uuid } = removeDecisionFieldInTreeMock;
+    const result = removeNode({
+      path: treePath,
+      tree,
+      uuid,
+    });
+
+    expect(result).toEqual(output);
+  });
+
+  test("remove node with ancestor references", () => {
+    const { tree, output, treePath, uuid } = removeNodeWithAncestorReferencesMock;
+    const result = removeNode({
+      path: treePath,
+      tree,
+      uuid,
+    });
+
+    expect(result).toEqual(output);
+  });
+
+  test("remove tree with params references", () => {
+    const { tree, output, uuid, treePath } = removeNodeWithParamsAncestorReferencesMock;
     const result = removeNode({
       path: treePath,
       tree,

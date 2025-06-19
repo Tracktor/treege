@@ -376,7 +376,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                       type="url"
                       label={t("form:apiRoute")}
                       onChange={handleChangeUrlSelect}
-                      value={url}
+                      value={url || ""}
                     />
                   </Grid2>
 
@@ -393,7 +393,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                           type="text"
                           label={t("form:key")}
                           onChange={handleChangeSearchKey}
-                          value={searchKey}
+                          value={searchKey || ""}
                         />
                       </Stack>
                     </Grid2>
@@ -422,13 +422,13 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                     <Paper key={id} elevation={1} sx={{ marginY: 1 }}>
                       <Grid2 key={id} container pb={2} justifyContent="space-between" alignItems="center" padding={1} spacing={1}>
                         <Grid2 size={6}>
-                          <Tooltip title={useAncestorValue && !key.length ? t("form:keyPathApiDescription") : ""}>
+                          <Tooltip title={useAncestorValue ? t("form:keyPathApiDescription") : ""}>
                             <TextField
                               id={`param-key-${id}`}
                               label="Key"
                               size="small"
                               onChange={({ target }) => handleChangeParam(index, "key", target.value)}
-                              value={key}
+                              value={key || ""}
                               inputProps={{ "data-id": id }}
                             />
                           </Tooltip>
@@ -518,7 +518,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                           sx={{ flex: 3 }}
                           InputLabelProps={{ shrink: true }}
                           label="Object Array Path"
-                          value={routeObject}
+                          value={routeObject || ""}
                           onChange={(event) => handleChangePath("object", event)}
                           placeholder="elements.features[]"
                           type="text"
@@ -529,7 +529,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                           sx={{ flex: 3 }}
                           InputLabelProps={{ shrink: true }}
                           label="Label Path"
-                          value={routeLabel}
+                          value={routeLabel || ""}
                           onChange={(event) => handleChangePath("label", event)}
                           placeholder="client.name"
                           type="text"
@@ -543,7 +543,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                           sx={{ flex: 3 }}
                           InputLabelProps={{ shrink: true }}
                           label="Value Path"
-                          value={routeValue}
+                          value={routeValue || ""}
                           onChange={(event) => handleChangePath("value", event)}
                           placeholder="client.id"
                           type="text"
@@ -554,7 +554,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                           sx={{ flex: 3 }}
                           InputLabelProps={{ shrink: true }}
                           label="Image Path"
-                          value={routeImage}
+                          value={routeImage || ""}
                           onChange={(event) => handleChangePath("image", event)}
                           placeholder="client.src.profile"
                           type="text"
