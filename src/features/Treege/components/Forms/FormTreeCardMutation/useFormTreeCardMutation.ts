@@ -1,5 +1,5 @@
 import type { SelectChangeEvent } from "@tracktor/design-system";
-import type { Route, TreeNode, TreeNodeField, TreeValues, DefaultValueFromAncestor, Params } from "@tracktor/types-treege";
+import type { DefaultValueFromAncestor, Params, Route, TreeNode, TreeNodeField, TreeValues } from "@tracktor/types-treege";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { ChangeEvent, FormEvent, MouseEvent, SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -48,7 +48,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   const [isMultiple, setIsMultiple] = useState(false);
   const [type, setType] = useState<TreeNodeField["type"]>("text");
   const [tag, setTag] = useState<string | null>(null);
-  const [route, setRoute] = useState<Route>({ url: "" });
+  const [route, setRoute] = useState<Route | undefined>(undefined);
   const [treeSelected, setTreeSelected] = useState<string>("");
   const [helperText, setHelperText] = useState("");
   const [messages, setMessages] = useState({ off: "", on: "" });
@@ -56,7 +56,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   const [initialQuery, setInitialQuery] = useState(false);
   const [pattern, setPattern] = useState<string | null | { label: string; value: string }>("");
   const [patternMessage, setPatternMessage] = useState("");
-  const [defaultValueFromAncestor, setDefaultValueFromAncestor] = useState<DefaultValueFromAncestor | null>(null);
+  const [defaultValueFromAncestor, setDefaultValueFromAncestor] = useState<DefaultValueFromAncestor | undefined>(undefined);
   const [selectAncestorName, setSelectAncestorName] = useState<string | undefined>("");
   const [collapseOptions, setCollapseOptions] = useState<boolean>(false);
 
@@ -150,50 +150,74 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   }, []);
 
   const handleChangeSearchKey = useCallback(({ target }: ChangeEvent<HTMLInputElement>) => {
-    setRoute((prevState) => ({
-      ...prevState,
-      searchKey: target.value,
-    }));
+    setRoute((prevState) => {
+      const { searchKey, ...rest } = prevState ?? {};
+
+      const { value } = target;
+      if (value === "") {
+        return Object.keys(rest).length > 0 ? rest : undefined;
+      }
+
+      return {
+        ...rest,
+        searchKey: value,
+      };
+    });
   }, []);
 
-  const handleChangePath = useCallback(
-    <T extends HTMLInputElement | HTMLTextAreaElement>(property: string, event: ChangeEvent<T>) => {
-      setRoute((prevState) => {
-        const updatedPathKey = {
-          ...prevState.pathKey,
-          [property]: event.target.value,
-        };
-        if (event.target.value === "" && property in updatedPathKey) {
-          const { pathKey, ...nextState } = prevState;
-          return {
-            ...nextState,
-          };
-        }
-        return {
-          ...prevState,
-          pathKey: updatedPathKey,
-        };
-      });
-    },
-    [setRoute],
-  );
+  const handleChangePath = useCallback(<T extends HTMLInputElement | HTMLTextAreaElement>(property: string, event: ChangeEvent<T>) => {
+    setRoute((prevState) => {
+      const safeState = prevState ?? {};
+      const safePathKey = safeState.pathKey ?? {};
 
-  const handleChangeParam = useCallback(
-    (index: number, property: keyof Params, value: string | boolean) => {
-      setRoute((prevState) => {
-        const updatedParams = [...(prevState.params ?? [])];
-        updatedParams[index] = {
-          ...(updatedParams[index] ?? {}),
-          [property]: value,
-        };
-        return {
-          ...prevState,
-          params: updatedParams,
-        };
-      });
-    },
-    [setRoute],
-  );
+      const updatedPathKey = {
+        ...safePathKey,
+        [property]: event.target.value,
+      };
+
+      if (event.target.value === "" && property in updatedPathKey) {
+        const { pathKey, ...nextState } = safeState;
+        return Object.keys(nextState).length > 0 ? nextState : undefined;
+      }
+
+      return {
+        ...safeState,
+        pathKey: updatedPathKey,
+      };
+    });
+  }, []);
+
+  const handleChangeParam = useCallback(<K extends keyof Params>(index: number, property: K, value: Params[K]) => {
+    setRoute((prevState) => {
+      const safeState = prevState ?? {};
+      const currentParams = [...(safeState.params ?? [])];
+      const currentParam = { ...(currentParams[index] ?? {}) };
+
+      if (value === "" || value === false) {
+        delete currentParam[property];
+      } else {
+        currentParam[property] = value;
+      }
+
+      const isParamEmpty = Object.values(currentParam).every((v) => v === "" || v === false || v === undefined);
+
+      if (isParamEmpty) {
+        currentParams.splice(index, 1);
+      } else {
+        currentParams[index] = currentParam;
+      }
+
+      if (currentParams.length === 0) {
+        const { params, ...rest } = safeState;
+        return Object.keys(rest).length > 0 ? rest : undefined;
+      }
+
+      return {
+        ...safeState,
+        params: currentParams,
+      };
+    });
+  }, []);
 
   const handleChangePattern = (_: SyntheticEvent, value: null | string | { label: string; value: string }) => {
     setPattern(value);
@@ -262,11 +286,24 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
 
   const handleAddParams = () => {
     setRoute((prevRoute) => {
-      const lastId = Number(prevRoute.params?.[prevRoute.params.length - 1]?.id || 0);
-      const nextId = String(lastId + 1);
-      const newParams = [...(prevRoute.params || []), { ancestorUuid: "", id: nextId, key: "", staticValue: "", useAncestorValue: false }];
+      const safeRoute = prevRoute ?? {};
+      const currentParams = [...(safeRoute.params ?? [])];
 
-      return { ...prevRoute, params: newParams };
+      const lastId = Number(currentParams[currentParams.length - 1]?.id || 0);
+      const nextId = String(lastId + 1);
+
+      const newParams: Params[] = [
+        ...currentParams,
+        {
+          id: nextId,
+          key: "",
+        },
+      ];
+
+      return {
+        ...safeRoute,
+        params: newParams,
+      };
     });
   };
 
@@ -276,12 +313,16 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
 
   const handleDeleteParam = (e: MouseEvent<HTMLButtonElement>) => {
     const buttonValue = e.currentTarget.value;
+
     setRoute((prevRoute) => {
-      const updatedParams = (prevRoute.params ?? []).filter(({ id }) => id !== buttonValue);
+      const safeRoute = prevRoute ?? {};
+      const currentParams = safeRoute.params ?? [];
+
+      const updatedParams = currentParams.filter(({ id }) => id !== buttonValue);
       const nextParams = updatedParams.length > 0 ? updatedParams : undefined;
 
       return {
-        ...prevRoute,
+        ...safeRoute,
         params: nextParams,
       };
     });
@@ -364,17 +405,32 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   );
 
   const handleValueFromAncestor = (sourceValue?: string) => {
-    setDefaultValueFromAncestor((prevState) => ({
-      ...(prevState ?? {}),
-      sourceValue,
-    }));
+    setDefaultValueFromAncestor((prevState) => {
+      const nextState = { ...(prevState ?? {}) };
+
+      if (sourceValue) {
+        nextState.sourceValue = sourceValue;
+      } else {
+        delete nextState.sourceValue;
+      }
+
+      return Object.keys(nextState).length > 0 ? nextState : undefined;
+    });
   };
 
   const handleAncestorRef = (ancestorUuid?: string, ancestorName?: string) => {
-    setDefaultValueFromAncestor((prevState) => ({
-      ...(prevState ?? {}),
-      uuid: ancestorUuid,
-    }));
+    setDefaultValueFromAncestor((prevState) => {
+      const nextState = { ...(prevState ?? {}) };
+
+      if (ancestorUuid) {
+        nextState.uuid = ancestorUuid;
+      } else {
+        delete nextState.uuid;
+      }
+
+      return Object.keys(nextState).length > 0 ? nextState : undefined;
+    });
+
     setSelectAncestorName(ancestorName);
   };
 
@@ -426,6 +482,8 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
         uuid: isEditModal ? currentUuid : uuid,
       };
 
+      // console.log(children);
+
       if (isEditModal) {
         dispatchTree(replaceTreeCard(currentPath || "", currentUuid, children));
       } else {
@@ -433,7 +491,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
       }
 
       setModalOpen(null);
-      uuidRef.current = "";
     },
     [
       isEditModal,
@@ -500,7 +557,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
       const savedAncestor = ancestor?.attributes?.name;
 
       setSelectAncestorName(savedAncestor);
-      setDefaultValueFromAncestor(currentHierarchyPointNode?.data?.attributes?.defaultValueFromAncestor || null);
+      setDefaultValueFromAncestor(currentHierarchyPointNode?.data?.attributes?.defaultValueFromAncestor || undefined);
       setTag(currentHierarchyPointNode?.data.attributes?.tag || null);
       setType(currentHierarchyPointNode?.data.attributes?.type || "text");
       setHelperText(currentHierarchyPointNode?.data.attributes?.helperText || "");
@@ -537,7 +594,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
 
       setInitialQuery(currentHierarchyPointNode?.data.attributes?.initialQuery || false);
 
-      setDefaultValueFromAncestor(currentHierarchyPointNode?.data?.attributes?.defaultValueFromAncestor || null);
+      setDefaultValueFromAncestor(currentHierarchyPointNode?.data?.attributes?.defaultValueFromAncestor || undefined);
     }
   }, [
     currentHierarchyPointNode?.data.attributes?.defaultValueFromAncestor,
