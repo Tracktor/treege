@@ -1984,10 +1984,10 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-2.0.0.tgz#f544a148d3ab35801c1f633a7441fd87c2e484bf"
   integrity sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==
 
-"@tracktor/design-system@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@tracktor/design-system/-/design-system-4.0.0.tgz#2a7157b4e96966d20d7dd5e95ef7dc502506a8d6"
-  integrity sha512-2djnebDezXzqw/AuWv+YRw8DQvKLAT7/Cd+OXA5BEwDKRxWa0qVYn4hVBXyyge8QaZBImVIMUsH6u7AJ7l223w==
+"@tracktor/design-system@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@tracktor/design-system/-/design-system-4.0.1.tgz#aa87fc12e6bfa2bac2369cc1361370be730ffd79"
+  integrity sha512-WMkozv5XTkWmAbBocZkH9uTSiZbzVD2jY92ywNWEU2+4Ue7WNJs/w3ijocamCQ72saZbwnZkT4cnJHAGDI5g2g==
   dependencies:
     "@emotion/react" "^11.0.0"
     "@emotion/styled" "^11.0.0"

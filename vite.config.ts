@@ -1,7 +1,7 @@
 import { resolve } from "path";
 import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
-import { defineConfig } from "vitest/config";
 import { dependencies, name, peerDependencies } from "./package.json";
 
 // https://vitejs.dev/config/
@@ -57,6 +57,7 @@ const config = ({ mode }) =>
         { find: "~", replacement: resolve(__dirname) },
       ],
     },
+    // @ts-expect-error Vitest option
     test: {
       environment: "jsdom",
       globals: true,
