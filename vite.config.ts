@@ -19,6 +19,7 @@ const config = ({ mode }) =>
         output: {
           globals: {
             "@codemirror/lang-json": "codemirrorLangJson",
+            "@mui/icons-material": "iconsMaterial",
             "@tanstack/react-query": "reactQuery",
             "@tracktor/design-system": "tracktorDesignSystem",
             "@uiw/codemirror-theme-dracula": "codemirrorThemeDracula",
