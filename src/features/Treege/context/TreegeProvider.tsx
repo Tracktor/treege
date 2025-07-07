@@ -1,7 +1,7 @@
 import type { CurrentTree, ModalType, TreeNode, TreePath } from "@tracktor/types-treege";
 import type { HierarchyPointNode } from "d3-hierarchy";
-import { createContext, ReactNode, ReducerAction, SetStateAction, useEffect, useMemo, useReducer, useState } from "react";
-import treeReducer, { setTree } from "@/features/Treege/reducer/treeReducer";
+import { createContext, Dispatch, ReactNode, SetStateAction, useEffect, useMemo, useReducer, useState } from "react";
+import treeReducer, { setTree, TreeReducerAction } from "@/features/Treege/reducer/treeReducer";
 import { BackendConfig } from "@/features/Treege/Treege";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import { version } from "~/package.json";
@@ -60,15 +60,15 @@ export interface TreeDefaultValue {
    * This is the tree node dispatch function
    * @param state
    */
-  dispatchTree(state: ReducerAction<any>): void;
+  dispatchTree: Dispatch<TreeReducerAction>;
   /**
    * This is the function to set the modal open state
    * @param state
    */
   setCurrentHierarchyPointNode(state: SetStateAction<null | HierarchyPointNode<TreeNode>>): void;
   /**
-   * This is the function to set the current tree information
-   * Not the node to display tree
+   * This is the function to set the current tree information,
+   * Not the node to display a tree
    * @param state
    */
   setCurrentTree(state: SetStateAction<CurrentTree>): void;

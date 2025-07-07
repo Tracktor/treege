@@ -1,8 +1,7 @@
-import type { SelectChangeEvent } from "@tracktor/design-system";
+import { SelectChangeEvent, useSnackbar } from "@tracktor/design-system";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { resetTree, setTree } from "@/features/Treege/reducer/treeReducer";
-import useSnackbar from "@/hooks/useSnackbar";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import useWorkflowsQuery from "@/services/workflows/query/useWorkflowsQuery";
@@ -14,7 +13,7 @@ interface useTreeSelectProps {
 
 const useTreeSelect = ({ isControlled, fetchWorkflowsOnOpen }: useTreeSelectProps) => {
   const { t } = useTranslation("snackMessage");
-  const { open } = useSnackbar();
+  const { openSnackbar } = useSnackbar();
   const { currentTree, setCurrentTree, dispatchTree } = useTreegeContext();
   const [treeSelected, setTreeSelected] = useState("");
   const enabled = !!treeSelected && !isControlled && treeSelected !== currentTree.id;
@@ -61,9 +60,9 @@ const useTreeSelect = ({ isControlled, fetchWorkflowsOnOpen }: useTreeSelectProp
         setTreeSelected(currentTree.id);
       }
     } catch (error) {
-      open(t("error.fetchTree", { ns: "snackMessage" }), "error");
+      openSnackbar({ message: t("error.fetchTree", { ns: "snackMessage" }), severity: "error" });
     }
-  }, [fetchWorkflowsOnOpen, fetchWorkflows, currentTree.id, treeSelected, open, t]);
+  }, [fetchWorkflowsOnOpen, fetchWorkflows, currentTree.id, treeSelected, openSnackbar, t]);
 
   // Set current tree when treeSelected is changed
   useEffect(() => {
@@ -82,9 +81,9 @@ const useTreeSelect = ({ isControlled, fetchWorkflowsOnOpen }: useTreeSelectProp
   // Display error message when fetch workflow failed
   useEffect(() => {
     if (isErrorWorkflow) {
-      open(t("error.fetchTree", { ns: "snackMessage" }), "error");
+      openSnackbar({ message: t("error.fetchTree", { ns: "snackMessage" }), severity: "error" });
     }
-  }, [isErrorWorkflow, open, t]);
+  }, [isErrorWorkflow, openSnackbar, t]);
 
   return {
     currentTree,

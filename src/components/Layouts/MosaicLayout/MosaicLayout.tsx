@@ -16,13 +16,13 @@ const MosaicLayout = ({ children }: GridLayoutProps) => {
 
   return (
     <Grid container padding={1} flexWrap="nowrap" height="100%" role="treegrid">
-      <Grid item xs={9} padding={1} display="flex">
+      <Grid size={{ xs: 9 }} padding={1} display="flex">
         <Stack sx={styles.stack} spacing={2}>
           {childrenArray[0]}
           {childrenArray[1]}
         </Stack>
       </Grid>
-      <Grid item xs={3} padding={1} display="flex">
+      <Grid size={{ xs: 3 }} padding={1} display="flex">
         <Stack sx={styles.stack} spacing={2}>
           {childrenArray[2]}
           {childrenArray[3]}

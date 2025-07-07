@@ -4,7 +4,7 @@ import getNode from "@/utils/tree/getNode/getNode";
 import getTree from "@/utils/tree/getTree/getTree";
 
 interface RemoveNodeParams {
-  tree: TreeNode;
+  tree: TreeNode | null;
   path: string;
   uuid: string;
 }
@@ -19,7 +19,7 @@ const removeTreeNode = (parent: TreeNode | null, nodeToRemove: TreeNode | null) 
     return null;
   }
 
-  // if parent or nodeToRemove is a Decision, then remove node and its children
+  // if a parent or nodeToRemove is a Decision, then remove node and its children
   if (parent.attributes.isDecision || nodeToRemove.attributes.isDecision) {
     // Remove node and its children
     Object.defineProperty(parent, "children", {
@@ -54,7 +54,7 @@ const removeTreeNode = (parent: TreeNode | null, nodeToRemove: TreeNode | null) 
 };
 
 /**
- * Get parent node by uuid in current tree
+ * Get parent node by uuid in the current tree
  * @param tree
  * @param path
  * @param uuid
@@ -88,12 +88,16 @@ const removeAncestorReferences = (node: TreeNode, uuidToRemove: string): TreeNod
 };
 
 /**
- * Remove node from tree
+ * Remove node from a tree
  * @param tree
  * @param path
  * @param uuid
  */
 const removeNode = ({ tree, path, uuid }: RemoveNodeParams) => {
+  if (!tree) {
+    return null;
+  }
+
   const treeCopy = structuredClone(tree);
   const nodeToRemove = getNode(treeCopy, path, uuid);
   const parentNodeToRemove = getParentTreeNode(treeCopy, path, uuid);

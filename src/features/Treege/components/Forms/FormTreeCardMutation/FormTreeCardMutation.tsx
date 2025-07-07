@@ -8,23 +8,23 @@ import {
   Autocomplete,
   Box,
   Button,
+  Checkbox,
   CircularProgress,
+  Collapse,
+  DialogActions,
+  DialogContent,
+  FormControlLabel,
+  FormGroup,
+  Grid,
   IconButton,
   InputAdornment,
+  MenuItem,
+  Paper,
+  Select,
   Stack,
   TextField,
-  Typography,
-  DialogActions,
-  Grid2,
-  DialogContent,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  Collapse,
-  Select,
-  MenuItem,
   Tooltip,
-  Paper,
+  Typography,
 } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
@@ -143,8 +143,8 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
 
   return (
     <Box component="form" onSubmit={handleSubmit}>
-      <Grid2 container height={600}>
-        <Grid2 size={isLargeView ? 6 : 12} sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <Grid container height={600}>
+        <Grid size={isLargeView ? 6 : 12} sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
           <DialogContent>
             <Typography variant="h3" pb={2}>
               {title}
@@ -347,20 +347,20 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
               {t("validate")}
             </Button>
           </DialogActions>
-        </Grid2>
+        </Grid>
 
         {isLargeView && (
-          <Grid2 size={6} maxHeight={600} sx={{ display: "flex" }}>
+          <Grid size={6} maxHeight={600} sx={{ display: "flex" }}>
             <DialogContent>
               {(isDynamicSelect || isAutocomplete) && (
-                <Grid2 container spacing={1} paddingY={1}>
-                  <Grid2 size={12}>
+                <Grid container spacing={1} paddingY={1}>
+                  <Grid size={12}>
                     <Typography variant="h5" pb={1}>
                       {t("form:urlConstruction")}
                     </Typography>
-                  </Grid2>
+                  </Grid>
 
-                  <Grid2 size={isAutocomplete ? 7 : 12}>
+                  <Grid size={isAutocomplete ? 7 : 12}>
                     <TextField
                       id="urlSelect"
                       size="small"
@@ -378,10 +378,10 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                       onChange={handleChangeUrlSelect}
                       value={url || ""}
                     />
-                  </Grid2>
+                  </Grid>
 
                   {isAutocomplete && (
-                    <Grid2 size={5}>
+                    <Grid size={5}>
                       <Stack direction="row" spacing={1} alignItems="center">
                         <QuestionMarkRoundedIcon />
                         <TextField
@@ -396,9 +396,9 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                           value={searchKey || ""}
                         />
                       </Stack>
-                    </Grid2>
+                    </Grid>
                   )}
-                </Grid2>
+                </Grid>
               )}
 
               {(isAutocomplete || isDynamicSelect) && (
@@ -420,8 +420,8 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
 
                   {params?.map(({ id, key, staticValue, ancestorUuid, useAncestorValue }, index) => (
                     <Paper key={id} elevation={1} sx={{ marginY: 1 }}>
-                      <Grid2 key={id} container pb={2} justifyContent="space-between" alignItems="center" padding={1} spacing={1}>
-                        <Grid2 size={6}>
+                      <Grid key={id} container pb={2} justifyContent="space-between" alignItems="center" padding={1} spacing={1}>
+                        <Grid size={6}>
                           <Tooltip title={useAncestorValue ? t("form:keyPathApiDescription") : ""}>
                             <TextField
                               id={`param-key-${id}`}
@@ -432,9 +432,9 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                               inputProps={{ "data-id": id }}
                             />
                           </Tooltip>
-                        </Grid2>
+                        </Grid>
 
-                        <Grid2 size={6}>
+                        <Grid size={6}>
                           {useAncestorValue ? (
                             <Select
                               fullWidth
@@ -472,7 +472,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                               inputProps={{ "data-id": id }}
                             />
                           )}
-                        </Grid2>
+                        </Grid>
 
                         {!!ancestors.length && (
                           <FormControlLabel
@@ -494,7 +494,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                         <IconButton color="error" value={id} onClick={handleDeleteParam}>
                           <DeleteOutlineIcon />
                         </IconButton>
-                      </Grid2>
+                      </Grid>
                     </Paper>
                   ))}
 
@@ -575,9 +575,9 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                 />
               )}
             </DialogContent>
-          </Grid2>
+          </Grid>
         )}
-      </Grid2>
+      </Grid>
     </Box>
   );
 };

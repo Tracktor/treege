@@ -1,11 +1,10 @@
-import type { SelectChangeEvent } from "@tracktor/design-system";
+import { SelectChangeEvent, useSnackbar } from "@tracktor/design-system";
 import type { DefaultValueFromAncestor, Params, Route, TreeNode, TreeNodeField, TreeValues } from "@tracktor/types-treege";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { ChangeEvent, FormEvent, MouseEvent, SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";
 import { appendTreeCard, replaceTreeCard } from "@/features/Treege/reducer/treeReducer";
-import useSnackbar from "@/hooks/useSnackbar";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import { getUUID } from "@/utils";
@@ -27,7 +26,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   const uuid = uuidRef.current;
   const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
   const { dispatchTree, currentHierarchyPointNode, modalOpen, treePath, setModalOpen, tree } = useTreegeContext();
-  const { open } = useSnackbar();
+  const { openSnackbar } = useSnackbar();
   const { t } = useTranslation(["translation", "form"]);
 
   const isMultipleAttribute =
@@ -387,11 +386,11 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
         try {
           return fetchWorkflow();
         } catch (e) {
-          open(t("error.fetchTree", { ns: "snackMessage" }), "error");
+          openSnackbar({ message: t("error.fetchTree", { ns: "snackMessage" }), severity: "error" });
         }
       }
 
-      // don't edit tree
+      // don't edit a tree
       if (isTreeSelected && isEdit && !isOtherTree) {
         return {
           data: { workflow: currentHierarchyPointNode?.data.attributes?.tree },
@@ -401,7 +400,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
 
       return { data: null, isError: null };
     },
-    [currentHierarchyPointNode?.data.attributes?.tree, fetchWorkflow, open, t],
+    [currentHierarchyPointNode?.data.attributes?.tree, fetchWorkflow, openSnackbar, t],
   );
 
   const handleValueFromAncestor = (sourceValue?: string) => {

@@ -2,7 +2,7 @@ import type { TreeNode } from "@tracktor/types-treege";
 import getNode from "@/utils/tree/getNode/getNode";
 
 interface UpdatedNodeParams {
-  tree: TreeNode;
+  tree: TreeNode | null;
   path: string;
   uuid: string;
   children: TreeNode;
@@ -51,13 +51,17 @@ const updateNodeByRef = (node: TreeNode | null, newNode: TreeNode) => {
 };
 
 /**
- * Update node in tree
+ * Update node in a tree
  * @param tree
  * @param path
  * @param uuid
  * @param children
  */
 const updateNodeInTree = ({ tree, path, uuid, children }: UpdatedNodeParams) => {
+  if (!tree) {
+    return null;
+  }
+
   const treeCopy = structuredClone(tree);
   const node = getNode(treeCopy, path, uuid);
 
