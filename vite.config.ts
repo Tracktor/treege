@@ -1,7 +1,7 @@
 import { resolve } from "path";
 import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
-import { defineConfig } from "vitest/config";
 import { dependencies, name, peerDependencies } from "./package.json";
 
 // https://vitejs.dev/config/
@@ -19,6 +19,7 @@ const config = ({ mode }) =>
         output: {
           globals: {
             "@codemirror/lang-json": "codemirrorLangJson",
+            "@mui/icons-material": "iconsMaterial",
             "@tanstack/react-query": "reactQuery",
             "@tracktor/design-system": "tracktorDesignSystem",
             "@uiw/codemirror-theme-dracula": "codemirrorThemeDracula",
@@ -56,6 +57,7 @@ const config = ({ mode }) =>
         { find: "~", replacement: resolve(__dirname) },
       ],
     },
+    // @ts-expect-error Vitest option
     test: {
       environment: "jsdom",
       globals: true,

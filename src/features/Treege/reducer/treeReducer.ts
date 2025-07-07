@@ -9,36 +9,43 @@ export const treeReducerActionType = {
   setTree: "setTree",
 } as const;
 
-export const appendTreeCard = (path: string | null, uuid: string, children: TreeNode) => ({
+export type TreeReducerAction =
+  | { type: typeof treeReducerActionType.appendTreeCard; path: string | null; uuid: string; children: TreeNode }
+  | { type: typeof treeReducerActionType.deleteTreeCard; path: string | ""; uuid: string }
+  | { type: typeof treeReducerActionType.replaceTreeCard; path: string | null; uuid: string; children: TreeNode }
+  | { type: typeof treeReducerActionType.resetTree }
+  | { type: typeof treeReducerActionType.setTree; tree: TreeNode | null };
+
+export const appendTreeCard = (path: string | null, uuid: string, children: TreeNode): TreeReducerAction => ({
   children,
   path,
   type: treeReducerActionType.appendTreeCard,
   uuid,
 });
 
-export const replaceTreeCard = (path: string | null, uuid: string, children: TreeNode) => ({
+export const replaceTreeCard = (path: string | null, uuid: string, children: TreeNode): TreeReducerAction => ({
   children,
   path,
   type: treeReducerActionType.replaceTreeCard,
   uuid,
 });
 
-export const deleteTreeCard = (path: string | "", uuid: string) => ({
+export const deleteTreeCard = (path: string | "", uuid: string): TreeReducerAction => ({
   path,
   type: treeReducerActionType.deleteTreeCard,
   uuid,
 });
 
-export const resetTree = () => ({
+export const resetTree = (): TreeReducerAction => ({
   type: treeReducerActionType.resetTree,
 });
 
-export const setTree = (tree: TreeNode) => ({
+export const setTree = (tree: TreeNode | null): TreeReducerAction => ({
   tree,
   type: treeReducerActionType.setTree,
 });
 
-const treeReducer = (tree: TreeNode, action: any) => {
+const treeReducer = (tree: TreeNode | null, action: any) => {
   switch (action.type) {
     case treeReducerActionType.appendTreeCard: {
       const { uuid, path, children } = action;

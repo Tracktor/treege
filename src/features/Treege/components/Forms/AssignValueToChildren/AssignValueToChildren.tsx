@@ -1,16 +1,16 @@
 import { KeyboardArrowDown } from "@mui/icons-material";
 import {
-  Typography,
   Alert,
-  Grid2,
-  TextField,
-  Checkbox,
-  FormControlLabel,
   Box,
-  Divider,
+  Checkbox,
   Collapse,
+  Divider,
+  FormControlLabel,
+  Grid,
   IconButton,
   Stack,
+  TextField,
+  Typography,
 } from "@tracktor/design-system";
 import type { DefaultValueFromAncestor } from "@tracktor/types-treege";
 import { ChangeEvent, useState } from "react";
@@ -93,8 +93,8 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, displayTopDivide
   };
 
   return (
-    <Grid2 container>
-      <Grid2 size={12} pt={2}>
+    <Grid container>
+      <Grid size={12} pt={2}>
         {displayTopDivider && <Divider sx={{ my: 2 }} />}
         <Typography variant="h5" gutterBottom>
           {t("ancestorValue", { ancestorName })}
@@ -167,8 +167,8 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, displayTopDivide
             {renderAlertContent()}
           </Box>
         )}
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   );
 };
 
