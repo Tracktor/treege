@@ -25,7 +25,7 @@ const modaleSize = (panels: number) => {
     case 1:
       return "sm";
     case 2:
-      return "lg";
+      return "md";
     case 3:
       return "xl";
     default:
