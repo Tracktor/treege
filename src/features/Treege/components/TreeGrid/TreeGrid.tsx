@@ -20,6 +20,19 @@ import TreeSelect from "@/features/Treege/components/TreeSelect";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import { getTree } from "@/utils/tree";
 
+const modaleSize = (panels: number) => {
+  switch (panels) {
+    case 1:
+      return "sm";
+    case 2:
+      return "lg";
+    case 3:
+      return "xl";
+    default:
+      return "sm";
+  }
+};
+
 const TreeGrid = () => {
   const { tree, treeModalOpen, treePath, backendConfig } = useTreegeContext();
   const { handleCloseTreeModal } = useTreeCardContainer();
@@ -30,8 +43,8 @@ const TreeGrid = () => {
     isModalMutationOpen,
     isDeleteModal,
     handleChangeTree,
-    isLargeView,
-    setIsLargeView,
+    panelOpens,
+    setPanelOpens,
   } = useTreeGrid();
   const lastTreePath = treePath?.at(-1);
   const currentTreePath = lastTreePath?.path;
@@ -72,11 +85,11 @@ const TreeGrid = () => {
         onClose={closeModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-        maxWidth={isLargeView ? "md" : "sm"}
+        maxWidth={modaleSize(panelOpens)}
         fullWidth
         scroll="paper"
       >
-        <FormTreeCardMutation setIsLarge={setIsLargeView} onClose={closeModal} title={getTitleModalMutation()} />
+        <FormTreeCardMutation panelOpens={panelOpens} setPanelOpens={setPanelOpens} onClose={closeModal} title={getTitleModalMutation()} />
       </Dialog>
 
       {/* Modal confirm delete tree node */}

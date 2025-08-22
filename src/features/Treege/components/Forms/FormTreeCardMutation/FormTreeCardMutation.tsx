@@ -38,7 +38,8 @@ import FieldSelectAutocompleteCreatable from "@/features/Treege/components/Input
 interface FormTreeCardMutationProps {
   onClose(): void;
   title?: string;
-  setIsLarge?(largeModal: boolean): void;
+  panelOpens?: number;
+  setPanelOpens?(amount: number): void;
 }
 
 const iconButtonCommonStyle = {
@@ -66,11 +67,20 @@ const styles = {
   },
 };
 
-const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutationProps) => {
+const getSizeContainer = (hasApiParams: boolean, ancestorChecked: boolean) => {
+  if (ancestorChecked && hasApiParams) return 4;
+  if (ancestorChecked && !hasApiParams) return 6;
+  if (!ancestorChecked && hasApiParams) return 6;
+
+  return 12;
+};
+
+const FormTreeCardMutation = ({ onClose, title, setPanelOpens }: FormTreeCardMutationProps) => {
   const { t } = useTranslation(["translation", "form"]);
 
   const {
     ancestors,
+    ancestorChecked,
     hasAncestors,
     patternOptions,
     values,
@@ -122,6 +132,7 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
     handleChangePath,
     handleChangeMultiple,
     handleChangeInitialQuery,
+    handleChangeAncestorChecked,
     route,
     handlePresetValues,
     patternMessage,
@@ -129,22 +140,23 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
     handleChangePattern,
     handleChangePatternMessage,
     messages: { on, off },
-    isLargeView,
     handleValueFromAncestor,
     defaultValueFromAncestor,
     handleAncestorRef,
     selectAncestorName,
     collapseOptions,
     setCollapseOptions,
-  } = useFormTreeCardMutation({ setIsLarge });
+    hasApiConfig,
+  } = useFormTreeCardMutation({ setPanelOpens });
 
   const { searchKey, url, pathKey, params } = route || {};
   const { object: routeObject = "", label: routeLabel = "", value: routeValue = "", image: routeImage = "" } = pathKey || {};
+  const size = getSizeContainer(isAutocomplete || isDynamicSelect, ancestorChecked);
 
   return (
     <Box component="form" onSubmit={handleSubmit}>
       <Grid container height={600}>
-        <Grid size={isLargeView ? 6 : 12} sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <Grid size={size} sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
           <DialogContent>
             <Typography variant="h3" pb={2}>
               {title}
@@ -257,6 +269,12 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                   control={<Checkbox id="isRequired" checked={required} onChange={handleChangeRequired} />}
                   label={t("required")}
                 />
+                {hasAncestors && (
+                  <FormControlLabel
+                    control={<Checkbox id="ancestor" checked={ancestorChecked} onChange={handleChangeAncestorChecked} />}
+                    label={t("setupField", { ns: "form" })}
+                  />
+                )}
                 <FormControlLabel
                   disabled={isRepeatableDisabled}
                   control={<Checkbox id="isRepeatable" checked={repeatable} onChange={handleChangeRepeatable} />}
@@ -328,10 +346,6 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                 </IconButton>
               </Box>
             )}
-
-            {hasAncestors && (
-              <ReceiveValueFromAncestor id="receive-value" onChange={handleAncestorRef} value={selectAncestorName} ancestors={ancestors} />
-            )}
           </DialogContent>
           <DialogActions>
             <Button variant="text" onClick={onClose}>
@@ -349,9 +363,48 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
           </DialogActions>
         </Grid>
 
-        {isLargeView && (
-          <Grid size={6} maxHeight={600} sx={{ display: "flex" }}>
+        {ancestorChecked && (
+          <Grid size={size} maxHeight={600} sx={{ display: "flex" }}>
+            <Paper
+              sx={{
+                display: "flex",
+                flex: 1,
+              }}
+              elevation={0.5}
+            >
+              <DialogContent>
+                <Typography variant="h3" pb={2}>
+                  {t("form:setupField")}
+                </Typography>
+                {ancestorChecked && (
+                  <ReceiveValueFromAncestor
+                    id="receive-value"
+                    onChange={handleAncestorRef}
+                    value={selectAncestorName}
+                    ancestors={ancestors}
+                  />
+                )}
+
+                {selectAncestorName && (
+                  <AssignValueToChildren
+                    ancestorName={selectAncestorName}
+                    onChange={handleValueFromAncestor}
+                    value={defaultValueFromAncestor}
+                    displayTopDivider={isAutocomplete || isDynamicSelect}
+                    currentType={type}
+                  />
+                )}
+              </DialogContent>
+            </Paper>
+          </Grid>
+        )}
+
+        {hasApiConfig && (
+          <Grid size={size} maxHeight={600} sx={{ display: "flex" }}>
             <DialogContent>
+              <Typography variant="h3" pb={2}>
+                {t("form:setupApi")}
+              </Typography>
               {(isDynamicSelect || isAutocomplete) && (
                 <Grid container spacing={1} paddingY={1}>
                   <Grid size={12}>
@@ -563,16 +616,6 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                     </Stack>
                   </Collapse>
                 </>
-              )}
-
-              {selectAncestorName && (
-                <AssignValueToChildren
-                  ancestorName={selectAncestorName}
-                  onChange={handleValueFromAncestor}
-                  value={defaultValueFromAncestor}
-                  displayTopDivider={isAutocomplete || isDynamicSelect}
-                  currentType={type}
-                />
               )}
             </DialogContent>
           </Grid>

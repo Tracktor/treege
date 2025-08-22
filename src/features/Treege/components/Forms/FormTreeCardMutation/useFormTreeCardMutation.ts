@@ -18,10 +18,10 @@ interface Values {
 }
 
 interface UseFormTreeCardMutationParams {
-  setIsLarge?(largeModal: boolean): void;
+  setPanelOpens?(amount: number): void;
 }
 
-const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) => {
+const useFormTreeCardMutation = ({ setPanelOpens }: UseFormTreeCardMutationParams) => {
   const uuidRef = useRef(getUUID());
   const uuid = uuidRef.current;
   const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
@@ -53,6 +53,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   const [messages, setMessages] = useState({ off: "", on: "" });
   const [repeatable, setRepeatable] = useState(false);
   const [initialQuery, setInitialQuery] = useState(false);
+  const [ancestorChecked, setAncestorChecked] = useState(false);
   const [pattern, setPattern] = useState<string | null | { label: string; value: string }>("");
   const [patternMessage, setPatternMessage] = useState("");
   const [defaultValueFromAncestor, setDefaultValueFromAncestor] = useState<DefaultValueFromAncestor | undefined>(undefined);
@@ -82,7 +83,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   const ancestorsName = useMemo(() => ancestors.map(({ name: getNames }) => getNames || ""), [ancestors]);
   const getDisabledValueField = useCallback((index: number) => !isDecisionField && index > 0, [isDecisionField]);
   const hasAncestors = !!ancestorsName.length;
-  const isLargeView = isAutocomplete || isDynamicSelect || !!selectAncestorName;
+  const hasApiConfig = isAutocomplete || isDynamicSelect;
 
   const { refetch: fetchWorkflow, isLoading: isWorkflowLoading } = useWorkflowQuery(treeSelected, { enabled: false });
 
@@ -248,6 +249,10 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
 
   const handleChangeRepeatable = ({ target }: ChangeEvent<HTMLInputElement>) => {
     setRepeatable(target.checked);
+  };
+
+  const handleChangeAncestorChecked = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    setAncestorChecked(target.checked);
   };
 
   const handleChangeType = (_: SyntheticEvent, value: (typeof fields)[number]) => {
@@ -554,6 +559,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
       const savedAncestor = ancestor?.attributes?.name;
 
       setSelectAncestorName(savedAncestor);
+      setAncestorChecked(!!savedAncestor);
       setDefaultValueFromAncestor(currentHierarchyPointNode?.data?.attributes?.defaultValueFromAncestor || undefined);
       setTag(currentHierarchyPointNode?.data.attributes?.tag || null);
       setType(currentHierarchyPointNode?.data.attributes?.type || "text");
@@ -626,12 +632,25 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
 
   // Adapt parent size Dialog view
   useEffect(() => {
-    if (setIsLarge) {
-      setIsLarge(isLargeView);
+    if (ancestorChecked && !hasApiConfig) {
+      setPanelOpens?.(2);
     }
-  }, [isLargeView, setIsLarge]);
+
+    if (!ancestorChecked && hasApiConfig) {
+      setPanelOpens?.(2);
+    }
+
+    if (ancestorChecked && hasApiConfig) {
+      setPanelOpens?.(3);
+    }
+
+    if (!ancestorChecked && !hasApiConfig) {
+      setPanelOpens?.(1);
+    }
+  }, [ancestorChecked, hasApiConfig, setPanelOpens]);
 
   return {
+    ancestorChecked,
     ancestors,
     collapseOptions,
     currentTree,
@@ -640,6 +659,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     handleAddParams,
     handleAddValue,
     handleAncestorRef,
+    handleChangeAncestorChecked,
     handleChangeHelperText,
     handleChangeHiddenValue,
     handleChangeInitialQuery,
@@ -666,6 +686,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     handleSubmit,
     handleValueFromAncestor,
     hasAncestors,
+    hasApiConfig,
     helperText,
     hiddenValue,
     initialQuery,
@@ -677,7 +698,6 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     isDisabledPast,
     isDynamicSelect,
     isHiddenField,
-    isLargeView,
     isMultiple,
     isMultiplePossible,
     isPatternEnabled,
