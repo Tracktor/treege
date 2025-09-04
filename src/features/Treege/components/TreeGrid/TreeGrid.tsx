@@ -85,11 +85,11 @@ const TreeGrid = () => {
         onClose={closeModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-        maxWidth={modaleSize(panelOpens)}
+        maxWidth="sm"
         fullWidth
         scroll="paper"
       >
-        <FormTreeCardMutation panelOpens={panelOpens} setPanelOpens={setPanelOpens} onClose={closeModal} title={getTitleModalMutation()} />
+        <FormTreeCardMutation onClose={closeModal} title={getTitleModalMutation()} />
       </Dialog>
 
       {/* Modal confirm delete tree node */}

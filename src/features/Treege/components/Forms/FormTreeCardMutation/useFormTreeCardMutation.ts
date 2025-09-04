@@ -17,11 +17,7 @@ interface Values {
   message?: string;
 }
 
-interface UseFormTreeCardMutationParams {
-  setPanelOpens?(amount: number): void;
-}
-
-const useFormTreeCardMutation = ({ setPanelOpens }: UseFormTreeCardMutationParams) => {
+const useFormTreeCardMutation = () => {
   const uuidRef = useRef(getUUID());
   const uuid = uuidRef.current;
   const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
@@ -61,7 +57,6 @@ const useFormTreeCardMutation = ({ setPanelOpens }: UseFormTreeCardMutationParam
   const [collapseOptions, setCollapseOptions] = useState<boolean>(false);
   const searchDynamicUrlParams = [...(route?.url?.matchAll(/{(.*?)}/g) ?? [])].map((m) => m[1]);
   const validDynamicUrlParams = searchDynamicUrlParams.filter((param) => param !== "");
-  const invalidDynamicUrlParams = searchDynamicUrlParams.filter((param) => param === "");
 
   // State
   const isTreeField = type === "tree";
@@ -252,10 +247,6 @@ const useFormTreeCardMutation = ({ setPanelOpens }: UseFormTreeCardMutationParam
 
   const handleChangeRepeatable = ({ target }: ChangeEvent<HTMLInputElement>) => {
     setRepeatable(target.checked);
-  };
-
-  const handleChangeAncestorChecked = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    setAncestorChecked(target.checked);
   };
 
   const handleChangeType = (_: SyntheticEvent, value: (typeof fields)[number]) => {
@@ -633,25 +624,6 @@ const useFormTreeCardMutation = ({ setPanelOpens }: UseFormTreeCardMutationParam
     patternOptions,
   ]);
 
-  // Adapt parent size Dialog view
-  useEffect(() => {
-    if (ancestorChecked && !hasApiConfig) {
-      setPanelOpens?.(2);
-    }
-
-    if (!ancestorChecked && hasApiConfig) {
-      setPanelOpens?.(2);
-    }
-
-    if (ancestorChecked && hasApiConfig) {
-      setPanelOpens?.(3);
-    }
-
-    if (!ancestorChecked && !hasApiConfig) {
-      setPanelOpens?.(1);
-    }
-  }, [ancestorChecked, hasApiConfig, setPanelOpens]);
-
   return {
     ancestorChecked,
     ancestors,
@@ -662,7 +634,6 @@ const useFormTreeCardMutation = ({ setPanelOpens }: UseFormTreeCardMutationParam
     handleAddParams,
     handleAddValue,
     handleAncestorRef,
-    handleChangeAncestorChecked,
     handleChangeHelperText,
     handleChangeHiddenValue,
     handleChangeInitialQuery,
