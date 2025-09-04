@@ -59,6 +59,9 @@ const useFormTreeCardMutation = ({ setPanelOpens }: UseFormTreeCardMutationParam
   const [defaultValueFromAncestor, setDefaultValueFromAncestor] = useState<DefaultValueFromAncestor | undefined>(undefined);
   const [selectAncestorName, setSelectAncestorName] = useState<string | undefined>("");
   const [collapseOptions, setCollapseOptions] = useState<boolean>(false);
+  const searchDynamicUrlParams = [...(route?.url?.matchAll(/{(.*?)}/g) ?? [])].map((m) => m[1]);
+  const validDynamicUrlParams = searchDynamicUrlParams.filter((param) => param !== "");
+  const invalidDynamicUrlParams = searchDynamicUrlParams.filter((param) => param === "");
 
   // State
   const isTreeField = type === "tree";
@@ -720,6 +723,7 @@ const useFormTreeCardMutation = ({ setPanelOpens }: UseFormTreeCardMutationParam
     treeSelected,
     type,
     uuid,
+    validDynamicUrlParams,
     values,
   };
 };

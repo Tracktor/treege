@@ -147,6 +147,7 @@ const FormTreeCardMutation = ({ onClose, title, setPanelOpens }: FormTreeCardMut
     collapseOptions,
     setCollapseOptions,
     hasApiConfig,
+    validDynamicUrlParams,
   } = useFormTreeCardMutation({ setPanelOpens });
 
   const { searchKey, url, pathKey, params } = route || {};
@@ -409,7 +410,7 @@ const FormTreeCardMutation = ({ onClose, title, setPanelOpens }: FormTreeCardMut
                 <Grid container spacing={1} paddingY={1}>
                   <Grid size={12}>
                     <Typography variant="h5" pb={1}>
-                      {t("form:urlConstruction")}
+                      {t("form:baseUrl")}
                     </Typography>
                   </Grid>
 
@@ -455,6 +456,32 @@ const FormTreeCardMutation = ({ onClose, title, setPanelOpens }: FormTreeCardMut
               )}
 
               <>
+                {validDynamicUrlParams?.length ? (
+                  <Stack spacing={1} paddingY={1} position="relative">
+                    <Typography variant="h5">{t("form:urlBuilder")}</Typography>
+                    {validDynamicUrlParams.map((param) => (
+                      <Paper key={param} elevation={1} sx={{ padding: 1 }}>
+                        <Grid container key={param} alignItems="center" spacing={1} alignContent="center">
+                          <Grid size={4}>
+                            <TextField
+                              fullWidth
+                              value={`{${param}}`}
+                              slotProps={{
+                                input: {
+                                  readOnly: true,
+                                },
+                              }}
+                            />
+                          </Grid>
+                          <Grid size={8}>
+                            <TextField fullWidth />
+                          </Grid>
+                        </Grid>
+                      </Paper>
+                    ))}
+                  </Stack>
+                ) : null}
+
                 <Stack
                   spacing={1}
                   paddingY={1}
@@ -462,7 +489,7 @@ const FormTreeCardMutation = ({ onClose, title, setPanelOpens }: FormTreeCardMut
                   position="relative"
                   alignItems={{ sm: "center", xs: "flex-start" }}
                 >
-                  <Typography variant="h5">{t("form:additionalParams")}</Typography>
+                  <Typography variant="h5">{t("form:queryParams")}</Typography>
                   <Box justifyContent="flex-end">
                     <IconButton color="success" sx={styles.iconButton} onClick={handleAddParams}>
                       <AddCircleRoundedIcon />
