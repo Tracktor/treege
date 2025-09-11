@@ -216,6 +216,7 @@ const FormTreeCardMutation = ({ onClose, title }: FormTreeCardMutationProps) => 
                   object: routeObject,
                   value: routeValue,
                 }}
+                initialQuery={initialQuery}
                 onChangeUrlSelect={handleChangeUrlSelect}
                 onChangeSearchKey={handleChangeSearchKey}
                 onAddParams={handleAddParams}
@@ -224,6 +225,7 @@ const FormTreeCardMutation = ({ onClose, title }: FormTreeCardMutationProps) => 
                 onChangeApiMapping={handleChangePath}
                 setCollapseOptions={setCollapseOptions}
                 onChangeType={handleChangeType}
+                onChangeInitialQuery={handleChangeInitialQuery}
               />
             )}
 
@@ -231,12 +233,6 @@ const FormTreeCardMutation = ({ onClose, title }: FormTreeCardMutationProps) => 
               <FormGroup row>
                 {isMultiplePossible && (
                   <FormControlLabel control={<Checkbox checked={isMultiple} onChange={handleChangeMultiple} />} label={t("multiple")} />
-                )}
-                {isAutocomplete && (
-                  <FormControlLabel
-                    control={<Checkbox id="isInitialQuery" checked={initialQuery} onChange={handleChangeInitialQuery} />}
-                    label={t("initialQueryEnable")}
-                  />
                 )}
                 <FormControlLabel
                   disabled={isRequiredDisabled}

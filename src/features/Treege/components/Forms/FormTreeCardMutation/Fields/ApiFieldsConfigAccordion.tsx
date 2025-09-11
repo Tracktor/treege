@@ -2,7 +2,7 @@ import { KeyboardArrowDown } from "@mui/icons-material";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
+import WebhookIcon from "@mui/icons-material/Webhook";
 import {
   Box,
   Checkbox,
@@ -21,6 +21,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   Divider,
+  FormGroup,
 } from "@tracktor/design-system";
 import type { Params } from "@tracktor/types-treege";
 import { ChangeEvent, Dispatch, MouseEvent, SetStateAction, SyntheticEvent, useCallback, useEffect } from "react";
@@ -43,6 +44,7 @@ interface ApiFieldsConfigAccordionProps {
   ancestors: { uuid: string; name?: string }[];
   collapseOptions?: boolean;
   apiMapping?: RouteMapping;
+  initialQuery?: boolean;
   onChangeUrlSelect?: ({ target }: ChangeEvent<HTMLInputElement>) => void;
   onChangeSearchKey?: ({ target }: ChangeEvent<HTMLInputElement>) => void;
   onAddParams?: () => void;
@@ -51,6 +53,7 @@ interface ApiFieldsConfigAccordionProps {
   onChangeApiMapping?: (property: string, event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   setCollapseOptions?: Dispatch<SetStateAction<boolean>>;
   onChangeType?: (_: SyntheticEvent, value: (typeof fields)[number]) => void;
+  onChangeInitialQuery?: ({ target }: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const ApiFieldsConfigAccordion = ({
@@ -62,6 +65,7 @@ const ApiFieldsConfigAccordion = ({
   ancestors,
   collapseOptions,
   apiMapping,
+  initialQuery,
   onChangeSearchKey,
   onChangeUrlSelect,
   onAddParams,
@@ -70,6 +74,7 @@ const ApiFieldsConfigAccordion = ({
   onChangeApiMapping,
   setCollapseOptions,
   onChangeType,
+  onChangeInitialQuery,
 }: ApiFieldsConfigAccordionProps) => {
   const { t } = useTranslation(["translation", "form"]);
   const getApiParamIndex = useCallback((key: string) => apiParams?.findIndex((p) => p.key === key) ?? -1, [apiParams]);
@@ -110,7 +115,7 @@ const ApiFieldsConfigAccordion = ({
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <LinkRoundedIcon />
+              <WebhookIcon />
             </InputAdornment>
           ),
         }}
@@ -139,7 +144,7 @@ const ApiFieldsConfigAccordion = ({
                 <Stack spacing={1} position="relative" pb={1}>
                   {slicedParams?.map(({ key, ancestorUuid, id }, index) => (
                     <Grid container key={key} alignItems="center" spacing={1} alignContent="center">
-                      <Grid size={4}>
+                      <Grid size={4} alignItems="center" textAlign="center" spacing={1}>
                         <Typography variant="h5">{`${key}`}</Typography>
                       </Grid>
                       <Grid size={8}>
@@ -178,12 +183,21 @@ const ApiFieldsConfigAccordion = ({
 
             <>
               <Stack direction="row" spacing={4} alignItems="center" paddingY={2}>
-                <FormControlLabel
-                  control={<Checkbox id="isAutocomplete" checked={isAutocomplete} onChange={handleChangeType} />}
-                  label={t("activateSearch")}
-                />
+                <FormGroup row>
+                  <FormControlLabel
+                    control={<Checkbox id="isAutocomplete" checked={isAutocomplete} onChange={handleChangeType} />}
+                    label={t("activateSearch")}
+                  />
+                  {isAutocomplete && (
+                    <FormControlLabel
+                      control={<Checkbox id="isInitialQuery" checked={initialQuery} onChange={onChangeInitialQuery} />}
+                      label={t("initialQueryEnable")}
+                    />
+                  )}
+                </FormGroup>
                 {isAutocomplete && (
                   <TextField
+                    required
                     id="searchKey"
                     size="small"
                     InputLabelProps={{ shrink: true }}
@@ -224,6 +238,7 @@ const ApiFieldsConfigAccordion = ({
                   <Grid size={6}>
                     <Tooltip title={useAncestorValue ? t("form:keyPathApiDescription") : ""}>
                       <TextField
+                        required
                         id={`param-key-${id}`}
                         label="Key"
                         size="small"
@@ -238,6 +253,7 @@ const ApiFieldsConfigAccordion = ({
                     {useAncestorValue ? (
                       <Select
                         fullWidth
+                        required
                         id={id}
                         variant="outlined"
                         size="small"
@@ -259,6 +275,7 @@ const ApiFieldsConfigAccordion = ({
                       </Select>
                     ) : (
                       <TextField
+                        required
                         id={`param-value-${id}`}
                         label={t("value", { ns: "form" })}
                         size="small"
