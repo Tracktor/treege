@@ -1,5 +1,6 @@
 const TRANSLATION_FR = {
   add: "Ajouter",
+  advancedConfiguration: "Configuration avancée",
   cancel: "Annuler",
   disabled: "Désactivé",
   edit: "Éditer",

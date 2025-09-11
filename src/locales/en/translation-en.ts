@@ -1,5 +1,6 @@
 const TRANSLATION_EN = {
   add: "Add",
+  advancedConfiguration: "Advanced configuration",
   cancel: "Cancel",
   disabled: "Disabled",
   edit: "Edit",
