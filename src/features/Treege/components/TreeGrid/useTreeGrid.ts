@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { setTree } from "@/features/Treege/reducer/treeReducer";
 import useTreegeContext from "@/hooks/useTreegeContext";
@@ -6,7 +5,6 @@ import useTreegeContext from "@/hooks/useTreegeContext";
 const useTreeGrid = () => {
   const { t } = useTranslation(["modal", "snackMessage"]);
   const { currentHierarchyPointNode, modalOpen, setModalOpen, dispatchTree } = useTreegeContext();
-  const [panelOpens, setPanelOpens] = useState<number>(1);
 
   const isEditModal = modalOpen === "edit";
   const isAddModal = modalOpen === "add";
@@ -15,7 +13,6 @@ const useTreeGrid = () => {
 
   const closeModal = () => {
     setModalOpen(null);
-    setPanelOpens(1);
   };
 
   const getTitleModalMutation = () => {
@@ -52,8 +49,6 @@ const useTreeGrid = () => {
     handleChangeTree,
     isDeleteModal,
     isModalMutationOpen,
-    panelOpens,
-    setPanelOpens,
   };
 };
 

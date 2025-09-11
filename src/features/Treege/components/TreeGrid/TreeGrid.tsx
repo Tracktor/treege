@@ -20,32 +20,10 @@ import TreeSelect from "@/features/Treege/components/TreeSelect";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import { getTree } from "@/utils/tree";
 
-const modaleSize = (panels: number) => {
-  switch (panels) {
-    case 1:
-      return "sm";
-    case 2:
-      return "md";
-    case 3:
-      return "xl";
-    default:
-      return "sm";
-  }
-};
-
 const TreeGrid = () => {
   const { tree, treeModalOpen, treePath, backendConfig } = useTreegeContext();
   const { handleCloseTreeModal } = useTreeCardContainer();
-  const {
-    getTitleModalMutation,
-    closeModal,
-    getTitleModalDelete,
-    isModalMutationOpen,
-    isDeleteModal,
-    handleChangeTree,
-    panelOpens,
-    setPanelOpens,
-  } = useTreeGrid();
+  const { getTitleModalMutation, closeModal, getTitleModalDelete, isModalMutationOpen, isDeleteModal, handleChangeTree } = useTreeGrid();
   const lastTreePath = treePath?.at(-1);
   const currentTreePath = lastTreePath?.path;
   const currentTreeName = lastTreePath?.label;
@@ -85,7 +63,7 @@ const TreeGrid = () => {
         onClose={closeModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-        maxWidth="sm"
+        maxWidth="md"
         fullWidth
         scroll="paper"
       >

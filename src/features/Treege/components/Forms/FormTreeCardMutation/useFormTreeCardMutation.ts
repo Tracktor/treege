@@ -49,7 +49,6 @@ const useFormTreeCardMutation = () => {
   const [messages, setMessages] = useState({ off: "", on: "" });
   const [repeatable, setRepeatable] = useState(false);
   const [initialQuery, setInitialQuery] = useState(false);
-  const [ancestorChecked, setAncestorChecked] = useState(false);
   const [pattern, setPattern] = useState<string | null | { label: string; value: string }>("");
   const [patternMessage, setPatternMessage] = useState("");
   const [defaultValueFromAncestor, setDefaultValueFromAncestor] = useState<DefaultValueFromAncestor | undefined>(undefined);
@@ -553,7 +552,6 @@ const useFormTreeCardMutation = () => {
       const savedAncestor = ancestor?.attributes?.name;
 
       setSelectAncestorName(savedAncestor);
-      setAncestorChecked(!!savedAncestor);
       setDefaultValueFromAncestor(currentHierarchyPointNode?.data?.attributes?.defaultValueFromAncestor || undefined);
       setTag(currentHierarchyPointNode?.data.attributes?.tag || null);
       setType(currentHierarchyPointNode?.data.attributes?.type || "text");
@@ -625,7 +623,6 @@ const useFormTreeCardMutation = () => {
   ]);
 
   return {
-    ancestorChecked,
     ancestors,
     collapseOptions,
     currentTree,
