@@ -54,8 +54,7 @@ const useFormTreeCardMutation = () => {
   const [defaultValueFromAncestor, setDefaultValueFromAncestor] = useState<DefaultValueFromAncestor | undefined>(undefined);
   const [selectAncestorName, setSelectAncestorName] = useState<string | undefined>("");
   const [collapseOptions, setCollapseOptions] = useState<boolean>(false);
-  const searchDynamicUrlParams = [...(route?.url?.matchAll(/{(.*?)}/g) ?? [])].map((m) => m[1]);
-  const validDynamicUrlParams = searchDynamicUrlParams.filter((param) => param !== "");
+  const validDynamicUrlParams = [...(route?.url?.matchAll(/{(.*?)}/g) ?? [])].filter((m) => m[1] !== "").map((m) => m[0]);
 
   // State
   const isTreeField = type === "tree";

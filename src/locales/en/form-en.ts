@@ -35,7 +35,7 @@ const FORM_EN = {
   patternMessage: "Pattern message",
   phoneNumber: "Phone number",
   prefillField: "pre-fill field",
-  queryParams: "Other query params",
+  queryParams: "query params",
   receiveValueFromParent: "Pre-fill field from:",
   repeatable: "Repeatable",
   searchKeyPlaceholder: "text",

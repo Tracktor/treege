@@ -24,7 +24,7 @@ import {
   AccordionDetails,
 } from "@tracktor/design-system";
 import type { Params } from "@tracktor/types-treege";
-import { ChangeEvent, Dispatch, MouseEvent, SetStateAction } from "react";
+import { ChangeEvent, Dispatch, MouseEvent, SetStateAction, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 interface RouteMapping {
@@ -35,7 +35,6 @@ interface RouteMapping {
 }
 
 interface ApiFieldsConfigAccordionProps {
-  isDynamicSelect?: boolean;
   isAutocomplete?: boolean;
   url?: string;
   searchKey?: string;
@@ -54,7 +53,6 @@ interface ApiFieldsConfigAccordionProps {
 }
 
 const ApiFieldsConfigAccordion = ({
-  isDynamicSelect,
   isAutocomplete,
   url,
   searchKey,
@@ -73,96 +71,117 @@ const ApiFieldsConfigAccordion = ({
 }: ApiFieldsConfigAccordionProps) => {
   const { t } = useTranslation(["translation", "form"]);
 
+  const queryParams = apiParams?.filter((param) => !sliceUrlParams?.includes(param.key));
+  const slicedParams = apiParams?.filter((param) => sliceUrlParams?.includes(param.key));
+
+  // Auto add slice params in apiParams on url change
+  useEffect(() => {
+    if (sliceUrlParams?.length && onAddParams) {
+      // Only add params if not already added in apiParams
+      const paramsToAdd = sliceUrlParams.filter((param) => !apiParams?.some(({ key }) => key === param));
+
+      if (paramsToAdd.length) {
+        paramsToAdd.forEach(() => {
+          onAddParams();
+        });
+      }
+
+      // update the key of the newly added params
+      paramsToAdd.forEach((param, index) => {
+        const paramIndex = (apiParams?.length || 0) + index;
+        onChangeParams?.(paramIndex, "key", param);
+      });
+    }
+  }, [apiParams, onAddParams, onChangeParams, sliceUrlParams]);
+
   return (
     <Accordion sx={{ marginY: 3 }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel-ancestor-control" id="panel-ancestor-control-header">
-        <Typography variant="h5">{t("form:setupApi")}</Typography>
+        <Grid container spacing={1} width="100%" alignItems="center">
+          <Grid size={isAutocomplete ? 7 : 12}>
+            <TextField
+              id="urlSelect"
+              size="small"
+              fullWidth
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LinkRoundedIcon />
+                  </InputAdornment>
+                ),
+              }}
+              placeholder="https://api.com/"
+              type="url"
+              onChange={onChangeUrlSelect}
+              value={url || ""}
+              onClick={(e) => e.stopPropagation()}
+            />
+          </Grid>
+
+          {isAutocomplete && (
+            <Grid size={5}>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <QuestionMarkRoundedIcon />
+                <TextField
+                  id="searchKey"
+                  size="small"
+                  InputLabelProps={{ shrink: true }}
+                  sx={{ flex: 1, minWidth: 0 }}
+                  placeholder={t("form:searchKeyPlaceholder")}
+                  type="text"
+                  label={t("form:key")}
+                  onChange={onChangeSearchKey}
+                  value={searchKey || ""}
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </Stack>
+            </Grid>
+          )}
+        </Grid>
       </AccordionSummary>
 
       <AccordionDetails>
-        {(isDynamicSelect || isAutocomplete) && (
-          <Grid container spacing={1} paddingY={1}>
-            <Grid size={12}>
-              <Typography variant="h5" pb={1}>
-                {t("form:baseUrl")}
-              </Typography>
-            </Grid>
-
-            <Grid size={isAutocomplete ? 7 : 12}>
-              <TextField
-                id="urlSelect"
-                size="small"
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <LinkRoundedIcon />
-                    </InputAdornment>
-                  ),
-                }}
-                placeholder="https://api.com/"
-                type="url"
-                label={t("form:apiRoute")}
-                onChange={onChangeUrlSelect}
-                value={url || ""}
-              />
-            </Grid>
-
-            {isAutocomplete && (
-              <Grid size={5}>
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <QuestionMarkRoundedIcon />
-                  <TextField
-                    id="searchKey"
-                    size="small"
-                    InputLabelProps={{ shrink: true }}
-                    sx={{ flex: 1, minWidth: 0 }}
-                    placeholder={t("form:searchKeyPlaceholder")}
-                    type="text"
-                    label={t("form:key")}
-                    onChange={onChangeSearchKey}
-                    value={searchKey || ""}
-                  />
-                </Stack>
-              </Grid>
-            )}
-          </Grid>
-        )}
-
         <>
           {sliceUrlParams?.length ? (
-            <Stack spacing={1} paddingY={1} position="relative">
-              <Typography variant="h5">{t("form:urlBuilder")}</Typography>
-              {sliceUrlParams.map((param) => (
-                <Paper key={param} elevation={1} sx={{ padding: 1 }}>
-                  <Grid container key={param} alignItems="center" spacing={1} alignContent="center">
-                    <Grid size={4}>
-                      <TextField
-                        fullWidth
-                        value={`{${param}}`}
-                        slotProps={{
-                          input: {
-                            readOnly: true,
-                          },
-                        }}
-                      />
-                    </Grid>
-                    <Grid size={8}>
-                      <TextField fullWidth />
-                    </Grid>
+            <Stack spacing={1} position="relative" pb={1}>
+              {slicedParams?.map(({ key, ancestorUuid, id }, index) => (
+                <Grid container key={key} alignItems="center" spacing={1} alignContent="center">
+                  <Grid size={4}>
+                    <Typography variant="h5">{`${key}`}</Typography>
                   </Grid>
-                </Paper>
+                  <Grid size={8}>
+                    <Select
+                      fullWidth
+                      id={id}
+                      variant="outlined"
+                      size="small"
+                      value={ancestorUuid || ""}
+                      onChange={({ target }) => onChangeParams?.(index, "ancestorUuid", target.value)}
+                      MenuProps={{
+                        PaperProps: {
+                          sx: { maxHeight: 300 },
+                        },
+                      }}
+                    >
+                      {ancestors.length ? (
+                        ancestors.map(({ name: ancestorName, uuid: ancestorId }) => (
+                          <MenuItem key={ancestorId} value={ancestorId}>
+                            {ancestorName}
+                          </MenuItem>
+                        ))
+                      ) : (
+                        <MenuItem disabled value="">
+                          {t("form:noAncestorFound")}
+                        </MenuItem>
+                      )}
+                    </Select>
+                  </Grid>
+                </Grid>
               ))}
             </Stack>
           ) : null}
 
-          <Stack
-            spacing={1}
-            paddingY={1}
-            direction={{ sm: "row", xs: "column" }}
-            position="relative"
-            alignItems={{ sm: "center", xs: "flex-start" }}
-          >
+          <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems={{ sm: "center", xs: "flex-start" }}>
             <Typography variant="h5">{t("form:queryParams")}</Typography>
             <Box justifyContent="flex-end">
               <IconButton
@@ -178,7 +197,7 @@ const ApiFieldsConfigAccordion = ({
             </Box>
           </Stack>
 
-          {apiParams?.map(({ id, key, staticValue, ancestorUuid, useAncestorValue }, index) => (
+          {queryParams?.map(({ id, key, staticValue, ancestorUuid, useAncestorValue }, index) => (
             <Paper key={id} elevation={1} sx={{ marginY: 1 }}>
               <Grid key={id} container pb={2} justifyContent="space-between" alignItems="center" padding={1} spacing={1}>
                 <Grid size={6}>

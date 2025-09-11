@@ -63,7 +63,7 @@ const TreeGrid = () => {
         onClose={closeModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-        maxWidth="md"
+        maxWidth="sm"
         fullWidth
         scroll="paper"
       >

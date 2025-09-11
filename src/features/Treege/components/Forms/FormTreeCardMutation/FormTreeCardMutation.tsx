@@ -204,7 +204,6 @@ const FormTreeCardMutation = ({ onClose, title }: FormTreeCardMutationProps) => 
             {hasApiConfig && (
               <ApiFieldsConfigAccordion
                 isAutocomplete={isAutocomplete}
-                isDynamicSelect={isDynamicSelect}
                 url={url}
                 searchKey={searchKey}
                 sliceUrlParams={validDynamicUrlParams}

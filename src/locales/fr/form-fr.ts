@@ -35,7 +35,7 @@ const FORM_FR = {
   patternMessage: "Message d'aide invalide",
   phoneNumber: "Numéro de téléphone",
   prefillField: "pré-remplir le champ",
-  queryParams: "Extra query params",
+  queryParams: "Query params",
   receiveValueFromParent: "Pré-remplissage du champ depuis:",
   repeatable: "Répétable",
   searchKeyPlaceholder: "text",
