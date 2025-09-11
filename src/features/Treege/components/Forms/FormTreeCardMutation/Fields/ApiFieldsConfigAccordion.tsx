@@ -23,8 +23,9 @@ import {
   Divider,
 } from "@tracktor/design-system";
 import type { Params } from "@tracktor/types-treege";
-import { ChangeEvent, Dispatch, MouseEvent, SetStateAction, useCallback, useEffect } from "react";
+import { ChangeEvent, Dispatch, MouseEvent, SetStateAction, SyntheticEvent, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import fields from "@/constants/fields";
 
 interface RouteMapping {
   object: string;
@@ -49,6 +50,7 @@ interface ApiFieldsConfigAccordionProps {
   onDeleteParams?: (e: MouseEvent<HTMLButtonElement>) => void;
   onChangeApiMapping?: (property: string, event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   setCollapseOptions?: Dispatch<SetStateAction<boolean>>;
+  onChangeType?: (_: SyntheticEvent, value: (typeof fields)[number]) => void;
 }
 
 const ApiFieldsConfigAccordion = ({
@@ -67,11 +69,23 @@ const ApiFieldsConfigAccordion = ({
   onDeleteParams,
   onChangeApiMapping,
   setCollapseOptions,
+  onChangeType,
 }: ApiFieldsConfigAccordionProps) => {
   const { t } = useTranslation(["translation", "form"]);
   const getApiParamIndex = useCallback((key: string) => apiParams?.findIndex((p) => p.key === key) ?? -1, [apiParams]);
   const queryParams = apiParams?.filter((param) => !sliceUrlParams?.includes(param.key));
   const slicedParams = apiParams?.filter((param) => sliceUrlParams?.includes(param.key));
+
+  const autocompleteField = fields.find((field) => field.type === "autocomplete") || fields[0];
+  const dynamicSelectField = fields.find((field) => field.type === "dynamicSelect") || fields[0];
+
+  const handleChangeType = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      onChangeType?.(event as any, autocompleteField);
+      return;
+    }
+    onChangeType?.(event as any, dynamicSelectField);
+  };
 
   useEffect(() => {
     if (sliceUrlParams?.length && onAddParams) {
@@ -162,10 +176,13 @@ const ApiFieldsConfigAccordion = ({
               </>
             ) : null}
 
-            {isAutocomplete && (
-              <>
-                <Stack direction="row" spacing={1} alignItems="center" paddingY={2}>
-                  <Typography variant="h5">Search Key</Typography>
+            <>
+              <Stack direction="row" spacing={4} alignItems="center" paddingY={2}>
+                <FormControlLabel
+                  control={<Checkbox id="isAutocomplete" checked={isAutocomplete} onChange={handleChangeType} />}
+                  label={t("activateSearch")}
+                />
+                {isAutocomplete && (
                   <TextField
                     id="searchKey"
                     size="small"
@@ -178,10 +195,10 @@ const ApiFieldsConfigAccordion = ({
                     value={searchKey || ""}
                     onClick={(e) => e.stopPropagation()}
                   />
-                </Stack>
-                <Divider sx={{ ml: -2, mr: -2 }} />
-              </>
-            )}
+                )}
+              </Stack>
+              <Divider sx={{ mb: 1, ml: -2, mr: -2 }} />
+            </>
 
             <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems={{ sm: "center", xs: "flex-start" }}>
               <Typography variant="h5">{t("form:queryParams")}</Typography>
@@ -276,6 +293,8 @@ const ApiFieldsConfigAccordion = ({
                 </Grid>
               );
             })}
+
+            <Divider sx={{ mb: 1, ml: -2, mr: -2, mt: 1 }} />
 
             <Box display="flex" alignItems="center">
               <IconButton

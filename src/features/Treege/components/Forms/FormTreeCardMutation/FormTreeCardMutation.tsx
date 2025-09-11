@@ -223,6 +223,7 @@ const FormTreeCardMutation = ({ onClose, title }: FormTreeCardMutationProps) => 
                 onDeleteParams={handleDeleteParam}
                 onChangeApiMapping={handleChangePath}
                 setCollapseOptions={setCollapseOptions}
+                onChangeType={handleChangeType}
               />
             )}
 

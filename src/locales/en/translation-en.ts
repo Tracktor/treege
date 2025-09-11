@@ -1,4 +1,5 @@
 const TRANSLATION_EN = {
+  activateSearch: "Activate search",
   add: "Add",
   advancedConfiguration: "Advanced configuration",
   cancel: "Cancel",

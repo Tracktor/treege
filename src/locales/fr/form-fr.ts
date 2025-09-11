@@ -49,11 +49,11 @@ const FORM_FR = {
   treeName: "Nom de l'arbre",
   type: {
     address: "Adresse",
-    autocomplete: "Autocomplétion",
+    autocomplete: "Champs API",
     checkbox: "Case à cocher",
     date: "Date",
     dateRange: "Plage de dates",
-    dynamicSelect: "Sélection dynamique",
+    dynamicSelect: "Champs API",
     email: "Email",
     file: "Fichier",
     hidden: "Champs caché",

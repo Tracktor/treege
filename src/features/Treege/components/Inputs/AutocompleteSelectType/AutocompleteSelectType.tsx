@@ -33,6 +33,8 @@ const AutocompleteSelectType = ({ id, onChange, value, sx }: FieldsSelectProps) 
         // eslint-disable-next-line react/prop-types
         const { key, ...rest } = props;
 
+        if (option.type === "autocomplete") return null;
+
         return (
           // eslint-disable-next-line react/jsx-props-no-spreading
           <MenuItem key={key} {...rest}>

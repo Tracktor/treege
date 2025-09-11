@@ -49,11 +49,11 @@ const FORM_EN = {
   treeName: "Tree name",
   type: {
     address: "Address",
-    autocomplete: "Autocomplete",
+    autocomplete: "API Field",
     checkbox: "Checkbox",
     date: "Date",
     dateRange: "Date range",
-    dynamicSelect: "Dynamic select",
+    dynamicSelect: "API Field",
     email: "Email",
     file: "File",
     hidden: "Hidden field",
