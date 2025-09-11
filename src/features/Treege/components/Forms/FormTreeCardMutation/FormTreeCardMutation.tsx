@@ -30,31 +30,6 @@ interface FormTreeCardMutationProps {
   title?: string;
 }
 
-const iconButtonCommonStyle = {
-  marginRight: "-20px !important",
-  minWidth: "auto !important",
-};
-
-const styles = {
-  iconButton: iconButtonCommonStyle,
-  iconButtonDelete: {
-    ...iconButtonCommonStyle,
-    "&:before": {
-      borderRadius: `50%`,
-      content: '""',
-      height: 20,
-      position: `absolute`,
-      width: 20,
-      zIndex: -1,
-    },
-    backgroundColor: colors.background,
-    position: "absolute",
-    right: 0,
-    top: "50%",
-    transform: "translateY(-50%)",
-  },
-};
-
 const FormTreeCardMutation = ({ onClose, title }: FormTreeCardMutationProps) => {
   const { t } = useTranslation(["translation", "form"]);
 
@@ -323,7 +298,28 @@ const FormTreeCardMutation = ({ onClose, title }: FormTreeCardMutationProps) => 
                       inputProps={{ "data-id": decisionId }}
                     />
                     {values.length > 1 && (
-                      <IconButton color="warning" sx={styles.iconButtonDelete} value={decisionId} onClick={handleDeleteValue}>
+                      <IconButton
+                        color="warning"
+                        sx={{
+                          "&:before": {
+                            borderRadius: `50%`,
+                            content: '""',
+                            height: 20,
+                            position: `absolute`,
+                            width: 20,
+                            zIndex: -1,
+                          },
+                          backgroundColor: colors.background,
+                          marginRight: "-20px !important",
+                          minWidth: "auto !important",
+                          position: "absolute",
+                          right: 0,
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                        }}
+                        value={decisionId}
+                        onClick={handleDeleteValue}
+                      >
                         <RemoveCircleRoundedIcon />
                       </IconButton>
                     )}
@@ -334,7 +330,14 @@ const FormTreeCardMutation = ({ onClose, title }: FormTreeCardMutationProps) => 
 
             {isDecisionField && (
               <Box justifyContent="flex-end" display="flex">
-                <IconButton color="success" sx={styles.iconButton} onClick={handleAddValue}>
+                <IconButton
+                  color="success"
+                  sx={{
+                    marginRight: "-20px !important",
+                    minWidth: "auto !important",
+                  }}
+                  onClick={handleAddValue}
+                >
                   <AddCircleRoundedIcon />
                 </IconButton>
               </Box>
