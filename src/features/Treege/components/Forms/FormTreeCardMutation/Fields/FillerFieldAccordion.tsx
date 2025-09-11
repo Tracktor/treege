@@ -53,7 +53,7 @@ const FillerFieldAccordion = ({
   };
 
   return (
-    <Accordion sx={{ marginY: 3 }}>
+    <Accordion sx={{ marginY: 3 }} disableGutters>
       <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel-ancestor-control" id="panel-ancestor-control-header">
         <Typography variant="h5">{t("form:prefillField")}</Typography>
       </AccordionSummary>

@@ -3,7 +3,6 @@ import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
-import QuestionMarkRoundedIcon from "@mui/icons-material/QuestionMarkRounded";
 import {
   Box,
   Checkbox,
@@ -90,52 +89,29 @@ const ApiFieldsConfigAccordion = ({
 
   return (
     <Stack marginY={3}>
-      <Grid container spacing={1} width="100%" alignItems="center">
-        <Grid size={isAutocomplete ? 7 : 12}>
-          <TextField
-            id="urlSelect"
-            size="small"
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <LinkRoundedIcon />
-                </InputAdornment>
-              ),
-            }}
-            placeholder="https://api.com/"
-            type="url"
-            onChange={onChangeUrlSelect}
-            value={url || ""}
-            onClick={(e) => e.stopPropagation()}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 0,
-              },
-            }}
-          />
-        </Grid>
+      <TextField
+        id="urlSelect"
+        size="small"
+        fullWidth
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <LinkRoundedIcon />
+            </InputAdornment>
+          ),
+        }}
+        placeholder="https://api.com/"
+        type="url"
+        onChange={onChangeUrlSelect}
+        value={url || ""}
+        onClick={(e) => e.stopPropagation()}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            borderRadius: 0,
+          },
+        }}
+      />
 
-        {isAutocomplete && (
-          <Grid size={5}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <QuestionMarkRoundedIcon />
-              <TextField
-                id="searchKey"
-                size="small"
-                InputLabelProps={{ shrink: true }}
-                sx={{ flex: 1, minWidth: 0 }}
-                placeholder={t("form:searchKeyPlaceholder")}
-                type="text"
-                label={t("form:key")}
-                onChange={onChangeSearchKey}
-                value={searchKey || ""}
-                onClick={(e) => e.stopPropagation()}
-              />
-            </Stack>
-          </Grid>
-        )}
-      </Grid>
       <Accordion disableGutters>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel-ancestor-control" id="panel-ancestor-control-header">
           <Typography>{t("advancedConfiguration")}</Typography>
@@ -145,45 +121,67 @@ const ApiFieldsConfigAccordion = ({
         <AccordionDetails>
           <>
             {sliceUrlParams?.length ? (
-              <Stack spacing={1} position="relative" pb={1}>
-                {slicedParams?.map(({ key, ancestorUuid, id }, index) => (
-                  <Grid container key={key} alignItems="center" spacing={1} alignContent="center">
-                    <Grid size={4}>
-                      <Typography variant="h5">{`${key}`}</Typography>
-                    </Grid>
-                    <Grid size={8}>
-                      <Select
-                        fullWidth
-                        id={id}
-                        variant="outlined"
-                        size="small"
-                        value={ancestorUuid || ""}
-                        onChange={({ target }) => onChangeParams?.(index, "ancestorUuid", target.value)}
-                        MenuProps={{
-                          PaperProps: {
-                            sx: { maxHeight: 300 },
-                          },
-                        }}
-                      >
-                        {ancestors.length ? (
-                          ancestors.map(({ name: ancestorName, uuid: ancestorId }) => (
-                            <MenuItem key={ancestorId} value={ancestorId}>
-                              {ancestorName}
+              <>
+                <Stack spacing={1} position="relative" pb={1}>
+                  {slicedParams?.map(({ key, ancestorUuid, id }, index) => (
+                    <Grid container key={key} alignItems="center" spacing={1} alignContent="center">
+                      <Grid size={4}>
+                        <Typography variant="h5">{`${key}`}</Typography>
+                      </Grid>
+                      <Grid size={8}>
+                        <Select
+                          fullWidth
+                          id={id}
+                          variant="outlined"
+                          size="small"
+                          value={ancestorUuid || ""}
+                          onChange={({ target }) => onChangeParams?.(index, "ancestorUuid", target.value)}
+                          MenuProps={{
+                            PaperProps: {
+                              sx: { maxHeight: 300 },
+                            },
+                          }}
+                        >
+                          {ancestors.length ? (
+                            ancestors.map(({ name: ancestorName, uuid: ancestorId }) => (
+                              <MenuItem key={ancestorId} value={ancestorId}>
+                                {ancestorName}
+                              </MenuItem>
+                            ))
+                          ) : (
+                            <MenuItem disabled value="">
+                              {t("form:noAncestorFound")}
                             </MenuItem>
-                          ))
-                        ) : (
-                          <MenuItem disabled value="">
-                            {t("form:noAncestorFound")}
-                          </MenuItem>
-                        )}
-                      </Select>
+                          )}
+                        </Select>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                ))}
-              </Stack>
+                  ))}
+                </Stack>
+                <Divider sx={{ ml: -2, mr: -2 }} />
+              </>
             ) : null}
 
-            <Divider sx={{ ml: -2, mr: -2 }} />
+            {isAutocomplete && (
+              <>
+                <Stack direction="row" spacing={1} alignItems="center" paddingY={2}>
+                  <Typography variant="h5">Search Key</Typography>
+                  <TextField
+                    id="searchKey"
+                    size="small"
+                    InputLabelProps={{ shrink: true }}
+                    sx={{ flex: 1, minWidth: 0 }}
+                    placeholder={t("form:searchKeyPlaceholder")}
+                    type="text"
+                    label={t("form:key")}
+                    onChange={onChangeSearchKey}
+                    value={searchKey || ""}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </Stack>
+                <Divider sx={{ ml: -2, mr: -2 }} />
+              </>
+            )}
 
             <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems={{ sm: "center", xs: "flex-start" }}>
               <Typography variant="h5">{t("form:queryParams")}</Typography>
