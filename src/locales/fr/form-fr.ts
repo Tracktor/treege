@@ -4,8 +4,7 @@ const FORM_FR = {
   addUrlVariable: "Ajouter une variable d'URL",
   ancestor: "Ancêtre",
   ancestorValue: "Récupération de la valeur de : {{ancestorName}}",
-  apiConfigDescription:
-    "Si une seule réponse est renvoyée, la valeur sera utilisée comme valeur du champ. Ainsi, l'attribution directe d'un ancêtre n'est pas nécessaire.",
+  apiConfigDescription: "Lorsque la recherche ne trouve qu’un seul choix possible, ce choix est directement affiché dans le champ.",
   apiRoute: "Api route",
   baseUrl: "URL de base",
   cardNumber: "Numéro de carte",

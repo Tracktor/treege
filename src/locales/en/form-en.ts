@@ -4,8 +4,7 @@ const FORM_EN = {
   addUrlVariable: "Add URL variable",
   ancestor: "Ancestor",
   ancestorValue: "Get value from: {{ancestorName}}",
-  apiConfigDescription:
-    "If only one response is returned, the value will be used as the field value. Thus, direct assignment of an ancestor is not necessary.",
+  apiConfigDescription: "When the search finds only one possible option, it is automatically displayed in the field.",
   apiRoute: "Api route",
   baseUrl: "Base URL",
   cardNumber: "Card number",
