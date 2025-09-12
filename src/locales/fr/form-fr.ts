@@ -22,7 +22,7 @@ const FORM_FR = {
   keyPathObject: "Clé vers la valeur",
   label: "Label",
   letter: "Lettre",
-  mapObjectToRender: "Mapper la valeur l'objet à afficher",
+  mapObjectToRender: "Mapper la valeur de l'objet à afficher",
   message: "Message",
   mustBeUnique: "Doit être unique",
   newTree: "Nouvel arbre",
