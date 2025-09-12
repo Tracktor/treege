@@ -163,7 +163,7 @@ const ApiFieldsConfigAccordion = ({
               <>
                 <Stack spacing={1} position="relative" pb={1}>
                   {slicedParams?.map(({ key, ancestorUuid, id, staticValue }) => {
-                    const realIndex = getApiParamIndex(key); // ✅ Utiliser le vrai index
+                    const realIndex = getApiParamIndex(key);
 
                     return (
                       <Grid container key={key} alignItems="center" spacing={1} alignContent="center">
@@ -267,7 +267,7 @@ const ApiFieldsConfigAccordion = ({
               const realIndex = getApiParamIndex(key);
 
               return (
-                <Grid key={id} container pb={2} justifyContent="space-between" alignItems="center" padding={1} spacing={1}>
+                <Grid key={id} container pb={2} alignItems="center" padding={1} spacing={1}>
                   <Grid size={6}>
                     <Tooltip title={useAncestorValue ? t("form:keyPathApiDescription") : ""}>
                       <TextField
@@ -320,26 +320,29 @@ const ApiFieldsConfigAccordion = ({
                     )}
                   </Grid>
 
-                  {!!ancestors.length && (
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          id={`useAncestorAsParam-${id}`}
-                          disabled={!ancestors.length}
-                          checked={useAncestorValue || false}
-                          onChange={({ target }) => onChangeParams?.(realIndex, "useAncestorValue", target.checked)}
-                        />
-                      }
-                      label={
-                        <Typography variant="body2" color="textSecondary">
-                          {t("form:useAncestorValueAsParam")}
-                        </Typography>
-                      }
-                    />
-                  )}
-                  <IconButton color="error" value={id} onClick={onDeleteParams}>
-                    <DeleteOutlineIcon />
-                  </IconButton>
+                  <Grid size="auto" sx={{ ml: "auto" }} container alignItems="center">
+                    {ancestors.length > 0 && (
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            id={`useAncestorAsParam-${id}`}
+                            disabled={!ancestors.length}
+                            checked={useAncestorValue || false}
+                            onChange={({ target }) => onChangeParams?.(realIndex, "useAncestorValue", target.checked)}
+                          />
+                        }
+                        label={
+                          <Typography variant="body2" color="textSecondary">
+                            {t("form:useAncestorValueAsParam")}
+                          </Typography>
+                        }
+                      />
+                    )}
+
+                    <IconButton color="error" value={id} onClick={onDeleteParams}>
+                      <DeleteOutlineIcon />
+                    </IconButton>
+                  </Grid>
                 </Grid>
               );
             })}
