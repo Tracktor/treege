@@ -91,7 +91,12 @@ const ApiFieldsConfigAccordion = ({
     if (!newKey) return;
 
     const newUrl = url?.endsWith("/") ? `${url}{${newKey}}` : `${url}/{${newKey}}`;
-    onChangeUrlSelect?.({ target: { value: newUrl } } as any);
+
+    const fakeEvent = {
+      target: { value: newUrl },
+    } as ChangeEvent<HTMLInputElement>;
+
+    onChangeUrlSelect?.(fakeEvent);
 
     const realIndex = apiParams?.length ?? 0;
     onAddParams?.(); // ajoute une row
@@ -106,10 +111,10 @@ const ApiFieldsConfigAccordion = ({
 
   const handleChangeType = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      onChangeType?.(event as any, autocompleteField);
+      onChangeType?.(event, autocompleteField);
       return;
     }
-    onChangeType?.(event as any, dynamicSelectField);
+    onChangeType?.(event, dynamicSelectField);
   };
 
   useEffect(() => {
