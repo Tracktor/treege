@@ -111,7 +111,7 @@ const ApiFieldsConfigAccordion = ({
       if (apiParams?.length && onDeleteParams) {
         const paramsToDelete = apiParams.filter(({ key }) => {
           // Check if the key is in {placeholder} format and not in the URL anymore
-          const hasPlaceholderFormat = /^\{.+\}$/.test(key.trim());
+          const hasPlaceholderFormat = /^\{.+$/.test(key.trim());
           const notInUrl = !sliceUrlParams?.includes(key);
 
           return hasPlaceholderFormat && notInUrl;
@@ -162,49 +162,53 @@ const ApiFieldsConfigAccordion = ({
             {sliceUrlParams?.length ? (
               <>
                 <Stack spacing={1} position="relative" pb={1}>
-                  {slicedParams?.map(({ key, ancestorUuid, id, staticValue }, index) => (
-                    <Grid container key={key} alignItems="center" spacing={1} alignContent="center">
-                      <Grid size={4} alignItems="center" textAlign="center" spacing={1}>
-                        <Typography variant="h5">{`${key}`}</Typography>
-                      </Grid>
-                      <Grid size={8}>
-                        {ancestors?.length ? (
-                          <Select
-                            fullWidth
-                            id={id}
-                            variant="outlined"
-                            size="small"
-                            value={ancestorUuid || ""}
-                            onChange={({ target }) => onChangeParams?.(index, "ancestorUuid", target.value)}
-                            MenuProps={{
-                              PaperProps: {
-                                sx: { maxHeight: 300 },
-                              },
-                            }}
-                          >
-                            {ancestors.length ? (
-                              ancestors.map(({ name: ancestorName, uuid: ancestorId }) => (
-                                <MenuItem key={ancestorId} value={ancestorId}>
-                                  {ancestorName}
+                  {slicedParams?.map(({ key, ancestorUuid, id, staticValue }) => {
+                    const realIndex = getApiParamIndex(key); // ✅ Utiliser le vrai index
+
+                    return (
+                      <Grid container key={key} alignItems="center" spacing={1} alignContent="center">
+                        <Grid size={4} alignItems="center" textAlign="center" spacing={1}>
+                          <Typography variant="h5">{`${key}`}</Typography>
+                        </Grid>
+                        <Grid size={8}>
+                          {ancestors?.length ? (
+                            <Select
+                              fullWidth
+                              id={id}
+                              variant="outlined"
+                              size="small"
+                              value={ancestorUuid || ""}
+                              onChange={({ target }) => onChangeParams?.(realIndex, "ancestorUuid", target.value)}
+                              MenuProps={{
+                                PaperProps: {
+                                  sx: { maxHeight: 300 },
+                                },
+                              }}
+                            >
+                              {ancestors.length ? (
+                                ancestors.map(({ name: ancestorName, uuid: ancestorId }) => (
+                                  <MenuItem key={ancestorId} value={ancestorId}>
+                                    {ancestorName}
+                                  </MenuItem>
+                                ))
+                              ) : (
+                                <MenuItem disabled value="">
+                                  {t("form:noAncestorFound")}
                                 </MenuItem>
-                              ))
-                            ) : (
-                              <MenuItem disabled value="">
-                                {t("form:noAncestorFound")}
-                              </MenuItem>
-                            )}
-                          </Select>
-                        ) : (
-                          <TextField
-                            fullWidth
-                            required
-                            value={staticValue || ""}
-                            onChange={({ target }) => onChangeParams?.(index, "staticValue", target.value)}
-                          />
-                        )}
+                              )}
+                            </Select>
+                          ) : (
+                            <TextField
+                              fullWidth
+                              required
+                              value={staticValue || ""}
+                              onChange={({ target }) => onChangeParams?.(realIndex, "staticValue", target.value)}
+                            />
+                          )}
+                        </Grid>
                       </Grid>
-                    </Grid>
-                  ))}
+                    );
+                  })}
                 </Stack>
                 <Divider sx={{ ml: -2, mr: -2 }} />
               </>
