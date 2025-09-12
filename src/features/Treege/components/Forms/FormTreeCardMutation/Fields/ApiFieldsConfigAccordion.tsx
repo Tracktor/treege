@@ -216,7 +216,7 @@ const ApiFieldsConfigAccordion = ({
 
             <>
               <Stack direction="row" spacing={4} alignItems="center" paddingY={2}>
-                <FormGroup row>
+                <FormGroup>
                   <FormControlLabel
                     control={<Checkbox id="isAutocomplete" checked={isAutocomplete} onChange={handleChangeType} />}
                     label={t("activateSearch")}
@@ -361,27 +361,22 @@ const ApiFieldsConfigAccordion = ({
             </Box>
 
             <Collapse in={collapseOptions}>
-              <Stack spacing={1} paddingY={1}>
-                <Stack spacing={1} sx={{ pb: 1 }} direction={{ sm: "row", xs: "column" }} alignItems="center">
-                  <TextField
-                    id="labelPath"
-                    size="small"
-                    sx={{ flex: 3 }}
-                    InputLabelProps={{ shrink: true }}
-                    label="Label Path"
-                    value={apiMapping?.label || ""}
-                    onChange={(event) => onChangeApiMapping?.("label", event)}
-                    placeholder="client.name"
-                    type="text"
-                  />
-                </Stack>
+              <Stack spacing={2} paddingY={1}>
+                <TextField
+                  id="labelPath"
+                  size="small"
+                  sx={{ flex: 1 }}
+                  label="Label"
+                  value={apiMapping?.label || ""}
+                  onChange={(event) => onChangeApiMapping?.("label", event)}
+                  placeholder="client.name"
+                  type="text"
+                />
 
                 <TextField
                   id="valuePath"
                   size="small"
-                  sx={{ flex: 3 }}
-                  InputLabelProps={{ shrink: true }}
-                  label="Value Path"
+                  label="Value"
                   value={apiMapping?.value || ""}
                   onChange={(event) => onChangeApiMapping?.("value", event)}
                   placeholder="client.id"
@@ -390,9 +385,7 @@ const ApiFieldsConfigAccordion = ({
                 <TextField
                   id="imagePath"
                   size="small"
-                  sx={{ flex: 3 }}
-                  InputLabelProps={{ shrink: true }}
-                  label="Image Path"
+                  label="Image"
                   value={apiMapping?.image || ""}
                   onChange={(event) => onChangeApiMapping?.("image", event)}
                   placeholder="client.src.profile"
