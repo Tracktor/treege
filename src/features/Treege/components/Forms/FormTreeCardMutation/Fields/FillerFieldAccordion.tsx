@@ -92,7 +92,6 @@ const FillerFieldAccordion = ({
 
         {selectAncestorName && (
           <AssignValueToChildren
-            ancestorName={selectAncestorName}
             onChange={onChangeValueFromAncestor}
             value={defaultValueFromAncestor}
             displayTopDivider={isAutocomplete || isDynamicSelect}

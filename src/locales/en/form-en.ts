@@ -1,5 +1,7 @@
 const FORM_EN = {
+  addParentsBeforeIntegrateUrlVariable: "Add fields parents before integrate URL variable",
   addressStructureHint: "An address type must be:",
+  addUrlVariable: "Add URL variable",
   ancestor: "Ancestor",
   ancestorValue: "Get value from: {{ancestorName}}",
   apiRoute: "Api route",
@@ -74,6 +76,7 @@ const FORM_EN = {
   url: "URL",
   urlBuilder: "URL Builder",
   urlConstruction: "URL construction",
+  URlVariables: "URL Variables",
   useAncestorValueAsParam: "Use Ancestor value",
   value: "Value",
   values: "Values",

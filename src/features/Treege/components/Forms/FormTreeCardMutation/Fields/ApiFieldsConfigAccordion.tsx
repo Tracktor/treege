@@ -1,6 +1,6 @@
 import { KeyboardArrowDown } from "@mui/icons-material";
-import AddIcon from "@mui/icons-material/Add";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
+import AddLinkOutlinedIcon from "@mui/icons-material/AddLinkOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import WebhookIcon from "@mui/icons-material/Webhook";
@@ -164,7 +164,11 @@ const ApiFieldsConfigAccordion = ({
                 <Popover
                   open={tooltipOpen}
                   anchorEl={anchorRef.current}
-                  onClose={() => setTooltipOpen(false)}
+                  onClose={() => {
+                    setTooltipOpen(false);
+                    setNewKey("");
+                    setNewAncestor("");
+                  }}
                   anchorOrigin={{
                     horizontal: "center",
                     vertical: "top",
@@ -219,7 +223,7 @@ const ApiFieldsConfigAccordion = ({
                   </Stack>
                 </Popover>
 
-                <Tooltip title="Ajouter une variable d'URL" placement="top" arrow>
+                <Tooltip title={t("form:addUrlVariable")} placement="top" arrow>
                   <IconButton
                     ref={anchorRef}
                     size="small"
@@ -228,11 +232,17 @@ const ApiFieldsConfigAccordion = ({
                       setTooltipOpen(!tooltipOpen);
                     }}
                   >
-                    <AddIcon />
+                    <AddLinkOutlinedIcon color="primary" />
                   </IconButton>
                 </Tooltip>
               </InputAdornment>
-            ) : null,
+            ) : (
+              <Tooltip title={t("form:addParentsBeforeIntegrateUrlVariable")} placement="top" arrow>
+                <IconButton ref={anchorRef} size="small">
+                  <AddLinkOutlinedIcon color="disabled" />
+                </IconButton>
+              </Tooltip>
+            ),
             startAdornment: (
               <InputAdornment position="start">
                 <WebhookIcon />
@@ -262,16 +272,19 @@ const ApiFieldsConfigAccordion = ({
           <>
             {ancestors?.length && sliceUrlParams?.length ? (
               <>
-                <Stack spacing={1} position="relative" pb={1}>
+                <Stack spacing={1} position="relative" paddingY={2}>
+                  <Typography variant="h5" pb={1} color="text.secondary">
+                    {t("form:URlVariables")} :
+                  </Typography>
                   {slicedParams?.map(({ key, ancestorUuid, id }) => {
                     const realIndex = getApiParamIndex(key);
 
                     return (
                       <Grid container key={key} alignItems="center" spacing={1} alignContent="center">
-                        <Grid size={4} alignItems="center" textAlign="center" spacing={1}>
+                        <Grid size={6} alignItems="center" textAlign="center" spacing={1}>
                           <Typography variant="h5">{`${key}`}</Typography>
                         </Grid>
-                        <Grid size={8}>
+                        <Grid size={6}>
                           <Select
                             fullWidth
                             id={id}
@@ -339,7 +352,7 @@ const ApiFieldsConfigAccordion = ({
               <Divider sx={{ mb: 1, ml: -2, mr: -2 }} />
             </>
 
-            <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems={{ sm: "center", xs: "flex-start" }}>
+            <Stack spacing={1} paddingY={2} direction={{ sm: "row", xs: "column" }} alignItems={{ sm: "center", xs: "flex-start" }}>
               <Typography variant="h5">{t("form:queryParams")}</Typography>
               <Box justifyContent="flex-end">
                 <IconButton
@@ -441,7 +454,7 @@ const ApiFieldsConfigAccordion = ({
 
             <Divider sx={{ mb: 1, ml: -2, mr: -2, mt: 1 }} />
 
-            <Box display="flex" alignItems="center">
+            <Stack direction="row" alignItems="center" paddingY={2}>
               <IconButton
                 aria-label={t("form:optionConfig")}
                 onClick={() => setCollapseOptions?.((prev) => !prev)}
@@ -450,10 +463,10 @@ const ApiFieldsConfigAccordion = ({
                 <KeyboardArrowDown />
               </IconButton>
               <Typography sx={{ ml: 1 }}>{t("form:optionConfig")}</Typography>
-            </Box>
+            </Stack>
 
             <Collapse in={collapseOptions}>
-              <Stack spacing={2} paddingY={1}>
+              <Stack spacing={2}>
                 <TextField
                   id="labelPath"
                   size="small"
