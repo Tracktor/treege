@@ -351,29 +351,18 @@ const ApiFieldsConfigAccordion = ({
 
             <Box display="flex" alignItems="center">
               <IconButton
-                aria-label={t("form:dataMapping")}
+                aria-label={t("form:optionConfig")}
                 onClick={() => setCollapseOptions?.((prev) => !prev)}
                 sx={{ transform: collapseOptions ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.3s" }}
               >
                 <KeyboardArrowDown />
               </IconButton>
-              <Typography sx={{ ml: 1 }}>{t("form:dataMapping")}</Typography>
+              <Typography sx={{ ml: 1 }}>{t("form:optionConfig")}</Typography>
             </Box>
 
             <Collapse in={collapseOptions}>
               <Stack spacing={1} paddingY={1}>
                 <Stack spacing={1} sx={{ pb: 1 }} direction={{ sm: "row", xs: "column" }} alignItems="center">
-                  <TextField
-                    id="objectArrayPath"
-                    size="small"
-                    sx={{ flex: 3 }}
-                    InputLabelProps={{ shrink: true }}
-                    label="Object Array Path"
-                    value={apiMapping?.object || ""}
-                    onChange={(event) => onChangeApiMapping?.("object", event)}
-                    placeholder="elements.features[]"
-                    type="text"
-                  />
                   <TextField
                     id="labelPath"
                     size="small"
@@ -387,30 +376,28 @@ const ApiFieldsConfigAccordion = ({
                   />
                 </Stack>
 
-                <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
-                  <TextField
-                    id="valuePath"
-                    size="small"
-                    sx={{ flex: 3 }}
-                    InputLabelProps={{ shrink: true }}
-                    label="Value Path"
-                    value={apiMapping?.value || ""}
-                    onChange={(event) => onChangeApiMapping?.("value", event)}
-                    placeholder="client.id"
-                    type="text"
-                  />
-                  <TextField
-                    id="imagePath"
-                    size="small"
-                    sx={{ flex: 3 }}
-                    InputLabelProps={{ shrink: true }}
-                    label="Image Path"
-                    value={apiMapping?.image || ""}
-                    onChange={(event) => onChangeApiMapping?.("image", event)}
-                    placeholder="client.src.profile"
-                    type="text"
-                  />
-                </Stack>
+                <TextField
+                  id="valuePath"
+                  size="small"
+                  sx={{ flex: 3 }}
+                  InputLabelProps={{ shrink: true }}
+                  label="Value Path"
+                  value={apiMapping?.value || ""}
+                  onChange={(event) => onChangeApiMapping?.("value", event)}
+                  placeholder="client.id"
+                  type="text"
+                />
+                <TextField
+                  id="imagePath"
+                  size="small"
+                  sx={{ flex: 3 }}
+                  InputLabelProps={{ shrink: true }}
+                  label="Image Path"
+                  value={apiMapping?.image || ""}
+                  onChange={(event) => onChangeApiMapping?.("image", event)}
+                  placeholder="client.src.profile"
+                  type="text"
+                />
               </Stack>
             </Collapse>
           </>
