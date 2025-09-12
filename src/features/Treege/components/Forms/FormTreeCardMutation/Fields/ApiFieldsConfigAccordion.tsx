@@ -1,4 +1,5 @@
 import { KeyboardArrowDown } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -22,9 +23,11 @@ import {
   AccordionDetails,
   Divider,
   FormGroup,
+  Popover,
+  Button,
 } from "@tracktor/design-system";
 import type { Params } from "@tracktor/types-treege";
-import { ChangeEvent, Dispatch, MouseEvent, SetStateAction, SyntheticEvent, useCallback, useEffect } from "react";
+import { ChangeEvent, Dispatch, MouseEvent, SetStateAction, SyntheticEvent, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";
 
@@ -76,13 +79,35 @@ const ApiFieldsConfigAccordion = ({
   onChangeType,
   onChangeInitialQuery,
 }: ApiFieldsConfigAccordionProps) => {
+  const anchorRef = useRef(null);
   const { t } = useTranslation(["translation", "form"]);
+  const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
+  const [newKey, setNewKey] = useState<string>("");
+  const [newAncestor, setNewAncestor] = useState<string>("");
+
   const getApiParamIndex = useCallback((key: string) => apiParams?.findIndex((p) => p.key === key) ?? -1, [apiParams]);
   const queryParams = apiParams?.filter((param) => !sliceUrlParams?.includes(param.key));
   const slicedParams = apiParams?.filter((param) => sliceUrlParams?.includes(param.key));
 
   const autocompleteField = fields.find((field) => field.type === "autocomplete") || fields[0];
   const dynamicSelectField = fields.find((field) => field.type === "dynamicSelect") || fields[0];
+
+  const handleNewUrlParam = () => {
+    if (!newKey) return;
+
+    const newUrl = url?.endsWith("/") ? `${url}{${newKey}}` : `${url}/{${newKey}}`;
+    onChangeUrlSelect?.({ target: { value: newUrl } } as any);
+
+    const realIndex = apiParams?.length ?? 0;
+    onAddParams?.(); // ajoute une row
+    onChangeParams?.(realIndex, "key", `{${newKey}}`);
+    if (newAncestor) {
+      onChangeParams?.(realIndex, "ancestorUuid", newAncestor);
+    }
+    setNewKey("");
+    setNewAncestor("");
+    setTooltipOpen(false);
+  };
 
   const handleChangeType = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
@@ -132,12 +157,88 @@ const ApiFieldsConfigAccordion = ({
         id="urlSelect"
         size="small"
         fullWidth
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <WebhookIcon />
-            </InputAdornment>
-          ),
+        slotProps={{
+          input: {
+            endAdornment: ancestors.length ? (
+              <InputAdornment position="end">
+                <Popover
+                  open={tooltipOpen}
+                  anchorEl={anchorRef.current}
+                  onClose={() => setTooltipOpen(false)}
+                  anchorOrigin={{
+                    horizontal: "center",
+                    vertical: "top",
+                  }}
+                  transformOrigin={{
+                    horizontal: "center",
+                    vertical: "bottom",
+                  }}
+                >
+                  <Stack p={2} width={400}>
+                    <Stack spacing={1} mb={2} direction="row">
+                      <TextField
+                        required
+                        value={newKey}
+                        onChange={(e) => setNewKey(e.target.value)}
+                        label="key"
+                        fullWidth
+                        size="small"
+                        sx={{ mb: 2 }}
+                      />
+                      <Select
+                        fullWidth
+                        required
+                        id="new-param-ancestor"
+                        variant="outlined"
+                        size="xSmall"
+                        value={newAncestor}
+                        onChange={({ target }) => setNewAncestor(target.value)}
+                        MenuProps={{
+                          PaperProps: {
+                            sx: { maxHeight: 300 },
+                          },
+                        }}
+                      >
+                        {ancestors.length ? (
+                          ancestors.map(({ name: ancestorName, uuid: ancestorId }) => (
+                            <MenuItem key={ancestorId} value={ancestorId}>
+                              {ancestorName}
+                            </MenuItem>
+                          ))
+                        ) : (
+                          <MenuItem disabled value="">
+                            {t("form:noAncestorFound")}
+                          </MenuItem>
+                        )}
+                      </Select>
+                    </Stack>
+
+                    <Button variant="contained" fullWidth onClick={handleNewUrlParam}>
+                      {t("add")}
+                    </Button>
+                  </Stack>
+                </Popover>
+
+                <Tooltip title="Ajouter une variable d'URL" placement="top" arrow>
+                  <IconButton
+                    ref={anchorRef}
+                    size="small"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setTooltipOpen(!tooltipOpen);
+                    }}
+                  >
+                    <AddIcon />
+                  </IconButton>
+                </Tooltip>
+              </InputAdornment>
+            ) : null,
+            startAdornment: (
+              <InputAdornment position="start">
+                <WebhookIcon />
+              </InputAdornment>
+            ),
+          },
         }}
         placeholder="https://api.com/"
         type="url"
@@ -159,10 +260,10 @@ const ApiFieldsConfigAccordion = ({
 
         <AccordionDetails>
           <>
-            {sliceUrlParams?.length ? (
+            {ancestors?.length && sliceUrlParams?.length ? (
               <>
                 <Stack spacing={1} position="relative" pb={1}>
-                  {slicedParams?.map(({ key, ancestorUuid, id, staticValue }) => {
+                  {slicedParams?.map(({ key, ancestorUuid, id }) => {
                     const realIndex = getApiParamIndex(key);
 
                     return (
@@ -171,40 +272,31 @@ const ApiFieldsConfigAccordion = ({
                           <Typography variant="h5">{`${key}`}</Typography>
                         </Grid>
                         <Grid size={8}>
-                          {ancestors?.length ? (
-                            <Select
-                              fullWidth
-                              id={id}
-                              variant="outlined"
-                              size="small"
-                              value={ancestorUuid || ""}
-                              onChange={({ target }) => onChangeParams?.(realIndex, "ancestorUuid", target.value)}
-                              MenuProps={{
-                                PaperProps: {
-                                  sx: { maxHeight: 300 },
-                                },
-                              }}
-                            >
-                              {ancestors.length ? (
-                                ancestors.map(({ name: ancestorName, uuid: ancestorId }) => (
-                                  <MenuItem key={ancestorId} value={ancestorId}>
-                                    {ancestorName}
-                                  </MenuItem>
-                                ))
-                              ) : (
-                                <MenuItem disabled value="">
-                                  {t("form:noAncestorFound")}
+                          <Select
+                            fullWidth
+                            id={id}
+                            variant="outlined"
+                            size="xSmall"
+                            value={ancestorUuid || ""}
+                            onChange={({ target }) => onChangeParams?.(realIndex, "ancestorUuid", target.value)}
+                            MenuProps={{
+                              PaperProps: {
+                                sx: { maxHeight: 300 },
+                              },
+                            }}
+                          >
+                            {ancestors.length ? (
+                              ancestors.map(({ name: ancestorName, uuid: ancestorId }) => (
+                                <MenuItem key={ancestorId} value={ancestorId}>
+                                  {ancestorName}
                                 </MenuItem>
-                              )}
-                            </Select>
-                          ) : (
-                            <TextField
-                              fullWidth
-                              required
-                              value={staticValue || ""}
-                              onChange={({ target }) => onChangeParams?.(realIndex, "staticValue", target.value)}
-                            />
-                          )}
+                              ))
+                            ) : (
+                              <MenuItem disabled value="">
+                                {t("form:noAncestorFound")}
+                              </MenuItem>
+                            )}
+                          </Select>
                         </Grid>
                       </Grid>
                     );
