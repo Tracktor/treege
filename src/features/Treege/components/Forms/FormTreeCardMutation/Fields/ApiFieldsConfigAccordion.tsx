@@ -99,7 +99,7 @@ const ApiFieldsConfigAccordion = ({
     onChangeUrlSelect?.(fakeEvent);
 
     const realIndex = apiParams?.length ?? 0;
-    onAddParams?.(); // ajoute une row
+    onAddParams?.();
     onChangeParams?.(realIndex, "key", `{${newKey}}`);
     if (newAncestor) {
       onChangeParams?.(realIndex, "ancestorUuid", newAncestor);
@@ -136,7 +136,7 @@ const ApiFieldsConfigAccordion = ({
       if (apiParams?.length && onDeleteParams) {
         const paramsToDelete = apiParams.filter(({ key }) => {
           // Check if the key is in {placeholder} format and not in the URL anymore
-          const hasPlaceholderFormat = /^\{.+$/.test(key.trim());
+          const hasPlaceholderFormat = /^\{[^}]+\}$/.test(key.trim());
           const notInUrl = !sliceUrlParams?.includes(key);
 
           return hasPlaceholderFormat && notInUrl;
