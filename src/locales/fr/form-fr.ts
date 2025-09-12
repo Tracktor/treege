@@ -5,7 +5,7 @@ const FORM_FR = {
   ancestor: "Ancêtre",
   ancestorValue: "Récupération de la valeur de : {{ancestorName}}",
   apiConfigDescription:
-    "Si une seule réponse est renvoyée, la valeur sera utilisée comme valeur du champ. Ainsi, l'attribution directe d'un ancêtre n'est pas nécessaire pour ce champ.",
+    "Si une seule réponse est renvoyée, la valeur sera utilisée comme valeur du champ. Ainsi, l'attribution directe d'un ancêtre n'est pas nécessaire.",
   apiRoute: "Api route",
   baseUrl: "URL de base",
   cardNumber: "Numéro de carte",

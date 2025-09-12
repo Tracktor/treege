@@ -5,7 +5,7 @@ const FORM_EN = {
   ancestor: "Ancestor",
   ancestorValue: "Get value from: {{ancestorName}}",
   apiConfigDescription:
-    "If only one response is returned, the value will be used as the field value. Thus, direct assignment of an ancestor is not necessary for this field.",
+    "If only one response is returned, the value will be used as the field value. Thus, direct assignment of an ancestor is not necessary.",
   apiRoute: "Api route",
   baseUrl: "Base URL",
   cardNumber: "Card number",

@@ -259,11 +259,11 @@ const ApiFieldsConfigAccordion = ({
 
       <Accordion disableGutters>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel-ancestor-control" id="panel-ancestor-control-header">
-          <Stack direction="row" spacing={3} alignItems="center">
+          <Stack direction="row" spacing={2} alignItems="center">
             <Typography>{t("advancedConfiguration")}</Typography>
             {ancestors?.length ? (
               <Tooltip title={t("form:apiConfigDescription")} placement="bottom" arrow>
-                <InfoOutlinedIcon fontSize="small" color="warning" />
+                <InfoOutlinedIcon fontSize="small" color="primary" />
               </Tooltip>
             ) : null}
           </Stack>
