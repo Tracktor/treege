@@ -142,37 +142,45 @@ const ApiFieldsConfigAccordion = ({
             {sliceUrlParams?.length ? (
               <>
                 <Stack spacing={1} position="relative" pb={1}>
-                  {slicedParams?.map(({ key, ancestorUuid, id }, index) => (
+                  {slicedParams?.map(({ key, ancestorUuid, id, staticValue }, index) => (
                     <Grid container key={key} alignItems="center" spacing={1} alignContent="center">
                       <Grid size={4} alignItems="center" textAlign="center" spacing={1}>
                         <Typography variant="h5">{`${key}`}</Typography>
                       </Grid>
                       <Grid size={8}>
-                        <Select
-                          fullWidth
-                          id={id}
-                          variant="outlined"
-                          size="small"
-                          value={ancestorUuid || ""}
-                          onChange={({ target }) => onChangeParams?.(index, "ancestorUuid", target.value)}
-                          MenuProps={{
-                            PaperProps: {
-                              sx: { maxHeight: 300 },
-                            },
-                          }}
-                        >
-                          {ancestors.length ? (
-                            ancestors.map(({ name: ancestorName, uuid: ancestorId }) => (
-                              <MenuItem key={ancestorId} value={ancestorId}>
-                                {ancestorName}
+                        {ancestors?.length ? (
+                          <Select
+                            fullWidth
+                            id={id}
+                            variant="outlined"
+                            size="small"
+                            value={ancestorUuid || ""}
+                            onChange={({ target }) => onChangeParams?.(index, "ancestorUuid", target.value)}
+                            MenuProps={{
+                              PaperProps: {
+                                sx: { maxHeight: 300 },
+                              },
+                            }}
+                          >
+                            {ancestors.length ? (
+                              ancestors.map(({ name: ancestorName, uuid: ancestorId }) => (
+                                <MenuItem key={ancestorId} value={ancestorId}>
+                                  {ancestorName}
+                                </MenuItem>
+                              ))
+                            ) : (
+                              <MenuItem disabled value="">
+                                {t("form:noAncestorFound")}
                               </MenuItem>
-                            ))
-                          ) : (
-                            <MenuItem disabled value="">
-                              {t("form:noAncestorFound")}
-                            </MenuItem>
-                          )}
-                        </Select>
+                            )}
+                          </Select>
+                        ) : (
+                          <TextField
+                            fullWidth
+                            value={staticValue || ""}
+                            onChange={({ target }) => onChangeParams?.(index, "staticValue", target.value)}
+                          />
+                        )}
                       </Grid>
                     </Grid>
                   ))}
