@@ -1,13 +1,12 @@
-import { KeyboardArrowDown } from "@mui/icons-material";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import AddLinkOutlinedIcon from "@mui/icons-material/AddLinkOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import WebhookIcon from "@mui/icons-material/Webhook";
 import {
   Box,
   Checkbox,
-  Collapse,
   FormControlLabel,
   Grid,
   IconButton,
@@ -27,7 +26,7 @@ import {
   Button,
 } from "@tracktor/design-system";
 import type { Params } from "@tracktor/types-treege";
-import { ChangeEvent, Dispatch, MouseEvent, SetStateAction, SyntheticEvent, useCallback, useEffect, useRef, useState } from "react";
+import { ChangeEvent, MouseEvent, SyntheticEvent, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import fields from "@/constants/fields";
 
@@ -45,7 +44,6 @@ interface ApiFieldsConfigAccordionProps {
   sliceUrlParams?: string[];
   apiParams?: Params[];
   ancestors: { uuid: string; name?: string }[];
-  collapseOptions?: boolean;
   apiMapping?: RouteMapping;
   initialQuery?: boolean;
   onChangeUrlSelect?: ({ target }: ChangeEvent<HTMLInputElement>) => void;
@@ -54,7 +52,6 @@ interface ApiFieldsConfigAccordionProps {
   onChangeParams?: <K extends keyof Params>(index: number, property: K, value: Params[K]) => void;
   onDeleteParams?: (e: MouseEvent<HTMLButtonElement> | string) => void;
   onChangeApiMapping?: (property: string, event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  setCollapseOptions?: Dispatch<SetStateAction<boolean>>;
   onChangeType?: (_: SyntheticEvent, value: (typeof fields)[number]) => void;
   onChangeInitialQuery?: ({ target }: ChangeEvent<HTMLInputElement>) => void;
 }
@@ -66,7 +63,6 @@ const ApiFieldsConfigAccordion = ({
   sliceUrlParams,
   apiParams,
   ancestors,
-  collapseOptions,
   apiMapping,
   initialQuery,
   onChangeSearchKey,
@@ -75,7 +71,6 @@ const ApiFieldsConfigAccordion = ({
   onChangeParams,
   onDeleteParams,
   onChangeApiMapping,
-  setCollapseOptions,
   onChangeType,
   onChangeInitialQuery,
 }: ApiFieldsConfigAccordionProps) => {
@@ -264,7 +259,14 @@ const ApiFieldsConfigAccordion = ({
 
       <Accordion disableGutters>
         <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel-ancestor-control" id="panel-ancestor-control-header">
-          <Typography>{t("advancedConfiguration")}</Typography>
+          <Stack direction="row" spacing={3} alignItems="center">
+            <Typography>{t("advancedConfiguration")}</Typography>
+            {ancestors?.length ? (
+              <Tooltip title={t("form:apiConfigDescription")} placement="bottom" arrow>
+                <InfoOutlinedIcon fontSize="small" color="warning" />
+              </Tooltip>
+            ) : null}
+          </Stack>
         </AccordionSummary>
         <Divider />
 
@@ -356,6 +358,48 @@ const ApiFieldsConfigAccordion = ({
               </Stack>
               <Divider sx={{ mb: 1, ml: -2, mr: -2 }} />
             </>
+
+            <Stack direction="column" paddingY={2} spacing={2}>
+              <Typography variant="h5" sx={{ ml: 1 }} color="text.secondary">
+                {t("form:optionConfig")} :
+              </Typography>
+
+              <Stack spacing={2}>
+                <TextField
+                  required
+                  id="labelPath"
+                  size="small"
+                  sx={{ flex: 1 }}
+                  label="Label"
+                  value={apiMapping?.label || ""}
+                  onChange={(event) => onChangeApiMapping?.("label", event)}
+                  placeholder="client.name"
+                  type="text"
+                />
+
+                <TextField
+                  required
+                  id="valuePath"
+                  size="small"
+                  label="Value"
+                  value={apiMapping?.value || ""}
+                  onChange={(event) => onChangeApiMapping?.("value", event)}
+                  placeholder="client.id"
+                  type="text"
+                />
+                <TextField
+                  id="imagePath"
+                  size="small"
+                  label="Image"
+                  value={apiMapping?.image || ""}
+                  onChange={(event) => onChangeApiMapping?.("image", event)}
+                  placeholder="client.src.profile"
+                  type="text"
+                />
+              </Stack>
+            </Stack>
+
+            <Divider sx={{ mb: 1, ml: -2, mr: -2, mt: 1 }} />
 
             <Stack spacing={1} paddingY={2} direction={{ sm: "row", xs: "column" }} alignItems={{ sm: "center", xs: "flex-start" }}>
               <Typography variant="h5" color="text.secondary">
@@ -458,55 +502,6 @@ const ApiFieldsConfigAccordion = ({
                 </Grid>
               );
             })}
-
-            <Divider sx={{ mb: 1, ml: -2, mr: -2, mt: 1 }} />
-
-            <Stack direction="row" alignItems="center" paddingY={2}>
-              <IconButton
-                aria-label={t("form:optionConfig")}
-                onClick={() => setCollapseOptions?.((prev) => !prev)}
-                sx={{ transform: collapseOptions ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.3s" }}
-              >
-                <KeyboardArrowDown />
-              </IconButton>
-              <Typography variant="h5" sx={{ ml: 1 }} color="text.secondary">
-                {t("form:optionConfig")}
-              </Typography>
-            </Stack>
-
-            <Collapse in={collapseOptions}>
-              <Stack spacing={2}>
-                <TextField
-                  id="labelPath"
-                  size="small"
-                  sx={{ flex: 1 }}
-                  label="Label"
-                  value={apiMapping?.label || ""}
-                  onChange={(event) => onChangeApiMapping?.("label", event)}
-                  placeholder="client.name"
-                  type="text"
-                />
-
-                <TextField
-                  id="valuePath"
-                  size="small"
-                  label="Value"
-                  value={apiMapping?.value || ""}
-                  onChange={(event) => onChangeApiMapping?.("value", event)}
-                  placeholder="client.id"
-                  type="text"
-                />
-                <TextField
-                  id="imagePath"
-                  size="small"
-                  label="Image"
-                  value={apiMapping?.image || ""}
-                  onChange={(event) => onChangeApiMapping?.("image", event)}
-                  placeholder="client.src.profile"
-                  type="text"
-                />
-              </Stack>
-            </Collapse>
           </>
         </AccordionDetails>
       </Accordion>

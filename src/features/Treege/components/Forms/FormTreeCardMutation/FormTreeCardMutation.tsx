@@ -55,7 +55,6 @@ const FormTreeCardMutation = ({ onClose, title }: FormTreeCardMutationProps) => 
     isRepeatableDisabled,
     isAutocomplete,
     isDateRangePicker,
-    isDynamicSelect,
     isTreeField,
     treeSelected,
     isWorkflowLoading,
@@ -97,8 +96,6 @@ const FormTreeCardMutation = ({ onClose, title }: FormTreeCardMutationProps) => 
     defaultValueFromAncestor,
     handleAncestorRef,
     selectAncestorName,
-    collapseOptions,
-    setCollapseOptions,
     hasApiConfig,
     validDynamicUrlParams,
   } = useFormTreeCardMutation();
@@ -209,7 +206,6 @@ const FormTreeCardMutation = ({ onClose, title }: FormTreeCardMutationProps) => 
                 sliceUrlParams={validDynamicUrlParams}
                 apiParams={params}
                 ancestors={ancestors}
-                collapseOptions={collapseOptions}
                 apiMapping={{
                   image: routeImage,
                   label: routeLabel,
@@ -223,9 +219,19 @@ const FormTreeCardMutation = ({ onClose, title }: FormTreeCardMutationProps) => 
                 onChangeParams={handleChangeParam}
                 onDeleteParams={handleDeleteParam}
                 onChangeApiMapping={handleChangePath}
-                setCollapseOptions={setCollapseOptions}
                 onChangeType={handleChangeType}
                 onChangeInitialQuery={handleChangeInitialQuery}
+              />
+            )}
+
+            {hasAncestors && !hasApiConfig && (
+              <FillerFieldAccordion
+                selectAncestorName={selectAncestorName}
+                type={type}
+                ancestors={ancestors}
+                defaultValueFromAncestor={defaultValueFromAncestor}
+                onChangeValueFromAncestor={handleValueFromAncestor}
+                onChangeAncestorRef={handleAncestorRef}
               />
             )}
 
@@ -337,19 +343,6 @@ const FormTreeCardMutation = ({ onClose, title }: FormTreeCardMutationProps) => 
                   <AddCircleRoundedIcon />
                 </IconButton>
               </Box>
-            )}
-
-            {hasAncestors && (
-              <FillerFieldAccordion
-                selectAncestorName={selectAncestorName}
-                type={type}
-                isDynamicSelect={isDynamicSelect}
-                isAutocomplete={isAutocomplete}
-                ancestors={ancestors}
-                defaultValueFromAncestor={defaultValueFromAncestor}
-                onChangeValueFromAncestor={handleValueFromAncestor}
-                onChangeAncestorRef={handleAncestorRef}
-              />
             )}
           </DialogContent>
 

@@ -9,6 +9,7 @@ import {
   Select,
   MenuItem,
   Stack,
+  FormControl,
 } from "@tracktor/design-system";
 import type { DefaultValueFromAncestor, FieldType } from "@tracktor/types-treege";
 import { useTranslation } from "react-i18next";
@@ -18,8 +19,6 @@ import useTreegeContext from "@/hooks/useTreegeContext";
 interface FillerFieldAccordionProps {
   selectAncestorName?: string;
   type: FieldType;
-  isAutocomplete: boolean;
-  isDynamicSelect: boolean;
   ancestors: { uuid: string; name?: string }[];
   defaultValueFromAncestor?: DefaultValueFromAncestor;
   onChangeValueFromAncestor?: (sourceValue?: string) => void;
@@ -29,8 +28,6 @@ interface FillerFieldAccordionProps {
 const FillerFieldAccordion = ({
   selectAncestorName,
   type,
-  isDynamicSelect,
-  isAutocomplete,
   ancestors,
   defaultValueFromAncestor,
   onChangeValueFromAncestor,
@@ -53,53 +50,53 @@ const FillerFieldAccordion = ({
   };
 
   return (
-    <Accordion sx={{ marginY: 3 }} disableGutters>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel-ancestor-control" id="panel-ancestor-control-header">
-        <Typography variant="h5">{t("form:prefillField")}</Typography>
-      </AccordionSummary>
-
-      <AccordionDetails>
-        <Stack spacing={1} pb={2} pt={3}>
-          <InputLabel> {t("form:receiveValueFromParent")}</InputLabel>
-          <Select
-            id="label-receive-value"
-            labelId="label-receive-value"
-            variant="outlined"
-            size="xSmall"
-            value={selectAncestorName || ""}
-            onChange={handleChange}
-            MenuProps={{
-              PaperProps: {
-                sx: { maxHeight: 300 },
-              },
-            }}
-          >
-            {ancestors.length && <MenuItem value="">&nbsp;</MenuItem>}
-
-            {ancestors.length ? (
-              ancestors.map(({ name }) => (
+    <Stack marginY={3}>
+      <FormControl fullWidth variant="outlined" size="small">
+        <InputLabel id="label-receive-value">{t("form:receiveValueFromParent")}</InputLabel>
+        <Select
+          labelId="label-receive-value"
+          id="select-receive-value"
+          value={selectAncestorName || ""}
+          onChange={handleChange}
+          label={t("form:receiveValueFromParent")}
+          sx={{ borderRadius: 0 }}
+          MenuProps={{
+            PaperProps: {
+              sx: { maxHeight: 300 },
+            },
+          }}
+        >
+          {ancestors.length > 0 ? (
+            [
+              <MenuItem key="empty" value="">
+                &nbsp;
+              </MenuItem>,
+              ...ancestors.map(({ name }) => (
                 <MenuItem key={`${name}-${uuid}`} value={name}>
                   {name}
                 </MenuItem>
-              ))
-            ) : (
-              <MenuItem disabled value="">
-                {t("form:noAncestorFound")}
-              </MenuItem>
-            )}
-          </Select>
-        </Stack>
+              )),
+            ]
+          ) : (
+            <MenuItem disabled value="">
+              {t("form:noAncestorFound")}
+            </MenuItem>
+          )}
+        </Select>
+      </FormControl>
 
-        {selectAncestorName && (
-          <AssignValueToChildren
-            onChange={onChangeValueFromAncestor}
-            value={defaultValueFromAncestor}
-            displayTopDivider={isAutocomplete || isDynamicSelect}
-            currentType={type}
-          />
-        )}
-      </AccordionDetails>
-    </Accordion>
+      {selectAncestorName && (
+        <Accordion disableGutters>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel-ancestor-control" id="panel-ancestor-control-header">
+            <Typography variant="h5">{t("advancedConfiguration")}</Typography>
+          </AccordionSummary>
+
+          <AccordionDetails>
+            <AssignValueToChildren onChange={onChangeValueFromAncestor} value={defaultValueFromAncestor} currentType={type} />
+          </AccordionDetails>
+        </Accordion>
+      )}
+    </Stack>
   );
 };
 
