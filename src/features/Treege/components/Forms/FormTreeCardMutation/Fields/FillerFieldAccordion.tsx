@@ -59,7 +59,7 @@ const FillerFieldAccordion = ({
           value={selectAncestorName || ""}
           onChange={handleChange}
           label={t("form:receiveValueFromParent")}
-          sx={{ borderBottomLeftRadius: 0, borderBottomRightRadius: 0 }}
+          sx={{ borderBottomLeftRadius: selectAncestorName ? 0 : undefined, borderBottomRightRadius: selectAncestorName ? 0 : undefined }}
           MenuProps={{
             PaperProps: {
               sx: { maxHeight: 300 },
