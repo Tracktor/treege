@@ -18,7 +18,6 @@ const FORM_EN = {
   keyPath: "Key path (string | number)",
   keyPathApiDescription:
     "(Option) To insert a value in a URL, use the syntax {paramName}. For example: http://api.com/userId={userId}, add {userId} in params.",
-  keyPathAssignment: "Key path to value: {{keyPath}}",
   keyPathObject: "Key path to value",
   label: "Label",
   letter: "Letter",
@@ -72,7 +71,6 @@ const FORM_EN = {
     tree: "Tree",
     url: "URL",
   },
-  typeStructureWarning: "Type structure must be: {{type}}",
   url: "URL",
   urlBuilder: "URL Builder",
   urlConstruction: "URL construction",
@@ -80,6 +78,7 @@ const FORM_EN = {
   useAncestorValueAsParam: "Use Ancestor value",
   value: "Value",
   values: "Values",
+  variant: "Field type: {{variant}}",
   warningApiAutocomplete: {
     response: "should have as a response",
     url: "The API Route",

@@ -320,40 +320,47 @@ const ApiFieldsConfigAccordion = ({
             ) : null}
 
             <>
-              <Stack direction="row" spacing={4} alignItems="center" paddingY={2}>
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox id="isAutocomplete" checked={isAutocomplete} onChange={handleChangeType} />}
-                    label={t("activateSearch")}
-                  />
-                  {isAutocomplete && (
+              <Stack direction="column" spacing={1} paddingY={2}>
+                <Typography variant="h5" color="text.secondary">
+                  {t("form:variant", { variant: isAutocomplete ? "Autocomplete" : "Select" })}
+                </Typography>
+                <Stack direction="row" spacing={4}>
+                  <FormGroup>
                     <FormControlLabel
-                      control={<Checkbox id="isInitialQuery" checked={initialQuery} onChange={onChangeInitialQuery} />}
-                      label={t("initialQueryEnable")}
+                      control={<Checkbox id="isAutocomplete" checked={isAutocomplete} onChange={handleChangeType} />}
+                      label={t("activateSearch")}
+                    />
+                    {isAutocomplete && (
+                      <FormControlLabel
+                        control={<Checkbox id="isInitialQuery" checked={initialQuery} onChange={onChangeInitialQuery} />}
+                        label={t("initialQueryEnable")}
+                      />
+                    )}
+                  </FormGroup>
+                  {isAutocomplete && (
+                    <TextField
+                      required
+                      id="searchKey"
+                      size="small"
+                      InputLabelProps={{ shrink: true }}
+                      sx={{ flex: 1, minWidth: 0 }}
+                      placeholder={t("form:searchKeyPlaceholder")}
+                      type="text"
+                      label={t("form:key")}
+                      onChange={onChangeSearchKey}
+                      value={searchKey || ""}
+                      onClick={(e) => e.stopPropagation()}
                     />
                   )}
-                </FormGroup>
-                {isAutocomplete && (
-                  <TextField
-                    required
-                    id="searchKey"
-                    size="small"
-                    InputLabelProps={{ shrink: true }}
-                    sx={{ flex: 1, minWidth: 0 }}
-                    placeholder={t("form:searchKeyPlaceholder")}
-                    type="text"
-                    label={t("form:key")}
-                    onChange={onChangeSearchKey}
-                    value={searchKey || ""}
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                )}
+                </Stack>
               </Stack>
               <Divider sx={{ mb: 1, ml: -2, mr: -2 }} />
             </>
 
             <Stack spacing={1} paddingY={2} direction={{ sm: "row", xs: "column" }} alignItems={{ sm: "center", xs: "flex-start" }}>
-              <Typography variant="h5">{t("form:queryParams")}</Typography>
+              <Typography variant="h5" color="text.secondary">
+                {t("form:queryParams")}
+              </Typography>
               <Box justifyContent="flex-end">
                 <IconButton
                   color="success"
@@ -462,7 +469,9 @@ const ApiFieldsConfigAccordion = ({
               >
                 <KeyboardArrowDown />
               </IconButton>
-              <Typography sx={{ ml: 1 }}>{t("form:optionConfig")}</Typography>
+              <Typography variant="h5" sx={{ ml: 1 }} color="text.secondary">
+                {t("form:optionConfig")}
+              </Typography>
             </Stack>
 
             <Collapse in={collapseOptions}>
