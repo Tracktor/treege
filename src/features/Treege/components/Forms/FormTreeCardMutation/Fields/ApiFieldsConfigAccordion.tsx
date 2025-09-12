@@ -49,7 +49,7 @@ interface ApiFieldsConfigAccordionProps {
   onChangeSearchKey?: ({ target }: ChangeEvent<HTMLInputElement>) => void;
   onAddParams?: () => void;
   onChangeParams?: <K extends keyof Params>(index: number, property: K, value: Params[K]) => void;
-  onDeleteParams?: (e: MouseEvent<HTMLButtonElement>) => void;
+  onDeleteParams?: (e: MouseEvent<HTMLButtonElement> | string) => void;
   onChangeApiMapping?: (property: string, event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   setCollapseOptions?: Dispatch<SetStateAction<boolean>>;
   onChangeType?: (_: SyntheticEvent, value: (typeof fields)[number]) => void;
@@ -93,18 +93,38 @@ const ApiFieldsConfigAccordion = ({
   };
 
   useEffect(() => {
-    if (sliceUrlParams?.length && onAddParams) {
-      const paramsToAdd = sliceUrlParams.filter((param) => !apiParams?.some(({ key }) => key === param));
+    if (onAddParams || onDeleteParams) {
+      // Auto-add of missing params
+      if (sliceUrlParams?.length && onAddParams) {
+        const paramsToAdd = sliceUrlParams.filter((param) => !apiParams?.some(({ key }) => key === param));
 
-      if (paramsToAdd.length) {
-        paramsToAdd.forEach((param) => {
-          const realIndex = apiParams?.length ?? 0;
-          onAddParams();
-          onChangeParams?.(realIndex, "key", param);
+        if (paramsToAdd.length) {
+          paramsToAdd.forEach((param) => {
+            const realIndex = apiParams?.length ?? 0;
+            onAddParams(); // create a new row
+            onChangeParams?.(realIndex, "key", param); // set its key value
+          });
+        }
+      }
+
+      // Auto-delete of removed or invalid params
+      if (apiParams?.length && onDeleteParams) {
+        const paramsToDelete = apiParams.filter(({ key }) => {
+          // Check if the key is in {placeholder} format and not in the URL anymore
+          const hasPlaceholderFormat = /^\{.+\}$/.test(key.trim());
+          const notInUrl = !sliceUrlParams?.includes(key);
+
+          return hasPlaceholderFormat && notInUrl;
         });
+
+        if (paramsToDelete.length) {
+          paramsToDelete.forEach(({ id }) => {
+            onDeleteParams(id);
+          });
+        }
       }
     }
-  }, [sliceUrlParams, apiParams, onAddParams, onChangeParams]);
+  }, [sliceUrlParams, apiParams, onAddParams, onChangeParams, onDeleteParams]);
 
   return (
     <Stack marginY={3}>
@@ -177,6 +197,7 @@ const ApiFieldsConfigAccordion = ({
                         ) : (
                           <TextField
                             fullWidth
+                            required
                             value={staticValue || ""}
                             onChange={({ target }) => onChangeParams?.(index, "staticValue", target.value)}
                           />

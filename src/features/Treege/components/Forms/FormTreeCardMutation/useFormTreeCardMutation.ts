@@ -307,14 +307,14 @@ const useFormTreeCardMutation = () => {
     setValues((prevState) => prevState.filter(({ id }) => currentTarget.value !== id));
   };
 
-  const handleDeleteParam = (e: MouseEvent<HTMLButtonElement>) => {
-    const buttonValue = e.currentTarget.value;
+  const handleDeleteParam = (arg: MouseEvent<HTMLButtonElement> | string) => {
+    const id = typeof arg === "string" ? arg : arg.currentTarget.value;
 
     setRoute((prevRoute) => {
       const safeRoute = prevRoute ?? {};
       const currentParams = safeRoute.params ?? [];
 
-      const updatedParams = currentParams.filter(({ id }) => id !== buttonValue);
+      const updatedParams = currentParams.filter((param) => param.id !== id);
       const nextParams = updatedParams.length > 0 ? updatedParams : undefined;
 
       return {
