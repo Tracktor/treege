@@ -20,97 +20,71 @@ const TreegeFlow = () => {
 
   const handleAddNode = useCallback(
     async (parentId: string) => {
-      console.log("handleAddNode called with parentId:", parentId);
-
-      // Utiliser une fonction pour accéder à l'état actuel
       setNodes((currentNodes) => {
+        const parentExists = currentNodes.find((n) => n.id === parentId);
+
+        if (!parentExists) return currentNodes;
+
+        const newId = `node-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        const newNode: Node<CustomNodeData> = {
+          data: { label: `Node ${currentNodes.length + 1}`, onAddNode: handleAddNode },
+          id: newId,
+          position: { x: 0, y: 0 },
+          type: "text",
+        };
+
+        const newEdge: Edge = {
+          id: `e-${parentId}-to-${newId}`,
+          source: parentId,
+          target: newId,
+          type: "smoothstep",
+        };
+
+        const newNodes = [...currentNodes, newNode];
+
         setEdges((currentEdges) => {
-          console.log(
-            "Current nodes in callback:",
-            currentNodes.map((n) => n.id),
-          );
-
-          // Vérifier que le parent existe
-          const parentExists = currentNodes.find((n) => n.id === parentId);
-          if (!parentExists) {
-            console.error(
-              "Parent node not found:",
-              parentId,
-              "Available nodes:",
-              currentNodes.map((n) => n.id),
-            );
-            return currentEdges; // Retourner les edges sans changement
-          }
-
-          // Générer un ID unique basé sur le timestamp
-          const newId = `node-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-
-          console.log("Creating new node with ID:", newId, "parent:", parentId);
-
-          const newNode: Node<CustomNodeData> = {
-            data: { label: `Node ${currentNodes.length + 1}`, onAddNode: handleAddNode },
-            id: newId,
-            position: { x: 0, y: 0 },
-            type: "text",
-          };
-
-          const newEdge: Edge = {
-            id: `e-${parentId}-to-${newId}`,
-            source: parentId,
-            target: newId,
-          };
-
-          console.log("Adding node:", newNode.id);
-          console.log("Adding edge:", `${newEdge.source} -> ${newEdge.target}`);
-
-          const newNodes = [...currentNodes, newNode];
           const newEdges = [...currentEdges, newEdge];
 
-          // Appliquer le layout de manière asynchrone
-          autoLayout(newNodes, newEdges)
-            .then((layoutNodes) => {
-              console.log("Layout successful, updating nodes");
+          // Appliquer le layout de manière asynchrone APRÈS avoir mis à jour les deux états
+          setTimeout(async () => {
+            try {
+              const layoutNodes = await autoLayout(newNodes, newEdges);
+
               setNodes(
-                layoutNodes.map((n) => ({
+                layoutNodes.nodes.map((n) => ({
                   ...n,
                   data: { ...n.data, onAddNode: handleAddNode },
                 })),
               );
 
-              // Ajuster la vue après un court délai
               setTimeout(() => {
                 fitView({ duration: 800, padding: 0.3 });
               }, 100);
-            })
-            .catch((error) => {
-              console.error("Erreur lors du layout:", error);
-
+            } catch (error) {
               // Fallback: position manuelle simple
               const fallbackNode = {
                 ...newNode,
                 position: {
-                  x: parentExists.position.x + (Math.random() - 0.5) * 200,
+                  x: parentExists.position.x + (Math.random() - 0.5) * 100,
                   y: parentExists.position.y + 200,
                 },
               };
 
-              const fallbackNodes = [
+              setNodes([
                 ...currentNodes,
                 {
                   ...fallbackNode,
                   data: { ...fallbackNode.data, onAddNode: handleAddNode },
                 },
-              ];
+              ]);
+            }
+          }, 0);
 
-              setNodes(fallbackNodes);
-            });
-
-          // Retourner les nouveaux edges immédiatement
           return newEdges;
         });
 
-        // Retourner les nodes actuels pour l'instant (ils seront mis à jour par autoLayout)
-        return currentNodes;
+        // Retourner les nouveaux nodes immédiatement
+        return newNodes;
       });
     },
     [setNodes, setEdges, fitView],
@@ -133,7 +107,24 @@ const TreegeFlow = () => {
   }, [handleAddNode, setNodes]);
 
   return (
-    <ReactFlow fitView nodeTypes={nodeTypes} nodes={nodes} edges={edges} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange}>
+    <ReactFlow
+      fitView
+      nodeTypes={nodeTypes}
+      nodes={nodes}
+      edges={edges}
+      onNodesChange={onNodesChange}
+      onEdgesChange={onEdgesChange}
+      defaultEdgeOptions={{
+        markerEnd: {
+          color: "#999",
+          height: 20,
+          type: "arrowclosed",
+          width: 20,
+        },
+        style: { stroke: "#999", strokeWidth: 2 },
+        type: "smoothstep",
+      }}
+    >
       <Controls />
     </ReactFlow>
   );

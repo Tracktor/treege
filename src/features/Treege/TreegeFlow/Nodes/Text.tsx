@@ -15,8 +15,8 @@ const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
   };
 
   return (
-    <Box component="div" sx={{ position: "relative" }}>
-      <Handle type="target" position={Position.Left} isConnectable={connections.length === 0} style={{ left: -8 }} />
+    <Box component="div">
+      <Handle type="target" position={Position.Top} isConnectable={connections.length === 0} />
 
       <Card
         sx={{
@@ -37,7 +37,7 @@ const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
           <Button onClick={handleAddNode}>+</Button>
         </CardContent>
       </Card>
-      <Handle type="source" position={Position.Right} style={{ right: -8 }} />
+      <Handle type="source" position={Position.Bottom} />
     </Box>
   );
 };
