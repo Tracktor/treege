@@ -44,7 +44,7 @@ const ViewerJSONAction = ({ downloadedFileName = "export", value }: ViewerJSONPr
 
       <Tooltip title={t("copyToClipboard", { ns: "button" })} enterDelay={1500} disableHoverListener={!value} arrow>
         <Box>
-          <IconButton href="#" download={`${downloadedFileName}.json`} disabled={!value} onClick={copyToClipboard(value)}>
+          <IconButton disabled={!value} onClick={copyToClipboard(value)}>
             <FileCopyRoundedIcon />
           </IconButton>
         </Box>
