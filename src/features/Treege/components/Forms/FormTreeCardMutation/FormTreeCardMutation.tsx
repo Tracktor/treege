@@ -1,8 +1,4 @@
-import { KeyboardArrowDown } from "@mui/icons-material";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
-import QuestionMarkRoundedIcon from "@mui/icons-material/QuestionMarkRounded";
 import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
 import {
   Autocomplete,
@@ -10,63 +6,31 @@ import {
   Button,
   Checkbox,
   CircularProgress,
-  Collapse,
   DialogActions,
   DialogContent,
   FormControlLabel,
   FormGroup,
   Grid,
   IconButton,
-  InputAdornment,
-  MenuItem,
-  Paper,
-  Select,
   Stack,
   TextField,
-  Tooltip,
   Typography,
 } from "@tracktor/design-system";
 import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
-import AssignValueToChildren from "@/features/Treege/components/Forms/AssignValueToChildren/AssignValueToChildren";
-import ExtraField from "@/features/Treege/components/Forms/FormTreeCardMutation/ExtraField";
+import ApiFieldsConfigAccordion from "@/features/Treege/components/Forms/FormTreeCardMutation/Fields/ApiFieldsConfigAccordion";
+import ExtraField from "@/features/Treege/components/Forms/FormTreeCardMutation/Fields/ExtraField";
+import FillerFieldAccordion from "@/features/Treege/components/Forms/FormTreeCardMutation/Fields/FillerFieldAccordion";
 import useFormTreeCardMutation from "@/features/Treege/components/Forms/FormTreeCardMutation/useFormTreeCardMutation";
-import ReceiveValueFromAncestor from "@/features/Treege/components/Forms/ReceiveValueFromAncestor";
 import AutocompleteSelectType from "@/features/Treege/components/Inputs/AutocompleteSelectType";
 import FieldSelectAutocompleteCreatable from "@/features/Treege/components/Inputs/FieldSelectAutocompleteCreatable";
 
 interface FormTreeCardMutationProps {
   onClose(): void;
   title?: string;
-  setIsLarge?(largeModal: boolean): void;
 }
 
-const iconButtonCommonStyle = {
-  marginRight: "-20px !important",
-  minWidth: "auto !important",
-};
-
-const styles = {
-  iconButton: iconButtonCommonStyle,
-  iconButtonDelete: {
-    ...iconButtonCommonStyle,
-    "&:before": {
-      borderRadius: `50%`,
-      content: '""',
-      height: 20,
-      position: `absolute`,
-      width: 20,
-      zIndex: -1,
-    },
-    backgroundColor: colors.background,
-    position: "absolute",
-    right: 0,
-    top: "50%",
-    transform: "translateY(-50%)",
-  },
-};
-
-const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutationProps) => {
+const FormTreeCardMutation = ({ onClose, title }: FormTreeCardMutationProps) => {
   const { t } = useTranslation(["translation", "form"]);
 
   const {
@@ -91,7 +55,6 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
     isRepeatableDisabled,
     isAutocomplete,
     isDateRangePicker,
-    isDynamicSelect,
     isTreeField,
     treeSelected,
     isWorkflowLoading,
@@ -129,14 +92,13 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
     handleChangePattern,
     handleChangePatternMessage,
     messages: { on, off },
-    isLargeView,
     handleValueFromAncestor,
     defaultValueFromAncestor,
     handleAncestorRef,
     selectAncestorName,
-    collapseOptions,
-    setCollapseOptions,
-  } = useFormTreeCardMutation({ setIsLarge });
+    hasApiConfig,
+    validDynamicUrlParams,
+  } = useFormTreeCardMutation();
 
   const { searchKey, url, pathKey, params } = route || {};
   const { object: routeObject = "", label: routeLabel = "", value: routeValue = "", image: routeImage = "" } = pathKey || {};
@@ -144,14 +106,12 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
   return (
     <Box component="form" onSubmit={handleSubmit}>
       <Grid container height={600}>
-        <Grid size={isLargeView ? 6 : 12} sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <Grid size={12} sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
           <DialogContent>
             <Typography variant="h3" pb={2}>
               {title}
             </Typography>
-
             <AutocompleteSelectType id="type" value={type} onChange={handleChangeType} sx={{ marginBottom: 1 }} />
-
             {/* Name and label */}
             <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
               <TextField
@@ -173,7 +133,6 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                 size="small"
               />
             </Stack>
-
             {/* Tag & helper text */}
             <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
               {type !== "title" && <FieldSelectAutocompleteCreatable id="tag" value={tag} onChange={handleChangeTag} />}
@@ -189,7 +148,6 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                 handleChangeHiddenValue={handleChangeHiddenValue}
               />
             </Stack>
-
             {/* Pattern */}
             {isPatternEnabled && (
               <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
@@ -218,7 +176,6 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                 />
               </Stack>
             )}
-
             {/* Boolean field */}
             {isBooleanField && (
               <Stack spacing={1} paddingY={1} direction={{ sm: "row", xs: "column" }}>
@@ -241,16 +198,47 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
               </Stack>
             )}
 
+            {hasApiConfig && (
+              <ApiFieldsConfigAccordion
+                isAutocomplete={isAutocomplete}
+                url={url}
+                searchKey={searchKey}
+                sliceUrlParams={validDynamicUrlParams}
+                apiParams={params}
+                ancestors={ancestors}
+                apiMapping={{
+                  image: routeImage,
+                  label: routeLabel,
+                  object: routeObject,
+                  value: routeValue,
+                }}
+                initialQuery={initialQuery}
+                onChangeUrlSelect={handleChangeUrlSelect}
+                onChangeSearchKey={handleChangeSearchKey}
+                onAddParams={handleAddParams}
+                onChangeParams={handleChangeParam}
+                onDeleteParams={handleDeleteParam}
+                onChangeApiMapping={handleChangePath}
+                onChangeType={handleChangeType}
+                onChangeInitialQuery={handleChangeInitialQuery}
+              />
+            )}
+
+            {hasAncestors && !hasApiConfig && (
+              <FillerFieldAccordion
+                selectAncestorName={selectAncestorName}
+                type={type}
+                ancestors={ancestors}
+                defaultValueFromAncestor={defaultValueFromAncestor}
+                onChangeValueFromAncestor={handleValueFromAncestor}
+                onChangeAncestorRef={handleAncestorRef}
+              />
+            )}
+
             <Stack paddingY={1}>
               <FormGroup row>
                 {isMultiplePossible && (
                   <FormControlLabel control={<Checkbox checked={isMultiple} onChange={handleChangeMultiple} />} label={t("multiple")} />
-                )}
-                {isAutocomplete && (
-                  <FormControlLabel
-                    control={<Checkbox id="isInitialQuery" checked={initialQuery} onChange={handleChangeInitialQuery} />}
-                    label={t("initialQueryEnable")}
-                  />
                 )}
                 <FormControlLabel
                   disabled={isRequiredDisabled}
@@ -312,7 +300,28 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
                       inputProps={{ "data-id": decisionId }}
                     />
                     {values.length > 1 && (
-                      <IconButton color="warning" sx={styles.iconButtonDelete} value={decisionId} onClick={handleDeleteValue}>
+                      <IconButton
+                        color="warning"
+                        sx={{
+                          "&:before": {
+                            borderRadius: `50%`,
+                            content: '""',
+                            height: 20,
+                            position: `absolute`,
+                            width: 20,
+                            zIndex: -1,
+                          },
+                          backgroundColor: colors.background,
+                          marginRight: "-20px !important",
+                          minWidth: "auto !important",
+                          position: "absolute",
+                          right: 0,
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                        }}
+                        value={decisionId}
+                        onClick={handleDeleteValue}
+                      >
                         <RemoveCircleRoundedIcon />
                       </IconButton>
                     )}
@@ -323,16 +332,20 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
 
             {isDecisionField && (
               <Box justifyContent="flex-end" display="flex">
-                <IconButton color="success" sx={styles.iconButton} onClick={handleAddValue}>
+                <IconButton
+                  color="success"
+                  sx={{
+                    marginRight: "-20px !important",
+                    minWidth: "auto !important",
+                  }}
+                  onClick={handleAddValue}
+                >
                   <AddCircleRoundedIcon />
                 </IconButton>
               </Box>
             )}
-
-            {hasAncestors && (
-              <ReceiveValueFromAncestor id="receive-value" onChange={handleAncestorRef} value={selectAncestorName} ancestors={ancestors} />
-            )}
           </DialogContent>
+
           <DialogActions>
             <Button variant="text" onClick={onClose}>
               {t("cancel")}
@@ -348,235 +361,6 @@ const FormTreeCardMutation = ({ onClose, title, setIsLarge }: FormTreeCardMutati
             </Button>
           </DialogActions>
         </Grid>
-
-        {isLargeView && (
-          <Grid size={6} maxHeight={600} sx={{ display: "flex" }}>
-            <DialogContent>
-              {(isDynamicSelect || isAutocomplete) && (
-                <Grid container spacing={1} paddingY={1}>
-                  <Grid size={12}>
-                    <Typography variant="h5" pb={1}>
-                      {t("form:urlConstruction")}
-                    </Typography>
-                  </Grid>
-
-                  <Grid size={isAutocomplete ? 7 : 12}>
-                    <TextField
-                      id="urlSelect"
-                      size="small"
-                      fullWidth
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <LinkRoundedIcon />
-                          </InputAdornment>
-                        ),
-                      }}
-                      placeholder="https://api.com/"
-                      type="url"
-                      label={t("form:apiRoute")}
-                      onChange={handleChangeUrlSelect}
-                      value={url || ""}
-                    />
-                  </Grid>
-
-                  {isAutocomplete && (
-                    <Grid size={5}>
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <QuestionMarkRoundedIcon />
-                        <TextField
-                          id="searchKey"
-                          size="small"
-                          InputLabelProps={{ shrink: true }}
-                          sx={{ flex: 1, minWidth: 0 }}
-                          placeholder={t("form:searchKeyPlaceholder")}
-                          type="text"
-                          label={t("form:key")}
-                          onChange={handleChangeSearchKey}
-                          value={searchKey || ""}
-                        />
-                      </Stack>
-                    </Grid>
-                  )}
-                </Grid>
-              )}
-
-              {(isAutocomplete || isDynamicSelect) && (
-                <>
-                  <Stack
-                    spacing={1}
-                    paddingY={1}
-                    direction={{ sm: "row", xs: "column" }}
-                    position="relative"
-                    alignItems={{ sm: "center", xs: "flex-start" }}
-                  >
-                    <Typography variant="h5">{t("form:additionalParams")}</Typography>
-                    <Box justifyContent="flex-end">
-                      <IconButton color="success" sx={styles.iconButton} onClick={handleAddParams}>
-                        <AddCircleRoundedIcon />
-                      </IconButton>
-                    </Box>
-                  </Stack>
-
-                  {params?.map(({ id, key, staticValue, ancestorUuid, useAncestorValue }, index) => (
-                    <Paper key={id} elevation={1} sx={{ marginY: 1 }}>
-                      <Grid key={id} container pb={2} justifyContent="space-between" alignItems="center" padding={1} spacing={1}>
-                        <Grid size={6}>
-                          <Tooltip title={useAncestorValue ? t("form:keyPathApiDescription") : ""}>
-                            <TextField
-                              id={`param-key-${id}`}
-                              label="Key"
-                              size="small"
-                              onChange={({ target }) => handleChangeParam(index, "key", target.value)}
-                              value={key || ""}
-                              inputProps={{ "data-id": id }}
-                            />
-                          </Tooltip>
-                        </Grid>
-
-                        <Grid size={6}>
-                          {useAncestorValue ? (
-                            <Select
-                              fullWidth
-                              id={id}
-                              variant="outlined"
-                              size="small"
-                              value={ancestorUuid || ""}
-                              onChange={({ target }) => handleChangeParam(index, "ancestorUuid", target.value)}
-                              MenuProps={{
-                                PaperProps: {
-                                  sx: { maxHeight: 300 },
-                                },
-                              }}
-                            >
-                              {ancestors.length ? (
-                                ancestors.map(({ name: ancestorName, uuid: ancestorId }) => (
-                                  <MenuItem key={ancestorId} value={ancestorId}>
-                                    {ancestorName}
-                                  </MenuItem>
-                                ))
-                              ) : (
-                                <MenuItem disabled value="">
-                                  {t("form:noAncestorFound")}
-                                </MenuItem>
-                              )}
-                            </Select>
-                          ) : (
-                            <TextField
-                              id={`param-value-${id}`}
-                              label={t("value", { ns: "form" })}
-                              size="small"
-                              fullWidth
-                              onChange={({ target }) => handleChangeParam(index, "staticValue", target.value)}
-                              value={staticValue || ""}
-                              inputProps={{ "data-id": id }}
-                            />
-                          )}
-                        </Grid>
-
-                        {!!ancestors.length && (
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                id={`useAncestorAsParam-${id}`}
-                                disabled={!ancestors.length}
-                                checked={useAncestorValue || false}
-                                onChange={({ target }) => handleChangeParam(index, "useAncestorValue", target.checked)}
-                              />
-                            }
-                            label={
-                              <Typography variant="body2" color="textSecondary">
-                                {t("form:useAncestorValueAsParam")}
-                              </Typography>
-                            }
-                          />
-                        )}
-                        <IconButton color="error" value={id} onClick={handleDeleteParam}>
-                          <DeleteOutlineIcon />
-                        </IconButton>
-                      </Grid>
-                    </Paper>
-                  ))}
-
-                  <Box display="flex" alignItems="center">
-                    <IconButton
-                      aria-label={t("form:dataMapping")}
-                      onClick={() => setCollapseOptions((prev) => !prev)}
-                      sx={{ transform: collapseOptions ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.3s" }}
-                    >
-                      <KeyboardArrowDown />
-                    </IconButton>
-                    <Typography sx={{ ml: 1 }}>{t("form:dataMapping")}</Typography>
-                  </Box>
-
-                  <Collapse in={collapseOptions}>
-                    <Stack spacing={1} paddingY={1}>
-                      <Stack spacing={1} sx={{ pb: 1 }} direction={{ sm: "row", xs: "column" }} alignItems="center">
-                        <TextField
-                          id="objectArrayPath"
-                          size="small"
-                          sx={{ flex: 3 }}
-                          InputLabelProps={{ shrink: true }}
-                          label="Object Array Path"
-                          value={routeObject || ""}
-                          onChange={(event) => handleChangePath("object", event)}
-                          placeholder="elements.features[]"
-                          type="text"
-                        />
-                        <TextField
-                          id="labelPath"
-                          size="small"
-                          sx={{ flex: 3 }}
-                          InputLabelProps={{ shrink: true }}
-                          label="Label Path"
-                          value={routeLabel || ""}
-                          onChange={(event) => handleChangePath("label", event)}
-                          placeholder="client.name"
-                          type="text"
-                        />
-                      </Stack>
-
-                      <Stack spacing={1} direction={{ sm: "row", xs: "column" }} alignItems="center">
-                        <TextField
-                          id="valuePath"
-                          size="small"
-                          sx={{ flex: 3 }}
-                          InputLabelProps={{ shrink: true }}
-                          label="Value Path"
-                          value={routeValue || ""}
-                          onChange={(event) => handleChangePath("value", event)}
-                          placeholder="client.id"
-                          type="text"
-                        />
-                        <TextField
-                          id="imagePath"
-                          size="small"
-                          sx={{ flex: 3 }}
-                          InputLabelProps={{ shrink: true }}
-                          label="Image Path"
-                          value={routeImage || ""}
-                          onChange={(event) => handleChangePath("image", event)}
-                          placeholder="client.src.profile"
-                          type="text"
-                        />
-                      </Stack>
-                    </Stack>
-                  </Collapse>
-                </>
-              )}
-
-              {selectAncestorName && (
-                <AssignValueToChildren
-                  ancestorName={selectAncestorName}
-                  onChange={handleValueFromAncestor}
-                  value={defaultValueFromAncestor}
-                  displayTopDivider={isAutocomplete || isDynamicSelect}
-                  currentType={type}
-                />
-              )}
-            </DialogContent>
-          </Grid>
-        )}
       </Grid>
     </Box>
   );
