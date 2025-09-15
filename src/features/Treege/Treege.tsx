@@ -1,15 +1,15 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { SnackbarProvider } from "@tracktor/design-system";
 import type { TreeNode } from "@tracktor/types-treege";
+import { ReactFlowProvider } from "@xyflow/react";
 import axios from "axios";
 import { useLayoutEffect } from "react";
-import { Node, Edge, useNodesState, useEdgesState, ReactFlowProvider } from "reactflow";
 import DarkTheme from "@/components/Theme/DarkTheme/DarkTheme";
 import queryConfig from "@/config/query.config";
 import AuthProvider from "@/context/Auth/AuthProvider";
 import TreegeProvider from "@/features/Treege/context/TreegeProvider";
 import "@/config/i18n.config";
-import "reactflow/dist/style.css";
+import "@xyflow/react/dist/style.css";
 import TreegeFlow from "@/features/Treege/TreegeFlow/TreegeFlow";
 
 export interface BackendConfig {
@@ -38,25 +38,7 @@ type TreegeProps =
       backendConfig?: BackendConfig;
     };
 
-export type CustomNodeData = {
-  label: string;
-};
-
-const initialNodes: Node<CustomNodeData>[] = [
-  {
-    data: { label: "Hello" },
-    id: "1",
-    position: { x: 0, y: 0 },
-    type: "input",
-  },
-];
-
-const initialEdges: Edge[] = [];
-
 const Treege = ({ initialTree, initialTreeId, backendConfig }: TreegeProps) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState<CustomNodeData>(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
   useLayoutEffect(() => {
     axios.defaults.baseURL = backendConfig?.baseUrl;
     if (backendConfig?.authToken) {
@@ -71,14 +53,7 @@ const Treege = ({ initialTree, initialTreeId, backendConfig }: TreegeProps) => {
           <TreegeProvider backendConfig={backendConfig} initialTree={initialTree} initialTreeId={initialTreeId}>
             <DarkTheme>
               <SnackbarProvider>
-                <TreegeFlow
-                  nodes={nodes}
-                  setNodes={setNodes}
-                  onNodesChange={onNodesChange}
-                  edges={edges}
-                  setEdges={setEdges}
-                  onEdgesChange={onEdgesChange}
-                />
+                <TreegeFlow />
               </SnackbarProvider>
             </DarkTheme>
           </TreegeProvider>
