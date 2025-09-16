@@ -13,15 +13,12 @@ const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
 
   const isLastNode = childConnections.length === 0;
 
-  // add a new node below current node
   const handleAddChild = () => {
-    // now just call onAddNode(id) — hook figures out child automatically
-    onAddNode?.(id);
+    onAddNode?.(id); // hook will auto pick child if needed
   };
 
-  // insert between current node and its current child (also just onAddNode(id))
   const handleInsertChild = () => {
-    onAddNode?.(id);
+    onAddNode?.(id); // hook auto picks the correct child
   };
 
   return (

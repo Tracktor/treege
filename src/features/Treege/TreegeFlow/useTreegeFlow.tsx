@@ -16,7 +16,6 @@ export const useTreegeFlow = () => {
   const initialized = useRef(false);
   const getId = useIdGenerator();
 
-  // helper: normalize order sequentially (1,2,3,4…)
   const normalizeOrder = (nodeArray: Node<CustomNodeData>[]) => {
     const sorted = [...nodeArray].sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
     return sorted.map((n, index) => ({
@@ -34,16 +33,22 @@ export const useTreegeFlow = () => {
         const parentNode = currentNodes.find((n) => n.id === parentId);
         if (!parentNode) return currentNodes;
 
-        // automatically detect current direct child if not provided
+        // auto-pick correct child if not provided
         let effectiveChildId = childId;
         if (!effectiveChildId) {
-          const existingEdge = graphEdges.find((e) => e.source === parentId);
-          if (existingEdge) {
-            effectiveChildId = existingEdge.target;
+          const childCandidates = graphEdges
+            .filter((e) => e.source === parentId)
+            .map((e) => currentNodes.find((n) => n.id === e.target))
+            .filter(Boolean) as Node<CustomNodeData>[];
+
+          if (childCandidates.length > 0) {
+            const sorted = childCandidates.sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+            // pick the first in order
+            effectiveChildId = sorted[0].id;
           }
         }
 
-        // determine order for the new node (fractional before normalize)
+        // determine order
         let newOrder: number;
         if (effectiveChildId) {
           const childNode = currentNodes.find((n) => n.id === effectiveChildId);
@@ -71,14 +76,12 @@ export const useTreegeFlow = () => {
         const indexParent = currentNodes.findIndex((n) => n.id === parentId);
         const newNodes = [...currentNodes.slice(0, indexParent + 1), newNode, ...currentNodes.slice(indexParent + 1)];
 
-        // update edges
         setGraphEdges((currentEdges) => {
           let newEdges = [...currentEdges];
+
           if (effectiveChildId) {
-            // remove old edge parent→child
             newEdges = newEdges.filter((e) => !(e.source === parentId && e.target === effectiveChildId));
 
-            // add parent→newNode and newNode→child
             newEdges.push({
               id: getId("edge"),
               source: parentId,
@@ -92,7 +95,6 @@ export const useTreegeFlow = () => {
               type: "smoothstep",
             });
           } else {
-            // add parent→newNode only
             newEdges.push({
               id: getId("edge"),
               source: parentId,
@@ -104,7 +106,6 @@ export const useTreegeFlow = () => {
           return newEdges;
         });
 
-        // 👇 normalize immediately after adding new node
         return normalizeOrder(newNodes);
       });
     },
