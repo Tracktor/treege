@@ -1,6 +1,6 @@
 import { ReactFlow, Controls, useEdgesState, useNodesState, useReactFlow, type Node, type Edge } from "@xyflow/react";
 import { useCallback, useEffect, useRef } from "react";
-import autoLayout from "@/features/Treege/autoLayout/autoLayout";
+import getLayout from "@/features/Treege/getLayout/getLayout";
 import TextNode from "@/features/Treege/TreegeFlow/Nodes/Text";
 import { getUUID } from "@/utils";
 
@@ -26,6 +26,7 @@ const TreegeFlow = () => {
         if (!parentExists) return currentNodes;
 
         const newId = `node-${getUUID()}`;
+
         const newNode: Node<CustomNodeData> = {
           data: { name: `Node ${currentNodes.length + 1}`, onAddNode: handleAddNode },
           id: newId,
@@ -33,10 +34,10 @@ const TreegeFlow = () => {
           type: "text",
         };
 
-        // 👉 construire edges en fonction du dernier état global
+        // ⚡ Ici, on utilise setEdges avec une updater function
         setEdges((currentEdges) => {
           const newEdge: Edge = {
-            id: `edge-${getUUID()}`,
+            id: `e-${parentId}-to-${newId}-${getUUID()}`,
             source: parentId,
             target: newId,
             type: "smoothstep",
@@ -45,23 +46,18 @@ const TreegeFlow = () => {
           const newNodes = [...currentNodes, newNode];
           const newEdges = [...currentEdges, newEdge];
 
-          // lancer layout sur le graphe complet et mettre à jour les 2 en même temps
           (async () => {
-            try {
-              const layouted = await autoLayout(newNodes, newEdges);
+            const layout = await getLayout(newNodes, newEdges);
 
-              setNodes(
-                layouted.nodes.map((n) => ({
-                  ...n,
-                  data: { ...n.data, onAddNode: handleAddNode },
-                })),
-              );
-              setEdges(layouted.edges);
+            setNodes(
+              layout.nodes.map((n) => ({
+                ...n,
+                data: { ...n.data, onAddNode: handleAddNode },
+              })),
+            );
+            setEdges(layout.edges);
 
-              fitView({ duration: 800, padding: 0.3 });
-            } catch (err) {
-              console.error("Layout error:", err);
-            }
+            await fitView({ duration: 800, padding: 0.3 });
           })();
 
           return newEdges;
@@ -70,7 +66,7 @@ const TreegeFlow = () => {
         return [...currentNodes, newNode];
       });
     },
-    [fitView, setEdges, setNodes],
+    [setNodes, setEdges, fitView],
   );
 
   // Initialisation du premier nœud
@@ -78,7 +74,7 @@ const TreegeFlow = () => {
     if (!initialized.current) {
       const rootId = `root-${getUUID()}`;
       const initialNode: Node<CustomNodeData> = {
-        data: { name: "Root Node", onAddNode: handleAddNode },
+        data: { name: "Node 1", onAddNode: handleAddNode },
         id: rootId,
         position: { x: 0, y: 0 },
         type: "text",

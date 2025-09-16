@@ -30,7 +30,7 @@ const elkOptions: ElkLayoutOptions = {
   "elk.spacing.nodeNode": "80",
 };
 
-export const getLayoutedElements = async (
+export const getLayout = async (
   nodes: Node<CustomNodeData>[],
   edges: Edge[],
   options: ElkLayoutOptions = {},
@@ -40,12 +40,16 @@ export const getLayoutedElements = async (
 }> => {
   const isHorizontal = options?.["elk.direction"] === "RIGHT";
 
-  // Mapper les edges React Flow en edges ELK
-  const elkEdges: ElkEdge[] = edges.map((edge) => ({
-    id: edge.id,
-    sources: [edge.source],
-    targets: [edge.target],
-  }));
+  const nodeIds = new Set(nodes.map((n) => n.id));
+
+  // ⚡ garder uniquement les edges valides
+  const elkEdges: ElkEdge[] = edges
+    .filter((edge) => nodeIds.has(edge.source) && nodeIds.has(edge.target))
+    .map((edge) => ({
+      id: edge.id,
+      sources: [edge.source],
+      targets: [edge.target],
+    }));
 
   const graph = {
     children: nodes.map((node) => ({
@@ -63,13 +67,24 @@ export const getLayoutedElements = async (
   try {
     const layoutedGraph = await elk.layout(graph);
 
-    const layoutedEdges: Edge[] = layoutedGraph.edges.map((e) => ({
-      id: e.id,
-      source: e.sources[0],
-      target: e.targets[0],
-    }));
+    // ⚡ Indexer les edges renvoyés par ELK
+    const elkEdgeMap = new Map((layoutedGraph.edges ?? []).map((e) => [e.id, e]));
 
-    const newLayoutedNodes: Node<CustomNodeData>[] = (layoutedGraph.children ?? [])
+    // ⚡ Reconstruire tous les edges à partir de la liste originale
+    const layoutedEdges: Edge[] = edges.map((original) => {
+      const elkEdge = elkEdgeMap.get(original.id);
+      if (elkEdge) {
+        return {
+          ...original,
+          source: elkEdge.sources[0],
+          target: elkEdge.targets[0],
+        };
+      }
+      return original; // si ELK n’a rien renvoyé, on garde l’original
+    });
+
+    // ⚡ Nodes recalculés avec positions
+    const newLayoutNodes: Node<CustomNodeData>[] = (layoutedGraph.children ?? [])
       .filter((node) => node.x !== undefined && node.y !== undefined)
       .map((node) => ({
         ...node,
@@ -80,11 +95,11 @@ export const getLayoutedElements = async (
         width: 200,
       }));
 
-    return { edges: layoutedEdges, nodes: newLayoutedNodes };
+    return { edges: layoutedEdges, nodes: newLayoutNodes };
   } catch (error) {
     console.error("ELK Layout error:", error);
     throw error;
   }
 };
 
-export default getLayoutedElements;
+export default getLayout;
