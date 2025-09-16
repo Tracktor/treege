@@ -8,6 +8,7 @@ const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
   const { name, onAddNode } = data;
 
   const parentConnections = useNodeConnections({ handleType: "target" });
+  const childConnections = useNodeConnections({ handleType: "source" });
 
   const handleAddChild = () => {
     onAddNode?.(id);
@@ -37,7 +38,7 @@ const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
           <Typography variant="h5">{name}</Typography>
           <Chip color="primary" size="small" label="text" />
           <Box sx={{ display: "flex", gap: 1 }}>
-            <Button onClick={handleAddChild}>Next node</Button>
+            {childConnections.length === 0 && <Button onClick={handleAddChild}>Next node</Button>}
             {parentConnections.length > 0 && <Button onClick={handleInsertBefore}>Insert Before</Button>}
           </Box>
         </CardContent>
