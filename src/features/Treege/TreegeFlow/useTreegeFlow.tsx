@@ -25,36 +25,29 @@ const useTreegeFlow = () => {
           type: "text",
         };
 
+        const newNodes = [...currentNodes, newNode];
         setEdges((currentEdges) => {
           let newEdges = [...currentEdges];
 
           if (childId) {
-            const edgeFromChild = newEdges.find((e) => e.source === childId);
+            const parentToChildEdge = newEdges.find((e) => e.source === parentId && e.target === childId);
 
-            if (edgeFromChild) {
-              newEdges = newEdges.filter((e) => e.id !== edgeFromChild.id);
-
-              newEdges.push({
-                id: `e-${childId}-to-${newId}-${getUUID()}`,
-                source: childId,
-                target: newId,
-                type: "smoothstep",
-              });
-
-              newEdges.push({
-                id: `e-${newId}-to-${edgeFromChild.target}-${getUUID()}`,
-                source: newId,
-                target: edgeFromChild.target,
-                type: "smoothstep",
-              });
-            } else {
-              newEdges.push({
-                id: `e-${childId}-to-${newId}-${getUUID()}`,
-                source: childId,
-                target: newId,
-                type: "smoothstep",
-              });
+            if (parentToChildEdge) {
+              newEdges = newEdges.filter((e) => e.id !== parentToChildEdge.id);
             }
+
+            newEdges.push({
+              id: `e-${parentId}-to-${newId}-${getUUID()}`,
+              source: parentId,
+              target: newId,
+              type: "smoothstep",
+            });
+            newEdges.push({
+              id: `e-${newId}-to-${childId}-${getUUID()}`,
+              source: newId,
+              target: childId,
+              type: "smoothstep",
+            });
           } else {
             newEdges.push({
               id: `e-${parentId}-to-${newId}-${getUUID()}`,
@@ -64,26 +57,28 @@ const useTreegeFlow = () => {
             });
           }
 
-          const newNodes = [...currentNodes, newNode];
-
           (async () => {
-            const layout = await getLayout(newNodes, newEdges);
+            try {
+              const layout = await getLayout(newNodes, newEdges);
 
-            setNodes(
-              layout.nodes.map((n) => ({
-                ...n,
-                data: { ...n.data, onAddNode: handleAddNode },
-              })),
-            );
-            setEdges(layout.edges);
+              setNodes(
+                layout.nodes.map((n) => ({
+                  ...n,
+                  data: { ...n.data, onAddNode: handleAddNode },
+                })),
+              );
+              setEdges(layout.edges);
 
-            await fitView({ duration: 800, padding: 0.3 });
+              await fitView({ duration: 800, padding: 0.3 });
+            } catch (error) {
+              console.error("Erreur lors du calcul du layout:", error);
+            }
           })();
 
           return newEdges;
         });
 
-        return [...currentNodes, newNode];
+        return newNodes;
       });
     },
     [setNodes, setEdges, fitView],
