@@ -2,9 +2,10 @@ import { ReactFlow, Controls, useEdgesState, useNodesState, useReactFlow, type N
 import { useCallback, useEffect, useRef } from "react";
 import autoLayout from "@/features/Treege/autoLayout/autoLayout";
 import TextNode from "@/features/Treege/TreegeFlow/Nodes/Text";
+import { getUUID } from "@/utils";
 
 export type CustomNodeData = {
-  label: string;
+  name: string;
   onAddNode?: (parentId: string) => void;
 };
 
@@ -22,87 +23,69 @@ const TreegeFlow = () => {
     async (parentId: string) => {
       setNodes((currentNodes) => {
         const parentExists = currentNodes.find((n) => n.id === parentId);
-
         if (!parentExists) return currentNodes;
 
-        const newId = `node-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        const newId = `node-${getUUID()}`;
         const newNode: Node<CustomNodeData> = {
-          data: { label: `Node ${currentNodes.length + 1}`, onAddNode: handleAddNode },
+          data: { name: `Node ${currentNodes.length + 1}`, onAddNode: handleAddNode },
           id: newId,
           position: { x: 0, y: 0 },
           type: "text",
         };
 
-        const newEdge: Edge = {
-          id: `e-${parentId}-to-${newId}`,
-          source: parentId,
-          target: newId,
-          type: "smoothstep",
-        };
-
-        const newNodes = [...currentNodes, newNode];
-
+        // 👉 construire edges en fonction du dernier état global
         setEdges((currentEdges) => {
+          const newEdge: Edge = {
+            id: `edge-${getUUID()}`,
+            source: parentId,
+            target: newId,
+            type: "smoothstep",
+          };
+
+          const newNodes = [...currentNodes, newNode];
           const newEdges = [...currentEdges, newEdge];
 
-          // Appliquer le layout de manière asynchrone APRÈS avoir mis à jour les deux états
-          setTimeout(async () => {
+          // lancer layout sur le graphe complet et mettre à jour les 2 en même temps
+          (async () => {
             try {
-              const layoutNodes = await autoLayout(newNodes, newEdges);
+              const layouted = await autoLayout(newNodes, newEdges);
 
               setNodes(
-                layoutNodes.nodes.map((n) => ({
+                layouted.nodes.map((n) => ({
                   ...n,
                   data: { ...n.data, onAddNode: handleAddNode },
                 })),
               );
+              setEdges(layouted.edges);
 
-              setTimeout(() => {
-                fitView({ duration: 800, padding: 0.3 });
-              }, 100);
-            } catch (error) {
-              // Fallback: position manuelle simple
-              const fallbackNode = {
-                ...newNode,
-                position: {
-                  x: parentExists.position.x + (Math.random() - 0.5) * 100,
-                  y: parentExists.position.y + 200,
-                },
-              };
-
-              setNodes([
-                ...currentNodes,
-                {
-                  ...fallbackNode,
-                  data: { ...fallbackNode.data, onAddNode: handleAddNode },
-                },
-              ]);
+              fitView({ duration: 800, padding: 0.3 });
+            } catch (err) {
+              console.error("Layout error:", err);
             }
-          }, 0);
+          })();
 
           return newEdges;
         });
 
-        // Retourner les nouveaux nodes immédiatement
-        return newNodes;
+        return [...currentNodes, newNode];
       });
     },
-    [setNodes, setEdges, fitView],
+    [fitView, setEdges, setNodes],
   );
 
-  // Initialisation du premier nœud (une seule fois)
+  // Initialisation du premier nœud
   useEffect(() => {
     if (!initialized.current) {
+      const rootId = `root-${getUUID()}`;
       const initialNode: Node<CustomNodeData> = {
-        data: { label: "Root Node", onAddNode: handleAddNode },
-        id: "root-1",
+        data: { name: "Root Node", onAddNode: handleAddNode },
+        id: rootId,
         position: { x: 0, y: 0 },
         type: "text",
       };
 
       setNodes([initialNode]);
       initialized.current = true;
-      console.log("Initial node created:", initialNode);
     }
   }, [handleAddNode, setNodes]);
 

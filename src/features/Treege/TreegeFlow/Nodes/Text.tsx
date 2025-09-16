@@ -1,17 +1,18 @@
-import { Card, CardContent, Chip, Box, Button } from "@tracktor/design-system";
+import { Card, CardContent, Chip, Box, Button, Typography } from "@tracktor/design-system";
 import { Position, Handle, useNodeConnections, type NodeProps, type Node } from "@xyflow/react";
 import { memo } from "react";
 import colors from "@/constants/colors";
 import { CustomNodeData } from "@/features/Treege/TreegeFlow/TreegeFlow";
 
 const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
+  const { name, onAddNode } = data;
+
   const connections = useNodeConnections({
     handleType: "target",
   });
 
   const handleAddNode = () => {
-    data.onAddNode?.(id);
-    console.log("Add node clicked for node id:", id);
+    onAddNode?.(id);
   };
 
   return (
@@ -33,6 +34,7 @@ const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
             width: 200,
           }}
         >
+          <Typography variant="h5">{name}</Typography>
           <Chip color="primary" size="small" label="text" />
           <Button onClick={handleAddNode}>+</Button>
         </CardContent>
