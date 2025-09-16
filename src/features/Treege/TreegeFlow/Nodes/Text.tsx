@@ -7,7 +7,6 @@ import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 
 const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
   const { name, onAddNode } = data;
-
   const parentConnections = useNodeConnections({ handleType: "target" });
   const childConnections = useNodeConnections({ handleType: "source" });
   const isLastNode = childConnections.length === 0;
