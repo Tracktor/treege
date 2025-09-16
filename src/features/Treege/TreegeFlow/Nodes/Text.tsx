@@ -6,30 +6,22 @@ import colors from "@/constants/colors";
 import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 
 const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
-  const { name, onAddNode } = data;
+  const { name, order, onAddNode } = data;
 
-  // incoming edges (parent connections)
   const parentConnections = useNodeConnections({ handleType: "target" });
-  // outgoing edges (child connections)
   const childConnections = useNodeConnections({ handleType: "source" });
 
   const isLastNode = childConnections.length === 0;
 
-  // add a child below the current node
+  // add a new node below current node
   const handleAddChild = () => {
+    // now just call onAddNode(id) — hook figures out child automatically
     onAddNode?.(id);
   };
 
-  // insert a node after the current node but before its first child
+  // insert between current node and its current child (also just onAddNode(id))
   const handleInsertChild = () => {
-    if (childConnections.length > 0) {
-      const childId = childConnections[0].target;
-      // current node becomes the parent of the new node
-      onAddNode?.(id, childId);
-    } else {
-      // no child: behave like add child
-      onAddNode?.(id);
-    }
+    onAddNode?.(id);
   };
 
   return (
@@ -46,7 +38,9 @@ const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
             width: 200,
           }}
         >
-          <Typography variant="h5">{name}</Typography>
+          <Typography variant="h5">
+            {name} (#{order})
+          </Typography>
           <Chip color="primary" size="small" label="text" />
           <Box sx={{ display: "flex", gap: 1 }}>
             {isLastNode && (

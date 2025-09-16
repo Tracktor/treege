@@ -10,28 +10,56 @@ export const useTreegeFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node<CustomNodeData>>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
 
-  console.log("edges", edges);
-  console.log("nodes", nodes);
-
   const [graphNodes, setGraphNodes] = useState<Node<CustomNodeData>[]>([]);
   const [graphEdges, setGraphEdges] = useState<Edge[]>([]);
 
   const initialized = useRef(false);
   const getId = useIdGenerator();
 
+  // helper: normalize order sequentially (1,2,3,4…)
+  const normalizeOrder = (nodeArray: Node<CustomNodeData>[]) => {
+    const sorted = [...nodeArray].sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+    return sorted.map((n, index) => ({
+      ...n,
+      data: {
+        ...n.data,
+        order: index + 1,
+      },
+    }));
+  };
+
   const handleAddNode = useCallback(
     (parentId: string, childId?: string) => {
       setGraphNodes((currentNodes) => {
-        const parentExists = currentNodes.find((n) => n.id === parentId);
-        if (!parentExists) return currentNodes;
+        const parentNode = currentNodes.find((n) => n.id === parentId);
+        if (!parentNode) return currentNodes;
+
+        // automatically detect current direct child if not provided
+        let effectiveChildId = childId;
+        if (!effectiveChildId) {
+          const existingEdge = graphEdges.find((e) => e.source === parentId);
+          if (existingEdge) {
+            effectiveChildId = existingEdge.target;
+          }
+        }
+
+        // determine order for the new node (fractional before normalize)
+        let newOrder: number;
+        if (effectiveChildId) {
+          const childNode = currentNodes.find((n) => n.id === effectiveChildId);
+          const parentOrder = parentNode.data.order ?? 0;
+          const childOrder = childNode?.data.order ?? parentOrder + 1;
+          newOrder = (parentOrder + childOrder) / 2;
+        } else {
+          const parentOrder = parentNode.data.order ?? currentNodes.length;
+          newOrder = parentOrder + 1;
+        }
 
         const newId = getId("node");
-        const newOrder = currentNodes.length + 1;
 
         const newNode: Node<CustomNodeData> = {
           data: {
-            name: `Node ${newOrder}`,
-            // explicit order field
+            name: `Node`,
             onAddNode: handleAddNode,
             order: newOrder,
           },
@@ -43,11 +71,14 @@ export const useTreegeFlow = () => {
         const indexParent = currentNodes.findIndex((n) => n.id === parentId);
         const newNodes = [...currentNodes.slice(0, indexParent + 1), newNode, ...currentNodes.slice(indexParent + 1)];
 
+        // update edges
         setGraphEdges((currentEdges) => {
           let newEdges = [...currentEdges];
-          if (childId) {
-            newEdges = newEdges.filter((e) => !(e.source === parentId && e.target === childId));
+          if (effectiveChildId) {
+            // remove old edge parent→child
+            newEdges = newEdges.filter((e) => !(e.source === parentId && e.target === effectiveChildId));
 
+            // add parent→newNode and newNode→child
             newEdges.push({
               id: getId("edge"),
               source: parentId,
@@ -57,10 +88,11 @@ export const useTreegeFlow = () => {
             newEdges.push({
               id: getId("edge"),
               source: newId,
-              target: childId,
+              target: effectiveChildId,
               type: "smoothstep",
             });
           } else {
+            // add parent→newNode only
             newEdges.push({
               id: getId("edge"),
               source: parentId,
@@ -68,13 +100,15 @@ export const useTreegeFlow = () => {
               type: "smoothstep",
             });
           }
+
           return newEdges;
         });
 
-        return newNodes;
+        // 👇 normalize immediately after adding new node
+        return normalizeOrder(newNodes);
       });
     },
-    [getId],
+    [getId, graphEdges],
   );
 
   useEffect(() => {

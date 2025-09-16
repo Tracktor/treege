@@ -2,6 +2,7 @@ import TextNode from "@/features/Treege/TreegeFlow/Nodes/Text";
 
 export type CustomNodeData = {
   name: string;
+  order: number;
   onAddNode?: (parentId: string, childId?: string) => void;
   onDeleteNode?: (parentId: string, childId?: string) => void;
 };
