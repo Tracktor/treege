@@ -6,7 +6,7 @@ import { getUUID } from "@/utils";
 
 export type CustomNodeData = {
   name: string;
-  onAddNode?: (parentId: string) => void;
+  onAddNode?: (parentId: string, childId?: string) => void;
 };
 
 const nodeTypes = {
@@ -20,7 +20,7 @@ const TreegeFlow = () => {
   const initialized = useRef(false);
 
   const handleAddNode = useCallback(
-    async (parentId: string) => {
+    async (parentId: string, childId?: string) => {
       setNodes((currentNodes) => {
         const parentExists = currentNodes.find((n) => n.id === parentId);
         if (!parentExists) return currentNodes;
@@ -28,23 +28,47 @@ const TreegeFlow = () => {
         const newId = `node-${getUUID()}`;
 
         const newNode: Node<CustomNodeData> = {
+          // layout recalculé ensuite
           data: { name: `Node ${currentNodes.length + 1}`, onAddNode: handleAddNode },
+
           id: newId,
+
           position: { x: 0, y: 0 },
           type: "text",
         };
 
-        // ⚡ Ici, on utilise setEdges avec une updater function
         setEdges((currentEdges) => {
-          const newEdge: Edge = {
-            id: `e-${parentId}-to-${newId}-${getUUID()}`,
-            source: parentId,
-            target: newId,
-            type: "smoothstep",
-          };
+          let newEdges = [...currentEdges];
+
+          if (childId) {
+            // On veut insérer entre parentId -> childId
+            // 1. Supprimer l'edge existant
+            newEdges = newEdges.filter((e) => !(e.source === parentId && e.target === childId));
+
+            // 2. Ajouter les 2 nouveaux edges
+            newEdges.push({
+              id: `e-${parentId}-to-${newId}-${getUUID()}`,
+              source: parentId,
+              target: newId,
+              type: "smoothstep",
+            });
+            newEdges.push({
+              id: `e-${newId}-to-${childId}-${getUUID()}`,
+              source: newId,
+              target: childId,
+              type: "smoothstep",
+            });
+          } else {
+            // Comportement par défaut : nouvelle branche
+            newEdges.push({
+              id: `e-${parentId}-to-${newId}-${getUUID()}`,
+              source: parentId,
+              target: newId,
+              type: "smoothstep",
+            });
+          }
 
           const newNodes = [...currentNodes, newNode];
-          const newEdges = [...currentEdges, newEdge];
 
           (async () => {
             const layout = await getLayout(newNodes, newEdges);
@@ -69,7 +93,7 @@ const TreegeFlow = () => {
     [setNodes, setEdges, fitView],
   );
 
-  // Initialisation du premier nœud
+  // Init first node
   useEffect(() => {
     if (!initialized.current) {
       const rootId = `root-${getUUID()}`;
@@ -94,13 +118,7 @@ const TreegeFlow = () => {
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       defaultEdgeOptions={{
-        markerEnd: {
-          color: "#999",
-          height: 20,
-          type: "arrowclosed",
-          width: 20,
-        },
-        style: { stroke: "#999", strokeWidth: 2 },
+        style: { stroke: "#999", strokeDasharray: "1 3", strokeLinecap: "round", strokeWidth: 1 },
         type: "smoothstep",
       }}
     >

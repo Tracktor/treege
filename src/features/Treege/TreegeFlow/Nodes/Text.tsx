@@ -7,24 +7,24 @@ import { CustomNodeData } from "@/features/Treege/TreegeFlow/TreegeFlow";
 const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
   const { name, onAddNode } = data;
 
-  const connections = useNodeConnections({
-    handleType: "target",
-  });
+  const parentConnections = useNodeConnections({ handleType: "target" });
 
-  const handleAddNode = () => {
+  const handleAddChild = () => {
     onAddNode?.(id);
+  };
+
+  const handleInsertBefore = () => {
+    if (parentConnections.length > 0) {
+      const parentId = parentConnections[0].source;
+      onAddNode?.(parentId, id);
+    }
   };
 
   return (
     <Box component="div">
-      <Handle type="target" position={Position.Top} isConnectable={connections.length === 0} />
+      {parentConnections.length !== 0 && <Handle type="target" position={Position.Top} />}
 
-      <Card
-        sx={{
-          background: colors.background,
-          borderRadius: "1rem",
-        }}
-      >
+      <Card sx={{ background: colors.background, borderRadius: "1rem" }}>
         <CardContent
           sx={{
             display: "flex",
@@ -36,9 +36,13 @@ const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
         >
           <Typography variant="h5">{name}</Typography>
           <Chip color="primary" size="small" label="text" />
-          <Button onClick={handleAddNode}>+</Button>
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Button onClick={handleAddChild}>Next node</Button>
+            {parentConnections.length > 0 && <Button onClick={handleInsertBefore}>Insert Before</Button>}
+          </Box>
         </CardContent>
       </Card>
+
       <Handle type="source" position={Position.Bottom} />
     </Box>
   );
