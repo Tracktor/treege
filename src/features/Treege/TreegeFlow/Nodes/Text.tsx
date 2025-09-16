@@ -1,4 +1,5 @@
-import { Card, CardContent, Chip, Box, Button, Typography } from "@tracktor/design-system";
+import AddIcon from "@mui/icons-material/Add";
+import { Card, CardContent, Chip, Box, Typography, IconButton } from "@tracktor/design-system";
 import { Position, Handle, useNodeConnections, type NodeProps, type Node } from "@xyflow/react";
 import { memo } from "react";
 import colors from "@/constants/colors";
@@ -9,12 +10,13 @@ const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
 
   const parentConnections = useNodeConnections({ handleType: "target" });
   const childConnections = useNodeConnections({ handleType: "source" });
+  const isLastNode = childConnections.length === 0;
 
   const handleAddChild = () => {
     onAddNode?.(id);
   };
 
-  const handleInsertBefore = () => {
+  const handleInsertChild = () => {
     if (parentConnections.length > 0) {
       const parentId = parentConnections[0].source;
       onAddNode?.(parentId, id);
@@ -38,8 +40,19 @@ const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
           <Typography variant="h5">{name}</Typography>
           <Chip color="primary" size="small" label="text" />
           <Box sx={{ display: "flex", gap: 1 }}>
-            {childConnections.length === 0 && <Button onClick={handleAddChild}>Next node</Button>}
-            {parentConnections.length > 0 && <Button onClick={handleInsertBefore}>Insert Before</Button>}
+            {isLastNode && (
+              <IconButton size="small" color="primary" onClick={handleAddChild}>
+                <AddIcon />
+                add
+              </IconButton>
+            )}
+
+            {!isLastNode && (
+              <IconButton size="small" color="secondary" onClick={handleInsertChild}>
+                <AddIcon />
+                insert
+              </IconButton>
+            )}
           </Box>
         </CardContent>
       </Card>

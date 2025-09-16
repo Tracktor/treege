@@ -29,20 +29,32 @@ const useTreegeFlow = () => {
           let newEdges = [...currentEdges];
 
           if (childId) {
-            newEdges = newEdges.filter((e) => !(e.source === parentId && e.target === childId));
+            const edgeFromChild = newEdges.find((e) => e.source === childId);
 
-            newEdges.push({
-              id: `e-${parentId}-to-${newId}-${getUUID()}`,
-              source: parentId,
-              target: newId,
-              type: "smoothstep",
-            });
-            newEdges.push({
-              id: `e-${newId}-to-${childId}-${getUUID()}`,
-              source: newId,
-              target: childId,
-              type: "smoothstep",
-            });
+            if (edgeFromChild) {
+              newEdges = newEdges.filter((e) => e.id !== edgeFromChild.id);
+
+              newEdges.push({
+                id: `e-${childId}-to-${newId}-${getUUID()}`,
+                source: childId,
+                target: newId,
+                type: "smoothstep",
+              });
+
+              newEdges.push({
+                id: `e-${newId}-to-${edgeFromChild.target}-${getUUID()}`,
+                source: newId,
+                target: edgeFromChild.target,
+                type: "smoothstep",
+              });
+            } else {
+              newEdges.push({
+                id: `e-${childId}-to-${newId}-${getUUID()}`,
+                source: childId,
+                target: newId,
+                type: "smoothstep",
+              });
+            }
           } else {
             newEdges.push({
               id: `e-${parentId}-to-${newId}-${getUUID()}`,
