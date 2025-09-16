@@ -1,7 +1,7 @@
 import { type Edge, type Node, useEdgesState, useNodesState, useReactFlow } from "@xyflow/react";
 import { useCallback, useEffect, useRef } from "react";
 import getLayout from "@/features/Treege/getLayout/getLayout";
-import { CustomNodeData } from "@/features/Treege/TreegeFlow/TreegeFlow";
+import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 import { getUUID } from "@/utils";
 
 const useTreegeFlow = () => {

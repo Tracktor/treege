@@ -1,20 +1,11 @@
-import { ReactFlow, Controls } from "@xyflow/react";
-import AnimatedDashedEdge from "@/features/Treege/TreegeFlow/Edges/AnimatedDashedEdge";
-import TextNode from "@/features/Treege/TreegeFlow/Nodes/Text";
+import { ReactFlow, Controls, DefaultEdgeOptions } from "@xyflow/react";
+import edgeTypes from "@/features/Treege/TreegeFlow/Edges/edgesTypes";
+import nodeTypes from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 import useTreegeFlow from "@/features/Treege/TreegeFlow/useTreegeFlow";
 
-export type CustomNodeData = {
-  name: string;
-  onAddNode?: (parentId: string, childId?: string) => void;
-  onDeleteNode?: (parentId: string, childId?: string) => void;
-};
-
-const nodeTypes = {
-  text: TextNode,
-};
-
-const edgeTypes = {
-  animatedDashed: AnimatedDashedEdge,
+const edgeOptions: DefaultEdgeOptions = {
+  style: { stroke: "#999", strokeDasharray: "1 3", strokeLinecap: "round", strokeWidth: 1 },
+  type: "smoothstep",
 };
 
 const TreegeFlow = () => {
@@ -29,10 +20,7 @@ const TreegeFlow = () => {
       edges={edges.map((e) => ({ ...e, type: "animatedDashed" }))}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
-      defaultEdgeOptions={{
-        style: { stroke: "#999", strokeDasharray: "1 3", strokeLinecap: "round", strokeWidth: 1 },
-        type: "smoothstep",
-      }}
+      defaultEdgeOptions={edgeOptions}
     >
       <Controls />
     </ReactFlow>

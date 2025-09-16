@@ -2,7 +2,7 @@ import { Card, CardContent, Chip, Box, Button, Typography } from "@tracktor/desi
 import { Position, Handle, useNodeConnections, type NodeProps, type Node } from "@xyflow/react";
 import { memo } from "react";
 import colors from "@/constants/colors";
-import { CustomNodeData } from "@/features/Treege/TreegeFlow/TreegeFlow";
+import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 
 const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
   const { name, onAddNode } = data;

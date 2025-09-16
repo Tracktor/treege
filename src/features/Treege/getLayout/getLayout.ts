@@ -1,6 +1,6 @@
 import { Edge, Node, Position } from "@xyflow/react";
 import ELK from "elkjs/lib/elk.bundled.js";
-import { CustomNodeData } from "@/features/Treege/TreegeFlow/TreegeFlow";
+import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 
 export type ElkLayoutOptions = Partial<{
   "elk.algorithm": "layered" | "force" | "mrtree";
