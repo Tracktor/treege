@@ -1,6 +1,7 @@
 import { ReactFlow, Controls, useEdgesState, useNodesState, useReactFlow, type Node, type Edge } from "@xyflow/react";
 import { useCallback, useEffect, useRef } from "react";
 import getLayout from "@/features/Treege/getLayout/getLayout";
+import AnimatedDashedEdge from "@/features/Treege/TreegeFlow/Edges/AnimatedDashedEdge";
 import TextNode from "@/features/Treege/TreegeFlow/Nodes/Text";
 import { getUUID } from "@/utils";
 
@@ -11,6 +12,10 @@ export type CustomNodeData = {
 
 const nodeTypes = {
   text: TextNode,
+};
+
+const edgeTypes = {
+  animatedDashed: AnimatedDashedEdge,
 };
 
 const TreegeFlow = () => {
@@ -114,7 +119,8 @@ const TreegeFlow = () => {
       fitView
       nodeTypes={nodeTypes}
       nodes={nodes}
-      edges={edges}
+      edgeTypes={edgeTypes}
+      edges={edges.map((e) => ({ ...e, type: "animatedDashed" }))}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       defaultEdgeOptions={{
