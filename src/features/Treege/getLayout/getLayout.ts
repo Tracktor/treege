@@ -42,7 +42,6 @@ export const getLayout = async (
 
   const nodeIds = new Set(nodes.map((n) => n.id));
 
-  // ⚡ garder uniquement les edges valides
   const elkEdges: ElkEdge[] = edges
     .filter((edge) => nodeIds.has(edge.source) && nodeIds.has(edge.target))
     .map((edge) => ({
@@ -67,10 +66,8 @@ export const getLayout = async (
   try {
     const layoutedGraph = await elk.layout(graph);
 
-    // ⚡ Indexer les edges renvoyés par ELK
     const elkEdgeMap = new Map((layoutedGraph.edges ?? []).map((e) => [e.id, e]));
 
-    // ⚡ Reconstruire tous les edges à partir de la liste originale
     const layoutedEdges: Edge[] = edges.map((original) => {
       const elkEdge = elkEdgeMap.get(original.id);
       if (elkEdge) {
@@ -80,10 +77,9 @@ export const getLayout = async (
           target: elkEdge.targets[0],
         };
       }
-      return original; // si ELK n’a rien renvoyé, on garde l’original
+      return original;
     });
 
-    // ⚡ Nodes recalculés avec positions
     const newLayoutNodes: Node<CustomNodeData>[] = (layoutedGraph.children ?? [])
       .filter((node) => node.x !== undefined && node.y !== undefined)
       .map((node) => ({
