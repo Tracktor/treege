@@ -10,6 +10,8 @@ export type ElkLayoutOptions = Partial<{
   "elk.padding": string;
   "elk.spacing.edgeNode": string;
   "elk.spacing.nodeNode": string;
+  "elk.layered.nodePlacement.strategy": string;
+  "elk.layered.nodeOrder.strategy": string;
 }>;
 
 type ElkEdge = {
@@ -24,8 +26,16 @@ const elkOptions: ElkLayoutOptions = {
   "elk.algorithm": "layered",
   "elk.direction": "DOWN",
   "elk.edgeRouting": "ORTHOGONAL",
+
+  "elk.layered.nodeOrder.strategy": "INPUT_ORDER",
+
+  // Enforce input order
+  "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
+
   "elk.layered.spacing.nodeNodeBetweenLayers": "120",
+
   "elk.padding": "[top=50,left=50,bottom=50,right=50]",
+
   "elk.spacing.edgeNode": "40",
   "elk.spacing.nodeNode": "80",
 };
@@ -40,8 +50,8 @@ export const getLayout = async (
 }> => {
   const isHorizontal = options?.["elk.direction"] === "RIGHT";
 
+  // Filter edges that have valid source and target
   const nodeIds = new Set(nodes.map((n) => n.id));
-
   const elkEdges: ElkEdge[] = edges
     .filter((edge) => nodeIds.has(edge.source) && nodeIds.has(edge.target))
     .map((edge) => ({
@@ -50,10 +60,14 @@ export const getLayout = async (
       targets: [edge.target],
     }));
 
+  // Sort nodes by input order if needed
+  const sortedNodes = [...nodes];
+
   const graph = {
-    children: nodes.map((node) => ({
+    children: sortedNodes.map((node, index) => ({
       ...node,
       height: 150,
+      order: index,
       sourcePosition: isHorizontal ? "right" : "bottom",
       targetPosition: isHorizontal ? "left" : "top",
       width: 200,

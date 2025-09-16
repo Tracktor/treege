@@ -7,18 +7,28 @@ import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 
 const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
   const { name, onAddNode } = data;
+
+  // incoming edges (parent connections)
   const parentConnections = useNodeConnections({ handleType: "target" });
+  // outgoing edges (child connections)
   const childConnections = useNodeConnections({ handleType: "source" });
+
   const isLastNode = childConnections.length === 0;
 
+  // add a child below the current node
   const handleAddChild = () => {
     onAddNode?.(id);
   };
 
+  // insert a node after the current node but before its first child
   const handleInsertChild = () => {
-    if (parentConnections.length > 0) {
-      const parentId = parentConnections[0].source;
-      onAddNode?.(parentId, id);
+    if (childConnections.length > 0) {
+      const childId = childConnections[0].target;
+      // current node becomes the parent of the new node
+      onAddNode?.(id, childId);
+    } else {
+      // no child: behave like add child
+      onAddNode?.(id);
     }
   };
 
