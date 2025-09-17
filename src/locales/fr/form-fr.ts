@@ -10,6 +10,7 @@ const FORM_FR = {
   disabledPast: "Passé désactivé",
   dynamicSelectStructureHint: "Assurez-vous que le champ accepte la valeur de l'ancêtre.",
   email: "Email",
+  false: "Faux",
   firstNameAndLastName: "Prénom et nom",
   helperText: "Texte d'information",
   hiddenValue: "Valeur caché",
@@ -44,6 +45,7 @@ const FORM_FR = {
   step: "Étape",
   tree: "Arbre",
   treeName: "Nom de l'arbre",
+  true: "Vrai",
   type: {
     address: "Adresse",
     autocomplete: "Autocomplétion",

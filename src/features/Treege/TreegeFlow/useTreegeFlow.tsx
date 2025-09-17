@@ -2,7 +2,7 @@ import { type Edge, type Node, useEdgesState, useNodesState, useReactFlow } from
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useIdGenerator } from "@/features/Treege/context/IDProvider";
 import getLayout from "@/features/Treege/getLayout/getLayout";
-import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
+import { CustomNodeData, NodeOptions } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 
 export const useTreegeFlow = () => {
   const { fitView } = useReactFlow();
@@ -28,12 +28,12 @@ export const useTreegeFlow = () => {
   };
 
   const handleAddNode = useCallback(
-    (parentId: string, childId?: string) => {
+    (parentId: string, childId?: string, options?: NodeOptions) => {
       setGraphNodes((currentNodes) => {
         const parentNode = currentNodes.find((n) => n.id === parentId);
         if (!parentNode) return currentNodes;
 
-        // auto-pick correct child if not provided
+        // auto-pick child if not provided
         let effectiveChildId = childId;
         if (!effectiveChildId) {
           const childCandidates = graphEdges
@@ -43,7 +43,6 @@ export const useTreegeFlow = () => {
 
           if (childCandidates.length > 0) {
             const sorted = childCandidates.sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
-            // pick the first in order
             effectiveChildId = sorted[0].id;
           }
         }
@@ -64,13 +63,15 @@ export const useTreegeFlow = () => {
 
         const newNode: Node<CustomNodeData> = {
           data: {
-            name: `Node`,
+            isDecision: options?.isDecision ?? false,
+            name: options?.name ?? `Node`,
             onAddNode: handleAddNode,
             order: newOrder,
+            type: options?.type ?? "text",
           },
           id: newId,
           position: { x: 0, y: 0 },
-          type: "text",
+          type: options?.type ?? "text",
         };
 
         const indexParent = currentNodes.findIndex((n) => n.id === parentId);
@@ -90,7 +91,7 @@ export const useTreegeFlow = () => {
             });
             newEdges.push({
               id: getId("edge"),
-              source: newId,
+              source: newNode.id,
               target: effectiveChildId,
               type: "smoothstep",
             });

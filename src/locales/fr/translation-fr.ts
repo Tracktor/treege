@@ -1,5 +1,6 @@
 const TRANSLATION_FR = {
   add: "Ajouter",
+  addNode: "Ajouter un noeud",
   cancel: "Annuler",
   disabled: "Désactivé",
   edit: "Éditer",
