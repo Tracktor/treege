@@ -11,24 +11,33 @@ import { CustomNodeData, NodeOptions } from "@/features/Treege/TreegeFlow/Nodes/
 const BooleanNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
   const { t } = useTranslation("form");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [branchHandle, setBranchHandle] = useState<string | null>(null);
   const parentConnections = useNodeConnections({ handleType: "target" });
   const { name, order, onAddNode, isDecision } = data;
 
-  const handleOpenModal = () => setIsModalOpen(true);
-
-  const handleSaveModal = (config: NodeOptions) => {
-    onAddNode?.(id, undefined, config);
-    setIsModalOpen(false);
+  const handleOpenModal = () => {
+    setBranchHandle(null);
+    setIsModalOpen(true);
   };
 
-  const handleCancelModal = () => setIsModalOpen(false);
+  const handleOpenBranchModal = (branch: "Yes" | "No") => {
+    const handleId = branch === "Yes" ? `${id}-true` : `${id}-false`;
+    setBranchHandle(handleId);
+    setIsModalOpen(true);
+  };
 
-  const handleAddBranch = (branchName: string) => {
-    const opts: NodeOptions = {
-      name: `${branchName} node`,
-      type: "text",
-    };
-    onAddNode?.(id, undefined, opts);
+  const handleSaveModal = (config: NodeOptions) => {
+    onAddNode?.(id, undefined, {
+      ...config,
+      sourceHandle: branchHandle ?? undefined,
+    });
+    setIsModalOpen(false);
+    setBranchHandle(null);
+  };
+
+  const handleCancelModal = () => {
+    setIsModalOpen(false);
+    setBranchHandle(null);
   };
 
   return (
@@ -36,7 +45,15 @@ const BooleanNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
       <Box component="div">
         {parentConnections.length !== 0 && <Handle type="target" position={Position.Top} />}
 
-        <Card sx={{ background: colors.background, borderColor: colors.primary, borderRadius: "1rem" }}>
+        <Card
+          sx={{
+            background: colors.background,
+            borderColor: colors.primary,
+            borderRadius: "1rem",
+            overflow: "visible",
+            position: "relative",
+          }}
+        >
           <CardContent
             sx={{
               display: "flex",
@@ -69,11 +86,11 @@ const BooleanNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
 
           {isDecision && (
             <Stack mr={2} ml={2}>
-              <Divider sx={{ ml: -3, mr: -3 }} />
+              <Divider sx={{ ml: -2, mr: -2 }} />
 
               <Stack spacing={2} direction="row" alignItems="center" alignSelf="end" sx={{ position: "relative" }}>
                 <Typography>{t("true")}</Typography>
-                <IconButton size="small" color="info" onClick={() => handleAddBranch("Yes")}>
+                <IconButton size="small" color="info" onClick={() => handleOpenBranchModal("Yes")}>
                   <AddBoxRoundedIcon sx={{ fontSize: 20 }} />
                 </IconButton>
 
@@ -82,24 +99,38 @@ const BooleanNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
                   position={Position.Right}
                   id={`${id}-true`}
                   style={{
-                    backgroundColor: colors.primary,
-                    borderRadius: "50%",
-                    height: 16,
+                    fontSize: 20,
+                    opacity: 0,
                     position: "absolute",
-                    right: -8,
-                    // place à droite du stack
+                    right: -27,
                     top: "50%",
                     transform: "translateY(-50%)",
-                    width: 16,
+                  }}
+                />
+
+                <ArrowDropDownCircleIcon
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: colors.secondary,
+                    },
+                    backgroundColor: colors.primary,
+                    borderRadius: "50%",
+                    color: colors.background,
+                    cursor: "pointer",
+                    fontSize: 20,
+                    position: "absolute",
+                    right: -27,
+                    top: "50%",
+                    transform: "translateY(-50%) rotate(-90deg)",
                   }}
                 />
               </Stack>
 
-              <Divider sx={{ ml: -3, mr: -3 }} />
+              <Divider sx={{ ml: -2, mr: -2 }} />
 
               <Stack spacing={2} direction="row" alignItems="center" alignSelf="end" sx={{ position: "relative" }}>
                 <Typography>{t("false")}</Typography>
-                <IconButton size="small" color="secondary" onClick={() => handleAddBranch("No")}>
+                <IconButton size="small" color="secondary" onClick={() => handleOpenBranchModal("No")}>
                   <AddBoxRoundedIcon sx={{ fontSize: 20 }} />
                 </IconButton>
 
@@ -108,14 +139,29 @@ const BooleanNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
                   position={Position.Right}
                   id={`${id}-false`}
                   style={{
-                    backgroundColor: colors.primary,
-                    borderRadius: "50%",
-                    height: 16,
+                    fontSize: 20,
+                    opacity: 0,
                     position: "absolute",
-                    right: -8,
+                    right: -27,
                     top: "50%",
                     transform: "translateY(-50%)",
-                    width: 16,
+                  }}
+                />
+
+                <ArrowDropDownCircleIcon
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: colors.secondary,
+                    },
+                    backgroundColor: colors.primary,
+                    borderRadius: "50%",
+                    color: colors.background,
+                    cursor: "pointer",
+                    fontSize: 20,
+                    position: "absolute",
+                    right: -27,
+                    top: "50%",
+                    transform: "translateY(-50%) rotate(-90deg)",
                   }}
                 />
               </Stack>

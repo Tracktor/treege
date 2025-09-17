@@ -5,6 +5,7 @@ export type NodeOptions = {
   name?: string;
   type?: string;
   isDecision?: boolean;
+  sourceHandle?: string;
 };
 
 export type CustomNodeData = {

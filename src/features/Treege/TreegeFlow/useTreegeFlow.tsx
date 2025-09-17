@@ -33,9 +33,10 @@ export const useTreegeFlow = () => {
         const parentNode = currentNodes.find((n) => n.id === parentId);
         if (!parentNode) return currentNodes;
 
-        // auto-pick child if not provided
+        const sourceHandle = options?.sourceHandle;
+
         let effectiveChildId = childId;
-        if (!effectiveChildId) {
+        if (!effectiveChildId && !sourceHandle) {
           const childCandidates = graphEdges
             .filter((e) => e.source === parentId)
             .map((e) => currentNodes.find((n) => n.id === e.target))
@@ -80,7 +81,15 @@ export const useTreegeFlow = () => {
         setGraphEdges((currentEdges) => {
           let newEdges = [...currentEdges];
 
-          if (effectiveChildId) {
+          if (sourceHandle) {
+            newEdges.push({
+              id: getId("edge"),
+              source: parentId,
+              sourceHandle,
+              target: newId,
+              type: "smoothstep",
+            });
+          } else if (effectiveChildId) {
             newEdges = newEdges.filter((e) => !(e.source === parentId && e.target === effectiveChildId));
 
             newEdges.push({
