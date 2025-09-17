@@ -1,15 +1,15 @@
+// AnimatedDashedEdge.tsx
 import { keyframes } from "@tracktor/design-system";
-import { BaseEdge, EdgeProps, getBezierPath } from "@xyflow/react";
-import React from "react";
+import { BaseEdge, EdgeProps, getStraightPath } from "@xyflow/react";
 
 const dashAnim = keyframes`
-  to {
-    stroke-dashoffset: -10;
-  }
+    to {
+        stroke-dashoffset: -12;
+    }
 `;
 
 const AnimatedDashedEdge = (props: EdgeProps) => {
-  const [path] = getBezierPath(props);
+  const [path] = getStraightPath(props);
 
   return (
     <BaseEdge
@@ -17,7 +17,7 @@ const AnimatedDashedEdge = (props: EdgeProps) => {
       style={{
         animation: `${dashAnim} 1s linear infinite`,
         stroke: "#999",
-        strokeDasharray: "5 5",
+        strokeDasharray: "6 4",
         strokeDashoffset: 0,
         strokeWidth: 2,
       }}

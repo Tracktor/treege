@@ -87,7 +87,7 @@ export const useTreegeFlow = () => {
               source: parentId,
               sourceHandle,
               target: newId,
-              type: "smoothstep",
+              type: "animatedDashed",
             });
           } else if (effectiveChildId) {
             newEdges = newEdges.filter((e) => !(e.source === parentId && e.target === effectiveChildId));
@@ -96,20 +96,20 @@ export const useTreegeFlow = () => {
               id: getId("edge"),
               source: parentId,
               target: newId,
-              type: "smoothstep",
+              type: "animatedDashed",
             });
             newEdges.push({
               id: getId("edge"),
               source: newNode.id,
               target: effectiveChildId,
-              type: "smoothstep",
+              type: "animatedDashed",
             });
           } else {
             newEdges.push({
               id: getId("edge"),
               source: parentId,
               target: newId,
-              type: "smoothstep",
+              type: "animatedDashed",
             });
           }
 

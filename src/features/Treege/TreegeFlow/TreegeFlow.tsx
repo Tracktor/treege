@@ -4,8 +4,13 @@ import nodeTypes from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 import useTreegeFlow from "@/features/Treege/TreegeFlow/useTreegeFlow";
 
 const edgeOptions: DefaultEdgeOptions = {
-  style: { stroke: "#999", strokeDasharray: "1 3", strokeLinecap: "round", strokeWidth: 1 },
-  type: "smoothstep",
+  style: {
+    stroke: "#999",
+    strokeDasharray: "6 4",
+    strokeLinecap: "round",
+    strokeWidth: 2,
+  },
+  type: "animatedDashed",
 };
 
 const TreegeFlow = () => {
@@ -17,7 +22,7 @@ const TreegeFlow = () => {
       nodeTypes={nodeTypes}
       nodes={nodes}
       edgeTypes={edgeTypes}
-      edges={edges.map((e) => ({ ...e, type: "animatedDashed" }))}
+      edges={edges}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       defaultEdgeOptions={edgeOptions}

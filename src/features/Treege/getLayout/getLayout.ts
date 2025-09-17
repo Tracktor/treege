@@ -26,12 +26,12 @@ const elkOptions: ElkLayoutOptions = {
   "elk.algorithm": "layered",
   "elk.direction": "DOWN",
   "elk.edgeRouting": "ORTHOGONAL",
-  "elk.layered.nodeOrder.strategy": "INPUT_ORDER",
-  "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
-  "elk.layered.spacing.nodeNodeBetweenLayers": "120",
+  "elk.layered.nodeOrder.strategy": "NETWORK_SIMPLEX",
+  "elk.layered.nodePlacement.strategy": "BRANDES_KOEPF",
+  "elk.layered.spacing.nodeNodeBetweenLayers": "150",
   "elk.padding": "[top=50,left=50,bottom=50,right=50]",
-  "elk.spacing.edgeNode": "40",
-  "elk.spacing.nodeNode": "80",
+  "elk.spacing.edgeNode": "60",
+  "elk.spacing.nodeNode": "150",
 };
 
 export const getLayout = async (
@@ -82,9 +82,13 @@ export const getLayout = async (
           ...original,
           source: elkEdge.sources[0],
           target: elkEdge.targets[0],
+          type: "straight",
         };
       }
-      return original;
+      return {
+        ...original,
+        type: "straight",
+      };
     });
 
     const newLayoutNodes: Node<CustomNodeData>[] = (layoutedGraph.children ?? [])
