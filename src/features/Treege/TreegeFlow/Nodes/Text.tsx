@@ -1,4 +1,5 @@
-import AddIcon from "@mui/icons-material/Add";
+import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
+import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 import { Card, CardContent, Chip, Box, Typography, IconButton, Stack } from "@tracktor/design-system";
 import { Position, Handle, useNodeConnections, type NodeProps, type Node } from "@xyflow/react";
 import { memo } from "react";
@@ -32,16 +33,39 @@ const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
               {name} (#{order})
             </Typography>
             <Chip color="info" size="small" label="text" />
-            <Box sx={{ display: "flex", gap: 1 }}>
-              <IconButton size="small" color="primary" onClick={handleAddChild}>
-                <AddIcon />
+
+            <Stack sx={{ gap: 1 }}>
+              <IconButton size="small" color="success" onClick={handleAddChild}>
+                <AddBoxRoundedIcon
+                  sx={{
+                    color: "success",
+                    fontSize: 20,
+                  }}
+                />
               </IconButton>
-            </Box>
+            </Stack>
           </Stack>
         </CardContent>
       </Card>
 
-      <Handle type="source" position={Position.Bottom} />
+      <Box sx={{ position: "relative" }}>
+        <Handle type="source" position={Position.Bottom} id={`${id}-out`} style={{ height: 24, opacity: 0, width: 24 }} />
+        <ArrowDropDownCircleIcon
+          sx={{
+            "&:hover": {
+              backgroundColor: colors.secondary,
+            },
+            backgroundColor: colors.primary,
+            borderRadius: "50%",
+            bottom: -12,
+            color: colors.background,
+            cursor: "pointer",
+            fontSize: 24,
+            left: "calc(50% - 12px)",
+            position: "absolute",
+          }}
+        />
+      </Box>
     </Box>
   );
 };
