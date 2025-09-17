@@ -1,14 +1,17 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { SnackbarProvider } from "@tracktor/design-system";
 import type { TreeNode } from "@tracktor/types-treege";
+import { ReactFlowProvider } from "@xyflow/react";
 import axios from "axios";
 import { useLayoutEffect } from "react";
 import DarkTheme from "@/components/Theme/DarkTheme/DarkTheme";
 import queryConfig from "@/config/query.config";
 import AuthProvider from "@/context/Auth/AuthProvider";
-import TreeGrid from "@/features/Treege/components/TreeGrid/TreeGrid";
+import IdProvider from "@/features/Treege/context/IDProvider";
 import TreegeProvider from "@/features/Treege/context/TreegeProvider";
 import "@/config/i18n.config";
+import "@xyflow/react/dist/style.css";
+import TreegeFlow from "@/features/Treege/TreegeFlow/TreegeFlow";
 
 export interface BackendConfig {
   baseUrl?: string;
@@ -37,12 +40,8 @@ type TreegeProps =
     };
 
 const Treege = ({ initialTree, initialTreeId, backendConfig }: TreegeProps) => {
-  /**
-   * Set the axios base URL and the Authorization header if the authToken is provided
-   */
   useLayoutEffect(() => {
     axios.defaults.baseURL = backendConfig?.baseUrl;
-
     if (backendConfig?.authToken) {
       axios.defaults.headers.common.Authorization = `Bearer ${backendConfig?.authToken}`;
     }
@@ -51,13 +50,17 @@ const Treege = ({ initialTree, initialTreeId, backendConfig }: TreegeProps) => {
   return (
     <QueryClientProvider client={queryConfig}>
       <AuthProvider authToken={backendConfig?.authToken}>
-        <TreegeProvider backendConfig={backendConfig} initialTree={initialTree} initialTreeId={initialTreeId}>
-          <DarkTheme>
-            <SnackbarProvider>
-              <TreeGrid />
-            </SnackbarProvider>
-          </DarkTheme>
-        </TreegeProvider>
+        <ReactFlowProvider>
+          <TreegeProvider backendConfig={backendConfig} initialTree={initialTree} initialTreeId={initialTreeId}>
+            <IdProvider>
+              <DarkTheme>
+                <SnackbarProvider>
+                  <TreegeFlow />
+                </SnackbarProvider>
+              </DarkTheme>
+            </IdProvider>
+          </TreegeProvider>
+        </ReactFlowProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
