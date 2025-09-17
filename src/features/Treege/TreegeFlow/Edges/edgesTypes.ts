@@ -1,7 +1,9 @@
-import AnimatedDashedEdge from "@/features/Treege/TreegeFlow/Edges/AnimatedDashedEdge";
+import StraightEdge from "@/features/Treege/TreegeFlow/Edges/AnimatedDashedEdge";
+import OrthogonalEdge from "@/features/Treege/TreegeFlow/Edges/OrthogonalEdge";
 
 const edgeTypes = {
-  animatedDashed: AnimatedDashedEdge,
+  orthogonal: OrthogonalEdge,
+  straight: StraightEdge,
 };
 
 export default edgeTypes;

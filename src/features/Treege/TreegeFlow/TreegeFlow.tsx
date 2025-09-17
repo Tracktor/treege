@@ -10,7 +10,7 @@ const edgeOptions: DefaultEdgeOptions = {
     strokeLinecap: "round",
     strokeWidth: 2,
   },
-  type: "animatedDashed",
+  type: "orthogonal",
 };
 
 const TreegeFlow = () => {
@@ -22,7 +22,7 @@ const TreegeFlow = () => {
       nodeTypes={nodeTypes}
       nodes={nodes}
       edgeTypes={edgeTypes}
-      edges={edges}
+      edges={edges.map((e) => ({ ...e, type: "orthogonal" }))}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       defaultEdgeOptions={edgeOptions}

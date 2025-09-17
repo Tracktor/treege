@@ -14,6 +14,24 @@ export type ElkLayoutOptions = Partial<{
   "elk.layered.nodeOrder.strategy": string;
 }>;
 
+interface ElkPoint {
+  x: number;
+  y: number;
+}
+
+interface ElkSection {
+  startPoint: ElkPoint;
+  endPoint: ElkPoint;
+  bendPoints?: ElkPoint[];
+}
+
+interface ElkEdgeWithSections {
+  id: string;
+  sources: string[];
+  targets: string[];
+  sections?: ElkSection[];
+}
+
 type ElkEdge = {
   id: string;
   sources: string[];
@@ -26,12 +44,12 @@ const elkOptions: ElkLayoutOptions = {
   "elk.algorithm": "layered",
   "elk.direction": "DOWN",
   "elk.edgeRouting": "ORTHOGONAL",
-  "elk.layered.nodeOrder.strategy": "NETWORK_SIMPLEX",
-  "elk.layered.nodePlacement.strategy": "BRANDES_KOEPF",
-  "elk.layered.spacing.nodeNodeBetweenLayers": "150",
+  "elk.layered.nodeOrder.strategy": "INPUT_ORDER",
+  "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
+  "elk.layered.spacing.nodeNodeBetweenLayers": "120",
   "elk.padding": "[top=50,left=50,bottom=50,right=50]",
-  "elk.spacing.edgeNode": "60",
-  "elk.spacing.nodeNode": "150",
+  "elk.spacing.edgeNode": "40",
+  "elk.spacing.nodeNode": "80",
 };
 
 export const getLayout = async (
@@ -53,7 +71,6 @@ export const getLayout = async (
       targets: [edge.target],
     }));
 
-  // Sort by order in data before sending to ELK
   const sortedNodes = [...nodes].sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
 
   const graph = {
@@ -73,22 +90,22 @@ export const getLayout = async (
   try {
     const layoutedGraph = await elk.layout(graph);
 
-    const elkEdgeMap = new Map((layoutedGraph.edges ?? []).map((e) => [e.id, e]));
+    const elkEdgeMap = new Map<string, ElkEdgeWithSections>(((layoutedGraph.edges ?? []) as ElkEdgeWithSections[]).map((e) => [e.id, e]));
 
     const layoutedEdges: Edge[] = edges.map((original) => {
       const elkEdge = elkEdgeMap.get(original.id);
-      if (elkEdge) {
+      if (elkEdge && elkEdge.sections) {
+        const section = elkEdge.sections[0];
+        const points = [section.startPoint, ...(section.bendPoints ?? []), section.endPoint].filter(Boolean);
         return {
           ...original,
-          source: elkEdge.sources[0],
-          target: elkEdge.targets[0],
-          type: "straight",
+          data: {
+            ...original.data,
+            elkPoints: points,
+          },
         };
       }
-      return {
-        ...original,
-        type: "straight",
-      };
+      return original;
     });
 
     const newLayoutNodes: Node<CustomNodeData>[] = (layoutedGraph.children ?? [])
