@@ -15,6 +15,18 @@ const BooleanNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
   const parentConnections = useNodeConnections({ handleType: "target" });
   const { name, order, onAddNode, isDecision } = data;
 
+  const trueConnections = useNodeConnections({
+    handleId: `${id}-true`,
+    handleType: "source",
+  });
+  const falseConnections = useNodeConnections({
+    handleId: `${id}-false`,
+    handleType: "source",
+  });
+
+  const isTrueConnected = trueConnections.length > 0;
+  const isFalseConnected = falseConnections.length > 0;
+
   const handleOpenModal = () => {
     setBranchHandle(null);
     setIsModalOpen(true);
@@ -90,9 +102,11 @@ const BooleanNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
 
               <Stack spacing={2} direction="row" alignItems="center" alignSelf="end" sx={{ position: "relative" }}>
                 <Typography>{t("true")}</Typography>
-                <IconButton size="small" color="info" onClick={() => handleOpenBranchModal("Yes")}>
-                  <AddBoxRoundedIcon sx={{ fontSize: 20 }} />
-                </IconButton>
+                {!isTrueConnected && (
+                  <IconButton size="small" color="info" onClick={() => handleOpenBranchModal("Yes")}>
+                    <AddBoxRoundedIcon sx={{ fontSize: 20 }} />
+                  </IconButton>
+                )}
 
                 <Handle
                   type="source"
@@ -130,9 +144,11 @@ const BooleanNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
 
               <Stack spacing={2} direction="row" alignItems="center" alignSelf="end" sx={{ position: "relative" }}>
                 <Typography>{t("false")}</Typography>
-                <IconButton size="small" color="secondary" onClick={() => handleOpenBranchModal("No")}>
-                  <AddBoxRoundedIcon sx={{ fontSize: 20 }} />
-                </IconButton>
+                {!isFalseConnected && (
+                  <IconButton size="small" color="secondary" onClick={() => handleOpenBranchModal("No")}>
+                    <AddBoxRoundedIcon sx={{ fontSize: 20 }} />
+                  </IconButton>
+                )}
 
                 <Handle
                   type="source"
