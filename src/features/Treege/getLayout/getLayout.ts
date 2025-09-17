@@ -63,6 +63,8 @@ export const getLayout = async (
   const isHorizontal = options?.["elk.direction"] === "RIGHT";
 
   const nodeIds = new Set(nodes.map((n) => n.id));
+
+  // 🔹 On ignore sourceHandle pour ELK
   const elkEdges: ElkEdge[] = edges
     .filter((edge) => nodeIds.has(edge.source) && nodeIds.has(edge.target))
     .map((edge) => ({
@@ -71,6 +73,7 @@ export const getLayout = async (
       targets: [edge.target],
     }));
 
+  // Trie par ordre
   const sortedNodes = [...nodes].sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
 
   const graph = {
@@ -90,13 +93,14 @@ export const getLayout = async (
   try {
     const layoutedGraph = await elk.layout(graph);
 
+    // On récupère les points ELK pour chaque edge
     const elkEdgeMap = new Map<string, ElkEdgeWithSections>(((layoutedGraph.edges ?? []) as ElkEdgeWithSections[]).map((e) => [e.id, e]));
 
     const layoutedEdges: Edge[] = edges.map((original) => {
       const elkEdge = elkEdgeMap.get(original.id);
       if (elkEdge && elkEdge.sections) {
         const section = elkEdge.sections[0];
-        const points = [section.startPoint, ...(section.bendPoints ?? []), section.endPoint].filter(Boolean);
+        const points: ElkPoint[] = [section.startPoint, ...(section.bendPoints ?? []), section.endPoint];
         return {
           ...original,
           data: {

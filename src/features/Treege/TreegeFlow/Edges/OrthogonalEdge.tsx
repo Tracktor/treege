@@ -1,30 +1,28 @@
 import { keyframes } from "@tracktor/design-system";
 import { BaseEdge, EdgeProps } from "@xyflow/react";
 
-type ElkEdgeData = {
-  elkPoints?: { x: number; y: number }[];
-};
+interface ElkPoint {
+  x: number;
+  y: number;
+}
 
+// Animation dash
 const dashAnim = keyframes`
-  to {
-    stroke-dashoffset: -12;
-  }
+    to {
+        stroke-dashoffset: -12;
+    }
 `;
 
+/**
+ * Edge orthogonal animated with elkPoints from ELK layout
+ */
 const OrthogonalEdge = ({ id, data, sourceX, sourceY, targetX, targetY }: EdgeProps) => {
-  const edgeData = data as ElkEdgeData | undefined;
+  const elkPoints = (data?.elkPoints as ElkPoint[] | undefined) ?? [
+    { x: sourceX, y: sourceY },
+    { x: targetX, y: targetY },
+  ];
 
-  const elkPoints: { x: number; y: number }[] | undefined = edgeData?.elkPoints;
-
-  const points: { x: number; y: number }[] =
-    elkPoints && elkPoints.length > 0
-      ? elkPoints
-      : [
-          { x: sourceX, y: sourceY },
-          { x: targetX, y: targetY },
-        ];
-
-  const d = points.reduce((acc, point, index) => acc + (index === 0 ? `M${point.x},${point.y}` : ` L${point.x},${point.y}`), "");
+  const d = elkPoints.reduce((acc, point, index) => acc + (index === 0 ? `M${point.x},${point.y}` : ` L${point.x},${point.y}`), "");
 
   return (
     <BaseEdge
@@ -32,7 +30,6 @@ const OrthogonalEdge = ({ id, data, sourceX, sourceY, targetX, targetY }: EdgePr
       path={d}
       style={{
         animation: `${dashAnim} 1s linear infinite`,
-        fill: "none",
         stroke: "#999",
         strokeDasharray: "6 4",
         strokeDashoffset: 0,
