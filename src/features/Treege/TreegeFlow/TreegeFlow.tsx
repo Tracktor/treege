@@ -1,6 +1,5 @@
 import { Box, GlobalStyles, Stack } from "@tracktor/design-system";
-import { ReactFlow, Controls, DefaultEdgeOptions } from "@xyflow/react";
-import { useContext, useMemo } from "react";
+import { ReactFlow, Controls } from "@xyflow/react";
 import Logo from "@/components/DataDisplay/Logo/Logo";
 import ViewerJSON from "@/components/DataDisplay/ViewerJSON/ViewerJSON";
 import Header from "@/components/Layouts/Header/Header";
@@ -12,16 +11,6 @@ import edgeTypes from "@/features/Treege/TreegeFlow/Edges/edgesTypes";
 import reactFlowToMinimal from "@/features/Treege/TreegeFlow/GraphDataMapper/reactFlowToMinimalConverter";
 import nodeTypes from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
-
-const edgeOptions: DefaultEdgeOptions = {
-  style: {
-    stroke: "#999",
-    strokeDasharray: "6 4",
-    strokeLinecap: "round",
-    strokeWidth: 2,
-  },
-  type: "orthogonal",
-};
 
 const pathClass = "tree-link";
 
@@ -56,10 +45,9 @@ const TreegeFlow = () => {
             nodeTypes={nodeTypes}
             nodes={nodes}
             edgeTypes={edgeTypes}
-            edges={edges.map((e) => ({ ...e, type: "orthogonal" }))}
+            edges={edges.map((e) => ({ ...e, type: "default" }))}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
-            defaultEdgeOptions={edgeOptions}
           >
             <Controls />
           </ReactFlow>

@@ -1,4 +1,3 @@
-// AnimatedDashedEdge.tsx
 import { keyframes } from "@tracktor/design-system";
 import { BaseEdge, EdgeProps, getStraightPath } from "@xyflow/react";
 
@@ -8,7 +7,7 @@ const dashAnim = keyframes`
     }
 `;
 
-const AnimatedDashedEdge = (props: EdgeProps) => {
+const OptionEdge = (props: EdgeProps) => {
   const [path] = getStraightPath(props);
 
   return (
@@ -25,4 +24,4 @@ const AnimatedDashedEdge = (props: EdgeProps) => {
   );
 };
 
-export default AnimatedDashedEdge;
+export default OptionEdge;

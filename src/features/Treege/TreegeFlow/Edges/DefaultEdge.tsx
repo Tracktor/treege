@@ -1,4 +1,3 @@
-import { keyframes } from "@tracktor/design-system";
 import { BaseEdge, EdgeProps } from "@xyflow/react";
 import { useMemo } from "react";
 
@@ -7,21 +6,11 @@ interface ElkPoint {
   y: number;
 }
 
-// Animation dash
-const dashAnim = keyframes`
-    from {
-        stroke-dashoffset: 0;
-    }
-    to {
-        stroke-dashoffset: -12;
-    }
-`;
-
 /**
  * Edge orthogonal animé avec elkPoints de ELK layout.
  * Ajuste automatiquement début et fin aux coordonnées actuelles des nodes.
  */
-const OrthogonalEdge = ({ id, data, sourceX, sourceY, targetX, targetY }: EdgeProps) => {
+const DefaultEdge = ({ id, data, sourceX, sourceY, targetX, targetY }: EdgeProps) => {
   // on récupère elkPoints ou un fallback
   const elkPoints: ElkPoint[] = (data?.elkPoints as ElkPoint[] | undefined) ?? [
     { x: sourceX, y: sourceY },
@@ -50,13 +39,11 @@ const OrthogonalEdge = ({ id, data, sourceX, sourceY, targetX, targetY }: EdgePr
       id={id}
       path={d}
       style={{
-        animation: `${dashAnim} 1s linear infinite`,
         stroke: "#999",
-        strokeDasharray: "6 4",
         strokeWidth: 2,
       }}
     />
   );
 };
 
-export default OrthogonalEdge;
+export default DefaultEdge;
