@@ -7,12 +7,11 @@ import { useLayoutEffect } from "react";
 import DarkTheme from "@/components/Theme/DarkTheme/DarkTheme";
 import queryConfig from "@/config/query.config";
 import AuthProvider from "@/context/Auth/AuthProvider";
-import IdProvider from "@/features/Treege/context/IDProvider";
+import TreegeFlowProvider from "@/features/Treege/context/TreegeFlowProvider";
 import TreegeProvider from "@/features/Treege/context/TreegeProvider";
 import "@/config/i18n.config";
 import "@xyflow/react/dist/style.css";
 import TreegeFlow from "@/features/Treege/TreegeFlow/TreegeFlow";
-import TreegeFlowProvider from "@/features/Treege/context/TreegeFlowProvider";
 
 export interface BackendConfig {
   baseUrl?: string;
@@ -53,15 +52,13 @@ const Treege = ({ initialTree, initialTreeId, backendConfig }: TreegeProps) => {
       <AuthProvider authToken={backendConfig?.authToken}>
         <ReactFlowProvider>
           <TreegeProvider backendConfig={backendConfig} initialTree={initialTree} initialTreeId={initialTreeId}>
-            <IdProvider>
-              <DarkTheme>
-                <SnackbarProvider>
-                  <TreegeFlowProvider>
-                    <TreegeFlow />
-                  </TreegeFlowProvider>
-                </SnackbarProvider>
-              </DarkTheme>
-            </IdProvider>
+            <DarkTheme>
+              <SnackbarProvider>
+                <TreegeFlowProvider>
+                  <TreegeFlow />
+                </TreegeFlowProvider>
+              </SnackbarProvider>
+            </DarkTheme>
           </TreegeProvider>
         </ReactFlowProvider>
       </AuthProvider>

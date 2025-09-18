@@ -1,6 +1,5 @@
 import { Node, Edge, useNodesState, useEdgesState } from "@xyflow/react";
-import { createContext, ReactNode, useMemo, useState, useCallback, useEffect } from "react";
-import { useIdGenerator } from "@/features/Treege/context/IDProvider";
+import { createContext, ReactNode, useMemo, useState, useCallback, useEffect, useRef } from "react";
 import minimalGraph from "@/features/Treege/TreegeFlow/GraphDataMapper/data";
 import { MinimalGraph, MinimalNode, MinimalEdge, Attributes, NodeOptions } from "@/features/Treege/TreegeFlow/GraphDataMapper/DataTypes";
 import useLayoutedGraph from "@/features/Treege/TreegeFlow/GraphDataMapper/useLayoutedGraph";
@@ -35,9 +34,15 @@ interface TreegeFlowProviderProps {
 
 export const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps) => {
   const [graph, setGraph] = useState<MinimalGraph>(initialGraph ?? minimalGraph);
-  const getId = useIdGenerator();
 
-  /** Ajoute ou insère un node dans le graphe minimal */
+  // 🔹 Générateur d’IDs intégré (remplace IdProvider)
+  const countersRef = useRef<Record<string, number>>({});
+  const getId = useCallback((prefix = "node") => {
+    countersRef.current[prefix] = (countersRef.current[prefix] ?? 0) + 1;
+    return `${prefix}-${countersRef.current[prefix]}`;
+  }, []);
+
+  /** 🔹 Ajoute ou insère un node dans le graphe minimal */
   const addNodeToGraph = useCallback(
     (parentId: string, options?: NodeOptions & { childId?: string }) => {
       setGraph((prev) => {
@@ -53,9 +58,11 @@ export const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProvide
           id: newNodeId,
         };
 
+        // ----- Cas 1 : insertion entre deux nodes -----
         if (options?.childId) {
           const { childId } = options;
 
+          // Filtrer edge parent->child
           const filteredEdges = prev.edges.filter((e) => !(e.source === parentId && e.target === childId));
 
           const edge1: MinimalEdge = {
@@ -76,6 +83,7 @@ export const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProvide
           };
         }
 
+        // ----- Cas 2 : ajout simple -----
         const newEdge: MinimalEdge = {
           id: getId("edge"),
           source: parentId,
@@ -91,7 +99,7 @@ export const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProvide
     [getId],
   );
 
-  /** Met à jour les attributes d’un node minimal */
+  /** 🔹 Met à jour les attributes d’un node minimal */
   const updateNodeAttributes = useCallback((nodeId: string, attributes: Attributes[]) => {
     setGraph((prev) => ({
       ...prev,
@@ -99,14 +107,14 @@ export const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProvide
     }));
   }, []);
 
-  /** Graphe layouté */
+  /** 🔹 Graphe layouté */
   const { nodes: layoutedNodes, edges: layoutedEdges } = useLayoutedGraph(graph);
 
-  /** État contrôlé React Flow */
+  /** 🔹 État contrôlé React Flow */
   const [nodes, setNodes, onNodesChange] = useNodesState<Node<CustomNodeData>>(layoutedNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(layoutedEdges);
 
-  /** Injection onAddNode dans chaque node layouté */
+  /** 🔹 Injection onAddNode dans chaque node layouté */
   useEffect(() => {
     const nodesWithAdd = layoutedNodes.map((n) => ({
       ...n,
