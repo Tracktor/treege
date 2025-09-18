@@ -1,20 +1,16 @@
-export type Attributes = {
-  key: string;
-  value: string;
-};
-
 export type NodeOptions = {
-  name?: string;
+  name: string;
+  label: string;
+  value: string;
   type?: string;
   isDecision?: boolean;
   sourceHandle?: string;
-  attributes?: Attributes[];
 };
 
 export type MinimalNode = {
   id: string;
-  data: NodeOptions;
-  type?: string;
+  attributes: NodeOptions;
+  options: NodeOptions[];
 };
 
 export type MinimalEdge = {

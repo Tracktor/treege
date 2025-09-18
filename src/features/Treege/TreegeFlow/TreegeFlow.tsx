@@ -18,8 +18,6 @@ const TreegeFlow = () => {
   const { nodes, edges, onNodesChange, onEdgesChange } = useTreegeFlowContext();
   const minimalGraph = reactFlowToMinimal(nodes, edges);
 
-  console.log("edges", edges);
-
   return (
     <MosaicLayout>
       <Header>

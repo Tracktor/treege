@@ -6,6 +6,7 @@ import TextNode from "@/features/Treege/TreegeFlow/Nodes/TextNode";
 export type CustomNodeData = NodeOptions & {
   order?: number;
   onAddNode?: (parentId: string, childId?: string, options?: NodeOptions) => void;
+  options?: NodeOptions[];
 };
 
 const nodeTypes = {
