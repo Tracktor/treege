@@ -1,5 +1,5 @@
 // TreegeFlowProvider.tsx
-import { Node, Edge, useNodesState, useEdgesState } from "@xyflow/react";
+import { Node, Edge, useNodesState, useEdgesState, OnNodesChange, OnEdgesChange } from "@xyflow/react";
 import { createContext, ReactNode, useMemo, useState, useCallback, useEffect, useRef } from "react";
 import minimalGraph from "@/features/Treege/TreegeFlow/GraphDataMapper/data";
 import { MinimalEdge, MinimalGraph, MinimalNode, NodeOptions } from "@/features/Treege/TreegeFlow/GraphDataMapper/DataTypes";
@@ -11,12 +11,21 @@ export interface TreegeFlowContextValue {
   edges: Edge[];
   graph: MinimalGraph;
   setGraph: (g: MinimalGraph) => void;
-  onNodesChange: (nodes: Node<CustomNodeData>[]) => void;
-  onEdgesChange: (edges: Edge[]) => void;
+  onNodesChange: OnNodesChange<Node<CustomNodeData>>;
+  onEdgesChange: OnEdgesChange<Edge>;
   updateNode: (nodeId: string, attributes: NodeOptions) => void;
   addOption: (nodeId: string, option: NodeOptions) => void;
   addNode: (parentId: string, options?: NodeOptions & { childId?: string }) => void;
 }
+
+const normalizeNodeOptions = (opt?: Partial<NodeOptions>): NodeOptions => ({
+  isDecision: opt?.isDecision,
+  label: opt?.label ?? "",
+  name: opt?.name ?? "",
+  sourceHandle: opt?.sourceHandle,
+  type: opt?.type,
+  value: opt?.value ?? "",
+});
 
 export const TreegeFlowContext = createContext<TreegeFlowContextValue>({} as TreegeFlowContextValue);
 
@@ -100,7 +109,13 @@ export const TreegeFlowProvider = ({ children, initialGraph }: { children: React
   useEffect(() => {
     const nodesWithAdd = layoutedNodes.map((n) => ({
       ...n,
-      data: { ...n.data, onAddNode: addNode },
+      data: {
+        ...n.data,
+        onAddNode: (parentId: string, childId?: string, options?: Partial<NodeOptions>) => {
+          const normalized = normalizeNodeOptions(options);
+          addNode(parentId, { ...normalized, childId });
+        },
+      },
     }));
     setNodes(nodesWithAdd);
     setEdges(layoutedEdges);

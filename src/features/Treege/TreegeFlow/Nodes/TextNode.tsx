@@ -10,6 +10,7 @@ import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 
 const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const parentConnections = useNodeConnections({ handleType: "target" });
   const childConnections = useNodeConnections({ handleType: "source" });
 
@@ -20,10 +21,7 @@ const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
   const handleSaveModal = (config: NodeOptions) => {
     const firstChildId = childConnections[0]?.target;
 
-    onAddNode?.(id, {
-      ...config,
-      childId: firstChildId,
-    });
+    onAddNode?.(id, firstChildId, config);
 
     setIsModalOpen(false);
   };

@@ -17,47 +17,61 @@ import {
 } from "@tracktor/design-system";
 import { FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { NodeOptions } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
+import { NodeOptions } from "@/features/Treege/TreegeFlow/GraphDataMapper/DataTypes";
 
 interface NodeConfigModalProps {
-  isOpen: boolean;
-  onSave: (config: NodeOptions) => void;
+  // 🔹 OnSave renvoie soit juste l’attribut principal, soit aussi des options
+  onSave: (config: NodeOptions & { options?: NodeOptions[] }) => void;
   onClose: () => void;
+  isOpen: boolean;
 }
 
 const decisionFields = ["boolean", "select"];
 
-// NodeConfigModal.tsx
 const NodeConfigModal = ({ isOpen, onSave, onClose }: NodeConfigModalProps) => {
   const { t } = useTranslation(["translation", "form"]);
-  const [name, setName] = useState<string>("");
-  const [type, setType] = useState<string>("text");
-  const [isDecision, setIsDecision] = useState<boolean>(false);
-  const [attributes, setAttributes] = useState<{ key: string; value: string }[]>([]);
+
+  // 🔹 attributs principaux du node
+  const [name, setName] = useState("");
+  const [label, setLabel] = useState("");
+  const [value, setValue] = useState("");
+  const [type, setType] = useState("text");
+  const [isDecision, setIsDecision] = useState(false);
+
+  // 🔹 sous-options (remplace l’ancien attributes[])
+  const [options, setOptions] = useState<NodeOptions[]>([]);
 
   const isBooleanType = type === "boolean";
-
   const canBeDecisionField = decisionFields.includes(type);
 
   const handleClose = () => {
     setName("");
+    setLabel("");
+    setValue("");
     setType("text");
     setIsDecision(false);
-    setAttributes([]);
+    setOptions([]);
     onClose();
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSave({ attributes, isDecision, name, type });
-
+    // on renvoie un seul objet + éventuellement des options
+    onSave({
+      isDecision,
+      label,
+      name,
+      options,
+      type,
+      value,
+    });
     handleClose();
   };
 
-  const handleAttrChange = (idx: number, key: string, value: string) => {
-    const newAttrs = [...attributes];
-    newAttrs[idx] = { ...newAttrs[idx], [key]: value };
-    setAttributes(newAttrs);
+  const handleOptionChange = (idx: number, key: keyof NodeOptions, newValue: string) => {
+    const newOptions = [...options];
+    newOptions[idx] = { ...newOptions[idx], [key]: newValue };
+    setOptions(newOptions);
   };
 
   return (
@@ -74,14 +88,16 @@ const NodeConfigModal = ({ isOpen, onSave, onClose }: NodeConfigModalProps) => {
                 label={t("type")}
                 value={type}
                 onChange={(e) => {
-                  setType(e.target.value);
-                  if (e.target.value === "boolean" && isDecision) {
-                    setAttributes([
-                      { key: "true", value: "true" },
-                      { key: "false", value: "false" },
+                  const selectedType = e.target.value;
+                  setType(selectedType);
+
+                  if (selectedType === "boolean" && isDecision) {
+                    setOptions([
+                      { label: "true", name: "true", type: "option", value: "true" },
+                      { label: "false", name: "false", type: "option", value: "false" },
                     ]);
                   } else {
-                    setAttributes([]);
+                    setOptions([]);
                   }
                 }}
               >
@@ -91,6 +107,8 @@ const NodeConfigModal = ({ isOpen, onSave, onClose }: NodeConfigModalProps) => {
             </FormControl>
 
             <TextField required fullWidth label="Name" value={name} onChange={(e) => setName(e.target.value)} />
+            <TextField fullWidth label="Label" value={label} onChange={(e) => setLabel(e.target.value)} />
+            <TextField fullWidth label="Value" value={value} onChange={(e) => setValue(e.target.value)} />
 
             {canBeDecisionField && (
               <FormControl fullWidth>
@@ -101,12 +119,12 @@ const NodeConfigModal = ({ isOpen, onSave, onClose }: NodeConfigModalProps) => {
                       onChange={(e) => {
                         setIsDecision(e.target.checked);
                         if (isBooleanType && e.target.checked) {
-                          setAttributes([
-                            { key: "true", value: "true" },
-                            { key: "false", value: "false" },
+                          setOptions([
+                            { label: "true", name: "true", type: "option", value: "true" },
+                            { label: "false", name: "false", type: "option", value: "false" },
                           ]);
                         } else {
-                          setAttributes([]);
+                          setOptions([]);
                         }
                       }}
                       color="primary"
@@ -118,10 +136,10 @@ const NodeConfigModal = ({ isOpen, onSave, onClose }: NodeConfigModalProps) => {
             )}
 
             {!isBooleanType &&
-              attributes.map((attr, idx) => (
-                <Stack key={attr.key} direction="row" spacing={2}>
-                  <TextField fullWidth label="key" value={attr.key} onChange={(e) => handleAttrChange(idx, "name", e.target.value)} />
-                  <TextField fullWidth label="Value" value={attr.value} onChange={(e) => handleAttrChange(idx, "value", e.target.value)} />
+              options.map((opt, idx) => (
+                <Stack key={opt.name} direction="row" spacing={2}>
+                  <TextField fullWidth label="Name" value={opt.name} onChange={(e) => handleOptionChange(idx, "name", e.target.value)} />
+                  <TextField fullWidth label="Value" value={opt.value} onChange={(e) => handleOptionChange(idx, "value", e.target.value)} />
                 </Stack>
               ))}
           </Stack>
