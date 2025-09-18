@@ -1,11 +1,5 @@
-import { keyframes } from "@tracktor/design-system";
 import { BaseEdge, EdgeProps, getStraightPath } from "@xyflow/react";
-
-const dashAnim = keyframes`
-    to {
-        stroke-dashoffset: -12;
-    }
-`;
+import { memo } from "react";
 
 const OptionEdge = (props: EdgeProps) => {
   const [path] = getStraightPath(props);
@@ -14,14 +8,13 @@ const OptionEdge = (props: EdgeProps) => {
     <BaseEdge
       path={path}
       style={{
-        animation: `${dashAnim} 1s linear infinite`,
         stroke: "#999",
-        strokeDasharray: "6 4",
+        strokeDasharray: "3 3",
         strokeDashoffset: 0,
-        strokeWidth: 2,
+        strokeWidth: 1,
       }}
     />
   );
 };
 
-export default OptionEdge;
+export default memo(OptionEdge);

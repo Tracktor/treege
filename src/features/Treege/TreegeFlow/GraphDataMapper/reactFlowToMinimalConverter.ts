@@ -19,11 +19,12 @@ const toMinimalNodes = (rfNodes: Node<CustomNodeData>[]): MinimalNode[] =>
 /** Convert Edge ReactFlow → MinimalEdge */
 const toMinimalEdges = (rfEdges: Edge[]): MinimalEdge[] =>
   rfEdges
-    .filter((e) => !e.id.includes("-attr-")) // ignore edges attributs
+    .filter((e) => !e.id.includes("-attr-"))
     .map((e) => ({
       id: e.id,
       source: e.source,
       target: e.target,
+      type: e.type,
     }));
 
 /** React Flow → MinimalGraph */

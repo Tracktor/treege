@@ -21,6 +21,7 @@ export type MinimalEdge = {
   id: string;
   source: string;
   target: string;
+  type?: string;
 };
 
 export type MinimalGraph = {

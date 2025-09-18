@@ -16,7 +16,9 @@ const pathClass = "tree-link";
 
 const TreegeFlow = () => {
   const { nodes, edges, onNodesChange, onEdgesChange } = useTreegeFlowContext();
-  const minimal = reactFlowToMinimal(nodes, edges);
+  const minimalGraph = reactFlowToMinimal(nodes, edges);
+
+  console.log("edges", edges);
 
   return (
     <MosaicLayout>
@@ -45,7 +47,7 @@ const TreegeFlow = () => {
             nodeTypes={nodeTypes}
             nodes={nodes}
             edgeTypes={edgeTypes}
-            edges={edges.map((e) => ({ ...e, type: "default" }))}
+            edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
           >
@@ -54,7 +56,7 @@ const TreegeFlow = () => {
         </Box>
       </Main>
       <Sidebar>
-        <ViewerJSON value={minimal} />
+        <ViewerJSON value={minimalGraph} />
       </Sidebar>
     </MosaicLayout>
   );

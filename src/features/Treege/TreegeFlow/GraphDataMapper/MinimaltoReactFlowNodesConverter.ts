@@ -24,7 +24,7 @@ const toReactFlowEdges = (minimalEdges: MinimalEdge[]): Edge[] =>
     id: m.id,
     source: m.source,
     target: m.target,
-    type: "orthogonal",
+    type: m.id.includes("-attr-") ? "option" : "default",
   }));
 
 export { toReactFlowNodes, toReactFlowEdges };

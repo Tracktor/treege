@@ -29,6 +29,7 @@ const expandNodesWithAttributes = (graph: MinimalGraph): MinimalGraph => {
           id: `edge-${node.id}-attr-${index}`,
           source: node.id,
           target: childId,
+          type: "option",
         });
       }
     });
