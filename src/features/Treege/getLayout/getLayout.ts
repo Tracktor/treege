@@ -64,7 +64,8 @@ function getHandlePosition(node: Node, position: Position) {
 const elkOptions: ElkLayoutOptions = {
   "elk.algorithm": "mrtree",
   "elk.direction": "DOWN",
-  "elk.edgeRouting": "POLYLINE",
+  // 👇 SPLINES ou POLYLINE, on ignore de toute façon les bendpoints pour tracer une ligne
+  "elk.edgeRouting": "SPLINES",
   "elk.padding": "[top=50,left=50,bottom=50,right=50]",
   "elk.spacing.edgeNode": "50",
   "elk.spacing.nodeNode": "50",
@@ -82,7 +83,6 @@ export const getLayout = async (
 
   const nodeIds = new Set(nodes.map((n) => n.id));
 
-  // Edges pour ELK
   const elkEdges: ElkEdge[] = edges
     .filter((edge) => nodeIds.has(edge.source) && nodeIds.has(edge.target))
     .map((edge) => ({
@@ -129,7 +129,9 @@ export const getLayout = async (
 
     if (elkEdge && elkEdge.sections) {
       const section = elkEdge.sections[0];
-      const points: ElkPoint[] = [section.startPoint, ...(section.bendPoints ?? []), section.endPoint];
+
+      // 👇 on ne garde que début et fin → ligne droite
+      const points: ElkPoint[] = [section.startPoint, section.endPoint];
 
       const sourceNode = newLayoutNodes.find((n) => n.id === original.source);
       const targetNode = newLayoutNodes.find((n) => n.id === original.target);
@@ -150,7 +152,18 @@ export const getLayout = async (
         },
       };
     }
-    return original;
+
+    // Edge sans info ELK → fallback direct
+    return {
+      ...original,
+      data: {
+        ...original.data,
+        elkPoints: [
+          getHandlePosition(newLayoutNodes.find((n) => n.id === original.source)!, Position.Bottom),
+          getHandlePosition(newLayoutNodes.find((n) => n.id === original.target)!, Position.Top),
+        ],
+      },
+    };
   });
 
   return { edges: layoutedEdges, nodes: newLayoutNodes };
