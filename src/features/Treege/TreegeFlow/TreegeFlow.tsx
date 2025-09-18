@@ -9,6 +9,7 @@ import MosaicLayout from "@/components/Layouts/MosaicLayout/MosaicLayout";
 import Sidebar from "@/components/Layouts/Sidebar/Sidebar";
 import colors from "@/constants/colors";
 import edgeTypes from "@/features/Treege/TreegeFlow/Edges/edgesTypes";
+import reactFlowToMinimal from "@/features/Treege/TreegeFlow/GraphDataMapper/reactFlowToMinimalConverter";
 import nodeTypes from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
 
@@ -26,8 +27,7 @@ const pathClass = "tree-link";
 
 const TreegeFlow = () => {
   const { nodes, edges, onNodesChange, onEdgesChange } = useTreegeFlowContext();
-
-  const formattedJSON = useMemo(() => [{ edges, node: nodes }], [edges, nodes]);
+  const minimal = reactFlowToMinimal(nodes, edges);
 
   return (
     <MosaicLayout>
@@ -66,7 +66,7 @@ const TreegeFlow = () => {
         </Box>
       </Main>
       <Sidebar>
-        <ViewerJSON value={formattedJSON} />
+        <ViewerJSON value={minimal} />
       </Sidebar>
     </MosaicLayout>
   );

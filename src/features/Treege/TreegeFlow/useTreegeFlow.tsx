@@ -14,7 +14,6 @@ export const useTreegeFlow = (initialGraph: MinimalGraph) => {
       setGraph((prev) => {
         const newNodeId = getId("node");
 
-        // nouveau node minimal
         const newNode: MinimalNode = {
           data: {
             attributes: options?.attributes ?? [],
@@ -76,7 +75,6 @@ export const useTreegeFlow = (initialGraph: MinimalGraph) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(layoutedEdges);
 
   useEffect(() => {
-    // On injecte `addNodeToGraph` dans data.onAddNode de chaque node
     const nodesWithAdd = layoutedNodes.map((n) => ({
       ...n,
       data: { ...n.data, onAddNode: addNodeToGraph },

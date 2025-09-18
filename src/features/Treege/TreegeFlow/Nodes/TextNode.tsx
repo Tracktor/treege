@@ -3,9 +3,10 @@ import { Card, CardContent, Chip, Box, Typography, IconButton, Stack } from "@tr
 import { Position, Handle, useNodeConnections, type NodeProps, type Node } from "@xyflow/react";
 import { memo, useState } from "react";
 import colors from "@/constants/colors";
+import { NodeOptions } from "@/features/Treege/TreegeFlow/GraphDataMapper/DataTypes";
 import HandleSource from "@/features/Treege/TreegeFlow/Handlers/HandleSource";
 import NodeConfigModal from "@/features/Treege/TreegeFlow/NodeConfigModal/NodeConfigModal";
-import { CustomNodeData, NodeOptions } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
+import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 
 const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,8 +19,6 @@ const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
 
   const handleSaveModal = (config: NodeOptions) => {
     const firstChildId = childConnections[0]?.target;
-
-    console.log("firstChildId", firstChildId);
 
     onAddNode?.(id, {
       ...config,
