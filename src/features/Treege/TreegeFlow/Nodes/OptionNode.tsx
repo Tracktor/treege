@@ -18,7 +18,7 @@ const OptionNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
       <Card
         sx={{
           background: colors.background,
-          borderColor: colors.primary,
+          borderColor: colors.secondary,
           borderRadius: "1rem",
         }}
       >

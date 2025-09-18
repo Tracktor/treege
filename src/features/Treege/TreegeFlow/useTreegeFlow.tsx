@@ -1,8 +1,18 @@
 import { type Edge, type Node, useEdgesState, useNodesState, useReactFlow } from "@xyflow/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useIdGenerator } from "@/features/Treege/context/IDProvider";
 import getLayout from "@/features/Treege/getLayout/getLayout";
 import { Attributes, CustomNodeData, NodeOptions } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
+
+const initialNode: Node<CustomNodeData> = {
+  data: {
+    name: "Node 1",
+    order: 1,
+  },
+  id: "root-id-1",
+  position: { x: 0, y: 0 },
+  type: "text",
+};
 
 export const useTreegeFlow = () => {
   const { fitView } = useReactFlow();
@@ -12,9 +22,8 @@ export const useTreegeFlow = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
 
   // états internes
-  const [graphNodes, setGraphNodes] = useState<Node<CustomNodeData>[]>([]);
+  const [graphNodes, setGraphNodes] = useState<Node<CustomNodeData>[]>([initialNode]);
   const [graphEdges, setGraphEdges] = useState<Edge[]>([]);
-  const initialized = useRef(false);
   const getId = useIdGenerator();
 
   /** Normalise l’ordre */
@@ -146,42 +155,43 @@ export const useTreegeFlow = () => {
     const addedEdges: Edge[] = [];
 
     graphNodes.forEach((node) => {
-      if (node.data?.attributes?.length > 0) {
-        node.data.attributes.forEach((attr, index) => {
-          // on construit un ID stable et prédictible
-          const childId = `${node.id}-attr-${index}`;
+      const { attributes } = node?.data ?? {};
+      if (!attributes?.length) return;
 
-          // Vérifie si déjà existant → si oui on ne le recrée pas
-          const alreadyExists = graphNodes.find((n) => n.id === childId) || addedNodes.find((n) => n.id === childId);
+      attributes.forEach((attr, index) => {
+        // on construit un ID stable et prédictible
+        const childId = `${node.id}-attr-${index}`;
 
-          if (!alreadyExists) {
-            // crée node enfant
-            const childNode: Node<CustomNodeData> = {
-              data: {
-                attributes: [],
-                name: `${attr.key}: ${attr.value}`,
-                // enfant n’a pas d’attributs
-                onAddNode: handleAddNode,
-                order: (node.data.order ?? 0) + (index + 1) * 0.1,
-              },
-              id: childId,
-              // ou ton type spécifique
-              position: { x: 0, y: 0 },
+        // Vérifie si déjà existant → si oui on ne le recrée pas
+        const alreadyExists = graphNodes.find((n) => n.id === childId) || addedNodes.find((n) => n.id === childId);
 
-              type: "text",
-            };
-            addedNodes.push(childNode);
+        if (!alreadyExists) {
+          // crée node enfant
+          const childNode: Node<CustomNodeData> = {
+            data: {
+              attributes: [],
+              name: `${attr.key}: ${attr.value}`,
+              // enfant n’a pas d’attributs
+              onAddNode: handleAddNode,
+              order: (node.data.order ?? 0) + (index + 1) * 0.1,
+            },
+            id: childId,
+            // ou ton type spécifique
+            position: { x: 0, y: 0 },
 
-            // crée edge parent → enfant
-            addedEdges.push({
-              id: getId("edge"),
-              source: node.id,
-              target: childId,
-              type: "orthogonal",
-            });
-          }
-        });
-      }
+            type: "text",
+          };
+          addedNodes.push(childNode);
+
+          // crée edge parent → enfant
+          addedEdges.push({
+            id: getId("edge"),
+            source: node.id,
+            target: childId,
+            type: "orthogonal",
+          });
+        }
+      });
     });
 
     if (addedNodes.length > 0 || addedEdges.length > 0) {
@@ -224,25 +234,14 @@ export const useTreegeFlow = () => {
     })();
   }, [graphNodes, graphEdges, setNodes, setEdges, fitView, handleAddNode]);
 
-  /** Init root */
-  useEffect(() => {
-    if (!initialized.current) {
-      const rootId = getId("root");
-      const initialNode: Node<CustomNodeData> = {
-        data: {
-          name: "Node 1",
-          onAddNode: handleAddNode,
-          order: 1,
-        },
-        id: rootId,
-        position: { x: 0, y: 0 },
-        type: "text",
-      };
-      setGraphNodes([initialNode]);
-      setGraphEdges([]);
-      initialized.current = true;
-    }
-  }, [handleAddNode, getId]);
+  // /** Init root */
+  // useEffect(() => {
+  //   if (!initialized.current) {
+  //     setGraphNodes([initialNode]);
+  //     setGraphEdges([]);
+  //     initialized.current = true;
+  //   }
+  // }, [handleAddNode, getId]);
 
   return {
     edges,
