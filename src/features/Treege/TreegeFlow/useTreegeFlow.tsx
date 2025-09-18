@@ -4,18 +4,27 @@ import { useIdGenerator } from "@/features/Treege/context/IDProvider";
 import getLayout from "@/features/Treege/getLayout/getLayout";
 import { CustomNodeData, NodeOptions } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 
+/**
+ * Hook pour gérer le flow Treege :
+ * - onAddNode(parentId) = ajoute un node à la suite
+ * - onAddNode(parentId, childId) = insère entre deux nodes
+ * - onAddNode(parentId, undefined, {sourceHandle}) = branche boolean
+ */
 export const useTreegeFlow = () => {
   const { fitView } = useReactFlow();
 
+  // états ReactFlow
   const [nodes, setNodes, onNodesChange] = useNodesState<Node<CustomNodeData>>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
 
+  // états “brut” pour builder le graphe
   const [graphNodes, setGraphNodes] = useState<Node<CustomNodeData>[]>([]);
   const [graphEdges, setGraphEdges] = useState<Edge[]>([]);
 
   const initialized = useRef(false);
   const getId = useIdGenerator();
 
+  /** Normalise l’ordre des nœuds */
   const normalizeOrder = (nodeArray: Node<CustomNodeData>[]) => {
     const sorted = [...nodeArray].sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
     return sorted.map((n, index) => ({
@@ -27,31 +36,22 @@ export const useTreegeFlow = () => {
     }));
   };
 
+  /**
+   * Ajoute un nouveau nœud
+   * - parentId : toujours requis
+   * - childId : si défini → insertion entre parent et child
+   * - options.sourceHandle : si défini → branche boolean
+   */
   const handleAddNode = useCallback(
     (parentId: string, childId?: string, options?: NodeOptions) => {
       setGraphNodes((currentNodes) => {
         const parentNode = currentNodes.find((n) => n.id === parentId);
         if (!parentNode) return currentNodes;
 
-        const sourceHandle = options?.sourceHandle;
-
-        let effectiveChildId = childId;
-        if (!effectiveChildId && !sourceHandle) {
-          const childCandidates = graphEdges
-            .filter((e) => e.source === parentId)
-            .map((e) => currentNodes.find((n) => n.id === e.target))
-            .filter(Boolean) as Node<CustomNodeData>[];
-
-          if (childCandidates.length > 0) {
-            const sorted = childCandidates.sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
-            effectiveChildId = sorted[0].id;
-          }
-        }
-
-        // determine order
+        // Détermine l’ordre
         let newOrder: number;
-        if (effectiveChildId) {
-          const childNode = currentNodes.find((n) => n.id === effectiveChildId);
+        if (childId) {
+          const childNode = currentNodes.find((n) => n.id === childId);
           const parentOrder = parentNode.data.order ?? 0;
           const childOrder = childNode?.data.order ?? parentOrder + 1;
           newOrder = (parentOrder + childOrder) / 2;
@@ -60,6 +60,7 @@ export const useTreegeFlow = () => {
           newOrder = parentOrder + 1;
         }
 
+        // Crée un nouvel ID pour le node
         const newId = getId("node");
 
         const newNode: Node<CustomNodeData> = {
@@ -75,23 +76,26 @@ export const useTreegeFlow = () => {
           type: options?.type ?? "text",
         };
 
+        // Ajoute le node dans la liste
         const indexParent = currentNodes.findIndex((n) => n.id === parentId);
         const newNodes = [...currentNodes.slice(0, indexParent + 1), newNode, ...currentNodes.slice(indexParent + 1)];
 
+        // 🔹 Gestion des edges
         setGraphEdges((currentEdges) => {
           let newEdges = [...currentEdges];
 
-          if (sourceHandle) {
+          if (options?.sourceHandle) {
+            // Branche booléenne
             newEdges.push({
               id: getId("edge"),
               source: parentId,
-              sourceHandle,
+              sourceHandle: options.sourceHandle,
               target: newId,
               type: "orthogonal",
             });
-          } else if (effectiveChildId) {
-            newEdges = newEdges.filter((e) => !(e.source === parentId && e.target === effectiveChildId));
-
+          } else if (childId) {
+            // On insère entre deux nœuds existants
+            newEdges = newEdges.filter((e) => !(e.source === parentId && e.target === childId));
             newEdges.push({
               id: getId("edge"),
               source: parentId,
@@ -100,11 +104,12 @@ export const useTreegeFlow = () => {
             });
             newEdges.push({
               id: getId("edge"),
-              source: newNode.id,
-              target: effectiveChildId,
+              source: newId,
+              target: childId,
               type: "orthogonal",
             });
           } else {
+            // Ajout simple
             newEdges.push({
               id: getId("edge"),
               source: parentId,
@@ -119,9 +124,17 @@ export const useTreegeFlow = () => {
         return normalizeOrder(newNodes);
       });
     },
-    [getId, graphEdges],
+    [getId],
   );
 
+  /** 🔹 Nettoie edges orphelins à chaque changement de nodes */
+  useEffect(() => {
+    setGraphEdges((currentEdges) =>
+      currentEdges.filter((e) => graphNodes.some((n) => n.id === e.source) && graphNodes.some((n) => n.id === e.target)),
+    );
+  }, [graphNodes]);
+
+  /** 🔹 Recalcule layout ELK */
   useEffect(() => {
     if (graphNodes.length === 0) return;
 
@@ -138,13 +151,18 @@ export const useTreegeFlow = () => {
 
       await fitView({ duration: 800, padding: 0.3 });
     })();
-  }, [graphNodes, graphEdges, fitView, handleAddNode, setNodes, setEdges]);
+  }, [graphNodes, graphEdges, setNodes, setEdges, fitView, handleAddNode]); // plus de setGraphEdges ici
 
+  /** 🔹 Init avec un node racine */
   useEffect(() => {
     if (!initialized.current) {
       const rootId = getId("root");
       const initialNode: Node<CustomNodeData> = {
-        data: { name: "Node 1", onAddNode: handleAddNode, order: 1 },
+        data: {
+          name: "Node 1",
+          onAddNode: handleAddNode,
+          order: 1,
+        },
         id: rootId,
         position: { x: 0, y: 0 },
         type: "text",

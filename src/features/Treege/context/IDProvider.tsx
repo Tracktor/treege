@@ -7,11 +7,11 @@ type IdContextValue = {
 const IdContext = createContext<IdContextValue | null>(null);
 
 export const IdProvider = ({ children }: { children: React.ReactNode }) => {
-  const counterRef = useRef(0);
+  const countersRef = useRef<Record<string, number>>({});
 
   const getId = (prefix = "node") => {
-    counterRef.current += 1;
-    return `${prefix}-${counterRef.current}`;
+    countersRef.current[prefix] = (countersRef.current[prefix] ?? 0) + 1;
+    return `${prefix}-${countersRef.current[prefix]}`;
   };
 
   const value = useMemo(() => ({ getId }), []);
