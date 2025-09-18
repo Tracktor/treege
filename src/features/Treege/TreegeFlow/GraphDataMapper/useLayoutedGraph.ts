@@ -56,10 +56,9 @@ const useLayoutedGraph = (graph: MinimalGraph) => {
       return;
     }
 
-    const expandedGraph = expandNodesWithAttributes(graph);
-
-    const rfNodes = toReactFlowNodes(expandedGraph.nodes);
-    const rfEdges = toReactFlowEdges(expandedGraph.edges);
+    // Ici on ne génère plus les nodes option → ils sont déjà dans graph
+    const rfNodes = toReactFlowNodes(graph.nodes);
+    const rfEdges = toReactFlowEdges(graph.edges);
 
     (async () => {
       try {

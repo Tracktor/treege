@@ -5,6 +5,41 @@ import { MinimalGraph, MinimalNode, MinimalEdge, Attributes, NodeOptions } from 
 import useLayoutedGraph from "@/features/Treege/TreegeFlow/GraphDataMapper/useLayoutedGraph";
 import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 
+// 🔹 Génère nodes/edges option dans le graphe minimal
+const expandMinimalGraphWithAttributes = (graph: MinimalGraph): MinimalGraph => {
+  const extraNodes: MinimalNode[] = [];
+  const extraEdges: MinimalEdge[] = [];
+
+  graph.nodes.forEach((node) => {
+    node.data.attributes?.forEach((attr, index) => {
+      const childId = `${node.id}-attr-${index}`;
+
+      if (!graph.nodes.find((n) => n.id === childId) && !extraNodes.find((n) => n.id === childId)) {
+        extraNodes.push({
+          data: {
+            attributes: [],
+            name: `${attr.key}: ${attr.value}`,
+            type: "option",
+          },
+          id: childId,
+        });
+
+        extraEdges.push({
+          id: `edge-${node.id}-attr-${index}`,
+          source: node.id,
+          target: childId,
+          type: "option",
+        });
+      }
+    });
+  });
+
+  return {
+    edges: [...graph.edges, ...extraEdges],
+    nodes: [...graph.nodes, ...extraNodes],
+  };
+};
+
 export interface TreegeFlowContextValue {
   nodes: Node<CustomNodeData>[];
   edges: Edge[];
@@ -33,19 +68,24 @@ interface TreegeFlowProviderProps {
 }
 
 export const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps) => {
-  const [graph, setGraph] = useState<MinimalGraph>(initialGraph ?? minimalGraph);
+  const [graph, setGraphRaw] = useState<MinimalGraph>(expandMinimalGraphWithAttributes(initialGraph ?? minimalGraph));
 
-  // 🔹 Générateur d’IDs intégré (remplace IdProvider)
+  // Générateur d’IDs intégré
   const countersRef = useRef<Record<string, number>>({});
   const getId = useCallback((prefix = "node") => {
     countersRef.current[prefix] = (countersRef.current[prefix] ?? 0) + 1;
     return `${prefix}-${countersRef.current[prefix]}`;
   }, []);
 
+  // 🔹 setter qui expanse automatiquement
+  const setGraph = useCallback((g: MinimalGraph) => {
+    setGraphRaw(expandMinimalGraphWithAttributes(g));
+  }, []);
+
   /** 🔹 Ajoute ou insère un node dans le graphe minimal */
   const addNodeToGraph = useCallback(
     (parentId: string, options?: NodeOptions & { childId?: string }) => {
-      setGraph((prev) => {
+      setGraphRaw((prev) => {
         const newNodeId = getId("node");
 
         const newNode: MinimalNode = {
@@ -58,42 +98,45 @@ export const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProvide
           id: newNodeId,
         };
 
-        // ----- Cas 1 : insertion entre deux nodes -----
+        let newGraph: MinimalGraph;
+
         if (options?.childId) {
           const { childId } = options;
 
-          // Filtrer edge parent->child
           const filteredEdges = prev.edges.filter((e) => !(e.source === parentId && e.target === childId));
 
-          const edge1: MinimalEdge = {
-            id: getId("edge"),
-            source: parentId,
-            target: newNodeId,
+          newGraph = {
+            edges: [
+              ...filteredEdges,
+              {
+                id: getId("edge"),
+                source: parentId,
+                target: newNodeId,
+              },
+              {
+                id: getId("edge"),
+                source: newNodeId,
+                target: childId,
+              },
+            ],
+            nodes: [...prev.nodes, newNode],
           };
-
-          const edge2: MinimalEdge = {
-            id: getId("edge"),
-            source: newNodeId,
-            target: childId,
-          };
-
-          return {
-            edges: [...filteredEdges, edge1, edge2],
+        } else {
+          newGraph = {
+            edges: [
+              ...prev.edges,
+              {
+                id: getId("edge"),
+                source: parentId,
+                target: newNodeId,
+              },
+            ],
             nodes: [...prev.nodes, newNode],
           };
         }
 
-        // ----- Cas 2 : ajout simple -----
-        const newEdge: MinimalEdge = {
-          id: getId("edge"),
-          source: parentId,
-          target: newNodeId,
-        };
-
-        return {
-          edges: [...prev.edges, newEdge],
-          nodes: [...prev.nodes, newNode],
-        };
+        // 🔹 on expanse pour avoir aussi les nodes option
+        return expandMinimalGraphWithAttributes(newGraph);
       });
     },
     [getId],
@@ -101,10 +144,15 @@ export const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProvide
 
   /** 🔹 Met à jour les attributes d’un node minimal */
   const updateNodeAttributes = useCallback((nodeId: string, attributes: Attributes[]) => {
-    setGraph((prev) => ({
-      ...prev,
-      nodes: prev.nodes.map((n) => (n.id === nodeId ? { ...n, data: { ...n.data, attributes } } : n)),
-    }));
+    setGraphRaw((prev) => {
+      const updated: MinimalGraph = {
+        ...prev,
+        nodes: prev.nodes.map((n) => (n.id === nodeId ? { ...n, data: { ...n.data, attributes } } : n)),
+      };
+
+      // recalcul nodes/edges option
+      return expandMinimalGraphWithAttributes(updated);
+    });
   }, []);
 
   /** 🔹 Graphe layouté */
