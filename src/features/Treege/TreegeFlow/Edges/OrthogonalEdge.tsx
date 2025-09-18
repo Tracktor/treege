@@ -1,5 +1,6 @@
 import { keyframes } from "@tracktor/design-system";
 import { BaseEdge, EdgeProps } from "@xyflow/react";
+import { useMemo } from "react";
 
 interface ElkPoint {
   x: number;
@@ -8,21 +9,41 @@ interface ElkPoint {
 
 // Animation dash
 const dashAnim = keyframes`
+    from {
+        stroke-dashoffset: 0;
+    }
     to {
         stroke-dashoffset: -12;
     }
 `;
 
 /**
- * Edge orthogonal animated with elkPoints from ELK layout
+ * Edge orthogonal animé avec elkPoints de ELK layout.
+ * Ajuste automatiquement début et fin aux coordonnées actuelles des nodes.
  */
 const OrthogonalEdge = ({ id, data, sourceX, sourceY, targetX, targetY }: EdgeProps) => {
-  const elkPoints = (data?.elkPoints as ElkPoint[] | undefined) ?? [
+  // on récupère elkPoints ou un fallback
+  const elkPoints: ElkPoint[] = (data?.elkPoints as ElkPoint[] | undefined) ?? [
     { x: sourceX, y: sourceY },
     { x: targetX, y: targetY },
   ];
 
-  const d = elkPoints.reduce((acc, point, index) => acc + (index === 0 ? `M${point.x},${point.y}` : ` L${point.x},${point.y}`), "");
+  // on remplace début et fin par coords actuelles des nodes
+  const points = useMemo(() => {
+    if (elkPoints.length < 2) {
+      return [
+        { x: sourceX, y: sourceY },
+        { x: targetX, y: targetY },
+      ];
+    }
+    const copy = [...elkPoints];
+    copy[0] = { x: sourceX, y: sourceY };
+    copy[copy.length - 1] = { x: targetX, y: targetY };
+    return copy;
+  }, [elkPoints, sourceX, sourceY, targetX, targetY]);
+
+  // construit le path SVG
+  const d = useMemo(() => `M${points.map((p) => `${p.x},${p.y}`).join(" L")}`, [points]);
 
   return (
     <BaseEdge
@@ -32,7 +53,6 @@ const OrthogonalEdge = ({ id, data, sourceX, sourceY, targetX, targetY }: EdgePr
         animation: `${dashAnim} 1s linear infinite`,
         stroke: "#999",
         strokeDasharray: "6 4",
-        strokeDashoffset: 0,
         strokeWidth: 2,
       }}
     />

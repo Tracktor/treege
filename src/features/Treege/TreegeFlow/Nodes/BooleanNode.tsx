@@ -93,7 +93,7 @@ const BooleanNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
           </CardContent>
         </Card>
 
-        <HandleSource handleId={`${id}-out`} position={Position.Bottom} />
+        <HandleSource handleId={`${id}-out`} position={Position.Bottom} rotation="0deg" />
       </Box>
 
       <NodeConfigModal isOpen={isModalOpen} onClose={handleCancelModal} onSave={handleSaveModal} />
