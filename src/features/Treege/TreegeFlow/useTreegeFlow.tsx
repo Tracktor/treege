@@ -1,253 +1,99 @@
-import { type Edge, type Node, useEdgesState, useNodesState, useReactFlow } from "@xyflow/react";
-import { useCallback, useEffect, useState } from "react";
+import { Node, Edge, useNodesState, useEdgesState } from "@xyflow/react";
+import { useState, useCallback, useEffect } from "react";
 import { useIdGenerator } from "@/features/Treege/context/IDProvider";
-import getLayout from "@/features/Treege/getLayout/getLayout";
-import { Attributes, CustomNodeData, NodeOptions } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
+import { MinimalGraph, MinimalNode, MinimalEdge, Attributes, NodeOptions } from "@/features/Treege/TreegeFlow/GraphDataMapper/DataTypes";
+import useLayoutedGraph from "@/features/Treege/TreegeFlow/GraphDataMapper/useLayoutedGraph";
+import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 
-const initialNode: Node<CustomNodeData> = {
-  data: {
-    name: "Node 1",
-    order: 1,
-  },
-  id: "root-id-1",
-  position: { x: 0, y: 0 },
-  type: "text",
-};
-
-export const useTreegeFlow = () => {
-  const { fitView } = useReactFlow();
-
-  // états ReactFlow
-  const [nodes, setNodes, onNodesChange] = useNodesState<Node<CustomNodeData>>([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
-
-  // états internes
-  const [graphNodes, setGraphNodes] = useState<Node<CustomNodeData>[]>([initialNode]);
-  const [graphEdges, setGraphEdges] = useState<Edge[]>([]);
+export const useTreegeFlow = (initialGraph: MinimalGraph) => {
+  const [graph, setGraph] = useState<MinimalGraph>(initialGraph ?? { edges: [], nodes: [] });
   const getId = useIdGenerator();
 
-  /** Normalise l’ordre */
-  const normalizeOrder = (nodeArray: Node<CustomNodeData>[]) => {
-    const sorted = [...nodeArray].sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
-    return sorted.map((n, index) => ({
-      ...n,
-      data: { ...n.data, order: index + 1 },
-    }));
-  };
+  const addNodeToGraph = useCallback(
+    (parentId: string, options?: NodeOptions & { childId?: string }) => {
+      setGraph((prev) => {
+        const newNodeId = getId("node");
 
-  /** Met à jour les attributes sans toucher à l’ordre */
-  const updateNodeAttributes = useCallback((nodeId: string, newAttributes: Attributes[]): void => {
-    setGraphNodes((current: Node<CustomNodeData>[]) =>
-      current.map((node) =>
-        node.id === nodeId
-          ? {
-              ...node,
-              data: {
-                ...node.data,
-                attributes: newAttributes,
-                order: node.data.order,
-              },
-            }
-          : node,
-      ),
-    );
-  }, []);
-
-  /** Ajoute un nouveau nœud */
-  const handleAddNode = useCallback(
-    (parentId: string, childId?: string, options?: NodeOptions) => {
-      setGraphNodes((currentNodes) => {
-        const parentNode = currentNodes.find((n) => n.id === parentId);
-        if (!parentNode) return currentNodes;
-
-        // Détermine l’ordre
-        let newOrder: number;
-        if (childId) {
-          const childNode = currentNodes.find((n) => n.id === childId);
-          const parentOrder = parentNode.data.order ?? 0;
-          const childOrder = childNode?.data.order ?? parentOrder + 1;
-          newOrder = (parentOrder + childOrder) / 2;
-        } else {
-          const parentOrder = parentNode.data.order ?? currentNodes.length;
-          newOrder = parentOrder + 1;
-        }
-
-        // Crée un nouvel ID
-        const newId = getId("node");
-
-        // ⚡️ Nouveau node – on prend exactement les attributs donnés par le modal
-        const newNode: Node<CustomNodeData> = {
+        // nouveau node minimal
+        const newNode: MinimalNode = {
           data: {
-            ...options,
             attributes: options?.attributes ?? [],
-            name: options?.name ?? `Node`,
-            onAddNode: handleAddNode,
-            order: newOrder,
+            isDecision: options?.isDecision ?? false,
+            name: options?.name ?? "Node",
+            type: options?.type ?? "text",
           },
-          id: newId,
-          position: { x: 0, y: 0 },
-          type: options?.type ?? "text",
+          id: newNodeId,
         };
 
-        // Insert dans le tableau après le parent
-        const indexParent = currentNodes.findIndex((n) => n.id === parentId);
-        const newNodes = [...currentNodes.slice(0, indexParent + 1), newNode, ...currentNodes.slice(indexParent + 1)];
+        if (options?.childId) {
+          const { childId } = options;
 
-        // Gestion des edges
-        setGraphEdges((currentEdges) => {
-          let newEdges = [...currentEdges];
+          const filteredEdges = prev.edges.filter((e) => !(e.source === parentId && e.target === childId));
 
-          if (options?.sourceHandle) {
-            // Branche booléenne
-            newEdges.push({
-              id: getId("edge"),
-              source: parentId,
-              sourceHandle: options.sourceHandle,
-              target: newId,
-              type: "orthogonal",
-            });
-          } else if (childId) {
-            // On insère entre deux nœuds existants
-            newEdges = newEdges.filter((e) => !(e.source === parentId && e.target === childId));
-            newEdges.push({
-              id: getId("edge"),
-              source: parentId,
-              target: newId,
-              type: "orthogonal",
-            });
-            newEdges.push({
-              id: getId("edge"),
-              source: newId,
-              target: childId,
-              type: "orthogonal",
-            });
-          } else {
-            // Ajout simple
-            newEdges.push({
-              id: getId("edge"),
-              source: parentId,
-              target: newId,
-              type: "orthogonal",
-            });
-          }
+          const edge1: MinimalEdge = {
+            id: getId("edge"),
+            source: parentId,
+            target: newNodeId,
+          };
 
-          return newEdges;
-        });
+          const edge2: MinimalEdge = {
+            id: getId("edge"),
+            source: newNodeId,
+            target: childId,
+          };
 
-        return normalizeOrder(newNodes);
+          return {
+            edges: [...filteredEdges, edge1, edge2],
+            nodes: [...prev.nodes, newNode],
+          };
+        }
+
+        const newEdge: MinimalEdge = {
+          id: getId("edge"),
+          source: parentId,
+          target: newNodeId,
+        };
+
+        return {
+          edges: [...prev.edges, newEdge],
+          nodes: [...prev.nodes, newNode],
+        };
       });
     },
     [getId],
   );
 
-  /** Nettoie edges orphelins */
-  useEffect(() => {
-    setGraphEdges((currentEdges) =>
-      currentEdges.filter((e) => graphNodes.some((n) => n.id === e.source) && graphNodes.some((n) => n.id === e.target)),
-    );
-  }, [graphNodes]);
+  const updateNodeAttributes = useCallback((nodeId: string, attributes: Attributes[]) => {
+    setGraph((prev) => ({
+      ...prev,
+      nodes: prev.nodes.map((n) => (n.id === nodeId ? { ...n, data: { ...n.data, attributes } } : n)),
+    }));
+  }, []);
+
+  const { nodes: layoutedNodes, edges: layoutedEdges } = useLayoutedGraph(graph);
+
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node<CustomNodeData>>(layoutedNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(layoutedEdges);
 
   useEffect(() => {
-    if (graphNodes.length === 0) return;
+    // On injecte `addNodeToGraph` dans data.onAddNode de chaque node
+    const nodesWithAdd = layoutedNodes.map((n) => ({
+      ...n,
+      data: { ...n.data, onAddNode: addNodeToGraph },
+    }));
 
-    // on accumule les nouveaux nodes/edges
-    const addedNodes: Node<CustomNodeData>[] = [];
-    const addedEdges: Edge[] = [];
-
-    graphNodes.forEach((node) => {
-      const { attributes } = node?.data ?? {};
-      if (!attributes?.length) return;
-
-      attributes.forEach((attr, index) => {
-        // on construit un ID stable et prédictible
-        const childId = `${node.id}-attr-${index}`;
-
-        // Vérifie si déjà existant → si oui on ne le recrée pas
-        const alreadyExists = graphNodes.find((n) => n.id === childId) || addedNodes.find((n) => n.id === childId);
-
-        if (!alreadyExists) {
-          // crée node enfant
-          const childNode: Node<CustomNodeData> = {
-            data: {
-              attributes: [],
-              name: `${attr.key}: ${attr.value}`,
-              // enfant n’a pas d’attributs
-              onAddNode: handleAddNode,
-              order: (node.data.order ?? 0) + (index + 1) * 0.1,
-            },
-            id: childId,
-            // ou ton type spécifique
-            position: { x: 0, y: 0 },
-
-            type: "text",
-          };
-          addedNodes.push(childNode);
-
-          // crée edge parent → enfant
-          addedEdges.push({
-            id: getId("edge"),
-            source: node.id,
-            target: childId,
-            type: "orthogonal",
-          });
-        }
-      });
-    });
-
-    if (addedNodes.length > 0 || addedEdges.length > 0) {
-      // on ajoute en une fois à la fin (évite plusieurs renders)
-      setGraphNodes((prev) => [...prev, ...addedNodes]);
-      setGraphEdges((prev) => {
-        const edgesSet = [...prev];
-        addedEdges.forEach((edge) => {
-          if (!edgesSet.find((e) => e.source === edge.source && e.target === edge.target)) {
-            edgesSet.push(edge);
-          }
-        });
-        return edgesSet;
-      });
-    }
-
-    // ⚠️ ne mets PAS graphNodes dans les deps pour éviter la boucle
-  }, [handleAddNode, getId, graphNodes]);
-
-  /** Recalcule layout ELK */
-  useEffect(() => {
-    if (graphNodes.length === 0) return;
-
-    (async () => {
-      const layout = await getLayout(graphNodes, graphEdges);
-
-      // Réinjecte seulement onAddNode
-      setNodes(
-        layout.nodes.map((n) => ({
-          ...n,
-          data: {
-            ...n.data,
-            onAddNode: handleAddNode,
-          },
-        })),
-      );
-      setEdges(layout.edges);
-
-      await fitView({ duration: 800, padding: 0.3 });
-    })();
-  }, [graphNodes, graphEdges, setNodes, setEdges, fitView, handleAddNode]);
-
-  // /** Init root */
-  // useEffect(() => {
-  //   if (!initialized.current) {
-  //     setGraphNodes([initialNode]);
-  //     setGraphEdges([]);
-  //     initialized.current = true;
-  //   }
-  // }, [handleAddNode, getId]);
+    setNodes(nodesWithAdd);
+    setEdges(layoutedEdges);
+  }, [layoutedNodes, layoutedEdges, addNodeToGraph, setNodes, setEdges]);
 
   return {
+    addNodeToGraph,
     edges,
+    graph,
     nodes,
     onEdgesChange,
     onNodesChange,
+    setGraph,
     updateNodeAttributes,
   };
 };

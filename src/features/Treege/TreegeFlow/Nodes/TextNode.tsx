@@ -18,7 +18,14 @@ const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
 
   const handleSaveModal = (config: NodeOptions) => {
     const firstChildId = childConnections[0]?.target;
-    onAddNode?.(id, firstChildId, config);
+
+    console.log("firstChildId", firstChildId);
+
+    onAddNode?.(id, {
+      ...config,
+      childId: firstChildId,
+    });
+
     setIsModalOpen(false);
   };
 

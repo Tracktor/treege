@@ -8,9 +8,9 @@ import Main from "@/components/Layouts/Main/Main";
 import MosaicLayout from "@/components/Layouts/MosaicLayout/MosaicLayout";
 import Sidebar from "@/components/Layouts/Sidebar/Sidebar";
 import colors from "@/constants/colors";
-import { TreegeFlowContext } from "@/features/Treege/context/TreegeFlowProvider";
 import edgeTypes from "@/features/Treege/TreegeFlow/Edges/edgesTypes";
 import nodeTypes from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
+import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
 
 const edgeOptions: DefaultEdgeOptions = {
   style: {
@@ -25,7 +25,8 @@ const edgeOptions: DefaultEdgeOptions = {
 const pathClass = "tree-link";
 
 const TreegeFlow = () => {
-  const { nodes, edges, onNodesChange, onEdgesChange } = useContext(TreegeFlowContext);
+  const { nodes, edges, onNodesChange, onEdgesChange } = useTreegeFlowContext();
+
   const formattedJSON = useMemo(() => [{ edges, node: nodes }], [edges, nodes]);
 
   return (

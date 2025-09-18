@@ -1,10 +1,10 @@
-// useLayoutedGraph.ts
 import { Node, Edge, Position } from "@xyflow/react";
 import { useEffect, useState } from "react";
 import getLayout from "@/features/Treege/getLayout/getLayout";
 import { MinimalEdge, MinimalGraph, MinimalNode } from "@/features/Treege/TreegeFlow/GraphDataMapper/DataTypes";
 import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 
+/** Convertit MinimalNode → Node ReactFlow */
 function toReactFlowNodes(minimalNodes: MinimalNode[]): Node<CustomNodeData>[] {
   return minimalNodes.map((m, index) => ({
     data: {
@@ -21,6 +21,7 @@ function toReactFlowNodes(minimalNodes: MinimalNode[]): Node<CustomNodeData>[] {
   }));
 }
 
+/** Convertit MinimalEdge → Edge ReactFlow */
 function toReactFlowEdges(minimalEdges: MinimalEdge[]): Edge[] {
   return minimalEdges.map((m) => ({
     id: m.id,
@@ -31,21 +32,59 @@ function toReactFlowEdges(minimalEdges: MinimalEdge[]): Edge[] {
 }
 
 /**
- * Hook qui prend un MinimalGraph et renvoie nodes & edges ReactFlow layoutés
+ * Génère automatiquement des nœuds enfants + edges pour les attributes
+ * sans modifier le graphe minimal d’origine
+ */
+function expandNodesWithAttributes(graph: MinimalGraph): MinimalGraph {
+  const extraNodes: MinimalNode[] = [];
+  const extraEdges: MinimalEdge[] = [];
+
+  graph.nodes.forEach((node) => {
+    node.data.attributes?.forEach((attr, index) => {
+      const childId = `${node.id}-attr-${index}`;
+      if (!graph.nodes.find((n) => n.id === childId) && !extraNodes.find((n) => n.id === childId)) {
+        extraNodes.push({
+          data: {
+            attributes: [],
+            name: `${attr.key}: ${attr.value}`,
+            type: "option",
+          },
+          id: childId,
+        });
+        extraEdges.push({
+          id: `edge-${node.id}-attr-${index}`,
+          source: node.id,
+          target: childId,
+        });
+      }
+    });
+  });
+
+  return {
+    edges: [...graph.edges, ...extraEdges],
+    nodes: [...graph.nodes, ...extraNodes],
+  };
+}
+
+/**
+ * Hook that takes a minimal graph and returns nodes and edges with an ELK layout
+ * with expanded attribute nodes.
  */
 const useLayoutedGraph = (graph: MinimalGraph) => {
   const [layoutedNodes, setLayoutedNodes] = useState<Node<CustomNodeData>[]>([]);
   const [layoutedEdges, setLayoutedEdges] = useState<Edge[]>([]);
 
   useEffect(() => {
-    if (!graph.nodes.length) {
+    if (!graph || !graph.nodes || graph.nodes.length === 0) {
       setLayoutedNodes([]);
       setLayoutedEdges([]);
       return;
     }
 
-    const rfNodes = toReactFlowNodes(graph.nodes);
-    const rfEdges = toReactFlowEdges(graph.edges);
+    const expandedGraph = expandNodesWithAttributes(graph);
+
+    const rfNodes = toReactFlowNodes(expandedGraph.nodes);
+    const rfEdges = toReactFlowEdges(expandedGraph.edges);
 
     (async () => {
       try {
