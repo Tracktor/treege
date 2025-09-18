@@ -1,42 +1,40 @@
 import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
-import { Card, CardContent, Chip, Box, Typography, IconButton, Stack, Divider } from "@tracktor/design-system";
+import { Card, CardContent, Chip, Box, Typography, IconButton, Stack } from "@tracktor/design-system";
 import { Position, Handle, useNodeConnections, type NodeProps, type Node } from "@xyflow/react";
 import { memo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import colors from "@/constants/colors";
 import HandleSource from "@/features/Treege/TreegeFlow/Handlers/HandleSource";
 import NodeConfigModal from "@/features/Treege/TreegeFlow/NodeConfigModal/NodeConfigModal";
 import { CustomNodeData, NodeOptions } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 
 const BooleanNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
-  const { t } = useTranslation("form");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [branchHandle, setBranchHandle] = useState<string | null>(null);
   const parentConnections = useNodeConnections({ handleType: "target" });
   const { name, order, onAddNode, isDecision } = data;
-
-  const trueConnections = useNodeConnections({
-    handleId: `${id}-true`,
-    handleType: "source",
-  });
-  const falseConnections = useNodeConnections({
-    handleId: `${id}-false`,
-    handleType: "source",
-  });
-
-  const isTrueConnected = trueConnections.length > 0;
-  const isFalseConnected = falseConnections.length > 0;
 
   const handleOpenModal = () => {
     setBranchHandle(null);
     setIsModalOpen(true);
   };
 
-  const handleOpenBranchModal = (branch: "Yes" | "No") => {
-    const handleId = branch === "Yes" ? `${id}-true` : `${id}-false`;
-    setBranchHandle(handleId);
-    setIsModalOpen(true);
-  };
+  // const trueConnections = useNodeConnections({
+  //   handleId: `${id}-true`,
+  //   handleType: "source",
+  // });
+  // const falseConnections = useNodeConnections({
+  //   handleId: `${id}-false`,
+  //   handleType: "source",
+  // });
+
+  // const isTrueConnected = trueConnections.length > 0;
+  // const isFalseConnected = falseConnections.length > 0;
+
+  // const handleOpenBranchModal = (branch: "Yes" | "No") => {
+  //   const handleId = branch === "Yes" ? `${id}-true` : `${id}-false`;
+  //   setBranchHandle(handleId);
+  //   setIsModalOpen(true);
+  // };
 
   const handleSaveModal = (config: NodeOptions) => {
     onAddNode?.(id, undefined, {
@@ -62,15 +60,13 @@ const BooleanNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
             background: colors.background,
             borderColor: colors.primary,
             borderRadius: "1rem",
-            overflow: "visible",
-            position: "relative",
           }}
         >
           <CardContent
             sx={{
               display: "flex",
               flexDirection: "column",
-              height: 130,
+              height: 150,
               justifyContent: "space-between",
               width: 200,
             }}
@@ -95,65 +91,9 @@ const BooleanNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
               )}
             </Stack>
           </CardContent>
-
-          {isDecision && (
-            <Stack mr={2} ml={2}>
-              <Divider sx={{ ml: -2, mr: -2 }} />
-
-              <Stack spacing={2} direction="row" alignItems="center" alignSelf="end" sx={{ position: "relative" }}>
-                <Typography>{t("true")}</Typography>
-                {!isTrueConnected && (
-                  <IconButton size="small" color="info" onClick={() => handleOpenBranchModal("Yes")}>
-                    <AddBoxRoundedIcon sx={{ fontSize: 20 }} />
-                  </IconButton>
-                )}
-
-                <HandleSource
-                  handleId={`${id}-true`}
-                  position={Position.Right}
-                  rotation="-90deg"
-                  style={{
-                    right: -27,
-                    top: "50%",
-                  }}
-                />
-              </Stack>
-
-              <Divider sx={{ ml: -2, mr: -2 }} />
-
-              <Stack spacing={2} direction="row" alignItems="center" alignSelf="end" sx={{ position: "relative" }}>
-                <Typography>{t("false")}</Typography>
-                {!isFalseConnected && (
-                  <IconButton size="small" color="secondary" onClick={() => handleOpenBranchModal("No")}>
-                    <AddBoxRoundedIcon sx={{ fontSize: 20 }} />
-                  </IconButton>
-                )}
-
-                <HandleSource
-                  handleId={`${id}-false`}
-                  position={Position.Right}
-                  rotation="-90deg"
-                  style={{
-                    right: -27,
-                    top: "50%",
-                  }}
-                />
-              </Stack>
-            </Stack>
-          )}
         </Card>
 
-        {!isDecision && (
-          <HandleSource
-            handleId={`${id}-out`}
-            position={Position.Bottom}
-            rotation="0deg"
-            style={{
-              bottom: -12,
-              left: "calc(50% - 12px)",
-            }}
-          />
-        )}
+        <HandleSource handleId={`${id}-out`} position={Position.Bottom} />
       </Box>
 
       <NodeConfigModal isOpen={isModalOpen} onClose={handleCancelModal} onSave={handleSaveModal} />

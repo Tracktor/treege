@@ -21,28 +21,28 @@ const HandleSource: FC<HandleSourceProps> = ({ handleId, position = Position.Rig
 
   return (
     <Box sx={{ position: "relative" }}>
-      <ArrowDropDownCircleIcon
-        sx={{
-          "&:hover": { backgroundColor: colors.secondary },
-          backgroundColor: isConnected ? colors.secondary : colors.primary,
-          borderRadius: "50%",
-          bottom: -18,
-          color: colors.background,
-          cursor: "pointer",
-          fontSize: 20,
-          left: "calc(50% - 12px)",
-          position: "absolute",
-          transform: `translateY(-50%) rotate(${rotation})`,
-          ...style,
-        }}
-      />
+      {/* <ArrowDropDownCircleIcon*/}
+      {/*  sx={{*/}
+      {/*    "&:hover": { backgroundColor: colors.secondary },*/}
+      {/*    backgroundColor: isConnected ? colors.secondary : colors.primary,*/}
+      {/*    borderRadius: "50%",*/}
+      {/*    bottom: -18,*/}
+      {/*    color: colors.background,*/}
+      {/*    cursor: "pointer",*/}
+      {/*    fontSize: 20,*/}
+      {/*    left: "calc(50% - 10px)",*/}
+      {/*    position: "absolute",*/}
+      {/*    transform: `translateY(-50%) rotate(${rotation})`,*/}
+      {/*    ...style,*/}
+      {/*  }}*/}
+      {/* />*/}
       <Handle
         type="source"
         position={position}
         id={handleId}
         style={{
-          backgroundColor: "transparent",
-          borderColor: "transparent",
+          // backgroundColor: "transparent",
+          // borderColor: "transparent",
           borderRadius: "50%",
           bottom: -18,
           height: 20,

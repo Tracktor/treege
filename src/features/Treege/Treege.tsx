@@ -12,6 +12,7 @@ import TreegeProvider from "@/features/Treege/context/TreegeProvider";
 import "@/config/i18n.config";
 import "@xyflow/react/dist/style.css";
 import TreegeFlow from "@/features/Treege/TreegeFlow/TreegeFlow";
+import TreegeFlowProvider from "@/features/Treege/context/TreegeFlowProvider";
 
 export interface BackendConfig {
   baseUrl?: string;
@@ -55,7 +56,9 @@ const Treege = ({ initialTree, initialTreeId, backendConfig }: TreegeProps) => {
             <IdProvider>
               <DarkTheme>
                 <SnackbarProvider>
-                  <TreegeFlow />
+                  <TreegeFlowProvider>
+                    <TreegeFlow />
+                  </TreegeFlowProvider>
                 </SnackbarProvider>
               </DarkTheme>
             </IdProvider>

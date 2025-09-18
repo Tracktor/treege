@@ -52,6 +52,27 @@ const elkOptions: ElkLayoutOptions = {
   "elk.spacing.nodeNode": "80",
 };
 
+// 👇 fonction utilitaire pour retrouver la position exacte du handle
+function getHandlePosition(node: Node, position: Position) {
+  const width = node.width ?? 200;
+  const height = node.height ?? 150;
+  const { x } = node.position;
+  const { y } = node.position;
+
+  switch (position) {
+    case Position.Bottom:
+      return { x: x + width / 2, y: y + height };
+    case Position.Top:
+      return { x: x + width / 2, y };
+    case Position.Left:
+      return { x, y: y + height / 2 };
+    case Position.Right:
+      return { x: x + width, y: y + height / 2 };
+    default:
+      return { x, y };
+  }
+}
+
 export const getLayout = async (
   nodes: Node<CustomNodeData>[],
   edges: Edge[],
@@ -93,25 +114,7 @@ export const getLayout = async (
   try {
     const layoutedGraph = await elk.layout(graph);
 
-    // On récupère les points ELK pour chaque edge
-    const elkEdgeMap = new Map<string, ElkEdgeWithSections>(((layoutedGraph.edges ?? []) as ElkEdgeWithSections[]).map((e) => [e.id, e]));
-
-    const layoutedEdges: Edge[] = edges.map((original) => {
-      const elkEdge = elkEdgeMap.get(original.id);
-      if (elkEdge && elkEdge.sections) {
-        const section = elkEdge.sections[0];
-        const points: ElkPoint[] = [section.startPoint, ...(section.bendPoints ?? []), section.endPoint];
-        return {
-          ...original,
-          data: {
-            ...original.data,
-            elkPoints: points,
-          },
-        };
-      }
-      return original;
-    });
-
+    // 🔹 On construit les nodes layoutés
     const newLayoutNodes: Node<CustomNodeData>[] = (layoutedGraph.children ?? [])
       .filter((node) => node.x !== undefined && node.y !== undefined)
       .map((node) => ({
@@ -122,6 +125,53 @@ export const getLayout = async (
         targetPosition: isHorizontal ? Position.Left : Position.Top,
         width: 200,
       }));
+
+    // 🔹 On récupère les points ELK pour chaque edge et on ajuste aux handles ReactFlow
+    const elkEdgeMap = new Map<string, ElkEdgeWithSections>(((layoutedGraph.edges ?? []) as ElkEdgeWithSections[]).map((e) => [e.id, e]));
+
+    const layoutedEdges: Edge[] = edges.map((original) => {
+      const elkEdge = elkEdgeMap.get(original.id);
+
+      if (elkEdge && elkEdge.sections) {
+        const section = elkEdge.sections[0];
+        let points: ElkPoint[] = [section.startPoint, ...(section.bendPoints ?? []), section.endPoint];
+
+        const sourceNode = newLayoutNodes.find((n) => n.id === original.source);
+        const targetNode = newLayoutNodes.find((n) => n.id === original.target);
+
+        // ⚡ On ajuste le start et end pour coller aux handles + forcer l’orthogonalité
+        if (sourceNode) {
+          const srcPos = getHandlePosition(sourceNode, sourceNode.sourcePosition ?? Position.Bottom);
+          const firstBend = points[1];
+          if (firstBend && Math.abs(srcPos.x - firstBend.x) > 1 && Math.abs(srcPos.y - firstBend.y) > 1) {
+            // insère un coude orthogonal
+            points = [srcPos, { x: srcPos.x, y: firstBend.y }, ...points.slice(1)];
+          } else {
+            points[0] = srcPos;
+          }
+        }
+
+        if (targetNode) {
+          const tgtPos = getHandlePosition(targetNode, targetNode.targetPosition ?? Position.Top);
+          const beforeLast = points[points.length - 2];
+          if (beforeLast && Math.abs(tgtPos.x - beforeLast.x) > 1 && Math.abs(tgtPos.y - beforeLast.y) > 1) {
+            // insère un coude orthogonal avant d’arriver
+            points = [...points.slice(0, -1), { x: beforeLast.x, y: tgtPos.y }, tgtPos];
+          } else {
+            points[points.length - 1] = tgtPos;
+          }
+        }
+
+        return {
+          ...original,
+          data: {
+            ...original.data,
+            elkPoints: points,
+          },
+        };
+      }
+      return original;
+    });
 
     return { edges: layoutedEdges, nodes: newLayoutNodes };
   } catch (error) {

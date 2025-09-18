@@ -2,14 +2,8 @@ import { type Edge, type Node, useEdgesState, useNodesState, useReactFlow } from
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useIdGenerator } from "@/features/Treege/context/IDProvider";
 import getLayout from "@/features/Treege/getLayout/getLayout";
-import { CustomNodeData, NodeOptions } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
+import { Attributes, CustomNodeData, NodeOptions } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 
-/**
- * Hook pour gérer le flow Treege :
- * - onAddNode(parentId) = ajoute un node à la suite
- * - onAddNode(parentId, childId) = insère entre deux nodes
- * - onAddNode(parentId, undefined, {sourceHandle}) = branche boolean
- */
 export const useTreegeFlow = () => {
   const { fitView } = useReactFlow();
 
@@ -17,31 +11,40 @@ export const useTreegeFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node<CustomNodeData>>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
 
-  // états “brut” pour builder le graphe
+  // états internes
   const [graphNodes, setGraphNodes] = useState<Node<CustomNodeData>[]>([]);
   const [graphEdges, setGraphEdges] = useState<Edge[]>([]);
-
   const initialized = useRef(false);
   const getId = useIdGenerator();
 
-  /** Normalise l’ordre des nœuds */
+  /** Normalise l’ordre */
   const normalizeOrder = (nodeArray: Node<CustomNodeData>[]) => {
     const sorted = [...nodeArray].sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
     return sorted.map((n, index) => ({
       ...n,
-      data: {
-        ...n.data,
-        order: index + 1,
-      },
+      data: { ...n.data, order: index + 1 },
     }));
   };
 
-  /**
-   * Ajoute un nouveau nœud
-   * - parentId : toujours requis
-   * - childId : si défini → insertion entre parent et child
-   * - options.sourceHandle : si défini → branche boolean
-   */
+  /** Met à jour les attributes sans toucher à l’ordre */
+  const updateNodeAttributes = useCallback((nodeId: string, newAttributes: Attributes[]): void => {
+    setGraphNodes((current: Node<CustomNodeData>[]) =>
+      current.map((node) =>
+        node.id === nodeId
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                attributes: newAttributes,
+                order: node.data.order,
+              },
+            }
+          : node,
+      ),
+    );
+  }, []);
+
+  /** Ajoute un nouveau nœud */
   const handleAddNode = useCallback(
     (parentId: string, childId?: string, options?: NodeOptions) => {
       setGraphNodes((currentNodes) => {
@@ -60,27 +63,28 @@ export const useTreegeFlow = () => {
           newOrder = parentOrder + 1;
         }
 
-        // Crée un nouvel ID pour le node
+        // Crée un nouvel ID
         const newId = getId("node");
 
+        // ⚡️ Nouveau node – on prend exactement les attributs donnés par le modal
         const newNode: Node<CustomNodeData> = {
           data: {
-            isDecision: options?.isDecision ?? false,
+            ...options,
+            attributes: options?.attributes ?? [],
             name: options?.name ?? `Node`,
             onAddNode: handleAddNode,
             order: newOrder,
-            type: options?.type ?? "text",
           },
           id: newId,
           position: { x: 0, y: 0 },
           type: options?.type ?? "text",
         };
 
-        // Ajoute le node dans la liste
+        // Insert dans le tableau après le parent
         const indexParent = currentNodes.findIndex((n) => n.id === parentId);
         const newNodes = [...currentNodes.slice(0, indexParent + 1), newNode, ...currentNodes.slice(indexParent + 1)];
 
-        // 🔹 Gestion des edges
+        // Gestion des edges
         setGraphEdges((currentEdges) => {
           let newEdges = [...currentEdges];
 
@@ -127,33 +131,100 @@ export const useTreegeFlow = () => {
     [getId],
   );
 
-  /** 🔹 Nettoie edges orphelins à chaque changement de nodes */
+  /** Nettoie edges orphelins */
   useEffect(() => {
     setGraphEdges((currentEdges) =>
       currentEdges.filter((e) => graphNodes.some((n) => n.id === e.source) && graphNodes.some((n) => n.id === e.target)),
     );
   }, [graphNodes]);
 
-  /** 🔹 Recalcule layout ELK */
+  useEffect(() => {
+    if (graphNodes.length === 0) return;
+
+    // on accumule les nouveaux nodes/edges
+    const addedNodes: Node<CustomNodeData>[] = [];
+    const addedEdges: Edge[] = [];
+
+    graphNodes.forEach((node) => {
+      if (node.data?.attributes?.length > 0) {
+        node.data.attributes.forEach((attr, index) => {
+          // on construit un ID stable et prédictible
+          const childId = `${node.id}-attr-${index}`;
+
+          // Vérifie si déjà existant → si oui on ne le recrée pas
+          const alreadyExists = graphNodes.find((n) => n.id === childId) || addedNodes.find((n) => n.id === childId);
+
+          if (!alreadyExists) {
+            // crée node enfant
+            const childNode: Node<CustomNodeData> = {
+              data: {
+                attributes: [],
+                name: `${attr.key}: ${attr.value}`,
+                // enfant n’a pas d’attributs
+                onAddNode: handleAddNode,
+                order: (node.data.order ?? 0) + (index + 1) * 0.1,
+              },
+              id: childId,
+              // ou ton type spécifique
+              position: { x: 0, y: 0 },
+
+              type: "text",
+            };
+            addedNodes.push(childNode);
+
+            // crée edge parent → enfant
+            addedEdges.push({
+              id: getId("edge"),
+              source: node.id,
+              target: childId,
+              type: "orthogonal",
+            });
+          }
+        });
+      }
+    });
+
+    if (addedNodes.length > 0 || addedEdges.length > 0) {
+      // on ajoute en une fois à la fin (évite plusieurs renders)
+      setGraphNodes((prev) => [...prev, ...addedNodes]);
+      setGraphEdges((prev) => {
+        const edgesSet = [...prev];
+        addedEdges.forEach((edge) => {
+          if (!edgesSet.find((e) => e.source === edge.source && e.target === edge.target)) {
+            edgesSet.push(edge);
+          }
+        });
+        return edgesSet;
+      });
+    }
+
+    // ⚠️ ne mets PAS graphNodes dans les deps pour éviter la boucle
+  }, [handleAddNode, getId, graphNodes]);
+
+  /** Recalcule layout ELK */
   useEffect(() => {
     if (graphNodes.length === 0) return;
 
     (async () => {
       const layout = await getLayout(graphNodes, graphEdges);
 
+      // Réinjecte seulement onAddNode
       setNodes(
         layout.nodes.map((n) => ({
           ...n,
-          data: { ...n.data, onAddNode: handleAddNode },
+          data: {
+            ...n.data,
+            onAddNode: handleAddNode,
+          },
         })),
       );
       setEdges(layout.edges);
 
       await fitView({ duration: 800, padding: 0.3 });
     })();
-  }, [graphNodes, graphEdges, setNodes, setEdges, fitView, handleAddNode]); // plus de setGraphEdges ici
+  }, [graphNodes, graphEdges, setNodes, setEdges, fitView, handleAddNode]);
 
-  /** 🔹 Init avec un node racine */
+  /** Init root */
   useEffect(() => {
     if (!initialized.current) {
       const rootId = getId("root");
@@ -173,7 +244,13 @@ export const useTreegeFlow = () => {
     }
   }, [handleAddNode, getId]);
 
-  return { edges, nodes, onEdgesChange, onNodesChange };
+  return {
+    edges,
+    nodes,
+    onEdgesChange,
+    onNodesChange,
+    updateNodeAttributes,
+  };
 };
 
 export default useTreegeFlow;

@@ -9,11 +9,7 @@ import { CustomNodeData, NodeOptions } from "@/features/Treege/TreegeFlow/Nodes/
 
 const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // connections entrantes (pour afficher handle top)
   const parentConnections = useNodeConnections({ handleType: "target" });
-
-  // 🔹 connections sortantes pour savoir si on a déjà un enfant
   const childConnections = useNodeConnections({ handleType: "source" });
 
   const { name, order, onAddNode } = data;
@@ -21,8 +17,7 @@ const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
   const handleOpenModal = () => setIsModalOpen(true);
 
   const handleSaveModal = (config: NodeOptions) => {
-    // 🔹 si on a déjà un enfant on insère entre parent et ce premier enfant
-    const firstChildId = childConnections[0]?.target; // id du premier enfant
+    const firstChildId = childConnections[0]?.target;
     onAddNode?.(id, firstChildId, config);
     setIsModalOpen(false);
   };
