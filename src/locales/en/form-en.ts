@@ -5,6 +5,15 @@ const FORM_EN = {
   ancestorValue: "Get value from: {{ancestorName}}",
   apiRoute: "Api route",
   cardNumber: "Card number",
+  category: {
+    api: "API",
+    boolean: "Boolean",
+    dateTime: "Date & Time",
+    decision: "Decision",
+    file: "File",
+    other: "Other",
+    textArea: "Text area",
+  },
   dataMapping: "Option mapping",
   decisionField: "Decision field",
   disabledPast: "Disabled Past",
@@ -48,6 +57,7 @@ const FORM_EN = {
   true: "True",
   type: {
     address: "Address",
+    api: "API",
     autocomplete: "Autocomplete",
     checkbox: "Checkbox",
     date: "Date",

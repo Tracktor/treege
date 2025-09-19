@@ -5,6 +5,15 @@ const FORM_FR = {
   ancestorValue: "Récupération de la valeur de : {{ancestorName}}",
   apiRoute: "Api route",
   cardNumber: "Numéro de carte",
+  category: {
+    api: "API",
+    boolean: "Booléen",
+    dateTime: "Date & Heure",
+    decision: "Décision",
+    file: "Fichier",
+    other: "Autre",
+    textArea: "Zone de texte",
+  },
   dataMapping: "Mapping des options",
   decisionField: "Champs de décision",
   disabledPast: "Passé désactivé",
@@ -48,6 +57,7 @@ const FORM_FR = {
   true: "Vrai",
   type: {
     address: "Adresse",
+    api: "API",
     autocomplete: "Autocomplétion",
     checkbox: "Case à cocher",
     date: "Date",

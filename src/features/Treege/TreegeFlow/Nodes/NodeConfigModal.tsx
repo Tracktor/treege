@@ -15,10 +15,11 @@ import {
   MenuItem,
   FormControlLabel,
   Checkbox,
+  ListSubheader,
 } from "@tracktor/design-system";
 import { FormEvent } from "react";
 import { useTranslation } from "react-i18next";
-import getCategoryOrTypes, { fieldCategory } from "@/features/Treege/TreegeFlow/utils/getCategoryOrTypes";
+import getCategoryOrTypes, { fieldCategory, fieldCategoryOrder, FieldType } from "@/features/Treege/TreegeFlow/utils/getCategoryOrTypes";
 import { Attributes } from "@/features/Treege/TreegeFlow/utils/types";
 
 interface NodeConfigModalForm {
@@ -100,80 +101,57 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
 
         <DialogContent>
           <Stack spacing={2}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel id="node-category-label">{t("category")}</InputLabel>
-              <Field name="category">
+            <Stack direction="row" spacing={2}>
+              <Field name="type">
                 {({ state, handleChange }) => (
-                  <Select
-                    labelId="node-category-label"
-                    label={t("category")}
-                    value={state.value}
-                    onChange={(e) => {
-                      const selectedCategory = e.target.value;
-                      handleChange(selectedCategory);
-                      // Reset type à premier type de la catégorie
-                      const firstType = (getCategoryOrTypes(selectedCategory) as string[])[0];
-                      setFieldValue("type", firstType);
-                      // reset children si besoin
-                      setChildren([]);
-                    }}
-                  >
-                    {Object.keys(fieldCategory).map((categoru) => (
-                      <MenuItem key={categoru} value={categoru}>
-                        {categoru}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                )}
-              </Field>
-            </FormControl>
-
-            <Subscribe
-              selector={(state) => ({
-                isDecision: state.values.isDecision,
-                type: state.values.type,
-              })}
-            >
-              {({ type }) => {
-                const handleTypeChange = (newType: string) => {
-                  setFieldValue("type", newType);
-
-                  // if (newType === "boolean" && isDecision) {
-                  //   setChildren([
-                  //     { label: "true", name: "true", type: "option", value: "true" },
-                  //     { label: "false", name: "false", type: "option", value: "false" },
-                  //   ]);
-                  // } else {
-                  //   setChildren([]);
-                  // }
-                };
-
-                return (
                   <FormControl fullWidth variant="outlined">
                     <InputLabel id="node-type-label">{t("type")}</InputLabel>
-                    <Select labelId="node-type-label" label={t("type")} value={type} onChange={(e) => handleTypeChange(e.target.value)}>
-                      <MenuItem value="text">Text</MenuItem>
-                      <MenuItem value="boolean">Boolean</MenuItem>
+                    <Select
+                      labelId="node-type-label"
+                      label={t("type")}
+                      value={state.value}
+                      onChange={(e) => {
+                        const selectedType = e.target.value;
+                        handleChange(selectedType);
+
+                        const categoryFound = Object.entries(fieldCategory).find(([_, types]) => types.includes(selectedType as never));
+
+                        if (categoryFound) {
+                          setFieldValue("category", categoryFound[0]);
+                        }
+                      }}
+                    >
+                      {fieldCategoryOrder.map((categoryKey) => {
+                        const types = fieldCategory[categoryKey]; // on récupère les types
+                        return [
+                          <ListSubheader key={`${categoryKey}-header`}>
+                            {t(`form:category.${categoryKey as keyof typeof fieldCategory}`)}
+                          </ListSubheader>,
+                          ...types.map((typeOption) => (
+                            <MenuItem key={typeOption} value={typeOption}>
+                              {t(`form:type.${typeOption as FieldType}`)}
+                            </MenuItem>
+                          )),
+                        ];
+                      })}
                     </Select>
                   </FormControl>
-                );
-              }}
-            </Subscribe>
-            <Field name="name">
-              {({ state, handleChange }) => (
-                <TextField required fullWidth label="Name" value={state.value} onChange={(e) => handleChange(e.target.value)} />
-              )}
-            </Field>
-            <Field name="label">
-              {({ state, handleChange }) => (
-                <TextField fullWidth label="Label" value={state.value} onChange={(e) => handleChange(e.target.value)} />
-              )}
-            </Field>
-            <Field name="value">
-              {({ state, handleChange }) => (
-                <TextField fullWidth label="Value" value={state.value} onChange={(e) => handleChange(e.target.value)} />
-              )}
-            </Field>
+                )}
+              </Field>
+            </Stack>
+
+            <Stack direction="row" spacing={2}>
+              <Field name="name">
+                {({ state, handleChange }) => (
+                  <TextField required fullWidth label="Name" value={state.value} onChange={(e) => handleChange(e.target.value)} />
+                )}
+              </Field>
+              <Field name="label">
+                {({ state, handleChange }) => (
+                  <TextField fullWidth label="Label" value={state.value} onChange={(e) => handleChange(e.target.value)} />
+                )}
+              </Field>
+            </Stack>
 
             {canBeDecisionField && (
               <FormControl fullWidth>
