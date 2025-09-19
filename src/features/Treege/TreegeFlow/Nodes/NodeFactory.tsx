@@ -2,8 +2,9 @@ import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
 import EditIcon from "@mui/icons-material/Edit";
 import { Card, CardContent, Chip, Box, Typography, IconButton, Stack } from "@tracktor/design-system";
 import { NodeProps, Node, Handle, Position, useNodeConnections } from "@xyflow/react";
-import { memo, ReactNode, useState } from "react";
+import { memo, ReactNode, useContext, useState } from "react";
 import colors from "@/constants/colors";
+import { TreegeFlowContext } from "@/features/Treege/context/TreegeFlowProvider";
 import HandleSource from "@/features/Treege/TreegeFlow/Handlers/HandleSource";
 import NodeConfigModal from "@/features/Treege/TreegeFlow/Nodes/NodeConfigModal";
 import { CustomNodeData, Attributes } from "@/features/Treege/TreegeFlow/utils/types";
@@ -55,11 +56,19 @@ const NodeRenderer = ({
   children,
   borderColor = colors.primary,
 }: BaseNodeProps) => {
+  const { updateNode, addNode } = useContext(TreegeFlowContext);
   const parentConnections = useNodeConnections({ handleType: "target" });
   const childConnections = useNodeConnections({ handleType: "source" });
-  const { name, order, onAddNode } = data;
+  const { name, order } = data;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"add" | "edit">("add");
+  const isEditMode = modalMode === "edit";
+  const initialValues = isEditMode
+    ? {
+        ...data,
+        children: data.children ?? [],
+      }
+    : undefined;
 
   const handleOpenEditModal = () => {
     setModalMode("edit");
@@ -74,8 +83,17 @@ const NodeRenderer = ({
   const handleCloseModal = () => setIsModalOpen(false);
 
   const handleSaveModal = (attributes: Attributes) => {
+    if (isEditMode) {
+      updateNode(id, attributes);
+      setIsModalOpen(false);
+      return;
+    }
+
     const firstChildId = childConnections[0]?.target;
-    onAddNode?.(id, firstChildId, attributes);
+    addNode(id, {
+      ...(attributes as Attributes),
+      childId: firstChildId,
+    });
     setIsModalOpen(false);
   };
 
@@ -128,20 +146,7 @@ const NodeRenderer = ({
         {children}
       </Box>
 
-      <NodeConfigModal
-        key={id}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        onSave={handleSaveModal}
-        initialValues={
-          modalMode === "edit"
-            ? {
-                ...data,
-                children: data.children ?? [],
-              }
-            : undefined
-        }
-      />
+      <NodeConfigModal key={id} isOpen={isModalOpen} onClose={handleCloseModal} onSave={handleSaveModal} initialValues={initialValues} />
     </>
   );
 };

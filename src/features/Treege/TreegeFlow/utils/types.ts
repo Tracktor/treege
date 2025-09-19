@@ -27,6 +27,5 @@ export type MinimalGraph = {
 
 export type CustomNodeData = Attributes & {
   order?: number;
-  onAddNode?: (parentId: string, childId?: string, attributes?: Attributes) => void;
   children?: Attributes[];
 };

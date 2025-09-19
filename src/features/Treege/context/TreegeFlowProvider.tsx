@@ -110,24 +110,9 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
     });
   }, []);
 
-  // --- Sync React Flow state with laid-out graph ---
+  /** Sync React Flow state with laid-out graph */
   useEffect(() => {
-    // Map over all laid-out nodes to enrich them with an onAddNode callback
-    const nodesWithAdd = laidOutNodes.map((n) => ({
-      ...n,
-      data: {
-        ...n.data,
-        onAddNode: (parentId: string, childId?: string, attributes?: Partial<Attributes>) => {
-          addNode(parentId, {
-            ...(attributes as Attributes),
-            childId,
-          });
-        },
-      },
-    }));
-
-    // Update React Flow state with enriched nodes and latest edges
-    setNodes(nodesWithAdd);
+    setNodes(laidOutNodes);
     setEdges(laidOutEdges);
   }, [laidOutNodes, laidOutEdges, addNode, setNodes, setEdges]);
 
