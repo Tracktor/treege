@@ -2,7 +2,7 @@ import { Node, Edge, useNodesState, useEdgesState } from "@xyflow/react";
 import { createContext, ReactNode, useMemo, useState, useCallback, useEffect, useRef } from "react";
 import minimalGraph from "@/features/Treege/TreegeFlow/GraphDataMapper/data";
 import { MinimalGraph, MinimalNode, MinimalEdge, NodeOptions } from "@/features/Treege/TreegeFlow/GraphDataMapper/DataTypes";
-import useLayoutedGraph from "@/features/Treege/TreegeFlow/GraphDataMapper/useLayoutedGraph";
+import useLaidOutGraph from "@/features/Treege/TreegeFlow/Layout/useLaidOutGraph";
 import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 
 export interface TreegeFlowContextValue {
@@ -37,9 +37,7 @@ interface TreegeFlowProviderProps {
 const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps) => {
   const countersRef = useRef<Record<string, number>>({});
   const [graph, setGraph] = useState<MinimalGraph>(initialGraph ?? minimalGraph);
-
-  const { nodes: laidOutNodes, edges: laidOutEdges } = useLayoutedGraph(graph);
-
+  const { nodes: laidOutNodes, edges: laidOutEdges } = useLaidOutGraph(graph);
   const [nodes, setNodes, onNodesChange] = useNodesState<Node<CustomNodeData>>(laidOutNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(laidOutEdges);
 
@@ -49,7 +47,6 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
     return `${prefix}-${countersRef.current[prefix]}`;
   }, []);
 
-  // --- Add node ---
   const addNode = useCallback(
     (parentId: string, options?: NodeOptions & { childId?: string; options?: NodeOptions[] }) => {
       setGraph((prev) => {
@@ -87,7 +84,6 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
     [getId],
   );
 
-  // --- Update node attributes ---
   const updateNode = useCallback((nodeId: string, attributes: NodeOptions) => {
     setGraph((prev) => ({
       ...prev,
@@ -95,7 +91,6 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
     }));
   }, []);
 
-  // --- Add option to node ---
   const addOption = useCallback((nodeId: string, option: NodeOptions) => {
     setGraph((prev) => {
       const updatedNode = prev.nodes.find((n) => n.id === nodeId);

@@ -40,7 +40,7 @@ type ElkEdge = {
 
 const elk = new ELK();
 
-// 👇 fonction utilitaire pour retrouver la position exacte du handle
+// 👇 Helper pour récupérer la position exacte du handle
 function getHandlePosition(node: Node, position: Position) {
   const width = node.width ?? 200;
   const height = node.height ?? 150;
@@ -64,25 +64,21 @@ function getHandlePosition(node: Node, position: Position) {
 const elkOptions: ElkLayoutOptions = {
   "elk.algorithm": "mrtree",
   "elk.direction": "DOWN",
-  // 👇 SPLINES ou POLYLINE, on ignore de toute façon les bendpoints pour tracer une ligne
-  "elk.edgeRouting": "SPLINES",
+  "elk.edgeRouting": "POLYLINE",
   "elk.padding": "[top=50,left=50,bottom=50,right=50]",
   "elk.spacing.edgeNode": "50",
   "elk.spacing.nodeNode": "50",
 };
 
-export const getLayout = async (
+export const computeGraphLayout = async (
   nodes: Node<CustomNodeData>[],
   edges: Edge[],
   options: ElkLayoutOptions = {},
-): Promise<{
-  nodes: Node<CustomNodeData>[];
-  edges: Edge[];
-}> => {
+): Promise<{ nodes: Node<CustomNodeData>[]; edges: Edge[] }> => {
   const isHorizontal = options?.["elk.direction"] === "RIGHT";
 
+  // 1️⃣ Préparation edges pour ELK
   const nodeIds = new Set(nodes.map((n) => n.id));
-
   const elkEdges: ElkEdge[] = edges
     .filter((edge) => nodeIds.has(edge.source) && nodeIds.has(edge.target))
     .map((edge) => ({
@@ -91,7 +87,7 @@ export const getLayout = async (
       targets: [edge.target],
     }));
 
-  // Nodes triés par ordre
+  // 2️⃣ Préparation nodes pour ELK
   const sortedNodes = [...nodes].sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
 
   const graph = {
@@ -108,8 +104,10 @@ export const getLayout = async (
     layoutOptions: { ...elkOptions, ...options },
   };
 
+  // 3️⃣ Layout via ELK
   const layoutedGraph = await elk.layout(graph);
 
+  // 4️⃣ Convert back nodes
   const newLayoutNodes: Node<CustomNodeData>[] = (layoutedGraph.children ?? [])
     .filter((node) => node.x !== undefined && node.y !== undefined)
     .map((node) => ({
@@ -121,17 +119,15 @@ export const getLayout = async (
       width: 200,
     }));
 
-  // Ajuste edges aux handles
+  // 5️⃣ Convert back edges + elkPoints
   const elkEdgeMap = new Map<string, ElkEdgeWithSections>(((layoutedGraph.edges ?? []) as ElkEdgeWithSections[]).map((e) => [e.id, e]));
 
   const layoutedEdges: Edge[] = edges.map((original) => {
     const elkEdge = elkEdgeMap.get(original.id);
 
-    if (elkEdge && elkEdge.sections) {
+    if (elkEdge?.sections?.length) {
       const section = elkEdge.sections[0];
-
-      // 👇 on ne garde que début et fin → ligne droite
-      const points: ElkPoint[] = [section.startPoint, section.endPoint];
+      const points: ElkPoint[] = [section.startPoint, ...(section.bendPoints ?? []), section.endPoint];
 
       const sourceNode = newLayoutNodes.find((n) => n.id === original.source);
       const targetNode = newLayoutNodes.find((n) => n.id === original.target);
@@ -153,14 +149,16 @@ export const getLayout = async (
       };
     }
 
-    // Edge sans info ELK → fallback direct
+    // fallback si ELK n’a pas renvoyé de sections
+    const srcNode = newLayoutNodes.find((n) => n.id === original.source);
+    const tgtNode = newLayoutNodes.find((n) => n.id === original.target);
     return {
       ...original,
       data: {
         ...original.data,
         elkPoints: [
-          getHandlePosition(newLayoutNodes.find((n) => n.id === original.source)!, Position.Bottom),
-          getHandlePosition(newLayoutNodes.find((n) => n.id === original.target)!, Position.Top),
+          srcNode ? getHandlePosition(srcNode, srcNode.sourcePosition ?? Position.Bottom) : { x: 0, y: 0 },
+          tgtNode ? getHandlePosition(tgtNode, tgtNode.targetPosition ?? Position.Top) : { x: 0, y: 0 },
         ],
       },
     };
@@ -169,4 +167,4 @@ export const getLayout = async (
   return { edges: layoutedEdges, nodes: newLayoutNodes };
 };
 
-export default getLayout;
+export default computeGraphLayout;
