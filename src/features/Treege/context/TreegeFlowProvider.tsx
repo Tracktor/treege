@@ -14,11 +14,13 @@ export interface TreegeFlowContextValue {
   updateNode: (nodeId: string, attributes: Attributes) => void;
   addChild: (nodeId: string, child: Attributes) => void;
   addNode: (parentId: string, attrs?: Attributes & { childId?: string; children?: Attributes[] }) => void;
+  deleteNode: (nodeId: string) => void;
 }
 
 export const TreegeFlowContext = createContext<TreegeFlowContextValue>({
   addChild: () => {},
   addNode: () => {},
+  deleteNode: () => {},
   edges: [],
   graph: { edges: [], nodes: [] },
   nodes: [],
@@ -109,6 +111,44 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
     [getId],
   );
 
+  /** Delete a node and reconnect its parents to its children */
+  const deleteNode = useCallback(
+    (nodeId: string) => {
+      setGraph((prev) => {
+        const parentEdges = prev.edges.filter((e) => e.target === nodeId);
+        const childEdges = prev.edges.filter((e) => e.source === nodeId);
+
+        const parents = parentEdges.map((e) => e.source);
+        const newChildren = childEdges.map((e) => e.target);
+
+        const remainingEdges = prev.edges.filter((e) => e.source !== nodeId && e.target !== nodeId);
+
+        const remainingNodes = prev.nodes.filter((n) => n.id !== nodeId);
+
+        const newEdges: MinimalEdge[] = [];
+        parents.forEach((p) => {
+          newChildren.forEach((c) => {
+            // éviter doublon
+            const alreadyExists = remainingEdges.some((e) => e.source === p && e.target === c);
+            if (!alreadyExists) {
+              newEdges.push({
+                id: getId("edge"),
+                source: p,
+                target: c,
+              });
+            }
+          });
+        });
+
+        return {
+          edges: [...remainingEdges, ...newEdges],
+          nodes: remainingNodes,
+        };
+      });
+    },
+    [getId],
+  );
+
   /** Update a node’s attributes */
   const updateNode = useCallback((nodeId: string, attributes: Attributes) => {
     setGraph((prev) => ({
@@ -145,6 +185,7 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
     () => ({
       addChild,
       addNode,
+      deleteNode,
       edges,
       graph,
       nodes,
@@ -153,7 +194,7 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
       setGraph,
       updateNode,
     }),
-    [edges, nodes, graph, onEdgesChange, onNodesChange, setGraph, updateNode, addNode, addChild],
+    [edges, nodes, graph, onEdgesChange, onNodesChange, setGraph, updateNode, addNode, addChild, deleteNode],
   );
 
   return <TreegeFlowContext.Provider value={value}>{children}</TreegeFlowContext.Provider>;

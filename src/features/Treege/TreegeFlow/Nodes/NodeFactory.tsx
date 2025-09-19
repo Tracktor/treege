@@ -1,4 +1,5 @@
 import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
+import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import EditIcon from "@mui/icons-material/Edit";
 import { Card, CardContent, Chip, Box, Typography, IconButton, Stack } from "@tracktor/design-system";
 import { NodeProps, Node, Handle, Position, useNodeConnections } from "@xyflow/react";
@@ -15,6 +16,7 @@ interface BaseNodeProps {
   chipLabel: string;
   showAddButton?: boolean;
   showEditButton?: boolean;
+  showDeleteButton?: boolean;
   children?: ReactNode;
   borderColor?: string;
 }
@@ -23,7 +25,8 @@ interface NodeConfig {
   chipLabel: string;
   borderColor: string;
   showAddButton?: (data: CustomNodeData) => boolean;
-  showEditButton?: (data: CustomNodeData) => boolean;
+  showEditButton?: boolean;
+  showDeleteButton?: boolean;
 }
 
 const nodeConfig: Record<string, NodeConfig> = {
@@ -31,19 +34,22 @@ const nodeConfig: Record<string, NodeConfig> = {
     borderColor: colors.primary,
     chipLabel: "boolean",
     showAddButton: (data) => !data.isDecision,
-    showEditButton: () => true,
+    showDeleteButton: true,
+    showEditButton: true,
   },
   option: {
     borderColor: colors.secondary,
     chipLabel: "option",
     showAddButton: () => true,
-    showEditButton: () => false,
+    showDeleteButton: false,
+    showEditButton: false,
   },
   text: {
     borderColor: colors.primary,
     chipLabel: "text",
     showAddButton: () => true,
-    showEditButton: () => true,
+    showDeleteButton: true,
+    showEditButton: true,
   },
 };
 
@@ -53,10 +59,11 @@ const NodeRenderer = ({
   chipLabel,
   showAddButton = true,
   showEditButton = true,
+  showDeleteButton = true,
   children,
   borderColor = colors.primary,
 }: BaseNodeProps) => {
-  const { updateNode, addNode } = useContext(TreegeFlowContext);
+  const { updateNode, addNode, deleteNode } = useContext(TreegeFlowContext);
   const parentConnections = useNodeConnections({ handleType: "target" });
   const childConnections = useNodeConnections({ handleType: "source" });
   const { name, order } = data;
@@ -81,6 +88,10 @@ const NodeRenderer = ({
   };
 
   const handleCloseModal = () => setIsModalOpen(false);
+
+  const handleDeleteNode = () => {
+    deleteNode(id);
+  };
 
   const handleSaveModal = (attributes: Attributes) => {
     if (isEditMode) {
@@ -125,6 +136,12 @@ const NodeRenderer = ({
               <Chip color="info" size="small" label={chipLabel} />
 
               <Stack direction="row">
+                {showDeleteButton && (
+                  <IconButton size="small" color="error" onClick={handleDeleteNode}>
+                    <DeleteOutlineRoundedIcon sx={{ fontSize: 20 }} />
+                  </IconButton>
+                )}
+
                 {showEditButton && (
                   <IconButton size="small" color="secondary" onClick={handleOpenEditModal}>
                     <EditIcon sx={{ fontSize: 20 }} />
@@ -165,7 +182,8 @@ const NodeFactory = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
       chipLabel={config.chipLabel}
       borderColor={config.borderColor}
       showAddButton={config.showAddButton?.(data)}
-      showEditButton={config.showEditButton?.(data)}
+      showEditButton={config.showEditButton}
+      showDeleteButton={config.showDeleteButton}
     />
   );
 };
