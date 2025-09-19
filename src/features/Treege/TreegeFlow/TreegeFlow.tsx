@@ -8,8 +8,8 @@ import MosaicLayout from "@/components/Layouts/MosaicLayout/MosaicLayout";
 import Sidebar from "@/components/Layouts/Sidebar/Sidebar";
 import colors from "@/constants/colors";
 import EdgeFactory from "@/features/Treege/TreegeFlow/Edges/EdgeFactory";
-import reactFlowToMinimal from "@/features/Treege/TreegeFlow/GraphDataMapper/reactFlowToMinimalConverter";
 import NodeFactory from "@/features/Treege/TreegeFlow/Nodes/NodeFactory";
+import reactFlowToMinimal from "@/features/Treege/TreegeFlow/utils/toMinimalConverter";
 import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
 
 const pathClass = "tree-link";

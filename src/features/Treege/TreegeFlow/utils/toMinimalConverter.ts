@@ -4,11 +4,8 @@ import { CustomNodeData, MinimalEdge, MinimalGraph, MinimalNode, NodeOptions } f
 /** Convert ReactFlow nodes → MinimalNode[] */
 const toMinimalNodes = (rfNodes: Node<CustomNodeData>[]): MinimalNode[] =>
   rfNodes
-    // On ignore les nodes "option" enfants si tu veux garder seulement les vrais nodes
-    // sinon enlève ce filter
     .filter((n) => !n.id.includes("-option-"))
     .map((n) => {
-      // 🔹 fallback attributes
       const attributes: NodeOptions = {
         isDecision: n.data.isDecision ?? false,
         label: n.data.label ?? "",
@@ -18,7 +15,6 @@ const toMinimalNodes = (rfNodes: Node<CustomNodeData>[]): MinimalNode[] =>
         value: n.data.value ?? "",
       };
 
-      // 🔹 fallback options
       const options: NodeOptions[] = Array.isArray(n.data.options)
         ? n.data.options.map((opt) => ({
             isDecision: opt.isDecision ?? false,
@@ -43,7 +39,6 @@ const toMinimalEdges = (rfEdges: Edge[]): MinimalEdge[] =>
     id: e.id,
     source: e.source,
     target: e.target,
-    // garde le type existant si défini, sinon détecte si c’est une option
     type: e.type ?? (e.id.includes("-option-") ? "option" : "default"),
   }));
 

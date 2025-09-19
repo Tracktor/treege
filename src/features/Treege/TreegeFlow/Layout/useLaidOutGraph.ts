@@ -1,9 +1,42 @@
 import { Node, Edge } from "@xyflow/react";
 import { useEffect, useState } from "react";
-import expandMinimalGraphWithOptions from "@/features/Treege/TreegeFlow/GraphDataMapper/expandMinimalGraphWithOptions";
-import { toReactFlowEdges, toReactFlowNodes } from "@/features/Treege/TreegeFlow/GraphDataMapper/MinimaltoReactFlowNodesConverter";
 import computeGraphLayout from "@/features/Treege/TreegeFlow/Layout/computeGraphLayout";
-import { CustomNodeData, MinimalGraph } from "@/features/Treege/TreegeFlow/utils/types";
+import { toReactFlowEdges, toReactFlowNodes } from "@/features/Treege/TreegeFlow/utils/toReactFlowNodesConverter";
+import { CustomNodeData, MinimalEdge, MinimalGraph, MinimalNode, NodeOptions } from "@/features/Treege/TreegeFlow/utils/types";
+
+const expandMinimalGraphWithOptions = (graph: MinimalGraph): MinimalGraph => {
+  const extraNodes: MinimalNode[] = [];
+  const extraEdges: MinimalEdge[] = [];
+
+  graph.nodes.forEach((node) => {
+    node.options?.forEach((opt: NodeOptions, index: number) => {
+      const childId = `${node.id}-option-${index}`;
+
+      if (!graph.nodes.find((n) => n.id === childId) && !extraNodes.find((n) => n.id === childId)) {
+        extraNodes.push({
+          attributes: {
+            ...opt,
+            type: opt.type ?? "option",
+          },
+          id: childId,
+          options: [],
+        });
+
+        extraEdges.push({
+          id: `edge-${node.id}-option-${index}`,
+          source: node.id,
+          target: childId,
+          type: "option",
+        });
+      }
+    });
+  });
+
+  return {
+    edges: [...graph.edges, ...extraEdges],
+    nodes: [...graph.nodes, ...extraNodes],
+  };
+};
 
 /**
  * Hook converting a MinimalGraph to React Flow nodes & edges,
