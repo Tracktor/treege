@@ -1928,10 +1928,34 @@
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.27.8.tgz#6667fac16c436b5434a387a34dedb013198f6e6e"
   integrity sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==
 
+"@tanstack/devtools-event-client@^0.2.5":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@tanstack/devtools-event-client/-/devtools-event-client-0.2.5.tgz#0b793bfb94fe2ed3ede1d87768056768b5a893db"
+  integrity sha512-iVdqw879KETXyyPHc3gQR5Ld0GjlPLk7bKenBUhzr3+z1FiQZvsbfgYfRRokTSPcgwANAV7aA2Uv05nx5xWT8A==
+
+"@tanstack/form-core@1.23.0":
+  version "1.23.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/form-core/-/form-core-1.23.0.tgz#cc04e62da15a7cb554accdd23c253ee94432b3c2"
+  integrity sha512-aBJnO5iA1TtMK/SSpAvd/y6cVsBgbu5Br2FftvW6r7TkHCcZ/lB2DMx3G2dk6SG7sW0g8s6F7iaMjrvqBGooDw==
+  dependencies:
+    "@tanstack/devtools-event-client" "^0.2.5"
+    "@tanstack/store" "^0.7.5"
+    uuid "^13.0.0"
+
 "@tanstack/query-core@5.81.5":
   version "5.81.5"
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.81.5.tgz#14e0cc778bad8bc11d1cf130709910d8a353bb73"
   integrity sha512-ZJOgCy/z2qpZXWaj/oxvodDx07XcQa9BF92c0oINjHkoqUPsmm3uG08HpTaviviZ/N9eP1f9CM7mKSEkIo7O1Q==
+
+"@tanstack/react-form@^1.23.0":
+  version "1.23.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-form/-/react-form-1.23.0.tgz#bc9b713680c76de85d943c15e7860dc50535050c"
+  integrity sha512-wZ/cBjqj5dgWG79TQOsilbs8WzdouJj3iXw1DAZvQ4nejobsTGl0huU7SZZ0mnFtdNHbre1bFSdWyw+GqFcIhQ==
+  dependencies:
+    "@tanstack/form-core" "1.23.0"
+    "@tanstack/react-store" "^0.7.5"
+    decode-formdata "^0.9.0"
+    devalue "^5.3.2"
 
 "@tanstack/react-query@^5.81.5":
   version "5.81.5"
@@ -1939,6 +1963,19 @@
   integrity sha512-lOf2KqRRiYWpQT86eeeftAGnjuTR35myTP8MXyvHa81VlomoAWNEd8x5vkcAfQefu0qtYCvyqLropFZqgI2EQw==
   dependencies:
     "@tanstack/query-core" "5.81.5"
+
+"@tanstack/react-store@^0.7.5":
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-store/-/react-store-0.7.5.tgz#a8cb11a5687bd322ab0ae20b651503c28b9ac6b1"
+  integrity sha512-A+WZtEnHZpvbKXm8qR+xndNKywBLez2KKKKEQc7w0Qs45GvY1LpRI3BTZNmELwEVim8+Apf99iEDH2J+MUIzlQ==
+  dependencies:
+    "@tanstack/store" "0.7.5"
+    use-sync-external-store "^1.5.0"
+
+"@tanstack/store@0.7.5", "@tanstack/store@^0.7.5":
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/@tanstack/store/-/store-0.7.5.tgz#91c3ffa94a06add47aab917819e8032420fef628"
+  integrity sha512-qd/OjkjaFRKqKU4Yjipaen/EOB9MyEg6Wr9fW103RBPACf1ZcKhbhcu2S5mj5IgdPib6xFIgCUti/mKVkl+fRw==
 
 "@testing-library/dom@^10.4.0":
   version "10.4.0"
@@ -3170,6 +3207,11 @@ decimal.js@^10.4.3:
   resolved "https://registry.yarnpkg.com/decimal.js/-/decimal.js-10.6.0.tgz#e649a43e3ab953a72192ff5983865e509f37ed9a"
   integrity sha512-YpgQiITW3JXGntzdUmyUR1V812Hn8T1YVXhCu+wO3OpS4eU9l4YdD3qjyiKdV6mvV29zapkMeD390UVEf2lkUg==
 
+decode-formdata@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/decode-formdata/-/decode-formdata-0.9.0.tgz#fa9c0c0ea0a279d6d1ea825c156534d2d5fa6721"
+  integrity sha512-q5uwOjR3Um5YD+ZWPOF/1sGHVW9A5rCrRwITQChRXlmPkxDFBqCm4jNTIVdGHNH9OnR+V9MoZVgRhsFb+ARbUw==
+
 deep-eql@^4.1.3:
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/deep-eql/-/deep-eql-4.1.4.tgz#d0d3912865911bb8fac5afb4e3acfa6a28dc72b7"
@@ -3209,6 +3251,11 @@ dequal@^2.0.2, dequal@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/dequal/-/dequal-2.0.3.tgz#2644214f1997d39ed0ee0ece72335490a7ac67be"
   integrity sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==
+
+devalue@^5.3.2:
+  version "5.3.2"
+  resolved "https://registry.yarnpkg.com/devalue/-/devalue-5.3.2.tgz#1d9a00f0d126a2f768589f236da8b67d6988d285"
+  integrity sha512-UDsjUbpQn9kvm68slnrs+mfxwFkIflOhkanmyabZ8zOYk8SMEIbJ3TK+88g70hSIeytu4y18f0z/hYHMTrXIWw==
 
 diff-sequences@^29.6.3:
   version "29.6.3"
@@ -6017,10 +6064,15 @@ url-parse@^1.5.3:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
 
-use-sync-external-store@^1.2.2:
+use-sync-external-store@^1.2.2, use-sync-external-store@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.5.0.tgz#55122e2a3edd2a6c106174c27485e0fd59bcfca0"
   integrity sha512-Rb46I4cGGVBmjamjphe8L/UnvJD+uPPtTkNvX5mZgqdbavhI4EbgIWJiIHXJ8bc/i9EQGPRh4DwEURJ552Do0A==
+
+uuid@^13.0.0:
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-13.0.0.tgz#263dc341b19b4d755eb8fe36b78d95a6b65707e8"
+  integrity sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w==
 
 uuid@^8.3.1:
   version "8.3.2"

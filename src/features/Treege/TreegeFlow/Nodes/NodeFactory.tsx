@@ -75,7 +75,7 @@ const NodeRenderer = ({ id, data, chipLabel, showAddButton = true, children, bor
         {children}
       </Box>
 
-      <NodeConfigModal isOpen={isModalOpen} onClose={handleCloseModal} onSave={handleSaveModal} />
+      <NodeConfigModal key={id} isOpen={isModalOpen} onClose={handleCloseModal} onSave={handleSaveModal} />
     </>
   );
 };

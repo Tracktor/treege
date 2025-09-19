@@ -35,6 +35,7 @@
   "dependencies": {
     "@codemirror/lang-json": "^6.0.1",
     "@mui/icons-material": "^7.2.0",
+    "@tanstack/react-form": "^1.23.0",
     "@tanstack/react-query": "^5.81.5",
     "@tracktor/design-system": "^4.0.1",
     "@uiw/codemirror-theme-dracula": "^4.21.19",
