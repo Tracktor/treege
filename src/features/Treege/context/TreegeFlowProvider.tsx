@@ -35,56 +35,67 @@ interface TreegeFlowProviderProps {
 }
 
 export const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps) => {
-  const [graph, setGraph] = useState<MinimalGraph>(initialGraph ?? minimalGraph);
-
-  // Générateur d’IDs
   const countersRef = useRef<Record<string, number>>({});
+  const [graph, setGraph] = useState<MinimalGraph>(initialGraph ?? minimalGraph);
+  const { nodes: layoutedNodes, edges: layoutedEdges } = useLayoutedGraph(graph);
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node<CustomNodeData>>(layoutedNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(layoutedEdges);
+
   const getId = useCallback((prefix = "node") => {
     countersRef.current[prefix] = (countersRef.current[prefix] ?? 0) + 1;
     return `${prefix}-${countersRef.current[prefix]}`;
   }, []);
 
-  /** 🔹 Ajoute ou insère un node dans le graphe minimal */
   const addNode = useCallback(
     (parentId: string, options?: NodeOptions & { childId?: string; options?: NodeOptions[] }) => {
-      if (!options) return; // sécurité
-
       setGraph((prev) => {
         const newNodeId = getId("node");
 
         const newNode: MinimalNode = {
           attributes: {
-            isDecision: options.isDecision ?? false,
-            label: options.label ?? "",
-            name: options.name ?? "Node",
-            sourceHandle: options.sourceHandle,
-            type: options.type ?? "text",
-            value: options.value ?? "",
+            isDecision: options?.isDecision ?? false,
+            label: options?.label ?? "",
+            name: options?.name ?? "Node",
+            sourceHandle: options?.sourceHandle,
+            type: options?.type ?? "text",
+            value: options?.value ?? "",
           },
           id: newNodeId,
-          options: options.options ?? [],
+          options: options?.options ?? [],
         };
 
-        let newEdges: MinimalEdge[];
+        // On prépare les edges
+        let newEdges: MinimalEdge[] = [];
 
-        if (options.childId) {
+        if (options?.childId) {
           const { childId } = options;
 
-          const filteredEdges = prev.edges.filter((e) => !(e.source === parentId && e.target === childId));
+          if (childId) {
+            const filteredEdges = prev.edges.filter((e) => !(e.source === parentId && e.target === childId));
 
-          newEdges = [
-            ...filteredEdges,
-            {
-              id: getId("edge"),
-              source: parentId,
-              target: newNodeId,
-            },
-            {
-              id: getId("edge"),
-              source: newNodeId,
-              target: childId,
-            },
-          ];
+            newEdges = [
+              ...filteredEdges,
+              {
+                id: getId("edge"),
+                source: parentId,
+                target: newNodeId,
+              },
+              {
+                id: getId("edge"),
+                source: newNodeId,
+                target: childId,
+              },
+            ];
+          } else {
+            newEdges = [
+              ...prev.edges,
+              {
+                id: getId("edge"),
+                source: parentId,
+                target: newNodeId,
+              },
+            ];
+          }
         } else {
           newEdges = [
             ...prev.edges,
@@ -105,7 +116,6 @@ export const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProvide
     [getId],
   );
 
-  /** 🔹 Met à jour les attributs d’un node */
   const updateNode = useCallback((nodeId: string, attributes: NodeOptions) => {
     setGraph((prev) => ({
       ...prev,
@@ -113,7 +123,6 @@ export const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProvide
     }));
   }, []);
 
-  /** 🔹 Ajoute une option dans un node */
   const addOption = useCallback((nodeId: string, option: NodeOptions) => {
     setGraph((prev) => ({
       ...prev,
@@ -121,21 +130,12 @@ export const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProvide
     }));
   }, []);
 
-  /** 🔹 Graphe layouté */
-  const { nodes: layoutedNodes, edges: layoutedEdges } = useLayoutedGraph(graph);
-
-  /** 🔹 État contrôlé React Flow */
-  const [nodes, setNodes, onNodesChange] = useNodesState<Node<CustomNodeData>>(layoutedNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(layoutedEdges);
-
-  /** 🔹 Injection onAddNode dans chaque node layouté */
   useEffect(() => {
     const nodesWithAdd = layoutedNodes.map((n) => ({
       ...n,
       data: {
         ...n.data,
         onAddNode: (parentId: string, childId?: string, options?: Partial<NodeOptions>) => {
-          // normalisation minimale
           addNode(parentId, {
             ...(options as NodeOptions),
             childId,
