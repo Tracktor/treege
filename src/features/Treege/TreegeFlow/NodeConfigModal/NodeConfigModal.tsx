@@ -17,10 +17,9 @@ import {
 } from "@tracktor/design-system";
 import { FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { NodeOptions } from "@/features/Treege/TreegeFlow/GraphDataMapper/DataTypes";
+import { NodeOptions } from "@/features/Treege/TreegeFlow/utils/types";
 
 interface NodeConfigModalProps {
-  // 🔹 OnSave renvoie soit juste l’attribut principal, soit aussi des options
   onSave: (config: NodeOptions & { options?: NodeOptions[] }) => void;
   onClose: () => void;
   isOpen: boolean;
@@ -30,15 +29,11 @@ const decisionFields = ["boolean", "select"];
 
 const NodeConfigModal = ({ isOpen, onSave, onClose }: NodeConfigModalProps) => {
   const { t } = useTranslation(["translation", "form"]);
-
-  // 🔹 attributs principaux du node
   const [name, setName] = useState("");
   const [label, setLabel] = useState("");
   const [value, setValue] = useState("");
   const [type, setType] = useState("text");
   const [isDecision, setIsDecision] = useState(false);
-
-  // 🔹 sous-options (remplace l’ancien attributes[])
   const [options, setOptions] = useState<NodeOptions[]>([]);
 
   const isBooleanType = type === "boolean";
@@ -56,7 +51,7 @@ const NodeConfigModal = ({ isOpen, onSave, onClose }: NodeConfigModalProps) => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // on renvoie un seul objet + éventuellement des options
+
     onSave({
       isDecision,
       label,

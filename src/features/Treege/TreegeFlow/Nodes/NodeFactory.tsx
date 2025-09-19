@@ -3,11 +3,10 @@ import { Card, CardContent, Chip, Box, Typography, IconButton, Stack } from "@tr
 import { NodeProps, Node, Handle, Position, useNodeConnections } from "@xyflow/react";
 import { memo, ReactNode, useState } from "react";
 import colors from "@/constants/colors";
-import { NodeOptions } from "@/features/Treege/TreegeFlow/GraphDataMapper/DataTypes";
 import HandleSource from "@/features/Treege/TreegeFlow/Handlers/HandleSource";
 import NodeConfigModal from "@/features/Treege/TreegeFlow/NodeConfigModal/NodeConfigModal";
 import nodeConfig from "@/features/Treege/TreegeFlow/Nodes/nodeConfig";
-import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
+import { CustomNodeData, NodeOptions } from "@/features/Treege/TreegeFlow/utils/types";
 
 interface BaseNodeProps {
   id: string;

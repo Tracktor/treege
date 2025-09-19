@@ -1,9 +1,8 @@
 import { Node, Edge, useNodesState, useEdgesState } from "@xyflow/react";
 import { createContext, ReactNode, useMemo, useState, useCallback, useEffect, useRef } from "react";
 import minimalGraph from "@/features/Treege/TreegeFlow/GraphDataMapper/data";
-import { MinimalGraph, MinimalNode, MinimalEdge, NodeOptions } from "@/features/Treege/TreegeFlow/GraphDataMapper/DataTypes";
 import useLaidOutGraph from "@/features/Treege/TreegeFlow/Layout/useLaidOutGraph";
-import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
+import { CustomNodeData, MinimalEdge, MinimalGraph, MinimalNode, NodeOptions } from "@/features/Treege/TreegeFlow/utils/types";
 
 export interface TreegeFlowContextValue {
   nodes: Node<CustomNodeData>[];

@@ -1,4 +1,4 @@
-import { MinimalGraph } from "@/features/Treege/TreegeFlow/GraphDataMapper/DataTypes";
+import { MinimalGraph } from "@/features/Treege/TreegeFlow/utils/types";
 
 const minimalGraph: MinimalGraph = {
   edges: [

@@ -1,6 +1,6 @@
 import { Edge, Node, Position } from "@xyflow/react";
 import ELK from "elkjs/lib/elk.bundled.js";
-import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
+import { CustomNodeData } from "@/features/Treege/TreegeFlow/utils/types";
 
 export type ElkLayoutOptions = Partial<{
   "elk.algorithm": "layered" | "force" | "mrtree";
@@ -77,7 +77,6 @@ export const computeGraphLayout = async (
 ): Promise<{ nodes: Node<CustomNodeData>[]; edges: Edge[] }> => {
   const isHorizontal = options?.["elk.direction"] === "RIGHT";
 
-  // 1️⃣ Préparation edges pour ELK
   const nodeIds = new Set(nodes.map((n) => n.id));
   const elkEdges: ElkEdge[] = edges
     .filter((edge) => nodeIds.has(edge.source) && nodeIds.has(edge.target))
@@ -87,7 +86,6 @@ export const computeGraphLayout = async (
       targets: [edge.target],
     }));
 
-  // 2️⃣ Préparation nodes pour ELK
   const sortedNodes = [...nodes].sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
 
   const graph = {
@@ -104,7 +102,6 @@ export const computeGraphLayout = async (
     layoutOptions: { ...elkOptions, ...options },
   };
 
-  // 3️⃣ Layout via ELK
   const layoutedGraph = await elk.layout(graph);
 
   // 4️⃣ Convert back nodes
@@ -149,9 +146,9 @@ export const computeGraphLayout = async (
       };
     }
 
-    // fallback si ELK n’a pas renvoyé de sections
     const srcNode = newLayoutNodes.find((n) => n.id === original.source);
     const tgtNode = newLayoutNodes.find((n) => n.id === original.target);
+
     return {
       ...original,
       data: {

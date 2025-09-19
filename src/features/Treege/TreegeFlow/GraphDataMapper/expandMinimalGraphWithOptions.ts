@@ -1,6 +1,5 @@
-import { MinimalEdge, MinimalGraph, MinimalNode, NodeOptions } from "@/features/Treege/TreegeFlow/GraphDataMapper/DataTypes";
+import { MinimalEdge, MinimalGraph, MinimalNode, NodeOptions } from "@/features/Treege/TreegeFlow/utils/types";
 
-/** 🔹 Transforme chaque option d’un node en node enfant + edge */
 const expandMinimalGraphWithOptions = (graph: MinimalGraph): MinimalGraph => {
   const extraNodes: MinimalNode[] = [];
   const extraEdges: MinimalEdge[] = [];

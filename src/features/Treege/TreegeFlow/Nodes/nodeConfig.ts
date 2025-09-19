@@ -1,5 +1,5 @@
 import colors from "@/constants/colors";
-import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
+import { CustomNodeData } from "@/features/Treege/TreegeFlow/utils/types";
 
 interface NodeConfig {
   chipLabel: string;

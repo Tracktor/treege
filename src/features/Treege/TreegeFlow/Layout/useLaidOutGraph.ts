@@ -1,10 +1,9 @@
 import { Node, Edge } from "@xyflow/react";
 import { useEffect, useState } from "react";
-import { MinimalGraph } from "@/features/Treege/TreegeFlow/GraphDataMapper/DataTypes";
 import expandMinimalGraphWithOptions from "@/features/Treege/TreegeFlow/GraphDataMapper/expandMinimalGraphWithOptions";
 import { toReactFlowEdges, toReactFlowNodes } from "@/features/Treege/TreegeFlow/GraphDataMapper/MinimaltoReactFlowNodesConverter";
 import computeGraphLayout from "@/features/Treege/TreegeFlow/Layout/computeGraphLayout";
-import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
+import { CustomNodeData, MinimalGraph } from "@/features/Treege/TreegeFlow/utils/types";
 
 /**
  * Hook converting a MinimalGraph to React Flow nodes & edges,
@@ -23,21 +22,23 @@ const useLaidOutGraph = (graph: MinimalGraph) => {
       return;
     }
 
-    // 1️⃣ Expand options → create child option nodes & edges
+    // Expand options → create child option nodes & edges
     const expandedGraph = expandMinimalGraphWithOptions(graph);
 
-    // 2️⃣ Convert MinimalGraph → React Flow nodes & edges
+    // Convert MinimalGraph → React Flow nodes & edges
     const reactFlowNodes = toReactFlowNodes(expandedGraph.nodes);
     const reactFlowEdges = toReactFlowEdges(expandedGraph.edges);
 
-    // 3️⃣ Compute layout with ELK
+    // Compute layout with ELK
     (async () => {
       try {
         const { nodes, edges } = await computeGraphLayout(reactFlowNodes, reactFlowEdges);
+
         setLaidOutNodes(nodes);
         setLaidOutEdges(edges);
       } catch (err) {
         console.error("ELK layout error:", err);
+
         setLaidOutNodes(reactFlowNodes);
         setLaidOutEdges(reactFlowEdges);
       }

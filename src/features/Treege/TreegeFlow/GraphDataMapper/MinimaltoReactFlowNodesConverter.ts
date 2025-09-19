@@ -1,7 +1,5 @@
-// MinimalToReactFlow.ts
 import { Node, Edge, Position } from "@xyflow/react";
-import { MinimalEdge, MinimalNode } from "@/features/Treege/TreegeFlow/GraphDataMapper/DataTypes";
-import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
+import { CustomNodeData, MinimalEdge, MinimalNode } from "@/features/Treege/TreegeFlow/utils/types";
 
 export const toReactFlowNodes = (minimalNodes: MinimalNode[]): Node<CustomNodeData>[] =>
   minimalNodes.map((m, index) => ({

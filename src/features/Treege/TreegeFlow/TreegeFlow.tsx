@@ -7,12 +7,24 @@ import Main from "@/components/Layouts/Main/Main";
 import MosaicLayout from "@/components/Layouts/MosaicLayout/MosaicLayout";
 import Sidebar from "@/components/Layouts/Sidebar/Sidebar";
 import colors from "@/constants/colors";
-import edgeTypes from "@/features/Treege/TreegeFlow/Edges/edgesTypes";
+import EdgeFactory from "@/features/Treege/TreegeFlow/Edges/EdgeFactory";
 import reactFlowToMinimal from "@/features/Treege/TreegeFlow/GraphDataMapper/reactFlowToMinimalConverter";
-import nodeTypes from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
+import NodeFactory from "@/features/Treege/TreegeFlow/Nodes/NodeFactory";
 import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
 
 const pathClass = "tree-link";
+
+const reactFlowTypes = {
+  edges: {
+    default: EdgeFactory,
+    option: EdgeFactory,
+  },
+  nodes: {
+    boolean: NodeFactory,
+    option: NodeFactory,
+    text: NodeFactory,
+  },
+};
 
 const TreegeFlow = () => {
   const { nodes, edges, onNodesChange, onEdgesChange } = useTreegeFlowContext();
@@ -42,9 +54,9 @@ const TreegeFlow = () => {
           />
           <ReactFlow
             fitView
-            nodeTypes={nodeTypes}
+            nodeTypes={reactFlowTypes.nodes}
             nodes={nodes}
-            edgeTypes={edgeTypes}
+            edgeTypes={reactFlowTypes.edges}
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
