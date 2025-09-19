@@ -1,4 +1,5 @@
 import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
+import EditIcon from "@mui/icons-material/Edit";
 import { Card, CardContent, Chip, Box, Typography, IconButton, Stack } from "@tracktor/design-system";
 import { NodeProps, Node, Handle, Position, useNodeConnections } from "@xyflow/react";
 import { memo, ReactNode, useState } from "react";
@@ -22,8 +23,18 @@ const NodeRenderer = ({ id, data, chipLabel, showAddButton = true, children, bor
   const childConnections = useNodeConnections({ handleType: "source" });
   const { name, order, onAddNode } = data;
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<"add" | "edit">("add");
 
-  const handleOpenModal = () => setIsModalOpen(true);
+  const handleOpenEditModal = () => {
+    setModalMode("edit");
+    setIsModalOpen(true);
+  };
+
+  const handleOpenAddModal = () => {
+    setModalMode("add");
+    setIsModalOpen(true);
+  };
+
   const handleCloseModal = () => setIsModalOpen(false);
 
   const handleSaveModal = (attributes: Attributes) => {
@@ -60,9 +71,13 @@ const NodeRenderer = ({ id, data, chipLabel, showAddButton = true, children, bor
               <Chip color="info" size="small" label={chipLabel} />
 
               {showAddButton && (
-                <Stack sx={{ gap: 1 }}>
-                  <IconButton size="small" color="success" onClick={handleOpenModal}>
-                    <AddBoxRoundedIcon sx={{ color: "success", fontSize: 20 }} />
+                <Stack direction="row">
+                  <IconButton size="small" color="secondary" onClick={handleOpenEditModal}>
+                    <EditIcon sx={{ fontSize: 20 }} />
+                  </IconButton>
+
+                  <IconButton size="small" color="success" onClick={handleOpenAddModal}>
+                    <AddBoxRoundedIcon sx={{ fontSize: 20 }} />
                   </IconButton>
                 </Stack>
               )}
@@ -75,7 +90,20 @@ const NodeRenderer = ({ id, data, chipLabel, showAddButton = true, children, bor
         {children}
       </Box>
 
-      <NodeConfigModal key={id} isOpen={isModalOpen} onClose={handleCloseModal} onSave={handleSaveModal} />
+      <NodeConfigModal
+        key={id}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSave={handleSaveModal}
+        initialValues={
+          modalMode === "edit"
+            ? {
+                ...data,
+                children: data.children ?? [],
+              }
+            : undefined
+        }
+      />
     </>
   );
 };

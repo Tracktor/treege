@@ -2,6 +2,7 @@ const TRANSLATION_EN = {
   add: "Add",
   addNode: "Add Node",
   cancel: "Cancel",
+  category: "Category",
   disabled: "Disabled",
   edit: "Edit",
   initialQueryEnable: "Enable initial API call",
