@@ -17,10 +17,10 @@ import {
 } from "@tracktor/design-system";
 import { FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { NodeOptions } from "@/features/Treege/TreegeFlow/utils/types";
+import { Attributes } from "@/features/Treege/TreegeFlow/utils/types";
 
 interface NodeConfigModalProps {
-  onSave: (config: NodeOptions & { options?: NodeOptions[] }) => void;
+  onSave: (config: Attributes & { children?: Attributes[] }) => void;
   onClose: () => void;
   isOpen: boolean;
 }
@@ -34,7 +34,7 @@ const NodeConfigModal = ({ isOpen, onSave, onClose }: NodeConfigModalProps) => {
   const [value, setValue] = useState("");
   const [type, setType] = useState("text");
   const [isDecision, setIsDecision] = useState(false);
-  const [options, setOptions] = useState<NodeOptions[]>([]);
+  const [children, setChildren] = useState<Attributes[]>([]);
 
   const isBooleanType = type === "boolean";
   const canBeDecisionField = decisionFields.includes(type);
@@ -45,7 +45,7 @@ const NodeConfigModal = ({ isOpen, onSave, onClose }: NodeConfigModalProps) => {
     setValue("");
     setType("text");
     setIsDecision(false);
-    setOptions([]);
+    setChildren([]);
     onClose();
   };
 
@@ -53,20 +53,21 @@ const NodeConfigModal = ({ isOpen, onSave, onClose }: NodeConfigModalProps) => {
     e.preventDefault();
 
     onSave({
+      children,
       isDecision,
       label,
       name,
-      options,
       type,
       value,
     });
+
     handleClose();
   };
 
-  const handleOptionChange = (idx: number, key: keyof NodeOptions, newValue: string) => {
-    const newOptions = [...options];
-    newOptions[idx] = { ...newOptions[idx], [key]: newValue };
-    setOptions(newOptions);
+  const handleChildChange = (idx: number, key: keyof Attributes, newValue: string) => {
+    const newChildren = [...children];
+    newChildren[idx] = { ...newChildren[idx], [key]: newValue };
+    setChildren(newChildren);
   };
 
   return (
@@ -87,12 +88,12 @@ const NodeConfigModal = ({ isOpen, onSave, onClose }: NodeConfigModalProps) => {
                   setType(selectedType);
 
                   if (selectedType === "boolean" && isDecision) {
-                    setOptions([
+                    setChildren([
                       { label: "true", name: "true", type: "option", value: "true" },
                       { label: "false", name: "false", type: "option", value: "false" },
                     ]);
                   } else {
-                    setOptions([]);
+                    setChildren([]);
                   }
                 }}
               >
@@ -114,12 +115,12 @@ const NodeConfigModal = ({ isOpen, onSave, onClose }: NodeConfigModalProps) => {
                       onChange={(e) => {
                         setIsDecision(e.target.checked);
                         if (isBooleanType && e.target.checked) {
-                          setOptions([
+                          setChildren([
                             { label: "true", name: "true", type: "option", value: "true" },
                             { label: "false", name: "false", type: "option", value: "false" },
                           ]);
                         } else {
-                          setOptions([]);
+                          setChildren([]);
                         }
                       }}
                       color="primary"
@@ -131,10 +132,15 @@ const NodeConfigModal = ({ isOpen, onSave, onClose }: NodeConfigModalProps) => {
             )}
 
             {!isBooleanType &&
-              options.map((opt, idx) => (
-                <Stack key={opt.name} direction="row" spacing={2}>
-                  <TextField fullWidth label="Name" value={opt.name} onChange={(e) => handleOptionChange(idx, "name", e.target.value)} />
-                  <TextField fullWidth label="Value" value={opt.value} onChange={(e) => handleOptionChange(idx, "value", e.target.value)} />
+              children.map((child, idx) => (
+                <Stack key={child.name} direction="row" spacing={2}>
+                  <TextField fullWidth label="Name" value={child.name} onChange={(e) => handleChildChange(idx, "name", e.target.value)} />
+                  <TextField
+                    fullWidth
+                    label="Value"
+                    value={child.value}
+                    onChange={(e) => handleChildChange(idx, "value", e.target.value)}
+                  />
                 </Stack>
               ))}
           </Stack>

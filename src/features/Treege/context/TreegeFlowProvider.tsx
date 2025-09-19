@@ -2,7 +2,7 @@ import { Node, Edge, useNodesState, useEdgesState } from "@xyflow/react";
 import { createContext, ReactNode, useMemo, useState, useCallback, useEffect, useRef } from "react";
 import useLaidOutGraph from "@/features/Treege/TreegeFlow/Layout/useLaidOutGraph";
 import minimalGraph from "@/features/Treege/TreegeFlow/utils/data";
-import { CustomNodeData, MinimalEdge, MinimalGraph, MinimalNode, NodeOptions } from "@/features/Treege/TreegeFlow/utils/types";
+import { Attributes, CustomNodeData, MinimalEdge, MinimalGraph, MinimalNode } from "@/features/Treege/TreegeFlow/utils/types";
 
 export interface TreegeFlowContextValue {
   nodes: Node<CustomNodeData>[];
@@ -11,14 +11,14 @@ export interface TreegeFlowContextValue {
   setGraph: (g: MinimalGraph) => void;
   onNodesChange: (changes: any) => void;
   onEdgesChange: (changes: any) => void;
-  updateNode: (nodeId: string, attributes: NodeOptions) => void;
-  addOption: (nodeId: string, option: NodeOptions) => void;
-  addNode: (parentId: string, options?: NodeOptions & { childId?: string; options?: NodeOptions[] }) => void;
+  updateNode: (nodeId: string, attributes: Attributes) => void;
+  addChild: (nodeId: string, child: Attributes) => void;
+  addNode: (parentId: string, attrs?: Attributes & { childId?: string; children?: Attributes[] }) => void;
 }
 
 export const TreegeFlowContext = createContext<TreegeFlowContextValue>({
+  addChild: () => {},
   addNode: () => {},
-  addOption: () => {},
   edges: [],
   graph: { edges: [], nodes: [] },
   nodes: [],
@@ -46,25 +46,26 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
     return `${prefix}-${countersRef.current[prefix]}`;
   }, []);
 
+  /** Add a new node to the graph (optionally between two existing nodes). */
   const addNode = useCallback(
-    (parentId: string, options?: NodeOptions & { childId?: string; options?: NodeOptions[] }) => {
+    (parentId: string, attrs?: Attributes & { childId?: string; children?: Attributes[] }) => {
       setGraph((prev) => {
         const newNodeId = getId("node");
 
         const newNode: MinimalNode = {
           attributes: {
-            isDecision: options?.isDecision ?? false,
-            label: options?.label ?? "",
-            name: options?.name ?? "Node",
-            sourceHandle: options?.sourceHandle,
-            type: options?.type ?? "text",
-            value: options?.value ?? "",
+            isDecision: attrs?.isDecision ?? false,
+            label: attrs?.label ?? "",
+            name: attrs?.name ?? "Node",
+            sourceHandle: attrs?.sourceHandle,
+            type: attrs?.type ?? "text",
+            value: attrs?.value ?? "",
           },
+          children: attrs?.children ?? [],
           id: newNodeId,
-          options: options?.options ?? [],
         };
 
-        const childId = options?.childId;
+        const childId = attrs?.childId;
 
         const newEdges: MinimalEdge[] = childId
           ? [
@@ -83,21 +84,23 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
     [getId],
   );
 
-  const updateNode = useCallback((nodeId: string, attributes: NodeOptions) => {
+  /** Update a node’s attributes */
+  const updateNode = useCallback((nodeId: string, attributes: Attributes) => {
     setGraph((prev) => ({
       ...prev,
       nodes: prev.nodes.map((n) => (n.id === nodeId ? { ...n, attributes } : n)),
     }));
   }, []);
 
-  const addOption = useCallback((nodeId: string, option: NodeOptions) => {
+  /** Add a child (option) to a node */
+  const addChild = useCallback((nodeId: string, child: Attributes) => {
     setGraph((prev) => {
       const updatedNode = prev.nodes.find((n) => n.id === nodeId);
       if (!updatedNode) return prev;
 
       const newNode = {
         ...updatedNode,
-        options: [...updatedNode.options, option],
+        children: [...updatedNode.children, child],
       };
 
       return {
@@ -114,9 +117,9 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
       ...n,
       data: {
         ...n.data,
-        onAddNode: (parentId: string, childId?: string, options?: Partial<NodeOptions>) => {
+        onAddNode: (parentId: string, childId?: string, attributes?: Partial<Attributes>) => {
           addNode(parentId, {
-            ...(options as NodeOptions),
+            ...(attributes as Attributes),
             childId,
           });
         },
@@ -130,8 +133,8 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
 
   const value = useMemo<TreegeFlowContextValue>(
     () => ({
+      addChild,
       addNode,
-      addOption,
       edges,
       graph,
       nodes,
@@ -140,7 +143,7 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
       setGraph,
       updateNode,
     }),
-    [edges, nodes, graph, onEdgesChange, onNodesChange, setGraph, updateNode, addNode, addOption],
+    [edges, nodes, graph, onEdgesChange, onNodesChange, setGraph, updateNode, addNode, addChild],
   );
 
   return <TreegeFlowContext.Provider value={value}>{children}</TreegeFlowContext.Provider>;

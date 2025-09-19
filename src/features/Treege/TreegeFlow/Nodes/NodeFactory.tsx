@@ -6,7 +6,7 @@ import colors from "@/constants/colors";
 import HandleSource from "@/features/Treege/TreegeFlow/Handlers/HandleSource";
 import nodeConfig from "@/features/Treege/TreegeFlow/Nodes/nodeConfig";
 import NodeConfigModal from "@/features/Treege/TreegeFlow/Nodes/NodeConfigModal";
-import { CustomNodeData, NodeOptions } from "@/features/Treege/TreegeFlow/utils/types";
+import { CustomNodeData, Attributes } from "@/features/Treege/TreegeFlow/utils/types";
 
 interface BaseNodeProps {
   id: string;
@@ -26,9 +26,9 @@ const NodeRenderer = ({ id, data, chipLabel, showAddButton = true, children, bor
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  const handleSaveModal = (config: NodeOptions) => {
+  const handleSaveModal = (attributes: Attributes) => {
     const firstChildId = childConnections[0]?.target;
-    onAddNode?.(id, firstChildId, config);
+    onAddNode?.(id, firstChildId, attributes);
     setIsModalOpen(false);
   };
 

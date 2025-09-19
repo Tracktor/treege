@@ -18,8 +18,8 @@ const minimalGraph: MinimalGraph = {
         type: "text",
         value: "node-test-1-value",
       },
+      children: [],
       id: "node-test-1",
-      options: [],
     },
     {
       attributes: {
@@ -29,8 +29,7 @@ const minimalGraph: MinimalGraph = {
         type: "boolean",
         value: "node-test-2-value",
       },
-      id: "node-test-2",
-      options: [
+      children: [
         {
           isDecision: false,
           label: "True option",
@@ -46,6 +45,7 @@ const minimalGraph: MinimalGraph = {
           value: "false",
         },
       ],
+      id: "node-test-2",
     },
   ],
 };

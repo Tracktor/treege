@@ -1,11 +1,14 @@
 import { Node, Edge, Position } from "@xyflow/react";
 import { CustomNodeData, MinimalEdge, MinimalNode } from "@/features/Treege/TreegeFlow/utils/types";
 
+/**
+ * Convert MinimalNode → Node ReactFlow
+ */
 export const toReactFlowNodes = (minimalNodes: MinimalNode[]): Node<CustomNodeData>[] =>
   minimalNodes.map((m, index) => ({
     data: {
       ...m.attributes,
-      options: m.options,
+      children: m.children,
       order: index + 1,
     },
     height: 150,
@@ -17,6 +20,9 @@ export const toReactFlowNodes = (minimalNodes: MinimalNode[]): Node<CustomNodeDa
     width: 200,
   }));
 
+/**
+ * Convert MinimalEdge → Edge ReactFlow
+ */
 export const toReactFlowEdges = (minimalEdges: MinimalEdge[]): Edge[] =>
   minimalEdges.map((m) => ({
     id: m.id,

@@ -1,4 +1,4 @@
-export type NodeOptions = {
+export type Attributes = {
   name: string;
   label: string;
   value: string;
@@ -9,8 +9,8 @@ export type NodeOptions = {
 
 export type MinimalNode = {
   id: string;
-  attributes: NodeOptions;
-  options: NodeOptions[];
+  attributes: Attributes;
+  children: Attributes[];
 };
 
 export type MinimalEdge = {
@@ -25,8 +25,8 @@ export type MinimalGraph = {
   edges: MinimalEdge[];
 };
 
-export type CustomNodeData = NodeOptions & {
+export type CustomNodeData = Attributes & {
   order?: number;
-  onAddNode?: (parentId: string, childId?: string, options?: NodeOptions) => void;
-  options?: NodeOptions[];
+  onAddNode?: (parentId: string, childId?: string, attributes?: Attributes) => void;
+  children?: Attributes[];
 };
