@@ -33,6 +33,31 @@ interface TreegeFlowProviderProps {
   initialGraph?: MinimalGraph;
 }
 
+/**
+ * TreegeFlowProvider
+ *
+ * React context provider for managing a Treege flow graph.
+ *
+ * This provider:
+ * - Stores and updates the underlying MinimalGraph state.
+ * - Keeps React Flow's `nodes` and `edges` in sync with the graph.
+ * - Exposes convenient helpers (`addNode`, `updateNode`, `addChild`) to modify the graph.
+ *
+ * Typical usage:
+ * ```tsx
+ * <TreegeFlowProvider initialGraph={myGraph}>
+ *   <MyTreegeEditor />
+ * </TreegeFlowProvider>
+ * ```
+ *
+ * Then inside any descendant component:
+ * ```tsx
+ * const { nodes, edges, addNode, updateNode } = useContext(TreegeFlowContext);
+ * ```
+ *
+ * @param children - React children that will have access to the context.
+ * @param initialGraph - Optional initial minimal graph to bootstrap the provider.
+ */
 const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps) => {
   const countersRef = useRef<Record<string, number>>({});
   const [graph, setGraph] = useState<MinimalGraph>(initialGraph ?? minimalGraph);
