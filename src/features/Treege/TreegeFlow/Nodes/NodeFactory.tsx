@@ -5,7 +5,6 @@ import { NodeProps, Node, Handle, Position, useNodeConnections } from "@xyflow/r
 import { memo, ReactNode, useState } from "react";
 import colors from "@/constants/colors";
 import HandleSource from "@/features/Treege/TreegeFlow/Handlers/HandleSource";
-import nodeConfig from "@/features/Treege/TreegeFlow/Nodes/nodeConfig";
 import NodeConfigModal from "@/features/Treege/TreegeFlow/Nodes/NodeConfigModal";
 import { CustomNodeData, Attributes } from "@/features/Treege/TreegeFlow/utils/types";
 
@@ -14,11 +13,48 @@ interface BaseNodeProps {
   data: CustomNodeData;
   chipLabel: string;
   showAddButton?: boolean;
+  showEditButton?: boolean;
   children?: ReactNode;
   borderColor?: string;
 }
 
-const NodeRenderer = ({ id, data, chipLabel, showAddButton = true, children, borderColor = colors.primary }: BaseNodeProps) => {
+interface NodeConfig {
+  chipLabel: string;
+  borderColor: string;
+  showAddButton?: (data: CustomNodeData) => boolean;
+  showEditButton?: (data: CustomNodeData) => boolean;
+}
+
+const nodeConfig: Record<string, NodeConfig> = {
+  boolean: {
+    borderColor: colors.primary,
+    chipLabel: "boolean",
+    showAddButton: (data) => !data.isDecision,
+    showEditButton: () => true,
+  },
+  option: {
+    borderColor: colors.secondary,
+    chipLabel: "option",
+    showAddButton: () => true,
+    showEditButton: () => false,
+  },
+  text: {
+    borderColor: colors.primary,
+    chipLabel: "text",
+    showAddButton: () => true,
+    showEditButton: () => true,
+  },
+};
+
+const NodeRenderer = ({
+  id,
+  data,
+  chipLabel,
+  showAddButton = true,
+  showEditButton = true,
+  children,
+  borderColor = colors.primary,
+}: BaseNodeProps) => {
   const parentConnections = useNodeConnections({ handleType: "target" });
   const childConnections = useNodeConnections({ handleType: "source" });
   const { name, order, onAddNode } = data;
@@ -70,17 +106,19 @@ const NodeRenderer = ({ id, data, chipLabel, showAddButton = true, children, bor
               </Typography>
               <Chip color="info" size="small" label={chipLabel} />
 
-              {showAddButton && (
-                <Stack direction="row">
+              <Stack direction="row">
+                {showEditButton && (
                   <IconButton size="small" color="secondary" onClick={handleOpenEditModal}>
                     <EditIcon sx={{ fontSize: 20 }} />
                   </IconButton>
+                )}
 
+                {showAddButton && (
                   <IconButton size="small" color="success" onClick={handleOpenAddModal}>
                     <AddBoxRoundedIcon sx={{ fontSize: 20 }} />
                   </IconButton>
-                </Stack>
-              )}
+                )}
+              </Stack>
             </Stack>
           </CardContent>
         </Card>
@@ -122,6 +160,7 @@ const NodeFactory = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
       chipLabel={config.chipLabel}
       borderColor={config.borderColor}
       showAddButton={config.showAddButton?.(data)}
+      showEditButton={config.showEditButton?.(data)}
     />
   );
 };
