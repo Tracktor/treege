@@ -1,32 +1,37 @@
 import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
 import { Card, CardContent, Chip, Box, Typography, IconButton, Stack } from "@tracktor/design-system";
-import { Position, Handle, useNodeConnections, type NodeProps, type Node } from "@xyflow/react";
-import { memo, useState } from "react";
+import { NodeProps, Node, Handle, Position, useNodeConnections } from "@xyflow/react";
+import { memo, ReactNode, useState } from "react";
 import colors from "@/constants/colors";
 import { NodeOptions } from "@/features/Treege/TreegeFlow/GraphDataMapper/DataTypes";
 import HandleSource from "@/features/Treege/TreegeFlow/Handlers/HandleSource";
 import NodeConfigModal from "@/features/Treege/TreegeFlow/NodeConfigModal/NodeConfigModal";
+import nodeConfig from "@/features/Treege/TreegeFlow/Nodes/nodeConfig";
 import { CustomNodeData } from "@/features/Treege/TreegeFlow/Nodes/nodeTypes";
 
-const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+interface BaseNodeProps {
+  id: string;
+  data: CustomNodeData;
+  chipLabel: string;
+  showAddButton?: boolean;
+  children?: ReactNode;
+  borderColor?: string;
+}
 
+const NodeRenderer = ({ id, data, chipLabel, showAddButton = true, children, borderColor = colors.primary }: BaseNodeProps) => {
   const parentConnections = useNodeConnections({ handleType: "target" });
   const childConnections = useNodeConnections({ handleType: "source" });
-
   const { name, order, onAddNode } = data;
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
   const handleSaveModal = (config: NodeOptions) => {
     const firstChildId = childConnections[0]?.target;
-
     onAddNode?.(id, firstChildId, config);
-
     setIsModalOpen(false);
   };
-
-  const handleCancelModal = () => setIsModalOpen(false);
 
   return (
     <>
@@ -36,7 +41,7 @@ const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
         <Card
           sx={{
             background: colors.background,
-            borderColor: colors.primary,
+            borderColor,
             borderRadius: "1rem",
           }}
         >
@@ -53,28 +58,45 @@ const TextNode = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
               <Typography variant="h5">
                 {name} (#{order})
               </Typography>
-              <Chip color="info" size="small" label="text" />
+              <Chip color="info" size="small" label={chipLabel} />
 
-              <Stack sx={{ gap: 1 }}>
-                <IconButton size="small" color="success" onClick={handleOpenModal}>
-                  <AddBoxRoundedIcon
-                    sx={{
-                      color: "success",
-                      fontSize: 20,
-                    }}
-                  />
-                </IconButton>
-              </Stack>
+              {showAddButton && (
+                <Stack sx={{ gap: 1 }}>
+                  <IconButton size="small" color="success" onClick={handleOpenModal}>
+                    <AddBoxRoundedIcon sx={{ color: "success", fontSize: 20 }} />
+                  </IconButton>
+                </Stack>
+              )}
             </Stack>
           </CardContent>
         </Card>
 
         <HandleSource handleId={`${id}-out`} position={Position.Bottom} rotation="0deg" />
+
+        {children}
       </Box>
 
-      <NodeConfigModal isOpen={isModalOpen} onClose={handleCancelModal} onSave={handleSaveModal} />
+      <NodeConfigModal isOpen={isModalOpen} onClose={handleCloseModal} onSave={handleSaveModal} />
     </>
   );
 };
 
-export default memo(TextNode);
+const NodeFactory = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
+  const config = nodeConfig[data.type ?? ""] ?? {
+    borderColor: colors.primary,
+    chipLabel: data.type ?? "unknown",
+    showAddButton: () => true,
+  };
+
+  return (
+    <NodeRenderer
+      id={id}
+      data={data}
+      chipLabel={config.chipLabel}
+      borderColor={config.borderColor}
+      showAddButton={config.showAddButton?.(data)}
+    />
+  );
+};
+
+export default memo(NodeFactory);

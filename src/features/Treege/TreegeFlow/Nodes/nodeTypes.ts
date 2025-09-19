@@ -1,7 +1,5 @@
 import { NodeOptions } from "@/features/Treege/TreegeFlow/GraphDataMapper/DataTypes";
-import BooleanNode from "@/features/Treege/TreegeFlow/Nodes/BooleanNode";
-import OptionNode from "@/features/Treege/TreegeFlow/Nodes/OptionNode";
-import TextNode from "@/features/Treege/TreegeFlow/Nodes/TextNode";
+import NodeFactory from "@/features/Treege/TreegeFlow/Nodes/NodeFactory";
 
 export type CustomNodeData = NodeOptions & {
   order?: number;
@@ -10,9 +8,9 @@ export type CustomNodeData = NodeOptions & {
 };
 
 const nodeTypes = {
-  boolean: BooleanNode,
-  option: OptionNode,
-  text: TextNode,
+  boolean: NodeFactory,
+  option: NodeFactory,
+  text: NodeFactory,
 };
 
 export default nodeTypes;
