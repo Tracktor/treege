@@ -40,7 +40,7 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
   const [nodes, setNodes, onNodesChange] = useNodesState<Node<CustomNodeData>>(laidOutNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(laidOutEdges);
 
-  // --- ID generator ---
+  /** ID generator for nodes and edges */
   const getId = useCallback((prefix = "node") => {
     countersRef.current[prefix] = (countersRef.current[prefix] ?? 0) + 1;
     return `${prefix}-${countersRef.current[prefix]}`;
