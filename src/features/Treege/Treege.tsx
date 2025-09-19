@@ -27,19 +27,22 @@ type TreegeProps =
       initialTree?: never;
       initialTreeId?: never;
       backendConfig?: BackendConfig;
+      initialGraph?: never;
     }
   | {
       initialTree?: TreeNode;
       initialTreeId?: never;
       backendConfig?: BackendConfig;
+      initialGraph?: never;
     }
   | {
       initialTree?: never;
       initialTreeId?: string;
       backendConfig?: BackendConfig;
+      initialGraph?: never;
     };
 
-const Treege = ({ initialTree, initialTreeId, backendConfig }: TreegeProps) => {
+const Treege = ({ initialTree, initialTreeId, backendConfig, initialGraph }: TreegeProps) => {
   useLayoutEffect(() => {
     axios.defaults.baseURL = backendConfig?.baseUrl;
     if (backendConfig?.authToken) {
@@ -52,13 +55,13 @@ const Treege = ({ initialTree, initialTreeId, backendConfig }: TreegeProps) => {
       <AuthProvider authToken={backendConfig?.authToken}>
         <ReactFlowProvider>
           <TreegeProvider backendConfig={backendConfig} initialTree={initialTree} initialTreeId={initialTreeId}>
-            <DarkTheme>
-              <SnackbarProvider>
-                <TreegeFlowProvider>
+            <TreegeFlowProvider initialGraph={initialGraph}>
+              <DarkTheme>
+                <SnackbarProvider>
                   <TreegeFlow />
-                </TreegeFlowProvider>
-              </SnackbarProvider>
-            </DarkTheme>
+                </SnackbarProvider>
+              </DarkTheme>
+            </TreegeFlowProvider>
           </TreegeProvider>
         </ReactFlowProvider>
       </AuthProvider>

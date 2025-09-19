@@ -1,7 +1,7 @@
 import { Node, Edge } from "@xyflow/react";
 import { useEffect, useState } from "react";
 import computeGraphLayout from "@/features/Treege/TreegeFlow/Layout/computeGraphLayout";
-import { toReactFlowEdges, toReactFlowNodes } from "@/features/Treege/TreegeFlow/utils/toReactFlowNodesConverter";
+import { toReactFlowEdges, toReactFlowNodes } from "@/features/Treege/TreegeFlow/utils/toReactFlowConverter";
 import { CustomNodeData, MinimalEdge, MinimalGraph, MinimalNode, NodeOptions } from "@/features/Treege/TreegeFlow/utils/types";
 
 const expandMinimalGraphWithOptions = (graph: MinimalGraph): MinimalGraph => {
