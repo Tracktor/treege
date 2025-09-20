@@ -9,6 +9,7 @@ import Sidebar from "@/components/Layouts/Sidebar/Sidebar";
 import colors from "@/constants/colors";
 import ButtonCreateGraph from "@/features/Treege/components/Inputs/ButtonCreateGraph";
 import EdgeFactory from "@/features/Treege/TreegeFlow/Edges/EdgeFactory";
+import useAutoFitView from "@/features/Treege/TreegeFlow/Layout/useAutoFitView";
 import NodeFactory from "@/features/Treege/TreegeFlow/Nodes/NodeFactory";
 import reactFlowToMinimal from "@/features/Treege/TreegeFlow/utils/toMinimalConverter";
 import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
@@ -31,6 +32,8 @@ const TreegeFlow = () => {
   const { nodes, edges, onNodesChange, onEdgesChange, graph } = useTreegeFlowContext();
   const minimalGraph = reactFlowToMinimal(nodes, edges);
   const isGraphEmpty = !graph || graph.nodes.length === 0;
+
+  useAutoFitView(nodes, edges);
 
   return (
     <MosaicLayout>
@@ -59,12 +62,12 @@ const TreegeFlow = () => {
             />
             <ReactFlow
               fitView
-              nodeTypes={reactFlowTypes.nodes}
               nodes={nodes}
-              edgeTypes={reactFlowTypes.edges}
               edges={edges}
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
+              nodeTypes={reactFlowTypes.nodes}
+              edgeTypes={reactFlowTypes.edges}
             >
               <Controls />
             </ReactFlow>
