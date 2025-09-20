@@ -7,6 +7,7 @@ import Main from "@/components/Layouts/Main/Main";
 import MosaicLayout from "@/components/Layouts/MosaicLayout/MosaicLayout";
 import Sidebar from "@/components/Layouts/Sidebar/Sidebar";
 import colors from "@/constants/colors";
+import ButtonCreateGraph from "@/features/Treege/components/Inputs/ButtonCreateGraph";
 import EdgeFactory from "@/features/Treege/TreegeFlow/Edges/EdgeFactory";
 import NodeFactory from "@/features/Treege/TreegeFlow/Nodes/NodeFactory";
 import reactFlowToMinimal from "@/features/Treege/TreegeFlow/utils/toMinimalConverter";
@@ -27,8 +28,9 @@ const reactFlowTypes = {
 };
 
 const TreegeFlow = () => {
-  const { nodes, edges, onNodesChange, onEdgesChange } = useTreegeFlowContext();
+  const { nodes, edges, onNodesChange, onEdgesChange, graph } = useTreegeFlowContext();
   const minimalGraph = reactFlowToMinimal(nodes, edges);
+  const isGraphEmpty = !graph || graph.nodes.length === 0;
 
   return (
     <MosaicLayout>
@@ -38,32 +40,36 @@ const TreegeFlow = () => {
         </Stack>
       </Header>
       <Main>
-        <Box
-          component="div"
-          style={{
-            height: "100%",
-            width: "100%",
-          }}
-        >
-          <GlobalStyles
-            styles={{
-              [`.${pathClass}`]: {
-                stroke: `${colors.borderGrey} !important`,
-              },
+        {isGraphEmpty ? (
+          <ButtonCreateGraph />
+        ) : (
+          <Box
+            component="div"
+            style={{
+              height: "100%",
+              width: "100%",
             }}
-          />
-          <ReactFlow
-            fitView
-            nodeTypes={reactFlowTypes.nodes}
-            nodes={nodes}
-            edgeTypes={reactFlowTypes.edges}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
           >
-            <Controls />
-          </ReactFlow>
-        </Box>
+            <GlobalStyles
+              styles={{
+                [`.${pathClass}`]: {
+                  stroke: `${colors.borderGrey} !important`,
+                },
+              }}
+            />
+            <ReactFlow
+              fitView
+              nodeTypes={reactFlowTypes.nodes}
+              nodes={nodes}
+              edgeTypes={reactFlowTypes.edges}
+              edges={edges}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+            >
+              <Controls />
+            </ReactFlow>
+          </Box>
+        )}
       </Main>
       <Sidebar>
         <ViewerJSON value={minimalGraph} />

@@ -1,6 +1,7 @@
 const BUTTON_EN = {
   close: "Close",
   copyToClipboard: "Copy tree to clipboard",
+  createGraph: "Create Graph",
   createTree: "Create Tree",
   downloadJSONFile: "Download JSON File",
   reset: "Reset",

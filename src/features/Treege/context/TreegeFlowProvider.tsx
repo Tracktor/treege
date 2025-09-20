@@ -1,7 +1,6 @@
 import { Node, Edge, useNodesState, useEdgesState } from "@xyflow/react";
 import { createContext, ReactNode, useMemo, useState, useCallback, useEffect, useRef } from "react";
 import useLaidOutGraph from "@/features/Treege/TreegeFlow/Layout/useLaidOutGraph";
-import minimalGraph from "@/features/Treege/TreegeFlow/utils/data";
 import { Attributes, CustomNodeData, MinimalEdge, MinimalGraph, MinimalNode } from "@/features/Treege/TreegeFlow/utils/types";
 
 export interface TreegeFlowContextValue {
@@ -13,7 +12,7 @@ export interface TreegeFlowContextValue {
   onEdgesChange: (changes: any) => void;
   updateNode: (nodeId: string, attributes: Attributes) => void;
   addChild: (nodeId: string, child: Attributes) => void;
-  addNode: (parentId: string, attrs?: Attributes & { childId?: string; children?: Attributes[] }) => void;
+  addNode: (parentId?: string, attrs?: Attributes & { childId?: string; children?: Attributes[] }) => void;
   deleteNode: (nodeId: string) => void;
 }
 
@@ -29,6 +28,8 @@ export const TreegeFlowContext = createContext<TreegeFlowContextValue>({
   setGraph: () => {},
   updateNode: () => {},
 });
+
+const EMPTY_GRAPH: MinimalGraph = { edges: [], nodes: [] };
 
 interface TreegeFlowProviderProps {
   children: ReactNode;
@@ -62,7 +63,7 @@ interface TreegeFlowProviderProps {
  */
 const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps) => {
   const countersRef = useRef<Record<string, number>>({});
-  const [graph, setGraph] = useState<MinimalGraph>(initialGraph ?? minimalGraph);
+  const [graph, setGraph] = useState<MinimalGraph>(initialGraph ?? EMPTY_GRAPH);
   const { nodes: laidOutNodes, edges: laidOutEdges } = useLaidOutGraph(graph);
   const [nodes, setNodes, onNodesChange] = useNodesState<Node<CustomNodeData>>(laidOutNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(laidOutEdges);
@@ -75,7 +76,7 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
 
   /** Add a new node to the graph (optionally between two existing nodes). */
   const addNode = useCallback(
-    (parentId: string, attrs?: Attributes & { childId?: string; children?: Attributes[] }) => {
+    (parentId?: string, attrs?: Attributes & { childId?: string; children?: Attributes[] }) => {
       setGraph((prev) => {
         const newNodeId = getId("node");
 
@@ -91,6 +92,13 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
           children: attrs?.children ?? [],
           id: newNodeId,
         };
+
+        if (!parentId) {
+          return {
+            edges: prev.edges,
+            nodes: [...prev.nodes, newNode],
+          };
+        }
 
         const childId = attrs?.childId;
 
@@ -194,7 +202,7 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
       setGraph,
       updateNode,
     }),
-    [edges, nodes, graph, onEdgesChange, onNodesChange, setGraph, updateNode, addNode, addChild, deleteNode],
+    [addChild, addNode, deleteNode, edges, graph, nodes, onEdgesChange, onNodesChange, updateNode],
   );
 
   return <TreegeFlowContext.Provider value={value}>{children}</TreegeFlowContext.Provider>;
