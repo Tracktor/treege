@@ -1,3 +1,5 @@
+import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
+import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
 import { useForm } from "@tanstack/react-form";
 import {
   Dialog,
@@ -16,8 +18,10 @@ import {
   FormControlLabel,
   Checkbox,
   ListSubheader,
+  Typography,
+  IconButton,
 } from "@tracktor/design-system";
-import { FormEvent } from "react";
+import { FormEvent, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import getCategoryOrTypes, { fieldCategory, fieldCategoryOrder, FieldType } from "@/features/Treege/TreegeFlow/utils/getCategoryOrTypes";
 import { Attributes } from "@/features/Treege/TreegeFlow/utils/types";
@@ -38,8 +42,6 @@ interface NodeConfigModalProps {
   isOpen: boolean;
   initialValues?: Attributes & { children?: Attributes[] };
 }
-
-const decisionFields = ["boolean", "select"];
 
 const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigModalProps) => {
   const { t } = useTranslation(["translation", "form"]);
@@ -70,12 +72,19 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
     },
   });
 
-  const isBooleanType = values.type === "boolean";
-  const canBeDecisionField = decisionFields.includes(values.type);
-
   const handleClose = () => {
     reset();
     onClose();
+  };
+
+  const handleAddChild = useCallback(() => {
+    const newChildren = [...values.children, { label: "", message: "", name: "", value: "" } as Attributes];
+    setFieldValue("children", newChildren);
+  }, [setFieldValue, values.children]);
+
+  const handleRemoveChild = (idx: number) => {
+    const newChildren = values.children.filter((_, i) => i !== idx);
+    setFieldValue("children", newChildren);
   };
 
   const setChildren = (children: Attributes[]) => {
@@ -153,35 +162,44 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
               </Field>
             </Stack>
 
-            {canBeDecisionField && (
-              <FormControl fullWidth>
-                <Field name="isDecision">
-                  {({ state, handleChange }) => (
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={state.value}
-                          onChange={(e) => {
-                            handleChange(e.target.checked);
+            <Subscribe
+              selector={(state) => ({
+                category: state.values.category,
+                children: state.values.children,
+              })}
+            >
+              {({ category, children }) =>
+                category === "decision" && (
+                  <FormControl fullWidth>
+                    <Field name="isDecision">
+                      {({ state, handleChange }) => (
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={state.value}
+                              onChange={(e) => {
+                                const { checked } = e.target;
+                                handleChange(checked);
 
-                            if (isBooleanType && e.target.checked) {
-                              setChildren([
-                                { label: "true", name: "true", type: "option", value: "true" },
-                                { label: "false", name: "false", type: "option", value: "false" },
-                              ]);
-                            } else {
-                              setChildren([]);
-                            }
-                          }}
-                          color="primary"
+                                if (checked && children.length === 0) {
+                                  handleAddChild();
+                                  return;
+                                }
+                                if (!checked) {
+                                  setChildren([]);
+                                }
+                              }}
+                              color="primary"
+                            />
+                          }
+                          label={t("form:decisionField")}
                         />
-                      }
-                      label={t("form:decisionField")}
-                    />
-                  )}
-                </Field>
-              </FormControl>
-            )}
+                      )}
+                    </Field>
+                  </FormControl>
+                )
+              }
+            </Subscribe>
 
             <Subscribe
               selector={(state) => ({
@@ -190,18 +208,45 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
               })}
             >
               {({ isDecision, children }) =>
-                isDecision &&
-                children.map((child: Attributes, idx: number) => (
-                  <Stack key={child.name ?? idx} direction="row" spacing={2}>
-                    <TextField fullWidth label="Name" value={child.name} onChange={(e) => handleChildChange(idx, "name", e.target.value)} />
-                    <TextField
-                      fullWidth
-                      label="Value"
-                      value={child.value}
-                      onChange={(e) => handleChildChange(idx, "value", e.target.value)}
-                    />
+                isDecision && (
+                  <Stack spacing={2}>
+                    <Typography variant="h4">{t("values")}</Typography>
+
+                    {children.map((child: Attributes, idx: number) => (
+                      <Stack key={child.name ?? idx} direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} position="relative">
+                        <TextField
+                          fullWidth
+                          label={t("form:label")}
+                          value={child.label ?? ""}
+                          onChange={(e) => handleChildChange(idx, "label", e.target.value)}
+                        />
+                        <TextField
+                          fullWidth
+                          label={t("form:value")}
+                          value={child.value ?? ""}
+                          onChange={(e) => handleChildChange(idx, "value", e.target.value)}
+                        />
+                        <TextField
+                          fullWidth
+                          label={t("form:message")}
+                          value={child.message ?? ""}
+                          onChange={(e) => handleChildChange(idx, "message", e.target.value)}
+                        />
+                        {children.length > 1 && (
+                          <IconButton color="warning" onClick={() => handleRemoveChild(idx)} sx={{ alignSelf: "center" }}>
+                            <RemoveCircleRoundedIcon />
+                          </IconButton>
+                        )}
+                      </Stack>
+                    ))}
+
+                    <Box justifyContent="flex-end" display="flex">
+                      <IconButton color="success" onClick={handleAddChild}>
+                        <AddCircleRoundedIcon />
+                      </IconButton>
+                    </Box>
                   </Stack>
-                ))
+                )
               }
             </Subscribe>
           </Stack>

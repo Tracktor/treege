@@ -5,6 +5,7 @@ export type Attributes = {
   type?: string;
   isDecision?: boolean;
   sourceHandle?: string;
+  message?: string;
 };
 
 export type MinimalNode = {
