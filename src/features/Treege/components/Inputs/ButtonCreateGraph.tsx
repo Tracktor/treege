@@ -30,7 +30,6 @@ const ButtonCreateGraph = () => {
         {t("createGraph")}
       </Button>
 
-      {/* 🔹 Modale de création du premier node */}
       <NodeConfigModal isOpen={isModalOpen} onClose={handleCloseModal} onSave={handleSaveModal} />
     </Box>
   );
