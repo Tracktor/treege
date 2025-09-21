@@ -169,11 +169,7 @@ const NodeRenderer = ({
 };
 
 const NodeFactory = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
-  const config = nodeConfig[data.type ?? ""] ?? {
-    borderColor: colors.primary,
-    chipLabel: data.type ?? "unknown",
-    showAddButton: () => true,
-  };
+  const config = nodeConfig[data.type ?? "text"] ?? nodeConfig.text;
 
   return (
     <NodeRenderer

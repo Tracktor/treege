@@ -82,19 +82,8 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
     setFieldValue("children", newChildren);
   }, [setFieldValue, values.children]);
 
-  const handleRemoveChild = (idx: number) => {
-    const newChildren = values.children.filter((_, i) => i !== idx);
-    setFieldValue("children", newChildren);
-  };
-
   const setChildren = (children: Attributes[]) => {
     setFieldValue("children", children);
-  };
-
-  const handleChildChange = (idx: number, key: keyof Attributes, newValue: string) => {
-    const newChildren = [...values.children];
-    newChildren[idx] = { ...newChildren[idx], [key]: newValue };
-    setChildren(newChildren);
   };
 
   const onSubmitForm = (e: FormEvent<HTMLFormElement>) => {
@@ -207,45 +196,68 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
                 isDecision: state.values.isDecision,
               })}
             >
-              {({ isDecision, children }) =>
+              {({ isDecision }) =>
                 isDecision && (
-                  <Stack spacing={2}>
-                    <Typography variant="h4">{t("values")}</Typography>
+                  <Field name="children" mode="array">
+                    {({ state, pushValue, removeValue, handleChange }) => (
+                      <Stack spacing={2}>
+                        <Typography variant="h4">{t("values")}</Typography>
 
-                    {children.map((child: Attributes, idx: number) => (
-                      <Stack key={child.name ?? idx} direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1} position="relative">
-                        <TextField
-                          fullWidth
-                          label={t("form:label")}
-                          value={child.label ?? ""}
-                          onChange={(e) => handleChildChange(idx, "label", e.target.value)}
-                        />
-                        <TextField
-                          fullWidth
-                          label={t("form:value")}
-                          value={child.value ?? ""}
-                          onChange={(e) => handleChildChange(idx, "value", e.target.value)}
-                        />
-                        <TextField
-                          fullWidth
-                          label={t("form:message")}
-                          value={child.message ?? ""}
-                          onChange={(e) => handleChildChange(idx, "message", e.target.value)}
-                        />
-                        {children.length > 1 && (
-                          <IconButton color="warning" onClick={() => handleRemoveChild(idx)} sx={{ alignSelf: "center" }}>
-                            <RemoveCircleRoundedIcon />
+                        {state.value.map((child, idx) => (
+                          <Stack
+                            key={child.name || `child-${idx}`}
+                            direction={{ sm: "row", xs: "column" }}
+                            spacing={1}
+                            paddingY={1}
+                            position="relative"
+                          >
+                            <TextField
+                              fullWidth
+                              label={t("form:label")}
+                              value={child.label ?? ""}
+                              onChange={(e) => handleChange((old) => old.map((c, i) => (i === idx ? { ...c, label: e.target.value } : c)))}
+                            />
+                            <TextField
+                              fullWidth
+                              label={t("form:value")}
+                              value={child.value ?? ""}
+                              onChange={(e) => handleChange((old) => old.map((c, i) => (i === idx ? { ...c, value: e.target.value } : c)))}
+                            />
+                            <TextField
+                              fullWidth
+                              label={t("form:message")}
+                              value={child.message ?? ""}
+                              onChange={(e) =>
+                                handleChange((old) => old.map((c, i) => (i === idx ? { ...c, message: e.target.value } : c)))
+                              }
+                            />
+
+                            {state.value.length > 1 && (
+                              <IconButton color="warning" onClick={() => removeValue(idx)} sx={{ alignSelf: "center" }}>
+                                <RemoveCircleRoundedIcon />
+                              </IconButton>
+                            )}
+                          </Stack>
+                        ))}
+
+                        <Box justifyContent="flex-end" display="flex">
+                          <IconButton
+                            color="success"
+                            onClick={() =>
+                              pushValue({
+                                label: "",
+                                message: "",
+                                name: "",
+                                value: "",
+                              })
+                            }
+                          >
+                            <AddCircleRoundedIcon />
                           </IconButton>
-                        )}
+                        </Box>
                       </Stack>
-                    ))}
-
-                    <Box justifyContent="flex-end" display="flex">
-                      <IconButton color="success" onClick={handleAddChild}>
-                        <AddCircleRoundedIcon />
-                      </IconButton>
-                    </Box>
-                  </Stack>
+                    )}
+                  </Field>
                 )
               }
             </Subscribe>
