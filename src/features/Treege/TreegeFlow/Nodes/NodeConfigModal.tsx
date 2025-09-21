@@ -24,11 +24,22 @@ import {
 import { FormEvent, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import getCategoryOrTypes, { fieldCategory, fieldCategoryOrder, FieldType } from "@/features/Treege/TreegeFlow/utils/getCategoryOrTypes";
-import { Attributes } from "@/features/Treege/TreegeFlow/utils/types";
+import { Attributes, MinimalNode } from "@/features/Treege/TreegeFlow/utils/types";
+import { getUUID } from "@/utils";
+
+interface ChildFormValues {
+  label: string;
+  message: string;
+  name: string;
+  value: string;
+  type?: string;
+  isDecision?: boolean;
+  sourceHandle?: string;
+}
 
 interface NodeConfigModalForm {
   category: string;
-  children: Attributes[];
+  children: ChildFormValues[];
   isDecision: boolean;
   label: string;
   name: string;
@@ -37,16 +48,27 @@ interface NodeConfigModalForm {
 }
 
 interface NodeConfigModalProps {
-  onSave: (config: Attributes & { children?: Attributes[] }) => void;
+  onSave: (config: Attributes & { children?: MinimalNode[] }) => void;
   onClose: () => void;
   isOpen: boolean;
-  initialValues?: Attributes & { children?: Attributes[] };
+  initialValues?: Attributes & { children?: MinimalNode[] };
 }
 
 const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigModalProps) => {
   const { t } = useTranslation(["translation", "form"]);
   const categoryOrType = initialValues?.type ? getCategoryOrTypes(initialValues.type) : null;
   const initialCategory = typeof categoryOrType === "string" ? String(categoryOrType) : "textArea";
+
+  const initialChildren: ChildFormValues[] =
+    initialValues?.children?.map((c) => ({
+      isDecision: c.attributes.isDecision,
+      label: c.attributes.label,
+      message: c.attributes.message ?? "",
+      name: c.attributes.name,
+      sourceHandle: c.attributes.sourceHandle,
+      type: c.attributes.type,
+      value: c.attributes.value,
+    })) ?? [];
 
   const {
     Field,
@@ -58,7 +80,7 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
   } = useForm({
     defaultValues: {
       category: initialCategory,
-      children: initialValues?.children ?? [],
+      children: initialChildren,
       isDecision: initialValues?.isDecision ?? false,
       label: initialValues?.label ?? "",
       name: initialValues?.name ?? "",
@@ -66,7 +88,30 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
       value: initialValues?.value ?? "",
     } as NodeConfigModalForm,
     onSubmit: ({ value }) => {
-      onSave(value);
+      const updatedChildren: MinimalNode[] = value.children.map((child) => ({
+        attributes: {
+          isDecision: child.isDecision,
+          label: child.label,
+          message: child.message,
+          name: `${value.name}:${child.value}`,
+          sourceHandle: child.sourceHandle,
+          type: child.type ?? "option",
+          value: child.value,
+        },
+        children: [],
+        id: getUUID(),
+      }));
+
+      onSave({
+        children: updatedChildren,
+        isDecision: value.isDecision,
+        label: value.label,
+        message: undefined,
+        name: value.name,
+        sourceHandle: undefined,
+        type: value.type,
+        value: value.value,
+      });
       reset();
       onClose();
     },
@@ -78,11 +123,11 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
   };
 
   const handleAddChild = useCallback(() => {
-    const newChildren = [...values.children, { label: "", message: "", name: "", value: "" } as Attributes];
+    const newChildren = [...values.children, { label: "", message: "", name: `${values.name}:`, value: "" }];
     setFieldValue("children", newChildren);
-  }, [setFieldValue, values.children]);
+  }, [setFieldValue, values.children, values.name]);
 
-  const setChildren = (children: Attributes[]) => {
+  const setChildren = (children: ChildFormValues[]) => {
     setFieldValue("children", children);
   };
 
@@ -99,6 +144,7 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
 
         <DialogContent>
           <Stack spacing={2}>
+            {/* TYPE */}
             <Stack direction="row" spacing={2}>
               <Field name="type">
                 {({ state, handleChange }) => (
@@ -113,14 +159,13 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
                         handleChange(selectedType);
 
                         const categoryFound = Object.entries(fieldCategory).find(([_, types]) => types.includes(selectedType as never));
-
                         if (categoryFound) {
                           setFieldValue("category", categoryFound[0]);
                         }
                       }}
                     >
                       {fieldCategoryOrder.map((categoryKey) => {
-                        const types = fieldCategory[categoryKey]; // on récupère les types
+                        const types = fieldCategory[categoryKey];
                         return [
                           <ListSubheader key={`${categoryKey}-header`}>
                             {t(`form:category.${categoryKey as keyof typeof fieldCategory}`)}
@@ -138,6 +183,7 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
               </Field>
             </Stack>
 
+            {/* NAME + LABEL */}
             <Stack direction="row" spacing={2}>
               <Field name="name">
                 {({ state, handleChange }) => (
@@ -151,6 +197,7 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
               </Field>
             </Stack>
 
+            {/* CHECKBOX DECISION */}
             <Subscribe
               selector={(state) => ({
                 category: state.values.category,
@@ -158,7 +205,7 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
               })}
             >
               {({ category, children }) =>
-                category === "decision" && (
+                category === "decision" ? (
                   <FormControl fullWidth>
                     <Field name="isDecision">
                       {({ state, handleChange }) => (
@@ -169,7 +216,6 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
                               onChange={(e) => {
                                 const { checked } = e.target;
                                 handleChange(checked);
-
                                 if (checked && children.length === 0) {
                                   handleAddChild();
                                   return;
@@ -186,52 +232,44 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
                       )}
                     </Field>
                   </FormControl>
-                )
+                ) : null
               }
             </Subscribe>
 
+            {/* CHILDREN */}
             <Subscribe
               selector={(state) => ({
                 children: state.values.children,
                 isDecision: state.values.isDecision,
+                parentName: state.values.name,
               })}
             >
-              {({ isDecision }) =>
-                isDecision && (
+              {({ isDecision, parentName }) =>
+                isDecision ? (
                   <Field name="children" mode="array">
                     {({ state, pushValue, removeValue, handleChange }) => (
                       <Stack spacing={2}>
                         <Typography variant="h4">{t("values")}</Typography>
-
                         {state.value.map((child, idx) => (
-                          <Stack
-                            key={child.name || `child-${idx}`}
-                            direction={{ sm: "row", xs: "column" }}
-                            spacing={1}
-                            paddingY={1}
-                            position="relative"
-                          >
+                          <Stack key={child.name || `child-${idx}`} direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1}>
                             <TextField
                               fullWidth
                               label={t("form:label")}
                               value={child.label ?? ""}
-                              onChange={(e) => handleChange((old) => old.map((c, i) => (i === idx ? { ...c, label: e.target.value } : c)))}
+                              onChange={(e) => handleChange(state.value.map((c, i) => (i === idx ? { ...c, label: e.target.value } : c)))}
                             />
                             <TextField
                               fullWidth
                               label={t("form:value")}
                               value={child.value ?? ""}
-                              onChange={(e) => handleChange((old) => old.map((c, i) => (i === idx ? { ...c, value: e.target.value } : c)))}
+                              onChange={(e) => handleChange(state.value.map((c, i) => (i === idx ? { ...c, value: e.target.value } : c)))}
                             />
                             <TextField
                               fullWidth
                               label={t("form:message")}
                               value={child.message ?? ""}
-                              onChange={(e) =>
-                                handleChange((old) => old.map((c, i) => (i === idx ? { ...c, message: e.target.value } : c)))
-                              }
+                              onChange={(e) => handleChange(state.value.map((c, i) => (i === idx ? { ...c, message: e.target.value } : c)))}
                             />
-
                             {state.value.length > 1 && (
                               <IconButton color="warning" onClick={() => removeValue(idx)} sx={{ alignSelf: "center" }}>
                                 <RemoveCircleRoundedIcon />
@@ -239,7 +277,6 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
                             )}
                           </Stack>
                         ))}
-
                         <Box justifyContent="flex-end" display="flex">
                           <IconButton
                             color="success"
@@ -247,7 +284,7 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
                               pushValue({
                                 label: "",
                                 message: "",
-                                name: "",
+                                name: `${parentName}:`,
                                 value: "",
                               })
                             }
@@ -258,7 +295,7 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
                       </Stack>
                     )}
                   </Field>
-                )
+                ) : null
               }
             </Subscribe>
           </Stack>

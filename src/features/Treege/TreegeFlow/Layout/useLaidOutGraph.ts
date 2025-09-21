@@ -12,30 +12,48 @@ const expandMinimalGraphWithChildren = (graph: MinimalGraph): MinimalGraph => {
   const extraNodes: MinimalNode[] = [];
   const extraEdges: MinimalEdge[] = [];
 
-  graph.nodes.forEach((node) => {
-    node.children?.forEach((child: Attributes, index: number) => {
-      const childId = `${node.id}-child-${index}`;
-
-      if (!graph.nodes.find((n) => n.id === childId) && !extraNodes.find((n) => n.id === childId)) {
-        // Create the option node
-        extraNodes.push({
-          attributes: {
-            ...child,
-            type: child.type ?? "option",
-          },
-          children: [],
-          id: childId,
-        });
-
-        // Create edge from parent to option node
+  const walkChildren = (parent: MinimalNode, children: (MinimalNode | Attributes)[], level = 0) => {
+    children.forEach((child, index) => {
+      if ("attributes" in child && "id" in child) {
         extraEdges.push({
-          id: `edge-${node.id}-child-${index}`,
-          source: node.id,
+          id: `edge-${parent.id}-${child.id}`,
+          source: parent.id,
+          target: child.id,
+          type: child.attributes.type ?? "option",
+        });
+        if (!graph.nodes.find((n) => n.id === child.id) && !extraNodes.find((n) => n.id === child.id)) {
+          extraNodes.push(child);
+        }
+        if (child.children?.length) {
+          walkChildren(child, child.children, level + 1);
+        }
+      } else {
+        const childAttr = child as Attributes;
+        const childId = `${parent.id}-child-${level}-${index}`;
+        if (!graph.nodes.find((n) => n.id === childId) && !extraNodes.find((n) => n.id === childId)) {
+          extraNodes.push({
+            attributes: {
+              ...childAttr,
+              type: childAttr.type ?? "option",
+            },
+            children: [],
+            id: childId,
+          });
+        }
+        extraEdges.push({
+          id: `edge-${parent.id}-child-${level}-${index}`,
+          source: parent.id,
           target: childId,
           type: "option",
         });
       }
     });
+  };
+
+  graph.nodes.forEach((node) => {
+    if (node.children?.length) {
+      walkChildren(node, node.children, 0);
+    }
   });
 
   return {

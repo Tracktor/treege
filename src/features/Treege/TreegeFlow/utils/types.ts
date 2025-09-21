@@ -11,7 +11,7 @@ export type Attributes = {
 export type MinimalNode = {
   id: string;
   attributes: Attributes;
-  children: Attributes[];
+  children: MinimalNode[];
 };
 
 export type MinimalEdge = {
@@ -28,5 +28,5 @@ export type MinimalGraph = {
 
 export type CustomNodeData = Attributes & {
   order?: number;
-  children?: Attributes[];
+  children?: MinimalNode[];
 };
