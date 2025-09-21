@@ -9,13 +9,13 @@ export type Attributes = {
 };
 
 export type MinimalNode = {
-  id: string;
+  uuid: string;
   attributes: Attributes;
   children: MinimalNode[];
 };
 
 export type MinimalEdge = {
-  id: string;
+  uuid: string;
   source: string;
   target: string;
   type?: string;

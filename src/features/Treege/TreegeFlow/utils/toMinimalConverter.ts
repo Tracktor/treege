@@ -1,10 +1,10 @@
 import { Node, Edge } from "@xyflow/react";
 import { Attributes, CustomNodeData, MinimalEdge, MinimalGraph, MinimalNode } from "@/features/Treege/TreegeFlow/utils/types";
 
-/** Convert ReactFlow nodes → MinimalNode[] */
+/** Convert ReactFlow nodes → MinimalNode[] (imbriqué : enfants dans le parent) */
 const toMinimalNodes = (rfNodes: Node<CustomNodeData>[]): MinimalNode[] =>
   rfNodes
-    .filter((n) => !n.id.includes("-option-"))
+    .filter((n) => !n.id.includes("-option-") && n.data.type !== "option")
     .map((n) => {
       const attributes: Attributes = {
         isDecision: n.data.isDecision ?? false,
@@ -27,28 +27,29 @@ const toMinimalNodes = (rfNodes: Node<CustomNodeData>[]): MinimalNode[] =>
               type: child.attributes?.type ?? "option",
               value: child.attributes?.value ?? "",
             },
-            children: child.children ?? [],
-            id: child.id ?? `${n.id}-child-${child.attributes?.value ?? ""}`,
+            children: [],
+            uuid: child.uuid ?? `${n.id}-child-${child.attributes?.value ?? ""}`,
           }))
         : [];
 
       return {
         attributes,
         children,
-        id: n.id,
+        uuid: n.id,
       };
     });
 
 /** Convert ReactFlow edges → MinimalEdge[] */
 const toMinimalEdges = (rfEdges: Edge[]): MinimalEdge[] =>
+  // 🔹 On garde tous les edges, y compris ceux vers les enfants
   rfEdges.map((e) => ({
-    id: e.id,
     source: e.source,
     target: e.target,
     type: e.type ?? (e.id.includes("-option-") ? "option" : "default"),
+    uuid: e.id,
   }));
 
-/** React Flow → MinimalGraph */
+/** React Flow → MinimalGraph (imbriqué + edges complets) */
 const reactFlowToMinimal = (rfNodes: Node<CustomNodeData>[], rfEdges: Edge[]): MinimalGraph => ({
   edges: toMinimalEdges(rfEdges),
   nodes: toMinimalNodes(rfNodes),

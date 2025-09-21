@@ -12,7 +12,7 @@ export const toReactFlowNodes = (minimalNodes: MinimalNode[]): Node<CustomNodeDa
       order: index + 1,
     },
     height: 150,
-    id: m.id,
+    id: m.uuid,
     position: { x: 0, y: 0 },
     sourcePosition: Position.Bottom,
     targetPosition: Position.Top,
@@ -25,8 +25,8 @@ export const toReactFlowNodes = (minimalNodes: MinimalNode[]): Node<CustomNodeDa
  */
 export const toReactFlowEdges = (minimalEdges: MinimalEdge[]): Edge[] =>
   minimalEdges.map((m) => ({
-    id: m.id,
+    id: m.uuid,
     source: m.source,
     target: m.target,
-    type: m.type ?? (m.id.includes("-option-") ? "option" : "default"),
+    type: m.type ?? (m.uuid.includes("-option-") ? "option" : "default"),
   }));

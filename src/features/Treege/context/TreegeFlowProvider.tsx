@@ -89,7 +89,7 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
         const newNode: MinimalNode = {
           attributes,
           children: nodeChildren ?? [],
-          id: newNodeId,
+          uuid: newNodeId,
         };
 
         if (!parentId) {
@@ -99,10 +99,10 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
         const newEdges: MinimalEdge[] = childId
           ? [
               ...prev.edges.filter((e) => !(e.source === parentId && e.target === childId)),
-              { id: getId("edge"), source: parentId, target: newNodeId },
-              { id: getId("edge"), source: newNodeId, target: childId },
+              { source: parentId, target: newNodeId, uuid: getId("edge") },
+              { source: newNodeId, target: childId, uuid: getId("edge") },
             ]
-          : [...prev.edges, { id: getId("edge"), source: parentId, target: newNodeId }];
+          : [...prev.edges, { source: parentId, target: newNodeId, uuid: getId("edge") }];
 
         return { edges: newEdges, nodes: [...prev.nodes, newNode] };
       });
@@ -121,7 +121,7 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
         const newChildren = childEdges.map((e) => e.target);
 
         const remainingEdges = prev.edges.filter((e) => e.source !== nodeId && e.target !== nodeId);
-        const remainingNodes = prev.nodes.filter((n) => n.id !== nodeId);
+        const remainingNodes = prev.nodes.filter((n) => n.uuid !== nodeId);
 
         const newEdges: MinimalEdge[] = [];
         parents.forEach((p) => {
@@ -129,9 +129,9 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
             const alreadyExists = remainingEdges.some((e) => e.source === p && e.target === c);
             if (!alreadyExists) {
               newEdges.push({
-                id: getEdgeId(),
                 source: p,
                 target: c,
+                uuid: getEdgeId(),
               });
             }
           });
@@ -151,7 +151,7 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
     setGraph((prev) => ({
       ...prev,
       nodes: prev.nodes.map((n) =>
-        n.id === nodeId
+        n.uuid === nodeId
           ? {
               ...n,
               attributes,
@@ -165,7 +165,7 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
   /** Add a child MinimalNode to a node */
   const addChild = useCallback((nodeId: string, child: MinimalNode) => {
     setGraph((prev) => {
-      const updatedNode = prev.nodes.find((n) => n.id === nodeId);
+      const updatedNode = prev.nodes.find((n) => n.uuid === nodeId);
       if (!updatedNode) return prev;
 
       const newNode = {
@@ -175,7 +175,7 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
 
       return {
         ...prev,
-        nodes: prev.nodes.map((n) => (n.id === nodeId ? newNode : n)),
+        nodes: prev.nodes.map((n) => (n.uuid === nodeId ? newNode : n)),
       };
     });
   }, []);

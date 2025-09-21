@@ -99,7 +99,7 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
           value: child.value,
         },
         children: [],
-        id: getUUID(),
+        uuid: getUUID(),
       }));
 
       onSave({

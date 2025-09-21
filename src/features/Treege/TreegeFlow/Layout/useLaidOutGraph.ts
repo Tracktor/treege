@@ -3,48 +3,67 @@ import { useEffect, useState } from "react";
 import computeGraphLayout from "@/features/Treege/TreegeFlow/Layout/computeGraphLayout";
 import { toReactFlowEdges, toReactFlowNodes } from "@/features/Treege/TreegeFlow/utils/toReactFlowConverter";
 import { Attributes, CustomNodeData, MinimalEdge, MinimalGraph, MinimalNode } from "@/features/Treege/TreegeFlow/utils/types";
+import { getUUID } from "@/utils";
 
 /**
  * Expand a MinimalGraph:
- * - Turns each node’s `children` into real option nodes and edges.
+ * - Turns each node’s `children` into real option nodes and edges with UUIDs.
  */
 const expandMinimalGraphWithChildren = (graph: MinimalGraph): MinimalGraph => {
   const extraNodes: MinimalNode[] = [];
   const extraEdges: MinimalEdge[] = [];
 
-  const walkChildren = (parent: MinimalNode, children: (MinimalNode | Attributes)[], level = 0) => {
-    children.forEach((child, index) => {
-      if ("attributes" in child && "id" in child) {
-        extraEdges.push({
-          id: `edge-${parent.id}-${child.id}`,
-          source: parent.id,
-          target: child.id,
+  const existingNodeUuids = new Set(graph.nodes.map((n) => n.uuid));
+  const existingEdgeUuids = new Set(graph.edges.map((e) => e.uuid));
+
+  const addNodeIfNotExists = (node: MinimalNode) => {
+    if (!existingNodeUuids.has(node.uuid)) {
+      extraNodes.push(node);
+      existingNodeUuids.add(node.uuid);
+    }
+  };
+
+  const addEdgeIfNotExists = (edge: MinimalEdge) => {
+    if (!existingEdgeUuids.has(edge.uuid)) {
+      extraEdges.push(edge);
+      existingEdgeUuids.add(edge.uuid);
+    }
+  };
+
+  const walkChildren = (parent: MinimalNode, children: (MinimalNode | Attributes)[]) => {
+    children.forEach((child) => {
+      if ("attributes" in child && "uuid" in child) {
+        const edgeUuid = getUUID();
+        addEdgeIfNotExists({
+          source: parent.uuid,
+          target: child.uuid,
           type: child.attributes.type ?? "option",
+          uuid: edgeUuid,
         });
-        if (!graph.nodes.find((n) => n.id === child.id) && !extraNodes.find((n) => n.id === child.id)) {
-          extraNodes.push(child);
-        }
+        addNodeIfNotExists(child);
         if (child.children?.length) {
-          walkChildren(child, child.children, level + 1);
+          walkChildren(child, child.children);
         }
       } else {
         const childAttr = child as Attributes;
-        const childId = `${parent.id}-child-${level}-${index}`;
-        if (!graph.nodes.find((n) => n.id === childId) && !extraNodes.find((n) => n.id === childId)) {
-          extraNodes.push({
-            attributes: {
-              ...childAttr,
-              type: childAttr.type ?? "option",
-            },
-            children: [],
-            id: childId,
-          });
-        }
-        extraEdges.push({
-          id: `edge-${parent.id}-child-${level}-${index}`,
-          source: parent.id,
-          target: childId,
+        const childUuid = getUUID();
+        const edgeUuid = getUUID();
+
+        const newChildNode: MinimalNode = {
+          attributes: {
+            ...childAttr,
+            type: childAttr.type ?? "option",
+          },
+          children: [],
+          uuid: childUuid,
+        };
+
+        addNodeIfNotExists(newChildNode);
+        addEdgeIfNotExists({
+          source: parent.uuid,
+          target: childUuid,
           type: "option",
+          uuid: edgeUuid,
         });
       }
     });
@@ -52,7 +71,7 @@ const expandMinimalGraphWithChildren = (graph: MinimalGraph): MinimalGraph => {
 
   graph.nodes.forEach((node) => {
     if (node.children?.length) {
-      walkChildren(node, node.children, 0);
+      walkChildren(node, node.children);
     }
   });
 
