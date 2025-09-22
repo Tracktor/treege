@@ -22,6 +22,7 @@ export interface TreegeFlowContextValue {
     },
   ) => void;
   deleteNode: (nodeId: string) => void;
+  deleteEdge: (edgeId: string) => void;
 }
 
 type AddNodeInput = Attributes & {
@@ -32,6 +33,7 @@ type AddNodeInput = Attributes & {
 export const TreegeFlowContext = createContext<TreegeFlowContextValue>({
   addChild: () => {},
   addNode: () => {},
+  deleteEdge: () => {},
   deleteNode: () => {},
   edges: [],
   graph: { edges: [], nodes: [] },
@@ -208,6 +210,14 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
     [setGraph, getEdgeId],
   );
 
+  /** Delete an edge by its uuid */
+  const deleteEdge = useCallback((edgeId: string) => {
+    setGraph((prev) => ({
+      ...prev,
+      edges: prev.edges.filter((e) => e.uuid !== edgeId),
+    }));
+  }, []);
+
   /** Sync React Flow state with laid-out graph */
   useEffect(() => {
     setNodes(laidOutNodes);
@@ -218,6 +228,7 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
     () => ({
       addChild,
       addNode,
+      deleteEdge,
       deleteNode,
       edges,
       graph,
@@ -228,7 +239,7 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
       setGraph,
       updateNode,
     }),
-    [addChild, addNode, deleteNode, edges, graph, nodes, onConnect, onEdgesChange, onNodesChange, updateNode],
+    [addChild, addNode, deleteEdge, deleteNode, edges, graph, nodes, onConnect, onEdgesChange, onNodesChange, updateNode],
   );
 
   return <TreegeFlowContext.Provider value={value}>{children}</TreegeFlowContext.Provider>;

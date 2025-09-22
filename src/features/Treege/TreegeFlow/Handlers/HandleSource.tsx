@@ -25,6 +25,7 @@ const HandleSource: FC<HandleSourceProps> = ({ handleId, position = Position.Rig
         type="source"
         position={position}
         id={handleId}
+        isValidConnection={() => !isConnected}
         style={{
           height: 18,
           width: 18,
@@ -34,7 +35,7 @@ const HandleSource: FC<HandleSourceProps> = ({ handleId, position = Position.Rig
         <ArrowDropDownCircleIcon
           sx={{
             "&:hover": { backgroundColor: colors.secondary },
-            backgroundColor: isConnected ? colors.secondary : colors.primary,
+            backgroundColor: isConnected ? colors.grey500 : colors.primary,
             borderRadius: "50%",
             bottom: -12,
             color: colors.background,

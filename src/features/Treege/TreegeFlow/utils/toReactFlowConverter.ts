@@ -23,10 +23,12 @@ export const toReactFlowNodes = (minimalNodes: MinimalNode[]): Node<CustomNodeDa
 /**
  * Convert MinimalEdge → Edge ReactFlow
  */
-export const toReactFlowEdges = (minimalEdges: MinimalEdge[]): Edge[] =>
-  minimalEdges.map((m) => ({
-    id: m.uuid,
-    source: m.source,
-    target: m.target,
-    type: m.type ?? (m.uuid.includes("-option-") ? "option" : "default"),
+export const toReactFlowEdges = (edges: MinimalEdge[]): Edge[] =>
+  edges.map((e) => ({
+    id: e.uuid,
+    source: e.source,
+    sourceHandle: `${e.source}-out`,
+    target: e.target,
+    targetHandle: `${e.target}-in`,
+    type: e.type ?? "default",
   }));

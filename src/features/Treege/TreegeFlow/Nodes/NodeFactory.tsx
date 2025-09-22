@@ -2,11 +2,12 @@ import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
 import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import EditIcon from "@mui/icons-material/Edit";
 import { Card, CardContent, Chip, Box, Typography, IconButton, Stack } from "@tracktor/design-system";
-import { NodeProps, Node, Handle, Position, useNodeConnections } from "@xyflow/react";
+import { NodeProps, Node, Position, useNodeConnections } from "@xyflow/react";
 import { memo, ReactNode, useContext, useState } from "react";
 import colors from "@/constants/colors";
 import { TreegeFlowContext } from "@/features/Treege/context/TreegeFlowProvider";
 import HandleSource from "@/features/Treege/TreegeFlow/Handlers/HandleSource";
+import HandleTarget from "@/features/Treege/TreegeFlow/Handlers/HandleTarget";
 import NodeConfigModal from "@/features/Treege/TreegeFlow/Nodes/NodeConfigModal";
 import { CustomNodeData, Attributes } from "@/features/Treege/TreegeFlow/utils/types";
 
@@ -95,7 +96,6 @@ const NodeRenderer = ({
   borderColor = colors.primary,
 }: BaseNodeProps) => {
   const { updateNode, addNode, deleteNode } = useContext(TreegeFlowContext);
-  const parentConnections = useNodeConnections({ handleType: "target" });
   const childConnections = useNodeConnections({ handleType: "source" });
   const { name } = data;
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -143,7 +143,7 @@ const NodeRenderer = ({
   return (
     <>
       <Box component="div">
-        {parentConnections.length !== 0 && <Handle type="target" position={Position.Top} />}
+        <HandleTarget handleId={`${id}-in`} position={Position.Top} />
 
         <Card
           sx={{

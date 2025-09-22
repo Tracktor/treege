@@ -33,6 +33,7 @@ const expandMinimalGraphWithChildren = (graph: MinimalGraph): MinimalGraph => {
   const walkChildren = (parent: MinimalNode, children: (MinimalNode | Attributes)[]) => {
     children.forEach((child) => {
       if ("attributes" in child && "uuid" in child) {
+        // child est un MinimalNode
         const edgeUuid = getUUID();
         addEdgeIfNotExists({
           source: parent.uuid,
@@ -45,6 +46,7 @@ const expandMinimalGraphWithChildren = (graph: MinimalGraph): MinimalGraph => {
           walkChildren(child, child.children);
         }
       } else {
+        // child est Attributes
         const childAttr = child as Attributes;
         const childUuid = getUUID();
         const edgeUuid = getUUID();
@@ -102,7 +104,13 @@ const useLaidOutGraph = (graph: MinimalGraph) => {
 
     // 2️⃣ Convert MinimalGraph → React Flow nodes & edges
     const reactFlowNodes = toReactFlowNodes(expandedGraph.nodes);
-    const reactFlowEdges = toReactFlowEdges(expandedGraph.edges);
+    let reactFlowEdges = toReactFlowEdges(expandedGraph.edges);
+
+    reactFlowEdges = reactFlowEdges.map((e) => ({
+      ...e,
+      sourceHandle: `${e.source}-out`,
+      targetHandle: `${e.target}-in`,
+    }));
 
     // 3️⃣ Compute layout with ELK
     (async () => {
