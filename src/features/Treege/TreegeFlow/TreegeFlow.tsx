@@ -8,27 +8,13 @@ import MosaicLayout from "@/components/Layouts/MosaicLayout/MosaicLayout";
 import Sidebar from "@/components/Layouts/Sidebar/Sidebar";
 import colors from "@/constants/colors";
 import ButtonCreateGraph from "@/features/Treege/components/Inputs/ButtonCreateGraph";
-import EdgeFactory from "@/features/Treege/TreegeFlow/Edges/EdgeFactory";
+import edgesTypes from "@/features/Treege/TreegeFlow/Edges/edgesTypes";
 import useAutoFitView from "@/features/Treege/TreegeFlow/Layout/useAutoFitView";
-import NodeFactory from "@/features/Treege/TreegeFlow/Nodes/NodeFactory";
+import nodesType from "@/features/Treege/TreegeFlow/Nodes/nodesType";
 import reactFlowToMinimal from "@/features/Treege/TreegeFlow/utils/toMinimalConverter";
 import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
 
 const pathClass = "tree-link";
-
-const reactFlowTypes = {
-  edges: {
-    default: EdgeFactory,
-    option: EdgeFactory,
-  },
-  nodes: {
-    boolean: NodeFactory,
-    default: NodeFactory,
-    option: NodeFactory,
-    select: NodeFactory,
-    text: NodeFactory,
-  },
-};
 
 const TreegeFlow = () => {
   const { nodes, edges, onNodesChange, onEdgesChange, graph } = useTreegeFlowContext();
@@ -68,8 +54,8 @@ const TreegeFlow = () => {
               edges={edges}
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
-              nodeTypes={reactFlowTypes.nodes}
-              edgeTypes={reactFlowTypes.edges}
+              nodeTypes={nodesType}
+              edgeTypes={edgesTypes}
             >
               <Controls />
             </ReactFlow>
