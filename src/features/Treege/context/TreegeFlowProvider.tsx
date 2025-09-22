@@ -1,4 +1,4 @@
-import { Node, Edge, useNodesState, useEdgesState } from "@xyflow/react";
+import { Node, Edge, useNodesState, useEdgesState, Connection } from "@xyflow/react";
 import { createContext, ReactNode, useMemo, useState, useCallback, useEffect } from "react";
 import useLaidOutGraph from "@/features/Treege/TreegeFlow/Layout/useLaidOutGraph";
 import { Attributes, CustomNodeData, MinimalEdge, MinimalGraph, MinimalNode } from "@/features/Treege/TreegeFlow/utils/types";
@@ -11,6 +11,7 @@ export interface TreegeFlowContextValue {
   setGraph: (g: MinimalGraph) => void;
   onNodesChange: (changes: any) => void;
   onEdgesChange: (changes: any) => void;
+  onConnect: (connection: Connection) => void;
   updateNode: (nodeId: string, attributes: Attributes, children?: MinimalNode[]) => void;
   addChild: (nodeId: string, child: MinimalNode) => void;
   addNode: (
@@ -35,6 +36,7 @@ export const TreegeFlowContext = createContext<TreegeFlowContextValue>({
   edges: [],
   graph: { edges: [], nodes: [] },
   nodes: [],
+  onConnect: () => {},
   onEdgesChange: () => {},
   onNodesChange: () => {},
   setGraph: () => {},
@@ -180,6 +182,32 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
     });
   }, []);
 
+  /** Handle new edge creation */
+  const onConnect = useCallback(
+    (connection: Connection) => {
+      setGraph((prev) => {
+        // sécurité
+        if (!connection.source || !connection.target) return prev;
+
+        // empêcher les doublons
+        const exists = prev.edges.some((e) => e.source === connection.source && e.target === connection.target);
+        if (exists) return prev;
+
+        const newEdge: MinimalEdge = {
+          source: connection.source,
+          target: connection.target,
+          uuid: getEdgeId(),
+        };
+
+        return {
+          ...prev,
+          edges: [...prev.edges, newEdge],
+        };
+      });
+    },
+    [setGraph, getEdgeId],
+  );
+
   /** Sync React Flow state with laid-out graph */
   useEffect(() => {
     setNodes(laidOutNodes);
@@ -194,12 +222,13 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
       edges,
       graph,
       nodes,
+      onConnect,
       onEdgesChange,
       onNodesChange,
       setGraph,
       updateNode,
     }),
-    [addChild, addNode, deleteNode, edges, graph, nodes, onEdgesChange, onNodesChange, updateNode],
+    [addChild, addNode, deleteNode, edges, graph, nodes, onConnect, onEdgesChange, onNodesChange, updateNode],
   );
 
   return <TreegeFlowContext.Provider value={value}>{children}</TreegeFlowContext.Provider>;

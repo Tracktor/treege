@@ -14,10 +14,8 @@ import nodesType from "@/features/Treege/TreegeFlow/Nodes/nodesType";
 import reactFlowToMinimal from "@/features/Treege/TreegeFlow/utils/toMinimalConverter";
 import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
 
-const pathClass = "tree-link";
-
 const TreegeFlow = () => {
-  const { nodes, edges, onNodesChange, onEdgesChange, graph } = useTreegeFlowContext();
+  const { nodes, edges, onNodesChange, onEdgesChange, graph, onConnect } = useTreegeFlowContext();
   const minimalGraph = reactFlowToMinimal(nodes, edges);
   const isGraphEmpty = !graph || graph.nodes.length === 0;
 
@@ -43,7 +41,7 @@ const TreegeFlow = () => {
           >
             <GlobalStyles
               styles={{
-                [`.${pathClass}`]: {
+                ".tree-link": {
                   stroke: `${colors.borderGrey} !important`,
                 },
               }}
@@ -52,6 +50,7 @@ const TreegeFlow = () => {
               fitView
               nodes={nodes}
               edges={edges}
+              onConnect={onConnect}
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
               nodeTypes={nodesType}

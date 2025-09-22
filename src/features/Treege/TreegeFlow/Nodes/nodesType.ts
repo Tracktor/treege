@@ -23,7 +23,6 @@ const nodesType = {
   time: NodeFactory,
   timeRange: NodeFactory,
   title: NodeFactory,
-
   url: NodeFactory,
 };
 
