@@ -29,29 +29,60 @@ interface NodeConfig {
   showDeleteButton?: boolean;
 }
 
-const nodeConfig: Record<string, NodeConfig> = {
+const defaultRender: NodeConfig = {
+  borderColor: colors.primary,
+  chipLabel: "default",
+  showAddButton: () => true,
+  showDeleteButton: true,
+  showEditButton: true,
+};
+
+const nodeConfigByCategory = {
   boolean: {
-    borderColor: colors.primary,
-    chipLabel: "boolean",
-    showAddButton: (data) => !data.isDecision,
-    showDeleteButton: true,
-    showEditButton: true,
+    checkbox: { ...defaultRender, chipLabel: "checkbox" },
+    switch: { ...defaultRender, chipLabel: "switch" },
   },
-  option: {
-    borderColor: colors.secondary,
-    chipLabel: "option",
-    showAddButton: () => true,
-    showDeleteButton: false,
-    showEditButton: false,
+  dateTime: {
+    date: { ...defaultRender, chipLabel: "date" },
+    dateRange: { ...defaultRender, chipLabel: "dateRange" },
+    time: { ...defaultRender, chipLabel: "time" },
+    timeRange: { ...defaultRender, chipLabel: "timeRange" },
   },
-  text: {
-    borderColor: colors.primary,
-    chipLabel: "text",
-    showAddButton: () => true,
-    showDeleteButton: true,
-    showEditButton: true,
+  decision: {
+    option: {
+      ...defaultRender,
+      borderColor: colors.secondary,
+      chipLabel: "option",
+      showDeleteButton: false,
+      showEditButton: false,
+    },
+    radio: { ...defaultRender, chipLabel: "radio" },
+    select: { ...defaultRender, chipLabel: "select", showDeleteButton: false },
+  },
+  other: {
+    autocomplete: {
+      ...defaultRender,
+      borderColor: colors.secondary,
+      chipLabel: "api",
+    },
+    dynamicSelect: { ...defaultRender, chipLabel: "api" },
+    file: { ...defaultRender, chipLabel: "file" },
+    hidden: { ...defaultRender, chipLabel: "hidden" },
+    title: { ...defaultRender, chipLabel: "title" },
+  },
+  textArea: {
+    address: { ...defaultRender, chipLabel: "address" },
+    email: { ...defaultRender, chipLabel: "email" },
+    number: { ...defaultRender, chipLabel: "number" },
+    password: { ...defaultRender, chipLabel: "password" },
+    tel: { ...defaultRender, chipLabel: "tel" },
+    text: { ...defaultRender, chipLabel: "text" },
+    url: { ...defaultRender, chipLabel: "url" },
   },
 };
+
+const nodeConfig: Record<string, NodeConfig> = Object.values(nodeConfigByCategory).reduce((acc, group) => ({ ...acc, ...group }), {});
+const isNodeType = (key: unknown): key is keyof typeof nodeConfig => typeof key === "string" && key in nodeConfig;
 
 const NodeRenderer = ({
   id,
@@ -66,10 +97,11 @@ const NodeRenderer = ({
   const { updateNode, addNode, deleteNode } = useContext(TreegeFlowContext);
   const parentConnections = useNodeConnections({ handleType: "target" });
   const childConnections = useNodeConnections({ handleType: "source" });
-  const { name, order } = data;
+  const { name } = data;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"add" | "edit">("add");
   const isEditMode = modalMode === "edit";
+
   const initialValues = isEditMode
     ? {
         ...data,
@@ -130,9 +162,7 @@ const NodeRenderer = ({
             }}
           >
             <Stack spacing={2} alignItems="flex-end">
-              <Typography variant="h5">
-                {name} (#{order})
-              </Typography>
+              <Typography variant="h5">{name}</Typography>
               <Chip color="info" size="small" label={chipLabel} />
 
               <Stack direction="row">
@@ -169,7 +199,7 @@ const NodeRenderer = ({
 };
 
 const NodeFactory = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
-  const config = nodeConfig[data.type ?? "text"] ?? nodeConfig.text;
+  const config = isNodeType(data.type) ? nodeConfig[data.type] : nodeConfig.default;
 
   return (
     <NodeRenderer

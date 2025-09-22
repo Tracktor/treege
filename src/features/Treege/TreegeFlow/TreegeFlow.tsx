@@ -23,7 +23,9 @@ const reactFlowTypes = {
   },
   nodes: {
     boolean: NodeFactory,
+    default: NodeFactory,
     option: NodeFactory,
+    select: NodeFactory,
     text: NodeFactory,
   },
 };
