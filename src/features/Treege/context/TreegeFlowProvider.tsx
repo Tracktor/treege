@@ -1,4 +1,4 @@
-import { Node, Edge, useNodesState, useEdgesState, Connection } from "@xyflow/react";
+import { Node, Edge, useNodesState, useEdgesState, Connection, NodeChange, EdgeChange } from "@xyflow/react";
 import { createContext, ReactNode, useMemo, useState, useCallback, useEffect } from "react";
 import useLaidOutGraph from "@/features/Treege/TreegeFlow/Layout/useLaidOutGraph";
 import { Attributes, CustomNodeData, MinimalEdge, MinimalGraph, MinimalNode } from "@/features/Treege/TreegeFlow/utils/types";
@@ -9,8 +9,8 @@ export interface TreegeFlowContextValue {
   edges: Edge[];
   graph: MinimalGraph;
   setGraph: (g: MinimalGraph) => void;
-  onNodesChange: (changes: any) => void;
-  onEdgesChange: (changes: any) => void;
+  onNodesChange: (changes: NodeChange<Node<CustomNodeData>>[]) => void;
+  onEdgesChange: (changes: EdgeChange<Edge>[]) => void;
   onConnect: (connection: Connection) => void;
   updateNode: (nodeId: string, attributes: Attributes, children?: MinimalNode[]) => void;
   addChild: (nodeId: string, child: MinimalNode) => void;
