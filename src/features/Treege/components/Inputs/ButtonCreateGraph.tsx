@@ -2,7 +2,7 @@ import PolylineRoundedIcon from "@mui/icons-material/PolylineRounded";
 import { Button, Box } from "@tracktor/design-system";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import NodeConfigModal from "@/features/Treege/TreegeFlow/Nodes/NodeConfigModal";
+import NodeMutationDialog from "@/features/Treege/TreegeFlow/Nodes/NodeMutationDialog";
 import { Attributes } from "@/features/Treege/TreegeFlow/utils/types";
 import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
 
@@ -30,7 +30,7 @@ const ButtonCreateGraph = () => {
         {t("createGraph")}
       </Button>
 
-      <NodeConfigModal isOpen={isModalOpen} onClose={handleCloseModal} onSave={handleSaveModal} />
+      <NodeMutationDialog isOpen={isModalOpen} onClose={handleCloseModal} onSave={handleSaveModal} />
     </Box>
   );
 };

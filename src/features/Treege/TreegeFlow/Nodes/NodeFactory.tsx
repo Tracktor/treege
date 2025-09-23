@@ -8,7 +8,8 @@ import colors from "@/constants/colors";
 import { TreegeFlowContext } from "@/features/Treege/context/TreegeFlowProvider";
 import HandleSource from "@/features/Treege/TreegeFlow/Handlers/HandleSource";
 import HandleTarget from "@/features/Treege/TreegeFlow/Handlers/HandleTarget";
-import NodeConfigModal from "@/features/Treege/TreegeFlow/Nodes/NodeConfigModal";
+import { isNodeType, nodeConfig } from "@/features/Treege/TreegeFlow/Nodes/nodeConfig";
+import NodeMutationDialog from "@/features/Treege/TreegeFlow/Nodes/NodeMutationDialog";
 import { CustomNodeData, Attributes } from "@/features/Treege/TreegeFlow/utils/types";
 
 interface NodeParams {
@@ -21,69 +22,6 @@ interface NodeParams {
   children?: ReactNode;
   borderColor?: string;
 }
-
-interface NodeConfig {
-  chipLabel: string;
-  borderColor: string;
-  showAddButton?: (data: CustomNodeData) => boolean;
-  showEditButton?: boolean;
-  showDeleteButton?: boolean;
-}
-
-const defaultRender: NodeConfig = {
-  borderColor: colors.primary,
-  chipLabel: "default",
-  showAddButton: () => true,
-  showDeleteButton: true,
-  showEditButton: true,
-};
-
-const nodeConfigByCategory = {
-  boolean: {
-    checkbox: { ...defaultRender, chipLabel: "checkbox" },
-    switch: { ...defaultRender, chipLabel: "switch" },
-  },
-  dateTime: {
-    date: { ...defaultRender, chipLabel: "date" },
-    dateRange: { ...defaultRender, chipLabel: "dateRange" },
-    time: { ...defaultRender, chipLabel: "time" },
-    timeRange: { ...defaultRender, chipLabel: "timeRange" },
-  },
-  decision: {
-    option: {
-      ...defaultRender,
-      borderColor: colors.secondary,
-      chipLabel: "option",
-      showDeleteButton: false,
-      showEditButton: false,
-    },
-    radio: { ...defaultRender, chipLabel: "radio" },
-    select: { ...defaultRender, chipLabel: "select", showDeleteButton: false },
-  },
-  other: {
-    autocomplete: {
-      ...defaultRender,
-      borderColor: colors.secondary,
-      chipLabel: "api",
-    },
-    dynamicSelect: { ...defaultRender, chipLabel: "api" },
-    file: { ...defaultRender, chipLabel: "file" },
-    hidden: { ...defaultRender, chipLabel: "hidden" },
-    title: { ...defaultRender, chipLabel: "title" },
-  },
-  textArea: {
-    address: { ...defaultRender, chipLabel: "address" },
-    email: { ...defaultRender, chipLabel: "email" },
-    number: { ...defaultRender, chipLabel: "number" },
-    password: { ...defaultRender, chipLabel: "password" },
-    tel: { ...defaultRender, chipLabel: "tel" },
-    text: { ...defaultRender, chipLabel: "text" },
-    url: { ...defaultRender, chipLabel: "url" },
-  },
-};
-
-const nodeConfig: Record<string, NodeConfig> = Object.values(nodeConfigByCategory).reduce((acc, group) => ({ ...acc, ...group }), {});
-const isNodeType = (key: unknown): key is keyof typeof nodeConfig => typeof key === "string" && key in nodeConfig;
 
 const NodeRenderer = ({
   id,
@@ -193,7 +131,7 @@ const NodeRenderer = ({
         {children}
       </Box>
 
-      <NodeConfigModal key={id} isOpen={isModalOpen} onClose={handleCloseModal} onSave={handleSaveModal} initialValues={initialValues} />
+      <NodeMutationDialog key={id} isOpen={isModalOpen} onClose={handleCloseModal} onSave={handleSaveModal} initialValues={initialValues} />
     </>
   );
 };

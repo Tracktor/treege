@@ -1,6 +1,7 @@
 import { Button, Box } from "@tracktor/design-system";
 import { BaseEdge, EdgeLabelRenderer, EdgeProps, getBezierPath, Position, useReactFlow } from "@xyflow/react";
 import { CSSProperties, memo, MouseEvent } from "react";
+import edgeConfig from "@/features/Treege/TreegeFlow/Edges/edgeConfig";
 import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
 
 type ExtendedEdgeProps = EdgeProps & { type?: string };
@@ -17,26 +18,6 @@ interface EdgeParams {
   markerEnd?: string;
   style: CSSProperties;
 }
-
-const edgeConfig: Record<string, { style: CSSProperties; showDeleteButton?: boolean }> = {
-  default: {
-    showDeleteButton: true,
-    style: {
-      stroke: "#999",
-      strokeDashoffset: 0,
-      strokeWidth: 1,
-    },
-  },
-  option: {
-    showDeleteButton: false,
-    style: {
-      stroke: "#999",
-      strokeDasharray: "3 3",
-      strokeDashoffset: 0,
-      strokeWidth: 1,
-    },
-  },
-};
 
 const EdgeRender = ({
   id,
@@ -103,18 +84,8 @@ const EdgeRender = ({
   );
 };
 
-const EdgeFactory = ({
-  id,
-  type = "default",
-  sourceX,
-  sourceY,
-  targetX,
-  targetY,
-  sourcePosition,
-  targetPosition,
-  markerEnd,
-}: ExtendedEdgeProps) => {
-  const config = edgeConfig[type] ?? edgeConfig.default;
+const EdgeFactory = ({ id, type, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, markerEnd }: ExtendedEdgeProps) => {
+  const config = type ? edgeConfig[type] : edgeConfig.default;
 
   return (
     <EdgeRender

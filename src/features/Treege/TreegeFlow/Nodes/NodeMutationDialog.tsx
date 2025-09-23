@@ -54,7 +54,7 @@ interface NodeConfigModalProps {
   initialValues?: Attributes & { children?: MinimalNode[] };
 }
 
-const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigModalProps) => {
+const NodeMutationDialog = ({ isOpen, onSave, onClose, initialValues }: NodeConfigModalProps) => {
   const { t } = useTranslation(["translation", "form"]);
   const categoryOrType = initialValues?.type ? getCategoryOrTypes(initialValues.type) : null;
   const initialCategory = typeof categoryOrType === "string" ? String(categoryOrType) : "textArea";
@@ -314,4 +314,4 @@ const NodeConfigModal = ({ isOpen, onSave, onClose, initialValues }: NodeConfigM
   );
 };
 
-export default NodeConfigModal;
+export default NodeMutationDialog;
