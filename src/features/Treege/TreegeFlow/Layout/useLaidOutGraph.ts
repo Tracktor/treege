@@ -21,10 +21,10 @@ const useLaidOutGraph = (graph: MinimalGraph) => {
       return;
     }
 
-    // 1️⃣ Expand children → create child option nodes & edges
+    // Expand children → create child option nodes & edges
     const expandedGraph = expandMinimalGraphWithChildren(graph);
 
-    // 2️⃣ Convert MinimalGraph → React Flow nodes & edges
+    // Convert MinimalGraph → React Flow nodes & edges
     const reactFlowNodes = toReactFlowNodes(expandedGraph.nodes);
     let reactFlowEdges = toReactFlowEdges(expandedGraph.edges);
 
@@ -34,7 +34,7 @@ const useLaidOutGraph = (graph: MinimalGraph) => {
       targetHandle: `${e.target}-in`,
     }));
 
-    // 3️⃣ Compute layout with ELK
+    // Compute layout with ELK
     (async () => {
       try {
         const { nodes, edges } = await computeGraphLayout(reactFlowNodes, reactFlowEdges);

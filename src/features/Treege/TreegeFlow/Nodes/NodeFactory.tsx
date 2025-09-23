@@ -11,7 +11,7 @@ import HandleTarget from "@/features/Treege/TreegeFlow/Handlers/HandleTarget";
 import NodeConfigModal from "@/features/Treege/TreegeFlow/Nodes/NodeConfigModal";
 import { CustomNodeData, Attributes } from "@/features/Treege/TreegeFlow/utils/types";
 
-interface BaseNodeProps {
+interface NodeParams {
   id: string;
   data: CustomNodeData;
   chipLabel: string;
@@ -94,7 +94,7 @@ const NodeRenderer = ({
   showDeleteButton = true,
   children,
   borderColor = colors.primary,
-}: BaseNodeProps) => {
+}: NodeParams) => {
   const { updateNode, addNode, deleteNode } = useContext(TreegeFlowContext);
   const childConnections = useNodeConnections({ handleType: "source" });
   const { name } = data;

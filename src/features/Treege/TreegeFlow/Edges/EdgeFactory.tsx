@@ -1,25 +1,55 @@
 import { Button, Box } from "@tracktor/design-system";
-import { BaseEdge, EdgeLabelRenderer, EdgeProps, getBezierPath, useReactFlow } from "@xyflow/react";
-import { CSSProperties, memo } from "react";
+import { BaseEdge, EdgeLabelRenderer, EdgeProps, getBezierPath, Position, useReactFlow } from "@xyflow/react";
+import { CSSProperties, memo, MouseEvent } from "react";
 import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
 
 type ExtendedEdgeProps = EdgeProps & { type?: string };
 
-const edgeConfig: Record<string, CSSProperties> = {
+interface EdgeParams {
+  id: string;
+  showDeleteButton?: boolean;
+  sourceX: number;
+  sourceY: number;
+  targetX: number;
+  targetY: number;
+  sourcePosition: Position;
+  targetPosition: Position;
+  markerEnd?: string;
+  style: CSSProperties;
+}
+
+const edgeConfig: Record<string, { style: CSSProperties; showDeleteButton?: boolean }> = {
   default: {
-    stroke: "#999",
-    strokeDashoffset: 0,
-    strokeWidth: 1,
+    showDeleteButton: true,
+    style: {
+      stroke: "#999",
+      strokeDashoffset: 0,
+      strokeWidth: 1,
+    },
   },
   option: {
-    stroke: "#999",
-    strokeDasharray: "3 3",
-    strokeDashoffset: 0,
-    strokeWidth: 1,
+    showDeleteButton: false,
+    style: {
+      stroke: "#999",
+      strokeDasharray: "3 3",
+      strokeDashoffset: 0,
+      strokeWidth: 1,
+    },
   },
 };
 
-const EdgeFactory = ({ id, type, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, markerEnd }: ExtendedEdgeProps) => {
+const EdgeRender = ({
+  id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition,
+  markerEnd,
+  style,
+  showDeleteButton,
+}: EdgeParams) => {
   const [edgePath, labelX, labelY] = getBezierPath({
     sourcePosition,
     sourceX,
@@ -32,11 +62,8 @@ const EdgeFactory = ({ id, type, sourceX, sourceY, targetX, targetY, sourcePosit
   const { setEdges } = useReactFlow();
   const { deleteEdge } = useTreegeFlowContext();
 
-  const style = edgeConfig[type ?? "default"] ?? edgeConfig.default;
-
-  const onEdgeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onEdgeClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    console.log("edge click", id);
     setEdges((edges) => edges.filter((edge) => edge.id !== id));
     deleteEdge(id);
   };
@@ -54,23 +81,54 @@ const EdgeFactory = ({ id, type, sourceX, sourceY, targetX, targetY, sourcePosit
             zIndex: 9999,
           }}
         >
-          <Button
-            onClick={onEdgeClick}
-            sx={{
-              borderColor: "red",
-              borderRadius: "50%",
-              height: 20,
-              minWidth: "auto",
-              padding: 0,
-              pointerEvents: "all",
-              width: 20,
-            }}
-          >
-            ×
-          </Button>
+          {showDeleteButton && (
+            <Button
+              onClick={onEdgeClick}
+              sx={{
+                borderColor: "red",
+                borderRadius: "50%",
+                height: 20,
+                minWidth: "auto",
+                padding: 0,
+                pointerEvents: "all",
+                width: 20,
+              }}
+            >
+              ×
+            </Button>
+          )}
         </Box>
       </EdgeLabelRenderer>
     </>
+  );
+};
+
+const EdgeFactory = ({
+  id,
+  type = "default",
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition,
+  markerEnd,
+}: ExtendedEdgeProps) => {
+  const config = edgeConfig[type] ?? edgeConfig.default;
+
+  return (
+    <EdgeRender
+      id={id}
+      sourceX={sourceX}
+      sourceY={sourceY}
+      targetX={targetX}
+      targetY={targetY}
+      sourcePosition={sourcePosition}
+      targetPosition={targetPosition}
+      markerEnd={markerEnd}
+      style={config.style}
+      showDeleteButton={config.showDeleteButton}
+    />
   );
 };
 
