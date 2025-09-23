@@ -40,8 +40,7 @@ type ElkEdge = {
 
 const elk = new ELK();
 
-// 👇 Helper pour récupérer la position exacte du handle
-function getHandlePosition(node: Node, position: Position) {
+const getHandlePosition = (node: Node, position: Position) => {
   const width = node.width ?? 200;
   const height = node.height ?? 150;
   const { x } = node.position;
@@ -59,7 +58,7 @@ function getHandlePosition(node: Node, position: Position) {
     default:
       return { x, y };
   }
-}
+};
 
 const elkOptions: ElkLayoutOptions = {
   "elk.algorithm": "mrtree",
@@ -104,7 +103,6 @@ export const computeGraphLayout = async (
 
   const layoutedGraph = await elk.layout(graph);
 
-  // 4️⃣ Convert back nodes
   const newLayoutNodes: Node<CustomNodeData>[] = (layoutedGraph.children ?? [])
     .filter((node) => node.x !== undefined && node.y !== undefined)
     .map((node) => ({
@@ -116,7 +114,6 @@ export const computeGraphLayout = async (
       width: 200,
     }));
 
-  // 5️⃣ Convert back edges + elkPoints
   const elkEdgeMap = new Map<string, ElkEdgeWithSections>(((layoutedGraph.edges ?? []) as ElkEdgeWithSections[]).map((e) => [e.id, e]));
 
   const layoutedEdges: Edge[] = edges.map((original) => {

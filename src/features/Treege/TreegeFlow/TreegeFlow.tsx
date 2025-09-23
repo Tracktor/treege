@@ -9,17 +9,11 @@ import Sidebar from "@/components/Layouts/Sidebar/Sidebar";
 import colors from "@/constants/colors";
 import ButtonCreateGraph from "@/features/Treege/components/Inputs/ButtonCreateGraph";
 import edgesTypes from "@/features/Treege/TreegeFlow/Edges/edgesTypes";
-import useAutoFitView from "@/features/Treege/TreegeFlow/Layout/useAutoFitView";
 import nodesType from "@/features/Treege/TreegeFlow/Nodes/nodesType";
-import reactFlowToMinimal from "@/features/Treege/TreegeFlow/utils/toMinimalConverter";
-import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
+import useTreegeFlow from "@/features/Treege/TreegeFlow/useTreegeFlow";
 
 const TreegeFlow = () => {
-  const { nodes, edges, onNodesChange, onEdgesChange, graph, onConnect } = useTreegeFlowContext();
-  const minimalGraph = reactFlowToMinimal(nodes, edges);
-  const isGraphEmpty = !graph || graph.nodes.length === 0;
-
-  useAutoFitView(nodes, edges);
+  const { nodes, onNodesChange, onEdgesChange, edges, onConnect, minimalGraph, isGraphEmpty } = useTreegeFlow();
 
   return (
     <MosaicLayout>
