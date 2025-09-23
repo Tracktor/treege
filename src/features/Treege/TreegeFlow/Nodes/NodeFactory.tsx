@@ -10,7 +10,7 @@ import HandleSource from "@/features/Treege/TreegeFlow/Handlers/HandleSource";
 import HandleTarget from "@/features/Treege/TreegeFlow/Handlers/HandleTarget";
 import { isNodeType, nodeConfig } from "@/features/Treege/TreegeFlow/Nodes/nodeConfig";
 import NodeMutationDialog from "@/features/Treege/TreegeFlow/Nodes/NodeMutationDialog";
-import { CustomNodeData, Attributes } from "@/features/Treege/TreegeFlow/utils/types";
+import { CustomNodeData, Attributes, MinimalNode } from "@/features/Treege/TreegeFlow/utils/types";
 
 interface NodeParams {
   id: string;
@@ -63,9 +63,9 @@ const NodeRenderer = ({
     deleteNode(id);
   };
 
-  const handleSaveModal = (attributes: Attributes) => {
+  const handleSaveModal = (attributes: Attributes & { children?: MinimalNode[] }) => {
     if (isEditMode) {
-      updateNode(id, attributes);
+      updateNode(id, attributes, attributes.children);
       setIsModalOpen(false);
       return;
     }

@@ -28,6 +28,7 @@ import { Attributes, MinimalNode } from "@/features/Treege/TreegeFlow/utils/type
 import { getUUID } from "@/utils";
 
 interface ChildFormValues {
+  uuid?: string;
   label: string;
   message: string;
   name: string;
@@ -67,6 +68,7 @@ const NodeMutationDialog = ({ isOpen, onSave, onClose, initialValues }: NodeConf
       name: c.attributes.name,
       sourceHandle: c.attributes.sourceHandle,
       type: c.attributes.type,
+      uuid: c.uuid,
       value: c.attributes.value,
     })) ?? [];
 
@@ -99,8 +101,9 @@ const NodeMutationDialog = ({ isOpen, onSave, onClose, initialValues }: NodeConf
           value: child.value,
         },
         children: [],
-        uuid: getUUID(),
+        uuid: child.uuid ?? getUUID(),
       }));
+      console.log(updatedChildren);
 
       onSave({
         children: updatedChildren,
@@ -123,7 +126,16 @@ const NodeMutationDialog = ({ isOpen, onSave, onClose, initialValues }: NodeConf
   };
 
   const handleAddChild = useCallback(() => {
-    const newChildren = [...values.children, { label: "", message: "", name: `${values.name}:`, value: "" }];
+    const newChildren = [
+      ...values.children,
+      {
+        label: "",
+        message: "",
+        name: `${values.name}:`,
+        uuid: getUUID(),
+        value: "",
+      },
+    ];
     setFieldValue("children", newChildren);
   }, [setFieldValue, values.children, values.name]);
 
