@@ -64,9 +64,10 @@ const elkOptions: ElkLayoutOptions = {
   "elk.algorithm": "mrtree",
   "elk.direction": "DOWN",
   "elk.edgeRouting": "POLYLINE",
-  "elk.padding": "[top=50,left=50,bottom=50,right=50]",
-  "elk.spacing.edgeNode": "50",
-  "elk.spacing.nodeNode": "50",
+  "elk.layered.spacing.nodeNodeBetweenLayers": "200",
+  "elk.padding": "[top=100,left=100,bottom=100,right=100]",
+  "elk.spacing.edgeNode": "100",
+  "elk.spacing.nodeNode": "100",
 };
 
 export const computeGraphLayout = async (

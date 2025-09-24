@@ -1,6 +1,8 @@
-import { Button, Box } from "@tracktor/design-system";
-import { BaseEdge, EdgeLabelRenderer, EdgeProps, getBezierPath, Position, useReactFlow } from "@xyflow/react";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import { IconButton, Box } from "@tracktor/design-system";
+import { BaseEdge, EdgeLabelRenderer, EdgeProps, getSmoothStepPath, Position, useReactFlow } from "@xyflow/react";
 import { CSSProperties, memo, MouseEvent } from "react";
+import colors from "@/constants/colors";
 import edgeConfig from "@/features/Treege/TreegeFlow/Edges/edgeConfig";
 import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
 
@@ -31,7 +33,9 @@ const EdgeRender = ({
   style,
   showDeleteButton,
 }: EdgeParams) => {
-  const [edgePath, labelX, labelY] = getBezierPath({
+  const [edgePath, labelX, labelY] = getSmoothStepPath({
+    borderRadius: 10,
+    offset: 5,
     sourcePosition,
     sourceX,
     sourceY,
@@ -63,20 +67,22 @@ const EdgeRender = ({
           }}
         >
           {showDeleteButton && (
-            <Button
+            <IconButton
+              size="small"
+              color="error"
               onClick={onEdgeClick}
               sx={{
-                borderColor: "red",
-                borderRadius: "50%",
-                height: 20,
-                minWidth: "auto",
-                padding: 0,
-                pointerEvents: "all",
-                width: 20,
+                bgcolor: "transparent",
               }}
             >
-              ×
-            </Button>
+              <HighlightOffIcon
+                sx={{
+                  bgcolor: colors.background,
+                  height: 15,
+                  width: 15,
+                }}
+              />
+            </IconButton>
           )}
         </Box>
       </EdgeLabelRenderer>
