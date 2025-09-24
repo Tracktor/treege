@@ -63,9 +63,9 @@ const getHandlePosition = (node: Node, position: Position) => {
 const elkOptions: ElkLayoutOptions = {
   "elk.algorithm": "layered",
   "elk.direction": "DOWN",
-  "elk.edgeRouting": "POLYLINE",
+  "elk.edgeRouting": "AVOID_OVERLAP",
   "elk.layered.spacing.nodeNodeBetweenLayers": "200",
-  "elk.padding": "[top=100,left=100,bottom=100,right=100]",
+  "elk.padding": "[top=150,left=150,bottom=150,right=150]",
   "elk.spacing.edgeNode": "100",
   "elk.spacing.nodeNode": "100",
 };
