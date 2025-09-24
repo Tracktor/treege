@@ -12,7 +12,6 @@ const useTreegeFlow = () => {
 
   const handleViewerChange = (value: string) => {
     const parsed = JSON.parse(value);
-
     didFitView.current = false;
 
     setGraph(parsed);

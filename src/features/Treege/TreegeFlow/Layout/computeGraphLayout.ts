@@ -61,7 +61,7 @@ const getHandlePosition = (node: Node, position: Position) => {
 };
 
 const elkOptions: ElkLayoutOptions = {
-  "elk.algorithm": "mrtree",
+  "elk.algorithm": "layered",
   "elk.direction": "DOWN",
   "elk.edgeRouting": "POLYLINE",
   "elk.layered.spacing.nodeNodeBetweenLayers": "200",
