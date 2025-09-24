@@ -5,13 +5,19 @@ import { CustomNodeData } from "@/features/Treege/TreegeFlow/utils/types";
 export type ElkLayoutOptions = Partial<{
   "elk.algorithm": "layered" | "force" | "mrtree";
   "elk.direction": "DOWN" | "RIGHT" | "UP" | "LEFT";
-  "elk.edgeRouting": "ORTHOGONAL" | "POLYLINE" | "SPLINES" | "AVOID_OVERLAP";
+  "elk.edgeRouting": "ORTHOGONAL" | "POLYLINE" | "SPLINES";
+  "elk.layered.allowNonFlowPortsToSwitchSides": string;
+  "elk.layered.crossingMinimization.semiInteractive": string;
+  "elk.layered.nodePlacement.avoidEdgeCrossings": string;
   "elk.layered.spacing.nodeNodeBetweenLayers": string;
   "elk.padding": string;
   "elk.spacing.edgeNode": string;
   "elk.spacing.nodeNode": string;
   "elk.layered.nodePlacement.strategy": string;
   "elk.layered.nodeOrder.strategy": string;
+  "elk.layered.nodePlacement.bk.fixedAlignment": string;
+  "elk.layered.nodePlacement.favorStraightEdges": string;
+  "elk.spacing.edgeEdge": string;
 }>;
 
 interface ElkPoint {
@@ -63,11 +69,17 @@ const getHandlePosition = (node: Node, position: Position) => {
 const elkOptions: ElkLayoutOptions = {
   "elk.algorithm": "layered",
   "elk.direction": "DOWN",
-  "elk.edgeRouting": "AVOID_OVERLAP",
-  "elk.layered.spacing.nodeNodeBetweenLayers": "200",
+  "elk.edgeRouting": "ORTHOGONAL", // contourne
+  "elk.layered.allowNonFlowPortsToSwitchSides": "false",
+  "elk.layered.nodePlacement.avoidEdgeCrossings": "true",
+  "elk.layered.nodePlacement.bk.fixedAlignment": "BALANCED",
+  "elk.layered.nodePlacement.favorStraightEdges": "true",
+  "elk.layered.nodePlacement.strategy": "SIMPLE",
+  "elk.layered.spacing.nodeNodeBetweenLayers": "250",
   "elk.padding": "[top=150,left=150,bottom=150,right=150]",
-  "elk.spacing.edgeNode": "100",
-  "elk.spacing.nodeNode": "100",
+  "elk.spacing.edgeEdge": "150",
+  "elk.spacing.edgeNode": "250",
+  "elk.spacing.nodeNode": "150",
 };
 
 export const computeGraphLayout = async (
