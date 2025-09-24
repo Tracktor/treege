@@ -8,44 +8,27 @@ const useTreegeFlow = () => {
   const minimalGraph = reactFlowToMinimal(nodes, edges);
   const isGraphEmpty = !graph || graph.nodes.length === 0;
   const { fitView } = useReactFlow();
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const didFitView = useRef(false);
 
   const handleViewerChange = (value: string) => {
     const parsed = JSON.parse(value);
+
+    didFitView.current = false;
+
     setGraph(parsed);
   };
 
   // Auto-fit view whenever nodes or edges change
   useEffect(() => {
-    // Clear any pending fitView calls before scheduling a new one
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
+    if (!didFitView.current && nodes.length > 0) {
+      fitView({
+        duration: 300,
+        includeHiddenNodes: false,
+        padding: 0.2,
+      }).then();
+      didFitView.current = true;
     }
-
-    // Only run fitView if we actually have nodes
-    if (nodes.length > 0) {
-      timeoutRef.current = setTimeout(async () => {
-        try {
-          await fitView({
-            duration: 300,
-            includeHiddenNodes: true,
-            padding: 0.2,
-          });
-        } catch (e) {
-          console.error(e);
-        }
-      }, 100);
-    }
-
-    // Cleanup: always clear the timeout when dependencies change or on unmount
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
-      }
-    };
-  }, [nodes, edges, fitView]);
+  }, [nodes.length, fitView]);
 
   return { edges, graph, handleViewerChange, isGraphEmpty, minimalGraph, nodes, onConnect, onEdgesChange, onNodesChange };
 };

@@ -49,6 +49,8 @@ const TreegeFlow = () => {
               onEdgesChange={onEdgesChange}
               nodeTypes={nodesType}
               edgeTypes={edgesTypes}
+              maxZoom={5}
+              minZoom={0.01}
             >
               <Controls />
             </ReactFlow>
