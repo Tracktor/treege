@@ -13,7 +13,7 @@ import nodesType from "@/features/Treege/TreegeFlow/Nodes/nodesType";
 import useTreegeFlow from "@/features/Treege/TreegeFlow/useTreegeFlow";
 
 const TreegeFlow = () => {
-  const { nodes, onNodesChange, onEdgesChange, edges, onConnect, minimalGraph, isGraphEmpty } = useTreegeFlow();
+  const { nodes, onNodesChange, onEdgesChange, edges, onConnect, minimalGraph, isGraphEmpty, handleViewerChange } = useTreegeFlow();
 
   return (
     <MosaicLayout>
@@ -56,7 +56,7 @@ const TreegeFlow = () => {
         )}
       </Main>
       <Sidebar>
-        <ViewerJSON value={minimalGraph} />
+        <ViewerJSON value={minimalGraph} onChange={handleViewerChange} />
       </Sidebar>
     </MosaicLayout>
   );

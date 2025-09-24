@@ -4,12 +4,16 @@ import reactFlowToMinimal from "@/features/Treege/TreegeFlow/utils/toMinimalConv
 import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
 
 const useTreegeFlow = () => {
-  const { nodes, edges, onNodesChange, onEdgesChange, graph, onConnect } = useTreegeFlowContext();
+  const { nodes, edges, onNodesChange, onEdgesChange, graph, onConnect, setGraph } = useTreegeFlowContext();
   const minimalGraph = reactFlowToMinimal(nodes, edges);
   const isGraphEmpty = !graph || graph.nodes.length === 0;
-
   const { fitView } = useReactFlow();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleViewerChange = (value: string) => {
+    const parsed = JSON.parse(value);
+    setGraph(parsed);
+  };
 
   // Auto-fit view whenever nodes or edges change
   useEffect(() => {
@@ -43,7 +47,7 @@ const useTreegeFlow = () => {
     };
   }, [nodes, edges, fitView]);
 
-  return { edges, graph, isGraphEmpty, minimalGraph, nodes, onConnect, onEdgesChange, onNodesChange };
+  return { edges, graph, handleViewerChange, isGraphEmpty, minimalGraph, nodes, onConnect, onEdgesChange, onNodesChange };
 };
 
 export default useTreegeFlow;
