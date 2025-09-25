@@ -18,6 +18,15 @@ export type ElkLayoutOptions = Partial<{
   "elk.layered.nodePlacement.bk.fixedAlignment": string;
   "elk.layered.nodePlacement.favorStraightEdges": string;
   "elk.spacing.edgeEdge": string;
+  "elk.layered.mergeEdges": string;
+  "elk.layered.mergeHierarchyEdges": string;
+  "elk.layered.considerModelOrder": string;
+  "elk.layered.cycleBreaking.strategy": string;
+  "elk.layered.thoroughness": string;
+  "elk.layered.unnecessaryBendpoints": string;
+  "elk.layered.wrapping.strategy": string;
+  "elk.layered.compaction.postCompaction.strategy": string;
+  "elk.layered.compaction.postCompaction.constraints": string;
 }>;
 
 const elkOptions: ElkLayoutOptions = {
@@ -25,15 +34,23 @@ const elkOptions: ElkLayoutOptions = {
   "elk.direction": "DOWN",
   "elk.edgeRouting": "ORTHOGONAL",
   "elk.layered.allowNonFlowPortsToSwitchSides": "false",
+  "elk.layered.considerModelOrder": "NODES_AND_EDGES",
+  "elk.layered.cycleBreaking.strategy": "GREEDY",
+  "elk.layered.mergeEdges": "false",
+  "elk.layered.mergeHierarchyEdges": "false",
+  "elk.layered.nodeOrder.strategy": "DF_MODELORDER",
   "elk.layered.nodePlacement.avoidEdgeCrossings": "true",
-  "elk.layered.nodePlacement.bk.fixedAlignment": "BALANCED",
+  "elk.layered.nodePlacement.bk.fixedAlignment": "LEFTUP",
   "elk.layered.nodePlacement.favorStraightEdges": "true",
   "elk.layered.nodePlacement.strategy": "SIMPLE",
-  "elk.layered.spacing.nodeNodeBetweenLayers": "250",
-  "elk.padding": "[top=150,left=150,bottom=150,right=150]",
-  "elk.spacing.edgeEdge": "150",
-  "elk.spacing.edgeNode": "250",
-  "elk.spacing.nodeNode": "150",
+  "elk.layered.spacing.nodeNodeBetweenLayers": "150",
+  "elk.layered.thoroughness": "7",
+  "elk.layered.unnecessaryBendpoints": "true",
+  "elk.layered.wrapping.strategy": "OFF",
+  "elk.padding": "[top=50,left=50,bottom=50,right=50]",
+  "elk.spacing.edgeEdge": "50",
+  "elk.spacing.edgeNode": "100",
+  "elk.spacing.nodeNode": "80",
 };
 
 interface ElkPoint {
@@ -81,6 +98,45 @@ const getHandlePosition = (node: Node, position: Position) => {
       return { x, y };
   }
 };
+
+const getDistanceFromNodeToPoint = (node: Node, point: ElkPoint): number => {
+  const nodeLeft = node.position.x;
+  const nodeRight = node.position.x + (node.width ?? 200);
+  const nodeTop = node.position.y;
+  const nodeBottom = node.position.y + (node.height ?? 150);
+
+  const dx = Math.max(nodeLeft - point.x, 0, point.x - nodeRight);
+  const dy = Math.max(nodeTop - point.y, 0, point.y - nodeBottom);
+
+  return Math.sqrt(dx * dx + dy * dy);
+};
+
+const adjustEdgePoints = (points: ElkPoint[], nodes: Node[], minDistance: number = 50): ElkPoint[] =>
+  points.map((point, index, arr) =>
+    index === 0 || index === arr.length - 1
+      ? point
+      : nodes.reduce<ElkPoint>((accPoint, node) => {
+          const distance = getDistanceFromNodeToPoint(node, accPoint);
+
+          if (distance >= minDistance) return accPoint;
+
+          const nodeCenter = {
+            x: node.position.x + (node.width ?? 200) / 2,
+            y: node.position.y + (node.height ?? 150) / 2,
+          };
+
+          const dx = accPoint.x - nodeCenter.x;
+          const dy = accPoint.y - nodeCenter.y;
+          const length = Math.sqrt(dx * dx + dy * dy);
+
+          return length > 0
+            ? {
+                x: nodeCenter.x + (dx * (minDistance + (node.width ?? 200) / 2)) / length,
+                y: nodeCenter.y + (dy * (minDistance + (node.width ?? 200) / 2)) / length,
+              }
+            : accPoint;
+        }, point),
+  );
 
 export const computeGraphLayout = async (
   nodes: Node<CustomNodeData>[],
@@ -134,7 +190,7 @@ export const computeGraphLayout = async (
 
     if (elkEdge?.sections?.length) {
       const section = elkEdge.sections[0];
-      const points: ElkPoint[] = [section.startPoint, ...(section.bendPoints ?? []), section.endPoint];
+      let points: ElkPoint[] = [section.startPoint, ...(section.bendPoints ?? []), section.endPoint];
 
       const sourceNode = newLayoutNodes.find((n) => n.id === original.source);
       const targetNode = newLayoutNodes.find((n) => n.id === original.target);
@@ -146,6 +202,9 @@ export const computeGraphLayout = async (
       if (targetNode) {
         points[points.length - 1] = getHandlePosition(targetNode, targetNode.targetPosition ?? Position.Top);
       }
+
+      const nodesExcludingSourceTarget = newLayoutNodes.filter((n) => n.id !== original.source && n.id !== original.target);
+      points = adjustEdgePoints(points, nodesExcludingSourceTarget, 40);
 
       return {
         ...original,
