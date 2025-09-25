@@ -20,6 +20,22 @@ export type ElkLayoutOptions = Partial<{
   "elk.spacing.edgeEdge": string;
 }>;
 
+const elkOptions: ElkLayoutOptions = {
+  "elk.algorithm": "layered",
+  "elk.direction": "DOWN",
+  "elk.edgeRouting": "ORTHOGONAL",
+  "elk.layered.allowNonFlowPortsToSwitchSides": "false",
+  "elk.layered.nodePlacement.avoidEdgeCrossings": "true",
+  "elk.layered.nodePlacement.bk.fixedAlignment": "BALANCED",
+  "elk.layered.nodePlacement.favorStraightEdges": "true",
+  "elk.layered.nodePlacement.strategy": "SIMPLE",
+  "elk.layered.spacing.nodeNodeBetweenLayers": "250",
+  "elk.padding": "[top=150,left=150,bottom=150,right=150]",
+  "elk.spacing.edgeEdge": "150",
+  "elk.spacing.edgeNode": "250",
+  "elk.spacing.nodeNode": "150",
+};
+
 interface ElkPoint {
   x: number;
   y: number;
@@ -64,22 +80,6 @@ const getHandlePosition = (node: Node, position: Position) => {
     default:
       return { x, y };
   }
-};
-
-const elkOptions: ElkLayoutOptions = {
-  "elk.algorithm": "layered",
-  "elk.direction": "DOWN",
-  "elk.edgeRouting": "ORTHOGONAL", // contourne
-  "elk.layered.allowNonFlowPortsToSwitchSides": "false",
-  "elk.layered.nodePlacement.avoidEdgeCrossings": "true",
-  "elk.layered.nodePlacement.bk.fixedAlignment": "BALANCED",
-  "elk.layered.nodePlacement.favorStraightEdges": "true",
-  "elk.layered.nodePlacement.strategy": "SIMPLE",
-  "elk.layered.spacing.nodeNodeBetweenLayers": "250",
-  "elk.padding": "[top=150,left=150,bottom=150,right=150]",
-  "elk.spacing.edgeEdge": "150",
-  "elk.spacing.edgeNode": "250",
-  "elk.spacing.nodeNode": "150",
 };
 
 export const computeGraphLayout = async (
