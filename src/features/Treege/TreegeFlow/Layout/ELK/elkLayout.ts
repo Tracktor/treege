@@ -3,17 +3,9 @@ import ELK from "elkjs/lib/elk.bundled.js";
 import ELKOptionConfig, { ElkLayoutOptions } from "@/features/Treege/TreegeFlow/Layout/ELK/ELKOptionConfig";
 import { CustomNodeData } from "@/features/Treege/TreegeFlow/utils/types";
 
-export interface ElkNode {
-  id: string;
-  x?: number;
-  y?: number;
-  width?: number;
-  height?: number;
-}
-
 const elk = new ELK();
 
-export const elkLayout = async (
+const elkLayout = async (
   nodes: Node<CustomNodeData>[],
   edges: Edge[],
   options: ElkLayoutOptions = {},
@@ -36,7 +28,7 @@ export const elkLayout = async (
   const layoutedGraph = await elk.layout(graph);
 
   const nodePositions = new Map(
-    ((layoutedGraph.children as ElkNode[]) ?? []).map((n) => [n.id, { height: n.height, width: n.width, x: n.x ?? 0, y: n.y ?? 0 }]),
+    (layoutedGraph.children ?? []).map((n) => [n.id, { height: n.height, width: n.width, x: n.x ?? 0, y: n.y ?? 0 }]),
   );
 
   const newNodes = nodes.map((node) => {
