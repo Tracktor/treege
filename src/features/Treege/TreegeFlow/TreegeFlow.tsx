@@ -32,12 +32,7 @@ const TreegeFlow = () => {
         <Stack justifyContent="space-between" direction="row" alignItems="center">
           <Logo />
 
-          <Select
-            value={layoutEngineName}
-            onChange={(e) => setLayoutEngineName(e.target.value as "dagre" | "elk")}
-            size="small"
-            style={{ width: 150 }}
-          >
+          <Select value={layoutEngineName} onChange={(e) => setLayoutEngineName(e.target.value)} size="small" style={{ width: 150 }}>
             <MenuItem value="dagre">Dagre Layout</MenuItem>
             <MenuItem value="elk">ELK Layout</MenuItem>
           </Select>
