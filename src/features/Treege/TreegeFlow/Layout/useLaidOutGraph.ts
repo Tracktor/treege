@@ -1,7 +1,7 @@
 import { Node, Edge } from "@xyflow/react";
 import { useEffect, useState } from "react";
-import computeGraphLayout from "@/features/Treege/TreegeFlow/Layout/computeGraphLayout";
-import expandMinimalGraphWithChildren from "@/features/Treege/TreegeFlow/Layout/expandMinimalGraphWithChildren";
+import elkLayout from "@/features/Treege/TreegeFlow/Layout/ELK/elkLayout";
+import expandMinimalGraphWithChildren from "@/features/Treege/TreegeFlow/utils/expandMinimalGraphWithChildren";
 import { toReactFlowEdges, toReactFlowNodes } from "@/features/Treege/TreegeFlow/utils/toReactFlowConverter";
 import { CustomNodeData, MinimalGraph } from "@/features/Treege/TreegeFlow/utils/types";
 
@@ -27,11 +27,11 @@ const useLaidOutGraph = (graph: MinimalGraph) => {
 
     (async () => {
       try {
-        const { nodes, edges } = await computeGraphLayout(reactFlowNodes, reactFlowEdges);
+        const { nodes, edges } = await elkLayout(reactFlowNodes, reactFlowEdges);
         setLaidOutNodes(nodes);
         setLaidOutEdges(edges);
       } catch (err) {
-        console.error("ELK layout error:", err);
+        console.error(err);
         setLaidOutNodes(reactFlowNodes);
         setLaidOutEdges(reactFlowEdges);
       }
