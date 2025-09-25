@@ -1,16 +1,17 @@
 import { Node, Edge } from "@xyflow/react";
 import { useEffect, useState } from "react";
-import elkLayout from "@/features/Treege/TreegeFlow/Layout/ELK/elkLayout";
 import expandMinimalGraphWithChildren from "@/features/Treege/TreegeFlow/utils/expandMinimalGraphWithChildren";
 import { toReactFlowEdges, toReactFlowNodes } from "@/features/Treege/TreegeFlow/utils/toReactFlowConverter";
 import { CustomNodeData, MinimalGraph } from "@/features/Treege/TreegeFlow/utils/types";
 
+type LayoutEngine = (nodes: Node<CustomNodeData>[], edges: Edge[]) => Promise<{ nodes: Node<CustomNodeData>[]; edges: Edge[] }>;
+
 /**
  * Hook converting a MinimalGraph to React Flow nodes & edges,
  * automatically expanding "children" into child nodes/edges,
- * and computing the layout via ELK.
+ * and computing the layout via a layout engine (ELK or Dagre).
  */
-const useLaidOutGraph = (graph: MinimalGraph) => {
+const useLaidOutGraph = (graph: MinimalGraph, layoutEngine: LayoutEngine) => {
   const [laidOutNodes, setLaidOutNodes] = useState<Node<CustomNodeData>[]>([]);
   const [laidOutEdges, setLaidOutEdges] = useState<Edge[]>([]);
 
@@ -27,7 +28,7 @@ const useLaidOutGraph = (graph: MinimalGraph) => {
 
     (async () => {
       try {
-        const { nodes, edges } = await elkLayout(reactFlowNodes, reactFlowEdges);
+        const { nodes, edges } = await layoutEngine(reactFlowNodes, reactFlowEdges);
         setLaidOutNodes(nodes);
         setLaidOutEdges(edges);
       } catch (err) {
@@ -36,7 +37,7 @@ const useLaidOutGraph = (graph: MinimalGraph) => {
         setLaidOutEdges(reactFlowEdges);
       }
     })();
-  }, [graph]);
+  }, [graph, layoutEngine]); // important d’ajouter layoutEngine dans le tableau de dépendances
 
   return { edges: laidOutEdges, nodes: laidOutNodes };
 };

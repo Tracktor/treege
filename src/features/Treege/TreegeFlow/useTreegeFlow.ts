@@ -4,7 +4,8 @@ import reactFlowToMinimal from "@/features/Treege/TreegeFlow/utils/toMinimalConv
 import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
 
 const useTreegeFlow = () => {
-  const { nodes, edges, onNodesChange, onEdgesChange, graph, onConnect, setGraph } = useTreegeFlowContext();
+  const { nodes, edges, onNodesChange, onEdgesChange, graph, onConnect, setGraph, layoutEngineName, setLayoutEngineName } =
+    useTreegeFlowContext();
   const minimalGraph = reactFlowToMinimal(nodes, edges);
   const isGraphEmpty = !graph || graph.nodes.length === 0;
   const { fitView } = useReactFlow();
@@ -29,7 +30,19 @@ const useTreegeFlow = () => {
     }
   }, [nodes.length, fitView]);
 
-  return { edges, graph, handleViewerChange, isGraphEmpty, minimalGraph, nodes, onConnect, onEdgesChange, onNodesChange };
+  return {
+    edges,
+    graph,
+    handleViewerChange,
+    isGraphEmpty,
+    layoutEngineName,
+    minimalGraph,
+    nodes,
+    onConnect,
+    onEdgesChange,
+    onNodesChange,
+    setLayoutEngineName,
+  };
 };
 
 export default useTreegeFlow;

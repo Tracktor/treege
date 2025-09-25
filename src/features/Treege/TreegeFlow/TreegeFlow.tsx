@@ -1,4 +1,4 @@
-import { Box, GlobalStyles, Stack } from "@tracktor/design-system";
+import { Box, GlobalStyles, Stack, Select, MenuItem } from "@tracktor/design-system";
 import { ReactFlow, Controls } from "@xyflow/react";
 import Logo from "@/components/DataDisplay/Logo/Logo";
 import ViewerJSON from "@/components/DataDisplay/ViewerJSON/ViewerJSON";
@@ -13,13 +13,34 @@ import nodesType from "@/features/Treege/TreegeFlow/Nodes/nodesType";
 import useTreegeFlow from "@/features/Treege/TreegeFlow/useTreegeFlow";
 
 const TreegeFlow = () => {
-  const { nodes, onNodesChange, onEdgesChange, edges, onConnect, minimalGraph, isGraphEmpty, handleViewerChange } = useTreegeFlow();
+  const {
+    nodes,
+    onNodesChange,
+    onEdgesChange,
+    edges,
+    onConnect,
+    minimalGraph,
+    isGraphEmpty,
+    handleViewerChange,
+    layoutEngineName,
+    setLayoutEngineName,
+  } = useTreegeFlow();
 
   return (
     <MosaicLayout>
       <Header>
         <Stack justifyContent="space-between" direction="row" alignItems="center">
           <Logo />
+
+          <Select
+            value={layoutEngineName}
+            onChange={(e) => setLayoutEngineName(e.target.value as "dagre" | "elk")}
+            size="small"
+            style={{ width: 150 }}
+          >
+            <MenuItem value="dagre">Dagre Layout</MenuItem>
+            <MenuItem value="elk">ELK Layout</MenuItem>
+          </Select>
         </Stack>
       </Header>
       <Main>

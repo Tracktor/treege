@@ -1,5 +1,7 @@
-import { Node, Edge, useNodesState, useEdgesState, Connection, NodeChange, EdgeChange } from "@xyflow/react";
+import { Edge, Node, useEdgesState, useNodesState, Connection, NodeChange, EdgeChange } from "@xyflow/react";
 import { createContext, ReactNode, useMemo, useState, useCallback, useEffect } from "react";
+import dagreLayout from "@/features/Treege/TreegeFlow/Layout/dagre/dagreLayout";
+import elkLayout from "@/features/Treege/TreegeFlow/Layout/ELK/elkLayout";
 import useLaidOutGraph from "@/features/Treege/TreegeFlow/Layout/useLaidOutGraph";
 import { Attributes, CustomNodeData, MinimalEdge, MinimalGraph, MinimalNode } from "@/features/Treege/TreegeFlow/utils/types";
 import { getUUID } from "@/utils";
@@ -23,6 +25,8 @@ export interface TreegeFlowContextValue {
   ) => void;
   deleteNode: (nodeId: string) => void;
   deleteEdge: (edgeId: string) => void;
+  layoutEngineName: "dagre" | "elk";
+  setLayoutEngineName: (name: "dagre" | "elk") => void;
 }
 
 type AddNodeInput = Attributes & {
@@ -37,11 +41,13 @@ export const TreegeFlowContext = createContext<TreegeFlowContextValue>({
   deleteNode: () => {},
   edges: [],
   graph: { edges: [], nodes: [] },
+  layoutEngineName: "dagre",
   nodes: [],
   onConnect: () => {},
   onEdgesChange: () => {},
   onNodesChange: () => {},
   setGraph: () => {},
+  setLayoutEngineName: () => {},
   updateNode: () => {},
 });
 
@@ -54,7 +60,9 @@ interface TreegeFlowProviderProps {
 
 const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps) => {
   const [graph, setGraph] = useState<MinimalGraph>(initialGraph ?? EMPTY_GRAPH);
-  const { nodes: laidOutNodes, edges: laidOutEdges } = useLaidOutGraph(graph);
+  const [layoutEngineName, setLayoutEngineName] = useState<"dagre" | "elk">("elk");
+  const layoutEngine = layoutEngineName === "dagre" ? dagreLayout : elkLayout;
+  const { nodes: laidOutNodes, edges: laidOutEdges } = useLaidOutGraph(graph, layoutEngine);
   const [nodes, setNodes, onNodesChange] = useNodesState<Node<CustomNodeData>>(laidOutNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(laidOutEdges);
 
@@ -62,14 +70,13 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
   const getEdgeId = useCallback(() => `edge-${getUUID()}`, []);
   const getId = useCallback((prefix = "node") => `${prefix}-${getUUID()}`, []);
 
-  /** Add a new node to the graph (optionally between two existing nodes). */
+  /** Add a new node to the graph */
   const addNode = useCallback(
     (parentId?: string, attrs?: AddNodeInput) => {
       setGraph((prev) => {
         const newNodeId = getId("node");
 
         const safeAttrs: AddNodeInput = attrs ?? {
-          // valeurs par défaut
           isDecision: false,
           label: "",
           message: "",
@@ -103,10 +110,25 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
         const newEdges: MinimalEdge[] = childId
           ? [
               ...prev.edges.filter((e) => !(e.source === parentId && e.target === childId)),
-              { source: parentId, target: newNodeId, uuid: getId("edge") },
-              { source: newNodeId, target: childId, uuid: getId("edge") },
+              {
+                source: parentId,
+                target: newNodeId,
+                uuid: getId("edge"),
+              },
+              {
+                source: newNodeId,
+                target: childId,
+                uuid: getId("edge"),
+              },
             ]
-          : [...prev.edges, { source: parentId, target: newNodeId, uuid: getId("edge") }];
+          : [
+              ...prev.edges,
+              {
+                source: parentId,
+                target: newNodeId,
+                uuid: getId("edge"),
+              },
+            ];
 
         return { edges: newEdges, nodes: [...prev.nodes, newNode] };
       });
@@ -188,10 +210,8 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
   const onConnect = useCallback(
     (connection: Connection) => {
       setGraph((prev) => {
-        // sécurité
         if (!connection.source || !connection.target) return prev;
 
-        // empêcher les doublons
         const exists = prev.edges.some((e) => e.source === connection.source && e.target === connection.target);
         if (exists) return prev;
 
@@ -207,7 +227,7 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
         };
       });
     },
-    [setGraph, getEdgeId],
+    [getEdgeId],
   );
 
   /** Delete an edge by its uuid */
@@ -232,14 +252,16 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
       deleteNode,
       edges,
       graph,
+      layoutEngineName,
       nodes,
       onConnect,
       onEdgesChange,
       onNodesChange,
       setGraph,
+      setLayoutEngineName,
       updateNode,
     }),
-    [addChild, addNode, deleteEdge, deleteNode, edges, graph, nodes, onConnect, onEdgesChange, onNodesChange, updateNode],
+    [addChild, addNode, deleteEdge, deleteNode, edges, graph, nodes, onConnect, onEdgesChange, onNodesChange, updateNode, layoutEngineName],
   );
 
   return <TreegeFlowContext.Provider value={value}>{children}</TreegeFlowContext.Provider>;
