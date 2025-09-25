@@ -1,4 +1,4 @@
-import { Box, GlobalStyles, Stack, Select, MenuItem } from "@tracktor/design-system";
+import { Box, GlobalStyles, Stack, Select, MenuItem, Typography } from "@tracktor/design-system";
 import { ReactFlow, Controls } from "@xyflow/react";
 import Logo from "@/components/DataDisplay/Logo/Logo";
 import ViewerJSON from "@/components/DataDisplay/ViewerJSON/ViewerJSON";
@@ -32,10 +32,13 @@ const TreegeFlow = () => {
         <Stack justifyContent="space-between" direction="row" alignItems="center">
           <Logo />
 
-          <Select value={layoutEngineName} onChange={(e) => setLayoutEngineName(e.target.value)} size="small" style={{ width: 150 }}>
-            <MenuItem value="dagre">Dagre Layout</MenuItem>
-            <MenuItem value="elk">ELK Layout</MenuItem>
-          </Select>
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Typography>Layout Engine:</Typography>
+            <Select value={layoutEngineName} onChange={(e) => setLayoutEngineName(e.target.value)} size="small">
+              <MenuItem value="dagre">Dagre</MenuItem>
+              <MenuItem value="elk">ELK</MenuItem>
+            </Select>
+          </Stack>
         </Stack>
       </Header>
       <Main>
