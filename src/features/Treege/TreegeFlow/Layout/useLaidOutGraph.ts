@@ -37,7 +37,7 @@ const useLaidOutGraph = (graph: MinimalGraph, layoutEngine: LayoutEngine) => {
         setLaidOutEdges(reactFlowEdges);
       }
     })();
-  }, [graph, layoutEngine]); // important d’ajouter layoutEngine dans le tableau de dépendances
+  }, [graph, layoutEngine]);
 
   return { edges: laidOutEdges, nodes: laidOutNodes };
 };
