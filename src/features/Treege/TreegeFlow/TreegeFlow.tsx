@@ -1,5 +1,5 @@
 import SettingsIcon from "@mui/icons-material/Settings";
-import { Box, GlobalStyles, Stack, Select, MenuItem, Typography, IconButton, Popover } from "@tracktor/design-system";
+import { Box, GlobalStyles, Stack, Button, ButtonGroup, Typography, IconButton, Popover } from "@tracktor/design-system";
 import { ReactFlow, Controls } from "@xyflow/react";
 import Logo from "@/components/DataDisplay/Logo/Logo";
 import ViewerJSON from "@/components/DataDisplay/ViewerJSON/ViewerJSON";
@@ -54,12 +54,32 @@ const TreegeFlow = () => {
             }}
           >
             <Box p={2}>
-              <Stack direction="row" alignItems="center" spacing={2}>
+              <Stack alignItems="center" spacing={2}>
                 <Typography>Layout Engine:</Typography>
-                <Select value={layoutEngineName} onChange={(e) => setLayoutEngineName(e.target.value)} size="small">
-                  <MenuItem value="dagre">Dagre</MenuItem>
-                  <MenuItem value="elk">ELK</MenuItem>
-                </Select>
+
+                <ButtonGroup
+                  variant="outlined"
+                  size="small"
+                  sx={{
+                    display: "flex",
+                    width: 200,
+                  }}
+                >
+                  <Button
+                    onClick={() => setLayoutEngineName("dagre")}
+                    variant={layoutEngineName === "dagre" ? "contained" : "outlined"}
+                    sx={{ flex: 1 }}
+                  >
+                    Dagre
+                  </Button>
+                  <Button
+                    onClick={() => setLayoutEngineName("elk")}
+                    variant={layoutEngineName === "elk" ? "contained" : "outlined"}
+                    sx={{ flex: 1 }}
+                  >
+                    ELK
+                  </Button>
+                </ButtonGroup>
               </Stack>
             </Box>
           </Popover>
