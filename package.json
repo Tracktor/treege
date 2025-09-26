@@ -1,8 +1,8 @@
 {
   "name": "treege",
-  "description": "Form decision tree generator",
+  "description": "Amazing form generator",
   "license": "ISC",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "type": "module",
   "types": "./dist/main.d.ts",
   "main": "./dist/main.umd.cjs",
@@ -24,63 +24,33 @@
   "homepage": "https://github.com/Tracktor/treege#readme",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "lint": "eslint . --max-warnings=0 && tsc --noEmit",
-    "lint:fix": "eslint . --fix",
     "preview": "vite preview",
-    "test": "yarn lint && vitest",
-    "test:ui": "vitest --ui",
     "prepare": "yarn run build && husky install"
   },
   "dependencies": {
-    "@codemirror/lang-json": "^6.0.1",
-    "@mui/icons-material": "^7.2.0",
-    "@tanstack/react-form": "^1.23.0",
-    "@tanstack/react-query": "^5.81.5",
-    "@tracktor/design-system": "^4.0.1",
-    "@uiw/codemirror-theme-dracula": "^4.21.19",
-    "@uiw/react-codemirror": "^4.21.19",
-    "@xyflow/react": "^12.8.4",
-    "axios": "^1.10.0",
-    "dagre": "^0.8.5",
-    "elkjs": "^0.10.0",
-    "i18next": "^25.3.1",
-    "i18next-browser-languagedetector": "^8.2.0",
-    "react-d3-tree": "^3.6.6",
-    "react-i18next": "^15.6.0"
-  },
-  "devDependencies": {
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^14.6.1",
-    "@tracktor/types-treege": "^0.3.14",
-    "@types/dagre": "^0.7.53",
-    "@types/node": "^18.19.115",
-    "@types/react": "^19.1.0",
-    "@types/react-dom": "^19.1.0",
-    "@vitejs/plugin-react": "^4.3.4",
-    "@vitest/ui": "1.6.1",
-    "eslint-config-react-tracktor": "^1.10.0",
-    "husky": "^8.0.3",
-    "jsdom": "22.1.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "typescript": "^5.8.3",
-    "vite": "^7.0.2",
-    "vite-plugin-dts": "^4.5.4",
-    "vitest": "^1.6.1"
+    "@xyflow/react": "^12.8.6"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "ajv": "^8.17.1",
+    "eslint-config-react-tracktor": "^1.10.0",
+    "husky": "^8.0.3",
+    "vite": "^7.1.7",
+    "vite-plugin-dts": "^4.5.4"
   },
   "peerDependencies": {
-    "@mui/icons-material": ">=5",
-    "@tracktor/design-system": ">=4",
-    "i18next": ">=23",
     "react": "^17.0.0 || ^18.0.0 || ^19.0.0",
     "react-dom": "^17.0.0 || ^18.0.0 || ^19.0.0"
   },
   "keywords": [
     "react",
-    "treege",
-    "treege consumer"
+    "treege"
   ]
 }

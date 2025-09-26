@@ -22,9 +22,6 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "noUnusedParameters": true,
-    "types": [
-      "vitest/globals"
-    ],
     "paths": {
       "@/*": [
         "src/*"
