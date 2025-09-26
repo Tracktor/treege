@@ -74,7 +74,7 @@ const TreegeFlow = () => {
               nodeTypes={nodesType}
               edgeTypes={edgesTypes}
               maxZoom={5}
-              minZoom={0.01}
+              minZoom={0.1}
               proOptions={{ hideAttribution: true }}
             >
               <Controls />
