@@ -45,15 +45,20 @@ const TreegeFlow = () => {
         {isGraphEmpty ? (
           <ButtonCreateGraph />
         ) : (
-          <Box
-            component="div"
-            style={{
-              height: "100%",
-              width: "100%",
-            }}
-          >
+          <Box component="div" style={{ height: "100%", width: "100%" }}>
             <GlobalStyles
               styles={{
+                ".react-flow__controls": {
+                  backgroundColor: "transparent",
+                  boxShadow: "none",
+                },
+                ".react-flow__controls-button": {
+                  backgroundColor: colors.tertiary,
+                  border: `1px solid ${colors.borderGrey}`,
+                },
+                ".react-flow__controls-button:hover": {
+                  backgroundColor: colors.background,
+                },
                 ".tree-link": {
                   stroke: `${colors.borderGrey} !important`,
                 },
@@ -70,6 +75,7 @@ const TreegeFlow = () => {
               edgeTypes={edgesTypes}
               maxZoom={5}
               minZoom={0.01}
+              proOptions={{ hideAttribution: true }}
             >
               <Controls />
             </ReactFlow>
