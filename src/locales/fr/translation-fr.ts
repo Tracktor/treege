@@ -1,6 +1,8 @@
 const TRANSLATION_FR = {
+  activateSearch: "Activer la recherche",
   add: "Ajouter",
   addNode: "Ajouter un noeud",
+  advancedConfiguration: "Configuration avancée",
   cancel: "Annuler",
   category: "Catégorie",
   disabled: "Désactivé",

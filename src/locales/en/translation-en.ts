@@ -1,6 +1,8 @@
 const TRANSLATION_EN = {
+  activateSearch: "Activate search",
   add: "Add",
   addNode: "Add Node",
+  advancedConfiguration: "Advanced configuration",
   cancel: "Cancel",
   category: "Category",
   disabled: "Disabled",

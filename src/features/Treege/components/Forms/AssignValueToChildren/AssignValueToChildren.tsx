@@ -1,17 +1,5 @@
 import { KeyboardArrowDown } from "@mui/icons-material";
-import {
-  Alert,
-  Box,
-  Checkbox,
-  Collapse,
-  Divider,
-  FormControlLabel,
-  Grid,
-  IconButton,
-  Stack,
-  TextField,
-  Typography,
-} from "@tracktor/design-system";
+import { Alert, Box, Checkbox, Collapse, FormControlLabel, IconButton, Stack, TextField, Typography } from "@tracktor/design-system";
 import type { DefaultValueFromAncestor } from "@tracktor/types-treege";
 import { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -22,14 +10,12 @@ import { findNodeByUUIDInTree } from "@/utils/tree";
 interface AssignValueToChildrenProps {
   value?: DefaultValueFromAncestor | null;
   onChange?: (sourceValue?: string) => void;
-  ancestorName: string;
-  displayTopDivider?: boolean;
   currentType?: string;
 }
 
 const ObjectType = ["address", "dynamicSelect", "autocomplete"];
 
-const AssignValueToChildren = ({ onChange, value, ancestorName, displayTopDivider, currentType }: AssignValueToChildrenProps) => {
+const AssignValueToChildren = ({ onChange, value, currentType }: AssignValueToChildrenProps) => {
   const { t } = useTranslation(["form"]);
   const { tree } = useTreegeContext();
   const node = findNodeByUUIDInTree(tree, value?.uuid || "");
@@ -69,16 +55,6 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, displayTopDivide
       );
     }
 
-    if (currentType === "dynamicSelect") {
-      return (
-        <Alert severity="warning" variant="outlined">
-          <Typography variant="subtitle2" gutterBottom>
-            {t("dynamicSelectStructureHint")}
-          </Typography>
-        </Alert>
-      );
-    }
-
     if (currentType === "select" || ancestorType === "radio") {
       return (
         <Alert severity="warning" variant="outlined">
@@ -93,82 +69,68 @@ const AssignValueToChildren = ({ onChange, value, ancestorName, displayTopDivide
   };
 
   return (
-    <Grid container>
-      <Grid size={12} pt={2}>
-        {displayTopDivider && <Divider sx={{ my: 2 }} />}
-        <Typography variant="h5" gutterBottom>
-          {t("ancestorValue", { ancestorName })}
-        </Typography>
+    <Stack spacing={2}>
+      <Typography color="text.secondary" sx={{ mb: 2 }}>
+        {t("valueOfParentIsOfType")}: <strong>{ancestorType}</strong>
+      </Typography>
 
-        <Typography color="text.secondary" sx={{ mb: 2 }}>
-          Input type: <strong>{ancestorType}</strong>
-        </Typography>
+      {ObjectType.includes(ancestorType || "") && (
+        <Stack spacing={2}>
+          <TextField fullWidth label={t("mapObjectToRender")} value={sourceValue ?? ""} onChange={handleTextChange} />
 
-        {ObjectType.includes(ancestorType || "") && (
-          <Box component="section" sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-            <Stack spacing={1}>
-              <Typography>{t("mapObject")}</Typography>
-              <TextField fullWidth label={t("keyPathObject")} value={sourceValue ?? ""} onChange={handleTextChange} />
-            </Stack>
+          <FormControlLabel
+            control={
+              <IconButton
+                onClick={() => setOpenObjectMappingExample((prev) => !prev)}
+                sx={{
+                  transform: openObjectMappingExample ? "rotate(180deg)" : "rotate(0deg)",
+                  transition: "transform 0.3s",
+                }}
+              >
+                <KeyboardArrowDown />
+              </IconButton>
+            }
+            label={t("objectDemo")}
+          />
 
+          <Collapse in={openObjectMappingExample}>
+            <Box mt={1}>
+              <ObjectMappingExample />
+            </Box>
+          </Collapse>
+
+          {renderAlertContent()}
+        </Stack>
+      )}
+
+      {["text", "number", "email", "tel", "url", "switch", "checkbox", "radio", "select", "date"].includes(ancestorType || "") && (
+        <Stack spacing={2}>
+          <Typography variant="body2">{t("staticValueDescription")}</Typography>
+          {!["switch", "checkbox"].includes(ancestorType || "") && (
+            <TextField fullWidth label={t("staticValue")} value={sourceValue ?? ""} onChange={handleTextChange} />
+          )}
+
+          {["switch", "checkbox"].includes(ancestorType || "") && (
             <FormControlLabel
               control={
-                <IconButton
-                  onClick={() => setOpenObjectMappingExample((prev) => !prev)}
-                  sx={{
-                    transform: openObjectMappingExample ? "rotate(180deg)" : "rotate(0deg)",
-                    transition: "transform 0.3s",
+                <Checkbox
+                  checked={isChecked}
+                  onChange={(e) => {
+                    const { checked } = e.target;
+
+                    setIsChecked(checked);
+                    onChange?.(checked ? String(checked) : undefined);
                   }}
-                >
-                  <KeyboardArrowDown />
-                </IconButton>
+                />
               }
-              label={t("objectDemo")}
+              label={t("staticValue")}
             />
+          )}
 
-            <Collapse in={openObjectMappingExample}>
-              <Box mt={1}>
-                <ObjectMappingExample />
-              </Box>
-            </Collapse>
-
-            <Typography>
-              Output type: <strong>{currentType}</strong>
-            </Typography>
-
-            {renderAlertContent()}
-          </Box>
-        )}
-
-        {["text", "number", "email", "tel", "url", "switch", "checkbox", "radio", "select", "date"].includes(ancestorType || "") && (
-          <Box component="section" sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-            <Typography variant="body2">{t("staticValueDescription")}</Typography>
-            {!["switch", "checkbox"].includes(ancestorType || "") && (
-              <TextField fullWidth label={t("staticValue")} value={sourceValue ?? ""} onChange={handleTextChange} />
-            )}
-
-            {["switch", "checkbox"].includes(ancestorType || "") && (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={isChecked}
-                    onChange={(e) => {
-                      const { checked } = e.target;
-
-                      setIsChecked(checked);
-                      onChange?.(checked ? String(checked) : undefined);
-                    }}
-                  />
-                }
-                label={t("staticValue")}
-              />
-            )}
-
-            {renderAlertContent()}
-          </Box>
-        )}
-      </Grid>
-    </Grid>
+          {renderAlertContent()}
+        </Stack>
+      )}
+    </Stack>
   );
 };
 

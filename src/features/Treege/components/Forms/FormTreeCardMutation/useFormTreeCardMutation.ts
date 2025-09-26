@@ -17,11 +17,7 @@ interface Values {
   message?: string;
 }
 
-interface UseFormTreeCardMutationParams {
-  setIsLarge?(largeModal: boolean): void;
-}
-
-const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) => {
+const useFormTreeCardMutation = () => {
   const uuidRef = useRef(getUUID());
   const uuid = uuidRef.current;
   const defaultValues = useMemo(() => [{ id: "0", label: "", message: "", value: "" }], []);
@@ -57,7 +53,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   const [patternMessage, setPatternMessage] = useState("");
   const [defaultValueFromAncestor, setDefaultValueFromAncestor] = useState<DefaultValueFromAncestor | undefined>(undefined);
   const [selectAncestorName, setSelectAncestorName] = useState<string | undefined>("");
-  const [collapseOptions, setCollapseOptions] = useState<boolean>(false);
+  const validDynamicUrlParams = [...(route?.url?.matchAll(/{(.*?)}/g) ?? [])].filter((m) => m[1] !== "").map((m) => m[0]);
 
   // State
   const isTreeField = type === "tree";
@@ -82,7 +78,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
   const ancestorsName = useMemo(() => ancestors.map(({ name: getNames }) => getNames || ""), [ancestors]);
   const getDisabledValueField = useCallback((index: number) => !isDecisionField && index > 0, [isDecisionField]);
   const hasAncestors = !!ancestorsName.length;
-  const isLargeView = isAutocomplete || isDynamicSelect || !!selectAncestorName;
+  const hasApiConfig = isAutocomplete || isDynamicSelect;
 
   const { refetch: fetchWorkflow, isLoading: isWorkflowLoading } = useWorkflowQuery(treeSelected, { enabled: false });
 
@@ -310,14 +306,14 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     setValues((prevState) => prevState.filter(({ id }) => currentTarget.value !== id));
   };
 
-  const handleDeleteParam = (e: MouseEvent<HTMLButtonElement>) => {
-    const buttonValue = e.currentTarget.value;
+  const handleDeleteParam = (arg: MouseEvent<HTMLButtonElement> | string) => {
+    const id = typeof arg === "string" ? arg : arg.currentTarget.value;
 
     setRoute((prevRoute) => {
       const safeRoute = prevRoute ?? {};
       const currentParams = safeRoute.params ?? [];
 
-      const updatedParams = currentParams.filter(({ id }) => id !== buttonValue);
+      const updatedParams = currentParams.filter((param) => param.id !== id);
       const nextParams = updatedParams.length > 0 ? updatedParams : undefined;
 
       return {
@@ -624,16 +620,8 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     patternOptions,
   ]);
 
-  // Adapt parent size Dialog view
-  useEffect(() => {
-    if (setIsLarge) {
-      setIsLarge(isLargeView);
-    }
-  }, [isLargeView, setIsLarge]);
-
   return {
     ancestors,
-    collapseOptions,
     currentTree,
     defaultValueFromAncestor,
     getDisabledValueField,
@@ -666,6 +654,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     handleSubmit,
     handleValueFromAncestor,
     hasAncestors,
+    hasApiConfig,
     helperText,
     hiddenValue,
     initialQuery,
@@ -675,9 +664,7 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     isDecision,
     isDecisionField,
     isDisabledPast,
-    isDynamicSelect,
     isHiddenField,
-    isLargeView,
     isMultiple,
     isMultiplePossible,
     isPatternEnabled,
@@ -695,11 +682,11 @@ const useFormTreeCardMutation = ({ setIsLarge }: UseFormTreeCardMutationParams) 
     required,
     route,
     selectAncestorName,
-    setCollapseOptions,
     tag,
     treeSelected,
     type,
     uuid,
+    validDynamicUrlParams,
     values,
   };
 };

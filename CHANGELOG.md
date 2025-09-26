@@ -1,8 +1,7 @@
 # [Versions](https://github.com/Tracktor/treege/releases)
 
-## v2.0.1
+## v2.1.0
 
-### 🧹 Chore
+### 🧹 Features
 
-- Migration to React 19 and Vite v7.
-- Updated dependencies and configuration for compatibility.
+- UX improvements and bug fixes.
