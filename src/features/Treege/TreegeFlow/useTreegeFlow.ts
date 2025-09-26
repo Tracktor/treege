@@ -1,5 +1,5 @@
 import { useReactFlow } from "@xyflow/react";
-import { useEffect, useRef } from "react";
+import { MouseEvent, useEffect, useRef, useState } from "react";
 import reactFlowToMinimal from "@/features/Treege/TreegeFlow/utils/toMinimalConverter";
 import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
 
@@ -10,6 +10,16 @@ const useTreegeFlow = () => {
   const isGraphEmpty = !graph || graph.nodes.length === 0;
   const { fitView } = useReactFlow();
   const didFitView = useRef(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const open = Boolean(anchorEl);
+
+  const handleOpen = (event: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleViewerChange = (value: string) => {
     const parsed = JSON.parse(value);
@@ -31,8 +41,11 @@ const useTreegeFlow = () => {
   }, [nodes.length, fitView]);
 
   return {
+    anchorEl,
     edges,
     graph,
+    handleClose,
+    handleOpen,
     handleViewerChange,
     isGraphEmpty,
     layoutEngineName,
@@ -41,6 +54,7 @@ const useTreegeFlow = () => {
     onConnect,
     onEdgesChange,
     onNodesChange,
+    open,
     setLayoutEngineName,
   };
 };

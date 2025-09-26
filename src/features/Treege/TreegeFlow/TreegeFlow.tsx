@@ -1,4 +1,5 @@
-import { Box, GlobalStyles, Stack, Select, MenuItem, Typography } from "@tracktor/design-system";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { Box, GlobalStyles, Stack, Select, MenuItem, Typography, IconButton, Popover } from "@tracktor/design-system";
 import { ReactFlow, Controls } from "@xyflow/react";
 import Logo from "@/components/DataDisplay/Logo/Logo";
 import ViewerJSON from "@/components/DataDisplay/ViewerJSON/ViewerJSON";
@@ -14,6 +15,10 @@ import useTreegeFlow from "@/features/Treege/TreegeFlow/useTreegeFlow";
 
 const TreegeFlow = () => {
   const {
+    open,
+    anchorEl,
+    handleOpen,
+    handleClose,
     nodes,
     onNodesChange,
     onEdgesChange,
@@ -31,14 +36,33 @@ const TreegeFlow = () => {
       <Header>
         <Stack justifyContent="space-between" direction="row" alignItems="center">
           <Logo />
+          <IconButton onClick={handleOpen} size="small">
+            <SettingsIcon />
+          </IconButton>
 
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Typography>Layout Engine:</Typography>
-            <Select value={layoutEngineName} onChange={(e) => setLayoutEngineName(e.target.value)} size="small">
-              <MenuItem value="dagre">Dagre</MenuItem>
-              <MenuItem value="elk">ELK</MenuItem>
-            </Select>
-          </Stack>
+          <Popover
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+              horizontal: "right",
+              vertical: "bottom",
+            }}
+            transformOrigin={{
+              horizontal: "right",
+              vertical: "top",
+            }}
+          >
+            <Box p={2}>
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <Typography>Layout Engine:</Typography>
+                <Select value={layoutEngineName} onChange={(e) => setLayoutEngineName(e.target.value)} size="small">
+                  <MenuItem value="dagre">Dagre</MenuItem>
+                  <MenuItem value="elk">ELK</MenuItem>
+                </Select>
+              </Stack>
+            </Box>
+          </Popover>
         </Stack>
       </Header>
       <Main>
