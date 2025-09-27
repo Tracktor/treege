@@ -53,8 +53,8 @@ const TreegeFlow = () => {
               vertical: "top",
             }}
           >
-            <Box p={2}>
-              <Stack alignItems="center" spacing={2}>
+            <Stack spacing={2} p={2}>
+              <Stack spacing={1}>
                 <Typography>Layout Engine:</Typography>
 
                 <ButtonGroup
@@ -82,7 +82,7 @@ const TreegeFlow = () => {
                 </ButtonGroup>
               </Stack>
 
-              <Stack alignItems="center" spacing={2}>
+              <Stack spacing={1}>
                 <Typography>Orientation:</Typography>
                 <ButtonGroup
                   variant="outlined"
@@ -108,10 +108,11 @@ const TreegeFlow = () => {
                   </Button>
                 </ButtonGroup>
               </Stack>
-            </Box>
+            </Stack>
           </Popover>
         </Stack>
       </Header>
+
       <Main>
         {isGraphEmpty ? (
           <ButtonCreateGraph />
