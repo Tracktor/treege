@@ -42,6 +42,7 @@ const useTreegeFlow = () => {
         await fitView({
           duration: 300,
           includeHiddenNodes: false,
+          maxZoom: 1,
           padding: 0.2,
         });
       })();
