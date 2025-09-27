@@ -5,7 +5,7 @@ import { Card, CardContent, Chip, Box, Typography, IconButton, Stack } from "@tr
 import { NodeProps, Node, Position, useNodeConnections } from "@xyflow/react";
 import { memo, ReactNode, useContext, useState } from "react";
 import colors from "@/constants/colors";
-import { TreegeFlowContext } from "@/context/TreegeFlow/TreegeFlow.context";
+import { TreegeFlowContext } from "@/context/TreegeFlow/TreegeFlowContext";
 import HandleSource from "@/features/Treege/TreegeFlow/Handlers/HandleSource";
 import HandleTarget from "@/features/Treege/TreegeFlow/Handlers/HandleTarget";
 import { isNodeType, nodeConfig } from "@/features/Treege/TreegeFlow/Nodes/nodeConfig";

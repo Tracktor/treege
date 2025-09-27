@@ -1,6 +1,6 @@
 import { Connection, Edge, Node, useEdgesState, useNodesState } from "@xyflow/react";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
-import { TreegeFlowContext, TreegeFlowContextValue } from "@/context/TreegeFlow/TreegeFlow.context";
+import { TreegeFlowContext, TreegeFlowContextValue } from "@/context/TreegeFlow/TreegeFlowContext";
 import dagreLayout from "@/features/Treege/TreegeFlow/Layout/dagre/dagreLayout";
 import elkLayout from "@/features/Treege/TreegeFlow/Layout/ELK/elkLayout";
 import useLaidOutGraph from "@/features/Treege/TreegeFlow/Layout/useLaidOutGraph";
