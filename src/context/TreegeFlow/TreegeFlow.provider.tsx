@@ -1,50 +1,11 @@
-import { Edge, Node, useEdgesState, useNodesState, Connection, NodeChange, EdgeChange } from "@xyflow/react";
-import { createContext, ReactNode, useMemo, useState, useCallback, useEffect } from "react";
+import { Connection, Edge, Node, useEdgesState, useNodesState } from "@xyflow/react";
+import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { TreegeFlowContext, TreegeFlowContextValue } from "@/context/TreegeFlow/TreegeFlow.context";
 import dagreLayout from "@/features/Treege/TreegeFlow/Layout/dagre/dagreLayout";
 import elkLayout from "@/features/Treege/TreegeFlow/Layout/ELK/elkLayout";
 import useLaidOutGraph from "@/features/Treege/TreegeFlow/Layout/useLaidOutGraph";
 import { TreeEdge, TreeGraph, TreeNode, TreeNodeData } from "@/features/Treege/TreegeFlow/utils/types";
 import { getUUID } from "@/utils";
-
-export interface TreegeFlowContextValue {
-  nodes: Node<TreeNodeData>[];
-  edges: Edge[];
-  graph: TreeGraph;
-  setGraph: (g: TreeGraph) => void;
-  onNodesChange: (changes: NodeChange<Node<TreeNodeData>>[]) => void;
-  onEdgesChange: (changes: EdgeChange<Edge>[]) => void;
-  onConnect: (connection: Connection) => void;
-  updateNode: (nodeId: string, attributes: TreeNode["attributes"], children?: TreeNode[]) => void;
-  addChild: (nodeId: string, child: TreeNode) => void;
-  addNode: (
-    parentId?: string,
-    attrs?: Partial<TreeNode["attributes"]> & {
-      childId?: string;
-      children?: TreeNode[];
-    },
-  ) => void;
-  deleteNode: (nodeId: string) => void;
-  deleteEdge: (edgeId: string) => void;
-  layoutEngineName: "dagre" | "elk";
-  setLayoutEngineName: (name: "dagre" | "elk") => void;
-}
-
-export const TreegeFlowContext = createContext<TreegeFlowContextValue>({
-  addChild: () => {},
-  addNode: () => {},
-  deleteEdge: () => {},
-  deleteNode: () => {},
-  edges: [],
-  graph: { edges: [], nodes: [] },
-  layoutEngineName: "dagre",
-  nodes: [],
-  onConnect: () => {},
-  onEdgesChange: () => {},
-  onNodesChange: () => {},
-  setGraph: () => {},
-  setLayoutEngineName: () => {},
-  updateNode: () => {},
-});
 
 const EMPTY_GRAPH: TreeGraph = { edges: [], nodes: [] };
 

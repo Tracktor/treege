@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { TreegeFlowContext } from "@/features/Treege/context/TreegeFlowProvider";
+import { TreegeFlowContext } from "@/context/TreegeFlow/TreegeFlow.context";
 
 const useTreegeFlowContext = () => useContext(TreegeFlowContext);
 

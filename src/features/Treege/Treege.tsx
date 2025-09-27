@@ -7,7 +7,7 @@ import { useLayoutEffect } from "react";
 import DarkTheme from "@/components/Theme/DarkTheme/DarkTheme";
 import queryConfig from "@/config/query.config";
 import AuthProvider from "@/context/Auth/AuthProvider";
-import TreegeFlowProvider from "@/features/Treege/context/TreegeFlowProvider";
+import TreegeFlowProvider from "@/context/TreegeFlow/TreegeFlow.provider";
 import TreegeProvider from "@/features/Treege/context/TreegeProvider";
 import "@/config/i18n.config";
 import "@xyflow/react/dist/style.css";
