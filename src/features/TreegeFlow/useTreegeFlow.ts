@@ -38,17 +38,15 @@ export const treeFlow = {
 };
 
 const useTreegeFlow = () => {
+  const prevNodeIdsRef = useRef<string[]>([]);
   const { nodes, edges, onNodesChange, onEdgesChange, graph, onConnect, setGraph, layoutEngineName, setLayoutEngineName } =
     useTreegeFlowContext();
+  const { fitView } = useReactFlow();
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const minimalGraph = reactFlowToMinimal(nodes, edges);
   const isGraphEmpty = !graph?.nodes || graph.nodes.length === 0;
-
-  const { fitView } = useReactFlow();
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const open = Boolean(anchorEl);
-
-  const prevNodeIdsRef = useRef<string[]>([]);
+  const open = !!anchorEl;
 
   const handleOpen = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
