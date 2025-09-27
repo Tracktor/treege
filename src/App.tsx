@@ -1,4 +1,4 @@
-import Treege from "@/features/Treege/Treege";
+import Treege from "@/features/Treege";
 
 const App = () => <Treege />;
 

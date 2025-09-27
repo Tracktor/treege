@@ -1,6 +1,6 @@
 import { Connection, Edge, EdgeChange, Node, NodeChange } from "@xyflow/react";
 import { createContext } from "react";
-import { TreeGraph, TreeNode, TreeNodeData } from "@/features/Treege/TreegeFlow/utils/types";
+import { TreeGraph, TreeNode, TreeNodeData } from "@/features/TreegeFlow/utils/types";
 
 export interface TreegeFlowContextValue {
   nodes: Node<TreeNodeData>[];

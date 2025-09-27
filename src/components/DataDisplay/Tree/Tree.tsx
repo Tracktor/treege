@@ -4,8 +4,8 @@ import { memo, ReactElement } from "react";
 import D3Tree, { RawNodeDatum, RenderCustomNodeElementFn } from "react-d3-tree";
 import useTree from "@/components/DataDisplay/Tree/useTree";
 import colors from "@/constants/colors";
-import ButtonCreateTree from "@/features/Treege/components/Inputs/ButtonCreateTree/ButtonCreateTree";
-import { TreeCustomNodeElementProps } from "@/features/Treege/components/TreeCardContainer/TreeCardContainer";
+import ButtonCreateTree from "@/features/TreegeTree/components/Inputs/ButtonCreateTree/ButtonCreateTree";
+import { TreeCustomNodeElementProps } from "@/features/TreegeTree/components/TreeCardContainer/TreeCardContainer";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 

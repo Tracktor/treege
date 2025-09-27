@@ -1,8 +1,8 @@
 import type { CurrentTree, ModalType, TreeNode, TreePath } from "@tracktor/types-treege";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import { createContext, Dispatch, ReactNode, SetStateAction, useEffect, useMemo, useReducer, useState } from "react";
-import treeReducer, { setTree, TreeReducerAction } from "@/features/Treege/reducer/treeReducer";
-import { BackendConfig } from "@/features/Treege/Treege";
+import { BackendConfig } from "@/features/Treege";
+import treeReducer, { setTree, TreeReducerAction } from "@/features/TreegeTree/reducer/treeReducer";
 import useWorkflowQuery from "@/services/workflows/query/useWorkflowQuery";
 import { version } from "~/package.json";
 

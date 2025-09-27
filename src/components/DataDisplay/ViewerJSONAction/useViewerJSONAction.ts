@@ -1,7 +1,7 @@
 import { useSnackbar } from "@tracktor/design-system";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { resetTree } from "@/features/Treege/reducer/treeReducer";
+import { resetTree } from "@/features/TreegeTree/reducer/treeReducer";
 import useTreegeContext from "@/hooks/useTreegeContext";
 import usePatchWorkflowsMutation from "@/services/workflows/mutation/usePatchWorkflowsMutation";
 import usePostWorkflowMutation from "@/services/workflows/mutation/usePostWorkflowMutation";
