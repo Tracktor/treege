@@ -1,7 +1,41 @@
 import { useReactFlow } from "@xyflow/react";
 import { MouseEvent, useEffect, useRef, useState } from "react";
+import EdgeFactory from "@/features/TreegeFlow/Edges/EdgeFactory";
+import NodeFactory from "@/features/TreegeFlow/Nodes/NodeFactory";
 import reactFlowToMinimal from "@/features/TreegeFlow/utils/toMinimalConverter";
 import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
+
+export const treeFlow = {
+  edges: {
+    default: EdgeFactory,
+    option: EdgeFactory,
+  },
+  nodes: {
+    address: NodeFactory,
+    autocomplete: NodeFactory,
+    boolean: NodeFactory,
+    checkbox: NodeFactory,
+    date: NodeFactory,
+    dateRange: NodeFactory,
+    default: NodeFactory,
+    dynamicSelect: NodeFactory,
+    email: NodeFactory,
+    file: NodeFactory,
+    hidden: NodeFactory,
+    number: NodeFactory,
+    option: NodeFactory,
+    password: NodeFactory,
+    radio: NodeFactory,
+    select: NodeFactory,
+    switch: NodeFactory,
+    tel: NodeFactory,
+    text: NodeFactory,
+    time: NodeFactory,
+    timeRange: NodeFactory,
+    title: NodeFactory,
+    url: NodeFactory,
+  },
+};
 
 const useTreegeFlow = () => {
   const { nodes, edges, onNodesChange, onEdgesChange, graph, onConnect, setGraph, layoutEngineName, setLayoutEngineName } =

@@ -8,9 +8,7 @@ import Main from "@/components/Layouts/Main/Main";
 import MosaicLayout from "@/components/Layouts/MosaicLayout/MosaicLayout";
 import Sidebar from "@/components/Layouts/Sidebar/Sidebar";
 import colors from "@/constants/colors";
-import edgesTypes from "@/features/TreegeFlow/Edges/edgesTypes";
-import nodesType from "@/features/TreegeFlow/Nodes/nodesType";
-import useTreegeFlow from "@/features/TreegeFlow/useTreegeFlow";
+import useTreegeFlow, { treeFlow } from "@/features/TreegeFlow/useTreegeFlow";
 import ButtonCreateGraph from "@/features/TreegeTree/components/Inputs/ButtonCreateGraph";
 
 const TreegeFlow = () => {
@@ -115,8 +113,8 @@ const TreegeFlow = () => {
               onConnect={onConnect}
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
-              nodeTypes={nodesType}
-              edgeTypes={edgesTypes}
+              nodeTypes={treeFlow.nodes}
+              edgeTypes={treeFlow.edges}
               maxZoom={5}
               minZoom={0.1}
               proOptions={{ hideAttribution: true }}
