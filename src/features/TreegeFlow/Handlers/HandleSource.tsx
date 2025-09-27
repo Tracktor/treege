@@ -1,21 +1,22 @@
 import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 import { Box } from "@tracktor/design-system";
 import { Handle, Position, useNodeConnections } from "@xyflow/react";
-import React, { CSSProperties, FC } from "react";
+import React, { FC, useContext } from "react";
 import colors from "@/constants/colors";
+import { TreegeFlowContext } from "@/context/TreegeFlow/TreegeFlowContext";
+import { NODE_CARD_HEIGHT } from "@/features/TreegeFlow/Nodes/NodeFactory";
 
 interface HandleSourceProps {
   handleId: string;
-  position?: Position;
-  rotation?: string;
-  style?: CSSProperties;
 }
 
-const HandleSource: FC<HandleSourceProps> = ({ handleId, position = Position.Right, rotation = "-90deg", style }) => {
+const HandleSource: FC<HandleSourceProps> = ({ handleId }) => {
+  const { orientation } = useContext(TreegeFlowContext);
   const connections = useNodeConnections({
     handleId,
     handleType: "source",
   });
+  const isVertical = orientation === "vertical";
 
   const isConnected = connections.length > 0;
 
@@ -23,13 +24,12 @@ const HandleSource: FC<HandleSourceProps> = ({ handleId, position = Position.Rig
     <Box sx={{ position: "relative" }}>
       <Handle
         type="source"
-        position={position}
+        position={isVertical ? Position.Bottom : Position.Right}
         id={handleId}
         isValidConnection={() => !isConnected}
         style={{
           height: 18,
           width: 18,
-          ...style,
         }}
       >
         <ArrowDropDownCircleIcon
@@ -37,14 +37,14 @@ const HandleSource: FC<HandleSourceProps> = ({ handleId, position = Position.Rig
             "&:hover": { backgroundColor: colors.secondary },
             backgroundColor: isConnected ? colors.grey500 : colors.primary,
             borderRadius: "50%",
-            bottom: -12,
+            bottom: isVertical ? -12 : NODE_CARD_HEIGHT / 2,
             color: colors.background,
             cursor: "pointer",
             fontSize: 20,
             left: "calc(50% - 10px)",
             position: "absolute",
-            transform: `translateY(-50%) rotate(${rotation})`,
-            ...style,
+            top: "50%",
+            transform: `translateY(${isVertical ? "-50%" : "0%"}) rotate(${isVertical ? "0deg" : "-90deg"})`,
           }}
         />
       </Handle>

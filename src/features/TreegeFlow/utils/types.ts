@@ -151,3 +151,5 @@ export interface TreeGraph {
   nodes?: TreeNode[];
   edges?: TreeEdge[];
 }
+
+export type Orientation = "vertical" | "horizontal";

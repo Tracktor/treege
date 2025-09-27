@@ -1,10 +1,10 @@
 import { Edge, Node, Position } from "@xyflow/react";
 import ELK from "elkjs/lib/elk.bundled.js";
-import ELKOptionConfig, { ElkLayoutOptions } from "@/features/TreegeFlow/Layout/ELK/ELKOptionConfig";
+import ELKOptionConfig, { ElkDirection } from "@/features/TreegeFlow/Layout/ELK/ELKOptionConfig";
+import { Orientation } from "@/features/TreegeFlow/utils/types";
 
 const elk = new ELK();
 
-// un Node dont data peut contenir attributes.type
 type NodeWithAttributes<T> = Node<
   T & {
     attributes?: {
@@ -16,11 +16,12 @@ type NodeWithAttributes<T> = Node<
 const elkLayout = async <T extends Record<string, unknown>>(
   nodes: NodeWithAttributes<T>[],
   edges: Edge[],
-  options: ElkLayoutOptions = {},
+  orientation: Orientation = "vertical",
 ): Promise<{ nodes: NodeWithAttributes<T>[]; edges: Edge[] }> => {
+  const elkDirection: ElkDirection = orientation === "horizontal" ? "RIGHT" : "DOWN";
+
   const graph = {
     children: nodes.map((node) => {
-      // Détection sûre de l’option
       const isOption = node.data?.attributes?.type === "option";
 
       return {
@@ -42,8 +43,8 @@ const elkLayout = async <T extends Record<string, unknown>>(
     id: "root",
     layoutOptions: {
       ...ELKOptionConfig,
-      ...options,
       "elk.algorithm": "layered",
+      "elk.direction": elkDirection,
       "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
     },
   };
@@ -69,8 +70,8 @@ const elkLayout = async <T extends Record<string, unknown>>(
           ...node,
           height: pos.height,
           position: { x: pos.x, y: pos.y },
-          sourcePosition: Position.Bottom,
-          targetPosition: Position.Top,
+          sourcePosition: orientation === "horizontal" ? Position.Right : Position.Bottom,
+          targetPosition: orientation === "horizontal" ? Position.Left : Position.Top,
           width: pos.width,
         }
       : node;

@@ -1,6 +1,6 @@
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { IconButton, Box } from "@tracktor/design-system";
-import { BaseEdge, EdgeLabelRenderer, EdgeProps, getSmoothStepPath, Position, useReactFlow } from "@xyflow/react";
+import { BaseEdge, EdgeLabelRenderer, EdgeProps, getSmoothStepPath, Position } from "@xyflow/react";
 import { CSSProperties, memo, MouseEvent } from "react";
 import colors from "@/constants/colors";
 import edgeConfig from "@/features/TreegeFlow/Edges/edgeConfig";
@@ -44,12 +44,10 @@ const EdgeRender = ({
     targetY,
   });
 
-  const { setEdges } = useReactFlow();
   const { deleteEdge } = useTreegeFlowContext();
 
   const onEdgeClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setEdges((edges) => edges.filter((edge) => edge.id !== id));
     deleteEdge(id);
   };
 

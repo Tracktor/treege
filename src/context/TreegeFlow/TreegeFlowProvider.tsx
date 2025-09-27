@@ -4,7 +4,7 @@ import { TreegeFlowContext, TreegeFlowContextValue } from "@/context/TreegeFlow/
 import dagreLayout from "@/features/TreegeFlow/Layout/dagre/dagreLayout";
 import elkLayout from "@/features/TreegeFlow/Layout/ELK/elkLayout";
 import useLaidOutGraph from "@/features/TreegeFlow/Layout/useLaidOutGraph";
-import { TreeEdge, TreeGraph, TreeNode, TreeNodeData } from "@/features/TreegeFlow/utils/types";
+import { Orientation, TreeEdge, TreeGraph, TreeNode, TreeNodeData } from "@/features/TreegeFlow/utils/types";
 import { getUUID } from "@/utils";
 
 const EMPTY_GRAPH: TreeGraph = { edges: [], nodes: [] };
@@ -18,10 +18,10 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
   const [graph, setGraph] = useState<TreeGraph>(initialGraph ?? EMPTY_GRAPH);
 
   const [layoutEngineName, setLayoutEngineName] = useState<"dagre" | "elk">("elk");
-  const [orientation, setOrientation] = useState<"vertical" | "horizontal">("vertical");
+  const [orientation, setOrientation] = useState<Orientation>("vertical");
   const layoutEngine = layoutEngineName === "dagre" ? dagreLayout : elkLayout;
 
-  const { nodes: laidOutNodes, edges: laidOutEdges } = useLaidOutGraph(graph, layoutEngine);
+  const { nodes: laidOutNodes, edges: laidOutEdges } = useLaidOutGraph(graph, layoutEngine, orientation);
 
   const [nodes, setNodes, onNodesChange] = useNodesState<Node<TreeNodeData>>(laidOutNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(laidOutEdges);

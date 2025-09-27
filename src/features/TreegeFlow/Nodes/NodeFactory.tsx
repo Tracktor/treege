@@ -1,8 +1,8 @@
 import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
 import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import EditIcon from "@mui/icons-material/Edit";
-import { Card, CardContent, Chip, Box, Typography, IconButton, Stack } from "@tracktor/design-system";
-import { NodeProps, Node, Position, useNodeConnections } from "@xyflow/react";
+import { Box, Card, CardContent, Chip, IconButton, Stack, Typography } from "@tracktor/design-system";
+import { Node, NodeProps, useNodeConnections } from "@xyflow/react";
 import { memo, ReactNode, useContext, useState } from "react";
 import colors from "@/constants/colors";
 import { TreegeFlowContext } from "@/context/TreegeFlow/TreegeFlowContext";
@@ -11,6 +11,9 @@ import HandleTarget from "@/features/TreegeFlow/Handlers/HandleTarget";
 import { isNodeType, nodeConfig } from "@/features/TreegeFlow/Nodes/nodeConfig";
 import NodeMutationDialog from "@/features/TreegeFlow/Nodes/NodeMutationDialog";
 import { FieldType, TreeNode, TreeNodeData } from "@/features/TreegeFlow/utils/types";
+
+export const NODE_CARD_WIDTH = 200;
+export const NODE_CARD_HEIGHT = 150;
 
 interface NodeParams {
   id: string;
@@ -82,7 +85,7 @@ const NodeRenderer = ({
   return (
     <>
       <Box component="div">
-        <HandleTarget handleId={`${id}-in`} position={Position.Top} />
+        <HandleTarget handleId={`${id}-in`} />
 
         <Card
           sx={{
@@ -95,9 +98,9 @@ const NodeRenderer = ({
             sx={{
               display: "flex",
               flexDirection: "column",
-              height: 150,
+              height: NODE_CARD_HEIGHT,
               justifyContent: "space-between",
-              width: 200,
+              width: NODE_CARD_WIDTH,
             }}
           >
             <Stack spacing={2} alignItems="flex-end">
@@ -127,7 +130,7 @@ const NodeRenderer = ({
           </CardContent>
         </Card>
 
-        <HandleSource handleId={`${id}-out`} position={Position.Bottom} rotation="0deg" />
+        <HandleSource handleId={`${id}-out`} />
 
         {children}
       </Box>
