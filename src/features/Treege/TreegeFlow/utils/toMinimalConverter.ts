@@ -1,5 +1,5 @@
 import { Node, Edge } from "@xyflow/react";
-import { MinimalEdge, TreeGraph, TreeNode, TreeNodeData } from "@/features/Treege/TreegeFlow/utils/types";
+import { TreeEdge, TreeGraph, TreeNode, TreeNodeData } from "@/features/Treege/TreegeFlow/utils/types";
 
 /** Convert ReactFlow nodes → TreeNodes[] */
 const toTreeNodes = (reactFlowNodes: Node<TreeNodeData>[]): TreeNodeData[] =>
@@ -56,9 +56,9 @@ const toTreeNodes = (reactFlowNodes: Node<TreeNodeData>[]): TreeNodeData[] =>
       };
     });
 
-/** Convert ReactFlow edges → MinimalEdge[] */
-const toTreeEdges = (rfEdges: Edge[]): MinimalEdge[] =>
-  rfEdges.map((e) => ({
+/** Convert ReactFlow edges → TreeEdge[] */
+const toTreeEdges = (reactFlowEdges: Edge[]): TreeEdge[] =>
+  reactFlowEdges.map((e) => ({
     source: e.source,
     target: e.target,
     type: e.type ?? (e.id.includes("-option-") ? "option" : "default"),

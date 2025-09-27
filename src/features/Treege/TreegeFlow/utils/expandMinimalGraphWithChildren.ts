@@ -1,9 +1,9 @@
-import { MinimalEdge, TreeNode } from "@/features/Treege/TreegeFlow/utils/types";
+import { TreeEdge, TreeNode } from "@/features/Treege/TreegeFlow/utils/types";
 import { getUUID } from "@/utils";
 
 export type TreeGraph = {
   nodes: TreeNode[];
-  edges: MinimalEdge[];
+  edges: TreeEdge[];
 };
 
 /**
@@ -12,7 +12,7 @@ export type TreeGraph = {
  */
 const expandTreeGraphWithChildren = (graph: TreeGraph): TreeGraph => {
   const extraNodes: TreeNode[] = [];
-  const extraEdges: MinimalEdge[] = [];
+  const extraEdges: TreeEdge[] = [];
 
   const existingNodeUuids = new Set(graph.nodes.map((n) => n.uuid));
   const existingEdgeUuids = new Set(graph.edges.map((e) => e.uuid));
@@ -24,7 +24,7 @@ const expandTreeGraphWithChildren = (graph: TreeGraph): TreeGraph => {
     }
   };
 
-  const addEdgeIfNotExists = (edge: MinimalEdge) => {
+  const addEdgeIfNotExists = (edge: TreeEdge) => {
     if (!existingEdgeUuids.has(edge.uuid)) {
       extraEdges.push(edge);
       existingEdgeUuids.add(edge.uuid);

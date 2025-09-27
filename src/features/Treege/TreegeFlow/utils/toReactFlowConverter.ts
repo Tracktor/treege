@@ -1,5 +1,5 @@
 import { Node, Edge, Position } from "@xyflow/react";
-import { TreeNode, TreeNodeData, MinimalEdge } from "@/features/Treege/TreegeFlow/utils/types";
+import { TreeNode, TreeNodeData, TreeEdge } from "@/features/Treege/TreegeFlow/utils/types";
 
 /**
  * Convert TreeNode[] → Node ReactFlow
@@ -19,9 +19,9 @@ export const toReactFlowNodes = (treeNodes: TreeNode[]): Node<TreeNodeData>[] =>
   }));
 
 /**
- * Convert MinimalEdge[] → Edge ReactFlow
+ * Convert TreeEdge[] → Edge ReactFlow
  */
-export const toReactFlowEdges = (edges: MinimalEdge[]): Edge[] =>
+export const toReactFlowEdges = (edges: TreeEdge[]): Edge[] =>
   edges.map((e) => ({
     id: e.uuid,
     source: e.source,

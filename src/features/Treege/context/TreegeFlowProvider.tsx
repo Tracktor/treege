@@ -3,7 +3,7 @@ import { createContext, ReactNode, useMemo, useState, useCallback, useEffect } f
 import dagreLayout from "@/features/Treege/TreegeFlow/Layout/dagre/dagreLayout";
 import elkLayout from "@/features/Treege/TreegeFlow/Layout/ELK/elkLayout";
 import useLaidOutGraph from "@/features/Treege/TreegeFlow/Layout/useLaidOutGraph";
-import { MinimalEdge, TreeGraph, TreeNode, TreeNodeData } from "@/features/Treege/TreegeFlow/utils/types";
+import { TreeEdge, TreeGraph, TreeNode, TreeNodeData } from "@/features/Treege/TreegeFlow/utils/types";
 import { getUUID } from "@/utils";
 
 export interface TreegeFlowContextValue {
@@ -102,7 +102,7 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
           return { edges: prev.edges, nodes: [...prev.nodes, newNode] };
         }
 
-        const newEdges: MinimalEdge[] = childId
+        const newEdges: TreeEdge[] = childId
           ? [
               ...prev.edges.filter((e) => !(e.source === parentId && e.target === childId)),
               { source: parentId, target: newNodeId, uuid: getId("edge") },
@@ -163,7 +163,7 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
         const remainingEdges = prev.edges.filter((e) => e.source !== nodeId && e.target !== nodeId);
         const remainingNodes = prev.nodes.filter((n) => n.uuid !== nodeId);
 
-        const newEdges: MinimalEdge[] = [];
+        const newEdges: TreeEdge[] = [];
         parents.forEach((p) => {
           newChildren.forEach((c) => {
             const alreadyExists = remainingEdges.some((e) => e.source === p && e.target === c);
@@ -195,7 +195,7 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
         const exists = prev.edges.some((e) => e.source === connection.source && e.target === connection.target);
         if (exists) return prev;
 
-        const newEdge: MinimalEdge = {
+        const newEdge: TreeEdge = {
           source: connection.source,
           target: connection.target,
           uuid: getEdgeId(),

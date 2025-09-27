@@ -138,17 +138,7 @@ export interface TreeNode {
       };
 }
 
-export type Attributes = {
-  name: string;
-  label: string;
-  value: string;
-  type?: string;
-  isDecision?: boolean;
-  sourceHandle?: string;
-  message?: string;
-};
-
-export type MinimalEdge = {
+export type TreeEdge = {
   uuid: string;
   source: string;
   target: string;
@@ -159,5 +149,5 @@ export type TreeNodeData = TreeNode & Record<string, unknown>;
 
 export interface TreeGraph {
   nodes: TreeNode[];
-  edges: MinimalEdge[];
+  edges: TreeEdge[];
 }
