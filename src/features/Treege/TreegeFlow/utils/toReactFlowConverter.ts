@@ -5,11 +5,10 @@ import { CustomNodeData, MinimalEdge, MinimalNode } from "@/features/Treege/Tree
  * Convert MinimalNode → Node ReactFlow
  */
 export const toReactFlowNodes = (minimalNodes: MinimalNode[]): Node<CustomNodeData>[] =>
-  minimalNodes.map((m, index) => ({
+  minimalNodes.map((m) => ({
     data: {
       ...m.attributes,
       children: m.children,
-      order: index + 1,
     },
     height: 150,
     id: m.uuid,
