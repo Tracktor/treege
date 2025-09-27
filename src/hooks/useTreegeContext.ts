@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { TreegeContext } from "@/features/Treege/context/TreegeProvider";
+import { TreegeContext } from "@/context/TreegeTree/TreegeProvider";
 
 const useTreegeContext = () => {
   if (!TreegeContext) {
