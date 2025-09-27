@@ -66,9 +66,15 @@ const toTreeEdges = (reactFlowEdges: Edge[]): TreeEdge[] =>
   }));
 
 /** React Flow → MinimalGraph (imbriqué + edges complets) */
-const reactFlowToMinimal = (reactFlowNodes: Node<TreeNodeData>[], reactFlowEdges: Edge[]): TreeGraph => ({
-  edges: toTreeEdges(reactFlowEdges),
-  nodes: toTreeNodes(reactFlowNodes),
-});
+const reactFlowToMinimal = (reactFlowNodes: Node<TreeNodeData>[], reactFlowEdges: Edge[]): TreeGraph => {
+  if (!reactFlowNodes?.length && !reactFlowEdges?.length) {
+    return {};
+  }
+
+  return {
+    edges: toTreeEdges(reactFlowEdges),
+    nodes: toTreeNodes(reactFlowNodes),
+  };
+};
 
 export default reactFlowToMinimal;
