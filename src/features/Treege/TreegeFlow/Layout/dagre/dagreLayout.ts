@@ -1,6 +1,5 @@
 import { Edge, Node, Position } from "@xyflow/react";
 import dagre from "dagre";
-import { CustomNodeData } from "@/features/Treege/TreegeFlow/utils/types";
 
 /**
  * Options for Dagre layout.
@@ -15,13 +14,13 @@ export interface DagreLayoutOptions {
 }
 
 /**
- * Compute layout using Dagre (similar to ELK usage).
+ * Compute layout using Dagre (generic version like ELK usage).
  */
-const dagreLayout = async (
-  nodes: Node<CustomNodeData>[],
+const dagreLayout = async <T extends Record<string, unknown>>(
+  nodes: Node<T>[],
   edges: Edge[],
   options: DagreLayoutOptions = { nodesep: 100, rankdir: "TB", ranksep: 150 },
-): Promise<{ nodes: Node<CustomNodeData>[]; edges: Edge[] }> => {
+): Promise<{ nodes: Node<T>[]; edges: Edge[] }> => {
   const g = new dagre.graphlib.Graph();
   g.setGraph({
     nodesep: options.nodesep ?? 100,
@@ -52,7 +51,6 @@ const dagreLayout = async (
             x: dagreNode.x - dagreNode.width / 2,
             y: dagreNode.y - dagreNode.height / 2,
           },
-
           sourcePosition: options.rankdir === "LR" || options.rankdir === "RL" ? Position.Right : Position.Bottom,
           targetPosition: options.rankdir === "LR" || options.rankdir === "RL" ? Position.Left : Position.Top,
           width: dagreNode.width,

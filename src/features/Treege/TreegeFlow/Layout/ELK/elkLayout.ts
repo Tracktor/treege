@@ -1,15 +1,17 @@
 import { Edge, Node, Position } from "@xyflow/react";
 import ELK from "elkjs/lib/elk.bundled.js";
 import ELKOptionConfig, { ElkLayoutOptions } from "@/features/Treege/TreegeFlow/Layout/ELK/ELKOptionConfig";
-import { CustomNodeData } from "@/features/Treege/TreegeFlow/utils/types";
 
 const elk = new ELK();
 
-const elkLayout = async (
-  nodes: Node<CustomNodeData>[],
+/**
+ * Generic ELK layout function for any Node<T extends Record<string, unknown>>.
+ */
+const elkLayout = async <T extends Record<string, unknown>>(
+  nodes: Node<T>[],
   edges: Edge[],
   options: ElkLayoutOptions = {},
-): Promise<{ nodes: Node<CustomNodeData>[]; edges: Edge[] }> => {
+): Promise<{ nodes: Node<T>[]; edges: Edge[] }> => {
   const graph = {
     children: nodes.map((node) => ({
       height: node.height ?? 150,
@@ -28,7 +30,15 @@ const elkLayout = async (
   const layoutedGraph = await elk.layout(graph);
 
   const nodePositions = new Map(
-    (layoutedGraph.children ?? []).map((n) => [n.id, { height: n.height, width: n.width, x: n.x ?? 0, y: n.y ?? 0 }]),
+    (layoutedGraph.children ?? []).map((n) => [
+      n.id,
+      {
+        height: n.height,
+        width: n.width,
+        x: n.x ?? 0,
+        y: n.y ?? 0,
+      },
+    ]),
   );
 
   const newNodes = nodes.map((node) => {
