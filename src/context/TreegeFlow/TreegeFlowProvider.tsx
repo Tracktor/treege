@@ -18,6 +18,7 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
   const [graph, setGraph] = useState<TreeGraph>(initialGraph ?? EMPTY_GRAPH);
 
   const [layoutEngineName, setLayoutEngineName] = useState<"dagre" | "elk">("elk");
+  const [orientation, setOrientation] = useState<"vertical" | "horizontal">("vertical");
   const layoutEngine = layoutEngineName === "dagre" ? dagreLayout : elkLayout;
 
   const { nodes: laidOutNodes, edges: laidOutEdges } = useLaidOutGraph(graph, layoutEngine);
@@ -217,11 +218,27 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
       onConnect,
       onEdgesChange,
       onNodesChange,
+      orientation,
       setGraph,
       setLayoutEngineName,
+      setOrientation,
       updateNode,
     }),
-    [addChild, addNode, deleteEdge, deleteNode, edges, graph, nodes, onConnect, onEdgesChange, onNodesChange, updateNode, layoutEngineName],
+    [
+      addChild,
+      addNode,
+      deleteEdge,
+      deleteNode,
+      edges,
+      graph,
+      layoutEngineName,
+      nodes,
+      onConnect,
+      onEdgesChange,
+      onNodesChange,
+      orientation,
+      updateNode,
+    ],
   );
 
   return <TreegeFlowContext.Provider value={value}>{children}</TreegeFlowContext.Provider>;

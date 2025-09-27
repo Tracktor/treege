@@ -23,6 +23,8 @@ export interface TreegeFlowContextValue {
   deleteEdge: (edgeId: string) => void;
   layoutEngineName: "dagre" | "elk";
   setLayoutEngineName: (name: "dagre" | "elk") => void;
+  orientation: "vertical" | "horizontal";
+  setOrientation: (orientation: "vertical" | "horizontal") => void;
 }
 
 export const TreegeFlowContext = createContext<TreegeFlowContextValue>({
@@ -37,7 +39,9 @@ export const TreegeFlowContext = createContext<TreegeFlowContextValue>({
   onConnect: () => {},
   onEdgesChange: () => {},
   onNodesChange: () => {},
+  orientation: "vertical",
   setGraph: () => {},
   setLayoutEngineName: () => {},
+  setOrientation: () => {},
   updateNode: () => {},
 });

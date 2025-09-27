@@ -39,8 +39,19 @@ export const treeFlow = {
 
 const useTreegeFlow = () => {
   const prevNodeIdsRef = useRef<string[]>([]);
-  const { nodes, edges, onNodesChange, onEdgesChange, graph, onConnect, setGraph, layoutEngineName, setLayoutEngineName } =
-    useTreegeFlowContext();
+  const {
+    nodes,
+    edges,
+    onNodesChange,
+    onEdgesChange,
+    graph,
+    onConnect,
+    setGraph,
+    layoutEngineName,
+    setLayoutEngineName,
+    orientation,
+    setOrientation,
+  } = useTreegeFlowContext();
   const { fitView } = useReactFlow();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -98,7 +109,9 @@ const useTreegeFlow = () => {
     onEdgesChange,
     onNodesChange,
     open,
+    orientation,
     setLayoutEngineName,
+    setOrientation,
   };
 };
 

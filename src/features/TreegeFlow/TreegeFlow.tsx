@@ -14,6 +14,8 @@ import ButtonCreateGraph from "@/features/TreegeTree/components/Inputs/ButtonCre
 const TreegeFlow = () => {
   const {
     open,
+    orientation,
+    setOrientation,
     anchorEl,
     handleOpen,
     handleClose,
@@ -76,6 +78,33 @@ const TreegeFlow = () => {
                     sx={{ flex: 1 }}
                   >
                     ELK
+                  </Button>
+                </ButtonGroup>
+              </Stack>
+
+              <Stack alignItems="center" spacing={2}>
+                <Typography>Orientation:</Typography>
+                <ButtonGroup
+                  variant="outlined"
+                  size="small"
+                  sx={{
+                    display: "flex",
+                    width: 200,
+                  }}
+                >
+                  <Button
+                    onClick={() => setOrientation("vertical")}
+                    variant={orientation === "vertical" ? "contained" : "outlined"}
+                    sx={{ flex: 1 }}
+                  >
+                    Vertical
+                  </Button>
+                  <Button
+                    onClick={() => setOrientation("horizontal")}
+                    variant={orientation === "horizontal" ? "contained" : "outlined"}
+                    sx={{ flex: 1 }}
+                  >
+                    Horizontal
                   </Button>
                 </ButtonGroup>
               </Stack>
