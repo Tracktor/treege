@@ -31,7 +31,7 @@ export const TreegeFlowContext = createContext<TreegeFlowContextValue>({
   deleteEdge: () => {},
   deleteNode: () => {},
   edges: [],
-  graph: { edges: [], nodes: [] },
+  graph: {},
   layoutEngineName: "elk",
   nodes: [],
   onConnect: () => {},

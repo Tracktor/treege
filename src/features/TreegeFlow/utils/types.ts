@@ -148,6 +148,6 @@ export type TreeEdge = {
 export type TreeNodeData = TreeNode & Record<string, unknown>;
 
 export interface TreeGraph {
-  nodes: TreeNode[];
-  edges: TreeEdge[];
+  nodes?: TreeNode[];
+  edges?: TreeEdge[];
 }

@@ -4,8 +4,8 @@ import { TreeNode, TreeNodeData, TreeEdge } from "@/features/TreegeFlow/utils/ty
 /**
  * Convert TreeNode[] → Node ReactFlow
  */
-export const toReactFlowNodes = (treeNodes: TreeNode[]): Node<TreeNodeData>[] =>
-  treeNodes.map((node) => ({
+export const toReactFlowNodes = (treeNodes?: TreeNode[]): Node<TreeNodeData>[] =>
+  (treeNodes ?? []).map((node) => ({
     data: {
       ...node,
     },
@@ -21,8 +21,8 @@ export const toReactFlowNodes = (treeNodes: TreeNode[]): Node<TreeNodeData>[] =>
 /**
  * Convert TreeEdge[] → Edge ReactFlow
  */
-export const toReactFlowEdges = (edges: TreeEdge[]): Edge[] =>
-  edges.map((e) => ({
+export const toReactFlowEdges = (edges?: TreeEdge[]): Edge[] =>
+  (edges ?? []).map((e) => ({
     id: e.uuid,
     source: e.source,
     sourceHandle: `${e.source}-out`,

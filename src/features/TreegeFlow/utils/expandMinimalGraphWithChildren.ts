@@ -1,21 +1,19 @@
-import { TreeEdge, TreeNode } from "@/features/TreegeFlow/utils/types";
+import { TreeEdge, TreeGraph, TreeNode } from "@/features/TreegeFlow/utils/types";
 import { getUUID } from "@/utils";
-
-export type TreeGraph = {
-  nodes: TreeNode[];
-  edges: TreeEdge[];
-};
 
 /**
  * Expand a TreeGraph:
  * - Turns each node’s `children` into real option nodes and edges with UUIDs.
  */
 const expandTreeGraphWithChildren = (graph: TreeGraph): TreeGraph => {
+  const baseNodes = graph.nodes ?? [];
+  const baseEdges = graph.edges ?? [];
+
   const extraNodes: TreeNode[] = [];
   const extraEdges: TreeEdge[] = [];
 
-  const existingNodeUuids = new Set(graph.nodes.map((n) => n.uuid));
-  const existingEdgeUuids = new Set(graph.edges.map((e) => e.uuid));
+  const existingNodeUuids = new Set(baseNodes.map((n) => n.uuid));
+  const existingEdgeUuids = new Set(baseEdges.map((e) => e.uuid));
 
   const addNodeIfNotExists = (node: TreeNode) => {
     if (!existingNodeUuids.has(node.uuid)) {
@@ -50,15 +48,15 @@ const expandTreeGraphWithChildren = (graph: TreeGraph): TreeGraph => {
     });
   };
 
-  graph.nodes.forEach((node) => {
+  baseNodes.forEach((node) => {
     if (node.children?.length) {
       walkChildren(node, node.children);
     }
   });
 
   return {
-    edges: [...graph.edges, ...extraEdges],
-    nodes: [...graph.nodes, ...extraNodes],
+    edges: [...baseEdges, ...extraEdges],
+    nodes: [...baseNodes, ...extraNodes],
   };
 };
 

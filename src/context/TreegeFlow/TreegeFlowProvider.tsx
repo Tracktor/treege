@@ -32,6 +32,9 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
   const addNode = useCallback(
     (parentId?: string, attrs?: Partial<TreeNode["attributes"]> & { childId?: string; children?: TreeNode[] }) => {
       setGraph((prev) => {
+        const prevNodes = prev.nodes ?? [];
+        const prevEdges = prev.edges ?? [];
+
         const newNodeId = getId("node");
 
         const { childId, children: nodeChildren, ...nodeAttrs } = attrs ?? {};
@@ -60,18 +63,18 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
         };
 
         if (!parentId) {
-          return { edges: prev.edges, nodes: [...prev.nodes, newNode] };
+          return { edges: prevEdges, nodes: [...prevNodes, newNode] };
         }
 
         const newEdges: TreeEdge[] = childId
           ? [
-              ...prev.edges.filter((e) => !(e.source === parentId && e.target === childId)),
+              ...prevEdges.filter((e) => !(e.source === parentId && e.target === childId)),
               { source: parentId, target: newNodeId, uuid: getId("edge") },
               { source: newNodeId, target: childId, uuid: getId("edge") },
             ]
-          : [...prev.edges, { source: parentId, target: newNodeId, uuid: getId("edge") }];
+          : [...prevEdges, { source: parentId, target: newNodeId, uuid: getId("edge") }];
 
-        return { edges: newEdges, nodes: [...prev.nodes, newNode] };
+        return { edges: newEdges, nodes: [...prevNodes, newNode] };
       });
     },
     [getId],
@@ -79,34 +82,40 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
 
   /** Update a node’s attributes & children */
   const updateNode = useCallback((nodeId: string, attributes: TreeNode["attributes"], newChildren?: TreeNode[]) => {
-    setGraph((prev) => ({
-      ...prev,
-      nodes: prev.nodes.map((n) =>
-        n.uuid === nodeId
-          ? {
-              ...n,
-              attributes,
-              children: newChildren ?? n.children,
-            }
-          : n,
-      ),
-    }));
+    setGraph((prev) => {
+      const prevNodes = prev.nodes ?? [];
+
+      return {
+        ...prev,
+        nodes: prevNodes.map((n) =>
+          n.uuid === nodeId
+            ? {
+                ...n,
+                attributes,
+                children: newChildren ?? n.children,
+              }
+            : n,
+        ),
+      };
+    });
   }, []);
 
   /** Add a child TreeNode */
   const addChild = useCallback((nodeId: string, child: TreeNode) => {
     setGraph((prev) => {
-      const updatedNode = prev.nodes.find((n) => n.uuid === nodeId);
+      const prevNodes = prev.nodes ?? [];
+
+      const updatedNode = prevNodes.find((n) => n.uuid === nodeId);
       if (!updatedNode) return prev;
 
-      const newNode = {
+      const newNode: TreeNode = {
         ...updatedNode,
-        children: [...updatedNode.children, child],
+        children: [...(updatedNode.children ?? []), child],
       };
 
       return {
         ...prev,
-        nodes: prev.nodes.map((n) => (n.uuid === nodeId ? newNode : n)),
+        nodes: prevNodes.map((n) => (n.uuid === nodeId ? newNode : n)),
       };
     });
   }, []);
@@ -115,14 +124,17 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
   const deleteNode = useCallback(
     (nodeId: string) => {
       setGraph((prev) => {
-        const parentEdges = prev.edges.filter((e) => e.target === nodeId);
-        const childEdges = prev.edges.filter((e) => e.source === nodeId);
+        const prevNodes = prev.nodes ?? [];
+        const prevEdges = prev.edges ?? [];
+
+        const parentEdges = prevEdges.filter((e) => e.target === nodeId);
+        const childEdges = prevEdges.filter((e) => e.source === nodeId);
 
         const parents = parentEdges.map((e) => e.source);
         const newChildren = childEdges.map((e) => e.target);
 
-        const remainingEdges = prev.edges.filter((e) => e.source !== nodeId && e.target !== nodeId);
-        const remainingNodes = prev.nodes.filter((n) => n.uuid !== nodeId);
+        const remainingEdges = prevEdges.filter((e) => e.source !== nodeId && e.target !== nodeId);
+        const remainingNodes = prevNodes.filter((n) => n.uuid !== nodeId);
 
         const newEdges: TreeEdge[] = [];
         parents.forEach((p) => {
@@ -153,7 +165,9 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
       setGraph((prev) => {
         if (!connection.source || !connection.target) return prev;
 
-        const exists = prev.edges.some((e) => e.source === connection.source && e.target === connection.target);
+        const prevEdges = prev.edges ?? [];
+
+        const exists = prevEdges.some((e) => e.source === connection.source && e.target === connection.target);
         if (exists) return prev;
 
         const newEdge: TreeEdge = {
@@ -164,19 +178,24 @@ const TreegeFlowProvider = ({ children, initialGraph }: TreegeFlowProviderProps)
 
         return {
           ...prev,
-          edges: [...prev.edges, newEdge],
+          edges: [...prevEdges, newEdge],
+          nodes: prev.nodes ?? [],
         };
       });
     },
     [getEdgeId],
   );
-
   /** Delete an edge by its uuid */
   const deleteEdge = useCallback((edgeId: string) => {
-    setGraph((prev) => ({
-      ...prev,
-      edges: prev.edges.filter((e) => e.uuid !== edgeId),
-    }));
+    setGraph((prev) => {
+      const prevEdges = prev.edges ?? [];
+
+      return {
+        ...prev,
+        edges: prevEdges.filter((e) => e.uuid !== edgeId),
+        nodes: prev.nodes ?? [],
+      };
+    });
   }, []);
 
   /** Sync React Flow state with laid-out graph */

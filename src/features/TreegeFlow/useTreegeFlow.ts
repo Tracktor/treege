@@ -42,7 +42,7 @@ const useTreegeFlow = () => {
     useTreegeFlowContext();
 
   const minimalGraph = reactFlowToMinimal(nodes, edges);
-  const isGraphEmpty = !graph || graph.nodes.length === 0;
+  const isGraphEmpty = !graph?.nodes || graph.nodes.length === 0;
 
   const { fitView } = useReactFlow();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
