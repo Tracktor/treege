@@ -24,18 +24,17 @@ import {
 import { FormEvent, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import getCategoryOrTypes, { fieldCategory, fieldCategoryOrder, FieldType } from "@/features/Treege/TreegeFlow/utils/getCategoryOrTypes";
-import { Attributes, MinimalNode } from "@/features/Treege/TreegeFlow/utils/types";
+import { TreeNode } from "@/features/Treege/TreegeFlow/utils/types";
 import { getUUID } from "@/utils";
 
 interface ChildFormValues {
   uuid?: string;
   label: string;
-  message: string;
+  message?: string;
   name: string;
   value: string;
   type?: string;
   isDecision?: boolean;
-  sourceHandle?: string;
 }
 
 interface NodeConfigModalForm {
@@ -49,10 +48,10 @@ interface NodeConfigModalForm {
 }
 
 interface NodeConfigModalProps {
-  onSave: (config: Attributes & { children?: MinimalNode[] }) => void;
+  onSave: (config: TreeNode["attributes"] & { children?: TreeNode[] }) => void;
   onClose: () => void;
   isOpen: boolean;
-  initialValues?: Attributes & { children?: MinimalNode[] };
+  initialValues?: TreeNode["attributes"] & { children?: TreeNode[] };
 }
 
 const NodeMutationDialog = ({ isOpen, onSave, onClose, initialValues }: NodeConfigModalProps) => {
@@ -61,16 +60,29 @@ const NodeMutationDialog = ({ isOpen, onSave, onClose, initialValues }: NodeConf
   const initialCategory = typeof categoryOrType === "string" ? String(categoryOrType) : "textArea";
 
   const initialChildren: ChildFormValues[] =
-    initialValues?.children?.map((c) => ({
-      isDecision: c.attributes.isDecision,
-      label: c.attributes.label,
-      message: c.attributes.message ?? "",
-      name: c.attributes.name,
-      sourceHandle: c.attributes.sourceHandle,
-      type: c.attributes.type,
-      uuid: c.uuid,
-      value: c.attributes.value,
-    })) ?? [];
+    initialValues?.children?.map((c) => {
+      if ("type" in c.attributes) {
+        return {
+          isDecision: c.attributes.isDecision ?? false,
+          label: c.attributes.label ?? "",
+          message: "",
+          name: c.attributes.name,
+          type: c.attributes.type,
+          uuid: c.uuid,
+          value: c.attributes.values?.[0]?.value ?? "",
+        };
+      }
+
+      return {
+        isDecision: false,
+        label: c.attributes.label ?? "",
+        message: c.attributes.message ?? "",
+        name: c.attributes.name,
+        type: "option",
+        uuid: c.uuid,
+        value: c.attributes.value ?? "",
+      };
+    }) ?? [];
 
   const {
     Field,
@@ -90,31 +102,46 @@ const NodeMutationDialog = ({ isOpen, onSave, onClose, initialValues }: NodeConf
       value: initialValues?.value ?? "",
     } as NodeConfigModalForm,
     onSubmit: ({ value }) => {
-      const updatedChildren: MinimalNode[] = value.children.map((child) => ({
-        attributes: {
-          isDecision: child.isDecision,
+      const updatedChildren: TreeNode[] = value.children.map((child) => {
+        const uuid = child.uuid ?? getUUID();
+
+        const childAttributes: TreeNode["attributes"] = {
+          depth: 1,
           label: child.label,
           message: child.message,
           name: `${value.name}:${child.value}`,
-          sourceHandle: child.sourceHandle,
-          type: child.type ?? "option",
+          // todo: fix type casting
+          type: "option" as any,
           value: child.value,
-        },
-        children: [],
-        uuid: child.uuid ?? getUUID(),
-      }));
-      console.log(updatedChildren);
+        };
+
+        return { attributes: childAttributes, children: [], uuid };
+      });
+
+      const nodeAttributes: TreeNode["attributes"] =
+        value.type && value.type !== "option"
+          ? {
+              depth: 0,
+              isDecision: value.isDecision,
+              label: value.label,
+              name: value.name,
+              // todo: fix type casting
+              type: value.type as any,
+              values: value.value ? [{ id: value.name, label: value.label, value: value.value }] : undefined,
+            }
+          : {
+              depth: 0,
+              label: value.label,
+              message: undefined,
+              name: value.name,
+              value: value.value,
+            };
 
       onSave({
+        ...nodeAttributes,
         children: updatedChildren,
-        isDecision: value.isDecision,
-        label: value.label,
-        message: undefined,
-        name: value.name,
-        sourceHandle: undefined,
-        type: value.type,
-        value: value.value,
       });
+
       reset();
       onClose();
     },

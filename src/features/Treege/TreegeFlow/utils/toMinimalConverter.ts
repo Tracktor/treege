@@ -1,30 +1,47 @@
 import { Node, Edge } from "@xyflow/react";
-import { Attributes, CustomNodeData, MinimalEdge, MinimalGraph, MinimalNode } from "@/features/Treege/TreegeFlow/utils/types";
+import { MinimalEdge, TreeGraph, TreeNode, TreeNodeData } from "@/features/Treege/TreegeFlow/utils/types";
 
-/** Convert ReactFlow nodes → MinimalNode[] (imbriqué : enfants dans le parent) */
-const toMinimalNodes = (rfNodes: Node<CustomNodeData>[]): MinimalNode[] =>
-  rfNodes
-    .filter((n) => !n.id.includes("-option-") && n.data.type !== "option")
+/** Convert ReactFlow nodes → TreeNodes[] */
+const toTreeNodes = (reactFlowNodes: Node<TreeNodeData>[]): TreeNodeData[] =>
+  reactFlowNodes
+    .filter((n) => !n.id.includes("-option-") && n.data.attributes?.type !== "option")
     .map((n) => {
-      const attributes: Attributes = {
-        isDecision: n.data.isDecision ?? false,
-        label: n.data.label ?? "",
-        message: n.data.message ?? "",
-        name: n.data.name ?? "",
-        sourceHandle: n.data.sourceHandle,
-        type: n.data.type ?? "text",
-        value: n.data.value ?? "",
-      };
+      const attr = n.data.attributes;
 
-      const children: MinimalNode[] = Array.isArray(n.data.children)
+      const attributes: TreeNode["attributes"] =
+        attr && "type" in attr
+          ? {
+              depth: 0,
+              isDecision: attr.isDecision ?? false,
+              label: attr.label ?? "",
+              name: attr.name ?? "",
+              type: attr.type ?? "text",
+              values:
+                attr.values && attr.values.length > 0
+                  ? [
+                      {
+                        id: attr.name ?? "",
+                        label: attr.label ?? "",
+                        value: attr.values[0].value,
+                      },
+                    ]
+                  : undefined,
+            }
+          : {
+              depth: 0,
+              label: attr?.label ?? "",
+              message: String(attr?.message ?? ""),
+              name: attr?.name ?? "",
+              value: attr?.value ?? "",
+            };
+
+      const children: TreeNode[] = Array.isArray(n.data.children)
         ? n.data.children.map((child) => ({
             attributes: {
-              isDecision: child.attributes?.isDecision ?? false,
+              depth: 1,
               label: child.attributes?.label ?? "",
               message: child.attributes?.message ?? "",
-              name: child.attributes?.name ?? "",
-              sourceHandle: child.attributes?.sourceHandle,
-              type: child.attributes?.type ?? "option",
+              name: child.attributes?.name ?? `${attr.name}:`,
               value: child.attributes?.value ?? "",
             },
             children: [],
@@ -40,8 +57,7 @@ const toMinimalNodes = (rfNodes: Node<CustomNodeData>[]): MinimalNode[] =>
     });
 
 /** Convert ReactFlow edges → MinimalEdge[] */
-const toMinimalEdges = (rfEdges: Edge[]): MinimalEdge[] =>
-  // 🔹 On garde tous les edges, y compris ceux vers les enfants
+const toTreeEdges = (rfEdges: Edge[]): MinimalEdge[] =>
   rfEdges.map((e) => ({
     source: e.source,
     target: e.target,
@@ -50,9 +66,9 @@ const toMinimalEdges = (rfEdges: Edge[]): MinimalEdge[] =>
   }));
 
 /** React Flow → MinimalGraph (imbriqué + edges complets) */
-const reactFlowToMinimal = (rfNodes: Node<CustomNodeData>[], rfEdges: Edge[]): MinimalGraph => ({
-  edges: toMinimalEdges(rfEdges),
-  nodes: toMinimalNodes(rfNodes),
+const reactFlowToMinimal = (reactFlowNodes: Node<TreeNodeData>[], reactFlowEdges: Edge[]): TreeGraph => ({
+  edges: toTreeEdges(reactFlowEdges),
+  nodes: toTreeNodes(reactFlowNodes),
 });
 
 export default reactFlowToMinimal;

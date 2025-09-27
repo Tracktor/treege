@@ -10,11 +10,11 @@ import HandleSource from "@/features/Treege/TreegeFlow/Handlers/HandleSource";
 import HandleTarget from "@/features/Treege/TreegeFlow/Handlers/HandleTarget";
 import { isNodeType, nodeConfig } from "@/features/Treege/TreegeFlow/Nodes/nodeConfig";
 import NodeMutationDialog from "@/features/Treege/TreegeFlow/Nodes/NodeMutationDialog";
-import { CustomNodeData, Attributes, MinimalNode } from "@/features/Treege/TreegeFlow/utils/types";
+import { FieldType, TreeNode, TreeNodeData } from "@/features/Treege/TreegeFlow/utils/types";
 
 interface NodeParams {
   id: string;
-  data: CustomNodeData;
+  data: TreeNodeData;
   chipLabel: string;
   showAddButton?: boolean;
   showEditButton?: boolean;
@@ -35,14 +35,15 @@ const NodeRenderer = ({
 }: NodeParams) => {
   const { updateNode, addNode, deleteNode } = useContext(TreegeFlowContext);
   const childConnections = useNodeConnections({ handleType: "source" });
-  const { name } = data;
+  const { attributes } = data;
+  const nodeName = "type" in attributes ? attributes.name : attributes.name ?? "Node";
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"add" | "edit">("add");
   const isEditMode = modalMode === "edit";
 
   const initialValues = isEditMode
     ? {
-        ...data,
+        ...attributes,
         children: data.children ?? [],
       }
     : undefined;
@@ -63,16 +64,16 @@ const NodeRenderer = ({
     deleteNode(id);
   };
 
-  const handleSaveModal = (attributes: Attributes & { children?: MinimalNode[] }) => {
+  const handleSaveModal = (newAttributes: TreeNode["attributes"] & { children?: TreeNode[] }) => {
     if (isEditMode) {
-      updateNode(id, attributes, attributes.children);
+      updateNode(id, newAttributes, newAttributes.children);
       setIsModalOpen(false);
       return;
     }
 
     const firstChildId = childConnections[0]?.target;
     addNode(id, {
-      ...(attributes as Attributes),
+      ...(newAttributes as TreeNode["attributes"]),
       childId: firstChildId,
     });
     setIsModalOpen(false);
@@ -100,7 +101,7 @@ const NodeRenderer = ({
             }}
           >
             <Stack spacing={2} alignItems="flex-end">
-              <Typography variant="h5">{name}</Typography>
+              <Typography variant="h5">{nodeName}</Typography>
               <Chip color="info" size="small" label={chipLabel} />
 
               <Stack direction="row">
@@ -136,8 +137,10 @@ const NodeRenderer = ({
   );
 };
 
-const NodeFactory = ({ id, data }: NodeProps<Node<CustomNodeData>>) => {
-  const config = isNodeType(data.type) ? nodeConfig[data.type] : nodeConfig.default;
+const NodeFactory = ({ id, data }: NodeProps<Node<TreeNodeData>>) => {
+  const rawType = "type" in data.attributes ? data.attributes.type : undefined;
+  const safeType: FieldType = rawType ?? "option";
+  const config = isNodeType(safeType) ? nodeConfig[safeType] : nodeConfig.default;
 
   return (
     <NodeRenderer

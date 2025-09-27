@@ -1,18 +1,18 @@
 import { Node, Edge } from "@xyflow/react";
 import { useEffect, useState } from "react";
-import expandMinimalGraphWithChildren from "@/features/Treege/TreegeFlow/utils/expandMinimalGraphWithChildren";
+import expandTreeGraphWithChildren from "@/features/Treege/TreegeFlow/utils/expandMinimalGraphWithChildren";
 import { toReactFlowEdges, toReactFlowNodes } from "@/features/Treege/TreegeFlow/utils/toReactFlowConverter";
-import { CustomNodeData, MinimalGraph } from "@/features/Treege/TreegeFlow/utils/types";
+import { TreeNodeData, TreeGraph } from "@/features/Treege/TreegeFlow/utils/types";
 
-type LayoutEngine = (nodes: Node<CustomNodeData>[], edges: Edge[]) => Promise<{ nodes: Node<CustomNodeData>[]; edges: Edge[] }>;
+type LayoutEngine = (nodes: Node<TreeNodeData>[], edges: Edge[]) => Promise<{ nodes: Node<TreeNodeData>[]; edges: Edge[] }>;
 
 /**
- * Hook converting a MinimalGraph to React Flow nodes & edges,
+ * Hook converting a TreeGraph to React Flow nodes & edges,
  * automatically expanding "children" into child nodes/edges,
  * and computing the layout via a layout engine (ELK or Dagre).
  */
-const useLaidOutGraph = (graph: MinimalGraph, layoutEngine: LayoutEngine) => {
-  const [laidOutNodes, setLaidOutNodes] = useState<Node<CustomNodeData>[]>([]);
+const useLaidOutGraph = (graph: TreeGraph, layoutEngine: LayoutEngine) => {
+  const [laidOutNodes, setLaidOutNodes] = useState<Node<TreeNodeData>[]>([]);
   const [laidOutEdges, setLaidOutEdges] = useState<Edge[]>([]);
 
   useEffect(() => {
@@ -22,7 +22,9 @@ const useLaidOutGraph = (graph: MinimalGraph, layoutEngine: LayoutEngine) => {
       return;
     }
 
-    const expandedGraph = expandMinimalGraphWithChildren(graph);
+    // Expand "children" into real nodes & edges
+    const expandedGraph = expandTreeGraphWithChildren(graph);
+
     const reactFlowNodes = toReactFlowNodes(expandedGraph.nodes);
     const reactFlowEdges = toReactFlowEdges(expandedGraph.edges);
 

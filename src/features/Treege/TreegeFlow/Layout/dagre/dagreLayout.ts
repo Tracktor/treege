@@ -1,26 +1,28 @@
 import { Edge, Node, Position } from "@xyflow/react";
 import dagre from "dagre";
 
-/**
- * Options for Dagre layout.
- */
 export interface DagreLayoutOptions {
-  /** Direction of the graph layout. (TB = top-bottom, LR = left-right) */
+  /** Direction du graphe */
   rankdir?: "TB" | "BT" | "LR" | "RL";
-  /** Separation between ranks (vertical space between layers). */
+  /** Espace entre rangées */
   ranksep?: number;
-  /** Separation between nodes (horizontal space). */
+  /** Espace entre nodes */
   nodesep?: number;
 }
 
-/**
- * Compute layout using Dagre (generic version like ELK usage).
- */
+type NodeWithAttributes<T> = Node<
+  T & {
+    attributes?: {
+      type?: string;
+    };
+  }
+>;
+
 const dagreLayout = async <T extends Record<string, unknown>>(
-  nodes: Node<T>[],
+  nodes: NodeWithAttributes<T>[],
   edges: Edge[],
   options: DagreLayoutOptions = { nodesep: 100, rankdir: "TB", ranksep: 150 },
-): Promise<{ nodes: Node<T>[]; edges: Edge[] }> => {
+): Promise<{ nodes: NodeWithAttributes<T>[]; edges: Edge[] }> => {
   const g = new dagre.graphlib.Graph();
   g.setGraph({
     nodesep: options.nodesep ?? 100,
@@ -32,7 +34,14 @@ const dagreLayout = async <T extends Record<string, unknown>>(
   nodes.forEach((node) => {
     const width = node.width ?? 200;
     const height = node.height ?? 150;
-    g.setNode(node.id, { height, width });
+
+    const isOption = node.data?.attributes?.type === "option";
+
+    g.setNode(node.id, {
+      height,
+      rank: isOption ? 1 : undefined,
+      width,
+    });
   });
 
   edges.forEach((edge) => {

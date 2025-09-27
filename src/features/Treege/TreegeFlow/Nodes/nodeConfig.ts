@@ -1,10 +1,10 @@
 import colors from "@/constants/colors";
-import { CustomNodeData } from "@/features/Treege/TreegeFlow/utils/types";
+import { TreeNodeData } from "@/features/Treege/TreegeFlow/utils/types";
 
 interface NodeConfig {
   chipLabel: string;
   borderColor: string;
-  showAddButton?: (data: CustomNodeData) => boolean; // toujours une fonction
+  showAddButton?: (data: TreeNodeData) => boolean;
   showEditButton?: boolean;
   showDeleteButton?: boolean;
 }
