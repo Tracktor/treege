@@ -1,8 +1,11 @@
+import type { TreeNode } from "@tracktor/types-treege";
 import { useReactFlow } from "@xyflow/react";
 import { MouseEvent, useEffect, useRef, useState } from "react";
 import EdgeFactory from "@/features/TreegeFlow/Edges/EdgeFactory";
 import NodeFactory from "@/features/TreegeFlow/Nodes/NodeFactory";
 import reactFlowToTreeGraph from "@/features/TreegeFlow/utils/toTreeGraphConverter";
+import treegeTreeToTreegeFlowConverter from "@/features/TreegeFlow/utils/treegeTreeToTreegeFlowConverter";
+import { TreeGraph } from "@/features/TreegeFlow/utils/types";
 import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
 
 export const treeFlow = {
@@ -37,6 +40,9 @@ export const treeFlow = {
   },
 };
 
+export const isTreeNode = (obj: unknown): obj is TreeNode =>
+  typeof obj === "object" && obj !== null && "attributes" in obj && "children" in obj;
+
 const useTreegeFlow = () => {
   const prevNodeIdsRef = useRef<string[]>([]);
   const {
@@ -70,8 +76,15 @@ const useTreegeFlow = () => {
   const handleViewerChange = (value: string) => {
     const parsed = JSON.parse(value);
 
+    if (isTreeNode(parsed)) {
+      const newGraph: TreeGraph = treegeTreeToTreegeFlowConverter(parsed);
+      prevNodeIdsRef.current = [];
+      return setGraph(newGraph);
+    }
+
+    const newGraph: TreeGraph = parsed as TreeGraph;
     prevNodeIdsRef.current = [];
-    setGraph(parsed);
+    return setGraph(newGraph);
   };
 
   useEffect(() => {
