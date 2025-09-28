@@ -15,8 +15,9 @@ const treegeTreeToTreegeFlowConverter = (tree: TreeNode): TreeGraph => {
 
   const traverse = (node: TreeNode, parentId: string | null = null) => {
     const { attributes, children, uuid } = node;
-
     const isDecision = attributes.isDecision || attributes.type === "radio";
+
+    if (!attributes.type && !isDecision) return;
 
     const newNode: TreeNode = {
       attributes: {
@@ -59,28 +60,15 @@ const treegeTreeToTreegeFlowConverter = (tree: TreeNode): TreeGraph => {
       }));
 
       children.forEach((child) => {
-        const optionNode: TreeNode = {
-          attributes: {
-            depth: child.attributes.depth,
-            isDecision: false,
-            label: child.attributes.label,
-            name: child.attributes.name,
-            type: "option" as any,
-          },
-          children: [],
-          uuid: child.uuid,
-        };
-        nodes.push(optionNode);
-
         edges.push({
           source: newNode.uuid,
-          target: optionNode.uuid,
+          target: child.uuid,
           type: "option",
           uuid: `edge-${getUUID()}`,
         });
 
         if (child.children && child.children.length) {
-          child.children.forEach((sub) => traverse(sub, optionNode.uuid));
+          child.children.forEach((sub) => traverse(sub, child.uuid));
         }
       });
     } else {

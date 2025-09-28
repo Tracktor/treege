@@ -82,9 +82,8 @@ const useTreegeFlow = () => {
       return setGraph(newGraph);
     }
 
-    const newGraph: TreeGraph = parsed as TreeGraph;
     prevNodeIdsRef.current = [];
-    return setGraph(newGraph);
+    return setGraph(parsed);
   };
 
   useEffect(() => {
