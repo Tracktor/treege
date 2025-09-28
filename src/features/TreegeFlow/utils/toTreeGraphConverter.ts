@@ -5,36 +5,37 @@ import { TreeEdge, TreeGraph, TreeNodeData } from "@/features/TreegeFlow/utils/t
 /** Convert ReactFlow nodes → TreeNodes[] */
 const toTreeNodes = (reactFlowNodes: Node<TreeNodeData>[]): TreeNodeData[] =>
   reactFlowNodes
-    .filter((n) => !n.id.includes("-option-") && (n.data.attributes?.type ?? "option") !== "option")
+    .filter((n) => !n.id.includes("-option-"))
     .map((n) => {
       const attr = n.data.attributes;
 
-      const attributes: TreeNode["attributes"] =
-        attr && "type" in attr
-          ? {
-              depth: 0,
-              isDecision: attr.isDecision ?? false,
-              label: attr.label ?? "",
-              name: attr.name ?? "",
-              type: attr.type ?? "text",
-              values:
-                attr.values && attr.values.length > 0
-                  ? [
-                      {
-                        id: attr.name ?? "",
-                        label: attr.label ?? "",
-                        value: attr.values[0].value,
-                      },
-                    ]
-                  : undefined,
-            }
-          : {
-              depth: 0,
-              label: attr?.label ?? "",
-              message: String(attr?.message ?? ""),
-              name: attr?.name ?? "",
-              value: attr?.value ?? "",
-            };
+      const hasType = Boolean(attr?.type);
+
+      const attributes: TreeNode["attributes"] = hasType
+        ? {
+            depth: 0,
+            isDecision: attr.isDecision ?? false,
+            label: attr.label ?? "",
+            name: attr.name ?? "",
+            type: attr.type ?? "text",
+            values:
+              attr.values && attr.values.length > 0
+                ? [
+                    {
+                      id: attr.name ?? "",
+                      label: attr.label ?? "",
+                      value: attr.values[0].value,
+                    },
+                  ]
+                : undefined,
+          }
+        : {
+            depth: 0,
+            label: attr?.label ?? "",
+            message: String(attr?.message ?? ""),
+            name: attr?.name ?? "",
+            value: attr?.value ?? "",
+          };
 
       const children: TreeNode[] = Array.isArray(n.data.children)
         ? n.data.children.map((child) => ({

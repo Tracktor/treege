@@ -142,7 +142,7 @@ const NodeRenderer = ({
 };
 
 const NodeFactory = ({ id, data }: NodeProps<Node<TreeNodeData>>) => {
-  const config = nodeConfig[data.attributes?.type ?? "text"] ?? nodeConfig.default;
+  const config = nodeConfig[data.attributes?.type ?? "option"];
 
   return (
     <NodeRenderer
