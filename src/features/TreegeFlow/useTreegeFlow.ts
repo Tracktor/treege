@@ -2,7 +2,7 @@ import { useReactFlow } from "@xyflow/react";
 import { MouseEvent, useEffect, useRef, useState } from "react";
 import EdgeFactory from "@/features/TreegeFlow/Edges/EdgeFactory";
 import NodeFactory from "@/features/TreegeFlow/Nodes/NodeFactory";
-import reactFlowToMinimal from "@/features/TreegeFlow/utils/toMinimalConverter";
+import reactFlowToTreeGraph from "@/features/TreegeFlow/utils/toTreeGraphConverter";
 import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
 
 export const treeFlow = {
@@ -55,7 +55,7 @@ const useTreegeFlow = () => {
   const { fitView } = useReactFlow();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-  const minimalGraph = reactFlowToMinimal(nodes, edges);
+  const minimalGraph = reactFlowToTreeGraph(nodes, edges);
   const isGraphEmpty = !graph?.nodes || graph.nodes.length === 0;
   const open = !!anchorEl;
 

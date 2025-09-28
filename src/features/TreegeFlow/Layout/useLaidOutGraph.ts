@@ -1,6 +1,6 @@
 import { Node, Edge } from "@xyflow/react";
 import { useEffect, useState } from "react";
-import expandTreeGraphWithChildren from "@/features/TreegeFlow/utils/expandMinimalGraphWithChildren";
+import expandTreeGraphWithChildren from "@/features/TreegeFlow/utils/expandTreeGraphWithChildren";
 import { toReactFlowEdges, toReactFlowNodes } from "@/features/TreegeFlow/utils/toReactFlowConverter";
 import { TreeNodeData, TreeGraph, Orientation } from "@/features/TreegeFlow/utils/types";
 
