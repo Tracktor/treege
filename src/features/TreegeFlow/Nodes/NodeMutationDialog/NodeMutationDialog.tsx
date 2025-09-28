@@ -48,7 +48,6 @@ const NodeMutationDialog = ({ isOpen, onSave, onClose, initialValues }: NodeConf
 
         <DialogContent>
           <Stack spacing={2}>
-            {/* TYPE */}
             <Stack direction="row" spacing={2}>
               <Field name="type">
                 {({ state, handleChange }) => (
@@ -70,6 +69,7 @@ const NodeMutationDialog = ({ isOpen, onSave, onClose, initialValues }: NodeConf
                     >
                       {fieldCategoryOrder.map((categoryKey) => {
                         const types = fieldCategory[categoryKey];
+
                         return [
                           <ListSubheader key={`${categoryKey}-header`}>
                             {t(`form:category.${categoryKey as keyof typeof fieldCategory}`)}
@@ -87,7 +87,6 @@ const NodeMutationDialog = ({ isOpen, onSave, onClose, initialValues }: NodeConf
               </Field>
             </Stack>
 
-            {/* NAME + LABEL */}
             <Stack direction="row" spacing={2}>
               <Field name="name">
                 {({ state, handleChange }) => (
@@ -101,7 +100,6 @@ const NodeMutationDialog = ({ isOpen, onSave, onClose, initialValues }: NodeConf
               </Field>
             </Stack>
 
-            {/* CHECKBOX DECISION */}
             <Subscribe
               selector={(state) => ({
                 category: state.values.category,
@@ -140,7 +138,6 @@ const NodeMutationDialog = ({ isOpen, onSave, onClose, initialValues }: NodeConf
               }
             </Subscribe>
 
-            {/* CHILDREN */}
             <Subscribe
               selector={(state) => ({
                 children: state.values.children,
@@ -155,7 +152,7 @@ const NodeMutationDialog = ({ isOpen, onSave, onClose, initialValues }: NodeConf
                       <Stack spacing={2}>
                         <Typography variant="h4">{t("values")}</Typography>
                         {state.value.map((child, idx) => (
-                          <Stack key={child.name || `child-${idx}`} direction={{ sm: "row", xs: "column" }} spacing={1} paddingY={1}>
+                          <Stack key={child.name || `child-${idx}`} direction={{ sm: "row", xs: "column" }} spacing={1}>
                             <TextField
                               fullWidth
                               label={t("form:label")}
