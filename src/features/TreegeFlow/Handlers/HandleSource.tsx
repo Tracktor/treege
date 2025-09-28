@@ -15,7 +15,7 @@ const handleStyle = (isVertical: boolean) => ({
   width: handleSize,
 });
 
-const handleIonStyle = (isVertical: boolean, isConnected: boolean) => {
+const handleIconStyle = (isVertical: boolean, isConnected: boolean) => {
   const iconTransform = isVertical ? "translate(-50%, -50%) rotate(0deg)" : "translate(-50%, -50%) rotate(-90deg)";
 
   return {
@@ -49,7 +49,7 @@ const HandleSource: FC<HandleSourceProps> = ({ handleId }) => {
 
   return (
     <Handle type="source" position={position} id={handleId} isValidConnection={() => !isConnected} style={handleStyle(isVertical)}>
-      <ArrowDropDownCircleIcon sx={handleIonStyle(isVertical, isConnected)} />
+      <ArrowDropDownCircleIcon sx={handleIconStyle(isVertical, isConnected)} />
     </Handle>
   );
 };
