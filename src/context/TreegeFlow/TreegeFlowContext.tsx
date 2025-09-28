@@ -1,6 +1,7 @@
+import type { TreeNode } from "@tracktor/types-treege";
 import { Connection, Edge, EdgeChange, Node, NodeChange } from "@xyflow/react";
 import { createContext } from "react";
-import { TreeGraph, TreeNode, TreeNodeData } from "@/features/TreegeFlow/utils/types";
+import { TreeGraph, TreeNodeData } from "@/features/TreegeFlow/utils/types";
 
 export interface TreegeFlowContextValue {
   nodes: Node<TreeNodeData>[];

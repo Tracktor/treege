@@ -2,6 +2,7 @@ import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
 import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import EditIcon from "@mui/icons-material/Edit";
 import { Box, Card, CardContent, Chip, IconButton, Stack, Typography } from "@tracktor/design-system";
+import type { TreeNode } from "@tracktor/types-treege";
 import { Node, NodeProps, useNodeConnections } from "@xyflow/react";
 import { memo, ReactNode, useContext, useState } from "react";
 import colors from "@/constants/colors";
@@ -10,7 +11,7 @@ import HandleSource from "@/features/TreegeFlow/Handlers/HandleSource";
 import HandleTarget from "@/features/TreegeFlow/Handlers/HandleTarget";
 import { nodeConfig } from "@/features/TreegeFlow/Nodes/nodeConfig";
 import NodeMutationDialog from "@/features/TreegeFlow/Nodes/NodeMutationDialog";
-import { TreeNode, TreeNodeData } from "@/features/TreegeFlow/utils/types";
+import { TreeNodeData } from "@/features/TreegeFlow/utils/types";
 
 export const NODE_CARD_WIDTH = 200;
 export const NODE_CARD_HEIGHT = 150;

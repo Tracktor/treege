@@ -1,10 +1,11 @@
+import type { TreeNode } from "@tracktor/types-treege";
 import { Connection, Edge, Node, useEdgesState, useNodesState } from "@xyflow/react";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { TreegeFlowContext, TreegeFlowContextValue } from "@/context/TreegeFlow/TreegeFlowContext";
 import dagreLayout from "@/features/TreegeFlow/Layout/dagre/dagreLayout";
 import elkLayout from "@/features/TreegeFlow/Layout/ELK/elkLayout";
 import useLaidOutGraph from "@/features/TreegeFlow/Layout/useLaidOutGraph";
-import { Orientation, TreeEdge, TreeGraph, TreeNode, TreeNodeData } from "@/features/TreegeFlow/utils/types";
+import { Orientation, TreeEdge, TreeGraph, TreeNodeData } from "@/features/TreegeFlow/utils/types";
 import { getUUID } from "@/utils";
 
 const EMPTY_GRAPH: TreeGraph = { edges: [], nodes: [] };

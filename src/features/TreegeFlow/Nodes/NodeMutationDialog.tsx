@@ -21,10 +21,10 @@ import {
   Typography,
   IconButton,
 } from "@tracktor/design-system";
+import type { TreeNode, FieldType } from "@tracktor/types-treege";
 import { FormEvent, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import getCategoryOrTypes, { fieldCategory, fieldCategoryOrder, FieldType } from "@/features/TreegeFlow/utils/getCategoryOrTypes";
-import { TreeNode } from "@/features/TreegeFlow/utils/types";
+import getCategoryOrTypes, { fieldCategory, fieldCategoryOrder } from "@/features/TreegeFlow/utils/getCategoryOrTypes";
 import { getUUID } from "@/utils";
 
 interface ChildFormValues {

@@ -1,5 +1,6 @@
+import type { TreeNode } from "@tracktor/types-treege";
 import { Node, Edge, Position } from "@xyflow/react";
-import { TreeNode, TreeNodeData, TreeEdge } from "@/features/TreegeFlow/utils/types";
+import { TreeNodeData, TreeEdge } from "@/features/TreegeFlow/utils/types";
 
 /**
  * Convert TreeNode[] → Node ReactFlow

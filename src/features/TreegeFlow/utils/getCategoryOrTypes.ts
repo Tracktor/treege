@@ -1,26 +1,3 @@
-export type FieldType =
-  | "text"
-  | "number"
-  | "email"
-  | "password"
-  | "tel"
-  | "url"
-  | "date"
-  | "address"
-  | "dateRange"
-  | "time"
-  | "timeRange"
-  | "select"
-  | "radio"
-  | "dynamicSelect"
-  | "autocomplete"
-  | "switch"
-  | "checkbox"
-  | "file"
-  | "api"
-  | "title"
-  | "hidden";
-
 export const fieldCategory = {
   boolean: ["switch", "checkbox"],
   dateTime: ["date", "dateRange", "time", "timeRange"],

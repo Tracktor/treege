@@ -1,4 +1,5 @@
-import { TreeEdge, TreeGraph, TreeNode } from "@/features/TreegeFlow/utils/types";
+import type { TreeNode } from "@tracktor/types-treege";
+import { TreeEdge, TreeGraph } from "@/features/TreegeFlow/utils/types";
 import { getUUID } from "@/utils";
 
 /**
