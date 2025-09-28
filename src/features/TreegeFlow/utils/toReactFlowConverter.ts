@@ -14,7 +14,7 @@ export const toReactFlowNodes = (treeNodes?: TreeNode[]): Node<TreeNodeData>[] =
     position: { x: 0, y: 0 },
     sourcePosition: Position.Bottom,
     targetPosition: Position.Top,
-    type: "type" in node.attributes ? node.attributes.type : "option",
+    type: node.attributes?.type ?? "option",
     width: 200,
   }));
 

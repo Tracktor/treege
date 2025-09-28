@@ -8,9 +8,9 @@ import colors from "@/constants/colors";
 import { TreegeFlowContext } from "@/context/TreegeFlow/TreegeFlowContext";
 import HandleSource from "@/features/TreegeFlow/Handlers/HandleSource";
 import HandleTarget from "@/features/TreegeFlow/Handlers/HandleTarget";
-import { isNodeType, nodeConfig } from "@/features/TreegeFlow/Nodes/nodeConfig";
+import { nodeConfig } from "@/features/TreegeFlow/Nodes/nodeConfig";
 import NodeMutationDialog from "@/features/TreegeFlow/Nodes/NodeMutationDialog";
-import { FieldType, TreeNode, TreeNodeData } from "@/features/TreegeFlow/utils/types";
+import { TreeNode, TreeNodeData } from "@/features/TreegeFlow/utils/types";
 
 export const NODE_CARD_WIDTH = 200;
 export const NODE_CARD_HEIGHT = 150;
@@ -141,9 +141,7 @@ const NodeRenderer = ({
 };
 
 const NodeFactory = ({ id, data }: NodeProps<Node<TreeNodeData>>) => {
-  const rawType = "type" in data.attributes ? data.attributes.type : undefined;
-  const safeType: FieldType = rawType ?? "option";
-  const config = isNodeType(safeType) ? nodeConfig[safeType] : nodeConfig.default;
+  const config = nodeConfig[data.attributes?.type ?? "text"] ?? nodeConfig.default;
 
   return (
     <NodeRenderer

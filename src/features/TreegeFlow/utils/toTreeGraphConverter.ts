@@ -4,7 +4,7 @@ import { TreeEdge, TreeGraph, TreeNode, TreeNodeData } from "@/features/TreegeFl
 /** Convert ReactFlow nodes → TreeNodes[] */
 const toTreeNodes = (reactFlowNodes: Node<TreeNodeData>[]): TreeNodeData[] =>
   reactFlowNodes
-    .filter((n) => !n.id.includes("-option-") && n.data.attributes?.type !== "option")
+    .filter((n) => !n.id.includes("-option-") && (n.data.attributes?.type ?? "option") !== "option")
     .map((n) => {
       const attr = n.data.attributes;
 
@@ -61,6 +61,7 @@ const toTreeEdges = (reactFlowEdges: Edge[]): TreeEdge[] =>
   reactFlowEdges.map((e) => ({
     source: e.source,
     target: e.target,
+    // ⬇️ fallback sur "option" si l’id contient -option-
     type: e.type ?? (e.id.includes("-option-") ? "option" : "default"),
     uuid: e.id,
   }));

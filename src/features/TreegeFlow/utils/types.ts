@@ -19,8 +19,7 @@ export type FieldType =
   | "select"
   | "autocomplete"
   | "dynamicSelect"
-  | "title"
-  | "option";
+  | "title";
 
 export interface TreeValues {
   id: string;

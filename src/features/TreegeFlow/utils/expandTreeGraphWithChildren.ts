@@ -36,7 +36,7 @@ const expandTreeGraphWithChildren = (graph: TreeGraph): TreeGraph => {
       addEdgeIfNotExists({
         source: parent.uuid,
         target: child.uuid,
-        type: "type" in child.attributes ? child.attributes.type : "option",
+        type: child.attributes?.type ?? "option",
         uuid: edgeUuid,
       });
 
