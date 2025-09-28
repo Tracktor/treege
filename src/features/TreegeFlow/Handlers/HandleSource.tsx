@@ -1,10 +1,36 @@
 import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
-import { Box } from "@tracktor/design-system";
 import { Handle, Position, useNodeConnections } from "@xyflow/react";
 import React, { FC, useContext } from "react";
 import colors from "@/constants/colors";
 import { TreegeFlowContext } from "@/context/TreegeFlow/TreegeFlowContext";
-import { NODE_CARD_HEIGHT } from "@/features/TreegeFlow/Nodes/NodeFactory";
+
+const handleSize = 18;
+const offset = -(handleSize / 2);
+
+const handleStyle = (isVertical: boolean) => ({
+  height: handleSize,
+  left: isVertical ? "50%" : `calc(100% + ${offset}px)`,
+  top: isVertical ? `calc(100% + ${offset}px)` : "50%",
+  transform: isVertical ? "translateX(-50%)" : "translateY(-50%)",
+  width: handleSize,
+});
+
+const handleIonStyle = (isVertical: boolean, isConnected: boolean) => {
+  const iconTransform = isVertical ? "translate(-50%, -50%) rotate(0deg)" : "translate(-50%, -50%) rotate(-90deg)";
+
+  return {
+    "&:hover": { backgroundColor: colors.secondary },
+    backgroundColor: isConnected ? colors.grey500 : colors.primary,
+    borderRadius: "50%",
+    color: colors.background,
+    cursor: "pointer",
+    fontSize: handleSize,
+    left: "50%",
+    position: "absolute",
+    top: "50%",
+    transform: iconTransform,
+  };
+};
 
 interface HandleSourceProps {
   handleId: string;
@@ -16,39 +42,15 @@ const HandleSource: FC<HandleSourceProps> = ({ handleId }) => {
     handleId,
     handleType: "source",
   });
-  const isVertical = orientation === "vertical";
 
+  const isVertical = orientation === "vertical";
   const isConnected = connections.length > 0;
+  const position = isVertical ? Position.Bottom : Position.Right;
 
   return (
-    <Box sx={{ position: "relative" }}>
-      <Handle
-        type="source"
-        position={isVertical ? Position.Bottom : Position.Right}
-        id={handleId}
-        isValidConnection={() => !isConnected}
-        style={{
-          height: 18,
-          width: 18,
-        }}
-      >
-        <ArrowDropDownCircleIcon
-          sx={{
-            "&:hover": { backgroundColor: colors.secondary },
-            backgroundColor: isConnected ? colors.grey500 : colors.primary,
-            borderRadius: "50%",
-            bottom: isVertical ? -12 : NODE_CARD_HEIGHT / 2,
-            color: colors.background,
-            cursor: "pointer",
-            fontSize: 20,
-            left: "calc(50% - 10px)",
-            position: "absolute",
-            top: "50%",
-            transform: `translateY(${isVertical ? "-50%" : "0%"}) rotate(${isVertical ? "0deg" : "-90deg"})`,
-          }}
-        />
-      </Handle>
-    </Box>
+    <Handle type="source" position={position} id={handleId} isValidConnection={() => !isConnected} style={handleStyle(isVertical)}>
+      <ArrowDropDownCircleIcon sx={handleIonStyle(isVertical, isConnected)} />
+    </Handle>
   );
 };
 
