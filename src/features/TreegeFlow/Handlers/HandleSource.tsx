@@ -7,7 +7,7 @@ import { TreegeFlowContext } from "@/context/TreegeFlow/TreegeFlowContext";
 const handleSize = 18;
 const offset = -(handleSize / 2);
 
-const handleStyle = (isVertical: boolean) => ({
+const handlerStyle = (isVertical: boolean) => ({
   height: handleSize,
   left: isVertical ? "50%" : `calc(100% + ${offset}px)`,
   top: isVertical ? `calc(100% + ${offset}px)` : "50%",
@@ -15,7 +15,7 @@ const handleStyle = (isVertical: boolean) => ({
   width: handleSize,
 });
 
-const handleIconStyle = (isVertical: boolean, isConnected: boolean) => {
+const handlerIconStyle = (isVertical: boolean, isConnected: boolean) => {
   const iconTransform = isVertical ? "translate(-50%, -50%) rotate(0deg)" : "translate(-50%, -50%) rotate(-90deg)";
 
   return {
@@ -48,8 +48,8 @@ const HandleSource: FC<HandleSourceProps> = ({ handleId }) => {
   const position = isVertical ? Position.Bottom : Position.Right;
 
   return (
-    <Handle type="source" position={position} id={handleId} isValidConnection={() => !isConnected} style={handleStyle(isVertical)}>
-      <ArrowDropDownCircleIcon sx={handleIconStyle(isVertical, isConnected)} />
+    <Handle type="source" position={position} id={handleId} isValidConnection={() => !isConnected} style={handlerStyle(isVertical)}>
+      <ArrowDropDownCircleIcon sx={handlerIconStyle(isVertical, isConnected)} />
     </Handle>
   );
 };

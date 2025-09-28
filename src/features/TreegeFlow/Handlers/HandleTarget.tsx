@@ -5,7 +5,7 @@ import { TreegeFlowContext } from "@/context/TreegeFlow/TreegeFlowContext";
 const handleSize = 10;
 const offset = -(handleSize / 2);
 
-const handleStyle = (isVertical: boolean) => {
+const handlerStyle = (isVertical: boolean) => {
   const transform = isVertical ? "translateX(-50%)" : "translateY(-50%)";
 
   return {
@@ -26,7 +26,7 @@ const HandleTarget: FC<HandleTargetProps> = ({ handleId }) => {
   const isVertical = orientation === "vertical";
   const position = isVertical ? Position.Top : Position.Left;
 
-  return <Handle type="target" position={position} id={handleId} style={handleStyle(isVertical)} />;
+  return <Handle type="target" position={position} id={handleId} style={handlerStyle(isVertical)} />;
 };
 
 export default HandleTarget;
