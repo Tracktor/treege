@@ -1,5 +1,5 @@
 import { useForm } from "@tanstack/react-form";
-import type { TreeNode } from "@tracktor/types-treege";
+import type { FieldType, TreeNode } from "@tracktor/types-treege";
 import { FormEvent, useCallback } from "react";
 import getCategoryOrTypes from "@/features/TreegeFlow/utils/getCategoryOrTypes";
 import { getUUID } from "@/utils";
@@ -85,8 +85,6 @@ const useNodeMutationDialog = ({ initialValues, onSave, onClose }: UseNodeMutati
           label: child.label,
           message: child.message,
           name: `${value.name}:${child.value}`,
-          // todo: fix type casting
-          type: "option" as any,
           value: child.value,
         };
 
@@ -100,8 +98,7 @@ const useNodeMutationDialog = ({ initialValues, onSave, onClose }: UseNodeMutati
               isDecision: value.isDecision,
               label: value.label,
               name: value.name,
-              // todo: fix type casting
-              type: value.type as any,
+              type: value.type as FieldType,
               values: value.value ? [{ id: value.name, label: value.label, value: value.value }] : undefined,
             }
           : {
