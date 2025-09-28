@@ -1,23 +1,16 @@
-import { Edge, Node, Position } from "@xyflow/react";
+import { Edge, Position } from "@xyflow/react";
 import ELK from "elkjs/lib/elk.bundled.js";
+import { Orientation } from "react-d3-tree";
 import ELKOptionConfig, { ElkDirection } from "@/features/TreegeFlow/Layout/ELK/ELKOptionConfig";
-import { Orientation } from "@/features/TreegeFlow/utils/types";
+import { EngineLayoutOutput, NodeWithAttributes } from "@/features/TreegeFlow/Layout/types";
 
 const elk = new ELK();
-
-type NodeWithAttributes<T> = Node<
-  T & {
-    attributes?: {
-      type?: string;
-    };
-  }
->;
 
 const elkLayout = async <T extends Record<string, unknown>>(
   nodes: NodeWithAttributes<T>[],
   edges: Edge[],
   orientation: Orientation = "vertical",
-): Promise<{ nodes: NodeWithAttributes<T>[]; edges: Edge[] }> => {
+): Promise<EngineLayoutOutput<T>> => {
   const elkDirection: ElkDirection = orientation === "horizontal" ? "RIGHT" : "DOWN";
 
   const graph = {

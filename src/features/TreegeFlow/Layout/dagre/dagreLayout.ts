@@ -1,26 +1,13 @@
-import { Edge, Node, Position } from "@xyflow/react";
+import { Edge, Position } from "@xyflow/react";
 import dagre from "dagre";
-
-export interface DagreLayoutOptions {
-  ranksep?: number;
-  nodesep?: number;
-}
-
-type Orientation = "vertical" | "horizontal";
-
-type NodeWithAttributes<T> = Node<
-  T & {
-    attributes?: {
-      type?: string;
-    };
-  }
->;
+import { Orientation } from "react-d3-tree";
+import { EngineLayoutOutput, NodeWithAttributes } from "@/features/TreegeFlow/Layout/types";
 
 const dagreLayout = async <T extends Record<string, unknown>>(
   nodes: NodeWithAttributes<T>[],
   edges: Edge[],
   orientation: Orientation = "vertical",
-): Promise<{ nodes: NodeWithAttributes<T>[]; edges: Edge[] }> => {
+): Promise<EngineLayoutOutput<T>> => {
   const rankdir = orientation === "horizontal" ? "LR" : "TB";
 
   const g = new dagre.graphlib.Graph();
