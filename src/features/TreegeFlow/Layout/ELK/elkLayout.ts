@@ -2,7 +2,7 @@ import { Edge, Position } from "@xyflow/react";
 import ELK from "elkjs/lib/elk.bundled.js";
 import { Orientation } from "react-d3-tree";
 import ELKOptionConfig, { ElkDirection } from "@/features/TreegeFlow/Layout/ELK/ELKOptionConfig";
-import { EngineLayoutOutput, NodeWithAttributes } from "@/features/TreegeFlow/Layout/types";
+import { EngineLayoutOutput, NodeWithAttributes } from "@/features/TreegeFlow/utils/types";
 
 const elk = new ELK();
 

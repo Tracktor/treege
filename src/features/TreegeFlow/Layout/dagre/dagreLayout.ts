@@ -1,7 +1,7 @@
 import { Edge, Position } from "@xyflow/react";
 import dagre from "dagre";
 import { Orientation } from "react-d3-tree";
-import { EngineLayoutOutput, NodeWithAttributes } from "@/features/TreegeFlow/Layout/types";
+import { EngineLayoutOutput, NodeWithAttributes } from "@/features/TreegeFlow/utils/types";
 
 const dagreLayout = async <T extends Record<string, unknown>>(
   nodes: NodeWithAttributes<T>[],
