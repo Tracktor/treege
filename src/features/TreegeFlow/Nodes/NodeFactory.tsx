@@ -10,7 +10,7 @@ import { TreegeFlowContext } from "@/context/TreegeFlow/TreegeFlowContext";
 import HandleSource from "@/features/TreegeFlow/Handlers/HandleSource";
 import HandleTarget from "@/features/TreegeFlow/Handlers/HandleTarget";
 import { nodeConfig } from "@/features/TreegeFlow/Nodes/nodeConfig";
-import NodeMutationDialog from "@/features/TreegeFlow/Nodes/NodeMutationDialog";
+import NodeMutationDialog from "@/features/TreegeFlow/Nodes/NodeMutationDialog/NodeMutationDialog";
 import { TreeNodeData } from "@/features/TreegeFlow/utils/types";
 
 export const NODE_CARD_WIDTH = 200;

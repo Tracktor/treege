@@ -3,7 +3,7 @@ import { Button, Box } from "@tracktor/design-system";
 import type { TreeNode } from "@tracktor/types-treege";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import NodeMutationDialog from "@/features/TreegeFlow/Nodes/NodeMutationDialog";
+import NodeMutationDialog from "@/features/TreegeFlow/Nodes/NodeMutationDialog/NodeMutationDialog";
 import useTreegeFlowContext from "@/hooks/useTreegeFlowContext";
 
 const ButtonCreateGraph = () => {
