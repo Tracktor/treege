@@ -1,5 +1,6 @@
 import { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, ReactFlow, ReactFlowProvider } from "@xyflow/react";
 import { nanoid } from "nanoid";
+import { ThemeProvider } from "@/components/theme-provider";
 import nodeTypes from "@/constants/nodeTypes";
 import ActionsSheets from "@/features/Treege/Sheets/ActionsSheets";
 import useFlowInteractions from "@/hooks/useFlowInteractions";
@@ -14,7 +15,7 @@ interface TreegeProps {
 const initialNodes: Node[] = [
   {
     data: {
-      label: "Node 1",
+      label: "",
     },
     id: nanoid(),
     position: { x: 0, y: 0 },
@@ -29,12 +30,12 @@ const Flow = ({ defaultEdges, defaultNodes }: TreegeProps) => {
     <ReactFlow
       fitView
       colorMode="dark"
+      selectNodesOnDrag={false}
       nodeTypes={nodeTypes}
       defaultEdges={defaultEdges || []}
       defaultNodes={defaultNodes || initialNodes}
       onConnect={onConnect}
       onConnectEnd={onConnectEnd}
-      selectNodesOnDrag={false}
     >
       <Background gap={10} variant={BackgroundVariant.Dots} />
       <MiniMap />
@@ -45,9 +46,11 @@ const Flow = ({ defaultEdges, defaultNodes }: TreegeProps) => {
 };
 
 const Treege = ({ defaultEdges, defaultNodes }: TreegeProps) => (
-  <ReactFlowProvider>
-    <Flow defaultEdges={defaultEdges} defaultNodes={defaultNodes} />
-  </ReactFlowProvider>
+  <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ReactFlowProvider>
+      <Flow defaultEdges={defaultEdges} defaultNodes={defaultNodes} />
+    </ReactFlowProvider>
+  </ThemeProvider>
 );
 
 export default Treege;

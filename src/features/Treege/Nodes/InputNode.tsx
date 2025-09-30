@@ -1,5 +1,6 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { LucideRectangleEllipsis } from "lucide-react";
+import { HTMLInputTypeAttribute } from "react";
 import { Badge } from "@/components/ui/badge";
 
 export type InputNodeType = Node<
@@ -7,6 +8,13 @@ export type InputNodeType = Node<
     forceToolbarVisible?: boolean;
     toolbarPosition?: Position;
     label?: string;
+    name?: string;
+    type?: HTMLInputTypeAttribute;
+    data?: {
+      label?: string;
+      name?: string;
+      type?: HTMLInputTypeAttribute;
+    };
   },
   "input"
 >;
@@ -19,7 +27,7 @@ const InputNode = ({ data, isConnectable, type }: InputNodeProps) => (
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} style={{ height: 10, width: 10 }} />
 
     {/* Label */}
-    <div className="text-2xl">{data?.label}</div>
+    <div className="text-2xl">{data?.label || data?.name}</div>
 
     {/* Type */}
     {type && (

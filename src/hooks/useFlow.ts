@@ -26,12 +26,49 @@ const useFlow = () => {
    * Clears the selection of all nodes and edges in the React Flow instance.
    */
   const clearSelection = useCallback(() => {
-    const updatedNodes = nodes.map(({ selected, ...node }) => node);
-    const updatedEdges = edges.map(({ selected, ...edge }) => edge);
+    reactFlow.setNodes((nds) => nds.map(({ selected, ...node }) => node));
+    reactFlow.setEdges((eds) => eds.map(({ selected, ...edge }) => edge));
+  }, [reactFlow]);
 
-    reactFlow.setNodes(updatedNodes);
-    reactFlow.setEdges(updatedEdges);
-  }, [nodes, edges, reactFlow]);
+  /**
+   * Updates a node's data by its ID.
+   * @param id - The ID of the node to update.
+   * @param data - Partial data to merge into the node's existing data.
+   */
+  const updateNode = useCallback(
+    (id: string, data: Partial<(typeof nodes)[number]["data"]>) => {
+      reactFlow.setNodes((nds) =>
+        nds.map((node) => {
+          if (node.id === id) {
+            return {
+              ...node,
+              data: {
+                ...node.data,
+                ...data,
+              },
+            };
+          }
+          return node;
+        }),
+      );
+    },
+    [reactFlow],
+  );
+
+  /**
+   * Updates the data of the currently selected node.
+   * If no node is selected, the function does nothing.
+   * @param data - Partial data to merge into the selected node's existing data.
+   */
+  const updateSelectedNode = useCallback(
+    (data: Partial<(typeof nodes)[number]["data"]>) => {
+      const currentSelectedNode = reactFlow.getNodes().find((node) => node.selected);
+      if (!currentSelectedNode) return;
+
+      updateNode(currentSelectedNode.id, data);
+    },
+    [reactFlow, updateNode],
+  );
 
   return {
     ...reactFlow,
@@ -44,6 +81,8 @@ const useFlow = () => {
     selectedEdges,
     selectedNode,
     selectedNodes,
+    updateNode,
+    updateSelectedNode,
   };
 };
 
