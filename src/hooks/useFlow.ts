@@ -10,12 +10,14 @@ import { shallow } from "zustand/shallow";
 const useFlow = () => {
   const reactFlow = useReactFlow();
 
-  const { nodes, edges, selectedNodes, selectedEdges } = useStore(
+  const { nodes, edges, selectedEdge, selectedEdges, selectedNode, selectedNodes } = useStore(
     (state) => ({
       edges: state.edges,
       nodes: state.nodes,
-      selectedEdges: state.edges.filter((e) => e.selected),
-      selectedNodes: state.nodes.filter((n) => n.selected),
+      selectedEdge: state.edges.find((edge) => edge.selected),
+      selectedEdges: state.edges.filter((edge) => edge.selected),
+      selectedNode: state.nodes.find((node) => node.selected),
+      selectedNodes: state.nodes.filter((node) => node.selected),
     }),
     shallow,
   );
@@ -38,7 +40,9 @@ const useFlow = () => {
     hasSelectedEdges: selectedEdges.length > 0,
     hasSelectedNode: selectedNodes.length > 0,
     nodes,
+    selectedEdge,
     selectedEdges,
+    selectedNode,
     selectedNodes,
   };
 };

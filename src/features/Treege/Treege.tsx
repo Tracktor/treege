@@ -23,7 +23,7 @@ const initialNodes: Node[] = [
 ];
 
 const Flow = ({ defaultEdges, defaultNodes }: TreegeProps) => {
-  const { onConnect, onConnectEnd, onNodeDragStart } = useFlowInteractions();
+  const { onConnect, onConnectEnd } = useFlowInteractions();
 
   return (
     <ReactFlow
@@ -34,7 +34,7 @@ const Flow = ({ defaultEdges, defaultNodes }: TreegeProps) => {
       defaultNodes={defaultNodes || initialNodes}
       onConnect={onConnect}
       onConnectEnd={onConnectEnd}
-      onNodeDragStart={onNodeDragStart}
+      selectNodesOnDrag={false}
     >
       <Background gap={10} variant={BackgroundVariant.Dots} />
       <MiniMap />

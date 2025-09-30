@@ -51,25 +51,9 @@ const useFlowInteractions = () => {
     [screenToFlowPosition, setEdges, setNodes],
   );
 
-  /**
-   * Handles the start of a node drag event.
-   * This function is called when a user starts dragging a node.
-   * It unselects all nodes to prevent the action of opening a sheet or other side effects.
-   */
-  const onNodeDragStart = useCallback(() => {
-    // Unselect all nodes when starting to drag a node to avoid sheet opening
-    setNodes((nds) =>
-      nds.map((n) => ({
-        ...n,
-        selected: false,
-      })),
-    );
-  }, [setNodes]);
-
   return {
     onConnect,
     onConnectEnd,
-    onNodeDragStart,
   };
 };
 
