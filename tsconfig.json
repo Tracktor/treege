@@ -24,7 +24,7 @@
     "noUnusedParameters": true,
     "paths": {
       "@/*": [
-        "src/*"
+        "./src/*"
       ],
       "~/*": [
         "./*"

@@ -43,7 +43,7 @@ const config = () =>
     ],
     resolve: {
       alias: [
-        { find: "@", replacement: resolve(__dirname, "src") },
+        { find: "@", replacement: resolve(__dirname, "./src") },
         { find: "~", replacement: resolve(__dirname) },
       ],
     },
