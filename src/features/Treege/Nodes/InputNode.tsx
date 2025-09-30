@@ -18,7 +18,7 @@ const InputNode = ({ data, isConnectable, type }: InputNodeProps) => (
   <>
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
     <ActionNodeToolbar forceToolbarVisible={data?.forceToolbarVisible} toolbarPosition={data?.toolbarPosition} />
-    <div className="text-sm">{data?.label}</div>
+    <div className="text-2xl">{data?.label}</div>
     <Badge variant="secondary" className="bg-blue-500 text-white dark:bg-blue-600">
       <BadgeCheckIcon />
       {type}

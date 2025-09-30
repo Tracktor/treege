@@ -28,7 +28,7 @@ const initialNodes = [
       label: "Node 2",
     },
     id: "n2",
-    position: { x: 0, y: 100 },
+    position: { x: 0, y: 150 },
     type: "input",
   },
 ];
@@ -43,22 +43,21 @@ const Treege = () => {
 
   return (
     <ReactFlowProvider>
-      <div style={{ height: "100vh", width: "100vw" }}>
-        <ReactFlow
-          colorMode="dark"
-          className="bg-teal-50"
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          nodeTypes={nodeTypes}
-        >
-          <Background gap={10} variant={BackgroundVariant.Dots} />
-          <MiniMap />
-          <Controls />
-        </ReactFlow>
-      </div>
+      <ReactFlow
+        fitView
+        colorMode="dark"
+        className="bg-teal-50"
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        nodeTypes={nodeTypes}
+      >
+        <Background gap={10} variant={BackgroundVariant.Dots} />
+        <MiniMap />
+        <Controls />
+      </ReactFlow>
     </ReactFlowProvider>
   );
 };
