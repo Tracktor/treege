@@ -1,6 +1,7 @@
 import { NodeToolbar, Position } from "@xyflow/react";
 import { memo } from "react";
 import { Button } from "@/components/ui/button";
+import { Menubar } from "@/components/ui/menubar";
 
 interface InputNodeToolbarProps {
   forceToolbarVisible?: boolean;
@@ -9,7 +10,7 @@ interface InputNodeToolbarProps {
 
 const ActionNodeToolbar = memo(({ forceToolbarVisible, toolbarPosition }: InputNodeToolbarProps) => (
   <NodeToolbar isVisible={forceToolbarVisible} position={toolbarPosition}>
-    <div className="bg-white flex flex-row p-2 rounded-full gap-2">
+    <Menubar className="text-white h-12 p-1.5">
       <Button variant="ghost" size="icon">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
           <path
@@ -28,7 +29,7 @@ const ActionNodeToolbar = memo(({ forceToolbarVisible, toolbarPosition }: InputN
           />
         </svg>
       </Button>
-    </div>
+    </Menubar>
   </NodeToolbar>
 ));
 
