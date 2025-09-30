@@ -1,19 +1,19 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
-import { LucideRectangleEllipsis } from "lucide-react";
+import { BadgeCheckIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-export type InputNodeType = Node<
+export type DefaultNodeType = Node<
   {
     forceToolbarVisible?: boolean;
     toolbarPosition?: Position;
     label?: string;
   },
-  "input"
+  "default"
 >;
 
-type InputNodeProps = NodeProps<InputNodeType>;
+type DefaultNodeProps = NodeProps<DefaultNodeType>;
 
-const InputNode = ({ data, isConnectable, type }: InputNodeProps) => (
+const DefaultNode = ({ data, isConnectable, type }: DefaultNodeProps) => (
   <>
     {/* Top handle */}
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} style={{ height: 10, width: 10 }} />
@@ -22,9 +22,9 @@ const InputNode = ({ data, isConnectable, type }: InputNodeProps) => (
     <div className="text-2xl">{data?.label}</div>
 
     {/* Type */}
-    {type && (
+    {type !== "default" && (
       <Badge variant="secondary" className="bg-blue-500 text-white dark:bg-blue-600">
-        <LucideRectangleEllipsis />
+        <BadgeCheckIcon />
         {type}
       </Badge>
     )}
@@ -34,4 +34,4 @@ const InputNode = ({ data, isConnectable, type }: InputNodeProps) => (
   </>
 );
 
-export default InputNode;
+export default DefaultNode;

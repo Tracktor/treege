@@ -1,65 +1,53 @@
-import {
-  addEdge,
-  Background,
-  BackgroundVariant,
-  Connection,
-  Controls,
-  MiniMap,
-  ReactFlow,
-  ReactFlowProvider,
-  useEdgesState,
-  useNodesState,
-} from "@xyflow/react";
-import { useCallback } from "react";
-import "@xyflow/react/dist/style.css";
+import { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, ReactFlow, ReactFlowProvider } from "@xyflow/react";
+import { nanoid } from "nanoid";
 import nodeTypes from "@/constants/nodeTypes";
+import ActionsSheets from "@/features/Treege/Sheets/ActionsSheets";
+import useFlowInteractions from "@/hooks/useFlowInteractions";
 
-const initialNodes = [
+import "@xyflow/react/dist/style.css";
+
+interface TreegeProps {
+  defaultNodes?: Node[];
+  defaultEdges?: Edge[];
+}
+
+const initialNodes: Node[] = [
   {
     data: {
       label: "Node 1",
     },
-    id: "n1",
+    id: nanoid(),
     position: { x: 0, y: 0 },
-    type: "input",
-  },
-  {
-    data: {
-      label: "Node 2",
-    },
-    id: "n2",
-    position: { x: 0, y: 150 },
-    type: "input",
+    type: "default",
   },
 ];
 
-const initialEdges = [{ id: "n1-n2", source: "n1", target: "n2" }];
-
-const Treege = () => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
-  const onConnect = useCallback((params: Connection) => setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)), [setEdges]);
+const Flow = ({ defaultEdges, defaultNodes }: TreegeProps) => {
+  const { onConnect, onConnectEnd, onNodeDragStart } = useFlowInteractions();
 
   return (
-    <ReactFlowProvider>
-      <ReactFlow
-        fitView
-        colorMode="dark"
-        className="bg-teal-50"
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        nodeTypes={nodeTypes}
-      >
-        <Background gap={10} variant={BackgroundVariant.Dots} />
-        <MiniMap />
-        <Controls />
-      </ReactFlow>
-    </ReactFlowProvider>
+    <ReactFlow
+      fitView
+      colorMode="dark"
+      nodeTypes={nodeTypes}
+      defaultEdges={defaultEdges || []}
+      defaultNodes={defaultNodes || initialNodes}
+      onConnect={onConnect}
+      onConnectEnd={onConnectEnd}
+      onNodeDragStart={onNodeDragStart}
+    >
+      <Background gap={10} variant={BackgroundVariant.Dots} />
+      <MiniMap />
+      <Controls />
+      <ActionsSheets />
+    </ReactFlow>
   );
 };
+
+const Treege = ({ defaultEdges, defaultNodes }: TreegeProps) => (
+  <ReactFlowProvider>
+    <Flow defaultEdges={defaultEdges} defaultNodes={defaultNodes} />
+  </ReactFlowProvider>
+);
 
 export default Treege;
