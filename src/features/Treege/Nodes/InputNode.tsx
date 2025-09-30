@@ -1,4 +1,6 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
+import { BadgeCheckIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import ActionNodeToolbar from "@/features/Treege/NodesToolbar/ActionNodeToolbar";
 
 export type InputNodeType = Node<
@@ -17,7 +19,10 @@ const InputNode = ({ data, isConnectable, type }: InputNodeProps) => (
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
     <ActionNodeToolbar forceToolbarVisible={data?.forceToolbarVisible} toolbarPosition={data?.toolbarPosition} />
     <div className="text-sm">{data?.label}</div>
-    <span className="bg-blue-700 rounded-full px-1 text-xs font-mono">{type}</span>
+    <Badge variant="secondary" className="bg-blue-500 text-white dark:bg-blue-600">
+      <BadgeCheckIcon />
+      {type}
+    </Badge>
     <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} />
   </>
 );

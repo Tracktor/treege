@@ -45,7 +45,6 @@ const Treege = () => {
     <ReactFlowProvider>
       <div style={{ height: "100vh", width: "100vw" }}>
         <ReactFlow
-          fitView
           colorMode="dark"
           className="bg-teal-50"
           nodes={nodes}
