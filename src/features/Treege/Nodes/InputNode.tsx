@@ -1,5 +1,5 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
-import { RectangleHorizontal } from "lucide-react";
+import { RectangleHorizontal, Type } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 export type InputNodeData = {
@@ -29,7 +29,7 @@ const InputNode = ({ data, isConnectable, type }: InputNodeProps) => (
 
       {data?.type && (
         <Badge variant="outline">
-          <RectangleHorizontal />
+          <Type />
           {data.type}
         </Badge>
       )}

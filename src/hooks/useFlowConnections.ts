@@ -9,7 +9,7 @@ import defaultNode from "@/constants/defaultNode";
  * It provides handlers for connecting nodes, ending connections,
  * and starting node drag events.
  */
-const useFlowInteractions = () => {
+const useFlowConnections = () => {
   const { setNodes, setEdges, screenToFlowPosition } = useReactFlow();
 
   /**
@@ -57,4 +57,4 @@ const useFlowInteractions = () => {
   };
 };
 
-export default useFlowInteractions;
+export default useFlowConnections;

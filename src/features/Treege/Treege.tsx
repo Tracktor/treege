@@ -1,9 +1,10 @@
 import { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, ReactFlow, ReactFlowProvider } from "@xyflow/react";
 import { ThemeProvider } from "@/components/theme-provider";
 import defaultNode from "@/constants/defaultNode";
+import edgeTypes from "@/constants/edgeTypes";
 import nodeTypes from "@/constants/nodeTypes";
 import ActionsSheets from "@/features/Treege/Sheets/ActionsSheets";
-import useFlowInteractions from "@/hooks/useFlowInteractions";
+import useFlowConnections from "@/hooks/useFlowConnections";
 
 import "@xyflow/react/dist/base.css";
 
@@ -13,7 +14,7 @@ interface TreegeProps {
 }
 
 const Flow = ({ defaultEdges, defaultNodes }: TreegeProps) => {
-  const { onConnect, onConnectEnd } = useFlowInteractions();
+  const { onConnect, onConnectEnd } = useFlowConnections();
 
   return (
     <ReactFlow
@@ -21,6 +22,7 @@ const Flow = ({ defaultEdges, defaultNodes }: TreegeProps) => {
       colorMode="dark"
       selectNodesOnDrag={false}
       nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
       defaultEdges={defaultEdges || []}
       defaultNodes={defaultNodes || [defaultNode]}
       onConnect={onConnect}
