@@ -44,8 +44,8 @@ const useFlowInteractions = () => {
           }),
         };
 
-        setNodes((nds) => nds.concat(newNode));
-        setEdges((eds) => eds.concat({ id, source: connectionState.fromNode?.id || "", target: id }));
+        setNodes((node) => node.concat(newNode));
+        setEdges((edge) => edge.concat({ id, source: connectionState.fromNode?.id || "", target: id }));
       }
     },
     [screenToFlowPosition, setEdges, setNodes],
