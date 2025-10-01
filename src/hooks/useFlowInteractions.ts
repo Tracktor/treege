@@ -2,6 +2,7 @@ import { addEdge, Node, useReactFlow } from "@xyflow/react";
 import type { OnConnect, OnConnectEnd } from "@xyflow/system";
 import { nanoid } from "nanoid";
 import { useCallback } from "react";
+import defaultNode from "@/constants/defaultNode";
 
 /**
  * A custom hook to manage interactions within a React Flow instance.
@@ -34,14 +35,13 @@ const useFlowInteractions = () => {
         const { clientX, clientY } = "changedTouches" in event ? event.changedTouches[0] : event;
 
         const newNode: Node = {
-          data: { label: "" },
+          ...defaultNode,
           id,
           origin: [0.5, 0.0],
           position: screenToFlowPosition({
             x: clientX,
             y: clientY,
           }),
-          type: "default",
         };
 
         setNodes((nds) => nds.concat(newNode));

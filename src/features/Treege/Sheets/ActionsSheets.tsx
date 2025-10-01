@@ -1,5 +1,6 @@
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import NodeForm from "@/features/Treege/Form/NodeForm";
+import InputNodeForm from "@/features/Treege/Forms/InputNodeForm";
+import SelectNodeType from "@/features/Treege/Inputs/SelectNodeType";
 import useFlow from "@/hooks/useFlow";
 
 const ActionsSheets = () => {
@@ -13,7 +14,10 @@ const ActionsSheets = () => {
           <SheetDescription>{String(selectedNode?.data?.label || selectedNode?.data?.name || "")}</SheetDescription>
         </SheetHeader>
 
-        <NodeForm />
+        <div className="grid gap-6 px-4">
+          <SelectNodeType />
+          {selectedNode?.type === "input" && <InputNodeForm />}
+        </div>
       </SheetContent>
     </Sheet>
   );

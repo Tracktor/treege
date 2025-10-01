@@ -2,7 +2,10 @@
   "extends": "eslint-config-react-tracktor",
   "overrides": [
     {
-      "files": ["src/components/ui/**/*.{js,jsx,ts,tsx}"],
+      "files": [
+        "src/components/ui/**/*.{js,jsx,ts,tsx}",
+        "src/lib/**/*.{js,jsx,ts,tsx}*"
+      ],
       "rules": {
         "all": "off"
       }

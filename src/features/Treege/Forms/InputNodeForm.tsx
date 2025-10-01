@@ -1,20 +1,19 @@
 import { useForm } from "@tanstack/react-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { InputNodeType } from "@/features/Treege/Nodes/InputNode";
+import { InputNodeData } from "@/features/Treege/Nodes/InputNode";
 import useFlow from "@/hooks/useFlow";
 
-const NodeForm = () => {
-  const { updateSelectedNode, selectedNode, clearSelection } = useFlow();
+const InputNodeForm = () => {
+  const { updateSelectedNodeData, selectedNode, clearSelection } = useFlow();
 
   const form = useForm({
     defaultValues: {
       label: selectedNode?.data?.label || "",
       name: selectedNode?.data?.name || "",
-    } as InputNodeType["data"],
+    } as InputNodeData,
     onSubmit: async ({ value }) => {
-      updateSelectedNode(value);
+      updateSelectedNodeData(value);
       clearSelection();
     },
   });
@@ -28,20 +27,7 @@ const NodeForm = () => {
         form.handleSubmit().then();
       }}
     >
-      <div className="grid gap-6 px-4">
-        <Select>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="input">Input</SelectItem>
-              <SelectItem value="ui">UI</SelectItem>
-              <SelectItem value="custom">Custom</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-
+      <div className="grid gap-6">
         <form.Field
           name="label"
           children={(field) => (
@@ -54,7 +40,7 @@ const NodeForm = () => {
                 onBlur={field.handleBlur}
                 onChange={(e) => {
                   field.handleChange(e.target.value);
-                  updateSelectedNode({ [field.name]: e.target.value });
+                  updateSelectedNodeData({ [field.name]: e.target.value });
                 }}
               />
             </div>
@@ -74,7 +60,7 @@ const NodeForm = () => {
                 onBlur={field.handleBlur}
                 onChange={(e) => {
                   field.handleChange(e.target.value);
-                  updateSelectedNode({ [field.name]: e.target.value });
+                  updateSelectedNodeData({ [field.name]: e.target.value });
                 }}
               />
             </div>
@@ -85,4 +71,4 @@ const NodeForm = () => {
   );
 };
 
-export default NodeForm;
+export default InputNodeForm;

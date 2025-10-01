@@ -35,7 +35,7 @@ const useFlow = () => {
    * @param id - The ID of the node to update.
    * @param data - Partial data to merge into the node's existing data.
    */
-  const updateNode = useCallback(
+  const updateNodeData = useCallback(
     (id: string, data: Partial<(typeof nodes)[number]["data"]>) => {
       reactFlow.setNodes((nds) =>
         nds.map((node) => {
@@ -56,18 +56,56 @@ const useFlow = () => {
   );
 
   /**
+   * Updates a node's type by its ID.
+   * @param id - The ID of the node to update.
+   * @param type - The new type to set for the node.
+   */
+  const updateNodeType = useCallback(
+    (id: string, type: string) => {
+      reactFlow.setNodes((nds) =>
+        nds.map((node) => {
+          if (node.id === id) {
+            return {
+              ...node,
+              data: {},
+              type,
+            };
+          }
+          return node;
+        }),
+      );
+    },
+    [reactFlow],
+  );
+
+  /**
+   * Updates the type of the currently selected node.
+   * If no node is selected, the function does nothing.
+   * @param type - The new type to set for the selected node.
+   */
+  const updateSelectedNodeType = useCallback(
+    (type: string) => {
+      const currentSelectedNode = reactFlow.getNodes().find((node) => node.selected);
+      if (!currentSelectedNode) return;
+
+      updateNodeType(currentSelectedNode.id, type);
+    },
+    [reactFlow, updateNodeType],
+  );
+
+  /**
    * Updates the data of the currently selected node.
    * If no node is selected, the function does nothing.
    * @param data - Partial data to merge into the selected node's existing data.
    */
-  const updateSelectedNode = useCallback(
+  const updateSelectedNodeData = useCallback(
     (data: Partial<(typeof nodes)[number]["data"]>) => {
       const currentSelectedNode = reactFlow.getNodes().find((node) => node.selected);
       if (!currentSelectedNode) return;
 
-      updateNode(currentSelectedNode.id, data);
+      updateNodeData(currentSelectedNode.id, data);
     },
-    [reactFlow, updateNode],
+    [reactFlow, updateNodeData],
   );
 
   return {
@@ -81,8 +119,10 @@ const useFlow = () => {
     selectedEdges,
     selectedNode,
     selectedNodes,
-    updateNode,
-    updateSelectedNode,
+    updateNodeData,
+    updateNodeType,
+    updateSelectedNodeData,
+    updateSelectedNodeType,
   };
 };
 

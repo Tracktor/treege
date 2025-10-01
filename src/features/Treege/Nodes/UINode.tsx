@@ -1,19 +1,17 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
-import { RectangleHorizontal } from "lucide-react";
-import { HTMLInputTypeAttribute } from "react";
+import { LucidePencilRuler } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-export type InputNodeData = {
+export type UINodeData = {
   label?: string;
-  name?: string;
-  type?: HTMLInputTypeAttribute;
+  type?: string;
 };
 
-export type InputNodeType = Node<InputNodeData, "input">;
+export type UINodeType = Node<UINodeData, "ui">;
 
-export type InputNodeProps = NodeProps<InputNodeType>;
+export type UINodeProps = NodeProps<UINodeType>;
 
-const InputNode = ({ data, isConnectable, type }: InputNodeProps) => (
+const UINode = ({ data, isConnectable, type }: UINodeProps) => (
   <>
     {/* Top handle */}
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} style={{ height: 10, width: 10 }} />
@@ -22,8 +20,8 @@ const InputNode = ({ data, isConnectable, type }: InputNodeProps) => (
     <div className="text-2xl">{data?.label}</div>
 
     {/* Type */}
-    <Badge variant="secondary" className="bg-blue-500 text-white dark:bg-blue-600">
-      <RectangleHorizontal />
+    <Badge variant="destructive">
+      <LucidePencilRuler />
       {type}
     </Badge>
 
@@ -32,4 +30,4 @@ const InputNode = ({ data, isConnectable, type }: InputNodeProps) => (
   </>
 );
 
-export default InputNode;
+export default UINode;

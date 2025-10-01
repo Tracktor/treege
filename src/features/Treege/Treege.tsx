@@ -1,27 +1,16 @@
 import { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, ReactFlow, ReactFlowProvider } from "@xyflow/react";
-import { nanoid } from "nanoid";
 import { ThemeProvider } from "@/components/theme-provider";
+import defaultNode from "@/constants/defaultNode";
 import nodeTypes from "@/constants/nodeTypes";
 import ActionsSheets from "@/features/Treege/Sheets/ActionsSheets";
 import useFlowInteractions from "@/hooks/useFlowInteractions";
 
-import "@xyflow/react/dist/style.css";
+import "@xyflow/react/dist/base.css";
 
 interface TreegeProps {
   defaultNodes?: Node[];
   defaultEdges?: Edge[];
 }
-
-const initialNodes: Node[] = [
-  {
-    data: {
-      label: "",
-    },
-    id: nanoid(),
-    position: { x: 0, y: 0 },
-    type: "default",
-  },
-];
 
 const Flow = ({ defaultEdges, defaultNodes }: TreegeProps) => {
   const { onConnect, onConnectEnd } = useFlowInteractions();
@@ -33,7 +22,7 @@ const Flow = ({ defaultEdges, defaultNodes }: TreegeProps) => {
       selectNodesOnDrag={false}
       nodeTypes={nodeTypes}
       defaultEdges={defaultEdges || []}
-      defaultNodes={defaultNodes || initialNodes}
+      defaultNodes={defaultNodes || [defaultNode]}
       onConnect={onConnect}
       onConnectEnd={onConnectEnd}
     >

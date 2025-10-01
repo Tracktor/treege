@@ -1,19 +1,16 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
-import { RectangleHorizontal } from "lucide-react";
-import { HTMLInputTypeAttribute } from "react";
+import { Columns3Cog } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-export type InputNodeData = {
+export type CustomNodeData = {
   label?: string;
-  name?: string;
-  type?: HTMLInputTypeAttribute;
 };
 
-export type InputNodeType = Node<InputNodeData, "input">;
+export type CustomNodeType = Node<CustomNodeData, "default">;
 
-export type InputNodeProps = NodeProps<InputNodeType>;
+export type CustomNodeProps = NodeProps<CustomNodeType>;
 
-const InputNode = ({ data, isConnectable, type }: InputNodeProps) => (
+const CustomNode = ({ data, isConnectable, type }: CustomNodeProps) => (
   <>
     {/* Top handle */}
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} style={{ height: 10, width: 10 }} />
@@ -22,8 +19,8 @@ const InputNode = ({ data, isConnectable, type }: InputNodeProps) => (
     <div className="text-2xl">{data?.label}</div>
 
     {/* Type */}
-    <Badge variant="secondary" className="bg-blue-500 text-white dark:bg-blue-600">
-      <RectangleHorizontal />
+    <Badge>
+      <Columns3Cog />
       {type}
     </Badge>
 
@@ -32,4 +29,4 @@ const InputNode = ({ data, isConnectable, type }: InputNodeProps) => (
   </>
 );
 
-export default InputNode;
+export default CustomNode;
