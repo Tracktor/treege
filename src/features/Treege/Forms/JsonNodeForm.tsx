@@ -22,13 +22,14 @@ const InputNodeForm = () => {
   return (
     <form
       id="edit-node-form"
+      className="flex flex-col h-full pb-4 min-h-0"
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();
         form.handleSubmit().then();
       }}
     >
-      <div className="grid gap-6">
+      <div className="flex flex-col gap-6 h-full">
         <form.Field
           name="label"
           children={(field) => (
@@ -48,30 +49,31 @@ const InputNodeForm = () => {
           )}
         />
 
-        <div>
-          <form.Field
-            name="json"
-            children={(field) => (
-              <div className="grid gap-3">
-                <Label htmlFor={field.name}>Name *</Label>
-                <CodeEditor
-                  value={field.state.value}
-                  language="json"
-                  data-color-mode="dark"
-                  placeholder="Please enter JSON."
-                  onChange={(event) => field.handleChange(event.target.value)}
-                  padding={15}
-                  className="dark:bg-input/30"
-                  style={{
-                    fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-                    height: 500,
-                    overflowY: "auto",
-                  }}
-                />
-              </div>
-            )}
-          />
-        </div>
+        <form.Field
+          name="json"
+          children={(field) => (
+            <div className="flex flex-col gap-3 flex-1 min-h-0">
+              <Label htmlFor={field.name}>Json</Label>
+              <CodeEditor
+                value={field.state.value}
+                language="json"
+                data-color-mode="dark"
+                placeholder="Please enter JSON."
+                padding={15}
+                className="dark:bg-input/30"
+                style={{
+                  fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+                  height: "100%",
+                  overflowY: "auto",
+                }}
+                onChange={(event) => {
+                  field.handleChange(event.target.value);
+                  updateSelectedNodeData({ [field.name]: event.target.value });
+                }}
+              />
+            </div>
+          )}
+        />
       </div>
     </form>
   );
