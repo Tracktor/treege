@@ -1,0 +1,28 @@
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import useFlow from "@/hooks/useFlow";
+
+const SelectInputType = () => {
+  const { updateSelectedNodeData, selectedNode } = useFlow();
+  const value = String(selectedNode?.data?.type);
+
+  return (
+    <SelectGroup>
+      <SelectLabel>Type</SelectLabel>
+      <Select value={value} onValueChange={(newValue) => updateSelectedNodeData({ type: newValue })}>
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Type" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value="text">Text</SelectItem>
+            <SelectItem value="number">Number</SelectItem>
+            <SelectItem value="autocomplete">Autocomplete</SelectItem>
+            <SelectItem value="http">HTTP</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </SelectGroup>
+  );
+};
+
+export default SelectInputType;

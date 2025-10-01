@@ -10,7 +10,7 @@ const SelectNodeType = () => {
       <SelectLabel>Node Type</SelectLabel>
       <Select value={value} onValueChange={(newValue) => updateSelectedNodeType(newValue)}>
         <SelectTrigger className="w-full">
-          <SelectValue placeholder="Type" />
+          <SelectValue placeholder="Node Type" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>

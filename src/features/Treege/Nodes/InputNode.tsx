@@ -1,12 +1,11 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { RectangleHorizontal } from "lucide-react";
-import { HTMLInputTypeAttribute } from "react";
 import { Badge } from "@/components/ui/badge";
 
 export type InputNodeData = {
   label?: string;
   name?: string;
-  type?: HTMLInputTypeAttribute;
+  type?: string;
 };
 
 export type InputNodeType = Node<InputNodeData, "input">;
@@ -22,10 +21,19 @@ const InputNode = ({ data, isConnectable, type }: InputNodeProps) => (
     <div className="text-2xl">{data?.label}</div>
 
     {/* Type */}
-    <Badge variant="secondary" className="bg-blue-500 text-white dark:bg-blue-600">
-      <RectangleHorizontal />
-      {type}
-    </Badge>
+    <div className="flex gap-1">
+      <Badge variant="secondary" className="bg-blue-500 text-white dark:bg-blue-600">
+        <RectangleHorizontal />
+        {type}
+      </Badge>
+
+      {data?.type && (
+        <Badge variant="outline">
+          <RectangleHorizontal />
+          {data.type}
+        </Badge>
+      )}
+    </div>
 
     {/* Bot handle */}
     <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} />
