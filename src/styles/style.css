@@ -148,3 +148,7 @@ div.react-flow__node:hover {
 div.react-flow__node.selected {
     box-shadow: var(--xy-node-boxshadow-selected);
 }
+
+.w-tc-editor {
+    @apply bg-input/30 dark:bg-input/30 rounded-md;
+}
