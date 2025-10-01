@@ -1,16 +1,17 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
-import { Columns3Cog } from "lucide-react";
+import { Braces } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-export type CustomNodeData = {
+export type JsonNodeData = {
   label?: string;
+  json?: string;
 };
 
-export type CustomNodeType = Node<CustomNodeData, "default">;
+export type JsonNodeType = Node<JsonNodeData, "default">;
 
-export type CustomNodeProps = NodeProps<CustomNodeType>;
+export type JsonNodeProps = NodeProps<JsonNodeType>;
 
-const CustomNode = ({ data, isConnectable, type }: CustomNodeProps) => (
+const JsonNode = ({ data, isConnectable, type }: JsonNodeProps) => (
   <>
     {/* Top handle */}
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} style={{ height: 10, width: 10 }} />
@@ -20,7 +21,7 @@ const CustomNode = ({ data, isConnectable, type }: CustomNodeProps) => (
 
     {/* Type */}
     <Badge>
-      <Columns3Cog />
+      <Braces />
       {type}
     </Badge>
 
@@ -29,4 +30,4 @@ const CustomNode = ({ data, isConnectable, type }: CustomNodeProps) => (
   </>
 );
 
-export default CustomNode;
+export default JsonNode;

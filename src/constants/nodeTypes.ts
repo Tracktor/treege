@@ -1,10 +1,10 @@
-import CustomNode from "@/features/Treege/Nodes/CustomNode";
 import InputNode from "@/features/Treege/Nodes/InputNode";
+import JsonNode from "@/features/Treege/Nodes/JsonNode";
 import UINode from "@/features/Treege/Nodes/UINode";
 
 const nodeTypes = {
-  custom: CustomNode,
   input: InputNode,
+  json: JsonNode,
   ui: UINode,
 };
 

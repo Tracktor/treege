@@ -1,7 +1,7 @@
 import { useForm } from "@tanstack/react-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { InputNodeData } from "@/features/Treege/Nodes/InputNode";
+import { JsonNodeData } from "@/features/Treege/Nodes/JsonNode";
 import useFlow from "@/hooks/useFlow";
 
 const InputNodeForm = () => {
@@ -9,9 +9,9 @@ const InputNodeForm = () => {
 
   const form = useForm({
     defaultValues: {
+      json: selectedNode?.data?.json || "",
       label: selectedNode?.data?.label || "",
-      name: selectedNode?.data?.name || "",
-    } as InputNodeData,
+    } as JsonNodeData,
     onSubmit: async ({ value }) => {
       updateSelectedNodeData(value);
       clearSelection();
@@ -48,11 +48,12 @@ const InputNodeForm = () => {
         />
 
         <form.Field
-          name="name"
+          name="json"
           children={(field) => (
             <div className="grid gap-3">
-              <Label htmlFor={field.name}>Name</Label>
+              <Label htmlFor={field.name}>Name *</Label>
               <Input
+                required
                 id={field.name}
                 name={field.name}
                 value={field.state.value}

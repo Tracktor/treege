@@ -16,7 +16,7 @@ const SelectNodeType = () => {
           <SelectGroup>
             <SelectItem value="input">Input</SelectItem>
             <SelectItem value="ui">UI</SelectItem>
-            <SelectItem value="custom">Custom</SelectItem>
+            <SelectItem value="json">JSON</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>

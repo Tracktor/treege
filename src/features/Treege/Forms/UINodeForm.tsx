@@ -1,17 +1,17 @@
 import { useForm } from "@tanstack/react-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { InputNodeData } from "@/features/Treege/Nodes/InputNode";
+import { UINodeData } from "@/features/Treege/Nodes/UINode";
 import useFlow from "@/hooks/useFlow";
 
-const InputNodeForm = () => {
+const UINodeForm = () => {
   const { updateSelectedNodeData, selectedNode, clearSelection } = useFlow();
 
   const form = useForm({
     defaultValues: {
       label: selectedNode?.data?.label || "",
-      name: selectedNode?.data?.name || "",
-    } as InputNodeData,
+      type: selectedNode?.data?.type || "",
+    } as UINodeData,
     onSubmit: async ({ value }) => {
       updateSelectedNodeData(value);
       clearSelection();
@@ -48,11 +48,12 @@ const InputNodeForm = () => {
         />
 
         <form.Field
-          name="name"
+          name="type"
           children={(field) => (
             <div className="grid gap-3">
-              <Label htmlFor={field.name}>Name</Label>
+              <Label htmlFor={field.name}>Type</Label>
               <Input
+                required
                 id={field.name}
                 name={field.name}
                 value={field.state.value}
@@ -70,4 +71,4 @@ const InputNodeForm = () => {
   );
 };
 
-export default InputNodeForm;
+export default UINodeForm;
