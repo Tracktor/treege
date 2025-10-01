@@ -14,7 +14,7 @@ export type JsonNodeProps = NodeProps<JsonNodeType>;
 const JsonNode = ({ data, isConnectable, type }: JsonNodeProps) => (
   <>
     {/* Top handle */}
-    <Handle type="target" position={Position.Top} isConnectable={isConnectable} style={{ height: 10, width: 10 }} />
+    <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
 
     {/* Label */}
     <div className="text-2xl">{data?.label}</div>
@@ -26,7 +26,7 @@ const JsonNode = ({ data, isConnectable, type }: JsonNodeProps) => (
     </Badge>
 
     {/* Bot handle */}
-    <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} style={{ height: 10, width: 10 }} />
+    <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} />
   </>
 );
 

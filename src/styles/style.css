@@ -149,6 +149,11 @@ div.react-flow__node.selected {
     box-shadow: var(--xy-node-boxshadow-selected);
 }
 
+.react-flow__handle {
+    width: 15px;
+    height: 15px;
+}
+
 .w-tc-editor {
     @apply bg-input/30 dark:bg-input/30 rounded-md border border-input;
 }
