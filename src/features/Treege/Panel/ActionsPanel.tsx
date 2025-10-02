@@ -80,11 +80,9 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
       <Button variant="outline" size="sm" onClick={handleExport}>
         <ArrowRightFromLine /> Export Json
       </Button>
-      {onSave && (
-        <Button variant="outline" size="sm" onClick={handleSave}>
-          <Save /> Save
-        </Button>
-      )}
+      <Button variant="outline" size="sm" onClick={handleSave}>
+        <Save /> Save
+      </Button>
       <input type="file" accept="application/json,.json" className="hidden" ref={inputFileRef} onChange={handleImport} />
     </Panel>
   );

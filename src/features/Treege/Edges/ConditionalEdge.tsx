@@ -98,10 +98,9 @@ const ConditionalEdge = ({
       {/* Render button */}
       <EdgeLabelRenderer>
         <div
-          className="nodrag nopan"
+          className="nodrag nopan absolute"
           style={{
             pointerEvents: "all",
-            position: "absolute",
             transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
           }}
         >
@@ -121,7 +120,7 @@ const ConditionalEdge = ({
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-80" align="center">
+            <PopoverContent className="w-80" align="center" onClick={(e) => e.stopPropagation()}>
               <form onChange={handleFormChange}>
                 <div className="grid gap-4">
                   <div className="space-y-2">
