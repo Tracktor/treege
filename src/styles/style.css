@@ -125,7 +125,7 @@
 }
 
 button {
-    @apply cursor-pointer
+    @apply cursor-pointer;
 }
 
 #root {
@@ -133,7 +133,7 @@ button {
     width: 100vw;
 }
 
-.react-flow__panel > a{
+.react-flow__panel > a {
     @apply hidden;
 }
 
