@@ -3,7 +3,7 @@ import useFlow from "@/hooks/useFlow";
 
 const SelectInputType = () => {
   const { updateSelectedNodeData, selectedNode } = useFlow();
-  const value = String(selectedNode?.data?.type);
+  const value = selectedNode?.data?.type ? String(selectedNode?.data?.type) : "";
 
   return (
     <SelectGroup>

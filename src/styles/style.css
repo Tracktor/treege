@@ -129,6 +129,10 @@
     width: 100vw;
 }
 
+.react-flow__panel > a{
+    @apply hidden;
+}
+
 div.react-flow__node {
     width: 280px;
     height: 150px;

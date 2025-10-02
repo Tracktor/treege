@@ -7,7 +7,7 @@ export type JsonNodeData = {
   json?: string;
 };
 
-export type JsonNodeType = Node<JsonNodeData, "default">;
+export type JsonNodeType = Node<JsonNodeData, "json">;
 
 export type JsonNodeProps = NodeProps<JsonNodeType>;
 

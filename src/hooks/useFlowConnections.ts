@@ -50,12 +50,13 @@ const useFlowConnections = () => {
   const onConnectEnd: OnConnectEnd = useCallback(
     (event, connectionState) => {
       if (!connectionState.isValid) {
-        const id = nanoid();
+        const nodeId = nanoid();
+        const edgeId = nanoid();
         const { clientX, clientY } = "changedTouches" in event ? event.changedTouches[0] : event;
 
         const newNode: Node = {
           ...defaultNode,
-          id,
+          id: nodeId,
           origin: [0.5, 0.0],
           position: screenToFlowPosition({
             x: clientX,
@@ -81,9 +82,9 @@ const useFlowConnections = () => {
                   },
                 }
               : undefined,
-            id,
+            id: edgeId,
             source: sourceId,
-            target: id,
+            target: nodeId,
             type: willHaveSiblings ? "conditional" : "default",
           };
 

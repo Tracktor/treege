@@ -1,4 +1,5 @@
 import { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, ReactFlow, ReactFlowProvider } from "@xyflow/react";
+import Logo from "@/components/data-display/Logo";
 import { ThemeProvider } from "@/components/theme-provider";
 import defaultNode from "@/constants/defaultNode";
 import edgeTypes from "@/constants/edgeTypes";
@@ -30,6 +31,7 @@ const Flow = ({ defaultEdges, defaultNodes }: TreegeProps) => {
       onEdgesDelete={onEdgesDelete}
     >
       <Background gap={10} variant={BackgroundVariant.Dots} />
+      <Logo />
       <MiniMap />
       <Controls />
       <NodeActionsSheet />
