@@ -98,7 +98,7 @@ const ConditionalEdge = ({
       {/* Render button */}
       <EdgeLabelRenderer>
         <div
-          className="conditional-edge-label nodrag nopan"
+          className="nodrag nopan"
           style={{
             pointerEvents: "all",
             position: "absolute",

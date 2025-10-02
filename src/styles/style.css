@@ -165,8 +165,3 @@ div.react-flow__node.selected {
 .w-tc-editor {
     @apply bg-input/30 dark:bg-input/30 rounded-md border border-input;
 }
-
-.conditional-edge-label:hover button {
-    background: var(--ring);
-    cursor: pointer;
-}

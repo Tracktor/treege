@@ -14,10 +14,8 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
   const { nodes, edges, setNodes, setEdges } = useFlow();
   const inputFileRef = useRef<HTMLInputElement>(null);
 
-  const handleImport = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log("'a");
-
-    const file = event.target.files?.[0];
+  const handleImport = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    const file = target.files?.[0];
 
     if (!file) {
       return;
