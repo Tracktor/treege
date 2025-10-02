@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import defaultNode from "@/constants/defaultNode";
 import edgeTypes from "@/constants/edgeTypes";
 import nodeTypes from "@/constants/nodeTypes";
+import ActionsPanel from "@/features/Treege/Panel/ActionsPanel";
 import NodeActionsSheet from "@/features/Treege/Sheets/NodeActionsSheet";
 import useFlowConnections from "@/hooks/useFlowConnections";
 
@@ -31,6 +32,7 @@ const Flow = ({ defaultEdges, defaultNodes }: TreegeProps) => {
       onEdgesDelete={onEdgesDelete}
     >
       <Background gap={10} variant={BackgroundVariant.Dots} />
+      <ActionsPanel />
       <Logo />
       <MiniMap />
       <Controls />
