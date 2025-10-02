@@ -1,12 +1,42 @@
-import { BaseEdge, EdgeLabelRenderer, type EdgeProps, getBezierPath } from "@xyflow/react";
-import { Waypoints } from "lucide-react";
-import { MouseEvent } from "react";
+import { useForm } from "@tanstack/react-form";
+import { BaseEdge, Edge, EdgeLabelRenderer, EdgeProps, getBezierPath } from "@xyflow/react";
+import { Waypoints, X } from "lucide-react";
+import { MouseEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import useFlow from "@/hooks/useFlow";
 
-const ConditionalEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, markerEnd, style }: EdgeProps) => {
+type Operator = "===" | "!==" | ">" | "<" | ">=" | "<=";
+
+export type ConditionalEdgeData = {
+  condition?: {
+    label?: string;
+    operator?: Operator;
+    value?: string;
+    fieldId?: string;
+  };
+};
+
+export type ConditionalEdgeType = Edge<ConditionalEdgeData, "conditional">;
+
+export type ConditionalEdgeProps = EdgeProps<ConditionalEdgeType>;
+
+const ConditionalEdge = ({
+  id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition,
+  markerEnd,
+  style,
+  data,
+}: ConditionalEdgeProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [edgePath, labelX, labelY] = getBezierPath({
     sourcePosition,
     sourceX,
@@ -16,56 +46,176 @@ const ConditionalEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePositio
     targetY,
   });
 
+  const { updateEdgeData } = useFlow();
+
+  const form = useForm({
+    defaultValues: {
+      fieldId: data?.condition?.fieldId || "",
+      label: data?.condition?.label || "",
+      operator: data?.condition?.operator || "===",
+      value: data?.condition?.value || "",
+    },
+    onSubmit: async ({ value }) => {
+      updateEdgeData(id, {
+        condition: value,
+      });
+    },
+  });
+
   const onEdgeClick = (e: MouseEvent) => {
     e.stopPropagation();
   };
 
-  console.log(id);
+  const handleClear = () => {
+    form.reset();
+    updateEdgeData(id, {
+      condition: undefined,
+    });
+    setIsOpen(false);
+  };
+
+  const handleFormChange = (e: React.FormEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    form.handleSubmit().then();
+  };
+
+  const hasCondition = data?.condition?.operator && data?.condition?.value && data?.condition?.fieldId;
 
   return (
     <>
       {/* Edge */}
-      <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />
+      <BaseEdge
+        path={edgePath}
+        markerEnd={markerEnd}
+        style={{
+          ...style,
+          stroke: hasCondition ? "var(--color-chart-2)" : style?.stroke,
+          strokeWidth: hasCondition ? 2 : style?.strokeWidth,
+        }}
+      />
 
       {/* Render button */}
       <EdgeLabelRenderer>
         <div
-          className="button-edge__label nodrag nopan"
+          className="conditional-edge-label nodrag nopan"
           style={{
+            pointerEvents: "all",
+            position: "absolute",
             transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
           }}
         >
-          <Popover>
+          <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
-              <Button variant="secondary" size="icon" className="size-8" onClick={onEdgeClick}>
-                <Waypoints />
+              <Button variant={hasCondition ? "default" : "secondary"} className="h-8 px-2 text-xs" onClick={onEdgeClick}>
+                {hasCondition ? (
+                  <>
+                    <Waypoints className="w-3 h-3 mr-1" />
+                    {data?.condition?.label || `${data?.condition?.fieldId} ${data?.condition?.operator} ${data?.condition?.value}`}
+                  </>
+                ) : (
+                  <>
+                    <Waypoints className="w-3 h-3 mr-1" />
+                    Condition
+                  </>
+                )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-80">
-              <div className="grid gap-4">
-                <div className="space-y-2">
-                  <h4 className="leading-none font-medium">Title</h4>
-                  <p className="text-muted-foreground text-sm">Description.</p>
+            <PopoverContent className="w-80" align="center">
+              <form onChange={handleFormChange}>
+                <div className="grid gap-4">
+                  <div className="space-y-2">
+                    <h4 className="font-medium leading-none">Display condition</h4>
+                    <p className="text-sm text-muted-foreground">This field will only be shown if the condition is met.</p>
+                  </div>
+
+                  <div className="grid gap-3">
+                    {/* Label */}
+                    <form.Field name="label">
+                      {(field) => (
+                        <div className="grid gap-2">
+                          <Label htmlFor="label">Label (optional)</Label>
+                          <Input
+                            id="label"
+                            placeholder="Ex: If is adult"
+                            value={field.state.value}
+                            onChange={({ target }) => field.handleChange(target.value)}
+                          />
+                        </div>
+                      )}
+                    </form.Field>
+
+                    {/* Field ID */}
+                    <form.Field name="fieldId">
+                      {(field) => (
+                        <div className="grid gap-2">
+                          <Label htmlFor="fieldId">Field to check</Label>
+                          <Input
+                            id="fieldId"
+                            placeholder="Ex: age"
+                            value={field.state.value}
+                            onChange={({ target }) => field.handleChange(target.value)}
+                          />
+                          <p className="text-xs text-muted-foreground">ID of the parent field to check</p>
+                        </div>
+                      )}
+                    </form.Field>
+
+                    {/* Operator */}
+                    <form.Field name="operator">
+                      {(field) => (
+                        <div className="grid gap-2">
+                          <Label htmlFor="operator">Operator</Label>
+                          <Select
+                            value={field.state.value}
+                            onValueChange={(value: Operator) => {
+                              field.handleChange(value);
+                            }}
+                          >
+                            <SelectTrigger id="operator">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="===">equal to (===)</SelectItem>
+                              <SelectItem value="!==">not equal to (!==)</SelectItem>
+                              <SelectItem value=">">greater than (&gt;)</SelectItem>
+                              <SelectItem value="<">less than (&lt;)</SelectItem>
+                              <SelectItem value=">=">greater than or equal to (≥)</SelectItem>
+                              <SelectItem value="<=">less than or equal to (≤)</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      )}
+                    </form.Field>
+
+                    {/* Value */}
+                    <form.Field name="value">
+                      {(field) => (
+                        <div className="grid gap-2">
+                          <Label htmlFor="value">Value</Label>
+                          <Input
+                            id="value"
+                            placeholder="Ex: 18"
+                            value={field.state.value}
+                            onChange={({ target }) => field.handleChange(target.value)}
+                          />
+                        </div>
+                      )}
+                    </form.Field>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex justify-end pt-2 gap-2">
+                    <Button type="button" size="sm" variant="outline" onClick={handleClear}>
+                      <X className="w-4 h-4 mr-1" />
+                      Clear
+                    </Button>
+                    <Button type="button" size="sm" onClick={() => setIsOpen(false)}>
+                      Close
+                    </Button>
+                  </div>
                 </div>
-                <div className="grid gap-2">
-                  <div className="grid grid-cols-3 items-center gap-4">
-                    <Label htmlFor="width">Width</Label>
-                    <Input id="width" defaultValue="100%" className="col-span-2 h-8" />
-                  </div>
-                  <div className="grid grid-cols-3 items-center gap-4">
-                    <Label htmlFor="maxWidth">Max. width</Label>
-                    <Input id="maxWidth" defaultValue="300px" className="col-span-2 h-8" />
-                  </div>
-                  <div className="grid grid-cols-3 items-center gap-4">
-                    <Label htmlFor="height">Height</Label>
-                    <Input id="height" defaultValue="25px" className="col-span-2 h-8" />
-                  </div>
-                  <div className="grid grid-cols-3 items-center gap-4">
-                    <Label htmlFor="maxHeight">Max. height</Label>
-                    <Input id="maxHeight" defaultValue="none" className="col-span-2 h-8" />
-                  </div>
-                </div>
-              </div>
+              </form>
             </PopoverContent>
           </Popover>
         </div>
@@ -73,4 +223,5 @@ const ConditionalEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePositio
     </>
   );
 };
+
 export default ConditionalEdge;

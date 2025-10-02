@@ -158,13 +158,7 @@ div.react-flow__node.selected {
     @apply bg-input/30 dark:bg-input/30 rounded-md border border-input;
 }
 
-.button-edge__label {
-    position: absolute;
-    pointer-events: all;
-    transform-origin: center;
-}
-
-.button-edge__label:hover button {
+.conditional-edge-label:hover button {
     background: var(--ring);
     cursor: pointer;
 }
