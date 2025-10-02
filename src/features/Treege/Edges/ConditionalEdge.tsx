@@ -1,7 +1,7 @@
 import { useForm } from "@tanstack/react-form";
 import { BaseEdge, Edge, EdgeLabelRenderer, EdgeProps, getBezierPath } from "@xyflow/react";
 import { Waypoints, X } from "lucide-react";
-import { MouseEvent, useState } from "react";
+import { FormEvent, MouseEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -74,7 +74,7 @@ const ConditionalEdge = ({
     setIsOpen(false);
   };
 
-  const handleFormChange = (e: React.FormEvent) => {
+  const handleFormChange = (e: FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
     form.handleSubmit().then();
