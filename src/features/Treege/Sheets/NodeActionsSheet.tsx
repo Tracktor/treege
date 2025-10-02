@@ -13,7 +13,11 @@ const NodeActionsSheet = () => {
       <SheetContent>
         <SheetHeader>
           <SheetTitle>Edit node</SheetTitle>
-          <SheetDescription>{String(selectedNode?.data?.label || selectedNode?.data?.name || "")}</SheetDescription>
+          <SheetDescription>
+            {selectedNode?.id}
+            {!!selectedNode?.id && (!!selectedNode?.data?.label || !!selectedNode?.data?.name) && " - "}
+            {String(selectedNode?.data?.label || selectedNode?.data?.name || "")}
+          </SheetDescription>
         </SheetHeader>
 
         <div className="flex flex-col gap-6 px-4 flex-1 min-h-0">
