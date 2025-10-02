@@ -5,7 +5,7 @@ import UINodeForm from "@/features/Treege/Forms/UINodeForm";
 import SelectNodeType from "@/features/Treege/Inputs/SelectNodeType";
 import useFlow from "@/hooks/useFlow";
 
-const NodeActionsSheets = () => {
+const NodeActionsSheet = () => {
   const { clearSelection, hasSelectedNode, selectedNode } = useFlow();
 
   return (
@@ -27,4 +27,4 @@ const NodeActionsSheets = () => {
   );
 };
 
-export default NodeActionsSheets;
+export default NodeActionsSheet;
