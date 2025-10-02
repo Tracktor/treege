@@ -1,7 +1,7 @@
 import { useForm } from "@tanstack/react-form";
 import { BaseEdge, Edge, EdgeLabelRenderer, EdgeProps, getBezierPath } from "@xyflow/react";
 import { Waypoints, X } from "lucide-react";
-import { FormEvent, MouseEvent, useState } from "react";
+import { MouseEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,7 +16,6 @@ export type ConditionalEdgeData = {
     label?: string;
     operator?: Operator;
     value?: string;
-    fieldId?: string;
   };
 };
 
@@ -26,6 +25,7 @@ export type ConditionalEdgeProps = EdgeProps<ConditionalEdgeType>;
 
 const ConditionalEdge = ({
   id,
+  source,
   sourceX,
   sourceY,
   targetX,
@@ -46,11 +46,12 @@ const ConditionalEdge = ({
     targetY,
   });
 
-  const { updateEdgeData } = useFlow();
+  const { updateEdgeData, getNode } = useFlow();
+  const parentNode = getNode(source);
+  const parentLabel = parentNode?.data?.label ? String(parentNode?.data?.label) : source;
 
   const form = useForm({
     defaultValues: {
-      fieldId: data?.condition?.fieldId || "",
       label: data?.condition?.label || "",
       operator: data?.condition?.operator || "===",
       value: data?.condition?.value || "",
@@ -74,13 +75,13 @@ const ConditionalEdge = ({
     setIsOpen(false);
   };
 
-  const handleFormChange = (e: FormEvent) => {
+  const handleFormChange = (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
     form.handleSubmit().then();
   };
 
-  const hasCondition = data?.condition?.operator && data?.condition?.value && data?.condition?.fieldId;
+  const hasCondition = data?.condition?.operator && data?.condition?.value;
 
   return (
     <>
@@ -110,7 +111,7 @@ const ConditionalEdge = ({
                 {hasCondition ? (
                   <>
                     <Waypoints className="w-3 h-3 mr-1" />
-                    {data?.condition?.label || `${data?.condition?.fieldId} ${data?.condition?.operator} ${data?.condition?.value}`}
+                    {data?.condition?.label || `${parentLabel} ${data?.condition?.operator} ${data?.condition?.value}`}
                   </>
                 ) : (
                   <>
@@ -125,7 +126,9 @@ const ConditionalEdge = ({
                 <div className="grid gap-4">
                   <div className="space-y-2">
                     <h4 className="font-medium leading-none">Display condition</h4>
-                    <p className="text-sm text-muted-foreground">This field will only be shown if the condition is met.</p>
+                    <p className="text-sm text-muted-foreground">
+                      This field will be shown if <span className="font-black">{parentLabel}</span> meets the condition.
+                    </p>
                   </div>
 
                   <div className="grid gap-3">
@@ -140,22 +143,6 @@ const ConditionalEdge = ({
                             value={field.state.value}
                             onChange={({ target }) => field.handleChange(target.value)}
                           />
-                        </div>
-                      )}
-                    </form.Field>
-
-                    {/* Field ID */}
-                    <form.Field name="fieldId">
-                      {(field) => (
-                        <div className="grid gap-2">
-                          <Label htmlFor="fieldId">Field to check</Label>
-                          <Input
-                            id="fieldId"
-                            placeholder="Ex: age"
-                            value={field.state.value}
-                            onChange={({ target }) => field.handleChange(target.value)}
-                          />
-                          <p className="text-xs text-muted-foreground">ID of the parent field to check</p>
                         </div>
                       )}
                     </form.Field>
