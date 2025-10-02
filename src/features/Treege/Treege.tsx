@@ -1,6 +1,7 @@
 import { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, ReactFlow, ReactFlowProvider } from "@xyflow/react";
 import Logo from "@/components/data-display/Logo";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 import defaultNode from "@/constants/defaultNode";
 import edgeTypes from "@/constants/edgeTypes";
 import nodeTypes from "@/constants/nodeTypes";
@@ -10,12 +11,31 @@ import useFlowConnections from "@/hooks/useFlowConnections";
 
 import "@xyflow/react/dist/base.css";
 
-interface TreegeProps {
+export interface TreegeProps {
+  /**
+   * Default nodes to initialize the nodes in the flow.
+   */
   defaultNodes?: Node[];
+  /**
+   * Default edges to initialize the edges in the flow.
+   */
   defaultEdges?: Edge[];
+  /**
+   * Default flow structure containing combined nodes and edges.
+   */
+  defaultFlow?: { nodes: Node[]; edges: Edge[] };
+  /**
+   * Callback function triggered when exporting JSON data.
+   */
+  onExportJson?: () => { nodes: Node[]; edges: Edge[] } | undefined;
+  /**
+   * Callback function triggered when saving the flow data.
+   * @param data
+   */
+  onSave?: (data: { nodes: Node[]; edges: Edge[] }) => void;
 }
 
-const Flow = ({ defaultEdges, defaultNodes }: TreegeProps) => {
+const Flow = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave }: TreegeProps) => {
   const { onConnect, onConnectEnd, onEdgesDelete } = useFlowConnections();
 
   return (
@@ -25,14 +45,14 @@ const Flow = ({ defaultEdges, defaultNodes }: TreegeProps) => {
       selectNodesOnDrag={false}
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
-      defaultEdges={defaultEdges || []}
-      defaultNodes={defaultNodes || [defaultNode]}
+      defaultEdges={defaultEdges || defaultFlow?.edges || []}
+      defaultNodes={defaultNodes || defaultFlow?.nodes || [defaultNode]}
       onConnect={onConnect}
       onConnectEnd={onConnectEnd}
       onEdgesDelete={onEdgesDelete}
     >
       <Background gap={10} variant={BackgroundVariant.Dots} />
-      <ActionsPanel />
+      <ActionsPanel onExportJson={onExportJson} onSave={onSave} />
       <Logo />
       <MiniMap />
       <Controls />
@@ -41,10 +61,11 @@ const Flow = ({ defaultEdges, defaultNodes }: TreegeProps) => {
   );
 };
 
-const Treege = ({ defaultEdges, defaultNodes }: TreegeProps) => (
+const Treege = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave }: TreegeProps) => (
   <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <Toaster position="bottom-center" />
     <ReactFlowProvider>
-      <Flow defaultEdges={defaultEdges} defaultNodes={defaultNodes} />
+      <Flow defaultEdges={defaultEdges} defaultNodes={defaultNodes} onExportJson={onExportJson} onSave={onSave} defaultFlow={defaultFlow} />
     </ReactFlowProvider>
   </ThemeProvider>
 );

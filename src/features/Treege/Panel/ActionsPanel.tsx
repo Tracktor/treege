@@ -1,16 +1,94 @@
-import { Panel } from "@xyflow/react";
-import { ArrowRightFromLine, Download } from "lucide-react";
+import { Edge, Node, Panel } from "@xyflow/react";
+import { ArrowRightFromLine, Download, Save } from "lucide-react";
+import { ChangeEvent, useRef } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import useFlow from "@/hooks/useFlow";
 
-const ActionsPanel = () => (
-  <Panel position="top-right" className="flex gap-2">
-    <Button variant="outline" size="sm">
-      <Download /> Import Json
-    </Button>
-    <Button variant="outline" size="sm">
-      <ArrowRightFromLine /> Export Json
-    </Button>
-  </Panel>
-);
+export interface ActionsPanelProps {
+  onExportJson?: (data: { nodes: Node[]; edges: Edge[] }) => void;
+  onSave?: (data: { nodes: Node[]; edges: Edge[] }) => void;
+}
 
+const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
+  const { nodes, edges, setNodes, setEdges } = useFlow();
+  const inputFileRef = useRef<HTMLInputElement>(null);
+
+  const handleImport = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log("'a");
+
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      try {
+        const json = JSON.parse(e.target?.result as string);
+
+        if (json.nodes && json.edges) {
+          setNodes(json.nodes);
+          setEdges(json.edges);
+          toast.success("Import successful!", {
+            description: "The flow has been imported successfully.",
+          });
+        } else {
+          toast.error("Invalid JSON file.", {
+            description: "The file must contain nodes and edges arrays.",
+          });
+        }
+      } catch (error) {
+        toast.error("Error parsing JSON file.", {
+          description: "Try to fix the file and import it again.",
+        });
+      }
+
+      if (inputFileRef.current) {
+        inputFileRef.current.value = "";
+      }
+    };
+
+    reader.readAsText(file);
+  };
+
+  const handleExport = () => {
+    const blob = new Blob([JSON.stringify({ edges, nodes }, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = "flow.json";
+    a.click();
+
+    toast.success("Download successfully.", {
+      description: "The flow has been exported successfully.",
+    });
+
+    onExportJson?.({ edges, nodes });
+  };
+
+  const handleSave = () => {
+    onSave?.({ edges, nodes });
+  };
+
+  return (
+    <Panel position="top-right" className="flex gap-2">
+      <Button variant="outline" size="sm" onClick={() => inputFileRef?.current?.click()}>
+        <Download /> Import Json
+      </Button>
+      <Button variant="outline" size="sm" onClick={handleExport}>
+        <ArrowRightFromLine /> Export Json
+      </Button>
+      {onSave && (
+        <Button variant="outline" size="sm" onClick={handleSave}>
+          <Save /> Save
+        </Button>
+      )}
+      <input type="file" accept="application/json,.json" className="hidden" ref={inputFileRef} onChange={handleImport} />
+    </Panel>
+  );
+};
 export default ActionsPanel;
