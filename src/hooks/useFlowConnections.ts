@@ -1,36 +1,55 @@
 import { addEdge, Node, useReactFlow } from "@xyflow/react";
+import type { OnEdgesDelete } from "@xyflow/react/dist/esm/types";
 import type { OnConnect, OnConnectEnd } from "@xyflow/system";
 import { nanoid } from "nanoid";
 import { useCallback } from "react";
 import defaultNode from "@/constants/defaultNode";
 
-/**
- * A custom hook to manage interactions within a React Flow instance.
- * It provides handlers for connecting nodes, ending connections,
- * and starting node drag events.
- */
 const useFlowConnections = () => {
   const { setNodes, setEdges, screenToFlowPosition } = useReactFlow();
 
   /**
    * Handles the connection of two nodes in the flow.
-   * This function is called when a connection is made between two nodes.
-   * It updates the edges state by adding the new edge to the existing edges.
-   *
-   * @param params - The parameters of the connection, including source and target node IDs.
    */
-  const onConnect: OnConnect = useCallback((params) => setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)), [setEdges]);
+  const onConnect: OnConnect = useCallback(
+    (params) => {
+      setEdges((edgesSnapshot) => {
+        const newEdges = addEdge(params, edgesSnapshot);
+        const sourceId = params.source;
+        const childrenEdges = newEdges.filter((edge) => edge.source === sourceId);
+
+        // If parent has more than one child, set all its edges to be "conditional"
+        if (childrenEdges.length > 1) {
+          return newEdges.map((edge) => {
+            if (edge.source === sourceId) {
+              return {
+                ...edge,
+                data: {
+                  ...edge.data,
+                  condition: edge.data?.condition || {
+                    expression: "",
+                    label: "",
+                  },
+                },
+                type: "conditional",
+              };
+            }
+            return edge;
+          });
+        }
+
+        return newEdges;
+      });
+    },
+    [setEdges],
+  );
 
   /**
    * Handles the end of a connection attempt in the flow.
-   * If the connection is not valid (i.e., not dropped on another node),
-   * this function creates a new node at the drop position and connects it
    */
   const onConnectEnd: OnConnectEnd = useCallback(
     (event, connectionState) => {
-      // Create a new node when dropped on the blank area
       if (!connectionState.isValid) {
-        // we need to remove the wrapper bounds, in order to get the correct position
         const id = nanoid();
         const { clientX, clientY } = "changedTouches" in event ? event.changedTouches[0] : event;
 
@@ -44,16 +63,94 @@ const useFlowConnections = () => {
           }),
         };
 
+        const sourceId = connectionState.fromNode?.id || "";
+
         setNodes((node) => node.concat(newNode));
-        setEdges((edge) => edge.concat({ id, source: connectionState.fromNode?.id || "", target: id }));
+
+        // Create a new edge from the source node to the newly created node
+        setEdges((edges) => {
+          const childrenEdges = edges.filter((edge) => edge.source === sourceId);
+          const willHaveSiblings = childrenEdges.length > 0;
+
+          const newEdge = {
+            data: willHaveSiblings
+              ? {
+                  condition: {
+                    expression: "",
+                    label: "",
+                  },
+                }
+              : undefined,
+            id,
+            source: sourceId,
+            target: id,
+            type: willHaveSiblings ? "conditional" : "default",
+          };
+
+          // If the source node will have siblings, update all its edges to be "conditional"
+          if (willHaveSiblings) {
+            return edges
+              .map((edge) => {
+                if (edge.source === sourceId) {
+                  return {
+                    ...edge,
+                    data: {
+                      ...edge.data,
+                      condition: edge.data?.condition || {
+                        expression: "",
+                        label: "",
+                      },
+                    },
+                    type: "conditional",
+                  };
+                }
+                return edge;
+              })
+              .concat(newEdge);
+          }
+
+          return edges.concat(newEdge);
+        });
       }
     },
     [screenToFlowPosition, setEdges, setNodes],
   );
 
+  /**
+   * Handles the deletion of edges in the flow.
+   */
+  const onEdgesDelete: OnEdgesDelete = useCallback(
+    (deletedEdges) => {
+      setEdges((edges) => {
+        const remainingEdges = edges.filter((edge) => !deletedEdges.find((deleted) => deleted.id === edge.id));
+
+        // For each parent of the deleted edges, check if they have only one child left
+        const affectedParents = new Set(deletedEdges.map((edge) => edge.source));
+
+        return remainingEdges.map((edge) => {
+          if (affectedParents.has(edge.source)) {
+            const siblingCount = remainingEdges.filter((e) => e.source === edge.source).length;
+
+            // If only one child left, set the edge to be "default"
+            if (siblingCount === 1) {
+              return {
+                ...edge,
+                data: undefined,
+                type: "default",
+              };
+            }
+          }
+          return edge;
+        });
+      });
+    },
+    [setEdges],
+  );
+
   return {
     onConnect,
     onConnectEnd,
+    onEdgesDelete,
   };
 };
 

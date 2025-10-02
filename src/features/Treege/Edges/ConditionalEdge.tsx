@@ -1,7 +1,9 @@
-import { BaseEdge, EdgeLabelRenderer, type EdgeProps, getBezierPath, useReactFlow } from "@xyflow/react";
-import React from "react";
+import { BaseEdge, EdgeLabelRenderer, type EdgeProps, getBezierPath } from "@xyflow/react";
+import { Waypoints } from "lucide-react";
+import { MouseEvent } from "react";
+import { Button } from "@/components/ui/button";
 
-const ConditionalEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, style = {}, markerEnd }: EdgeProps) => {
+const ConditionalEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, markerEnd, style }: EdgeProps) => {
   const [edgePath, labelX, labelY] = getBezierPath({
     sourcePosition,
     sourceX,
@@ -11,14 +13,18 @@ const ConditionalEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePositio
     targetY,
   });
 
-  const { setEdges } = useReactFlow();
-  const onEdgeClick = () => {
-    setEdges((edges) => edges.filter((edge) => edge.id !== id));
+  const onEdgeClick = (e: MouseEvent) => {
+    e.stopPropagation();
   };
+
+  console.log(id);
 
   return (
     <>
+      {/* Edge */}
       <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />
+
+      {/* Render button */}
       <EdgeLabelRenderer>
         <div
           className="button-edge__label nodrag nopan"
@@ -26,9 +32,9 @@ const ConditionalEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePositio
             transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
           }}
         >
-          <button className="button-edge__button" onClick={onEdgeClick}>
-            ×
-          </button>
+          <Button variant="secondary" size="icon" className="size-8" onClick={onEdgeClick}>
+            <Waypoints />
+          </Button>
         </div>
       </EdgeLabelRenderer>
     </>
