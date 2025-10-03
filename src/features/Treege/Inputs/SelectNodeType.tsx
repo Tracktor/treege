@@ -5,23 +5,22 @@ import useFlow from "@/hooks/useFlow";
 const SelectNodeType = () => {
   const { updateSelectedNodeType, selectedNode } = useFlow();
   const value = selectedNode?.type || "";
+  const isGroupNode = selectedNode?.type === "group";
 
   return (
     <SelectGroup>
       <SelectLabel>Node Type</SelectLabel>
-      <Select value={value} onValueChange={(newValue) => updateSelectedNodeType(newValue)}>
+      <Select value={value} onValueChange={(newValue) => updateSelectedNodeType(newValue)} disabled={isGroupNode}>
         <SelectTrigger className="w-full">
           <SelectValue placeholder="Node Type" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {Object.keys(nodeTypes)
-              .filter((type) => type !== "group")
-              .map((type) => (
-                <SelectItem key={type} value={type}>
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
-                </SelectItem>
-              ))}
+            {Object.keys(nodeTypes).map((type) => (
+              <SelectItem key={type} value={type}>
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </SelectItem>
+            ))}
           </SelectGroup>
         </SelectContent>
       </Select>

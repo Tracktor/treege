@@ -14,6 +14,11 @@ const SelectNodeGroup = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const { selectedNode, groupNodes, setNodes } = useFlow();
   const currentParentId = selectedNode?.parentId || "none";
+  const isGroupNode = selectedNode?.type === "group";
+
+  if (isGroupNode) {
+    return null;
+  }
 
   const handleGroupChange = (parentId: string) => {
     if (!selectedNode) return;
