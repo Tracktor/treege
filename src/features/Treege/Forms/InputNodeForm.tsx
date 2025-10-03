@@ -22,7 +22,7 @@ const InputNodeForm = () => {
 
   return (
     <form
-      id="edit-node-form"
+      id="inout-node-form"
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();

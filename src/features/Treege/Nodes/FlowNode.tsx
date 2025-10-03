@@ -1,17 +1,17 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
-import { LucidePencilRuler } from "lucide-react";
+import { Network } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-export type UINodeData = {
+export type FlowNodeData = {
   label?: string;
-  type?: string;
+  targetId?: string;
 };
 
-export type UINodeType = Node<UINodeData, "ui">;
+export type FlowNodeType = Node<FlowNodeData, "flow">;
 
-export type UINodeProps = NodeProps<UINodeType>;
+export type FlowNodeProps = NodeProps<FlowNodeType>;
 
-const UINode = ({ data, isConnectable, type }: UINodeProps) => (
+const FlowNode = ({ data, isConnectable, type }: FlowNodeProps) => (
   <>
     {/* Top handle */}
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
@@ -20,8 +20,8 @@ const UINode = ({ data, isConnectable, type }: UINodeProps) => (
     <div className="text-2xl text-center text-nowrap text-ellipsis overflow-hidden max-w-full px-6 mb-1">{data?.label}</div>
 
     {/* Type */}
-    <Badge variant="destructive" className="!bg-purple-600">
-      <LucidePencilRuler />
+    <Badge variant="destructive">
+      <Network />
       {type}
     </Badge>
 
@@ -30,4 +30,4 @@ const UINode = ({ data, isConnectable, type }: UINodeProps) => (
   </>
 );
 
-export default UINode;
+export default FlowNode;

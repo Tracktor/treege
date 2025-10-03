@@ -1,4 +1,5 @@
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import FlowNodeForm from "@/features/Treege/Forms/FlowNodeForm";
 import InputNodeForm from "@/features/Treege/Forms/InputNodeForm";
 import JsonNodeForm from "@/features/Treege/Forms/JsonNodeForm";
 import UINodeForm from "@/features/Treege/Forms/UINodeForm";
@@ -25,6 +26,7 @@ const NodeActionsSheet = () => {
           {selectedNode?.type === "input" && <InputNodeForm />}
           {selectedNode?.type === "ui" && <UINodeForm />}
           {selectedNode?.type === "json" && <JsonNodeForm />}
+          {selectedNode?.type === "flow" && <FlowNodeForm />}
         </div>
       </SheetContent>
     </Sheet>

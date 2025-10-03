@@ -21,7 +21,7 @@ const InputNodeForm = () => {
 
   return (
     <form
-      id="edit-node-form"
+      id="json-node-form"
       className="flex flex-col h-full pb-4 min-h-0"
       onSubmit={(e) => {
         e.preventDefault();

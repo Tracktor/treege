@@ -1,4 +1,5 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import nodeTypes from "@/constants/nodeTypes";
 import useFlow from "@/hooks/useFlow";
 
 const SelectNodeType = () => {
@@ -14,9 +15,11 @@ const SelectNodeType = () => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem value="input">Input</SelectItem>
-            <SelectItem value="ui">UI</SelectItem>
-            <SelectItem value="json">JSON</SelectItem>
+            {Object.keys(nodeTypes).map((type) => (
+              <SelectItem key={type} value={type}>
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </SelectItem>
+            ))}
           </SelectGroup>
         </SelectContent>
       </Select>
