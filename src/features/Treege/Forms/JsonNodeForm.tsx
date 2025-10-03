@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { JsonNodeData } from "@/features/Treege/Nodes/JsonNode";
 import useFlow from "@/hooks/useFlow";
 
-const InputNodeForm = () => {
+const JsonNodeForm = () => {
   const { updateSelectedNodeData, selectedNode } = useFlow();
 
   const { handleSubmit, Field } = useForm({
@@ -65,4 +65,4 @@ const InputNodeForm = () => {
   );
 };
 
-export default InputNodeForm;
+export default JsonNodeForm;
