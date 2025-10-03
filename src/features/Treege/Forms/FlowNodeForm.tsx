@@ -14,7 +14,6 @@ const FlowNodeForm = () => {
       targetId: selectedNode?.data?.targetId || "",
     } as FlowNodeData,
     onSubmit: async ({ value }) => {
-      console.log(value);
       updateSelectedNodeData(value);
     },
   });
