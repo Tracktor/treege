@@ -21,7 +21,7 @@ const InputNodeForm = () => {
   });
 
   return (
-    <form id="inout-node-form" onChange={handleSubmit}>
+    <form id="input-node-form" onChange={handleSubmit}>
       <div className="grid gap-6">
         <SelectInputType />
 

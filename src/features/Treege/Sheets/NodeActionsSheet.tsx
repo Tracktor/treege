@@ -1,3 +1,4 @@
+import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import FlowNodeForm from "@/features/Treege/Forms/FlowNodeForm";
 import InputNodeForm from "@/features/Treege/Forms/InputNodeForm";
@@ -21,8 +22,11 @@ const NodeActionsSheet = () => {
           </SheetDescription>
         </SheetHeader>
 
-        <div className="flex flex-col gap-6 px-4 flex-1 min-h-0">
+        <div className="flex flex-col px-4 flex-1 min-h-0">
           <SelectNodeType />
+
+          <Separator className="mt-8 mb-5" />
+
           {selectedNode?.type === "input" && <InputNodeForm />}
           {selectedNode?.type === "ui" && <UINodeForm />}
           {selectedNode?.type === "json" && <JsonNodeForm />}

@@ -3,14 +3,14 @@ import useFlow from "@/hooks/useFlow";
 
 const SelectInputType = () => {
   const { updateSelectedNodeData, selectedNode } = useFlow();
-  const value = selectedNode?.data?.type ? String(selectedNode?.data?.type) : "";
+  const value = selectedNode?.data?.type ? String(selectedNode?.data?.type) : "text";
 
   return (
     <SelectGroup>
       <SelectLabel>Type</SelectLabel>
       <Select value={value} onValueChange={(newValue) => updateSelectedNodeData({ type: newValue })}>
         <SelectTrigger className="w-full">
-          <SelectValue placeholder="Type" />
+          <SelectValue placeholder="" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
