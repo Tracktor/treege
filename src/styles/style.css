@@ -124,7 +124,7 @@
 }
 
 button {
-    @apply cursor-pointer;
+    @apply cursor-pointer select-none;
 }
 
 #root {
@@ -144,20 +144,17 @@ div.react-flow__node {
     align-items: center;
     justify-content: center;
     border-radius: 20px;
-    background:
-            linear-gradient(var(--color-card), var(--color-card)) padding-box,
-            linear-gradient(135deg, #13d3b4, #0065a8, #007ff6) border-box;
+    background: linear-gradient(var(--color-card), var(--color-card)) padding-box,
+    linear-gradient(135deg, #13d3b4, #0065a8, #007ff6) border-box;
     border: 2px solid transparent !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 20px 6px rgba(19, 211, 180, 0.10), 0 0 20px rgba(0, 101, 168, 0.10)
 }
 
 div.react-flow__node.selected {
-    background:
-            linear-gradient(var(--color-card), var(--color-card)) padding-box,
-            linear-gradient(135deg, #13d3b4, #0065a8, #007ff6) border-box;
+    background: linear-gradient(var(--color-card), var(--color-card)) padding-box,
+    linear-gradient(135deg, #13d3b4, #0065a8, #007ff6) border-box;
     border: 2px solid transparent !important;
-    box-shadow: 0 0 0 3px rgba(19, 211, 180, 0.2),
-    0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 20px 6px rgba(19, 211, 180, 0.33), 0 0 20px rgba(0, 101, 168, 0.33)
 }
 
 div.react-flow__node-group {
