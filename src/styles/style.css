@@ -157,7 +157,7 @@ div.react-flow__node.selected {
     box-shadow: 0 0 20px 6px rgba(19, 211, 180, 0.33), 0 0 20px rgba(0, 101, 168, 0.33)
 }
 
-div.react-flow__node-group {
+div.react-flow__node-group, div.react-flow__node-group.selected {
     background: oklch(from var(--color-chart-2) l c h / 5%);
     box-shadow:none;
     border: 2px dashed var(--color-chart-2) !important;

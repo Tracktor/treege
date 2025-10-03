@@ -49,7 +49,8 @@ const ConditionalEdge = ({
 
   const { updateEdgeData, getNode } = useFlow();
   const parentNode = getNode(source);
-  const parentLabel = parentNode?.data?.label ? String(parentNode?.data?.label) : source;
+  const parentLabelOrName = parentNode?.data?.label || parentNode?.data?.name;
+  const parentLabel = parentLabelOrName ? String(parentLabelOrName) : source;
   const hasCondition = data?.condition?.operator && data?.condition?.value;
 
   const { handleSubmit, reset, Field } = useForm({
