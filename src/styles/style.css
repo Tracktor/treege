@@ -77,8 +77,6 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
-    --xy-node-boxshadow-selected: 0 0 4px 1px #1a192b;
-    --xy-node-boxshadow-hover: 0 1px 4px 1px rgba(0, 0, 0, 0.08);
 }
 
 .dark {
@@ -113,8 +111,6 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
-    --xy-node-boxshadow-selected: 0 1px 4px 1px rgba(255, 255, 255, 0.2);
-    --xy-node-boxshadow-hover: 0 1px 4px 1px rgba(255, 255, 255, 0.1);
 }
 
 @layer base {
@@ -147,17 +143,21 @@ div.react-flow__node {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
-    border: 2px solid var(--color-border) !important;
-    background-color: var(--color-card);
-}
-
-div.react-flow__node:hover {
-    box-shadow: var(--xy-node-boxshadow-hover);
+    border-radius: 20px;
+    background:
+            linear-gradient(var(--color-card), var(--color-card)) padding-box,
+            linear-gradient(135deg, #13d3b4, #0065a8, #007ff6) border-box;
+    border: 2px solid transparent !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
 }
 
 div.react-flow__node.selected {
-    box-shadow: var(--xy-node-boxshadow-selected);
+    background:
+            linear-gradient(var(--color-card), var(--color-card)) padding-box,
+            linear-gradient(135deg, #13d3b4, #0065a8, #007ff6) border-box;
+    border: 2px solid transparent !important;
+    box-shadow: 0 0 0 3px rgba(19, 211, 180, 0.2),
+    0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 div.react-flow__node-group {
