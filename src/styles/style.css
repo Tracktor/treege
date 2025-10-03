@@ -157,6 +157,10 @@ div.react-flow__node.selected {
     box-shadow: var(--xy-node-boxshadow-selected);
 }
 
+div.react-flow__node-group {
+    background: oklch(from var(--color-chart-2) l c h / 5%);
+}
+
 .react-flow__handle {
     width: 15px;
     height: 15px;
