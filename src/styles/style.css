@@ -149,7 +149,7 @@ div.react-flow__node {
     justify-content: center;
     border-radius: 8px;
     border: 2px solid var(--color-border) !important;
-    background-color: var(--color-secondary);
+    background-color: var(--color-card);
 }
 
 div.react-flow__node:hover {
