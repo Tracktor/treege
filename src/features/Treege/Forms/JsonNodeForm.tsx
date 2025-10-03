@@ -1,5 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import CodeEditor from "@uiw/react-textarea-code-editor";
+import { FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { JsonNodeData } from "@/features/Treege/Nodes/JsonNode";
@@ -24,7 +25,7 @@ const InputNodeForm = () => {
         <Field
           name="label"
           children={(field) => (
-            <div className="grid gap-3">
+            <FormItem>
               <Label htmlFor={field.name}>Label</Label>
               <Input
                 id={field.name}
@@ -33,14 +34,14 @@ const InputNodeForm = () => {
                 onBlur={field.handleBlur}
                 onChange={({ target }) => field.handleChange(target.value)}
               />
-            </div>
+            </FormItem>
           )}
         />
 
         <Field
           name="json"
           children={(field) => (
-            <div className="flex flex-col gap-3 flex-1 min-h-0">
+            <FormItem className="flex flex-col flex-1 min-h-0">
               <Label htmlFor={field.name}>Json</Label>
               <CodeEditor
                 value={field.state.value}
@@ -56,7 +57,7 @@ const InputNodeForm = () => {
                 }}
                 onChange={({ target }) => field.handleChange(target.value)}
               />
-            </div>
+            </FormItem>
           )}
         />
       </div>

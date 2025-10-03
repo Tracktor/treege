@@ -1,4 +1,5 @@
 import { useForm } from "@tanstack/react-form";
+import { FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { UINodeData } from "@/features/Treege/Nodes/UINode";
@@ -23,7 +24,7 @@ const UINodeForm = () => {
         <Field
           name="label"
           children={(field) => (
-            <div className="grid gap-3">
+            <FormItem>
               <Label htmlFor={field.name}>Label</Label>
               <Input
                 id={field.name}
@@ -32,14 +33,14 @@ const UINodeForm = () => {
                 onBlur={field.handleBlur}
                 onChange={({ target }) => field.handleChange(target.value)}
               />
-            </div>
+            </FormItem>
           )}
         />
 
         <Field
           name="type"
           children={(field) => (
-            <div className="grid gap-3">
+            <FormItem>
               <Label htmlFor={field.name}>Type</Label>
               <Input
                 required
@@ -49,7 +50,7 @@ const UINodeForm = () => {
                 onBlur={field.handleBlur}
                 onChange={({ target }) => field.handleChange(target.value)}
               />
-            </div>
+            </FormItem>
           )}
         />
       </div>

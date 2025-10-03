@@ -3,6 +3,7 @@ import { BaseEdge, Edge, EdgeLabelRenderer, EdgeProps, getBezierPath } from "@xy
 import { Waypoints, X } from "lucide-react";
 import { MouseEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -114,7 +115,7 @@ const ConditionalEdge = ({
             </PopoverTrigger>
             <PopoverContent className="w-80" align="center" onClick={(e) => e.stopPropagation()}>
               <form onChange={handleSubmit}>
-                <div className="grid gap-4">
+                <div className="grid gap-5">
                   <div className="space-y-2">
                     <h4 className="font-medium leading-none">Display condition</h4>
                     <p className="text-sm text-muted-foreground">
@@ -122,11 +123,11 @@ const ConditionalEdge = ({
                     </p>
                   </div>
 
-                  <div className="grid gap-3">
+                  <div className="grid gap-4">
                     {/* Label */}
                     <Field name="label">
                       {(field) => (
-                        <div className="grid gap-2">
+                        <FormItem>
                           <Label htmlFor="label">Label (optional)</Label>
                           <Input
                             id="label"
@@ -134,14 +135,14 @@ const ConditionalEdge = ({
                             value={field.state.value}
                             onChange={({ target }) => field.handleChange(target.value)}
                           />
-                        </div>
+                        </FormItem>
                       )}
                     </Field>
 
                     {/* Operator */}
                     <Field name="operator">
                       {(field) => (
-                        <div className="grid gap-2">
+                        <FormItem>
                           <Label htmlFor="operator">Operator</Label>
                           <Select
                             value={field.state.value}
@@ -161,14 +162,14 @@ const ConditionalEdge = ({
                               <SelectItem value="<=">less than or equal to (≤)</SelectItem>
                             </SelectContent>
                           </Select>
-                        </div>
+                        </FormItem>
                       )}
                     </Field>
 
                     {/* Value */}
                     <Field name="value">
                       {(field) => (
-                        <div className="grid gap-2">
+                        <FormItem>
                           <Label htmlFor="value">Value</Label>
                           <Input
                             id="value"
@@ -176,7 +177,7 @@ const ConditionalEdge = ({
                             value={field.state.value}
                             onChange={({ target }) => field.handleChange(target.value)}
                           />
-                        </div>
+                        </FormItem>
                       )}
                     </Field>
                   </div>
