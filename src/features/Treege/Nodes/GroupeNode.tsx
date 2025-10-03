@@ -10,10 +10,8 @@ export type GroupNodeType = Node<GroupNodeData, "group">;
 export type GroupNodeProps = NodeProps<GroupNodeType>;
 
 const GroupNode = ({ data }: GroupNodeProps) => (
-  <div className="absolute left-4 -top-3">
-    <Badge variant="outline" className="bg-background">
-      {data.label}
-    </Badge>
+  <div className="absolute left-6 -top-3.5 ">
+    <Badge className="bg-chart-2">{data.label}</Badge>
   </div>
 );
 

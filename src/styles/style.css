@@ -159,6 +159,8 @@ div.react-flow__node.selected {
 
 div.react-flow__node-group {
     background: oklch(from var(--color-chart-2) l c h / 5%);
+    box-shadow:none;
+    border: 2px dashed var(--color-chart-2) !important;
 }
 
 .react-flow__handle {
