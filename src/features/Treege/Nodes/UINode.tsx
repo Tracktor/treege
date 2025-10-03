@@ -20,7 +20,7 @@ const UINode = ({ data, isConnectable, type }: UINodeProps) => (
     <div className="text-2xl text-center text-nowrap text-ellipsis overflow-hidden max-w-full px-6 mb-1">{data?.label}</div>
 
     {/* Type */}
-    <Badge variant="destructive" className="!bg-purple-600">
+    <Badge variant="purple">
       <LucidePencilRuler />
       {type}
     </Badge>
