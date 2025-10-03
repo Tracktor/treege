@@ -4,11 +4,12 @@ import FlowNodeForm from "@/features/Treege/Forms/FlowNodeForm";
 import InputNodeForm from "@/features/Treege/Forms/InputNodeForm";
 import JsonNodeForm from "@/features/Treege/Forms/JsonNodeForm";
 import UINodeForm from "@/features/Treege/Forms/UINodeForm";
+import SelectNodeGroup from "@/features/Treege/Inputs/SelectNodeGroup";
 import SelectNodeType from "@/features/Treege/Inputs/SelectNodeType";
 import useFlow from "@/hooks/useFlow";
 
 const NodeActionsSheet = () => {
-  const { clearSelection, hasSelectedNode, selectedNode } = useFlow();
+  const { clearSelection, hasSelectedNode, selectedNode, nodes } = useFlow();
 
   return (
     <Sheet open={hasSelectedNode} onOpenChange={clearSelection}>
@@ -22,10 +23,11 @@ const NodeActionsSheet = () => {
           </SheetDescription>
         </SheetHeader>
 
-        <div className="flex flex-col px-4 flex-1 min-h-0">
+        <div className="flex flex-col px-4 flex-1 min-h-0 space-y-6 pt-6">
           <SelectNodeType />
+          <SelectNodeGroup />
 
-          <Separator className="mt-8 mb-5" />
+          <Separator />
 
           {selectedNode?.type === "input" && <InputNodeForm />}
           {selectedNode?.type === "ui" && <UINodeForm />}

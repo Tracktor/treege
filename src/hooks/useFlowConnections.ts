@@ -50,9 +50,11 @@ const useFlowConnections = () => {
   const onConnectEnd: OnConnectEnd = useCallback(
     (event, connectionState) => {
       if (!connectionState.isValid) {
+        const { clientX, clientY } = "changedTouches" in event ? event.changedTouches[0] : event;
         const nodeId = nanoid();
         const edgeId = nanoid();
-        const { clientX, clientY } = "changedTouches" in event ? event.changedTouches[0] : event;
+        const sourceNode = connectionState.fromNode;
+        const sourceId = connectionState.fromNode?.id || "";
 
         const newNode: Node = {
           ...defaultNode,
@@ -64,7 +66,11 @@ const useFlowConnections = () => {
           }),
         };
 
-        const sourceId = connectionState.fromNode?.id || "";
+        // If the source node is part of a group, set the new node to be part of the same group
+        if (sourceNode?.parentId) {
+          newNode.parentId = sourceNode.parentId;
+          newNode.extent = "parent";
+        }
 
         setNodes((node) => node.concat(newNode));
 

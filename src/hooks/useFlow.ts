@@ -22,6 +22,8 @@ const useFlow = () => {
     shallow,
   );
 
+  const groupNodes = nodes.filter((node) => node.type === "group");
+
   /**
    * Clears the selection of all nodes and edges in the React Flow instance.
    */
@@ -112,6 +114,7 @@ const useFlow = () => {
     ...reactFlow,
     clearSelection,
     edges,
+    groupNodes,
     hasSelectedEdges: selectedEdges.length > 0,
     hasSelectedNode: selectedNodes.length > 0,
     nodes,
