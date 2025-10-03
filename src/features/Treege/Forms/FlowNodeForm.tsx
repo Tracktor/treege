@@ -5,7 +5,7 @@ import { FlowNodeData } from "@/features/Treege/Nodes/FlowNode";
 import useFlow from "@/hooks/useFlow";
 
 const FlowNodeForm = () => {
-  const { updateSelectedNodeData, selectedNode, clearSelection } = useFlow();
+  const { updateSelectedNodeData, selectedNode } = useFlow();
 
   const { handleSubmit, Field } = useForm({
     defaultValues: {
@@ -30,10 +30,7 @@ const FlowNodeForm = () => {
                 name={field.name}
                 value={field.state.value}
                 onBlur={field.handleBlur}
-                onChange={(e) => {
-                  field.handleChange(e.target.value);
-                  updateSelectedNodeData({ [field.name]: e.target.value });
-                }}
+                onChange={({ target }) => field.handleChange(target.value)}
               />
             </div>
           )}

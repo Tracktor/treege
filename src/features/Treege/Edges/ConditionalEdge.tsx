@@ -49,8 +49,9 @@ const ConditionalEdge = ({
   const { updateEdgeData, getNode } = useFlow();
   const parentNode = getNode(source);
   const parentLabel = parentNode?.data?.label ? String(parentNode?.data?.label) : source;
+  const hasCondition = data?.condition?.operator && data?.condition?.value;
 
-  const form = useForm({
+  const { handleSubmit, reset, Field } = useForm({
     defaultValues: {
       label: data?.condition?.label || "",
       operator: data?.condition?.operator || "===",
@@ -68,20 +69,10 @@ const ConditionalEdge = ({
   };
 
   const handleClear = () => {
-    form.reset();
-    updateEdgeData(id, {
-      condition: undefined,
-    });
+    reset();
+    updateEdgeData(id, { condition: undefined });
     setIsOpen(false);
   };
-
-  const handleFormChange = (e: React.FormEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    form.handleSubmit().then();
-  };
-
-  const hasCondition = data?.condition?.operator && data?.condition?.value;
 
   return (
     <>
@@ -122,7 +113,7 @@ const ConditionalEdge = ({
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80" align="center" onClick={(e) => e.stopPropagation()}>
-              <form onChange={handleFormChange}>
+              <form onChange={handleSubmit}>
                 <div className="grid gap-4">
                   <div className="space-y-2">
                     <h4 className="font-medium leading-none">Display condition</h4>
@@ -133,7 +124,7 @@ const ConditionalEdge = ({
 
                   <div className="grid gap-3">
                     {/* Label */}
-                    <form.Field name="label">
+                    <Field name="label">
                       {(field) => (
                         <div className="grid gap-2">
                           <Label htmlFor="label">Label (optional)</Label>
@@ -145,10 +136,10 @@ const ConditionalEdge = ({
                           />
                         </div>
                       )}
-                    </form.Field>
+                    </Field>
 
                     {/* Operator */}
-                    <form.Field name="operator">
+                    <Field name="operator">
                       {(field) => (
                         <div className="grid gap-2">
                           <Label htmlFor="operator">Operator</Label>
@@ -172,10 +163,10 @@ const ConditionalEdge = ({
                           </Select>
                         </div>
                       )}
-                    </form.Field>
+                    </Field>
 
                     {/* Value */}
-                    <form.Field name="value">
+                    <Field name="value">
                       {(field) => (
                         <div className="grid gap-2">
                           <Label htmlFor="value">Value</Label>
@@ -187,7 +178,7 @@ const ConditionalEdge = ({
                           />
                         </div>
                       )}
-                    </form.Field>
+                    </Field>
                   </div>
 
                   {/* Actions */}

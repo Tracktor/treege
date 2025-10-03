@@ -6,31 +6,22 @@ import { JsonNodeData } from "@/features/Treege/Nodes/JsonNode";
 import useFlow from "@/hooks/useFlow";
 
 const InputNodeForm = () => {
-  const { updateSelectedNodeData, selectedNode, clearSelection } = useFlow();
+  const { updateSelectedNodeData, selectedNode } = useFlow();
 
-  const form = useForm({
+  const { handleSubmit, Field } = useForm({
     defaultValues: {
       json: selectedNode?.data?.json || "",
       label: selectedNode?.data?.label || "",
     } as JsonNodeData,
     onSubmit: async ({ value }) => {
       updateSelectedNodeData(value);
-      clearSelection();
     },
   });
 
   return (
-    <form
-      id="json-node-form"
-      className="flex flex-col h-full pb-4 min-h-0"
-      onSubmit={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        form.handleSubmit().then();
-      }}
-    >
+    <form id="json-node-form" className="flex flex-col h-full pb-4 min-h-0" onChange={handleSubmit}>
       <div className="flex flex-col gap-6 h-full">
-        <form.Field
+        <Field
           name="label"
           children={(field) => (
             <div className="grid gap-3">
@@ -40,16 +31,13 @@ const InputNodeForm = () => {
                 name={field.name}
                 value={field.state.value}
                 onBlur={field.handleBlur}
-                onChange={(e) => {
-                  field.handleChange(e.target.value);
-                  updateSelectedNodeData({ [field.name]: e.target.value });
-                }}
+                onChange={({ target }) => field.handleChange(target.value)}
               />
             </div>
           )}
         />
 
-        <form.Field
+        <Field
           name="json"
           children={(field) => (
             <div className="flex flex-col gap-3 flex-1 min-h-0">
@@ -66,10 +54,7 @@ const InputNodeForm = () => {
                   height: "100%",
                   overflowY: "auto",
                 }}
-                onChange={(event) => {
-                  field.handleChange(event.target.value);
-                  updateSelectedNodeData({ [field.name]: event.target.value });
-                }}
+                onChange={({ target }) => field.handleChange(target.value)}
               />
             </div>
           )}

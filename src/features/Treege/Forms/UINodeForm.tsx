@@ -5,30 +5,22 @@ import { UINodeData } from "@/features/Treege/Nodes/UINode";
 import useFlow from "@/hooks/useFlow";
 
 const UINodeForm = () => {
-  const { updateSelectedNodeData, selectedNode, clearSelection } = useFlow();
+  const { updateSelectedNodeData, selectedNode } = useFlow();
 
-  const form = useForm({
+  const { handleSubmit, Field } = useForm({
     defaultValues: {
       label: selectedNode?.data?.label || "",
       type: selectedNode?.data?.type || "",
     } as UINodeData,
     onSubmit: async ({ value }) => {
       updateSelectedNodeData(value);
-      clearSelection();
     },
   });
 
   return (
-    <form
-      id="ui-node-form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        form.handleSubmit().then();
-      }}
-    >
+    <form id="ui-node-form" onChange={handleSubmit}>
       <div className="grid gap-6">
-        <form.Field
+        <Field
           name="label"
           children={(field) => (
             <div className="grid gap-3">
@@ -38,16 +30,13 @@ const UINodeForm = () => {
                 name={field.name}
                 value={field.state.value}
                 onBlur={field.handleBlur}
-                onChange={(e) => {
-                  field.handleChange(e.target.value);
-                  updateSelectedNodeData({ [field.name]: e.target.value });
-                }}
+                onChange={({ target }) => field.handleChange(target.value)}
               />
             </div>
           )}
         />
 
-        <form.Field
+        <Field
           name="type"
           children={(field) => (
             <div className="grid gap-3">
@@ -58,10 +47,7 @@ const UINodeForm = () => {
                 name={field.name}
                 value={field.state.value}
                 onBlur={field.handleBlur}
-                onChange={(e) => {
-                  field.handleChange(e.target.value);
-                  updateSelectedNodeData({ [field.name]: e.target.value });
-                }}
+                onChange={({ target }) => field.handleChange(target.value)}
               />
             </div>
           )}
