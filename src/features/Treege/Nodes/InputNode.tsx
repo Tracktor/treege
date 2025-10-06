@@ -1,6 +1,7 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { RectangleHorizontal, Type } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import useFlow from "@/hooks/useFlow";
 
 export type InputNodeData = {
   label?: string;
@@ -12,32 +13,37 @@ export type InputNodeType = Node<InputNodeData, "input">;
 
 export type InputNodeProps = NodeProps<InputNodeType>;
 
-const InputNode = ({ data, isConnectable, type }: InputNodeProps) => (
-  <>
-    {/* Top handle */}
-    <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
+const InputNode = ({ data, isConnectable, type, parentId }: InputNodeProps) => {
+  const { nodes } = useFlow();
+  const isInsideGroup = !!parentId && nodes.some((n) => n.id === parentId && n.type === "group");
 
-    {/* Label */}
-    <div className="text-2xl text-center text-nowrap text-ellipsis overflow-hidden max-w-full px-6 mb-1">{data?.label}</div>
+  return (
+    <>
+      {/* Top handle */}
+      <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
 
-    {/* Type */}
-    <div className="flex gap-1">
-      <Badge variant="secondary" className="bg-blue-500 text-white dark:bg-blue-600">
-        <RectangleHorizontal />
-        {type}
-      </Badge>
+      {/* Label */}
+      <div className="text-2xl text-center text-nowrap text-ellipsis overflow-hidden max-w-full px-6 mb-1">{data?.label}</div>
 
-      {data?.type && (
-        <Badge variant="outline">
-          <Type />
-          {data.type}
+      {/* Type */}
+      <div className="flex gap-1">
+        <Badge variant="secondary" className="bg-blue-500 text-white dark:bg-blue-600">
+          <RectangleHorizontal />
+          {type}
         </Badge>
-      )}
-    </div>
 
-    {/* Bot handle */}
-    <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} />
-  </>
-);
+        {data?.type && (
+          <Badge variant="outline">
+            <Type />
+            {data.type}
+          </Badge>
+        )}
+      </div>
+
+      {/* Bot handle */}
+      <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} />
+    </>
+  );
+};
 
 export default InputNode;

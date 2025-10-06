@@ -71,12 +71,15 @@ const SelectNodeGroup = () => {
     const newGroupId = nanoid();
 
     setNodes((nds) => {
+      const groupX = Math.max(0, selectedNode.position.x);
+      const groupY = Math.max(0, selectedNode.position.y);
+
       const newGroupNode = {
         data: { label: newGroupLabel.trim() },
         id: newGroupId,
         position: {
-          x: selectedNode.position.x - 50,
-          y: selectedNode.position.y - 80,
+          x: selectedNode.position.x - 300,
+          y: selectedNode.position.y,
         },
         style: {
           height: 400,
@@ -93,8 +96,8 @@ const SelectNodeGroup = () => {
             extent: "parent" as const,
             parentId: newGroupId,
             position: {
-              x: 50,
-              y: 80,
+              x: 175,
+              y: 30,
             },
           };
         }

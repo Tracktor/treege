@@ -143,9 +143,8 @@ div.react-flow__node {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-radius: 20px;
-    background: linear-gradient(var(--color-card), var(--color-card)) padding-box,
-    linear-gradient(135deg, #13d3b4, #0065a8, #007ff6) border-box;
+    border-radius: 40px;
+    background: linear-gradient(oklch(from var(--color-card) l c h / 97%), oklch(from var(--color-card) l c h / 97%)) padding-box, linear-gradient(145deg, #13d3b4, #0065a8, #007ff6) border-box;
     border: 2px solid transparent !important;
     box-shadow: 0 0 20px 6px rgba(19, 211, 180, 0.10), 0 0 20px rgba(0, 101, 168, 0.10)
 }
@@ -159,7 +158,7 @@ div.react-flow__node.selected {
 
 div.react-flow__node-group, div.react-flow__node-group.selected {
     background: oklch(from var(--color-chart-2) l c h / 5%);
-    box-shadow:none;
+    box-shadow: none;
     border: 2px dashed var(--color-chart-2) !important;
 }
 
