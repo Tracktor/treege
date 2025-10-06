@@ -2,7 +2,6 @@ import { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, ReactFlow
 import Logo from "@/components/data-display/Logo";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
-import defaultNode from "@/constants/defaultNode";
 import edgeTypes from "@/constants/edgeTypes";
 import nodeTypes from "@/constants/nodeTypes";
 import ActionsPanel from "@/features/Treege/Panel/ActionsPanel";
@@ -46,7 +45,7 @@ const Flow = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave }:
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
       defaultEdges={defaultEdges || defaultFlow?.edges || []}
-      defaultNodes={defaultNodes || defaultFlow?.nodes || [defaultNode]}
+      defaultNodes={defaultNodes || defaultFlow?.nodes || []}
       onConnect={onConnect}
       onConnectEnd={onConnectEnd}
       onEdgesDelete={onEdgesDelete}
