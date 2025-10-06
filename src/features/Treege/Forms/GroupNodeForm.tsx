@@ -18,7 +18,14 @@ const GroupNodeForm = () => {
   });
 
   return (
-    <form id="flow-node-form" onChange={handleSubmit}>
+    <form
+      id="flow-node-form"
+      onChange={handleSubmit}
+      onSubmit={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
       <Field
         name="label"
         children={(field) => (

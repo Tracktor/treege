@@ -165,6 +165,16 @@ div.react-flow__node-group, div.react-flow__node-group.selected {
     border: 2px dashed var(--color-chart-2) !important;
 }
 
+div.react-flow__node-group .react-flow__resize-control {
+    padding: 4px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+div.react-flow__node-group:hover .react-flow__resize-control, .react-flow__resize-control:hover {
+    opacity: 1;
+}
+
 .react-flow__handle {
     width: 15px;
     height: 15px;

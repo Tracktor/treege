@@ -71,9 +71,6 @@ const SelectNodeGroup = () => {
     const newGroupId = nanoid();
 
     setNodes((nds) => {
-      const groupX = Math.max(0, selectedNode.position.x);
-      const groupY = Math.max(0, selectedNode.position.y);
-
       const newGroupNode = {
         data: { label: newGroupLabel.trim() },
         id: newGroupId,

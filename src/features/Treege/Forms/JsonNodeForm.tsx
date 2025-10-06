@@ -20,7 +20,15 @@ const JsonNodeForm = () => {
   });
 
   return (
-    <form id="json-node-form" className="flex flex-col h-full pb-4 min-h-0" onChange={handleSubmit}>
+    <form
+      id="json-node-form"
+      className="flex flex-col h-full pb-4 min-h-0"
+      onChange={handleSubmit}
+      onSubmit={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
       <div className="flex flex-col gap-6 h-full">
         <Field
           name="label"
