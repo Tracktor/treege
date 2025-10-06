@@ -16,11 +16,13 @@ const SelectNodeType = () => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {Object.keys(nodeTypes).map((type) => (
-              <SelectItem key={type} value={type}>
-                {type.charAt(0).toUpperCase() + type.slice(1)}
-              </SelectItem>
-            ))}
+            {Object.keys(nodeTypes)
+              .filter((type) => (isGroupNode ? type === "group" : type !== "group"))
+              .map((type) => (
+                <SelectItem key={type} value={type}>
+                  {type.charAt(0).toUpperCase() + type.slice(1)}
+                </SelectItem>
+              ))}
           </SelectGroup>
         </SelectContent>
       </Select>

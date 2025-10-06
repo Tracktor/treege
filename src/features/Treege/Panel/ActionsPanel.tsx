@@ -75,7 +75,7 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
     const a = document.createElement("a");
 
     a.href = url;
-    a.download = "flow.json";
+    a.download = "treege.json";
     a.click();
 
     toast.success("Download successfully.", {
