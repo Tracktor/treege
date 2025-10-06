@@ -19,23 +19,21 @@ const GroupNodeForm = () => {
 
   return (
     <form id="flow-node-form" onChange={handleSubmit}>
-      <div className="grid gap-6">
-        <Field
-          name="label"
-          children={(field) => (
-            <FormItem>
-              <Label htmlFor={field.name}>Label</Label>
-              <Input
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={({ target }) => field.handleChange(target.value)}
-              />
-            </FormItem>
-          )}
-        />
-      </div>
+      <Field
+        name="label"
+        children={(field) => (
+          <FormItem>
+            <Label htmlFor={field.name}>Label</Label>
+            <Input
+              id={field.name}
+              name={field.name}
+              value={field.state.value}
+              onBlur={field.handleBlur}
+              onChange={({ target }) => field.handleChange(target.value)}
+            />
+          </FormItem>
+        )}
+      />
     </form>
   );
 };
