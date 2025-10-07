@@ -157,9 +157,9 @@ div.react-flow__node__wrapper {
             oklch(from var(--color-card) l c h / 33%),
             oklch(from var(--color-card) l c h / 33%)) padding-box,
     linear-gradient(145deg,
-            oklch(from var(--treege-color-primary) l c h / 33%),
+            oklch(from var(--treege-color-primary) l c h / 40%),
             oklch(0 0 0 / 0),
-            oklch(from var(--treege-color-secondary) l c h / 33%)) border-box;
+            oklch(from var(--treege-color-secondary) l c h / 40%)) border-box;
 }
 
 /* Neon node in group */

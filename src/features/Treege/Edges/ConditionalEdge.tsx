@@ -129,7 +129,7 @@ const ConditionalEdge = ({
                     <Field name="label">
                       {(field) => (
                         <FormItem>
-                          <Label htmlFor="label">Label (optional)</Label>
+                          <Label htmlFor="label">Label</Label>
                           <Input
                             id="label"
                             placeholder="Ex: If is adult"

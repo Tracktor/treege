@@ -114,7 +114,7 @@ const SelectNodeGroup = () => {
 
   return (
     <div className="space-y-2">
-      <Label>Group (optional)</Label>
+      <Label>Group</Label>
       <div className="flex gap-2">
         <Select value={currentParentId} onValueChange={handleGroupChange}>
           <SelectTrigger className="flex-1">
