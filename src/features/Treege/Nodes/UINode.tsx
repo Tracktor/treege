@@ -1,5 +1,5 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
-import { LucidePencilRuler } from "lucide-react";
+import { LucidePencilRuler, Type } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import NodeWrapper from "@/features/Treege/Nodes/Layout/NodeWrapper";
 
@@ -18,13 +18,24 @@ const UINode = ({ data, isConnectable, type, parentId }: UINodeProps) => (
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
 
     {/* Label */}
-    <div className="text-2xl text-center text-nowrap text-ellipsis overflow-hidden max-w-full px-6 mb-1 capitalize">{data?.label}</div>
+    <div className="text-2xl text-nowrap text-ellipsis overflow-hidden max-w-full mb-1 capitalize">{data?.label}</div>
 
     {/* Type */}
-    <Badge variant="purple">
-      <LucidePencilRuler />
-      {type}
-    </Badge>
+
+    {/* Input type */}
+    <div className="flex gap-1">
+      <Badge variant="purple">
+        <LucidePencilRuler />
+        {type}
+      </Badge>
+
+      {data?.type && (
+        <Badge variant="outline">
+          <Type />
+          {data.type}
+        </Badge>
+      )}
+    </div>
 
     {/* Bot handle */}
     <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} />

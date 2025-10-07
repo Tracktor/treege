@@ -46,7 +46,14 @@ const InputNodeForm = () => {
           )}
         />
 
-        <SelectInputType />
+        <Field
+          name="type"
+          children={(field) => (
+            <FormItem>
+              <SelectInputType value={field.state.value} onValueChange={(newValue) => field.handleChange(newValue)} />
+            </FormItem>
+          )}
+        />
 
         <Field
           name="name"

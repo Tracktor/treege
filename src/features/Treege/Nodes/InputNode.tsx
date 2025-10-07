@@ -19,14 +19,16 @@ const InputNode = ({ data, isConnectable, type, parentId }: InputNodeProps) => (
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
 
     {/* Label */}
-    <div className="text-2xl text-center text-nowrap text-ellipsis overflow-hidden max-w-full px-6 mb-1">{data?.label}</div>
+    <div className="text-2xl text-nowrap text-ellipsis overflow-hidden max-w-full mb-1">{data?.label || data?.name}</div>
 
-    {/* Type */}
+    {/* Input type */}
     <div className="flex gap-1">
-      <Badge variant="secondary" className="bg-blue-500 text-white dark:bg-blue-600">
-        <RectangleEllipsis />
-        {type}
-      </Badge>
+      {data.type && (
+        <Badge variant="secondary" className="bg-blue-500 text-white dark:bg-blue-600">
+          <RectangleEllipsis />
+          {type}
+        </Badge>
+      )}
 
       {data?.type && (
         <Badge variant="outline">

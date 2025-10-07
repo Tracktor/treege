@@ -147,7 +147,7 @@ div.react-flow__node {
 
 /* Neon node */
 div.react-flow__node__wrapper {
-    @apply flex items-center justify-center flex-col;
+    @apply flex justify-center flex-col p-7;
     width: 270px;
     height: 150px;
     border-radius: 40px;
