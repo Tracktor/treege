@@ -5,8 +5,8 @@
 
 @theme inline {
     --treege-color-primary: #13d3b4;
-    --treege-color-secondary: #0065a8;
-    --treege-color-tertiary: #007ff6;
+    --treege-color-tertiary: #0065a8;
+    --treege-color-secondary: #007ff6;
     --radius-sm: calc(var(--radius) - 4px);
     --radius-md: calc(var(--radius) - 2px);
     --radius-lg: var(--radius);
@@ -147,30 +147,41 @@ div.react-flow__node {
 
 /* Neon node */
 div.react-flow__node__wrapper {
+    @apply flex items-center justify-center flex-col;
     width: 270px;
     height: 150px;
     border-radius: 40px;
-    border: 2px solid transparent !important;
-    box-shadow: 0 0 20px 6px rgba(19, 211, 180, 0.10), 0 0 20px rgba(0, 101, 168, 0.10);
-    background: linear-gradient(oklch(from var(--color-card) l c h / 97%), oklch(from var(--color-card) l c h / 97%)) padding-box, linear-gradient(145deg, var(--treege-color-primary), var(--treege-color-secondary), var(--treege-color-tertiary)) border-box;
-    @apply flex items-center justify-center flex-col;
+    border: 3px solid transparent !important;
+    box-shadow: 0 0 20px 6px oklch(from var(--treege-color-primary) l c h / 10%), 0 0 20px oklch(from var(--treege-color-tertiary) l c h / 10%);
+    background: linear-gradient(
+            oklch(from var(--color-card) l c h / 33%),
+            oklch(from var(--color-card) l c h / 33%)) padding-box,
+    linear-gradient(145deg,
+            oklch(from var(--treege-color-primary) l c h / 33%),
+            oklch(0 0 0 / 0),
+            oklch(from var(--treege-color-secondary) l c h / 33%)) border-box;
 }
 
 /* Neon node in group */
 div.react-flow__node__wrapper.in-group {
-    background: linear-gradient(oklch(from var(--color-card) l c h / 97%), oklch(from var(--color-card) l c h / 97%)) padding-box, linear-gradient(145deg, var(--color-chart-2), var(--color-chart-2), var(--color-chart-2)) border-box;
-}
+    background: linear-gradient(
+            oklch(from var(--color-card) l c h / 33%),
+            oklch(from var(--color-card) l c h / 33%)) padding-box,
+    linear-gradient(145deg,
+            oklch(from var(--color-chart-2) l c h / 33%),
+            oklch(0 0 0 / 0),
+            oklch(from var(--color-chart-2) l c h / 33%)) border-box;}
 
 /* Neon node selected */
 div.react-flow__node.selected .react-flow__node__wrapper {
-    box-shadow: 0 0 20px 6px rgba(19, 211, 180, 0.33), 0 0 20px rgba(0, 101, 168, 0.33);
+    box-shadow: 0 0 20px 6px oklch(from var(--treege-color-primary) l c h / 30%), 0 0 20px oklch(from var(--treege-color-tertiary) l c h / 30%);
 }
 
 /* Group node */
 div.react-flow__node-group, div.react-flow__node-group.selected {
     background: oklch(from var(--color-chart-2) l c h / 5%);
     box-shadow: none;
-    border: 2px dashed var(--color-chart-2) !important;
+    border: 3px dashed var(--color-chart-2) !important;
 }
 
 /* Group node  resize */
