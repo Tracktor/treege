@@ -1,4 +1,4 @@
-import { useReactFlow, useStore } from "@xyflow/react";
+import { Node, useReactFlow, useStore } from "@xyflow/react";
 import { useCallback } from "react";
 import { shallow } from "zustand/shallow";
 
@@ -9,11 +9,10 @@ import { shallow } from "zustand/shallow";
  */
 const useFlow = () => {
   const reactFlow = useReactFlow();
+  const groupNodes = useStore((state) => state.nodes.filter((node) => node.type === "group"), shallow);
 
-  const { nodes, edges, selectedEdge, selectedEdges, selectedNode, selectedNodes } = useStore(
+  const { selectedEdges, selectedNodes, selectedEdge, selectedNode } = useStore(
     (state) => ({
-      edges: state.edges,
-      nodes: state.nodes,
       selectedEdge: state.edges.find((edge) => edge.selected),
       selectedEdges: state.edges.filter((edge) => edge.selected),
       selectedNode: state.nodes.find((node) => node.selected),
@@ -22,11 +21,6 @@ const useFlow = () => {
     shallow,
   );
 
-  const groupNodes = nodes.filter((node) => node.type === "group");
-
-  /**
-   * Clears the selection of all nodes and edges in the React Flow instance.
-   */
   const clearSelection = useCallback(() => {
     reactFlow.setNodes((nds) => nds.map(({ selected, ...node }) => node));
     reactFlow.setEdges((eds) => eds.map(({ selected, ...edge }) => edge));
@@ -38,7 +32,7 @@ const useFlow = () => {
    * @param data - Partial data to merge into the node's existing data.
    */
   const updateNodeData = useCallback(
-    (id: string, data: Partial<(typeof nodes)[number]["data"]>) => {
+    (id: string, data: Partial<Node[][number]["data"]>) => {
       reactFlow.setNodes((nds) =>
         nds.map((node) => {
           if (node.id === id) {
@@ -101,7 +95,7 @@ const useFlow = () => {
    * @param data - Partial data to merge into the selected node's existing data.
    */
   const updateSelectedNodeData = useCallback(
-    (data: Partial<(typeof nodes)[number]["data"]>) => {
+    (data: Partial<Node[][number]["data"]>) => {
       const currentSelectedNode = reactFlow.getNodes().find((node) => node.selected);
       if (!currentSelectedNode) return;
 
@@ -113,11 +107,9 @@ const useFlow = () => {
   return {
     ...reactFlow,
     clearSelection,
-    edges,
     groupNodes,
     hasSelectedEdges: selectedEdges.length > 0,
-    hasSelectedNode: selectedNodes.length > 0,
-    nodes,
+    hasSelectedNodes: selectedNodes.length > 0,
     selectedEdge,
     selectedEdges,
     selectedNode,

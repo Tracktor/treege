@@ -14,12 +14,10 @@ const GroupNode = ({ data }: GroupNodeProps) => (
   <>
     <NodeResizer />
     <div className="absolute left-6 -top-3.5 ">
-      {data.label && (
-        <Badge className="bg-chart-2 max-w-50">
-          <Boxes className="!w-3 !h-3" />
-          {data.label}
-        </Badge>
-      )}
+      <Badge className="bg-chart-2 max-w-50">
+        <Boxes className="!w-3 !h-3" />
+        {data.label}
+      </Badge>
     </div>
   </>
 );

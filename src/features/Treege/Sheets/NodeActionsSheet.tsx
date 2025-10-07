@@ -10,10 +10,10 @@ import SelectNodeType from "@/features/Treege/Inputs/SelectNodeType";
 import useFlow from "@/hooks/useFlow";
 
 const NodeActionsSheet = () => {
-  const { clearSelection, hasSelectedNode, selectedNode } = useFlow();
+  const { clearSelection, hasSelectedNodes, selectedNode } = useFlow();
 
   return (
-    <Sheet open={hasSelectedNode} onOpenChange={clearSelection}>
+    <Sheet open={hasSelectedNodes} onOpenChange={clearSelection}>
       <SheetContent>
         <SheetHeader>
           <SheetTitle>Edit node</SheetTitle>
