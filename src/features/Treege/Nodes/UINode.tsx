@@ -11,8 +11,8 @@ export type UINodeType = Node<UINodeData, "ui">;
 
 export type UINodeProps = NodeProps<UINodeType>;
 
-const UINode = ({ data, isConnectable, type }: UINodeProps) => (
-  <NodeWrapper>
+const UINode = ({ data, isConnectable, type, parentId }: UINodeProps) => (
+  <NodeWrapper inGroup={!!parentId}>
     {/* Top handle */}
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
 

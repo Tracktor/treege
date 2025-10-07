@@ -13,8 +13,8 @@ export type InputNodeType = Node<InputNodeData, "input">;
 
 export type InputNodeProps = NodeProps<InputNodeType>;
 
-const InputNode = ({ data, isConnectable, type }: InputNodeProps) => (
-  <NodeWrapper>
+const InputNode = ({ data, isConnectable, type, parentId }: InputNodeProps) => (
+  <NodeWrapper inGroup={!!parentId}>
     {/* Top handle */}
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
 

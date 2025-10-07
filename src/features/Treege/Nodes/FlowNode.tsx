@@ -12,8 +12,8 @@ export type FlowNodeType = Node<FlowNodeData, "flow">;
 
 export type FlowNodeProps = NodeProps<FlowNodeType>;
 
-const FlowNode = ({ data, isConnectable, type }: FlowNodeProps) => (
-  <NodeWrapper>
+const FlowNode = ({ data, isConnectable, type, parentId }: FlowNodeProps) => (
+  <NodeWrapper inGroup={!!parentId}>
     {/* Top handle */}
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
 

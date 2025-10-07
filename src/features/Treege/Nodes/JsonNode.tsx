@@ -12,8 +12,8 @@ export type JsonNodeType = Node<JsonNodeData, "json">;
 
 export type JsonNodeProps = NodeProps<JsonNodeType>;
 
-const JsonNode = ({ data, isConnectable, type }: JsonNodeProps) => (
-  <NodeWrapper>
+const JsonNode = ({ data, isConnectable, type, parentId }: JsonNodeProps) => (
+  <NodeWrapper inGroup={!!parentId}>
     {/* Top handle */}
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
 
