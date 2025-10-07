@@ -30,8 +30,6 @@ const InputNodeForm = () => {
       }}
     >
       <div className="grid gap-6">
-        <SelectInputType />
-
         <Field
           name="label"
           children={(field) => (
@@ -47,6 +45,8 @@ const InputNodeForm = () => {
             </FormItem>
           )}
         />
+
+        <SelectInputType />
 
         <Field
           name="name"
