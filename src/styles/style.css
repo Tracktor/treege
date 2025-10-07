@@ -196,7 +196,7 @@ div.react-flow__node-group:hover .react-flow__resize-control, .react-flow__resiz
     opacity: 1;
 }
 
-/* Handle size*/
+/* Handle */
 .react-flow__handle {
     width: 15px;
     height: 15px;
