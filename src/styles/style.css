@@ -197,9 +197,14 @@ div.react-flow__node-group:hover .react-flow__resize-control, .react-flow__resiz
 }
 
 /* Handle */
-.react-flow__handle {
+div.react-flow__handle {
     width: 15px;
     height: 15px;
+    background-color: var(--muted-foreground);
+}
+
+path.react-flow__edge-path {
+    stroke: var(--muted-foreground);
 }
 
 /* Json editor */
