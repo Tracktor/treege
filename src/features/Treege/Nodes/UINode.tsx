@@ -1,6 +1,7 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { LucidePencilRuler } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import NodeWrapper from "@/features/Treege/Nodes/Layout/NodeWrapper";
 
 export type UINodeData = {
   type?: string;
@@ -11,7 +12,7 @@ export type UINodeType = Node<UINodeData, "ui">;
 export type UINodeProps = NodeProps<UINodeType>;
 
 const UINode = ({ data, isConnectable, type }: UINodeProps) => (
-  <>
+  <NodeWrapper>
     {/* Top handle */}
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
 
@@ -26,7 +27,7 @@ const UINode = ({ data, isConnectable, type }: UINodeProps) => (
 
     {/* Bot handle */}
     <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} />
-  </>
+  </NodeWrapper>
 );
 
 export default UINode;

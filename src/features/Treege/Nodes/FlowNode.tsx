@@ -1,6 +1,7 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { Network } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import NodeWrapper from "@/features/Treege/Nodes/Layout/NodeWrapper";
 
 export type FlowNodeData = {
   label?: string;
@@ -12,7 +13,7 @@ export type FlowNodeType = Node<FlowNodeData, "flow">;
 export type FlowNodeProps = NodeProps<FlowNodeType>;
 
 const FlowNode = ({ data, isConnectable, type }: FlowNodeProps) => (
-  <>
+  <NodeWrapper>
     {/* Top handle */}
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
 
@@ -27,7 +28,7 @@ const FlowNode = ({ data, isConnectable, type }: FlowNodeProps) => (
 
     {/* Bot handle */}
     <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} />
-  </>
+  </NodeWrapper>
 );
 
 export default FlowNode;
