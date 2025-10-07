@@ -5,6 +5,7 @@ import NodeWrapper from "@/features/Treege/Nodes/Layout/NodeWrapper";
 
 export type UINodeData = {
   type?: string;
+  label?: string;
 };
 
 export type UINodeType = Node<UINodeData, "ui">;
