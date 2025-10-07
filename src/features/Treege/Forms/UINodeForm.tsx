@@ -10,7 +10,6 @@ const UINodeForm = () => {
 
   const { handleSubmit, Field } = useForm({
     defaultValues: {
-      label: selectedNode?.data?.label || "",
       type: selectedNode?.data?.type || "",
     } as UINodeData,
     onSubmit: async ({ value }) => {
@@ -28,22 +27,6 @@ const UINodeForm = () => {
       }}
     >
       <div className="grid gap-6">
-        <Field
-          name="label"
-          children={(field) => (
-            <FormItem>
-              <Label htmlFor={field.name}>Label</Label>
-              <Input
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={({ target }) => field.handleChange(target.value)}
-              />
-            </FormItem>
-          )}
-        />
-
         <Field
           name="type"
           children={(field) => (
