@@ -17,7 +17,7 @@ const useFlowHelpers = () => {
    *   - siblingCount: number of siblings
    */
   const getNodeSiblings = useCallback(
-    (nodeId: string) => {
+    (nodeId: string | null) => {
       const edges = getEdges();
       const nodes = getNodes();
       const node = nodes.find((n) => n.id === nodeId);
@@ -63,7 +63,7 @@ const useFlowHelpers = () => {
    * @param nodeId - The ID of the node to check.
    * @returns boolean indicating if the node has siblings.
    */
-  const hasSiblings = useCallback((nodeId: string) => getNodeSiblings(nodeId).hasSiblings, [getNodeSiblings]);
+  const hasSiblings = useCallback((nodeId: string | null) => getNodeSiblings(nodeId).hasSiblings, [getNodeSiblings]);
 
   /**
    * Gets all children of a node.
@@ -71,7 +71,7 @@ const useFlowHelpers = () => {
    * @returns Array of child node IDs.
    */
   const getNodeChildren = useCallback(
-    (nodeId: string) => {
+    (nodeId: string | null) => {
       const edges = getEdges();
       return edges.filter((edge) => edge.source === nodeId).map((edge) => edge.target);
     },
@@ -84,7 +84,7 @@ const useFlowHelpers = () => {
    * @returns Array of parent node IDs.
    */
   const getNodeParents = useCallback(
-    (nodeId: string) => {
+    (nodeId: string | null) => {
       const edges = getEdges();
       return edges.filter((edge) => edge.target === nodeId).map((edge) => edge.source);
     },
