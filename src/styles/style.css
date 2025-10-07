@@ -140,7 +140,7 @@ button {
 }
 
 div.react-flow__node {
-    width: 280px;
+    width: 270px;
     height: 150px;
     display: flex;
     flex-direction: column;
