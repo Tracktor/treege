@@ -125,7 +125,9 @@ const SelectNodeGroup = () => {
               <SelectItem value="none">No group</SelectItem>
               {groupNodes.map((node) => (
                 <SelectItem key={node.id} value={node.id}>
-                  {node.data?.label ? String(node.data?.label) : node.id}
+                  {node.data?.label && typeof node.data?.label === "object" && "en" in node.data.label
+                    ? String(node.data?.label?.en)
+                    : node.id}
                 </SelectItem>
               ))}
             </SelectGroup>
