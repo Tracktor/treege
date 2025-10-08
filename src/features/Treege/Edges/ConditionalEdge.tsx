@@ -84,7 +84,7 @@ const ConditionalEdge = ({
         markerEnd={markerEnd}
         style={{
           ...style,
-          stroke: hasCondition ? "var(--color-chart-2)" : style?.stroke,
+          stroke: hasCondition ? "var(--color-chart-2)" : "var(--color-chart-3)",
           strokeWidth: hasCondition ? 2 : style?.strokeWidth,
         }}
       />

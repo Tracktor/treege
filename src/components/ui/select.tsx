@@ -67,7 +67,7 @@ const SelectContent = ({ className, children, position = "popper", ...props }: R
 const SelectLabel = ({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.Label>) => (
   <SelectPrimitive.Label
     data-slot="select-label"
-    className={cn("text-muted-foreground py-1.5 text-sm font-medium ", className)}
+    className={cn("text-muted-foreground pb-1.5 text-sm font-medium ", className)}
     {...props}
   />
 );

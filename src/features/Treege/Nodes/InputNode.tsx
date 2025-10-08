@@ -10,6 +10,8 @@ export type InputNodeData = {
   type?: InputType;
   helperText?: string;
   required?: boolean;
+  pattern?: string;
+  errorMessage?: string;
 };
 
 export type InputNodeType = Node<InputNodeData, "input">;
