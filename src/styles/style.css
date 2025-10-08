@@ -135,7 +135,6 @@ button {
     width: 100vw;
 }
 
-/* Hide watermark */
 .react-flow__panel > a {
     @apply hidden;
 }
@@ -203,6 +202,7 @@ div.react-flow__handle {
     background-color: var(--muted-foreground);
 }
 
+/* Edge */
 path.react-flow__edge-path {
     stroke: var(--muted-foreground);
 }
