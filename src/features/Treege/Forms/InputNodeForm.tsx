@@ -11,8 +11,10 @@ const InputNodeForm = () => {
 
   const { handleSubmit, Field } = useForm({
     defaultValues: {
+      helperText: selectedNode?.data?.helperText || "",
       label: selectedNode?.data?.label || "",
       name: selectedNode?.data?.name || "",
+      required: selectedNode?.data?.required || false,
       type: selectedNode?.data?.type || "",
     } as InputNodeData,
     onSubmit: async ({ value }) => {
@@ -68,6 +70,22 @@ const InputNodeForm = () => {
                 onChange={({ target }) => {
                   field.handleChange(target.value);
                 }}
+              />
+            </FormItem>
+          )}
+        />
+
+        <Field
+          name="helperText"
+          children={(field) => (
+            <FormItem>
+              <Label htmlFor={field.name}>Helper text</Label>
+              <Input
+                id={field.name}
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={({ target }) => field.handleChange(target.value)}
               />
             </FormItem>
           )}
