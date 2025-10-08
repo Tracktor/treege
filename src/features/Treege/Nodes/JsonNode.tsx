@@ -4,7 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import NodeWrapper from "@/features/Treege/Nodes/Layout/NodeWrapper";
 
 export type JsonNodeData = {
-  label?: string;
+  label?: {
+    en?: string;
+    [key: string]: string | undefined;
+  };
   json?: string;
 };
 
@@ -18,7 +21,7 @@ const JsonNode = ({ data, isConnectable, type, parentId }: JsonNodeProps) => (
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
 
     {/* Label */}
-    <div className="text-2xl text-nowrap text-ellipsis overflow-hidden max-w-full mb-1">{data?.label}</div>
+    <div className="text-2xl text-nowrap text-ellipsis overflow-hidden max-w-full mb-1">{data?.label?.en}</div>
 
     {/* Type */}
     <Badge>

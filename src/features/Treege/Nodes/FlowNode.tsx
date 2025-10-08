@@ -4,7 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import NodeWrapper from "@/features/Treege/Nodes/Layout/NodeWrapper";
 
 export type FlowNodeData = {
-  label?: string;
+  label?: {
+    en?: string;
+    [key: string]: string | undefined;
+  };
   targetId?: string;
 };
 
@@ -18,7 +21,7 @@ const FlowNode = ({ data, isConnectable, type, parentId }: FlowNodeProps) => (
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
 
     {/* Label */}
-    <div className="text-2xl text-nowrap text-ellipsis overflow-hidden max-w-full mb-1">{data?.label}</div>
+    <div className="text-2xl text-nowrap text-ellipsis overflow-hidden max-w-full mb-1">{data?.label?.en}</div>
 
     {/* Type */}
     <Badge variant="destructive">

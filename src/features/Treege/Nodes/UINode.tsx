@@ -5,7 +5,10 @@ import NodeWrapper from "@/features/Treege/Nodes/Layout/NodeWrapper";
 
 export type UINodeData = {
   type?: string;
-  label?: string;
+  label?: {
+    en?: string;
+    [key: string]: string | undefined;
+  };
 };
 
 export type UINodeType = Node<UINodeData, "ui">;
@@ -18,7 +21,7 @@ const UINode = ({ data, isConnectable, type, parentId }: UINodeProps) => (
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
 
     {/* Label */}
-    <div className="text-2xl text-nowrap text-ellipsis overflow-hidden max-w-full mb-1 capitalize">{data?.label}</div>
+    <div className="text-2xl text-nowrap text-ellipsis overflow-hidden max-w-full mb-1 capitalize">{data?.label?.en}</div>
 
     {/* Type */}
 

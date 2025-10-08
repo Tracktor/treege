@@ -1,16 +1,19 @@
 import { useForm } from "@tanstack/react-form";
+import { useState } from "react";
 import { FormDescription, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import SelectLanguage, { Language } from "@/features/Treege/Inputs/SelectLanguage";
 import { FlowNodeData } from "@/features/Treege/Nodes/FlowNode";
 import useFlow from "@/hooks/useFlow";
 
 const FlowNodeForm = () => {
+  const [selectedLanguage, setSelectedLanguage] = useState<Language>("en");
   const { updateSelectedNodeData, selectedNode } = useFlow();
 
   const { handleSubmit, Field } = useForm({
     defaultValues: {
-      label: selectedNode?.data?.label || "",
+      label: selectedNode?.data?.label || { en: "" },
       targetId: selectedNode?.data?.targetId || "",
     } as FlowNodeData,
     onSubmit: async ({ value }) => {
@@ -28,21 +31,29 @@ const FlowNodeForm = () => {
       }}
     >
       <div className="grid gap-6">
-        <Field
-          name="label"
-          children={(field) => (
-            <FormItem>
-              <Label htmlFor={field.name}>Label</Label>
-              <Input
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={({ target }) => field.handleChange(target.value)}
-              />
-            </FormItem>
-          )}
-        />
+        <div className="flex gap-2 items-end">
+          <Field
+            name="label"
+            children={(field) => (
+              <FormItem className="flex-1">
+                <Label htmlFor={field.name}>Label</Label>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value?.[selectedLanguage] || ""}
+                  onBlur={field.handleBlur}
+                  onChange={({ target }) => {
+                    field.handleChange({
+                      ...field.state.value,
+                      [selectedLanguage]: target.value,
+                    });
+                  }}
+                />
+              </FormItem>
+            )}
+          />
+          <SelectLanguage value={selectedLanguage} onValueChange={setSelectedLanguage} />
+        </div>
 
         <Field
           name="targetId"

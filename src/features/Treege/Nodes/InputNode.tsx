@@ -5,7 +5,10 @@ import { InputType } from "@/features/Treege/Inputs/SelectInputType";
 import NodeWrapper from "@/features/Treege/Nodes/Layout/NodeWrapper";
 
 export type InputNodeData = {
-  label?: string;
+  label?: {
+    en?: string;
+    [key: string]: string | undefined;
+  };
   name?: string;
   type?: InputType;
   helperText?: string;
@@ -24,7 +27,7 @@ const InputNode = ({ data, isConnectable, type, parentId }: InputNodeProps) => (
     <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
 
     {/* Label */}
-    <div className="text-2xl text-nowrap text-ellipsis overflow-hidden max-w-full mb-1">{data?.label || data?.name}</div>
+    <div className="text-2xl text-nowrap text-ellipsis overflow-hidden max-w-full mb-1">{data?.label?.en || data?.name}</div>
 
     {/* Input type */}
     <div className="flex gap-1">

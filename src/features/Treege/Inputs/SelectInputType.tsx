@@ -1,26 +1,26 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const inputType = {
-  address: "address",
-  autocomplete: "autocomplete",
-  checkbox: "checkbox",
-  date: "date",
-  dateRange: "dateRange",
-  daterange: "daterange",
-  file: "file",
-  hidden: "hidden",
-  http: "http",
-  number: "number",
-  password: "password",
-  radio: "radio",
-  select: "select",
-  switch: "switch",
-  text: "text",
-  time: "time",
-  timeRange: "timeRange",
-};
+const inputType = [
+  "address",
+  "autocomplete",
+  "checkbox",
+  "date",
+  "dateRange",
+  "daterange",
+  "file",
+  "hidden",
+  "http",
+  "number",
+  "password",
+  "radio",
+  "select",
+  "switch",
+  "text",
+  "time",
+  "timeRange",
+] as const;
 
-export type InputType = (typeof inputType)[keyof typeof inputType];
+export type InputType = (typeof inputType)[number];
 
 export interface SelectInputTypeProps {
   value?: InputType;

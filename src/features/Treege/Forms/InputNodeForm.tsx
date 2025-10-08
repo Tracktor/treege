@@ -8,10 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import SelectInputType from "@/features/Treege/Inputs/SelectInputType";
+import SelectLanguage, { Language } from "@/features/Treege/Inputs/SelectLanguage";
 import { InputNodeData } from "@/features/Treege/Nodes/InputNode";
 import useFlow from "@/hooks/useFlow";
 
 const InputNodeForm = () => {
+  const [selectedLanguage, setSelectedLanguage] = useState<Language>("en");
   const [validationSectionIsOpen, setValidationSectionIsOpen] = useState(false);
   const { updateSelectedNodeData, selectedNode } = useFlow();
 
@@ -19,7 +21,7 @@ const InputNodeForm = () => {
     defaultValues: {
       errorMessage: selectedNode?.data?.errorMessage || "",
       helperText: selectedNode?.data?.helperText || "",
-      label: selectedNode?.data?.label || "",
+      label: selectedNode?.data?.label || { en: "" },
       name: selectedNode?.data?.name || "",
       pattern: selectedNode?.data?.pattern || "",
       required: selectedNode?.data?.required || false,
@@ -40,21 +42,29 @@ const InputNodeForm = () => {
       }}
     >
       <div className="grid gap-6">
-        <Field
-          name="label"
-          children={(field) => (
-            <FormItem>
-              <Label htmlFor={field.name}>Label</Label>
-              <Input
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={({ target }) => field.handleChange(target.value)}
-              />
-            </FormItem>
-          )}
-        />
+        <div className="flex gap-2 items-end">
+          <Field
+            name="label"
+            children={(field) => (
+              <FormItem className="flex-1">
+                <Label htmlFor={field.name}>Label</Label>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value?.[selectedLanguage] || ""}
+                  onBlur={field.handleBlur}
+                  onChange={({ target }) => {
+                    field.handleChange({
+                      ...field.state.value,
+                      [selectedLanguage]: target.value,
+                    });
+                  }}
+                />
+              </FormItem>
+            )}
+          />
+          <SelectLanguage value={selectedLanguage} onValueChange={setSelectedLanguage} />
+        </div>
 
         <Field
           name="type"
