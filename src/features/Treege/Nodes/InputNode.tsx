@@ -3,12 +3,10 @@ import { RectangleEllipsis, Type } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { InputType } from "@/features/Treege/Inputs/SelectInputType";
 import NodeWrapper from "@/features/Treege/Nodes/Layout/NodeWrapper";
+import { TranslatableLabel } from "@/Types/translate";
 
 export type InputNodeData = {
-  label?: {
-    en?: string;
-    [key: string]: string | undefined;
-  };
+  label?: TranslatableLabel;
   name?: string;
   type?: InputType;
   helperText?: string;
