@@ -29,7 +29,7 @@ const InputNode = ({ data, isConnectable, type, parentId }: InputNodeProps) => (
 
     {/* Input type */}
     <div className="flex gap-1">
-      {data.type && (
+      {type && (
         <Badge variant="secondary" className="bg-blue-500 text-white dark:bg-blue-600">
           <RectangleEllipsis />
           {type}

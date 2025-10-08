@@ -16,7 +16,7 @@ const SelectLanguage = ({ value = "en", onValueChange }: SelectLanguageProps) =>
     </SelectTrigger>
     <SelectContent>
       <SelectGroup>
-        {Object.values(languages).map((type) => (
+        {languages.map((type) => (
           <SelectItem key={type} value={type} className="uppercase">
             {type}
           </SelectItem>
