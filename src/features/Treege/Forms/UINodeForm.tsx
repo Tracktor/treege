@@ -19,6 +19,12 @@ const UINodeForm = () => {
       label: selectedNode?.data?.label || { en: "" },
       type: selectedNode?.data?.type || "title",
     } as UINodeData,
+    listeners: {
+      onChange: ({ formApi }) => {
+        formApi.handleSubmit().then();
+      },
+      onChangeDebounceMs: 500,
+    },
     onSubmit: async ({ value }) => {
       updateSelectedNodeData(value);
     },
@@ -27,7 +33,6 @@ const UINodeForm = () => {
   return (
     <form
       id="ui-node-form"
-      onChange={handleSubmit}
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -37,6 +42,12 @@ const UINodeForm = () => {
         <div className="flex gap-2 items-end">
           <Field
             name="label"
+            listeners={{
+              onChange: () => {
+                handleSubmit().then();
+              },
+              onChangeDebounceMs: 150,
+            }}
             children={(field) => (
               <FormItem className="flex-1">
                 <Label htmlFor={field.name}>Label</Label>

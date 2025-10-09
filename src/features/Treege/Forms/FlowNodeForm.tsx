@@ -18,6 +18,12 @@ const FlowNodeForm = () => {
       label: selectedNode?.data?.label || { en: "" },
       targetId: selectedNode?.data?.targetId || "",
     } as FlowNodeData,
+    listeners: {
+      onChange: ({ formApi }) => {
+        formApi.handleSubmit().then();
+      },
+      onChangeDebounceMs: 500,
+    },
     onSubmit: async ({ value }) => {
       updateSelectedNodeData(value);
     },
@@ -26,7 +32,6 @@ const FlowNodeForm = () => {
   return (
     <form
       id="flow-node-form"
-      onChange={handleSubmit}
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -36,6 +41,12 @@ const FlowNodeForm = () => {
         <div className="flex gap-2 items-end">
           <Field
             name="label"
+            listeners={{
+              onChange: () => {
+                handleSubmit().then();
+              },
+              onChangeDebounceMs: 150,
+            }}
             children={(field) => (
               <FormItem className="flex-1">
                 <Label htmlFor={field.name}>Label</Label>

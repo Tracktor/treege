@@ -20,7 +20,7 @@ const InputNodeForm = () => {
   const { updateSelectedNodeData } = useFlowActions();
   const needsOptions = ["select", "radio", "autocomplete", "checkbox"].includes(selectedNode?.data?.type || "");
 
-  const form = useForm({
+  const { handleSubmit, Field } = useForm({
     defaultValues: {
       errorMessage: selectedNode?.data?.errorMessage || "",
       helperText: selectedNode?.data?.helperText || "",
@@ -32,6 +32,12 @@ const InputNodeForm = () => {
       required: selectedNode?.data?.required || false,
       type: selectedNode?.data?.type || "",
     } as InputNodeData,
+    listeners: {
+      onChange: ({ formApi }) => {
+        formApi.handleSubmit().then();
+      },
+      onChangeDebounceMs: 500,
+    },
     onSubmit: async ({ value }) => {
       updateSelectedNodeData(value);
     },
@@ -40,7 +46,6 @@ const InputNodeForm = () => {
   return (
     <form
       id="input-node-form"
-      onChange={() => form.handleSubmit()}
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -48,8 +53,14 @@ const InputNodeForm = () => {
     >
       <div className="grid gap-6">
         <div className="flex gap-2 items-end">
-          <form.Field
+          <Field
             name="label"
+            listeners={{
+              onChange: () => {
+                handleSubmit().then();
+              },
+              onChangeDebounceMs: 150,
+            }}
             children={(field) => (
               <FormItem className="flex-1">
                 <Label htmlFor={field.name}>Label</Label>
@@ -71,7 +82,7 @@ const InputNodeForm = () => {
           <SelectLanguage value={selectedLanguage} onValueChange={setSelectedLanguage} />
         </div>
 
-        <form.Field
+        <Field
           name="type"
           children={(field) => (
             <FormItem>
@@ -80,7 +91,7 @@ const InputNodeForm = () => {
           )}
         />
 
-        <form.Field
+        <Field
           name="name"
           children={(field) => (
             <FormItem>
@@ -96,7 +107,7 @@ const InputNodeForm = () => {
           )}
         />
 
-        <form.Field
+        <Field
           name="helperText"
           children={(field) => (
             <FormItem>
@@ -126,7 +137,7 @@ const InputNodeForm = () => {
             </CollapsibleTrigger>
 
             <CollapsibleContent className="flex flex-col gap-4">
-              <form.Field name="options" mode="array">
+              <Field name="options" mode="array">
                 {(field) => (
                   <div className="space-y-2">
                     {field.state.value?.map((_, index) => {
@@ -135,7 +146,7 @@ const InputNodeForm = () => {
                       return (
                         <div key={key} className="flex gap-2 items-start">
                           {/* Label field */}
-                          <form.Field name={`options[${index}].label`}>
+                          <Field name={`options[${index}].label`}>
                             {(subField) => (
                               <Input
                                 placeholder="Label"
@@ -148,10 +159,10 @@ const InputNodeForm = () => {
                                 }}
                               />
                             )}
-                          </form.Field>
+                          </Field>
 
                           {/* Value field */}
-                          <form.Field name={`options[${index}].value`}>
+                          <Field name={`options[${index}].value`}>
                             {(subField) => (
                               <Input
                                 placeholder="Value"
@@ -159,7 +170,7 @@ const InputNodeForm = () => {
                                 onChange={({ target }) => subField.handleChange(target.value)}
                               />
                             )}
-                          </form.Field>
+                          </Field>
 
                           {/* Remove button */}
                           <Button
@@ -168,7 +179,7 @@ const InputNodeForm = () => {
                             size="icon"
                             onClick={() => {
                               field.removeValue(index);
-                              form.handleSubmit().then();
+                              handleSubmit().then();
                             }}
                           >
                             <X className="h-4 w-4" />
@@ -178,16 +189,24 @@ const InputNodeForm = () => {
                     })}
 
                     {/* Add option button */}
-                    <Button type="button" variant="outline" size="sm" onClick={() => field.pushValue({ label: { en: "" }, value: "" })}>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        field.pushValue({ label: { en: "" }, value: "" });
+                        handleSubmit().then();
+                      }}
+                    >
                       + Add option
                     </Button>
                   </div>
                 )}
-              </form.Field>
+              </Field>
 
               {/* Multiple selection switch */}
               {selectedNode?.data?.type === "select" && (
-                <form.Field
+                <Field
                   name="multiple"
                   children={(field) => (
                     <div className="flex items-center space-x-2">
@@ -218,7 +237,7 @@ const InputNodeForm = () => {
           </CollapsibleTrigger>
 
           <CollapsibleContent className="flex flex-col gap-6">
-            <form.Field
+            <Field
               name="required"
               children={(field) => (
                 <FormItem>
@@ -230,7 +249,7 @@ const InputNodeForm = () => {
               )}
             />
 
-            <form.Field
+            <Field
               name="pattern"
               children={(field) => (
                 <FormItem>
@@ -246,7 +265,7 @@ const InputNodeForm = () => {
               )}
             />
 
-            <form.Field
+            <Field
               name="errorMessage"
               children={(field) => (
                 <FormItem>
