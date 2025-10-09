@@ -14,7 +14,6 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
-    "noEmit": true,
     // Linting
     "strict": true,
     "noUnusedLocals": true,

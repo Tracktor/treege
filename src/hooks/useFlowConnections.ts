@@ -5,6 +5,10 @@ import { nanoid } from "nanoid";
 import { useCallback } from "react";
 import defaultNode from "@/constants/defaultNode";
 
+/**
+ * Custom hook to manage flow connections, including connecting nodes,
+ * handling connection ends, and deleting edges with conditional logic.
+ */
 const useFlowConnections = () => {
   const { setNodes, setEdges, screenToFlowPosition } = useReactFlow();
 

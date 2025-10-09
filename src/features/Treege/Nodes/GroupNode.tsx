@@ -1,9 +1,10 @@
 import { Node, NodeProps, NodeResizer } from "@xyflow/react";
 import { Boxes } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { TranslatableLabel } from "@/Types/translate";
+import { BaseNodeData } from "@/type/node";
+import { TranslatableLabel } from "@/type/translate";
 
-export type GroupNodeData = {
+export type GroupNodeData = BaseNodeData & {
   label: TranslatableLabel;
 };
 

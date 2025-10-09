@@ -2,10 +2,9 @@ import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { Network } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import NodeWrapper from "@/features/Treege/Nodes/Layout/NodeWrapper";
-import { TranslatableLabel } from "@/Types/translate";
+import { BaseNodeData } from "@/type/node";
 
-export type FlowNodeData = {
-  label?: TranslatableLabel;
+export type FlowNodeData = BaseNodeData & {
   targetId?: string;
 };
 

@@ -2,10 +2,9 @@ import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { Braces } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import NodeWrapper from "@/features/Treege/Nodes/Layout/NodeWrapper";
-import { TranslatableLabel } from "@/Types/translate";
+import { BaseNodeData } from "@/type/node";
 
-export type JsonNodeData = {
-  label?: TranslatableLabel;
+export type JsonNodeData = BaseNodeData & {
   json?: string;
 };
 

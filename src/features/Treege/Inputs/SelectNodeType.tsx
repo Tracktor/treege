@@ -1,9 +1,11 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import nodeTypes from "@/constants/nodeTypes";
-import useFlow from "@/hooks/useFlow";
+import useFlowActions from "@/hooks/useFlowActions";
+import useNodesSelection from "@/hooks/useNodesSelection";
 
 const SelectNodeType = () => {
-  const { updateSelectedNodeType, selectedNode } = useFlow();
+  const { selectedNode } = useNodesSelection();
+  const { updateSelectedNodeType } = useFlowActions();
   const value = selectedNode?.type || "";
   const isGroupNode = selectedNode?.type === "group";
 

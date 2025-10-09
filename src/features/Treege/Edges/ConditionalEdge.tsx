@@ -1,5 +1,5 @@
 import { useForm } from "@tanstack/react-form";
-import { BaseEdge, Edge, EdgeLabelRenderer, EdgeProps, getBezierPath } from "@xyflow/react";
+import { BaseEdge, Edge, EdgeLabelRenderer, EdgeProps, getBezierPath, useReactFlow } from "@xyflow/react";
 import { Waypoints, X } from "lucide-react";
 import { MouseEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import useFlow from "@/hooks/useFlow";
 
 type Operator = "===" | "!==" | ">" | "<" | ">=" | "<=";
 
@@ -47,7 +46,7 @@ const ConditionalEdge = ({
     targetY,
   });
 
-  const { updateEdgeData, getNode } = useFlow();
+  const { updateEdgeData, getNode } = useReactFlow();
   const parentNode = getNode(source);
   const parentLabelOrName = parentNode?.data?.label || parentNode?.data?.name;
   const parentLabel = parentLabelOrName ? String(parentLabelOrName) : source;

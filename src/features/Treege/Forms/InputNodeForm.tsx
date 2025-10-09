@@ -10,12 +10,14 @@ import { Switch } from "@/components/ui/switch";
 import SelectInputType from "@/features/Treege/Inputs/SelectInputType";
 import SelectLanguage, { Language } from "@/features/Treege/Inputs/SelectLanguage";
 import { InputNodeData } from "@/features/Treege/Nodes/InputNode";
-import useFlow from "@/hooks/useFlow";
+import useFlowActions from "@/hooks/useFlowActions";
+import useNodesSelection from "@/hooks/useNodesSelection";
 
 const InputNodeForm = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<Language>("en");
   const [validationSectionIsOpen, setValidationSectionIsOpen] = useState(false);
-  const { updateSelectedNodeData, selectedNode } = useFlow();
+  const { selectedNode } = useNodesSelection<InputNodeData>();
+  const { updateSelectedNodeData } = useFlowActions();
 
   const { handleSubmit, Field } = useForm({
     defaultValues: {

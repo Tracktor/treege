@@ -50,6 +50,7 @@ export const ThemeProvider = ({ children, defaultTheme = "system", storageKey = 
   );
 
   return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
     <ThemeProviderContext.Provider {...props} value={value}>
       {children}
     </ThemeProviderContext.Provider>

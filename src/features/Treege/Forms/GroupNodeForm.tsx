@@ -5,11 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import SelectLanguage, { Language } from "@/features/Treege/Inputs/SelectLanguage";
 import { GroupNodeData } from "@/features/Treege/Nodes/GroupNode";
-import useFlow from "@/hooks/useFlow";
+import useFlowActions from "@/hooks/useFlowActions";
+import useNodesSelection from "@/hooks/useNodesSelection";
 
 const GroupNodeForm = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<Language>("en");
-  const { updateSelectedNodeData, selectedNode } = useFlow();
+  const { selectedNode } = useNodesSelection<GroupNodeData>();
+  const { updateSelectedNodeData } = useFlowActions();
 
   const { handleSubmit, Field } = useForm({
     defaultValues: {

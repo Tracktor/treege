@@ -1,3 +1,4 @@
+import { useReactFlow } from "@xyflow/react";
 import { PlusCircle } from "lucide-react";
 import { nanoid } from "nanoid";
 import { useState } from "react";
@@ -7,12 +8,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import useFlow from "@/hooks/useFlow";
+import useNodesSelection from "@/hooks/useNodesSelection";
 
 const SelectNodeGroup = () => {
   const [newGroupLabel, setNewGroupLabel] = useState("");
   const [popoverOpen, setPopoverOpen] = useState(false);
-  const { selectedNode, groupNodes, setNodes } = useFlow();
+  const { selectedNode, groupNodes } = useNodesSelection();
+  const { setNodes } = useReactFlow();
   const currentParentId = selectedNode?.parentId || "none";
   const isGroupNode = selectedNode?.type === "group";
 

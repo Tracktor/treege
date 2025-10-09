@@ -2,11 +2,10 @@ import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { LucidePencilRuler, Type } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import NodeWrapper from "@/features/Treege/Nodes/Layout/NodeWrapper";
-import { TranslatableLabel } from "@/Types/translate";
+import { BaseNodeData } from "@/type/node";
 
-export type UINodeData = {
+export type UINodeData = BaseNodeData & {
   type?: string;
-  label?: TranslatableLabel;
 };
 
 export type UINodeType = Node<UINodeData, "ui">;

@@ -7,10 +7,14 @@ import JsonNodeForm from "@/features/Treege/Forms/JsonNodeForm";
 import UINodeForm from "@/features/Treege/Forms/UINodeForm";
 import SelectNodeGroup from "@/features/Treege/Inputs/SelectNodeGroup";
 import SelectNodeType from "@/features/Treege/Inputs/SelectNodeType";
-import useFlow from "@/hooks/useFlow";
+import useFlowActions from "@/hooks/useFlowActions";
+import useNodesSelection from "@/hooks/useNodesSelection";
+import { TreegeNodeData } from "@/type/node";
+import { isFlowNode, isGroupNode, isInputNode, isJsonNode, isUINode } from "@/utils/nodeTyoeGuards";
 
 const NodeActionsSheet = () => {
-  const { clearSelection, hasSelectedNodes, selectedNode } = useFlow();
+  const { selectedNode, hasSelectedNodes } = useNodesSelection<TreegeNodeData>();
+  const { clearSelection } = useFlowActions();
 
   return (
     <Sheet open={hasSelectedNodes} onOpenChange={clearSelection}>
@@ -18,8 +22,8 @@ const NodeActionsSheet = () => {
         <SheetHeader>
           <SheetTitle>Edit node</SheetTitle>
           <SheetDescription>
-            {String(selectedNode?.data?.label || selectedNode?.data?.name || "")}
-            {!!selectedNode?.id && (!!selectedNode?.data?.label || !!selectedNode?.data?.name) && " - "}
+            {String(selectedNode?.data?.label?.en || "")}
+            {!!selectedNode?.id && !!selectedNode?.data?.label?.en && " - "}
             {selectedNode?.id}
           </SheetDescription>
         </SheetHeader>
@@ -30,11 +34,11 @@ const NodeActionsSheet = () => {
 
           <Separator />
 
-          {selectedNode?.type === "input" && <InputNodeForm />}
-          {selectedNode?.type === "ui" && <UINodeForm />}
-          {selectedNode?.type === "json" && <JsonNodeForm />}
-          {selectedNode?.type === "flow" && <FlowNodeForm />}
-          {selectedNode?.type === "group" && <GroupNodeForm />}
+          {isInputNode(selectedNode) && <InputNodeForm />}
+          {isUINode(selectedNode) && <UINodeForm />}
+          {isJsonNode(selectedNode) && <JsonNodeForm />}
+          {isFlowNode(selectedNode) && <FlowNodeForm />}
+          {isGroupNode(selectedNode) && <GroupNodeForm />}
         </div>
       </SheetContent>
     </Sheet>

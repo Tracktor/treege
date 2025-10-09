@@ -1,18 +1,17 @@
-import { Edge, Node, Panel, useEdges, useNodes } from "@xyflow/react";
+import { Edge, Node, Panel, useEdges, useNodes, useReactFlow } from "@xyflow/react";
 import { ArrowRightFromLine, Download, Plus, Save } from "lucide-react";
 import { nanoid } from "nanoid";
 import { ChangeEvent, useRef } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import defaultNode from "@/constants/defaultNode";
-import useFlow from "@/hooks/useFlow";
 
 export interface ActionsPanelProps {
   onExportJson?: (data: { nodes: Node[]; edges: Edge[] }) => void;
   onSave?: (data: { nodes: Node[]; edges: Edge[] }) => void;
 }
 const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
-  const { setNodes, setEdges, addNodes, screenToFlowPosition } = useFlow();
+  const { setNodes, setEdges, addNodes, screenToFlowPosition } = useReactFlow();
   const nodes = useNodes();
   const edges = useEdges();
   const inputFileRef = useRef<HTMLInputElement>(null);

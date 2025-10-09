@@ -5,11 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import SelectLanguage, { Language } from "@/features/Treege/Inputs/SelectLanguage";
 import { FlowNodeData } from "@/features/Treege/Nodes/FlowNode";
-import useFlow from "@/hooks/useFlow";
+import useFlowActions from "@/hooks/useFlowActions";
+import useNodesSelection from "@/hooks/useNodesSelection";
 
 const FlowNodeForm = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<Language>("en");
-  const { updateSelectedNodeData, selectedNode } = useFlow();
+  const { updateSelectedNodeData } = useFlowActions();
+  const { selectedNode } = useNodesSelection<FlowNodeData>();
 
   const { handleSubmit, Field } = useForm({
     defaultValues: {
