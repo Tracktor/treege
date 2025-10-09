@@ -1,8 +1,8 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { RectangleEllipsis, Type } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { InputType } from "@/features/Treege/Inputs/SelectInputType";
 import NodeWrapper from "@/features/Treege/Nodes/Layout/NodeWrapper";
+import { InputOption, InputType } from "@/type/input";
 import { BaseNodeData } from "@/type/node";
 
 export type InputNodeData = BaseNodeData & {
@@ -12,6 +12,8 @@ export type InputNodeData = BaseNodeData & {
   required?: boolean;
   pattern?: string;
   errorMessage?: string;
+  options?: InputOption[];
+  multiple?: boolean;
 };
 
 export type InputNodeType = Node<InputNodeData, "input">;
