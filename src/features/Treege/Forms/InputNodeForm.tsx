@@ -130,7 +130,7 @@ const InputNodeForm = () => {
                 <FormItem>
                   <div className="flex items-center space-x-2">
                     <Switch id="required" checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
-                    <Label htmlFor="airplane-mode">Required</Label>
+                    <Label htmlFor="required">Required</Label>
                   </div>
                 </FormItem>
               )}

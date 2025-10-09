@@ -74,7 +74,11 @@ const SelectNodeGroup = () => {
 
     setNodes((nds) => {
       const newGroupNode = {
-        data: { label: newGroupLabel.trim() },
+        data: {
+          label: {
+            en: newGroupLabel.trim(),
+          },
+        },
         id: newGroupId,
         position: {
           x: selectedNode.position.x - 300,
@@ -127,9 +131,7 @@ const SelectNodeGroup = () => {
               <SelectItem value="none">No group</SelectItem>
               {groupNodes.map((node) => (
                 <SelectItem key={node.id} value={node.id}>
-                  {node.data?.label && typeof node.data?.label === "object" && "en" in node.data.label
-                    ? String(node.data?.label?.en)
-                    : node.id}
+                  {node.data.label?.en ? String(node.data.label?.en) : node.id}
                 </SelectItem>
               ))}
             </SelectGroup>

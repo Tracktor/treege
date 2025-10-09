@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": [],
+    "types": ["node"],
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "composite": true,
     "module": "ESNext",
