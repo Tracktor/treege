@@ -61,7 +61,10 @@ const SelectNodeGroup = () => {
       return;
     }
 
-    const existingGroup = groupNodes.find((node) => String(node.data?.label).toLowerCase() === newGroupLabel.trim().toLowerCase());
+    const existingGroup = groupNodes.find((node) => {
+      const label = node.data?.label?.en || node.data?.label;
+      return String(label).toLowerCase() === newGroupLabel.trim().toLowerCase();
+    });
 
     if (existingGroup) {
       toast.error("This group already exists", {

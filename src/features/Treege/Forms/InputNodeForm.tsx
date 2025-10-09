@@ -112,7 +112,11 @@ const InputNodeForm = () => {
         />
 
         {/* Validation */}
-        <Collapsible open={validationSectionIsOpen} onOpenChange={setValidationSectionIsOpen} className="flex w-[350px] flex-col gap-2">
+        <Collapsible
+          open={validationSectionIsOpen}
+          onOpenChange={setValidationSectionIsOpen}
+          className="flex w-full max-w-[350px] flex-col gap-2"
+        >
           <CollapsibleTrigger asChild>
             <div className="flex items-center justify-between gap-4">
               <h4 className="text-sm font-semibold">Validation</h4>
