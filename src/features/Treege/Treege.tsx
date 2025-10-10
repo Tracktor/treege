@@ -1,9 +1,9 @@
 import { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, ReactFlow, ReactFlowProvider } from "@xyflow/react";
-import { ThemeProvider } from "@/components/theme-provider";
-import Logo from "@/components/ui/logo";
+import Logo from "@/components/logo";
 import { Toaster } from "@/components/ui/sonner";
 import edgeTypes from "@/constants/edgeTypes";
 import nodeTypes from "@/constants/nodeTypes";
+import { ThemeProvider } from "@/context/theme-provider";
 import ActionsPanel from "@/features/Treege/Panel/ActionsPanel";
 import NodeActionsSheet from "@/features/Treege/Sheets/NodeActionsSheet";
 import useFlowConnections from "@/hooks/useFlowConnections";
