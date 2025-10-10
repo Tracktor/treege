@@ -4,7 +4,6 @@ const inputType = [
   "checkbox",
   "date",
   "daterange",
-  "daterange",
   "file",
   "hidden",
   "http",
