@@ -16,7 +16,7 @@ const config = () =>
         name,
       },
       rollupOptions: {
-        external: [...Object.keys(dependencies).filter((dep) => dep !== "nanoid"), ...Object.keys(peerDependencies)],
+        external: [...Object.keys(dependencies ?? {}).filter((dep) => dep !== "nanoid"), ...Object.keys(peerDependencies ?? {})],
         output: {
           globals: {
             react: "React",
