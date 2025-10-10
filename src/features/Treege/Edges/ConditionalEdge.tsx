@@ -1,5 +1,5 @@
 import { useForm } from "@tanstack/react-form";
-import { BaseEdge, Edge, EdgeLabelRenderer, EdgeProps, getBezierPath, useReactFlow } from "@xyflow/react";
+import { BaseEdge, Edge, EdgeLabelRenderer, EdgeProps, getBezierPath, useNodesData, useReactFlow } from "@xyflow/react";
 import { Waypoints, X } from "lucide-react";
 import { MouseEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import useTranslatedLabel from "@/hooks/useTranslatedLabel";
+import { TreegeNode } from "@/type/node";
 
 type Operator = "===" | "!==" | ">" | "<" | ">=" | "<=";
 
@@ -36,7 +38,6 @@ const ConditionalEdge = ({
   style,
   data,
 }: ConditionalEdgeProps) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [edgePath, labelX, labelY] = getBezierPath({
     sourcePosition,
     sourceX,
@@ -46,10 +47,11 @@ const ConditionalEdge = ({
     targetY,
   });
 
-  const { updateEdgeData, getNode } = useReactFlow();
-  const parentNode = getNode(source);
-  const parentLabelOrName = parentNode?.data?.label || parentNode?.data?.name;
-  const parentLabel = parentLabelOrName ? String(parentLabelOrName) : source;
+  const [isOpen, setIsOpen] = useState(false);
+  const { updateEdgeData } = useReactFlow();
+  const translateLabel = useTranslatedLabel();
+  const parentNodeData = useNodesData<TreegeNode>(source);
+  const parentLabel = translateLabel(parentNodeData?.data?.label) || source;
   const hasCondition = data?.condition?.operator && data?.condition?.value;
 
   const { handleSubmit, reset, Field } = useForm({
