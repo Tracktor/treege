@@ -9,12 +9,15 @@ import SelectNodeGroup from "@/features/Treege/Inputs/SelectNodeGroup";
 import SelectNodeType from "@/features/Treege/Inputs/SelectNodeType";
 import useFlowActions from "@/hooks/useFlowActions";
 import useNodesSelection from "@/hooks/useNodesSelection";
+import useTranslatedLabel from "@/hooks/useTranslatedLabel";
 import { TreegeNodeData } from "@/type/node";
-import { isFlowNode, isGroupNode, isInputNode, isJsonNode, isUINode } from "@/utils/nodeTyoeGuards";
+import { isFlowNode, isGroupNode, isInputNode, isJsonNode, isUINode } from "@/utils/nodeTypeGuards";
 
 const NodeActionsSheet = () => {
   const { selectedNode, hasSelectedNodes } = useNodesSelection<TreegeNodeData>();
   const { clearSelection } = useFlowActions();
+  const translateLabel = useTranslatedLabel();
+  const label = translateLabel(selectedNode?.data?.label);
 
   return (
     <Sheet open={hasSelectedNodes} onOpenChange={clearSelection}>
@@ -22,8 +25,8 @@ const NodeActionsSheet = () => {
         <SheetHeader>
           <SheetTitle>Edit node</SheetTitle>
           <SheetDescription>
-            {String(selectedNode?.data?.label?.en || "")}
-            {!!selectedNode?.id && !!selectedNode?.data?.label?.en && " - "}
+            {label}
+            {!!selectedNode?.id && !!label && " - "}
             {selectedNode?.id}
           </SheetDescription>
         </SheetHeader>
