@@ -3,7 +3,7 @@ const inputType = [
   "autocomplete",
   "checkbox",
   "date",
-  "dateRange",
+  "daterange",
   "daterange",
   "file",
   "hidden",
@@ -15,7 +15,7 @@ const inputType = [
   "switch",
   "text",
   "time",
-  "timeRange",
+  "timerange",
 ] as const;
 
 export default inputType;

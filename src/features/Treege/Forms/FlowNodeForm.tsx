@@ -13,7 +13,7 @@ const FlowNodeForm = () => {
   const { updateSelectedNodeData } = useFlowActions();
   const { selectedNode } = useNodesSelection<FlowNodeData>();
 
-  const { handleSubmit, Field } = useForm({
+  const { Field } = useForm({
     defaultValues: {
       label: selectedNode?.data?.label || { en: "" },
       targetId: selectedNode?.data?.targetId || "",
@@ -22,7 +22,7 @@ const FlowNodeForm = () => {
       onChange: ({ formApi }) => {
         formApi.handleSubmit().then();
       },
-      onChangeDebounceMs: 500,
+      onChangeDebounceMs: 150,
     },
     onSubmit: async ({ value }) => {
       updateSelectedNodeData(value);
@@ -41,12 +41,6 @@ const FlowNodeForm = () => {
         <div className="flex gap-2 items-end">
           <Field
             name="label"
-            listeners={{
-              onChange: () => {
-                handleSubmit().then();
-              },
-              onChangeDebounceMs: 150,
-            }}
             children={(field) => (
               <FormItem className="flex-1">
                 <Label htmlFor={field.name}>Label</Label>
