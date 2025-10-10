@@ -7,13 +7,12 @@ interface ComboboxPatternProps {
   onValueChange?: (newValue: string) => void;
 }
 
-const ComboboxPattern = ({ value, onValueChange }: ComboboxPatternProps) => {
-  const defaultPatterns: ComboboxOption[] = Object.entries(pattern).map(([key, val]) => ({
-    label: key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, " "),
-    value: val,
-  }));
+const defaultPatterns: ComboboxOption[] = Object.entries(pattern).map(([key, val]) => ({
+  label: key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, " "),
+  value: val,
+}));
 
-  // Add current value as custom option if it's not in default patterns
+const ComboboxPattern = ({ value, onValueChange }: ComboboxPatternProps) => {
   const allOptions = useMemo(() => {
     if (value && !defaultPatterns.some((opt) => opt.value === value)) {
       return [
@@ -25,7 +24,7 @@ const ComboboxPattern = ({ value, onValueChange }: ComboboxPatternProps) => {
       ];
     }
     return defaultPatterns;
-  }, [defaultPatterns, value]);
+  }, [value]);
 
   return (
     <ComboboxWithCreate

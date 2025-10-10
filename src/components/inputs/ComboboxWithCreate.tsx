@@ -116,8 +116,12 @@ const ComboboxWithCreate = ({
                     option.label.toLowerCase().includes(search.toLowerCase()) ||
                     option?.value?.toLowerCase().includes(search.toLowerCase()),
                 )
-                .map((option) => (
-                  <CommandItem key={option.value} value={option.label} onSelect={() => handleSelect(option?.value || "")}>
+                .map((option, idx) => (
+                  <CommandItem
+                    key={option.value ?? option.label ?? idx}
+                    value={option.label}
+                    onSelect={() => handleSelect(option?.value || "")}
+                  >
                     <Check className={cn("mr-2 h-4 w-4", value === option.value ? "opacity-100" : "opacity-0")} />
                     {option.label}
                   </CommandItem>

@@ -21,6 +21,7 @@ export interface TreegeProps {
   defaultEdges?: Edge[];
   /**
    * Default flow structure containing combined nodes and edges.
+   * Note: Individual defaultNodes/defaultEdges props take precedence over this.
    */
   defaultFlow?: { nodes: Node[]; edges: Edge[] };
   /**
