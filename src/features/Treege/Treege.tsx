@@ -1,6 +1,6 @@
 import { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, ReactFlow, ReactFlowProvider } from "@xyflow/react";
-import Logo from "@/components/data-display/Logo";
 import { ThemeProvider } from "@/components/theme-provider";
+import Logo from "@/components/ui/logo";
 import { Toaster } from "@/components/ui/sonner";
 import edgeTypes from "@/constants/edgeTypes";
 import nodeTypes from "@/constants/nodeTypes";

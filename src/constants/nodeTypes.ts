@@ -4,7 +4,7 @@ import InputNode from "@/features/Treege/Nodes/InputNode";
 import JsonNode from "@/features/Treege/Nodes/JsonNode";
 import UINode from "@/features/Treege/Nodes/UINode";
 
-const nodeTypes = {
+export const nodeTypes = {
   flow: FlowNode,
   group: GroupNode,
   input: InputNode,

@@ -1,6 +1,6 @@
 import ConditionalEdge from "@/features/Treege/Edges/ConditionalEdge";
 
-const edgeTypes = {
+export const edgeTypes = {
   conditional: ConditionalEdge,
 };
 

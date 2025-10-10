@@ -1,4 +1,4 @@
-const inputType = [
+export const inputType = [
   "address",
   "autocomplete",
   "checkbox",
