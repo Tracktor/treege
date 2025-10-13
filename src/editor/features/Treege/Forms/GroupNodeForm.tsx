@@ -31,7 +31,7 @@ const GroupNodeForm = () => {
 
   return (
     <form
-      id="flow-node-form"
+      id="group-node-form"
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();

@@ -41,7 +41,9 @@ export const ThemeProvider = ({ children, defaultTheme = "system", storageKey = 
   const value = useMemo(
     () => ({
       setTheme: (newTheme: Theme) => {
-        localStorage.setItem(storageKey, newTheme);
+        if (typeof window !== "undefined") {
+          localStorage.setItem(storageKey, newTheme);
+        }
         setTheme(newTheme);
       },
       theme,
