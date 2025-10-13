@@ -10,7 +10,11 @@ const config = () =>
   defineConfig({
     build: {
       lib: {
-        entry: resolve(__dirname, "src/main.ts"),
+        entry: {
+          editor: resolve(__dirname, "src/editor/index.ts"),
+          main: resolve(__dirname, "src/main.ts"),
+          renderer: resolve(__dirname, "src/renderer/index.ts"),
+        },
         fileName: "[name]",
         formats: ["umd", "es"],
         name,
