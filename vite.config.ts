@@ -16,6 +16,7 @@ const config = () =>
           renderer: resolve(__dirname, "src/renderer/index.ts"),
         },
         fileName: "[name]",
+        formats: ["es"],
         name,
       },
       rollupOptions: {

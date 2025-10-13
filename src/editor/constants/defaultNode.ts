@@ -8,5 +8,3 @@ export const defaultNode = {
   position: { x: 0, y: 0 },
   type: "input",
 };
-
-export default defaultNode;

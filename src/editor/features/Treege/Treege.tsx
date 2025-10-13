@@ -1,7 +1,7 @@
 import { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, ReactFlow, ReactFlowProvider } from "@xyflow/react";
 import Logo from "@/editor/components/DataDisplay/logo";
-import edgeTypes from "@/editor/constants/edgeTypes";
-import nodeTypes from "@/editor/constants/nodeTypes";
+import { edgeTypes } from "@/editor/constants/edgeTypes";
+import { nodeTypes } from "@/editor/constants/nodeTypes";
 import { ThemeProvider } from "@/editor/context/theme-provider";
 import ActionsPanel from "@/editor/features/Treege/Panel/ActionsPanel";
 import NodeActionsSheet from "@/editor/features/Treege/Sheets/NodeActionsSheet";

@@ -16,5 +16,3 @@ export const inputType = [
   "time",
   "timerange",
 ] as const;
-
-export default inputType;

@@ -3,7 +3,7 @@ import type { OnEdgesDelete } from "@xyflow/react/dist/esm/types";
 import type { OnConnect, OnConnectEnd } from "@xyflow/system";
 import { nanoid } from "nanoid";
 import { useCallback } from "react";
-import defaultNode from "@/editor/constants/defaultNode";
+import { defaultNode } from "@/editor/constants/defaultNode";
 
 /**
  * Custom hook to manage flow connections, including connecting nodes,

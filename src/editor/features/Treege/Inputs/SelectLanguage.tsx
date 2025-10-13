@@ -1,5 +1,5 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
-import languages from "@/shared/constants/languages";
+import { languages } from "@/shared/constants/languages";
 import { Language } from "@/shared/types/languages";
 
 export interface SelectLanguageProps {

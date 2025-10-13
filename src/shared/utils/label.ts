@@ -13,5 +13,3 @@ export const getTranslatedLabel = (label?: TranslatableLabel, preferredLang: str
 
   return label[preferredLang] || label.en || Object.values(label).find(Boolean) || "";
 };
-
-export default {};

@@ -11,5 +11,3 @@ export const nodeTypes = {
   json: JsonNode,
   ui: UINode,
 };
-
-export default nodeTypes;

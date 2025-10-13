@@ -1,4 +1,4 @@
-import nodeTypes from "@/editor/constants/nodeTypes";
+import { nodeTypes } from "@/editor/constants/nodeTypes";
 import useFlowActions from "@/editor/hooks/useFlowActions";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/shared/components/ui/select";

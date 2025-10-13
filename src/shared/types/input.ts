@@ -1,4 +1,4 @@
-import inputType from "@/shared/constants/inputType";
+import { inputType } from "@/shared/constants/inputType";
 import { TranslatableLabel } from "@/shared/types/translate";
 
 export type InputOption = {

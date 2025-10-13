@@ -3,7 +3,7 @@ import { ArrowRightFromLine, Download, Plus, Save } from "lucide-react";
 import { nanoid } from "nanoid";
 import { ChangeEvent, useRef } from "react";
 import { toast } from "sonner";
-import defaultNode from "@/editor/constants/defaultNode";
+import { defaultNode } from "@/editor/constants/defaultNode";
 import { Button } from "@/shared/components/ui/button";
 
 export interface ActionsPanelProps {

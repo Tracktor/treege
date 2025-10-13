@@ -111,11 +111,10 @@ const ComboboxWithCreate = ({
 
               {/* Existing options */}
               {options
-                .filter(
-                  (option) =>
-                    option.label.toLowerCase().includes(search.toLowerCase()) ||
-                    option?.value?.toLowerCase().includes(search.toLowerCase()),
-                )
+                .filter((option) => {
+                  const s = search.toLowerCase();
+                  return option.label.toLowerCase().includes(s) || (option.value?.toLowerCase() ?? "").includes(s);
+                })
                 .map((option, idx) => (
                   <CommandItem
                     key={option.value ?? option.label ?? idx}
