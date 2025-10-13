@@ -1,10 +1,10 @@
 import { useForm } from "@tanstack/react-form";
-import { useReactFlow } from "@xyflow/react";
 import { ChevronsUpDown, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import ComboboxPattern from "@/editor/features/Treege/Inputs/ComboboxPattern";
 import SelectInputType from "@/editor/features/Treege/Inputs/SelectInputType";
 import SelectLanguage from "@/editor/features/Treege/Inputs/SelectLanguage";
+import { useAvailableParentFields } from "@/editor/hooks/useAvailableParentFields";
 import useFlowActions from "@/editor/hooks/useFlowActions";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
 import { Button } from "@/shared/components/ui/button";
@@ -15,53 +15,14 @@ import { Label } from "@/shared/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { Switch } from "@/shared/components/ui/switch";
 import { Language } from "@/shared/types/languages";
-import { InputNodeData, TreegeNode } from "@/shared/types/node";
+import { InputNodeData } from "@/shared/types/node";
 
 const InputNodeForm = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<Language>("en");
   const { selectedNode } = useNodesSelection<InputNodeData>();
   const { updateSelectedNodeData } = useFlowActions();
-  const { getNodes, getEdges } = useReactFlow();
   const needsOptions = ["select", "radio", "autocomplete", "checkbox"].includes(selectedNode?.data?.type || "");
-
-  const availableParentFields = useMemo(() => {
-    if (!selectedNode?.id) {
-      return [];
-    }
-
-    const nodes = getNodes() as TreegeNode[];
-    const edges = getEdges();
-
-    const findAncestors = (nodeId: string, visited = new Set<string>()): string[] => {
-      if (visited.has(nodeId)) {
-        return [];
-      }
-
-      const newVisited = new Set(visited).add(nodeId);
-      const incomingEdges = edges.filter((edge) => edge.target === nodeId);
-      return incomingEdges.flatMap((edge) => [edge.source, ...findAncestors(edge.source, newVisited)]);
-    };
-
-    const ancestorIds = findAncestors(selectedNode.id);
-
-    return nodes
-      .filter((node) => {
-        const isAncestor = ancestorIds.includes(node.id);
-        const isInput = node.type === "input";
-        return isAncestor && isInput;
-      })
-      .map((node) => {
-        const data = node.data as InputNodeData;
-        const label = (typeof data.label === "object" ? data.label.en : data.label) || `Node ${node.id.slice(0, 8)}`;
-
-        return {
-          label: data.name ? `${label} (${data.name})` : label,
-          name: data.name,
-          nodeId: node.id,
-          type: data.type || "text",
-        };
-      });
-  }, [selectedNode?.id, getNodes, getEdges]);
+  const availableParentFields = useAvailableParentFields(selectedNode?.id);
 
   const { handleSubmit, Field } = useForm({
     defaultValues: {
