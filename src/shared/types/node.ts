@@ -23,6 +23,12 @@ export type InputNodeData = BaseNodeData & {
   errorMessage?: string;
   options?: InputOption[];
   multiple?: boolean;
+  defaultValue?: null | {
+    type?: "static" | "reference";
+    staticValue?: string | string[] | boolean;
+    referenceField?: string;
+    transformFunction?: null | "toString" | "toNumber" | "toBoolean" | "toArray" | "none";
+  };
 };
 
 export type JsonNodeData = BaseNodeData & {

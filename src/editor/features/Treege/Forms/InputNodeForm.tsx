@@ -1,6 +1,7 @@
 import { useForm } from "@tanstack/react-form";
-import { ChevronDown, X } from "lucide-react";
-import { useState } from "react";
+import { useReactFlow } from "@xyflow/react";
+import { ChevronsUpDown, X } from "lucide-react";
+import { useMemo, useState } from "react";
 import ComboboxPattern from "@/editor/features/Treege/Inputs/ComboboxPattern";
 import SelectInputType from "@/editor/features/Treege/Inputs/SelectInputType";
 import SelectLanguage from "@/editor/features/Treege/Inputs/SelectLanguage";
@@ -11,19 +12,60 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/co
 import { FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { Switch } from "@/shared/components/ui/switch";
 import { Language } from "@/shared/types/languages";
-import { InputNodeData } from "@/shared/types/node";
+import { InputNodeData, TreegeNode } from "@/shared/types/node";
 
 const InputNodeForm = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<Language>("en");
-  const [validationSectionIsOpen, setValidationSectionIsOpen] = useState(false);
   const { selectedNode } = useNodesSelection<InputNodeData>();
   const { updateSelectedNodeData } = useFlowActions();
+  const { getNodes, getEdges } = useReactFlow();
   const needsOptions = ["select", "radio", "autocomplete", "checkbox"].includes(selectedNode?.data?.type || "");
+
+  const availableParentFields = useMemo(() => {
+    if (!selectedNode?.id) {
+      return [];
+    }
+
+    const nodes = getNodes() as TreegeNode[];
+    const edges = getEdges();
+
+    const findAncestors = (nodeId: string, visited = new Set<string>()): string[] => {
+      if (visited.has(nodeId)) {
+        return [];
+      }
+
+      const newVisited = new Set(visited).add(nodeId);
+      const incomingEdges = edges.filter((edge) => edge.target === nodeId);
+      return incomingEdges.flatMap((edge) => [edge.source, ...findAncestors(edge.source, newVisited)]);
+    };
+
+    const ancestorIds = findAncestors(selectedNode.id);
+
+    return nodes
+      .filter((node) => {
+        const isAncestor = ancestorIds.includes(node.id);
+        const isInput = node.type === "input";
+        return isAncestor && isInput;
+      })
+      .map((node) => {
+        const data = node.data as InputNodeData;
+        const label = (typeof data.label === "object" ? data.label.en : data.label) || `Node ${node.id.slice(0, 8)}`;
+
+        return {
+          label: data.name ? `${label} (${data.name})` : label,
+          name: data.name,
+          nodeId: node.id,
+          type: data.type || "text",
+        };
+      });
+  }, [selectedNode?.id, getNodes, getEdges]);
 
   const { handleSubmit, Field } = useForm({
     defaultValues: {
+      defaultValue: selectedNode?.data?.defaultValue,
       errorMessage: selectedNode?.data?.errorMessage || "",
       helperText: selectedNode?.data?.helperText || "",
       label: selectedNode?.data?.label || { en: "" },
@@ -126,7 +168,7 @@ const InputNodeForm = () => {
               <div className="flex items-center justify-between gap-4">
                 <h4 className="text-sm font-semibold">Options</h4>
                 <Button variant="ghost" size="icon" className="size-8">
-                  <ChevronDown />
+                  <ChevronsUpDown />
                   <span className="sr-only">Toggle</span>
                 </Button>
               </div>
@@ -217,16 +259,12 @@ const InputNodeForm = () => {
         )}
 
         {/* Validation */}
-        <Collapsible
-          open={validationSectionIsOpen}
-          onOpenChange={setValidationSectionIsOpen}
-          className="flex w-full max-w-[350px] flex-col gap-2"
-        >
+        <Collapsible className="flex w-full max-w-[350px] flex-col gap-2">
           <CollapsibleTrigger asChild>
             <div className="flex items-center justify-between gap-4">
               <h4 className="text-sm font-semibold">Validation</h4>
               <Button variant="ghost" size="icon" className="size-8">
-                {validationSectionIsOpen ? <ChevronDown className="rotate-180" /> : <ChevronDown />}
+                <ChevronsUpDown />
                 <span className="sr-only">Toggle</span>
               </Button>
             </div>
@@ -270,6 +308,166 @@ const InputNodeForm = () => {
                 </FormItem>
               )}
             />
+          </CollapsibleContent>
+        </Collapsible>
+
+        <Collapsible className="flex w-full max-w-[350px] flex-col gap-2">
+          <CollapsibleTrigger asChild>
+            <div className="flex items-center justify-between gap-4">
+              <h4 className="text-sm font-semibold">Advanced Configuration</h4>
+              <Button variant="ghost" size="icon" className="size-8">
+                <ChevronsUpDown />
+                <span className="sr-only">Toggle</span>
+              </Button>
+            </div>
+          </CollapsibleTrigger>
+
+          <CollapsibleContent className="flex flex-col gap-6">
+            <Field name="defaultValue">
+              {(defaultValueField) => (
+                <>
+                  <FormItem>
+                    <Label htmlFor="defaultValueType">Default Value</Label>
+                    <Select
+                      value={defaultValueField.state.value?.type || "none"}
+                      onValueChange={(value: "none" | "static" | "reference") => {
+                        defaultValueField.handleChange(value === "none" ? null : { type: value });
+                      }}
+                    >
+                      <SelectTrigger id="defaultValueType">
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">None</SelectItem>
+                        <SelectItem value="static">Static Value</SelectItem>
+                        <SelectItem value="reference">Reference Field</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+
+                  {defaultValueField.state.value?.type === "static" && (
+                    <Field name="defaultValue.staticValue">
+                      {(field) => {
+                        const inputType = selectedNode?.data?.type;
+
+                        if (inputType === "checkbox") {
+                          return (
+                            <FormItem>
+                              <div className="flex items-center space-x-2">
+                                <Switch
+                                  id="staticValue"
+                                  checked={!!field.state.value}
+                                  onCheckedChange={(value: boolean) => field.handleChange(value)}
+                                />
+                                <Label htmlFor="staticValue">Default Checked</Label>
+                              </div>
+                            </FormItem>
+                          );
+                        }
+
+                        if (inputType === "select" && selectedNode?.data?.multiple) {
+                          return (
+                            <FormItem>
+                              <Label htmlFor="staticValue">Default Values (comma-separated)</Label>
+                              <Input
+                                id="staticValue"
+                                placeholder="value1, value2, value3"
+                                value={Array.isArray(field.state.value) ? field.state.value.join(", ") : ""}
+                                onChange={({ target }) => {
+                                  const values = target.value
+                                    .split(",")
+                                    .map((v: string) => v.trim())
+                                    .filter(Boolean);
+                                  field.handleChange(values.length > 0 ? values : undefined);
+                                }}
+                              />
+                            </FormItem>
+                          );
+                        }
+
+                        return (
+                          <FormItem>
+                            <Label htmlFor="staticValue">Static Value</Label>
+                            <Input
+                              id="staticValue"
+                              placeholder="Enter default value"
+                              value={typeof field.state.value === "string" ? field.state.value : ""}
+                              onChange={({ target }) => field.handleChange(target.value || undefined)}
+                            />
+                          </FormItem>
+                        );
+                      }}
+                    </Field>
+                  )}
+
+                  {defaultValueField.state.value?.type === "reference" && (
+                    <>
+                      <Field name="defaultValue.referenceField">
+                        {(field: any) => (
+                          <FormItem>
+                            <Label htmlFor="referenceField">Reference Field</Label>
+                            <Select
+                              value={field.state.value || ""}
+                              onValueChange={(value: string) => {
+                                field.handleChange(value || undefined);
+                              }}
+                            >
+                              <SelectTrigger id="referenceField">
+                                <SelectValue placeholder="Select a field" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {availableParentFields.length === 0 ? (
+                                  <SelectItem value="none" disabled>
+                                    No parent fields available
+                                  </SelectItem>
+                                ) : (
+                                  availableParentFields.map((availField) => (
+                                    <SelectItem key={availField.nodeId} value={availField.nodeId}>
+                                      {availField.label} ({availField.type})
+                                    </SelectItem>
+                                  ))
+                                )}
+                              </SelectContent>
+                            </Select>
+                            {availableParentFields.length === 0 && (
+                              <p className="text-xs text-muted-foreground mt-1">Add input fields before this node to reference them</p>
+                            )}
+                          </FormItem>
+                        )}
+                      </Field>
+
+                      <Field name="defaultValue.transformFunction">
+                        {(field) => (
+                          <FormItem>
+                            <Label htmlFor="transformFunction">Transform Function</Label>
+                            <Select
+                              value={field.state.value || "none"}
+                              onValueChange={(value: "none" | "toString" | "toNumber" | "toBoolean" | "toArray") => {
+                                field.handleChange(value === "none" ? null : value);
+                              }}
+                            >
+                              <SelectTrigger id="transformFunction">
+                                <SelectValue placeholder="Select transformation" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="none">No transformation</SelectItem>
+                                <SelectItem value="toString">Convert to String</SelectItem>
+                                <SelectItem value="toNumber">Convert to Number</SelectItem>
+                                <SelectItem value="toBoolean">Convert to Boolean</SelectItem>
+                                <SelectItem value="toArray">Convert to Array</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Transform the referenced value to match this field&#39;s type
+                            </p>
+                          </FormItem>
+                        )}
+                      </Field>
+                    </>
+                  )}
+                </>
+              )}
+            </Field>
           </CollapsibleContent>
         </Collapsible>
       </div>
