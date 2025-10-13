@@ -7,19 +7,11 @@
 
 - [Installation](#Installation)
 - [Usage](#Usage)
-  - [Options](#Options)
-- [Generate form from Treege data](#Generate-form-from-Treege-data)
-- [Local installation](#local-installation)
-- [Available Scripts](#Available-Scripts)
-    - [yarn dev](#yarn-dev)
-    - [yarn build](#yarn-build)
-    - [yarn preview](#yarn-preview)
-- [Convention](#Convention)
 
 ## Installation
 
 ```console
-yarn add treege
+bun add treege
 ```
 
 ## Usage
