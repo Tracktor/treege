@@ -10,8 +10,20 @@
 
 ## Installation
 
-```console
-bun add treege
+```bash
+  npm install treege
+```
+
+```bash
+  pnpm add treege
+```
+
+```bash
+  yarn add treege
+```
+
+```bash
+  bun add treege
 ```
 
 ## Usage
