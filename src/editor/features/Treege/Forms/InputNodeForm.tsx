@@ -288,7 +288,7 @@ const InputNodeForm = () => {
               {(defaultValueField) => (
                 <>
                   <FormItem>
-                    <Label htmlFor="defaultValueType">Default Value</Label>
+                    <Label htmlFor="defaultValueType">Default Value Type</Label>
                     <Select
                       value={defaultValueField.state.value?.type || "none"}
                       onValueChange={(value: "none" | "static" | "reference") => {
@@ -400,7 +400,7 @@ const InputNodeForm = () => {
                       <Field name="defaultValue.transformFunction">
                         {(field) => (
                           <FormItem>
-                            <Label htmlFor="transformFunction">Transform Function</Label>
+                            <Label htmlFor="transformFunction">Transform Type</Label>
                             <Select
                               value={field.state.value || "none"}
                               onValueChange={(value: "none" | "toString" | "toNumber" | "toBoolean" | "toArray") => {
