@@ -1,14 +1,14 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
-import { Braces } from "lucide-react";
-import NodeWrapper from "@/editor/features/Treege/Nodes/Layout/NodeWrapper";
+import { Network } from "lucide-react";
+import NodeWrapper from "@/editor/features/TreegeEditor/Nodes/Layout/NodeWrapper";
 import useTranslatedLabel from "@/editor/hooks/useTranslatedLabel";
 import { Badge } from "@/shared/components/ui/badge";
-import { JsonNodeData } from "@/shared/types/node";
+import { FlowNodeData } from "@/shared/types/node";
 
-export type JsonNodeType = Node<JsonNodeData, "json">;
-export type JsonNodeProps = NodeProps<JsonNodeType>;
+export type FlowNodeType = Node<FlowNodeData, "flow">;
+export type FlowNodeProps = NodeProps<FlowNodeType>;
 
-const JsonNode = ({ data, isConnectable, type, parentId }: JsonNodeProps) => {
+const FlowNode = ({ data, isConnectable, type, parentId }: FlowNodeProps) => {
   const translateLabel = useTranslatedLabel();
   const label = translateLabel(data?.label);
 
@@ -21,8 +21,8 @@ const JsonNode = ({ data, isConnectable, type, parentId }: JsonNodeProps) => {
       <div className="text-2xl text-nowrap text-ellipsis overflow-hidden max-w-full mb-1">{label}</div>
 
       {/* Type */}
-      <Badge>
-        <Braces />
+      <Badge variant="destructive">
+        <Network />
         {type}
       </Badge>
 
@@ -32,4 +32,4 @@ const JsonNode = ({ data, isConnectable, type, parentId }: JsonNodeProps) => {
   );
 };
 
-export default JsonNode;
+export default FlowNode;

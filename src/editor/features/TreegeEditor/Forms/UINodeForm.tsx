@@ -1,6 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import { useState } from "react";
-import SelectLanguage from "@/editor/features/Treege/Inputs/SelectLanguage";
+import SelectLanguage from "@/editor/features/TreegeEditor/Inputs/SelectLanguage";
 import useFlowActions from "@/editor/hooks/useFlowActions";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
 import { FormItem } from "@/shared/components/ui/form";

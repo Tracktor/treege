@@ -1,9 +1,9 @@
 import { useForm } from "@tanstack/react-form";
 import { ChevronsUpDown, Plus, X } from "lucide-react";
 import { useState } from "react";
-import ComboboxPattern from "@/editor/features/Treege/Inputs/ComboboxPattern";
-import SelectInputType from "@/editor/features/Treege/Inputs/SelectInputType";
-import SelectLanguage from "@/editor/features/Treege/Inputs/SelectLanguage";
+import ComboboxPattern from "@/editor/features/TreegeEditor/Inputs/ComboboxPattern";
+import SelectInputType from "@/editor/features/TreegeEditor/Inputs/SelectInputType";
+import SelectLanguage from "@/editor/features/TreegeEditor/Inputs/SelectLanguage";
 import { useAvailableParentFields } from "@/editor/hooks/useAvailableParentFields";
 import useFlowActions from "@/editor/hooks/useFlowActions";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";

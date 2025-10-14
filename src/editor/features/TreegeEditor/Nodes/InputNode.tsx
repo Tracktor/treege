@@ -1,6 +1,6 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { RectangleEllipsis, Type } from "lucide-react";
-import NodeWrapper from "@/editor/features/Treege/Nodes/Layout/NodeWrapper";
+import NodeWrapper from "@/editor/features/TreegeEditor/Nodes/Layout/NodeWrapper";
 import useTranslatedLabel from "@/editor/hooks/useTranslatedLabel";
 import { Badge } from "@/shared/components/ui/badge";
 import { InputNodeData } from "@/shared/types/node";
