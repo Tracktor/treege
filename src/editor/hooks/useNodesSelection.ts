@@ -1,6 +1,7 @@
 import { useNodes } from "@xyflow/react";
 import { useMemo } from "react";
 import { TreegeNode, TreegeNodeData } from "@/shared/types/node";
+import { isGroupNode } from "@/shared/utils/nodeTypeGuards";
 
 /**
  * Hook to access flow nodes selection state and derived data.
@@ -9,7 +10,7 @@ import { TreegeNode, TreegeNodeData } from "@/shared/types/node";
  */
 const useNodesSelection = <TNodeData extends TreegeNodeData = TreegeNodeData>() => {
   const nodes = useNodes<TreegeNode>();
-  const groupNodes = useMemo(() => nodes.filter((node) => node.type === "group"), [nodes]);
+  const groupNodes = useMemo(() => nodes.filter(isGroupNode), [nodes]);
   const selectedNodes = useMemo(() => nodes.filter((node) => node.selected), [nodes]);
   const selectedNode = useMemo(() => nodes.find((node) => node.selected) as (TreegeNode & { data: TNodeData }) | undefined, [nodes]);
 

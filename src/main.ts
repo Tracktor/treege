@@ -6,3 +6,7 @@ export * from "@/renderer";
 export * from "@/shared/types/input";
 export * from "@/shared/types/node";
 export * from "@/shared/types/translate";
+
+// Utils
+export * from "@/shared/utils/label";
+export * from "@/shared/utils/nodeTypeGuards";

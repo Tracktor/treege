@@ -2,24 +2,25 @@ import { nodeTypes } from "@/editor/constants/nodeTypes";
 import useFlowActions from "@/editor/hooks/useFlowActions";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
+import { isGroupNode } from "@/shared/utils/nodeTypeGuards";
 
 const SelectNodeType = () => {
   const { selectedNode } = useNodesSelection();
   const { updateSelectedNodeType } = useFlowActions();
   const value = selectedNode?.type || "";
-  const isGroupNode = selectedNode?.type === "group";
+  const isGroup = isGroupNode(selectedNode);
 
   return (
     <SelectGroup>
       <SelectLabel>Node Type</SelectLabel>
-      <Select value={value} onValueChange={(newValue) => updateSelectedNodeType(newValue)} disabled={isGroupNode}>
+      <Select value={value} onValueChange={(newValue) => updateSelectedNodeType(newValue)} disabled={isGroup}>
         <SelectTrigger className="w-full">
           <SelectValue placeholder="Node Type" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             {Object.keys(nodeTypes)
-              .filter((type) => (isGroupNode ? type === "group" : type !== "group"))
+              .filter((type) => (isGroup ? type === "group" : type !== "group"))
               .map((type) => (
                 <SelectItem key={type} value={type}>
                   {type.charAt(0).toUpperCase() + type.slice(1)}

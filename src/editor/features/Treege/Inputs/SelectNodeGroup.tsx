@@ -9,6 +9,7 @@ import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
+import { isGroupNode } from "@/shared/utils/nodeTypeGuards";
 
 const SelectNodeGroup = () => {
   const [newGroupLabel, setNewGroupLabel] = useState("");
@@ -16,9 +17,9 @@ const SelectNodeGroup = () => {
   const { selectedNode, groupNodes } = useNodesSelection();
   const { setNodes } = useReactFlow();
   const currentParentId = selectedNode?.parentId || "none";
-  const isGroupNode = selectedNode?.type === "group";
+  const isGroup = isGroupNode(selectedNode);
 
-  if (isGroupNode) {
+  if (isGroup) {
     return null;
   }
 
