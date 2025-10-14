@@ -80,62 +80,55 @@ const findVisibleNodes = (
   while (queue.length > 0) {
     const nodeId = queue.shift()!;
 
-    if (visited.has(nodeId)) {
-      continue;
-    }
+    if (!visited.has(nodeId)) {
+      visited.add(nodeId);
+      visible.add(nodeId);
 
-    visited.add(nodeId);
-    visible.add(nodeId);
+      const node = nodeMap.get(nodeId);
+      if (node) {
+        // Get outgoing edges from this node
+        const outgoingEdges = edgeMap.get(nodeId) || [];
 
-    const node = nodeMap.get(nodeId);
-    if (!node) {
-      continue;
-    }
+        if (outgoingEdges.length > 0) {
+          // Separate conditional and unconditional edges
+          const conditionalEdges = outgoingEdges.filter((edge) => edge.data?.conditions && edge.data.conditions.length > 0);
+          const unconditionalEdges = outgoingEdges.filter((edge) => !edge.data?.conditions || edge.data.conditions.length === 0);
 
-    // Get outgoing edges from this node
-    const outgoingEdges = edgeMap.get(nodeId) || [];
-
-    if (outgoingEdges.length === 0) {
-      // No outgoing edges - this is a leaf node
-      continue;
-    }
-
-    // Separate conditional and unconditional edges
-    const conditionalEdges = outgoingEdges.filter((edge) => edge.data?.conditions && edge.data.conditions.length > 0);
-    const unconditionalEdges = outgoingEdges.filter((edge) => !edge.data?.conditions || edge.data.conditions.length === 0);
-
-    // Always follow unconditional edges (no branching)
-    unconditionalEdges.forEach((edge) => {
-      queue.push(edge.target);
-    });
-
-    // Handle conditional edges (branching)
-    if (conditionalEdges.length > 0) {
-      // This is a branch point - check if all condition fields have values
-      const allConditionFieldsFilled = conditionalEdges.every((edge) => {
-        const conditions = edge.data?.conditions || [];
-        return conditions.every((cond) => {
-          if (!cond.field) return true;
-
-          // Try to resolve field as node ID first
-          const fieldNode = nodeMap.get(cond.field);
-          const fieldName = (isInputNode(fieldNode) ? fieldNode.data.name : undefined) || cond.field;
-
-          return hasValue(fieldName, formValues);
-        });
-      });
-
-      // If all fields are filled, evaluate conditions and follow matching branches
-      if (allConditionFieldsFilled) {
-        conditionalEdges.forEach((edge) => {
-          const conditions = edge.data?.conditions || [];
-          if (evaluateConditions(conditions, formValues, nodeMap)) {
+          // Always follow unconditional edges (no branching)
+          unconditionalEdges.forEach((edge) => {
             queue.push(edge.target);
+          });
+
+          // Handle conditional edges (branching)
+          if (conditionalEdges.length > 0) {
+            // This is a branch point - check if all condition fields have values
+            const allConditionFieldsFilled = conditionalEdges.every((edge) => {
+              const conditions = edge.data?.conditions || [];
+              return conditions.every((cond) => {
+                if (!cond.field) return true;
+
+                // Try to resolve field as node ID first
+                const fieldNode = nodeMap.get(cond.field);
+                const fieldName = (isInputNode(fieldNode) ? fieldNode.data.name : undefined) || cond.field;
+
+                return hasValue(fieldName, formValues);
+              });
+            });
+
+            // If all fields are filled, evaluate conditions and follow matching branches
+            if (allConditionFieldsFilled) {
+              conditionalEdges.forEach((edge) => {
+                const conditions = edge.data?.conditions || [];
+                if (evaluateConditions(conditions, formValues, nodeMap)) {
+                  queue.push(edge.target);
+                }
+              });
+            }
+            // If fields are not filled, stop here and wait for user input
+            // (don't add any conditional targets to the queue)
           }
-        });
+        }
       }
-      // If fields are not filled, stop here and wait for user input
-      // (don't add any conditional targets to the queue)
     }
   }
 
