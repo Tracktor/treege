@@ -8,6 +8,7 @@ import { FormDescription, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
+import { ScrollArea } from "@/shared/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { ConditionalEdgeData, EdgeOperator, LogicalOperator } from "@/shared/types/edge";
 
@@ -63,9 +64,8 @@ const ConditionalEdge = ({
   };
 
   const handleClear = () => {
-    reset();
+    reset({ conditions: [], label: "" });
     updateEdgeData(id, { conditions: undefined, label: undefined });
-    setIsOpen(false);
   };
 
   const getConditionSummary = () => {
@@ -119,183 +119,185 @@ const ConditionalEdge = ({
                 {hasConditions ? getConditionSummary() : "Condition"}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-96" align="center" onClick={(e) => e.stopPropagation()}>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
-              >
-                <div className="grid gap-5">
-                  <div className="space-y-2">
-                    <h4 className="font-medium leading-none">Display conditions</h4>
-                    <p className="text-sm text-muted-foreground">This field will be shown if the following conditions are met.</p>
-                  </div>
+            <PopoverContent className="w-96 p-1" align="center" onClick={(e) => e.stopPropagation()}>
+              <ScrollArea className="flex flex-col max-h-150 p-3 ">
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                >
+                  <div className="grid gap-5">
+                    <div className="space-y-2">
+                      <h4 className="font-medium leading-none">Display conditions</h4>
+                      <p className="text-sm text-muted-foreground">This field will be shown if the following conditions are met.</p>
+                    </div>
 
-                  <div className="grid gap-4">
-                    <Field name="label">
-                      {(field) => (
-                        <FormItem>
-                          <Label htmlFor="label">Label (optional)</Label>
-                          <Input
-                            id="label"
-                            placeholder="Ex: If eligible"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                          />
-                          <FormDescription>Custom label for the condition button</FormDescription>
-                        </FormItem>
-                      )}
-                    </Field>
+                    <div className="grid gap-4">
+                      <Field name="label">
+                        {(field) => (
+                          <FormItem>
+                            <Label htmlFor="label">Label (optional)</Label>
+                            <Input
+                              id="label"
+                              placeholder="Ex: If eligible"
+                              value={field.state.value}
+                              onChange={(e) => field.handleChange(e.target.value)}
+                            />
+                            <FormDescription>Custom label for the condition button</FormDescription>
+                          </FormItem>
+                        )}
+                      </Field>
 
-                    <Field name="conditions" mode="array">
-                      {(conditionsField) => (
-                        <div className="space-y-3">
-                          <Label>Conditions</Label>
+                      <Field name="conditions" mode="array">
+                        {(conditionsField) => (
+                          <div className="space-y-3">
+                            <Label>Conditions</Label>
 
-                          <div className="space-y-2">
-                            {conditionsField.state.value?.map((_, index) => (
-                              <div key={`condition-${index}`} className="space-y-2">
-                                <div className="p-3 border rounded-lg bg-muted/30 space-y-2">
-                                  <Field name={`conditions[${index}].field`}>
-                                    {(fieldField) => (
-                                      <FormItem>
-                                        <Label htmlFor={`field-${index}`}>Field</Label>
-                                        <Select
-                                          value={fieldField.state.value || ""}
-                                          onValueChange={(value: string) => fieldField.handleChange(value)}
-                                        >
-                                          <SelectTrigger id={`field-${index}`} className="w-full">
-                                            <SelectValue placeholder="Select a field" />
-                                          </SelectTrigger>
-                                          <SelectContent>
-                                            {availableParentFields.length === 0 ? (
-                                              <SelectItem value="none" disabled>
-                                                No fields available
-                                              </SelectItem>
-                                            ) : (
-                                              availableParentFields.map((field) => (
-                                                <SelectItem key={field.nodeId} value={field.nodeId}>
-                                                  {field.label} ({field.type})
-                                                </SelectItem>
-                                              ))
-                                            )}
-                                          </SelectContent>
-                                        </Select>
-                                      </FormItem>
-                                    )}
-                                  </Field>
-
-                                  <div className="flex gap-2">
-                                    <Field name={`conditions[${index}].operator`}>
-                                      {(operatorField) => (
+                            <div className="space-y-2">
+                              {conditionsField.state.value?.map((_, index) => (
+                                <div key={`condition-${index}`} className="space-y-2">
+                                  <div className="p-3 border rounded-lg bg-muted/30 space-y-2">
+                                    <Field name={`conditions[${index}].field`}>
+                                      {(fieldField) => (
                                         <FormItem>
-                                          <Label htmlFor={`operator-${index}`}>Operator</Label>
+                                          <Label htmlFor={`field-${index}`}>Field</Label>
                                           <Select
-                                            value={operatorField.state.value || "==="}
-                                            onValueChange={(value: EdgeOperator) => operatorField.handleChange(value)}
+                                            value={fieldField.state.value || ""}
+                                            onValueChange={(value: string) => fieldField.handleChange(value)}
                                           >
-                                            <SelectTrigger id={`operator-${index}`}>
-                                              <SelectValue />
+                                            <SelectTrigger id={`field-${index}`} className="w-full">
+                                              <SelectValue placeholder="Select a field" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                              <SelectItem value="===">=</SelectItem>
-                                              <SelectItem value="!==">≠</SelectItem>
-                                              <SelectItem value=">">&gt;</SelectItem>
-                                              <SelectItem value="<">&lt;</SelectItem>
-                                              <SelectItem value=">=">&gt;=</SelectItem>
-                                              <SelectItem value="<=">&lt;=</SelectItem>
+                                              {availableParentFields.length === 0 ? (
+                                                <SelectItem value="none" disabled>
+                                                  No fields available
+                                                </SelectItem>
+                                              ) : (
+                                                availableParentFields.map((field) => (
+                                                  <SelectItem key={field.nodeId} value={field.nodeId}>
+                                                    {field.label} ({field.type})
+                                                  </SelectItem>
+                                                ))
+                                              )}
                                             </SelectContent>
                                           </Select>
                                         </FormItem>
                                       )}
                                     </Field>
 
-                                    <Field name={`conditions[${index}].value`}>
-                                      {(valueField) => (
-                                        <FormItem className="w-full">
-                                          <Label htmlFor={`value-${index}`}>Value</Label>
-                                          <Input
-                                            id={`value-${index}`}
-                                            placeholder="Ex: 18"
-                                            value={valueField.state.value || ""}
-                                            onChange={(e) => valueField.handleChange(e.target.value)}
-                                          />
-                                        </FormItem>
-                                      )}
-                                    </Field>
+                                    <div className="flex gap-2">
+                                      <Field name={`conditions[${index}].operator`}>
+                                        {(operatorField) => (
+                                          <FormItem>
+                                            <Label htmlFor={`operator-${index}`}>Operator</Label>
+                                            <Select
+                                              value={operatorField.state.value || "==="}
+                                              onValueChange={(value: EdgeOperator) => operatorField.handleChange(value)}
+                                            >
+                                              <SelectTrigger id={`operator-${index}`}>
+                                                <SelectValue />
+                                              </SelectTrigger>
+                                              <SelectContent>
+                                                <SelectItem value="===">=</SelectItem>
+                                                <SelectItem value="!==">≠</SelectItem>
+                                                <SelectItem value=">">&gt;</SelectItem>
+                                                <SelectItem value="<">&lt;</SelectItem>
+                                                <SelectItem value=">=">&gt;=</SelectItem>
+                                                <SelectItem value="<=">&lt;=</SelectItem>
+                                              </SelectContent>
+                                            </Select>
+                                          </FormItem>
+                                        )}
+                                      </Field>
+
+                                      <Field name={`conditions[${index}].value`}>
+                                        {(valueField) => (
+                                          <FormItem className="w-full">
+                                            <Label htmlFor={`value-${index}`}>Value</Label>
+                                            <Input
+                                              id={`value-${index}`}
+                                              placeholder="Ex: 18"
+                                              value={valueField.state.value || ""}
+                                              onChange={(e) => valueField.handleChange(e.target.value)}
+                                            />
+                                          </FormItem>
+                                        )}
+                                      </Field>
+                                    </div>
+
+                                    {conditionsField.state.value && conditionsField.state.value.length > 1 && (
+                                      <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        className="w-full"
+                                        onClick={() => {
+                                          conditionsField.removeValue(index);
+                                          handleSubmit().then();
+                                        }}
+                                      >
+                                        <X className="w-4 h-4 mr-1" />
+                                        Remove condition
+                                      </Button>
+                                    )}
                                   </div>
 
-                                  {conditionsField.state.value && conditionsField.state.value.length > 1 && (
-                                    <Button
-                                      type="button"
-                                      variant="ghost"
-                                      size="sm"
-                                      className="w-full"
-                                      onClick={() => {
-                                        conditionsField.removeValue(index);
-                                        handleSubmit().then();
-                                      }}
-                                    >
-                                      <X className="w-4 h-4 mr-1" />
-                                      Remove condition
-                                    </Button>
+                                  {conditionsField.state.value && index < conditionsField.state.value.length - 1 && (
+                                    <Field name={`conditions[${index}].logicalOperator`}>
+                                      {(logicalField) => (
+                                        <div className="flex justify-center">
+                                          <Select
+                                            value={logicalField.state.value || "AND"}
+                                            onValueChange={(value: LogicalOperator) => logicalField.handleChange(value)}
+                                          >
+                                            <SelectTrigger className="w-32 h-9 font-semibold">
+                                              <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                              <SelectItem value="AND">AND</SelectItem>
+                                              <SelectItem value="OR">OR</SelectItem>
+                                            </SelectContent>
+                                          </Select>
+                                        </div>
+                                      )}
+                                    </Field>
                                   )}
                                 </div>
+                              ))}
 
-                                {conditionsField.state.value && index < conditionsField.state.value.length - 1 && (
-                                  <Field name={`conditions[${index}].logicalOperator`}>
-                                    {(logicalField) => (
-                                      <div className="flex justify-center">
-                                        <Select
-                                          value={logicalField.state.value || "AND"}
-                                          onValueChange={(value: LogicalOperator) => logicalField.handleChange(value)}
-                                        >
-                                          <SelectTrigger className="w-32 h-9 font-semibold">
-                                            <SelectValue />
-                                          </SelectTrigger>
-                                          <SelectContent>
-                                            <SelectItem value="AND">AND</SelectItem>
-                                            <SelectItem value="OR">OR</SelectItem>
-                                          </SelectContent>
-                                        </Select>
-                                      </div>
-                                    )}
-                                  </Field>
-                                )}
-                              </div>
-                            ))}
-
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              className="w-full"
-                              onClick={() => {
-                                conditionsField.pushValue({ field: source, logicalOperator: "AND", operator: "===", value: "" });
-                                handleSubmit().then();
-                              }}
-                            >
-                              <Plus className="w-4 h-4 mr-2" />
-                              Add condition
-                            </Button>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                className="w-full"
+                                onClick={() => {
+                                  conditionsField.pushValue({ field: source, logicalOperator: "AND", operator: "===", value: "" });
+                                  handleSubmit().then();
+                                }}
+                              >
+                                <Plus className="w-4 h-4 mr-2" />
+                                Add condition
+                              </Button>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </Field>
-                  </div>
+                        )}
+                      </Field>
+                    </div>
 
-                  <div className="flex justify-end pt-2 gap-2">
-                    <Button type="button" size="sm" variant="outline" onClick={handleClear}>
-                      <X className="w-4 h-4 mr-1" />
-                      Clear
-                    </Button>
-                    <Button type="button" size="sm" onClick={() => setIsOpen(false)}>
-                      Close
-                    </Button>
+                    <div className="flex justify-end pt-2 gap-2">
+                      <Button type="button" size="sm" variant="outline" onClick={handleClear}>
+                        <X className="w-4 h-4 mr-1" />
+                        Clear
+                      </Button>
+                      <Button type="button" size="sm" onClick={() => setIsOpen(false)}>
+                        Close
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </form>
+                </form>
+              </ScrollArea>
             </PopoverContent>
           </Popover>
         </div>
