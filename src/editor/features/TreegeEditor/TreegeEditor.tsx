@@ -3,14 +3,14 @@ import Logo from "@/editor/components/DataDisplay/logo";
 import { edgeTypes } from "@/editor/constants/edgeTypes";
 import { nodeTypes } from "@/editor/constants/nodeTypes";
 import { ThemeProvider } from "@/editor/context/theme-provider";
-import ActionsPanel from "@/editor/features/Treege/Panel/ActionsPanel";
-import NodeActionsSheet from "@/editor/features/Treege/Sheets/NodeActionsSheet";
+import ActionsPanel from "@/editor/features/TreegeEditor/Panel/ActionsPanel";
+import NodeActionsSheet from "@/editor/features/TreegeEditor/Sheets/NodeActionsSheet";
 import useFlowConnections from "@/editor/hooks/useFlowConnections";
 import { Toaster } from "@/shared/components/ui/sonner";
 
 import "@/editor/styles/style.css";
 
-export interface TreegeProps {
+export interface TreegeEditorProps {
   /**
    * Default nodes to initialize the nodes in the flow.
    */
@@ -35,7 +35,7 @@ export interface TreegeProps {
   onSave?: (data: { nodes: Node[]; edges: Edge[] }) => void;
 }
 
-const Flow = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave }: TreegeProps) => {
+const Flow = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave }: TreegeEditorProps) => {
   const { onConnect, onConnectEnd, onEdgesDelete } = useFlowConnections();
 
   return (
@@ -61,7 +61,7 @@ const Flow = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave }:
   );
 };
 
-const Treege = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave }: TreegeProps) => (
+const TreegeEditor = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave }: TreegeEditorProps) => (
   <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
     <Toaster position="bottom-center" />
     <ReactFlowProvider>
@@ -70,4 +70,4 @@ const Treege = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave 
   </ThemeProvider>
 );
 
-export default Treege;
+export default TreegeEditor;

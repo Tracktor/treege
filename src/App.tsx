@@ -1,5 +1,5 @@
-import Treege from "@/editor/features/Treege/Treege";
+import TreegeEditor from "@/editor/features/TreegeEditor/TreegeEditor";
 
-const App = () => <Treege />;
+const App = () => <TreegeEditor />;
 
 export default App;

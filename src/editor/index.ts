@@ -1,2 +1,2 @@
-export { default as Treege } from "@/editor/features/Treege/Treege";
-export * from "@/editor/features/Treege/Treege";
+export { default as TreegeEditor } from "@/editor/features/TreegeEditor/TreegeEditor";
+export * from "@/editor/features/TreegeEditor/TreegeEditor";

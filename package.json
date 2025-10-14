@@ -12,8 +12,16 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/main.js",
-      "require": "./dist/main.umd.cjs"
+      "types": "./dist/main.d.ts",
+      "import": "./dist/main.js"
+    },
+    "./editor": {
+      "types": "./dist/editor.d.ts",
+      "import": "./dist/editor.js"
+    },
+    "./renderer": {
+      "types": "./dist/renderer.d.ts",
+      "import": "./dist/renderer.js"
     }
   },
   "repository": "git@github.com:Tracktor/treege.git",
