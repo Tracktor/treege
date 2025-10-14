@@ -364,7 +364,7 @@ const InputNodeForm = () => {
                   {defaultValueField.state.value?.type === "reference" && (
                     <>
                       <Field name="defaultValue.referenceField">
-                        {(field: any) => (
+                        {(field) => (
                           <FormItem>
                             <Label htmlFor="referenceField">Reference Field</Label>
                             <Select
