@@ -18,6 +18,7 @@ export type InputNodeData = BaseNodeData & {
   name?: string;
   type?: InputType;
   helperText?: string;
+  placeholder?: string;
   required?: boolean;
   pattern?: string;
   errorMessage?: string;

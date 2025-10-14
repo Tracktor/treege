@@ -23,7 +23,18 @@ function FormDescription({ className, ...props }: React.ComponentProps<"p">) {
   )
 }
 
+function FormError({ className, ...props }: React.ComponentProps<"p">) {
+  return (
+    <p
+      data-slot="form-error"
+      className={cn("text-xs text-destructive-foreground", className)}
+      {...props}
+    />
+  )
+}
+
 export {
+  FormError,
   FormItem,
   FormDescription,
 }

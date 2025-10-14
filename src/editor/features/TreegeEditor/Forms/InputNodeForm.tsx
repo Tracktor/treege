@@ -34,6 +34,7 @@ const InputNodeForm = () => {
       name: selectedNode?.data?.name || "",
       options: selectedNode?.data?.options || [],
       pattern: selectedNode?.data?.pattern || "",
+      placeholder: selectedNode?.data?.placeholder || "",
       required: selectedNode?.data?.required || false,
       type: selectedNode?.data?.type || "",
     } as InputNodeData,
@@ -95,6 +96,22 @@ const InputNodeForm = () => {
           children={(field) => (
             <FormItem>
               <Label htmlFor={field.name}>Name</Label>
+              <Input
+                id={field.name}
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={({ target }) => field.handleChange(target.value)}
+              />
+            </FormItem>
+          )}
+        />
+
+        <Field
+          name="placeholder"
+          children={(field) => (
+            <FormItem>
+              <Label htmlFor={field.name}>Placeholder</Label>
               <Input
                 id={field.name}
                 name={field.name}
