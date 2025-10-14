@@ -27,7 +27,11 @@ export type InputNodeData = BaseNodeData & {
     type?: "static" | "reference";
     staticValue?: string | string[] | boolean;
     referenceField?: string;
-    transformFunction?: null | "toString" | "toNumber" | "toBoolean" | "toArray" | "none";
+    transformFunction?: null | "toString" | "toNumber" | "toBoolean" | "toArray" | "toObject";
+    objectMapping?: Array<{
+      sourceKey: string;
+      targetKey: string;
+    }>;
   };
 };
 

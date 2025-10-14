@@ -1,5 +1,5 @@
 import { useForm } from "@tanstack/react-form";
-import { ChevronsUpDown, X } from "lucide-react";
+import { ChevronsUpDown, Plus, X } from "lucide-react";
 import { useState } from "react";
 import ComboboxPattern from "@/editor/features/Treege/Inputs/ComboboxPattern";
 import SelectInputType from "@/editor/features/Treege/Inputs/SelectInputType";
@@ -9,7 +9,7 @@ import useFlowActions from "@/editor/hooks/useFlowActions";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
 import { Button } from "@/shared/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/components/ui/collapsible";
-import { FormItem } from "@/shared/components/ui/form";
+import { FormDescription, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
@@ -122,7 +122,6 @@ const InputNodeForm = () => {
           )}
         />
 
-        {/* Options */}
         {needsOptions && (
           <Collapsible defaultOpen className="flex w-full max-w-[350px] flex-col gap-2">
             <CollapsibleTrigger asChild>
@@ -144,7 +143,6 @@ const InputNodeForm = () => {
 
                       return (
                         <div key={key} className="flex gap-2 items-start">
-                          {/* Label field */}
                           <Field name={`options[${index}].label`}>
                             {(subField) => (
                               <Input
@@ -160,7 +158,6 @@ const InputNodeForm = () => {
                             )}
                           </Field>
 
-                          {/* Value field */}
                           <Field name={`options[${index}].value`}>
                             {(subField) => (
                               <Input
@@ -171,7 +168,6 @@ const InputNodeForm = () => {
                             )}
                           </Field>
 
-                          {/* Remove button */}
                           <Button
                             type="button"
                             variant="ghost"
@@ -187,7 +183,6 @@ const InputNodeForm = () => {
                       );
                     })}
 
-                    {/* Add option button */}
                     <Button
                       type="button"
                       variant="outline"
@@ -203,7 +198,6 @@ const InputNodeForm = () => {
                 )}
               </Field>
 
-              {/* Multiple selection switch */}
               {selectedNode?.data?.type === "select" && (
                 <Field
                   name="multiple"
@@ -219,7 +213,6 @@ const InputNodeForm = () => {
           </Collapsible>
         )}
 
-        {/* Validation */}
         <Collapsible className="flex w-full max-w-[350px] flex-col gap-2">
           <CollapsibleTrigger asChild>
             <div className="flex items-center justify-between gap-4">
@@ -391,7 +384,7 @@ const InputNodeForm = () => {
                               </SelectContent>
                             </Select>
                             {availableParentFields.length === 0 && (
-                              <p className="text-xs text-muted-foreground mt-1">Add input fields before this node to reference them</p>
+                              <FormDescription>Add input fields before this node to reference them</FormDescription>
                             )}
                           </FormItem>
                         )}
@@ -403,8 +396,20 @@ const InputNodeForm = () => {
                             <Label htmlFor="transformFunction">Transform Type</Label>
                             <Select
                               value={field.state.value || "none"}
-                              onValueChange={(value: "none" | "toString" | "toNumber" | "toBoolean" | "toArray") => {
-                                field.handleChange(value === "none" ? null : value);
+                              onValueChange={(value: "none" | "toString" | "toNumber" | "toBoolean" | "toArray" | "toObject") => {
+                                const newValue = value === "none" ? null : value;
+                                field.handleChange(newValue);
+
+                                // Initialize objectMapping when selecting toObject
+                                if (value === "toObject") {
+                                  const currentDefaultValue = defaultValueField.state.value;
+                                  if (!currentDefaultValue?.objectMapping) {
+                                    defaultValueField.handleChange({
+                                      ...currentDefaultValue,
+                                      objectMapping: [],
+                                    });
+                                  }
+                                }
                               }}
                             >
                               <SelectTrigger id="transformFunction">
@@ -416,14 +421,77 @@ const InputNodeForm = () => {
                                 <SelectItem value="toNumber">Convert to Number</SelectItem>
                                 <SelectItem value="toBoolean">Convert to Boolean</SelectItem>
                                 <SelectItem value="toArray">Convert to Array</SelectItem>
+                                <SelectItem value="toObject">Map to Object</SelectItem>
                               </SelectContent>
                             </Select>
-                            <p className="text-xs text-muted-foreground mt-1">
-                              Transform the referenced value to match this field&#39;s type
-                            </p>
+                            <FormDescription>Transform the referenced value to match this field&#39;s type</FormDescription>
                           </FormItem>
                         )}
                       </Field>
+
+                      {defaultValueField.state.value?.transformFunction === "toObject" && (
+                        <Field name="defaultValue.objectMapping" mode="array">
+                          {(mappingField) => (
+                            <FormItem>
+                              <Label>Object Mapping</Label>
+                              <div className="space-y-2">
+                                {mappingField.state.value?.map((_, index) => (
+                                  <div key={`mapping-${index}`} className="flex gap-2 items-center">
+                                    <Field name={`defaultValue.objectMapping[${index}].sourceKey`}>
+                                      {(sourceField) => (
+                                        <Input
+                                          placeholder="Source key"
+                                          value={sourceField.state.value || ""}
+                                          onChange={({ target }) => sourceField.handleChange(target.value)}
+                                        />
+                                      )}
+                                    </Field>
+
+                                    <span className="text-muted-foreground">→</span>
+
+                                    <Field name={`defaultValue.objectMapping[${index}].targetKey`}>
+                                      {(targetField) => (
+                                        <Input
+                                          placeholder="Target key"
+                                          value={targetField.state.value || ""}
+                                          onChange={({ target }) => targetField.handleChange(target.value)}
+                                        />
+                                      )}
+                                    </Field>
+
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={() => {
+                                        mappingField.removeValue(index);
+                                        handleSubmit().then();
+                                      }}
+                                    >
+                                      <X className="h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                ))}
+
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  className="w-full"
+                                  onClick={() => {
+                                    mappingField.pushValue({ sourceKey: "", targetKey: "" });
+                                    handleSubmit().then();
+                                  }}
+                                >
+                                  <Plus className="h-4 w-4 mr-2" />
+                                  Add Mapping
+                                </Button>
+                              </div>
+                              <FormDescription>Map properties from the source object to a new structure</FormDescription>
+                            </FormItem>
+                          )}
+                        </Field>
+                      )}
                     </>
                   )}
                 </>
