@@ -1,5 +1,5 @@
 import { Edge, Node } from "@xyflow/react";
-import { ReactNode } from "react";
+import { FormEvent, ReactNode } from "react";
 import { InputNodeData, TreegeNodeData } from "@/shared/types/node";
 
 /**
@@ -83,7 +83,7 @@ export type TreegeRendererComponents = {
   /**
    * Custom form wrapper
    */
-  form?: (props: { children: ReactNode; onSubmit: (e: React.FormEvent) => void }) => ReactNode;
+  form?: (props: { children: ReactNode; onSubmit: (e: FormEvent) => void }) => ReactNode;
 };
 
 /**

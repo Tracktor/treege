@@ -1,10 +1,10 @@
-import { FormEvent, useCallback, useEffect, useMemo } from "react";
-import { DefaultFormWrapper, DefaultGroup, DefaultJson, DefaultUI } from "@/renderer/components/DefaultComponents";
+import { FormEvent, ReactNode, useCallback, useEffect, useMemo, useRef } from "react";
+import { DefaultFormWrapper, DefaultGroup, DefaultUI } from "@/renderer/components/DefaultComponents";
 import { defaultInputRenderers } from "@/renderer/components/DefaultInputs";
 import { useTreegeForm } from "@/renderer/hooks/useTreegeForm";
 import { ProcessedNode, RenderContext, TreegeRendererProps } from "@/renderer/types/renderer";
-import { InputNodeData, JsonNodeData, UINodeData } from "@/shared/types/node";
-import { isGroupNode, isInputNode, isJsonNode, isUINode } from "@/shared/utils/nodeTypeGuards";
+import { InputNodeData, UINodeData } from "@/shared/types/node";
+import { isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
 
 const TreegeRenderer = ({
   nodes,
@@ -23,20 +23,9 @@ const TreegeRenderer = ({
     initialValues,
   );
 
-  // Notify parent of form changes
-  useEffect(() => {
-    if (onChange) {
-      onChange(formValues);
-    }
-  }, [formValues, onChange]);
-
-  // Handle custom validation
-  useEffect(() => {
-    if (validate && (validationMode === "onChange" || validationMode === "onBlur")) {
-      const customErrors = validate(formValues, visibleNodes);
-      setErrors((prev) => ({ ...prev, ...customErrors }));
-    }
-  }, [formValues, validate, validationMode, visibleNodes, setErrors]);
+  const onChangeRef = useRef(onChange);
+  const validateRef = useRef(validate);
+  const FormWrapper = components.form || DefaultFormWrapper;
 
   // Create render context
   const renderContext: RenderContext = useMemo(
@@ -57,51 +46,45 @@ const TreegeRenderer = ({
     (e: FormEvent) => {
       e.preventDefault();
 
-      // Validate
-      let isValid = validateForm();
+      const formIsValid = validateForm();
+      const customErrors = validateRef.current ? validateRef.current(formValues, visibleNodes) : {};
+      const isValid = formIsValid && Object.keys(customErrors).length === 0;
 
-      // Custom validation
-      if (validate) {
-        const customErrors = validate(formValues, visibleNodes);
-        setErrors((prev) => ({ ...prev, ...customErrors }));
-        isValid = isValid && Object.keys(customErrors).length === 0;
-      }
+      setErrors((prev) => ({ ...prev, ...customErrors }));
 
       if (isValid && onSubmit) {
         onSubmit(formValues);
       }
     },
-    [validateForm, validate, formValues, visibleNodes, onSubmit, setErrors],
+    [validateForm, formValues, visibleNodes, onSubmit, setErrors],
   );
 
   /**
    * Render an input node
    */
   const renderInputNode = useCallback(
-    (pNode: ProcessedNode) => {
-      if (!isInputNode(pNode.node)) return null;
+    (processedNode: ProcessedNode) => {
+      if (!isInputNode(processedNode.node)) return null;
 
-      const inputData = pNode.node.data as InputNodeData;
+      const inputData = processedNode.node.data as InputNodeData;
       const inputType = inputData.type || "text";
       const fieldName = inputData.name;
 
       if (!fieldName) {
-        console.warn("Input node without name:", pNode.node);
+        console.warn("Input node without name:", processedNode.node);
         return null;
       }
 
-      // Get custom renderer or default
       const CustomRenderer = components.inputs?.[inputType];
       const DefaultRenderer = defaultInputRenderers[inputType as keyof typeof defaultInputRenderers];
       const Renderer = CustomRenderer || DefaultRenderer || defaultInputRenderers.text;
-
       const value = getFieldValue(fieldName);
       const error = errors[fieldName];
 
       return (
         <Renderer
-          key={pNode.node.id}
-          node={pNode.node}
+          key={processedNode.node.id}
+          node={processedNode.node}
           value={value}
           onChange={(newValue) => setFieldValue(fieldName, newValue)}
           error={error}
@@ -115,60 +98,42 @@ const TreegeRenderer = ({
   /**
    * Render a node based on its type (recursive)
    */
-  const renderNode: (pNode: ProcessedNode) => React.ReactNode = useCallback(
-    (pNode: ProcessedNode) => {
-      if (!pNode.visible) return null;
+  const renderNode: (processedNode: ProcessedNode) => ReactNode = useCallback(
+    (processedNode: ProcessedNode) => {
+      if (!processedNode.visible) return null;
 
-      const { node } = pNode;
+      const { node } = processedNode;
 
       switch (node.type) {
         case "input":
-          return renderInputNode(pNode);
+          return renderInputNode(processedNode);
 
         case "group": {
-          if (!isGroupNode(pNode.node)) return null;
+          if (!isGroupNode(processedNode.node)) return null;
 
           const GroupComponent = components.group || DefaultGroup;
-          const children = pNode.children?.map((child) => renderNode(child));
 
           return (
-            <GroupComponent key={pNode.node.id} node={pNode.node} context={renderContext}>
-              {children}
+            <GroupComponent key={processedNode.node.id} node={processedNode.node} context={renderContext}>
+              {processedNode.children?.map((child) => renderNode(child))}
             </GroupComponent>
           );
         }
 
         case "ui": {
-          if (!isUINode(pNode.node)) return null;
+          if (!isUINode(processedNode.node)) return null;
 
-          const uiData = pNode.node.data as UINodeData;
+          const uiData = processedNode.node.data as UINodeData;
           const uiType = uiData.type || "default";
-
           const CustomRenderer = components.ui?.[uiType];
           const Renderer = CustomRenderer || components.ui?.default || DefaultUI;
 
-          return <Renderer key={pNode.node.id} node={pNode.node} context={renderContext} />;
+          return <Renderer key={processedNode.node.id} node={processedNode.node} context={renderContext} />;
         }
 
-        case "json": {
-          if (!isJsonNode(pNode.node)) return null;
-
-          const jsonData = pNode.node.data as JsonNodeData;
-          let parsedData = {};
-
-          try {
-            parsedData = jsonData.json ? JSON.parse(jsonData.json) : {};
-          } catch (e) {
-            console.error("Failed to parse JSON node data:", e);
-          }
-
-          const JsonComponent = components.json || DefaultJson;
-
-          return <JsonComponent key={pNode.node.id} node={pNode.node} data={parsedData} context={renderContext} />;
-        }
-
+        case "json":
         case "flow":
-          // Flow nodes are navigation, they don't render anything
+          // TODO: Handle flow & json nodes
           return null;
 
         default:
@@ -176,16 +141,43 @@ const TreegeRenderer = ({
           return null;
       }
     },
-    [renderInputNode, components.group, components.ui, components.json, renderContext],
+    [renderInputNode, components.group, components.ui, renderContext],
   );
 
-  // Render all processed nodes
-  const renderedNodes = processedNodes.map((pNode) => renderNode(pNode));
+  /**
+   * Handle custom validation (optimized with ref and dependency check)
+   */
+  useEffect(() => {
+    if (validateRef.current && (validationMode === "onChange" || validationMode === "onBlur")) {
+      const customErrors = validateRef.current(formValues, visibleNodes);
+      setErrors((prev) => ({ ...prev, ...customErrors }));
+    }
+  }, [formValues, validationMode, visibleNodes, setErrors]);
 
-  // Use custom form wrapper or default
-  const FormWrapper = components.form || DefaultFormWrapper;
+  /**
+   * Use ref to store the latest onChange callback to avoid unnecessary re-renders
+   */
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
 
-  return <FormWrapper onSubmit={handleSubmit}>{renderedNodes}</FormWrapper>;
+  //
+
+  /**
+   * Use ref to store the latest validate callback to avoid unnecessary re-renders
+   */
+  useEffect(() => {
+    validateRef.current = validate;
+  }, [validate]);
+
+  /**
+   * Notify parent of form changes (optimized with ref)
+   */
+  useEffect(() => {
+    onChangeRef.current?.(formValues);
+  }, [formValues]);
+
+  return <FormWrapper onSubmit={handleSubmit}>{processedNodes.map((processedNode) => renderNode(processedNode))}</FormWrapper>;
 };
 
 export default TreegeRenderer;

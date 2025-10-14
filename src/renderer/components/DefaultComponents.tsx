@@ -1,5 +1,5 @@
 import { FormEvent, ReactNode } from "react";
-import { GroupRenderProps, JsonRenderProps, UIRenderProps } from "@/renderer/types/renderer";
+import { GroupRenderProps, UIRenderProps } from "@/renderer/types/renderer";
 import { renderLabel } from "@/renderer/utils/helpers";
 
 /**
@@ -9,15 +9,6 @@ export const DefaultGroup = ({ node, children, context }: GroupRenderProps) => (
   <div className="mb-6 p-4 border rounded-lg bg-gray-50">
     {node.data.label && <h3 className="text-lg font-semibold mb-4">{renderLabel(node.data.label, context.language)}</h3>}
     <div>{children}</div>
-  </div>
-);
-
-/**
- * Default JSON component (displays JSON data)
- */
-export const DefaultJson = ({ data }: JsonRenderProps) => (
-  <div className="mb-4 p-4 bg-gray-100 rounded-md">
-    <pre className="text-sm overflow-auto">{JSON.stringify(data, null, 2)}</pre>
   </div>
 );
 

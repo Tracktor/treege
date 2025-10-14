@@ -1,5 +1,5 @@
 import { Edge, Node } from "@xyflow/react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { FormValues, ProcessedNode } from "@/renderer/types/renderer";
 import { evaluateConditions } from "@/renderer/utils/conditionEvaluator";
 import { ConditionalEdgeData } from "@/shared/types/edge";
@@ -155,10 +155,45 @@ const buildRenderTree = (nodes: Node<TreegeNodeData>[], visibleNodeIds: Set<stri
 };
 
 /**
+ * Initialize form values with defaults from input nodes
+ */
+const initializeFormValues = (nodes: Node<TreegeNodeData>[], initialValues: FormValues): FormValues => {
+  const defaultValues: FormValues = { ...initialValues };
+
+  nodes.forEach((node) => {
+    if (isInputNode(node)) {
+      const inputData = node.data as InputNodeData;
+      const fieldName = inputData.name;
+
+      if (!fieldName || defaultValues[fieldName] !== undefined) return;
+
+      const { defaultValue } = inputData;
+      if (!defaultValue) return;
+
+      // Handle static default value
+      if (defaultValue.type === "static" && defaultValue.staticValue !== undefined) {
+        defaultValues[fieldName] = defaultValue.staticValue;
+      }
+
+      // Handle reference default value
+      if (defaultValue.type === "reference" && defaultValue.referenceField) {
+        const { referenceField } = defaultValue;
+        const refValue = defaultValues[referenceField];
+        if (refValue !== undefined) {
+          defaultValues[fieldName] = refValue;
+        }
+      }
+    }
+  });
+
+  return defaultValues;
+};
+
+/**
  * Hook to manage form state and node visibility based on conditions
  */
 export const useTreegeForm = (nodes: Node<TreegeNodeData>[], edges: Edge<ConditionalEdgeData>[], initialValues: FormValues = {}) => {
-  const [formValues, setFormValues] = useState<FormValues>(initialValues);
+  const [formValues, setFormValues] = useState<FormValues>(() => initializeFormValues(nodes, initialValues));
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Build graph maps (memoized)
@@ -272,42 +307,6 @@ export const useTreegeForm = (nodes: Node<TreegeNodeData>[], edges: Edge<Conditi
     setFormValues(initialValues);
     setErrors({});
   }, [initialValues]);
-
-  /**
-   * Initialize form values from default values in input nodes
-   */
-  useEffect(() => {
-    const defaultValues: FormValues = { ...initialValues };
-
-    nodes.forEach((node) => {
-      if (isInputNode(node)) {
-        const inputData = node.data as InputNodeData;
-        const fieldName = inputData.name;
-
-        if (!fieldName || defaultValues[fieldName] !== undefined) return;
-
-        const { defaultValue } = inputData;
-        if (!defaultValue) return;
-
-        // Handle static default value
-        if (defaultValue.type === "static" && defaultValue.staticValue !== undefined) {
-          defaultValues[fieldName] = defaultValue.staticValue;
-        }
-
-        // Handle reference default value
-        if (defaultValue.type === "reference" && defaultValue.referenceField) {
-          const { referenceField } = defaultValue;
-          const refValue = formValues[referenceField];
-          if (refValue !== undefined) {
-            defaultValues[fieldName] = refValue;
-          }
-        }
-      }
-    });
-
-    setFormValues(defaultValues);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Only run on mount
 
   return {
     errors,
