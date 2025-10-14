@@ -7,126 +7,144 @@ import { InputNodeData, TreegeNodeData } from "@/shared/types/node";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
 
 /**
- * Graph utilities for navigating the decision tree
+ * Helper functions for graph navigation
  */
-class FlowGraph {
-  private nodeMap: Map<string, Node<TreegeNodeData>>;
 
-  private edgeMap: Map<string, Edge<ConditionalEdgeData>[]>;
+/**
+ * Check if a field has a value (not empty)
+ */
+const hasValue = (fieldName: string | undefined, formValues: FormValues): boolean => {
+  if (!fieldName) return false;
+  const value = formValues[fieldName];
+  return value !== undefined && value !== null && value !== "";
+};
 
-  private incomingEdgeMap: Map<string, Edge<ConditionalEdgeData>[]>;
+/**
+ * Build a map of node ID to outgoing edges
+ */
+const buildEdgeMap = (edges: Edge<ConditionalEdgeData>[]): Map<string, Edge<ConditionalEdgeData>[]> => {
+  const edgeMap = new Map<string, Edge<ConditionalEdgeData>[]>();
+  edges.forEach((edge) => {
+    const outgoing = edgeMap.get(edge.source) || [];
+    outgoing.push(edge);
+    edgeMap.set(edge.source, outgoing);
+  });
+  return edgeMap;
+};
 
-  constructor(nodes: Node<TreegeNodeData>[], edges: Edge<ConditionalEdgeData>[]) {
-    this.nodeMap = new Map(nodes.map((node) => [node.id, node]));
+/**
+ * Build a map of node ID to incoming edges
+ */
+const buildIncomingEdgeMap = (edges: Edge<ConditionalEdgeData>[]): Map<string, Edge<ConditionalEdgeData>[]> => {
+  const incomingEdgeMap = new Map<string, Edge<ConditionalEdgeData>[]>();
+  edges.forEach((edge) => {
+    const incoming = incomingEdgeMap.get(edge.target) || [];
+    incoming.push(edge);
+    incomingEdgeMap.set(edge.target, incoming);
+  });
+  return incomingEdgeMap;
+};
 
-    // Build outgoing edges map
-    this.edgeMap = new Map();
-    edges.forEach((edge) => {
-      const outgoing = this.edgeMap.get(edge.source) || [];
-      outgoing.push(edge);
-      this.edgeMap.set(edge.source, outgoing);
-    });
+/**
+ * Find the start node (node without incoming edges)
+ */
+const findStartNode = (
+  nodes: Node<TreegeNodeData>[],
+  incomingEdgeMap: Map<string, Edge<ConditionalEdgeData>[]>,
+): Node<TreegeNodeData> | undefined => {
+  const nodesWithoutIncoming = nodes.filter((node) => {
+    const incomingEdges = incomingEdgeMap.get(node.id) || [];
+    return incomingEdges.length === 0;
+  });
 
-    // Build incoming edges map
-    this.incomingEdgeMap = new Map();
-    edges.forEach((edge) => {
-      const incoming = this.incomingEdgeMap.get(edge.target) || [];
-      incoming.push(edge);
-      this.incomingEdgeMap.set(edge.target, incoming);
-    });
-  }
+  // Prefer input nodes as start, otherwise take first node
+  return nodesWithoutIncoming.find(isInputNode) || nodesWithoutIncoming[0];
+};
 
-  getNode(nodeId: string): Node<TreegeNodeData> | undefined {
-    return this.nodeMap.get(nodeId);
-  }
+/**
+ * Find all visible nodes using branch-based progressive rendering
+ *
+ * Logic:
+ * - Start from the start node
+ * - Follow all unconditional edges (always visible)
+ * - When reaching a node with multiple conditional edges (a branch point):
+ *   - Stop and wait for user input
+ *   - Once the user fills the field, evaluate conditions and follow the matching branch
+ */
+const findVisibleNodes = (
+  startNodeId: string,
+  nodeMap: Map<string, Node<TreegeNodeData>>,
+  edgeMap: Map<string, Edge<ConditionalEdgeData>[]>,
+  formValues: FormValues,
+): Set<string> => {
+  const visible = new Set<string>();
+  const visited = new Set<string>();
+  const queue: string[] = [startNodeId];
 
-  getOutgoingEdges(nodeId: string): Edge<ConditionalEdgeData>[] {
-    return this.edgeMap.get(nodeId) || [];
-  }
+  while (queue.length > 0) {
+    const nodeId = queue.shift()!;
 
-  getIncomingEdges(nodeId: string): Edge<ConditionalEdgeData>[] {
-    return this.incomingEdgeMap.get(nodeId) || [];
-  }
-
-  getAllNodes(): Node<TreegeNodeData>[] {
-    return Array.from(this.nodeMap.values());
-  }
-
-  /**
-   * Find the start node (node without incoming edges)
-   */
-  findStartNode(): Node<TreegeNodeData> | undefined {
-    const nodesWithoutIncoming = this.getAllNodes().filter((node) => this.getIncomingEdges(node.id).length === 0);
-
-    // Prefer input nodes as start, otherwise take first node
-    return nodesWithoutIncoming.find(isInputNode) || nodesWithoutIncoming[0];
-  }
-
-  /**
-   * Check if a field has a value (not empty)
-   */
-  hasValue(fieldName: string | undefined, formValues: FormValues): boolean {
-    if (!fieldName) return false;
-    const value = formValues[fieldName];
-    return value !== undefined && value !== null && value !== "";
-  }
-
-  /**
-   * Find visible nodes using progressive rendering logic
-   * - Show start node
-   * - For each visible node with a filled field, show next nodes based on conditions
-   * - For nodes without conditions, show them if parent is visible and filled
-   */
-  findVisibleNodes(fromNodeId: string, formValues: FormValues): Set<string> {
-    const visible = new Set<string>();
-    const queue: string[] = [fromNodeId];
-    const visited = new Set<string>();
-
-    while (queue.length > 0) {
-      const nodeId = queue.shift()!;
-
-      if (visited.has(nodeId)) continue;
-      visited.add(nodeId);
-      visible.add(nodeId);
-
-      const node = this.getNode(nodeId);
-      if (!node) continue;
-
-      // Check if this node is an input with a value
-      let nodeHasValue = true;
-      if (isInputNode(node)) {
-        const inputData = node.data as InputNodeData;
-        nodeHasValue = this.hasValue(inputData.name, formValues);
-      }
-
-      // Get outgoing edges
-      const outgoingEdges = this.getOutgoingEdges(nodeId);
-
-      // If node has no value yet, don't traverse further (wait for user input)
-      if (!nodeHasValue && isInputNode(node)) {
-        continue;
-      }
-
-      // Traverse outgoing edges
-      outgoingEdges.forEach((edge) => {
-        const conditions = edge.data?.conditions;
-
-        // If edge has no conditions, always follow it
-        if (!conditions || conditions.length === 0) {
-          queue.push(edge.target);
-          return;
-        }
-
-        // If edge has conditions, check if they're met
-        if (evaluateConditions(conditions, formValues)) {
-          queue.push(edge.target);
-        }
-      });
+    if (visited.has(nodeId)) {
+      continue;
     }
 
-    return visible;
+    visited.add(nodeId);
+    visible.add(nodeId);
+
+    const node = nodeMap.get(nodeId);
+    if (!node) {
+      continue;
+    }
+
+    // Get outgoing edges from this node
+    const outgoingEdges = edgeMap.get(nodeId) || [];
+
+    if (outgoingEdges.length === 0) {
+      // No outgoing edges - this is a leaf node
+      continue;
+    }
+
+    // Separate conditional and unconditional edges
+    const conditionalEdges = outgoingEdges.filter((edge) => edge.data?.conditions && edge.data.conditions.length > 0);
+    const unconditionalEdges = outgoingEdges.filter((edge) => !edge.data?.conditions || edge.data.conditions.length === 0);
+
+    // Always follow unconditional edges (no branching)
+    unconditionalEdges.forEach((edge) => {
+      queue.push(edge.target);
+    });
+
+    // Handle conditional edges (branching)
+    if (conditionalEdges.length > 0) {
+      // This is a branch point - check if all condition fields have values
+      const allConditionFieldsFilled = conditionalEdges.every((edge) => {
+        const conditions = edge.data?.conditions || [];
+        return conditions.every((cond) => {
+          if (!cond.field) return true;
+
+          // Try to resolve field as node ID first
+          const fieldNode = nodeMap.get(cond.field);
+          const fieldName = (isInputNode(fieldNode) ? fieldNode.data.name : undefined) || cond.field;
+
+          return hasValue(fieldName, formValues);
+        });
+      });
+
+      // If all fields are filled, evaluate conditions and follow matching branches
+      if (allConditionFieldsFilled) {
+        conditionalEdges.forEach((edge) => {
+          const conditions = edge.data?.conditions || [];
+          if (evaluateConditions(conditions, formValues, nodeMap)) {
+            queue.push(edge.target);
+          }
+        });
+      }
+      // If fields are not filled, stop here and wait for user input
+      // (don't add any conditional targets to the queue)
+    }
   }
-}
+
+  return visible;
+};
 
 /**
  * Build a hierarchical tree structure for rendering
@@ -154,11 +172,13 @@ export const useTreegeForm = (nodes: Node<TreegeNodeData>[], edges: Edge<Conditi
   const [formValues, setFormValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Build graph representation
-  const graph = useMemo(() => new FlowGraph(nodes, edges), [nodes, edges]);
+  // Build graph maps (memoized)
+  const nodeMap = useMemo(() => new Map(nodes.map((node) => [node.id, node])), [nodes]);
+  const edgeMap = useMemo(() => buildEdgeMap(edges), [edges]);
+  const incomingEdgeMap = useMemo(() => buildIncomingEdgeMap(edges), [edges]);
 
   // Find start node
-  const startNode = useMemo(() => graph.findStartNode(), [graph]);
+  const startNode = useMemo(() => findStartNode(nodes, incomingEdgeMap), [nodes, incomingEdgeMap]);
 
   /**
    * Calculate which nodes should be visible based on current form values
@@ -172,8 +192,8 @@ export const useTreegeForm = (nodes: Node<TreegeNodeData>[], edges: Edge<Conditi
   const visibleNodeIds = useMemo(() => {
     if (!startNode) return new Set<string>();
 
-    return graph.findVisibleNodes(startNode.id, formValues);
-  }, [graph, startNode, formValues]);
+    return findVisibleNodes(startNode.id, nodeMap, edgeMap, formValues);
+  }, [startNode, nodeMap, edgeMap, formValues]);
 
   /**
    * Process nodes into a tree structure with visibility

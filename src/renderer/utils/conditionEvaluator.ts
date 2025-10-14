@@ -1,16 +1,8 @@
+import { Node } from "@xyflow/react";
 import { FormValues } from "@/renderer/types/renderer";
 import { EdgeCondition, EdgeOperator } from "@/shared/types/edge";
-
-/**
- * Helper to check if a value is considered empty
- */
-export const isEmpty = (value: any): boolean => {
-  if (value === null || value === undefined) return true;
-  if (typeof value === "string") return value.trim() === "";
-  if (Array.isArray(value)) return value.length === 0;
-  if (typeof value === "object") return Object.keys(value).length === 0;
-  return false;
-};
+import { TreegeNodeData } from "@/shared/types/node";
+import { isInputNode } from "@/shared/utils/nodeTypeGuards";
 
 /**
  * Normalize values for comparison
@@ -109,8 +101,13 @@ const compareValues = (fieldVal: any, condVal: any, operator: EdgeOperator): boo
 
 /**
  * Evaluates a single condition against form values
+ * Note: The field parameter can be either a field name OR a node ID
  */
-export const evaluateCondition = (condition: EdgeCondition, formValues: FormValues): boolean => {
+export const evaluateCondition = (
+  condition: EdgeCondition,
+  formValues: FormValues,
+  nodeMap?: Map<string, Node<TreegeNodeData>>,
+): boolean => {
   const { field, operator, value } = condition;
 
   // If condition is incomplete, consider it as always true
@@ -119,7 +116,16 @@ export const evaluateCondition = (condition: EdgeCondition, formValues: FormValu
     return true;
   }
 
-  const fieldValue = formValues[field];
+  // Try to get the field value directly from formValues
+  let fieldValue = formValues[field];
+
+  // If not found, and we have a nodeMap, try to resolve field as a node ID
+  if (fieldValue === undefined && nodeMap) {
+    const node = nodeMap.get(field);
+    if (node && isInputNode(node) && node.data.name) {
+      fieldValue = formValues[node.data.name];
+    }
+  }
 
   return compareValues(fieldValue, value, operator);
 };
@@ -128,7 +134,11 @@ export const evaluateCondition = (condition: EdgeCondition, formValues: FormValu
  * Evaluates multiple conditions with logical operators (AND/OR)
  * Returns true if all conditions are met according to their logical operators
  */
-export const evaluateConditions = (conditions: EdgeCondition[] | undefined, formValues: FormValues): boolean => {
+export const evaluateConditions = (
+  conditions: EdgeCondition[] | undefined,
+  formValues: FormValues,
+  nodeMap?: Map<string, Node<TreegeNodeData>>,
+): boolean => {
   // No conditions means the edge should always be followed
   if (!conditions || conditions.length === 0) {
     return true;
@@ -136,15 +146,15 @@ export const evaluateConditions = (conditions: EdgeCondition[] | undefined, form
 
   // Single condition - just evaluate it
   if (conditions.length === 1) {
-    return evaluateCondition(conditions[0], formValues);
+    return evaluateCondition(conditions[0], formValues, nodeMap);
   }
 
   // Multiple conditions - evaluate with logical operators
-  let result = evaluateCondition(conditions[0], formValues);
+  let result = evaluateCondition(conditions[0], formValues, nodeMap);
 
   for (let i = 1; i < conditions.length; i += 1) {
     const condition = conditions[i];
-    const conditionResult = evaluateCondition(condition, formValues);
+    const conditionResult = evaluateCondition(condition, formValues, nodeMap);
 
     // The logical operator is stored on the PREVIOUS condition
     const logicalOperator = conditions[i - 1].logicalOperator || "AND";
