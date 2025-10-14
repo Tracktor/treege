@@ -7,10 +7,6 @@ import { InputNodeData, TreegeNodeData } from "@/shared/types/node";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
 
 /**
- * Helper functions for graph navigation
- */
-
-/**
  * Check if a field has a value (not empty)
  */
 const hasValue = (fieldName: string | undefined, formValues: FormValues): boolean => {

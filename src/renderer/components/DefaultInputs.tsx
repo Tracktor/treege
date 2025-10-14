@@ -11,7 +11,7 @@ export const DefaultTextInput = ({ node, value, onChange, error, context }: Inpu
     <FormItem className="mb-4">
       <Label htmlFor={name}>
         {renderLabel(node.data.label, context.language) || node.data.name}
-        {node.data.required && <span className="text-red-500 ml-1">*</span>}
+        {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
         type="text"
@@ -34,7 +34,7 @@ export const DefaultNumberInput = ({ node, value, onChange, error, context }: In
     <FormItem className="mb-4">
       <Label htmlFor={name}>
         {renderLabel(node.data.label, context.language) || node.data.name}
-        {node.data.required && <span className="text-red-500 ml-1">*</span>}
+        {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
         type="number"
@@ -57,7 +57,7 @@ export const DefaultSelectInput = ({ node, value, onChange, error, context }: In
     <FormItem className="mb-4">
       <Label htmlFor={name}>
         {renderLabel(node.data.label, context.language) || node.data.name}
-        {node.data.required && <span className="text-red-500 ml-1">*</span>}
+        {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <select
         id={name}
@@ -95,7 +95,7 @@ export const DefaultCheckboxInput = ({ node, value, onChange, error, context }: 
         />
         <span className="text-sm font-medium">
           {renderLabel(node.data.label, context.language) || node.data.name}
-          {node.data.required && <span className="text-red-500 ml-1">*</span>}
+          {node.data.required && <span className="text-red-500">*</span>}
         </span>
       </Label>
       {error && <FormError>{error}</FormError>}
@@ -112,7 +112,7 @@ export const DefaultSwitchInput = ({ node, value, onChange, error, context }: In
       <div>
         <Label htmlFor={name} className="block text-sm font-medium">
           {renderLabel(node.data.label, context.language) || node.data.name}
-          {node.data.required && <span className="text-red-500 ml-1">*</span>}
+          {node.data.required && <span className="text-red-500">*</span>}
         </Label>
         {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
       </div>
@@ -138,7 +138,7 @@ export const DefaultRadioInput = ({ node, value, onChange, error, context }: Inp
     <FormItem className="mb-4">
       <Label htmlFor={firstOptionValue ? `${name}-${firstOptionValue}` : undefined} className="block text-sm font-medium mb-2">
         {renderLabel(node.data.label, context.language) || node.data.name}
-        {node.data.required && <span className="text-red-500 ml-1">*</span>}
+        {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       {node.data.options?.map((opt) => (
         <Label key={opt.value} htmlFor={`${name}-${opt.value}`} className="flex items-center mb-1">
@@ -168,7 +168,7 @@ export const DefaultDateInput = ({ node, value, onChange, error, context }: Inpu
     <FormItem className="mb-4">
       <Label htmlFor={name}>
         {renderLabel(node.data.label, context.language) || node.data.name}
-        {node.data.required && <span className="text-red-500 ml-1">*</span>}
+        {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
         type="date"
@@ -191,7 +191,7 @@ export const DefaultTimeInput = ({ node, value, onChange, error, context }: Inpu
     <FormItem className="mb-4">
       <Label htmlFor={name}>
         {renderLabel(node.data.label, context.language) || node.data.name}
-        {node.data.required && <span className="text-red-500 ml-1">*</span>}
+        {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
         type="time"
@@ -214,7 +214,7 @@ export const DefaultPasswordInput = ({ node, value, onChange, error, context }: 
     <FormItem className="mb-4">
       <Label htmlFor={name}>
         {renderLabel(node.data.label, context.language) || node.data.name}
-        {node.data.required && <span className="text-red-500 ml-1">*</span>}
+        {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
         type="password"
@@ -237,7 +237,7 @@ export const DefaultFileInput = ({ node, onChange, error, context }: InputRender
     <FormItem className="mb-4">
       <Label htmlFor={name}>
         {renderLabel(node.data.label, context.language) || node.data.name}
-        {node.data.required && <span className="text-red-500 ml-1">*</span>}
+        {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
         type="file"
