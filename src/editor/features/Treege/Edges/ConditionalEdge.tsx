@@ -1,33 +1,23 @@
 import { useForm } from "@tanstack/react-form";
-import { BaseEdge, Edge, EdgeLabelRenderer, EdgeProps, getBezierPath, useNodesData, useReactFlow } from "@xyflow/react";
-import { Waypoints, X } from "lucide-react";
+import { BaseEdge, Edge, EdgeLabelRenderer, EdgeProps, getBezierPath, useReactFlow } from "@xyflow/react";
+import { Plus, Waypoints, X } from "lucide-react";
 import { MouseEvent, useState } from "react";
-import useTranslatedLabel from "@/editor/hooks/useTranslatedLabel";
+import { useAvailableParentFields } from "@/editor/hooks/useAvailableParentFields";
 import { Button } from "@/shared/components/ui/button";
-import { FormItem } from "@/shared/components/ui/form";
+import { FormDescription, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
-import { TreegeNode } from "@/shared/types/node";
-
-type Operator = "===" | "!==" | ">" | "<" | ">=" | "<=";
-
-export type ConditionalEdgeData = {
-  condition?: {
-    label?: string;
-    operator?: Operator;
-    value?: string;
-  };
-};
+import { ConditionalEdgeData, EdgeOperator, LogicalOperator } from "@/shared/types/edge";
 
 export type ConditionalEdgeType = Edge<ConditionalEdgeData, "conditional">;
-
 export type ConditionalEdgeProps = EdgeProps<ConditionalEdgeType>;
 
 const ConditionalEdge = ({
   id,
   source,
+  target,
   sourceX,
   sourceY,
   targetX,
@@ -49,21 +39,22 @@ const ConditionalEdge = ({
 
   const [isOpen, setIsOpen] = useState(false);
   const { updateEdgeData } = useReactFlow();
-  const translateLabel = useTranslatedLabel();
-  const parentNodeData = useNodesData<TreegeNode>(source);
-  const parentLabel = translateLabel(parentNodeData?.data?.label) || source;
-  const hasCondition = data?.condition?.operator && data?.condition?.value;
+  const availableParentFields = useAvailableParentFields(target);
+  const hasConditions = data?.conditions && data.conditions.length > 0;
 
   const { handleSubmit, reset, Field } = useForm({
     defaultValues: {
-      label: data?.condition?.label || "",
-      operator: data?.condition?.operator || "===",
-      value: data?.condition?.value || "",
+      conditions: data?.conditions || [{ field: source, operator: "===", value: "" }],
+      label: data?.label || "",
+    },
+    listeners: {
+      onChange: ({ formApi }) => {
+        formApi.handleSubmit().then();
+      },
+      onChangeDebounceMs: 150,
     },
     onSubmit: async ({ value }) => {
-      updateEdgeData(id, {
-        condition: value,
-      });
+      updateEdgeData(id, value);
     },
   });
 
@@ -73,24 +64,46 @@ const ConditionalEdge = ({
 
   const handleClear = () => {
     reset();
-    updateEdgeData(id, { condition: undefined });
+    updateEdgeData(id, { conditions: undefined, label: undefined });
     setIsOpen(false);
+  };
+
+  const getConditionSummary = () => {
+    if (!hasConditions) return null;
+
+    if (data.label) return data.label;
+
+    const conditions = data.conditions!;
+    if (conditions.length === 1) {
+      const field = availableParentFields.find((f) => f.nodeId === conditions[0].field)?.label || conditions[0].field;
+      return `${field} ${conditions[0].operator} ${conditions[0].value}`;
+    }
+
+    const andCount = conditions.filter((c) => c.logicalOperator === "AND").length;
+    const orCount = conditions.filter((c) => c.logicalOperator === "OR").length;
+
+    if (andCount > 0 && orCount === 0) {
+      return `${conditions.length} conditions (AND)`;
+    }
+    if (orCount > 0 && andCount === 0) {
+      return `${conditions.length} conditions (OR)`;
+    }
+
+    return `${conditions.length} conditions (mixed)`;
   };
 
   return (
     <>
-      {/* Edge */}
       <BaseEdge
         path={edgePath}
         markerEnd={markerEnd}
         style={{
           ...style,
-          stroke: hasCondition ? "var(--color-chart-2)" : "var(--color-chart-3)",
-          strokeWidth: hasCondition ? 2 : style?.strokeWidth,
+          stroke: hasConditions ? "var(--color-chart-2)" : "var(--color-chart-3)",
+          strokeWidth: hasConditions ? 2 : style?.strokeWidth,
         }}
       />
 
-      {/* Render button */}
       <EdgeLabelRenderer>
         <div
           className="nodrag nopan absolute"
@@ -101,90 +114,177 @@ const ConditionalEdge = ({
         >
           <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
-              <Button variant={hasCondition ? "default" : "secondary"} className="h-8 px-2 text-xs" onClick={onEdgeClick}>
-                {hasCondition ? (
-                  <>
-                    <Waypoints className="w-3 h-3 mr-1" />
-                    {data?.condition?.label || `${parentLabel} ${data?.condition?.operator} ${data?.condition?.value}`}
-                  </>
-                ) : (
-                  <>
-                    <Waypoints className="w-3 h-3 mr-1" />
-                    Condition
-                  </>
-                )}
+              <Button variant={hasConditions ? "default" : "secondary"} className="h-8 px-2 text-xs" onClick={onEdgeClick}>
+                <Waypoints className="w-3 h-3 mr-1" />
+                {hasConditions ? getConditionSummary() : "Condition"}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-80" align="center" onClick={(e) => e.stopPropagation()}>
-              <form onChange={handleSubmit}>
+            <PopoverContent className="w-96" align="center" onClick={(e) => e.stopPropagation()}>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+              >
                 <div className="grid gap-5">
                   <div className="space-y-2">
-                    <h4 className="font-medium leading-none">Display condition</h4>
-                    <p className="text-sm text-muted-foreground">
-                      This field will be shown if <span className="font-black">{parentLabel}</span> meets the condition.
-                    </p>
+                    <h4 className="font-medium leading-none">Display conditions</h4>
+                    <p className="text-sm text-muted-foreground">This field will be shown if the following conditions are met.</p>
                   </div>
 
                   <div className="grid gap-4">
-                    {/* Label */}
                     <Field name="label">
                       {(field) => (
                         <FormItem>
-                          <Label htmlFor="label">Label</Label>
+                          <Label htmlFor="label">Label (optional)</Label>
                           <Input
                             id="label"
-                            placeholder="Ex: If is adult"
+                            placeholder="Ex: If eligible"
                             value={field.state.value}
-                            onChange={({ target }) => field.handleChange(target.value)}
+                            onChange={(e) => field.handleChange(e.target.value)}
                           />
+                          <FormDescription>Custom label for the condition button</FormDescription>
                         </FormItem>
                       )}
                     </Field>
 
-                    {/* Operator */}
-                    <Field name="operator">
-                      {(field) => (
-                        <FormItem>
-                          <Label htmlFor="operator">Operator</Label>
-                          <Select
-                            value={field.state.value}
-                            onValueChange={(value: Operator) => {
-                              field.handleChange(value);
-                            }}
-                          >
-                            <SelectTrigger id="operator">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="===">equal to (===)</SelectItem>
-                              <SelectItem value="!==">not equal to (!==)</SelectItem>
-                              <SelectItem value=">">greater than (&gt;)</SelectItem>
-                              <SelectItem value="<">less than (&lt;)</SelectItem>
-                              <SelectItem value=">=">greater than or equal to (≥)</SelectItem>
-                              <SelectItem value="<=">less than or equal to (≤)</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormItem>
-                      )}
-                    </Field>
+                    <Field name="conditions" mode="array">
+                      {(conditionsField) => (
+                        <div className="space-y-3">
+                          <Label>Conditions</Label>
 
-                    {/* Value */}
-                    <Field name="value">
-                      {(field) => (
-                        <FormItem>
-                          <Label htmlFor="value">Value</Label>
-                          <Input
-                            id="value"
-                            placeholder="Ex: 18"
-                            value={field.state.value}
-                            onChange={({ target }) => field.handleChange(target.value)}
-                          />
-                        </FormItem>
+                          <div className="space-y-2">
+                            {conditionsField.state.value?.map((_, index) => (
+                              <div key={`condition-${index}`} className="space-y-2">
+                                <div className="p-3 border rounded-lg bg-muted/30 space-y-2">
+                                  <Field name={`conditions[${index}].field`}>
+                                    {(fieldField) => (
+                                      <FormItem>
+                                        <Label htmlFor={`field-${index}`}>Field</Label>
+                                        <Select
+                                          value={fieldField.state.value || ""}
+                                          onValueChange={(value: string) => fieldField.handleChange(value)}
+                                        >
+                                          <SelectTrigger id={`field-${index}`} className="w-full">
+                                            <SelectValue placeholder="Select a field" />
+                                          </SelectTrigger>
+                                          <SelectContent>
+                                            {availableParentFields.length === 0 ? (
+                                              <SelectItem value="none" disabled>
+                                                No fields available
+                                              </SelectItem>
+                                            ) : (
+                                              availableParentFields.map((field) => (
+                                                <SelectItem key={field.nodeId} value={field.nodeId}>
+                                                  {field.label} ({field.type})
+                                                </SelectItem>
+                                              ))
+                                            )}
+                                          </SelectContent>
+                                        </Select>
+                                      </FormItem>
+                                    )}
+                                  </Field>
+
+                                  <div className="flex gap-2">
+                                    <Field name={`conditions[${index}].operator`}>
+                                      {(operatorField) => (
+                                        <FormItem>
+                                          <Label htmlFor={`operator-${index}`}>Operator</Label>
+                                          <Select
+                                            value={operatorField.state.value || "==="}
+                                            onValueChange={(value: EdgeOperator) => operatorField.handleChange(value)}
+                                          >
+                                            <SelectTrigger id={`operator-${index}`}>
+                                              <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                              <SelectItem value="===">=</SelectItem>
+                                              <SelectItem value="!==">≠</SelectItem>
+                                              <SelectItem value=">">&gt;</SelectItem>
+                                              <SelectItem value="<">&lt;</SelectItem>
+                                              <SelectItem value=">=">&gt;=</SelectItem>
+                                              <SelectItem value="<=">&lt;=</SelectItem>
+                                            </SelectContent>
+                                          </Select>
+                                        </FormItem>
+                                      )}
+                                    </Field>
+
+                                    <Field name={`conditions[${index}].value`}>
+                                      {(valueField) => (
+                                        <FormItem className="w-full">
+                                          <Label htmlFor={`value-${index}`}>Value</Label>
+                                          <Input
+                                            id={`value-${index}`}
+                                            placeholder="Ex: 18"
+                                            value={valueField.state.value || ""}
+                                            onChange={(e) => valueField.handleChange(e.target.value)}
+                                          />
+                                        </FormItem>
+                                      )}
+                                    </Field>
+                                  </div>
+
+                                  {conditionsField.state.value && conditionsField.state.value.length > 1 && (
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="sm"
+                                      className="w-full"
+                                      onClick={() => {
+                                        conditionsField.removeValue(index);
+                                        handleSubmit().then();
+                                      }}
+                                    >
+                                      <X className="w-4 h-4 mr-1" />
+                                      Remove condition
+                                    </Button>
+                                  )}
+                                </div>
+
+                                {conditionsField.state.value && index < conditionsField.state.value.length - 1 && (
+                                  <Field name={`conditions[${index}].logicalOperator`}>
+                                    {(logicalField) => (
+                                      <div className="flex justify-center">
+                                        <Select
+                                          value={logicalField.state.value || "AND"}
+                                          onValueChange={(value: LogicalOperator) => logicalField.handleChange(value)}
+                                        >
+                                          <SelectTrigger className="w-32 h-9 font-semibold">
+                                            <SelectValue />
+                                          </SelectTrigger>
+                                          <SelectContent>
+                                            <SelectItem value="AND">AND</SelectItem>
+                                            <SelectItem value="OR">OR</SelectItem>
+                                          </SelectContent>
+                                        </Select>
+                                      </div>
+                                    )}
+                                  </Field>
+                                )}
+                              </div>
+                            ))}
+
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              className="w-full"
+                              onClick={() => {
+                                conditionsField.pushValue({ field: source, logicalOperator: "AND", operator: "===", value: "" });
+                                handleSubmit().then();
+                              }}
+                            >
+                              <Plus className="w-4 h-4 mr-2" />
+                              Add condition
+                            </Button>
+                          </div>
+                        </div>
                       )}
                     </Field>
                   </div>
 
-                  {/* Actions */}
                   <div className="flex justify-end pt-2 gap-2">
                     <Button type="button" size="sm" variant="outline" onClick={handleClear}>
                       <X className="w-4 h-4 mr-1" />
