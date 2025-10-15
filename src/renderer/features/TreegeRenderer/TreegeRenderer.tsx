@@ -1,7 +1,9 @@
 import { Edge, Node } from "@xyflow/react";
 import { FormEvent, ReactNode, useCallback, useEffect, useMemo, useRef } from "react";
-import { DefaultFormWrapper, DefaultGroup, DefaultUI } from "@/renderer/components/DefaultComponents";
+import DefaultFormWrapper from "@/renderer/components/DefaultFormWrapper";
+import DefaultGroup from "@/renderer/components/DefaultGroup";
 import { defaultInputRenderers } from "@/renderer/components/DefaultInputs";
+import { defaultUI } from "@/renderer/components/DefaultUI";
 import { TreegeRendererProvider } from "@/renderer/context/TreegeRendererContext";
 import { useTreegeForm } from "@/renderer/hooks/useTreegeForm";
 import { FormValues, TreegeRendererComponents } from "@/renderer/types/renderer";
@@ -125,7 +127,7 @@ const TreegeRenderer = ({
           const inputType = inputData.type || "text";
           const CustomRenderer = components.inputs?.[inputType];
           const DefaultRenderer = defaultInputRenderers[inputType as keyof typeof defaultInputRenderers];
-          const Renderer = CustomRenderer || DefaultRenderer || defaultInputRenderers.text;
+          const Renderer = CustomRenderer || DefaultRenderer;
 
           return <Renderer key={node.id} node={node} />;
         }
@@ -147,9 +149,10 @@ const TreegeRenderer = ({
           if (!isUINode(node)) return null;
 
           const uiData = node.data as UINodeData;
-          const uiType = uiData.type || "default";
+          const uiType = uiData.type || "title";
           const CustomRenderer = components.ui?.[uiType];
-          const Renderer = CustomRenderer || components.ui?.default || DefaultUI;
+          const DefaultRenderer = defaultUI[uiType as keyof typeof defaultUI];
+          const Renderer = CustomRenderer || DefaultRenderer;
 
           return <Renderer key={node.id} node={node} />;
         }

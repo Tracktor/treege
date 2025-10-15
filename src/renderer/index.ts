@@ -7,7 +7,9 @@ export * from "@/renderer/types/renderer";
 
 // Default components (for customization reference)
 export * from "@/renderer/components/DefaultInputs";
-export * from "@/renderer/components/DefaultComponents";
+export * from "@/renderer/components/DefaultGroup";
+export * from "@/renderer/components/DefaultUI";
+export * from "@/renderer/components/DefaultFormWrapper";
 
 // Utils
 export * from "@/renderer/utils/conditionEvaluator";

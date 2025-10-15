@@ -201,9 +201,20 @@ export const useTreegeForm = (nodes: Node<TreegeNodeData>[], edges: Edge<Conditi
   }, [startNode, nodeMap, edgeMap, formValues]);
 
   /**
-   * Get all visible nodes
+   * Get all visible nodes (including parent groups of visible nodes)
    */
-  const visibleNodes = useMemo(() => nodes.filter((node) => visibleNodeIds.has(node.id)), [nodes, visibleNodeIds]);
+  const visibleNodes = useMemo(() => {
+    const visible = new Set(visibleNodeIds);
+
+    // Add parent groups of visible nodes
+    nodes.forEach((node) => {
+      if (visibleNodeIds.has(node.id) && node.parentId) {
+        visible.add(node.parentId);
+      }
+    });
+
+    return nodes.filter((node) => visible.has(node.id));
+  }, [nodes, visibleNodeIds]);
 
   /**
    * Set field value and clear error for that field

@@ -1,6 +1,6 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { INPUT_TYPE } from "@/shared/constants/inputType";
-import { InputType } from "@/shared/types/input";
+import { InputType } from "@/shared/types/node";
 
 export interface SelectInputTypeProps {
   value?: InputType;

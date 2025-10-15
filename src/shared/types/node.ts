@@ -1,6 +1,16 @@
 import { Node } from "@xyflow/react";
-import { InputOption, InputType } from "@/shared/types/input";
+import { INPUT_TYPE } from "@/shared/constants/inputType";
+import { UI_TYPE } from "@/shared/constants/uiType";
 import { TranslatableLabel } from "@/shared/types/translate";
+
+export type UIType = (typeof UI_TYPE)[keyof typeof UI_TYPE];
+export type InputType = (typeof INPUT_TYPE)[keyof typeof INPUT_TYPE];
+
+export type InputOption = {
+  value: string;
+  label: TranslatableLabel;
+  disabled?: boolean;
+};
 
 export type BaseNodeData = {
   label?: TranslatableLabel;
@@ -41,7 +51,7 @@ export type JsonNodeData = BaseNodeData & {
 };
 
 export type UINodeData = BaseNodeData & {
-  type?: string;
+  type: UIType;
 };
 
 export type TreegeNodeData = InputNodeData | UINodeData | FlowNodeData | GroupNodeData | JsonNodeData;

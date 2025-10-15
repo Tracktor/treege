@@ -1,9 +1,9 @@
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import { InputRenderProps } from "@/renderer/types/renderer";
-import { renderLabel } from "@/renderer/utils/helpers";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
+import { getTranslatedLabel } from "@/shared/utils/label";
 
 export const DefaultTextInput = ({ node }: InputRenderProps) => {
   const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
@@ -14,7 +14,7 @@ export const DefaultTextInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {renderLabel(node.data.label, language) || node.data.name}
+        {getTranslatedLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
@@ -40,7 +40,7 @@ export const DefaultNumberInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {renderLabel(node.data.label, language) || node.data.name}
+        {getTranslatedLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
@@ -66,7 +66,7 @@ export const DefaultSelectInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {renderLabel(node.data.label, language) || node.data.name}
+        {getTranslatedLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <select
@@ -79,7 +79,7 @@ export const DefaultSelectInput = ({ node }: InputRenderProps) => {
         <option value="">Sélectionnez une option</option>
         {node.data.options?.map((opt) => (
           <option key={opt.value} value={opt.value} disabled={opt.disabled}>
-            {renderLabel(opt.label)}
+            {getTranslatedLabel(opt.label)}
           </option>
         ))}
       </select>
@@ -107,7 +107,7 @@ export const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
           className="mr-2"
         />
         <span className="text-sm font-medium">
-          {renderLabel(node.data.label, language) || node.data.name}
+          {getTranslatedLabel(node.data.label, language) || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </span>
       </Label>
@@ -127,7 +127,7 @@ export const DefaultSwitchInput = ({ node }: InputRenderProps) => {
     <FormItem className="mb-4 flex items-center justify-between">
       <div>
         <Label htmlFor={name} className="block text-sm font-medium">
-          {renderLabel(node.data.label, language) || node.data.name}
+          {getTranslatedLabel(node.data.label, language) || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
         {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
@@ -156,7 +156,7 @@ export const DefaultRadioInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label htmlFor={firstOptionValue ? `${name}-${firstOptionValue}` : undefined} className="block text-sm font-medium mb-2">
-        {renderLabel(node.data.label, language) || node.data.name}
+        {getTranslatedLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       {node.data.options?.map((opt) => (
@@ -171,7 +171,7 @@ export const DefaultRadioInput = ({ node }: InputRenderProps) => {
             disabled={opt.disabled}
             className="mr-2"
           />
-          <span className="text-sm">{renderLabel(opt.label)}</span>
+          <span className="text-sm">{getTranslatedLabel(opt.label)}</span>
         </Label>
       ))}
       {error && <FormError>{error}</FormError>}
@@ -189,7 +189,7 @@ export const DefaultDateInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {renderLabel(node.data.label, language) || node.data.name}
+        {getTranslatedLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
@@ -215,7 +215,7 @@ export const DefaultTimeInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {renderLabel(node.data.label, language) || node.data.name}
+        {getTranslatedLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
@@ -241,7 +241,7 @@ export const DefaultPasswordInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {renderLabel(node.data.label, language) || node.data.name}
+        {getTranslatedLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
@@ -266,7 +266,7 @@ export const DefaultFileInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {renderLabel(node.data.label, language) || node.data.name}
+        {getTranslatedLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input

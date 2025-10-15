@@ -7,8 +7,9 @@ import { FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
+import { UI_TYPE } from "@/shared/constants/uiType";
 import { Language } from "@/shared/types/languages";
-import { UINodeData } from "@/shared/types/node";
+import { UINodeData, UIType } from "@/shared/types/node";
 
 const UINodeForm = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<Language>("en");
@@ -18,7 +19,7 @@ const UINodeForm = () => {
   const { Field } = useForm({
     defaultValues: {
       label: selectedNode?.data?.label || { en: "" },
-      type: selectedNode?.data?.type || "title",
+      type: selectedNode?.data?.type || UI_TYPE.title,
     } as UINodeData,
     listeners: {
       onChange: ({ formApi }) => {
@@ -69,14 +70,14 @@ const UINodeForm = () => {
           children={(field) => (
             <SelectGroup>
               <SelectLabel>Type</SelectLabel>
-              <Select value={field.state.value} onValueChange={(newValue) => field.handleChange(newValue)}>
+              <Select value={field.state.value} onValueChange={(newValue: UIType) => field.handleChange(newValue)}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value="title">Title</SelectItem>
-                    <SelectItem value="divider">Divider</SelectItem>
+                    <SelectItem value={UI_TYPE.title}>Title</SelectItem>
+                    <SelectItem value={UI_TYPE.divider}>Divider</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>

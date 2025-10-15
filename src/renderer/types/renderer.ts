@@ -1,6 +1,6 @@
 import { Node } from "@xyflow/react";
 import { FormEvent, ReactNode } from "react";
-import { InputNodeData, TreegeNodeData } from "@/shared/types/node";
+import { InputNodeData, InputType, TreegeNodeData, UINodeData, UIType } from "@/shared/types/node";
 
 /**
  * Form values stored during rendering
@@ -12,6 +12,10 @@ export type FormValues = Record<string, any>;
  */
 export type InputRenderProps = {
   node: Node<InputNodeData>;
+};
+
+export type UiRenderProps = {
+  node: Node<UINodeData>;
 };
 
 /**
@@ -28,11 +32,11 @@ export type TreegeRendererComponents = {
   /**
    * Custom input renderers by input type
    */
-  inputs?: Partial<Record<string, (props: InputRenderProps) => ReactNode>>;
+  inputs?: Partial<Record<InputType, (props: InputRenderProps) => ReactNode>>;
   /**
    * Custom UI node renderers by UI type
    */
-  ui?: Partial<Record<string, (props: NodeRenderProps) => ReactNode>>;
+  ui?: Partial<Record<UIType, (props: NodeRenderProps) => ReactNode>>;
   /**
    * Custom group container renderer
    */
