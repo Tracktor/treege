@@ -35,7 +35,8 @@
     "build": "vite build",
     "lint": "eslint . --max-warnings=0 && tsc --noEmit",
     "preview": "vite preview",
-    "prepare": "yarn run build && husky install"
+    "prepare": "yarn run build && husky install",
+    "example": "vite --open /example"
   },
   "dependencies": {
     "@radix-ui/react-collapsible": "^1.1.12",

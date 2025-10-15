@@ -30,10 +30,7 @@ const useFlowConnections = () => {
                 ...edge,
                 data: {
                   ...edge.data,
-                  condition: edge.data?.condition || {
-                    expression: "",
-                    label: "",
-                  },
+                  conditions: edge.data?.conditions || [{ field: sourceId, operator: "===", value: "" }],
                 },
                 type: "conditional",
               };
@@ -86,10 +83,7 @@ const useFlowConnections = () => {
           const newEdge = {
             data: willHaveSiblings
               ? {
-                  condition: {
-                    expression: "",
-                    label: "",
-                  },
+                  conditions: [{ field: sourceId, operator: "===", value: "" }],
                 }
               : undefined,
             id: edgeId,
@@ -107,10 +101,7 @@ const useFlowConnections = () => {
                     ...edge,
                     data: {
                       ...edge.data,
-                      condition: edge.data?.condition || {
-                        expression: "",
-                        label: "",
-                      },
+                      conditions: edge.data?.conditions || [{ field: sourceId, operator: "===", value: "" }],
                     },
                     type: "conditional",
                   };

@@ -1,0 +1,351 @@
+{
+  "edges": [
+    {
+      "id": "tWmmJgrcOEFDafUBUGiDB",
+      "source": "edZHIcGqvZTtOGuV0DKIA",
+      "target": "cduBV4jbyp_vuQGLIYa_v",
+      "type": "default"
+    },
+    {
+      "id": "a3ttG6QFb8M4mbo2_gI3U",
+      "source": "cduBV4jbyp_vuQGLIYa_v",
+      "target": "_fMC1wrs60fWlQhk1KMLX",
+      "type": "default"
+    },
+    {
+      "data": {
+        "conditions": [
+          {
+            "field": "_fMC1wrs60fWlQhk1KMLX",
+            "operator": "<",
+            "value": "18"
+          },
+          {
+            "field": "_fMC1wrs60fWlQhk1KMLX",
+            "logicalOperator": "AND",
+            "operator": "!==",
+            "value": ""
+          }
+        ],
+        "label": "Not adult"
+      },
+      "id": "PPv66Nk6JyIQ1awTpPFd1",
+      "source": "_fMC1wrs60fWlQhk1KMLX",
+      "target": "-D7pyFD9dm4NTEwwDhDmt",
+      "type": "conditional"
+    },
+    {
+      "data": {
+        "conditions": [
+          {
+            "field": "_fMC1wrs60fWlQhk1KMLX",
+            "operator": ">=",
+            "value": "18"
+          }
+        ],
+        "label": "Adult"
+      },
+      "id": "u0emut9DCfPaeZiXH8FtU",
+      "source": "_fMC1wrs60fWlQhk1KMLX",
+      "target": "kXHUqwgGLMzhrnksbXdyg",
+      "type": "conditional"
+    },
+    {
+      "id": "adXJ55-xFRv7Qo09QLorO",
+      "source": "kXHUqwgGLMzhrnksbXdyg",
+      "target": "B-LmqLroRrDAr4Rm6zbk6",
+      "type": "default"
+    },
+    {
+      "id": "hc6KA7Vk4B3nBQ12H8gc3",
+      "source": "B-LmqLroRrDAr4Rm6zbk6",
+      "target": "0N6un3J68xH-efbmV7OOp",
+      "type": "default"
+    },
+    {
+      "id": "-ClGJJnvL-aP3BnRp0baB",
+      "source": "-D7pyFD9dm4NTEwwDhDmt",
+      "target": "-_ZX-b0jGrKFQwA6KgocI",
+      "type": "default"
+    }
+  ],
+  "nodes": [
+    {
+      "data": {
+        "type": "text",
+        "errorMessage": "",
+        "helperText": "Hey i am a helper text ! ",
+        "label": {
+          "en": "How are you ?"
+        },
+        "multiple": false,
+        "name": "how-are-you",
+        "options": [],
+        "pattern": "",
+        "placeholder": "I am a placeholder text ! ",
+        "required": true
+      },
+      "id": "edZHIcGqvZTtOGuV0DKIA",
+      "position": {
+        "x": 573,
+        "y": 474
+      },
+      "type": "input",
+      "measured": {
+        "width": 270,
+        "height": 150
+      }
+    },
+    {
+      "data": {
+        "type": "file",
+        "errorMessage": "",
+        "helperText": "",
+        "label": {
+          "en": "Give me a picture !"
+        },
+        "multiple": false,
+        "name": "photo",
+        "options": [],
+        "pattern": "",
+        "placeholder": "",
+        "required": false
+      },
+      "id": "cduBV4jbyp_vuQGLIYa_v",
+      "position": {
+        "x": 708.305450520271,
+        "y": 675.0253598482864
+      },
+      "type": "input",
+      "origin": [
+        0.5,
+        0
+      ],
+      "measured": {
+        "width": 270,
+        "height": 150
+      },
+      "dragging": false
+    },
+    {
+      "data": {
+        "type": "number",
+        "errorMessage": "",
+        "helperText": "",
+        "label": {
+          "en": "How old are you ?"
+        },
+        "multiple": false,
+        "name": "age",
+        "options": [],
+        "pattern": "",
+        "placeholder": "",
+        "required": false
+      },
+      "id": "_fMC1wrs60fWlQhk1KMLX",
+      "position": {
+        "x": 706.7054142620666,
+        "y": 875.7755114344224
+      },
+      "type": "input",
+      "origin": [
+        0.5,
+        0
+      ],
+      "measured": {
+        "width": 270,
+        "height": 150
+      },
+      "dragging": false
+    },
+    {
+      "data": {
+        "type": "text",
+        "errorMessage": "",
+        "helperText": "",
+        "label": {
+          "en": "What is your favorite cartoon ?"
+        },
+        "multiple": false,
+        "name": "cartoon",
+        "options": [],
+        "pattern": "",
+        "placeholder": "",
+        "required": false
+      },
+      "id": "-D7pyFD9dm4NTEwwDhDmt",
+      "position": {
+        "x": 523.0821754362249,
+        "y": 1127.7165608700545
+      },
+      "type": "input",
+      "origin": [
+        0.5,
+        0
+      ],
+      "measured": {
+        "width": 270,
+        "height": 150
+      }
+    },
+    {
+      "data": {
+        "type": "text",
+        "errorMessage": "",
+        "helperText": "",
+        "label": {
+          "en": "What is your favorite movie ?"
+        },
+        "multiple": false,
+        "name": "movie",
+        "options": [],
+        "pattern": "",
+        "placeholder": "",
+        "required": false
+      },
+      "id": "kXHUqwgGLMzhrnksbXdyg",
+      "position": {
+        "x": 912.1652853918247,
+        "y": 1123.5328715156934
+      },
+      "type": "input",
+      "origin": [
+        0.5,
+        0
+      ],
+      "measured": {
+        "width": 270,
+        "height": 150
+      }
+    },
+    {
+      "data": {
+        "type": "radio",
+        "errorMessage": "",
+        "helperText": "",
+        "label": {
+          "en": "What kind of movie do you prefer ?"
+        },
+        "multiple": false,
+        "name": "movie",
+        "options": [
+          {
+            "label": {
+              "en": "Action"
+            },
+            "value": "action"
+          },
+          {
+            "label": {
+              "en": "Comedy"
+            },
+            "value": "Comedy"
+          },
+          {
+            "label": {
+              "en": "Horror"
+            },
+            "value": "horror"
+          }
+        ],
+        "pattern": "",
+        "placeholder": "",
+        "required": false
+      },
+      "id": "B-LmqLroRrDAr4Rm6zbk6",
+      "position": {
+        "x": 911.3967173410323,
+        "y": 1318.8468542816424
+      },
+      "type": "input",
+      "origin": [
+        0.5,
+        0
+      ],
+      "measured": {
+        "width": 270,
+        "height": 150
+      },
+      "dragging": false
+    },
+    {
+      "data": {
+        "type": "text",
+        "errorMessage": "",
+        "helperText": "",
+        "label": {
+          "en": "You want to say something"
+        },
+        "multiple": false,
+        "name": "something",
+        "options": [],
+        "pattern": "",
+        "placeholder": "",
+        "required": false
+      },
+      "id": "0N6un3J68xH-efbmV7OOp",
+      "position": {
+        "x": 909.8502158339014,
+        "y": 1522.9850532229057
+      },
+      "type": "input",
+      "origin": [
+        0.5,
+        0
+      ],
+      "measured": {
+        "width": 270,
+        "height": 150
+      }
+    },
+    {
+      "data": {
+        "type": "checkbox",
+        "errorMessage": "",
+        "helperText": "",
+        "label": {
+          "en": "Do you like cookie ?"
+        },
+        "multiple": false,
+        "name": "",
+        "options": [
+          {
+            "label": {
+              "en": "Like? I live for cookies ! 🍪"
+            },
+            "value": "live"
+          },
+          {
+            "label": {
+              "en": "Only if it comes with milk and zero witnesses. 🥛😏"
+            },
+            "value": ""
+          },
+          {
+            "label": {
+              "en": "No… I love them so much I might actually marry one ! 💍🍪"
+            },
+            "value": ""
+          }
+        ],
+        "pattern": "",
+        "placeholder": "",
+        "required": false
+      },
+      "id": "-_ZX-b0jGrKFQwA6KgocI",
+      "position": {
+        "x": 521.6783375440752,
+        "y": 1326.5793618172966
+      },
+      "type": "input",
+      "origin": [
+        0.5,
+        0
+      ],
+      "measured": {
+        "width": 270,
+        "height": 150
+      }
+    }
+  ]
+}

@@ -13,6 +13,7 @@ export const INPUT_TYPE = {
   select: "select",
   switch: "switch",
   text: "text",
+  textarea: "textarea",
   time: "time",
   timerange: "timerange",
 } as const;

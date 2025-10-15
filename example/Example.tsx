@@ -1,0 +1,100 @@
+import { Edge, Node } from "@xyflow/react";
+import { useState } from "react";
+import TreegeEditor from "@/editor/features/TreegeEditor/TreegeEditor";
+import { FormValues } from "@/renderer";
+import TreegeRenderer from "@/renderer/features/TreegeRenderer/TreegeRenderer";
+import example from "~/example/json/example.json";
+
+const EditorPanel = ({
+  defaultFlow,
+  onSave,
+}: {
+  defaultFlow: { nodes: Node[]; edges: Edge[] };
+  onSave: (flow: { nodes: Node[]; edges: Edge[] }) => void;
+}) => (
+  <div className="h-full flex flex-col">
+    <div className="flex-1">
+      <TreegeEditor onSave={onSave} defaultFlow={defaultFlow} />
+    </div>
+  </div>
+);
+
+const RendererPanel = ({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) => {
+  const [formValues, setFormValues] = useState<FormValues>({});
+
+  const handleSubmit = (values: Record<string, any>) => {
+    console.log("Form submitted:", values);
+    // eslint-disable-next-line no-alert
+    alert(`Form submitted!\n\n${JSON.stringify(values, null, 2)}`);
+  };
+
+  return (
+    <div className="h-full flex flex-col bg-background">
+      <div className="p-4 border-b">
+        <h2 className="text-lg font-semibold">Form Preview</h2>
+        <p className="text-sm text-muted-foreground mt-1">
+          {nodes.length > 0 ? `${nodes.length} nodes, ${edges.length} edges` : "Save to see the render"}
+        </p>
+      </div>
+      <div className="flex-1 overflow-auto p-6">
+        {nodes.length > 0 ? (
+          <>
+            <TreegeRenderer
+              nodes={nodes}
+              edges={edges}
+              initialValues={{}}
+              onSubmit={handleSubmit}
+              onChange={setFormValues}
+              validationMode="onSubmit"
+            />
+            <div className="mt-8 p-4 border rounded-lg">
+              <h3 className="font-semibold mb-2">Current values:</h3>
+              <pre className="text-xs p-2 rounded overflow-auto">{JSON.stringify(formValues, null, 2)}</pre>
+            </div>
+          </>
+        ) : (
+          <div className="flex items-center justify-center h-full text-gray-400">
+            <div className="text-center">
+              <svg className="mx-auto h-12 w-12 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              <p className="text-lg">No form to display</p>
+              <p className="text-sm mt-2">Create your form in the editor and click &quot;Save&quot;</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const Example = () => {
+  const [savedNodes, setSavedNodes] = useState<Node[]>([]);
+  const [savedEdges, setSavedEdges] = useState<Edge[]>([]);
+
+  const handleSave = ({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) => {
+    setSavedNodes(nodes);
+    setSavedEdges(edges);
+  };
+
+  return (
+    <div className="h-screen w-screen flex">
+      {/* Left Panel - Editor */}
+      <div className="w-1/2 border-r">
+        <EditorPanel onSave={handleSave} defaultFlow={example as { nodes: Node[]; edges: Edge[] }} />
+      </div>
+
+      {/* Right Panel - Renderer */}
+      <div className="w-1/2">
+        <RendererPanel nodes={savedNodes} edges={savedEdges} />
+      </div>
+    </div>
+  );
+};
+
+export default Example;
