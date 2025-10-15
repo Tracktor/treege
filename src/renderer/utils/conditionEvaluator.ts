@@ -1,5 +1,6 @@
 import { Node } from "@xyflow/react";
 import { FormValues } from "@/renderer/types/renderer";
+import { getFieldName } from "@/renderer/utils/helpers";
 import { EdgeCondition, EdgeOperator } from "@/shared/types/edge";
 import { TreegeNodeData } from "@/shared/types/node";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
@@ -122,8 +123,8 @@ export const evaluateCondition = (
   // If not found, and we have a nodeMap, try to resolve field as a node ID
   if (fieldValue === undefined && nodeMap) {
     const node = nodeMap.get(field);
-    if (node && isInputNode(node) && node.data.name) {
-      fieldValue = formValues[node.data.name];
+    if (node && isInputNode(node)) {
+      fieldValue = formValues[getFieldName(node)];
     }
   }
 

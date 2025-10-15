@@ -1,9 +1,10 @@
 import { Edge, Node } from "@xyflow/react";
 import { useCallback, useMemo, useState } from "react";
-import { FormValues, ProcessedNode } from "@/renderer/types/renderer";
+import { FormValues } from "@/renderer/types/renderer";
 import { evaluateConditions } from "@/renderer/utils/conditionEvaluator";
+import { getFieldName } from "@/renderer/utils/helpers";
 import { ConditionalEdgeData } from "@/shared/types/edge";
-import { InputNodeData, TreegeNodeData } from "@/shared/types/node";
+import { TreegeNodeData } from "@/shared/types/node";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
 
 /**
@@ -109,7 +110,7 @@ const findVisibleNodes = (
 
                 // Try to resolve field as node ID first
                 const fieldNode = nodeMap.get(cond.field);
-                const fieldName = (isInputNode(fieldNode) ? fieldNode.data.name : undefined) || cond.field;
+                const fieldName = isInputNode(fieldNode) ? getFieldName(fieldNode) : cond.field;
 
                 return hasValue(fieldName, formValues);
               });
@@ -136,25 +137,6 @@ const findVisibleNodes = (
 };
 
 /**
- * Build a hierarchical tree structure for rendering
- * This respects parent-child relationships while checking visibility
- */
-const buildRenderTree = (nodes: Node<TreegeNodeData>[], visibleNodeIds: Set<string>, parentId?: string): ProcessedNode[] => {
-  const childNodes = nodes.filter((node) => node.parentId === parentId);
-
-  return childNodes.map((node) => {
-    const children = buildRenderTree(nodes, visibleNodeIds, node.id);
-    const visible = visibleNodeIds.has(node.id);
-
-    return {
-      children,
-      node,
-      visible,
-    };
-  });
-};
-
-/**
  * Initialize form values with defaults from input nodes
  */
 const initializeFormValues = (nodes: Node<TreegeNodeData>[], initialValues: FormValues): FormValues => {
@@ -162,12 +144,11 @@ const initializeFormValues = (nodes: Node<TreegeNodeData>[], initialValues: Form
 
   nodes.forEach((node) => {
     if (isInputNode(node)) {
-      const inputData = node.data as InputNodeData;
-      const fieldName = inputData.name;
+      const fieldName = getFieldName(node);
 
-      if (!fieldName || defaultValues[fieldName] !== undefined) return;
+      if (defaultValues[fieldName] !== undefined) return;
 
-      const { defaultValue } = inputData;
+      const { defaultValue } = node.data;
       if (!defaultValue) return;
 
       // Handle static default value
@@ -220,22 +201,9 @@ export const useTreegeForm = (nodes: Node<TreegeNodeData>[], edges: Edge<Conditi
   }, [startNode, nodeMap, edgeMap, formValues]);
 
   /**
-   * Process nodes into a tree structure with visibility
+   * Get all visible nodes
    */
-  const processedNodes = useMemo(() => buildRenderTree(nodes, visibleNodeIds), [nodes, visibleNodeIds]);
-
-  /**
-   * Get all visible nodes (flattened)
-   */
-  const visibleNodes = useMemo(() => {
-    const flatten = (pNodes: ProcessedNode[]): Node<TreegeNodeData>[] =>
-      pNodes.flatMap((pNode) => {
-        const children = pNode.children ? flatten(pNode.children) : [];
-        return pNode.visible ? [pNode.node, ...children] : children;
-      });
-
-    return flatten(processedNodes);
-  }, [processedNodes]);
+  const visibleNodes = useMemo(() => nodes.filter((node) => visibleNodeIds.has(node.id)), [nodes, visibleNodeIds]);
 
   /**
    * Set field value and clear error for that field
@@ -267,27 +235,23 @@ export const useTreegeForm = (nodes: Node<TreegeNodeData>[], edges: Edge<Conditi
 
     visibleNodes.forEach((node) => {
       if (isInputNode(node)) {
-        const inputData = node.data as InputNodeData;
-        const fieldName = inputData.name;
-
-        if (!fieldName) return;
-
+        const fieldName = getFieldName(node);
         const value = formValues[fieldName];
 
         // Required validation
-        if (inputData.required) {
+        if (node.data.required) {
           if (value === undefined || value === null || value === "") {
-            newErrors[fieldName] = inputData.errorMessage || "This field is required";
+            newErrors[fieldName] = node.data.errorMessage || "This field is required";
             return;
           }
         }
 
         // Pattern validation (only if value is not empty)
-        if (value && inputData.pattern) {
+        if (value && node.data.pattern) {
           try {
-            const regex = new RegExp(inputData.pattern);
+            const regex = new RegExp(node.data.pattern);
             if (!regex.test(String(value))) {
-              newErrors[fieldName] = inputData.errorMessage || "Invalid format";
+              newErrors[fieldName] = node.data.errorMessage || "Invalid format";
             }
           } catch (e) {
             console.error(`Invalid pattern for field ${fieldName}:`, e);
@@ -312,7 +276,6 @@ export const useTreegeForm = (nodes: Node<TreegeNodeData>[], edges: Edge<Conditi
     errors,
     formValues,
     getFieldValue,
-    processedNodes,
     resetForm,
     setErrors,
     setFieldValue,

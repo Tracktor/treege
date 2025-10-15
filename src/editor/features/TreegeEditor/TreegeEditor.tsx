@@ -2,7 +2,7 @@ import { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, ReactFlow
 import Logo from "@/editor/components/DataDisplay/logo";
 import { edgeTypes } from "@/editor/constants/edgeTypes";
 import { nodeTypes } from "@/editor/constants/nodeTypes";
-import { ThemeProvider } from "@/editor/context/theme-provider";
+import { ThemeProvider } from "@/editor/context/ThemeContext";
 import ActionsPanel from "@/editor/features/TreegeEditor/Panel/ActionsPanel";
 import NodeActionsSheet from "@/editor/features/TreegeEditor/Sheets/NodeActionsSheet";
 import useFlowConnections from "@/editor/hooks/useFlowConnections";

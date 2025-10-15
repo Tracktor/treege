@@ -8,85 +8,37 @@ import { InputNodeData, TreegeNodeData } from "@/shared/types/node";
 export type FormValues = Record<string, any>;
 
 /**
- * Context passed to render props functions
- */
-export type RenderContext = {
-  formValues: FormValues;
-  setFieldValue: (fieldName: string, value: any) => void;
-  getFieldValue: (fieldName: string) => any;
-  errors: Record<string, string>;
-  language: string;
-};
-
-/**
- * Props for custom input component render
+ * Props for input components (use useTreegeContext for form state)
  */
 export type InputRenderProps = {
   node: Node<InputNodeData>;
-  value: any;
-  onChange: (value: any) => void;
-  error?: string;
-  context: RenderContext;
 };
 
 /**
- * Props for custom group component render
+ * Props for UI/Group components (use useTreegeContext for state)
  */
-export type GroupRenderProps = {
+export type NodeRenderProps = {
   node: Node<TreegeNodeData>;
-  children: ReactNode;
-  context: RenderContext;
 };
 
 /**
- * Props for custom UI component render
- */
-export type UIRenderProps = {
-  node: Node<TreegeNodeData>;
-  context: RenderContext;
-};
-
-/**
- * Props for custom JSON component render
- */
-export type JsonRenderProps = {
-  node: Node<TreegeNodeData>;
-  data: any;
-  context: RenderContext;
-};
-
-/**
- * Custom renderer functions for each node type
+ * Custom renderer components
  */
 export type TreegeRendererComponents = {
   /**
-   * Custom input renderer by input type
-   * Example: { text: (props) => <MyTextInput {...props} /> }
+   * Custom input renderers by input type
    */
   inputs?: Partial<Record<string, (props: InputRenderProps) => ReactNode>>;
   /**
+   * Custom UI node renderers by UI type
+   */
+  ui?: Partial<Record<string, (props: NodeRenderProps) => ReactNode>>;
+  /**
    * Custom group container renderer
    */
-  group?: (props: GroupRenderProps) => ReactNode;
-  /**
-   * Custom UI node renderer by type
-   */
-  ui?: Partial<Record<string, (props: UIRenderProps) => ReactNode>>;
-  /**
-   * Custom JSON node renderer
-   */
-  json?: (props: JsonRenderProps) => ReactNode;
+  group?: (props: NodeRenderProps) => ReactNode;
   /**
    * Custom form wrapper
    */
   form?: (props: { children: ReactNode; onSubmit: (e: FormEvent) => void }) => ReactNode;
-};
-
-/**
- * Processed node ready for rendering with visibility state
- */
-export type ProcessedNode = {
-  node: Node<TreegeNodeData>;
-  visible: boolean;
-  children?: ProcessedNode[];
 };

@@ -18,7 +18,7 @@ const initialState: ThemeProviderState = {
   theme: "system",
 };
 
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
+const ThemeContext = createContext<ThemeProviderState>(initialState);
 
 export const ThemeProvider = ({ children, defaultTheme = "system", storageKey = "vite-ui-theme", ...props }: ThemeProviderProps) => {
   const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem(storageKey) as Theme) || defaultTheme);
@@ -53,14 +53,14 @@ export const ThemeProvider = ({ children, defaultTheme = "system", storageKey = 
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <ThemeProviderContext.Provider {...props} value={value}>
+    <ThemeContext.Provider {...props} value={value}>
       {children}
-    </ThemeProviderContext.Provider>
+    </ThemeContext.Provider>
   );
 };
 
 export const useTheme = () => {
-  const context = useContext(ThemeProviderContext);
+  const context = useContext(ThemeContext);
 
   if (context === undefined) throw new Error("useTheme must be used within a ThemeProvider");
 

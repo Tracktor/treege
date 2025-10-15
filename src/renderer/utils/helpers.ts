@@ -1,5 +1,12 @@
+import { Node } from "@xyflow/react";
+import { InputNodeData } from "@/shared/types/node";
 import { TranslatableLabel } from "@/shared/types/translate";
 import { getTranslatedLabel } from "@/shared/utils/label";
+
+/**
+ * Get field name for an input node (use name or fallback to node ID)
+ */
+export const getFieldName = (node: Node<InputNodeData>): string => node.data.name || node.id;
 
 /**
  * Helper to safely render a label (TranslatableLabel | string) as a string

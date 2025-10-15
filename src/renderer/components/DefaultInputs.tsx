@@ -1,16 +1,20 @@
+import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import { InputRenderProps } from "@/renderer/types/renderer";
 import { renderLabel } from "@/renderer/utils/helpers";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 
-export const DefaultTextInput = ({ node, value, onChange, error, context }: InputRenderProps) => {
+export const DefaultTextInput = ({ node }: InputRenderProps) => {
+  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
+  const value = getFieldValue(name);
+  const error = errors[name];
 
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {renderLabel(node.data.label, context.language) || node.data.name}
+        {renderLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
@@ -18,7 +22,7 @@ export const DefaultTextInput = ({ node, value, onChange, error, context }: Inpu
         id={name}
         name={name}
         value={value || ""}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => setFieldValue(name, e.target.value)}
         placeholder={node.data.placeholder}
       />
       {error && <FormError>{error}</FormError>}
@@ -27,13 +31,16 @@ export const DefaultTextInput = ({ node, value, onChange, error, context }: Inpu
   );
 };
 
-export const DefaultNumberInput = ({ node, value, onChange, error, context }: InputRenderProps) => {
+export const DefaultNumberInput = ({ node }: InputRenderProps) => {
+  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
+  const value = getFieldValue(name);
+  const error = errors[name];
 
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {renderLabel(node.data.label, context.language) || node.data.name}
+        {renderLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
@@ -41,7 +48,7 @@ export const DefaultNumberInput = ({ node, value, onChange, error, context }: In
         id={name}
         name={name}
         value={value || ""}
-        onChange={(e) => onChange(Number(e.target.value))}
+        onChange={(e) => setFieldValue(name, Number(e.target.value))}
         placeholder={node.data.placeholder}
       />
       {error && <FormError>{error}</FormError>}
@@ -50,20 +57,23 @@ export const DefaultNumberInput = ({ node, value, onChange, error, context }: In
   );
 };
 
-export const DefaultSelectInput = ({ node, value, onChange, error, context }: InputRenderProps) => {
+export const DefaultSelectInput = ({ node }: InputRenderProps) => {
+  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
+  const value = getFieldValue(name);
+  const error = errors[name];
 
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {renderLabel(node.data.label, context.language) || node.data.name}
+        {renderLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <select
         id={name}
         name={name}
         value={value || ""}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => setFieldValue(name, e.target.value)}
         className="w-full px-3 py-2 border rounded-md"
       >
         <option value="">Sélectionnez une option</option>
@@ -79,8 +89,11 @@ export const DefaultSelectInput = ({ node, value, onChange, error, context }: In
   );
 };
 
-export const DefaultCheckboxInput = ({ node, value, onChange, error, context }: InputRenderProps) => {
+export const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
+  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
+  const value = getFieldValue(name);
+  const error = errors[name];
 
   return (
     <FormItem className="mb-4">
@@ -90,11 +103,11 @@ export const DefaultCheckboxInput = ({ node, value, onChange, error, context }: 
           id={name}
           name={name}
           checked={value || false}
-          onChange={(e) => onChange(e.target.checked)}
+          onChange={(e) => setFieldValue(name, e.target.checked)}
           className="mr-2"
         />
         <span className="text-sm font-medium">
-          {renderLabel(node.data.label, context.language) || node.data.name}
+          {renderLabel(node.data.label, language) || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </span>
       </Label>
@@ -104,14 +117,17 @@ export const DefaultCheckboxInput = ({ node, value, onChange, error, context }: 
   );
 };
 
-export const DefaultSwitchInput = ({ node, value, onChange, error, context }: InputRenderProps) => {
+export const DefaultSwitchInput = ({ node }: InputRenderProps) => {
+  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
+  const value = getFieldValue(name);
+  const error = errors[name];
 
   return (
     <FormItem className="mb-4 flex items-center justify-between">
       <div>
         <Label htmlFor={name} className="block text-sm font-medium">
-          {renderLabel(node.data.label, context.language) || node.data.name}
+          {renderLabel(node.data.label, language) || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
         {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
@@ -122,7 +138,7 @@ export const DefaultSwitchInput = ({ node, value, onChange, error, context }: In
         id={name}
         name={name}
         checked={value || false}
-        onChange={(e) => onChange(e.target.checked)}
+        onChange={(e) => setFieldValue(name, e.target.checked)}
         className="ml-4"
       />
       {error && <FormError>{error}</FormError>}
@@ -130,14 +146,17 @@ export const DefaultSwitchInput = ({ node, value, onChange, error, context }: In
   );
 };
 
-export const DefaultRadioInput = ({ node, value, onChange, error, context }: InputRenderProps) => {
+export const DefaultRadioInput = ({ node }: InputRenderProps) => {
+  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
+  const value = getFieldValue(name);
+  const error = errors[name];
   const firstOptionValue = node.data.options?.[0]?.value;
 
   return (
     <FormItem className="mb-4">
       <Label htmlFor={firstOptionValue ? `${name}-${firstOptionValue}` : undefined} className="block text-sm font-medium mb-2">
-        {renderLabel(node.data.label, context.language) || node.data.name}
+        {renderLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       {node.data.options?.map((opt) => (
@@ -148,7 +167,7 @@ export const DefaultRadioInput = ({ node, value, onChange, error, context }: Inp
             name={name}
             value={opt.value}
             checked={value === opt.value}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => setFieldValue(name, e.target.value)}
             disabled={opt.disabled}
             className="mr-2"
           />
@@ -161,13 +180,16 @@ export const DefaultRadioInput = ({ node, value, onChange, error, context }: Inp
   );
 };
 
-export const DefaultDateInput = ({ node, value, onChange, error, context }: InputRenderProps) => {
+export const DefaultDateInput = ({ node }: InputRenderProps) => {
+  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
+  const value = getFieldValue(name);
+  const error = errors[name];
 
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {renderLabel(node.data.label, context.language) || node.data.name}
+        {renderLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
@@ -175,7 +197,7 @@ export const DefaultDateInput = ({ node, value, onChange, error, context }: Inpu
         id={name}
         name={name}
         value={value || ""}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => setFieldValue(name, e.target.value)}
         placeholder={node.data.placeholder}
       />
       {error && <FormError>{error}</FormError>}
@@ -184,13 +206,16 @@ export const DefaultDateInput = ({ node, value, onChange, error, context }: Inpu
   );
 };
 
-export const DefaultTimeInput = ({ node, value, onChange, error, context }: InputRenderProps) => {
+export const DefaultTimeInput = ({ node }: InputRenderProps) => {
+  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
+  const value = getFieldValue(name);
+  const error = errors[name];
 
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {renderLabel(node.data.label, context.language) || node.data.name}
+        {renderLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
@@ -198,7 +223,7 @@ export const DefaultTimeInput = ({ node, value, onChange, error, context }: Inpu
         id={name}
         name={name}
         value={value || ""}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => setFieldValue(name, e.target.value)}
         placeholder={node.data.placeholder}
       />
       {error && <FormError>{error}</FormError>}
@@ -207,13 +232,16 @@ export const DefaultTimeInput = ({ node, value, onChange, error, context }: Inpu
   );
 };
 
-export const DefaultPasswordInput = ({ node, value, onChange, error, context }: InputRenderProps) => {
+export const DefaultPasswordInput = ({ node }: InputRenderProps) => {
+  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
+  const value = getFieldValue(name);
+  const error = errors[name];
 
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {renderLabel(node.data.label, context.language) || node.data.name}
+        {renderLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
@@ -221,7 +249,7 @@ export const DefaultPasswordInput = ({ node, value, onChange, error, context }: 
         id={name}
         name={name}
         value={value || ""}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => setFieldValue(name, e.target.value)}
         placeholder={node.data.placeholder}
       />
       {error && <FormError>{error}</FormError>}
@@ -230,20 +258,22 @@ export const DefaultPasswordInput = ({ node, value, onChange, error, context }: 
   );
 };
 
-export const DefaultFileInput = ({ node, onChange, error, context }: InputRenderProps) => {
+export const DefaultFileInput = ({ node }: InputRenderProps) => {
+  const { setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
+  const error = errors[name];
 
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {renderLabel(node.data.label, context.language) || node.data.name}
+        {renderLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
         type="file"
         id={name}
         name={name}
-        onChange={(e) => onChange(e.target.files?.[0])}
+        onChange={(e) => setFieldValue(name, e.target.files?.[0])}
         multiple={node.data.multiple}
         placeholder={node.data.placeholder}
       />
@@ -253,8 +283,10 @@ export const DefaultFileInput = ({ node, onChange, error, context }: InputRender
   );
 };
 
-export const DefaultHiddenInput = ({ node, value }: InputRenderProps) => {
+export const DefaultHiddenInput = ({ node }: InputRenderProps) => {
+  const { getFieldValue } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
+  const value = getFieldValue(name);
   return <Input type="hidden" name={name} value={value || ""} />;
 };
 
