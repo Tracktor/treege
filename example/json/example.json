@@ -270,7 +270,7 @@
     },
     {
       "data": {
-        "type": "text",
+        "type": "textarea",
         "errorMessage": "",
         "helperText": "",
         "label": {

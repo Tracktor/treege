@@ -23,12 +23,10 @@ const NodeActionsSheet = () => {
     <Sheet open={hasSelectedNodes} onOpenChange={clearSelection}>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Edit node</SheetTitle>
-          <SheetDescription>
-            {label}
-            {!!selectedNode?.id && !!label && " - "}
-            {selectedNode?.id}
-          </SheetDescription>
+          <SheetTitle>
+            Edit node <span className="text-xs text-muted-foreground font-light">{selectedNode?.id}</span>
+          </SheetTitle>
+          <SheetDescription>{label || "\u00A0"}</SheetDescription>
         </SheetHeader>
 
         <div className="flex flex-col px-4 flex-1 min-h-0 space-y-6 pt-6">

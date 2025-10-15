@@ -3,6 +3,8 @@ import { InputRenderProps } from "@/renderer/types/renderer";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
+import { Textarea } from "@/shared/components/ui/textarea";
 import { getTranslatedLabel } from "@/shared/utils/label";
 
 export const DefaultTextInput = ({ node }: InputRenderProps) => {
@@ -69,20 +71,20 @@ export const DefaultSelectInput = ({ node }: InputRenderProps) => {
         {getTranslatedLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
-      <select
-        id={name}
-        name={name}
-        value={value || ""}
-        onChange={(e) => setFieldValue(name, e.target.value)}
-        className="w-full px-3 py-2 border rounded-md"
-      >
-        <option value="">Sélectionnez une option</option>
-        {node.data.options?.map((opt) => (
-          <option key={opt.value} value={opt.value} disabled={opt.disabled}>
-            {getTranslatedLabel(opt.label)}
-          </option>
-        ))}
-      </select>
+      <Select value={value || ""} onValueChange={(val) => setFieldValue(name, val)}>
+        <SelectTrigger>
+          <SelectValue placeholder="Sélectionnez une option" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {node.data.options?.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value} disabled={opt.disabled}>
+                {getTranslatedLabel(opt.label)}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
       {error && <FormError>{error}</FormError>}
       {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
     </FormItem>
@@ -290,6 +292,33 @@ export const DefaultHiddenInput = ({ node }: InputRenderProps) => {
   return <Input type="hidden" name={name} value={value || ""} />;
 };
 
+export const DefaultTextAreaInput = ({ node }: InputRenderProps) => {
+  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
+  const name = node.data.name || `${node.id}`;
+  const value = getFieldValue(name);
+  const error = errors[name];
+
+  return (
+    <FormItem className="mb-4">
+      <Label htmlFor={name}>
+        {getTranslatedLabel(node.data.label, language) || node.data.name}
+        {node.data.required && <span className="text-red-500">*</span>}
+      </Label>
+      <Textarea
+        id={name}
+        name={name}
+        value={value || ""}
+        onChange={(e) => setFieldValue(name, e.target.value)}
+        placeholder={node.data.placeholder}
+        className="w-full px-3 py-2 border rounded-md"
+        rows={4}
+      />
+      {error && <FormError>{error}</FormError>}
+      {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+    </FormItem>
+  );
+};
+
 export const defaultInputRenderers = {
   address: DefaultTextInput,
   autocomplete: DefaultTextInput,
@@ -305,6 +334,7 @@ export const defaultInputRenderers = {
   select: DefaultSelectInput,
   switch: DefaultSwitchInput,
   text: DefaultTextInput,
+  textarea: DefaultTextAreaInput,
   time: DefaultTimeInput,
   timerange: DefaultTimeInput,
 };
