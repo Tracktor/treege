@@ -1,10 +1,50 @@
+import { Edge, Node } from "@xyflow/react";
 import { FormEvent, ReactNode, useCallback, useEffect, useMemo, useRef } from "react";
 import { DefaultFormWrapper, DefaultGroup, DefaultUI } from "@/renderer/components/DefaultComponents";
 import { defaultInputRenderers } from "@/renderer/components/DefaultInputs";
 import { useTreegeForm } from "@/renderer/hooks/useTreegeForm";
-import { ProcessedNode, RenderContext, TreegeRendererProps } from "@/renderer/types/renderer";
+import { FormValues, ProcessedNode, RenderContext, TreegeRendererComponents } from "@/renderer/types/renderer";
 import { InputNodeData, UINodeData } from "@/shared/types/node";
 import { isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
+
+export type TreegeRendererProps = {
+  /**
+   * Flow nodes from the editor
+   */
+  nodes: Node[];
+  /**
+   * Flow edges from the editor
+   */
+  edges: Edge[];
+  /**
+   * Initial form values
+   */
+  initialValues?: FormValues;
+  /**
+   * Callback when form is submitted
+   */
+  onSubmit?: (values: FormValues) => void;
+  /**
+   * Callback when form values change
+   */
+  onChange?: (values: FormValues) => void;
+  /**
+   * Custom component renderers (render props pattern)
+   */
+  components?: TreegeRendererComponents;
+  /**
+   * Current language for translations
+   */
+  language?: string;
+  /**
+   * Validation mode
+   */
+  validationMode?: "onChange" | "onBlur" | "onSubmit";
+  /**
+   * Custom validation function
+   */
+  validate?: (values: FormValues, nodes: Node[]) => Record<string, string>;
+};
 
 const TreegeRenderer = ({
   nodes,
@@ -100,11 +140,14 @@ const TreegeRenderer = ({
    */
   const renderNode: (processedNode: ProcessedNode) => ReactNode = useCallback(
     (processedNode: ProcessedNode) => {
+      console.log(processedNode);
+
       if (!processedNode.visible) return null;
 
       const { node } = processedNode;
+      const { type } = node;
 
-      switch (node.type) {
+      switch (type) {
         case "input":
           return renderInputNode(processedNode);
 
@@ -137,7 +180,7 @@ const TreegeRenderer = ({
           return null;
 
         default:
-          console.warn("Unknown node type:", node.type);
+          console.warn("Unknown node type:", type);
           return null;
       }
     },
@@ -181,4 +224,3 @@ const TreegeRenderer = ({
 };
 
 export default TreegeRenderer;
-export type { TreegeRendererProps };

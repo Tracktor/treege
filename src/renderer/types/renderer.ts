@@ -1,4 +1,4 @@
-import { Edge, Node } from "@xyflow/react";
+import { Node } from "@xyflow/react";
 import { FormEvent, ReactNode } from "react";
 import { InputNodeData, TreegeNodeData } from "@/shared/types/node";
 
@@ -64,22 +64,18 @@ export type TreegeRendererComponents = {
    * Example: { text: (props) => <MyTextInput {...props} /> }
    */
   inputs?: Partial<Record<string, (props: InputRenderProps) => ReactNode>>;
-
   /**
    * Custom group container renderer
    */
   group?: (props: GroupRenderProps) => ReactNode;
-
   /**
    * Custom UI node renderer by type
    */
   ui?: Partial<Record<string, (props: UIRenderProps) => ReactNode>>;
-
   /**
    * Custom JSON node renderer
    */
   json?: (props: JsonRenderProps) => ReactNode;
-
   /**
    * Custom form wrapper
    */
@@ -93,54 +89,4 @@ export type ProcessedNode = {
   node: Node<TreegeNodeData>;
   visible: boolean;
   children?: ProcessedNode[];
-};
-
-/**
- * Main TreegeRenderer props
- */
-export type TreegeRendererProps = {
-  /**
-   * Flow nodes from the editor
-   */
-  nodes: Node[];
-
-  /**
-   * Flow edges from the editor
-   */
-  edges: Edge[];
-
-  /**
-   * Initial form values
-   */
-  initialValues?: FormValues;
-
-  /**
-   * Callback when form is submitted
-   */
-  onSubmit?: (values: FormValues) => void;
-
-  /**
-   * Callback when form values change
-   */
-  onChange?: (values: FormValues) => void;
-
-  /**
-   * Custom component renderers (render props pattern)
-   */
-  components?: TreegeRendererComponents;
-
-  /**
-   * Current language for translations
-   */
-  language?: string;
-
-  /**
-   * Validation mode
-   */
-  validationMode?: "onChange" | "onBlur" | "onSubmit";
-
-  /**
-   * Custom validation function
-   */
-  validate?: (values: FormValues, nodes: Node[]) => Record<string, string>;
 };
