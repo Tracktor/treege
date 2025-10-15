@@ -1,4 +1,4 @@
-import { inputType } from "@/shared/constants/inputType";
+import { INPUT_TYPE } from "@/shared/constants/inputType";
 import { TranslatableLabel } from "@/shared/types/translate";
 
 export type InputOption = {
@@ -7,4 +7,4 @@ export type InputOption = {
   disabled?: boolean;
 };
 
-export type InputType = (typeof inputType)[number];
+export type InputType = (typeof INPUT_TYPE)[number];

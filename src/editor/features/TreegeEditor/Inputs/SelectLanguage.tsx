@@ -1,5 +1,5 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
-import { languages } from "@/shared/constants/languages";
+import { LANGUAGES } from "@/shared/constants/languages";
 import { Language } from "@/shared/types/languages";
 
 export interface SelectLanguageProps {
@@ -14,7 +14,7 @@ const SelectLanguage = ({ value = "en", onValueChange }: SelectLanguageProps) =>
     </SelectTrigger>
     <SelectContent>
       <SelectGroup>
-        {languages.map((type) => (
+        {Object.values(LANGUAGES).map((type) => (
           <SelectItem key={type} value={type} className="uppercase">
             {type}
           </SelectItem>

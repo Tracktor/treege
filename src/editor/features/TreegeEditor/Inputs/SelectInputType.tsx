@@ -1,5 +1,5 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
-import { inputType } from "@/shared/constants/inputType";
+import { INPUT_TYPE } from "@/shared/constants/inputType";
 import { InputType } from "@/shared/types/input";
 
 export interface SelectInputTypeProps {
@@ -16,7 +16,7 @@ const SelectInputType = ({ value, onValueChange }: SelectInputTypeProps) => (
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          {Object.values(inputType).map((type) => (
+          {Object.values(INPUT_TYPE).map((type) => (
             <SelectItem key={type} value={type} className="capitalize">
               {type}
             </SelectItem>

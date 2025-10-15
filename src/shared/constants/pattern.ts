@@ -1,4 +1,4 @@
-export const pattern = {
+export const PATTERN = {
   alphanumeric: "^[a-zA-Z0-9]+$",
   email: "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
   letters: "^[a-zA-Z]+$",

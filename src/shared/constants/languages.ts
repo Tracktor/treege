@@ -1,1 +1,9 @@
-export const languages = ["en", "fr", "es", "de", "ar", "it", "pt"];
+export const LANGUAGES = {
+  ar: "ar",
+  de: "de",
+  en: "en",
+  es: "es",
+  fr: "fr",
+  it: "it",
+  pt: "pt",
+} as const;

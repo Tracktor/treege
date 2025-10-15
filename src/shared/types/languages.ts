@@ -1,3 +1,3 @@
-import { languages } from "@/shared/constants/languages";
+import { LANGUAGES } from "@/shared/constants/languages";
 
-export type Language = (typeof languages)[number];
+export type Language = (typeof LANGUAGES)[keyof typeof LANGUAGES];

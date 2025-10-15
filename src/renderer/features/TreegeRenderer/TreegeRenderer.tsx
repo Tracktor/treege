@@ -5,6 +5,7 @@ import { defaultInputRenderers } from "@/renderer/components/DefaultInputs";
 import { TreegeRendererProvider } from "@/renderer/context/TreegeRendererContext";
 import { useTreegeForm } from "@/renderer/hooks/useTreegeForm";
 import { FormValues, TreegeRendererComponents } from "@/renderer/types/renderer";
+import { NODE_TYPE } from "@/shared/constants/node";
 import { TreegeNodeData, UINodeData } from "@/shared/types/node";
 import { isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
 
@@ -117,7 +118,7 @@ const TreegeRenderer = ({
       const { type } = node;
 
       switch (type) {
-        case "input": {
+        case NODE_TYPE.input: {
           if (!isInputNode(node)) return null;
 
           const inputData = node.data;
@@ -129,7 +130,7 @@ const TreegeRenderer = ({
           return <Renderer key={node.id} node={node} />;
         }
 
-        case "group": {
+        case NODE_TYPE.group: {
           if (!isGroupNode(node)) return null;
 
           const GroupComponent = components.group || DefaultGroup;
@@ -142,7 +143,7 @@ const TreegeRenderer = ({
           );
         }
 
-        case "ui": {
+        case NODE_TYPE.ui: {
           if (!isUINode(node)) return null;
 
           const uiData = node.data as UINodeData;
@@ -175,7 +176,6 @@ const TreegeRenderer = ({
 
   // Render all top-level visible nodes (nodes without parent or with invisible parent)
   const topLevelNodes = visibleNodes.filter((node) => !node.parentId || !visibleNodes.some((n) => n.id === node.parentId));
-
   const FormWrapper = components.form || DefaultFormWrapper;
 
   return (
