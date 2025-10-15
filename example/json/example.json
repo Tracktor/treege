@@ -227,7 +227,7 @@
           "en": "What kind of movie do you prefer ?"
         },
         "multiple": false,
-        "name": "movie",
+        "name": "kind-movie",
         "options": [
           {
             "label": {
@@ -239,7 +239,7 @@
             "label": {
               "en": "Comedy"
             },
-            "value": "Comedy"
+            "value": "comedy"
           },
           {
             "label": {
@@ -307,7 +307,7 @@
           "en": "Do you like cookie ?"
         },
         "multiple": false,
-        "name": "",
+        "name": "cookie",
         "options": [
           {
             "label": {
