@@ -313,19 +313,19 @@
             "label": {
               "en": "Like? I live for cookies ! 🍪"
             },
-            "value": "live"
+            "value": "a"
           },
           {
             "label": {
               "en": "Only if it comes with milk and zero witnesses. 🥛😏"
             },
-            "value": ""
+            "value": "b"
           },
           {
             "label": {
               "en": "No… I love them so much I might actually marry one ! 💍🍪"
             },
-            "value": ""
+            "value": "c"
           }
         ],
         "pattern": "",
