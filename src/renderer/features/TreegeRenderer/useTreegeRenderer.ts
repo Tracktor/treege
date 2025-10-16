@@ -2,7 +2,6 @@ import { Edge, Node } from "@xyflow/react";
 import { useCallback, useMemo, useState } from "react";
 import { FormValues } from "@/renderer/types/renderer";
 import { evaluateConditions } from "@/renderer/utils/conditionEvaluator";
-import { getFieldName } from "@/renderer/utils/helpers";
 import { ConditionalEdgeData } from "@/shared/types/edge";
 import { TreegeNodeData } from "@/shared/types/node";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
@@ -114,7 +113,7 @@ const findVisibleNodes = (
 
                 // Try to resolve field as node ID first
                 const fieldNode = nodeMap.get(cond.field);
-                const fieldName = isInputNode(fieldNode) ? getFieldName(fieldNode) : cond.field;
+                const fieldName = isInputNode(fieldNode) ? fieldNode.id : cond.field;
 
                 return hasValue(fieldName, formValues);
               });
@@ -154,7 +153,7 @@ const initializeFormValues = (nodes: Node<TreegeNodeData>[], initialValues: Form
 
   nodes.forEach((node) => {
     if (isInputNode(node)) {
-      const fieldName = getFieldName(node);
+      const fieldName = node.id;
 
       if (defaultValues[fieldName] !== undefined) return;
 
@@ -267,7 +266,7 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
             return conds.every((cond) => {
               if (!cond.field) return true;
               const fieldNode = nodeMap.get(cond.field);
-              const fieldName = isInputNode(fieldNode) ? getFieldName(fieldNode) : cond.field;
+              const fieldName = isInputNode(fieldNode) ? fieldNode.id : cond.field;
               return hasValue(fieldName, formValues);
             });
           });
@@ -293,7 +292,7 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
           if (!cond.field) return true;
 
           const fieldNode = nodeMap.get(cond.field);
-          const fieldName = isInputNode(fieldNode) ? getFieldName(fieldNode) : cond.field;
+          const fieldName = isInputNode(fieldNode) ? fieldNode.id : cond.field;
 
           return hasValue(fieldName, formValues);
         });
@@ -336,7 +335,7 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
 
     visibleNodes.forEach((node) => {
       if (isInputNode(node)) {
-        const fieldName = getFieldName(node);
+        const fieldName = node.id;
         const value = formValues[fieldName];
 
         // Required validation

@@ -1,7 +1,22 @@
 import { Node } from "@xyflow/react";
+import { FormValues } from "@/renderer/types/renderer";
 import { InputNodeData } from "@/shared/types/node";
 
 /**
- * Get field name for an input node (use name or fallback to node ID)
+ * Convert internal form values (keyed by nodeId) to external format (keyed by name)
+ * When multiple nodes share the same name, later values overwrite earlier ones
  */
-export const getFieldName = (node: Node<InputNodeData>): string => node.data.name || node.id;
+export const exportFormValues = (formValues: FormValues, nodes: Node<InputNodeData>[]): Record<string, any> => {
+  const exported: Record<string, any> = {};
+
+  nodes.forEach((node) => {
+    const nodeId = node.id;
+    const name = node.data.name || nodeId;
+
+    if (formValues[nodeId] !== undefined) {
+      exported[name] = formValues[nodeId];
+    }
+  });
+
+  return exported;
+};

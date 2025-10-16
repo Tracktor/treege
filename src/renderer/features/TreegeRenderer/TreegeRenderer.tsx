@@ -1,5 +1,5 @@
 import { Node } from "@xyflow/react";
-import { FormEvent, ReactNode, useCallback, useEffect, useRef } from "react";
+import { FormEvent, ReactNode, useCallback, useEffect, useMemo, useRef } from "react";
 import DefaultFormWrapper from "@/renderer/components/DefaultFormWrapper";
 import DefaultGroup from "@/renderer/components/DefaultGroup";
 import { defaultInputRenderers } from "@/renderer/components/DefaultInputs";
@@ -8,8 +8,9 @@ import { defaultUI } from "@/renderer/components/DefaultUI";
 import { TreegeRendererProvider } from "@/renderer/context/TreegeRendererContext";
 import { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
 import { TreegeRendererProps } from "@/renderer/types/renderer";
+import { exportFormValues } from "@/renderer/utils/helpers";
 import { NODE_TYPE } from "@/shared/constants/node";
-import { TreegeNodeData, UINodeData } from "@/shared/types/node";
+import { InputNodeData, TreegeNodeData, UINodeData } from "@/shared/types/node";
 import { isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
 
 const TreegeRenderer = ({
@@ -36,6 +37,10 @@ const TreegeRenderer = ({
   const FormWrapper = components.form || DefaultFormWrapper;
   const SubmitButton = components.submitButton || DefaultSubmitButton;
 
+  // Memoized values
+  const inputNodes = useMemo(() => nodes.filter(isInputNode) as Node<InputNodeData>[], [nodes]);
+  const exportedValues = useMemo(() => exportFormValues(formValues, inputNodes), [formValues, inputNodes]);
+
   /**
    * Handle form submission
    */
@@ -43,13 +48,8 @@ const TreegeRenderer = ({
     (e: FormEvent) => {
       e.preventDefault();
 
-      // Run built-in validation (required, pattern)
       const formIsValid = validateForm();
-
-      // Run custom validation if provided
       const customErrors = validateRef.current ? validateRef.current(formValues, visibleNodes) : {};
-
-      // Check if form is valid
       const isValid = formIsValid && Object.keys(customErrors).length === 0;
 
       // Replace errors completely with custom errors (no merge to avoid stale errors)
@@ -58,10 +58,10 @@ const TreegeRenderer = ({
       }
 
       if (isValid && onSubmit) {
-        onSubmit(formValues);
+        onSubmit(exportedValues);
       }
     },
-    [validateForm, formValues, visibleNodes, setErrors, onSubmit],
+    [validateForm, formValues, visibleNodes, setErrors, onSubmit, exportedValues],
   );
 
   /**
@@ -135,8 +135,8 @@ const TreegeRenderer = ({
    * Trigger onChange callback when form values change
    */
   useEffect(() => {
-    onChangeRef.current?.(formValues);
-  }, [formValues]);
+    onChangeRef.current?.(exportedValues);
+  }, [exportedValues]);
 
   /**
    * Trigger validation when form values change based on validation mode
