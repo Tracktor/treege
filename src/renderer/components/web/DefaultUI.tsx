@@ -1,6 +1,7 @@
-import { getTranslatedLabel, UiRenderProps } from "@/renderer";
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
+import { UiRenderProps } from "@/renderer/types/renderer";
 import { Separator } from "@/shared/components/ui/separator";
+import { getTranslatedLabel } from "@/shared/utils/label";
 
 export const Divider = ({ node }: UiRenderProps) => {
   const { language } = useTreegeRendererContext();
