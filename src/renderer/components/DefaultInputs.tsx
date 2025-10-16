@@ -51,8 +51,8 @@ export const DefaultNumberInput = ({ node }: InputRenderProps) => {
         type="number"
         id={name}
         name={name}
-        value={value || ""}
-        onChange={(e) => setFieldValue(name, Number(e.target.value))}
+        value={value ?? ""}
+        onChange={(e) => setFieldValue(name, e.target.value === "" ? undefined : Number(e.target.value))}
         placeholder={node.data.placeholder}
       />
       {error && <FormError>{error}</FormError>}
