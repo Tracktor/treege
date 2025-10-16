@@ -288,9 +288,24 @@ export const DefaultPasswordInput = ({ node }: InputRenderProps) => {
 };
 
 export const DefaultFileInput = ({ node }: InputRenderProps) => {
-  const { formValues, setFieldValue, errors, language } = useTreegeRendererContext();
+  const { setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
   const error = errors[name];
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.target;
+    if (!files) {
+      setFieldValue(name, undefined);
+      return;
+    }
+
+    // If multiple files are allowed, store as array, otherwise store single file
+    if (node.data.multiple) {
+      setFieldValue(name, Array.from(files));
+    } else {
+      setFieldValue(name, files[0]);
+    }
+  };
 
   return (
     <FormItem className="mb-4">
@@ -302,7 +317,7 @@ export const DefaultFileInput = ({ node }: InputRenderProps) => {
         type="file"
         id={name}
         name={name}
-        onChange={(e) => setFieldValue(name, e.target.files?.[0])}
+        onChange={handleFileChange}
         multiple={node.data.multiple}
         placeholder={node.data.placeholder}
       />
