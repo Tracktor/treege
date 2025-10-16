@@ -26,7 +26,7 @@ const TreegeRenderer = ({
 }: TreegeRendererProps) => {
   const initializedValues = useMemo(() => initializeFormValues(nodes, initialValues), [nodes, initialValues]);
 
-  const { formValues, setFieldValue, errors, setErrors, visibleNodes, topLevelNodes, validateForm, isEndOfPath } = useTreegeRenderer(
+  const { formValues, setFieldValue, errors, setErrors, visibleNodes, topLevelNodes, checkValidForm, isEndOfPath } = useTreegeRenderer(
     nodes,
     edges,
     initializedValues,
@@ -49,7 +49,7 @@ const TreegeRenderer = ({
     (e: FormEvent) => {
       e.preventDefault();
 
-      const formIsValid = validateForm();
+      const formIsValid = checkValidForm();
       const customErrors = validateRef.current ? validateRef.current(formValues, visibleNodes) : {};
       const isValid = formIsValid && Object.keys(customErrors).length === 0;
 
@@ -62,7 +62,7 @@ const TreegeRenderer = ({
         onSubmit(exportedValues);
       }
     },
-    [validateForm, formValues, visibleNodes, setErrors, onSubmit, exportedValues],
+    [checkValidForm, formValues, visibleNodes, setErrors, onSubmit, exportedValues],
   );
 
   // ============================================

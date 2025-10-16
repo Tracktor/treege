@@ -182,9 +182,9 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
   }, []);
 
   /**
-   * Validate form based on visible input nodes
+   * Check if form is valid based on visible input nodes
    */
-  const validateForm = useCallback((): boolean => {
+  const checkValidForm = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
 
     visibleNodes.forEach((node) => {
@@ -227,6 +227,7 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
   }, [initialValues]);
 
   return {
+    checkValidForm,
     errors,
     formValues,
     isEndOfPath,
@@ -234,7 +235,6 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
     setErrors,
     setFieldValue,
     topLevelNodes,
-    validateForm,
     visibleNodes,
   };
 };
