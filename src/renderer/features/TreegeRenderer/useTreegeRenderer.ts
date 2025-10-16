@@ -95,14 +95,8 @@ const findVisibleNodes = (
           const conditionalEdges = outgoingEdges.filter((edge) => edge.data?.conditions && edge.data.conditions.length > 0);
           const unconditionalEdges = outgoingEdges.filter((edge) => !edge.data?.conditions || edge.data.conditions.length === 0);
 
-          // Follow unconditional edges, but gate progression for input nodes until they have a value
+          // Follow all unconditional edges immediately (no gating)
           unconditionalEdges.forEach((edge) => {
-            if (isInputNode(node)) {
-              const fieldName = getFieldName(node);
-              if (!hasValue(fieldName, formValues)) {
-                return; // wait for user input
-              }
-            }
             queue.push(edge.target);
           });
 
@@ -227,6 +221,52 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
   );
 
   /**
+   * Check if we're at the end of a path (no more nodes can be revealed)
+   * We're at the end when there are no outgoing edges from any visible node
+   * that could potentially lead to new nodes
+   */
+  const isEndOfPath = useMemo(() => {
+    // Check if there are any visible nodes with outgoing edges that could reveal new nodes
+    const hasUnexploredPaths = visibleNodes.some((node) => {
+      const outgoing = edgeMap.get(node.id) || [];
+
+      return outgoing.some((edge) => {
+        // If target is already visible, this edge won't reveal anything new
+        if (visibleNodeIds.has(edge.target)) return false;
+
+        // Check if this is an unconditional edge
+        const conditions = edge.data?.conditions || [];
+        if (conditions.length === 0) {
+          // Unconditional edge to non-visible node - this should have been followed already
+          // This means we're not at the end yet (edge will be followed when conditions are met)
+          return true;
+        }
+
+        // For conditional edges, check if the conditions COULD be met in the future
+        // If all condition fields are already filled, check if conditions evaluate to true
+        const allConditionFieldsFilled = conditions.every((cond) => {
+          if (!cond.field) return true;
+
+          const fieldNode = nodeMap.get(cond.field);
+          const fieldName = isInputNode(fieldNode) ? getFieldName(fieldNode) : cond.field;
+
+          return hasValue(fieldName, formValues);
+        });
+
+        // If not all fields are filled, we might follow this edge in the future
+        if (!allConditionFieldsFilled) return true;
+
+        // If all fields are filled, check if conditions evaluate to true
+        // If false, this edge will never be followed, so it doesn't count as unexplored
+        return evaluateConditions(conditions, formValues, nodeMap);
+      });
+    });
+
+    // We're at the end if there are no unexplored paths
+    return !hasUnexploredPaths;
+  }, [visibleNodes, edgeMap, visibleNodeIds, nodeMap, formValues]);
+
+  /**
    * Set field value and clear error for that field
    */
   const setFieldValue = useCallback((fieldName: string, value: any) => {
@@ -291,6 +331,7 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
   return {
     errors,
     formValues,
+    isEndOfPath,
     resetForm,
     setErrors,
     setFieldValue,

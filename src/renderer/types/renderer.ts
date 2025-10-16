@@ -45,4 +45,9 @@ export type TreegeRendererComponents = {
    * Custom form wrapper
    */
   form?: (props: { children: ReactNode; onSubmit: (e: FormEvent) => void }) => ReactNode;
+  /**
+   * Custom submit button
+   * @param props
+   */
+  submitButton?: (props: { label?: string }) => ReactNode;
 };

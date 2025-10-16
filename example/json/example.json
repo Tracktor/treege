@@ -105,7 +105,7 @@
           "en": "Give me a picture !"
         },
         "multiple": false,
-        "name": "photo",
+        "name": "picture",
         "options": [],
         "pattern": "",
         "placeholder": "",
@@ -167,7 +167,7 @@
           "en": "What is your favorite cartoon ?"
         },
         "multiple": false,
-        "name": "cartoon",
+        "name": "favorite-cartoon",
         "options": [],
         "pattern": "",
         "placeholder": "",
@@ -197,7 +197,7 @@
           "en": "What is your favorite movie ?"
         },
         "multiple": false,
-        "name": "movie",
+        "name": "favorite-movie",
         "options": [],
         "pattern": "",
         "placeholder": "",
@@ -307,7 +307,7 @@
           "en": "Do you like cookie ?"
         },
         "multiple": false,
-        "name": "cookie",
+        "name": "do-you-like-cookie",
         "options": [
           {
             "label": {

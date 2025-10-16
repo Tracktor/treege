@@ -3,6 +3,7 @@ import { FormEvent, ReactNode, useCallback, useEffect, useRef } from "react";
 import DefaultFormWrapper from "@/renderer/components/DefaultFormWrapper";
 import DefaultGroup from "@/renderer/components/DefaultGroup";
 import { defaultInputRenderers } from "@/renderer/components/DefaultInputs";
+import DefaultSubmitButton from "@/renderer/components/DefaultSubmitButton";
 import { defaultUI } from "@/renderer/components/DefaultUI";
 import { TreegeRendererProvider } from "@/renderer/context/TreegeRendererContext";
 import { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
@@ -62,15 +63,18 @@ const TreegeRenderer = ({
   language = "en",
   validationMode = "onSubmit",
 }: TreegeRendererProps) => {
-  const { formValues, setFieldValue, errors, setErrors, visibleNodes, topLevelNodes, validateForm } = useTreegeRenderer(
+  const { formValues, setFieldValue, errors, setErrors, visibleNodes, topLevelNodes, validateForm, isEndOfPath } = useTreegeRenderer(
     nodes,
     edges,
     initialValues,
   );
 
-  const FormWrapper = components.form || DefaultFormWrapper;
+  // Refs to avoid re-creating effects
   const onChangeRef = useRef(onChange);
   const validateRef = useRef(validate);
+  // Component
+  const FormWrapper = components.form || DefaultFormWrapper;
+  const SubmitButton = components.submitButton || DefaultSubmitButton;
 
   /**
    * Handle form submission
@@ -194,7 +198,10 @@ const TreegeRenderer = ({
         setFieldValue,
       }}
     >
-      <FormWrapper onSubmit={handleSubmit}>{topLevelNodes.map((node) => renderNode(node))}</FormWrapper>
+      <FormWrapper onSubmit={handleSubmit}>
+        {topLevelNodes.map((node) => renderNode(node))}
+        {isEndOfPath && <SubmitButton label="Submit" />}
+      </FormWrapper>
     </TreegeRendererProvider>
   );
 };
