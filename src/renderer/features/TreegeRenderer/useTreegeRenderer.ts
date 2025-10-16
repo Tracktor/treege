@@ -238,11 +238,6 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
   }, []);
 
   /**
-   * Get field value
-   */
-  const getFieldValue = useCallback((fieldName: string) => formValues[fieldName], [formValues]);
-
-  /**
    * Validate form based on visible input nodes
    */
   const validateForm = useCallback((): boolean => {
@@ -290,7 +285,6 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
   return {
     errors,
     formValues,
-    getFieldValue,
     resetForm,
     setErrors,
     setFieldValue,

@@ -4,7 +4,6 @@ import { FormValues } from "@/renderer/types/renderer";
 export type TreegeContextValue = {
   formValues: FormValues;
   setFieldValue: (fieldName: string, value: any) => void;
-  getFieldValue: (fieldName: string) => any;
   errors: Record<string, string>;
   language: string;
 };

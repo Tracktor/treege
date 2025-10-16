@@ -61,7 +61,7 @@ const TreegeRenderer = ({
   language = "en",
   validationMode = "onSubmit",
 }: TreegeRendererProps) => {
-  const { formValues, setFieldValue, getFieldValue, errors, setErrors, visibleNodes, topLevelNodes, validateForm } = useTreegeRenderer(
+  const { formValues, setFieldValue, errors, setErrors, visibleNodes, topLevelNodes, validateForm } = useTreegeRenderer(
     nodes,
     edges,
     initialValues,
@@ -180,7 +180,6 @@ const TreegeRenderer = ({
       value={{
         errors,
         formValues,
-        getFieldValue,
         language,
         setFieldValue,
       }}

@@ -10,9 +10,9 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import { getTranslatedLabel } from "@/shared/utils/label";
 
 export const DefaultTextInput = ({ node }: InputRenderProps) => {
-  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
-  const value = getFieldValue(name);
+  const value = formValues[name];
   const error = errors[name];
 
   return (
@@ -36,9 +36,9 @@ export const DefaultTextInput = ({ node }: InputRenderProps) => {
 };
 
 export const DefaultNumberInput = ({ node }: InputRenderProps) => {
-  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
-  const value = getFieldValue(name);
+  const value = formValues[name];
   const error = errors[name];
 
   return (
@@ -62,9 +62,9 @@ export const DefaultNumberInput = ({ node }: InputRenderProps) => {
 };
 
 export const DefaultSelectInput = ({ node }: InputRenderProps) => {
-  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
-  const value = getFieldValue(name);
+  const value = formValues[name];
   const error = errors[name];
 
   return (
@@ -94,9 +94,9 @@ export const DefaultSelectInput = ({ node }: InputRenderProps) => {
 };
 
 export const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
-  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
-  const value = getFieldValue(name);
+  const value = formValues[name];
   const error = errors[name];
 
   return (
@@ -116,9 +116,9 @@ export const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
   );
 };
 export const DefaultSwitchInput = ({ node }: InputRenderProps) => {
-  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
-  const value = getFieldValue(name);
+  const value = formValues[name];
   const error = errors[name];
 
   return (
@@ -145,9 +145,9 @@ export const DefaultSwitchInput = ({ node }: InputRenderProps) => {
 };
 
 export const DefaultRadioInput = ({ node }: InputRenderProps) => {
-  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
-  const value = getFieldValue(name);
+  const value = formValues[name];
   const error = errors[name];
 
   return (
@@ -173,9 +173,9 @@ export const DefaultRadioInput = ({ node }: InputRenderProps) => {
 };
 
 export const DefaultDateInput = ({ node }: InputRenderProps) => {
-  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
-  const value = getFieldValue(name);
+  const value = formValues[name];
   const error = errors[name];
 
   return (
@@ -199,9 +199,9 @@ export const DefaultDateInput = ({ node }: InputRenderProps) => {
 };
 
 export const DefaultTimeInput = ({ node }: InputRenderProps) => {
-  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
-  const value = getFieldValue(name);
+  const value = formValues[name];
   const error = errors[name];
 
   return (
@@ -225,9 +225,9 @@ export const DefaultTimeInput = ({ node }: InputRenderProps) => {
 };
 
 export const DefaultPasswordInput = ({ node }: InputRenderProps) => {
-  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
-  const value = getFieldValue(name);
+  const value = formValues[name];
   const error = errors[name];
 
   return (
@@ -251,7 +251,7 @@ export const DefaultPasswordInput = ({ node }: InputRenderProps) => {
 };
 
 export const DefaultFileInput = ({ node }: InputRenderProps) => {
-  const { setFieldValue, errors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
   const error = errors[name];
 
@@ -276,16 +276,16 @@ export const DefaultFileInput = ({ node }: InputRenderProps) => {
 };
 
 export const DefaultHiddenInput = ({ node }: InputRenderProps) => {
-  const { getFieldValue } = useTreegeRendererContext();
+  const { formValues } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
-  const value = getFieldValue(name);
+  const value = formValues[name];
   return <Input type="hidden" name={name} value={value || ""} />;
 };
 
 export const DefaultTextAreaInput = ({ node }: InputRenderProps) => {
-  const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
-  const value = getFieldValue(name);
+  const value = formValues[name];
   const error = errors[name];
 
   return (
