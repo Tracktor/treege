@@ -1,8 +1,7 @@
 import { Edge, Node } from "@xyflow/react";
 import { useState } from "react";
 import TreegeEditor from "@/editor/features/TreegeEditor/TreegeEditor";
-import { FormValues } from "@/renderer";
-import TreegeRenderer from "@/renderer/features/TreegeRenderer/TreegeRenderer";
+import { FormValues, TreegeRenderer } from "@/renderer";
 
 const EditorPanel = ({
   defaultFlow,

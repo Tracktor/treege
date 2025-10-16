@@ -1,20 +1,16 @@
-// Main component
-export { default as TreegeRenderer } from "@/renderer/features/TreegeRenderer/TreegeRenderer";
-export * from "@/renderer/features/TreegeRenderer/TreegeRenderer";
+// Main component (web version by default)
+export { TreegeRenderer, useTreegeRenderer } from "@/renderer/features/TreegeRenderer";
 
 // Types
 export * from "@/renderer/types/renderer";
 
-// Default components (for customization reference)
-export * from "@/renderer/components/DefaultInputs";
-export * from "@/renderer/components/DefaultGroup";
-export * from "@/renderer/components/DefaultUI";
-export * from "@/renderer/components/DefaultFormWrapper";
+// Default web components (for customization reference)
+export * from "@/renderer/components/web/DefaultInputs";
+export * from "@/renderer/components/web/DefaultGroup";
+export * from "@/renderer/components/web/DefaultUI";
+export * from "@/renderer/components/web/DefaultFormWrapper";
 
-// Utils
+// Utils (platform-agnostic)
 export * from "@/renderer/utils/conditionEvaluator";
 export * from "@/renderer/utils/form";
 export { getTranslatedLabel } from "@/shared/utils/label";
-
-// Hooks
-export { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
