@@ -20,7 +20,9 @@ export type EdgeCondition = {
 };
 
 export type ConditionalEdgeData = {
-  // A label for the edge, useful for displaying in the UI
+  /**
+   *  A label for the edge, useful for displaying in the UI
+   */
   label?: string;
   /**
    * Conditions that must be met for this edge to be followed
