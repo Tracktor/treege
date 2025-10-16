@@ -11,4 +11,9 @@ export type EdgeCondition = {
 export type ConditionalEdgeData = {
   label?: string;
   conditions?: EdgeCondition[];
+  /**
+   * Whether this edge is a fallback/default path
+   * Fallback edges are followed when no other conditional edges match
+   */
+  isFallback?: boolean;
 };

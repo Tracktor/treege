@@ -17,17 +17,13 @@
         "conditions": [
           {
             "field": "_fMC1wrs60fWlQhk1KMLX",
-            "operator": "<",
-            "value": "18"
-          },
-          {
-            "field": "_fMC1wrs60fWlQhk1KMLX",
             "logicalOperator": "AND",
             "operator": "!==",
             "value": ""
           }
         ],
-        "label": "Not adult"
+        "label": "Fallback",
+        "isFallback": true
       },
       "id": "PPv66Nk6JyIQ1awTpPFd1",
       "source": "_fMC1wrs60fWlQhk1KMLX",
@@ -40,10 +36,11 @@
           {
             "field": "_fMC1wrs60fWlQhk1KMLX",
             "operator": ">=",
-            "value": "18"
+            "value": "50"
           }
         ],
-        "label": "Adult"
+        "label": "I am over 50 years old",
+        "isFallback": false
       },
       "id": "u0emut9DCfPaeZiXH8FtU",
       "source": "_fMC1wrs60fWlQhk1KMLX",
@@ -67,6 +64,23 @@
       "source": "-D7pyFD9dm4NTEwwDhDmt",
       "target": "-_ZX-b0jGrKFQwA6KgocI",
       "type": "default"
+    },
+    {
+      "data": {
+        "conditions": [
+          {
+            "field": "_fMC1wrs60fWlQhk1KMLX",
+            "operator": "<",
+            "value": "18"
+          }
+        ],
+        "isFallback": false,
+        "label": "Is not adult"
+      },
+      "id": "JgobjyWATAwLs6G6-bcqP",
+      "source": "_fMC1wrs60fWlQhk1KMLX",
+      "target": "WHjELjK_SEZvh8VLRJVpq",
+      "type": "conditional"
     }
   ],
   "nodes": [
@@ -74,7 +88,7 @@
       "data": {
         "type": "text",
         "errorMessage": "",
-        "helperText": "Hey i am a helper text ! ",
+        "helperText": "Tell us briefly how you're feeling today.",
         "label": {
           "en": "How are you ?"
         },
@@ -82,7 +96,7 @@
         "name": "how-are-you",
         "options": [],
         "pattern": "",
-        "placeholder": "I am a placeholder text ! ",
+        "placeholder": " Type your answer here...",
         "required": true
       },
       "id": "edZHIcGqvZTtOGuV0DKIA",
@@ -175,8 +189,8 @@
       },
       "id": "-D7pyFD9dm4NTEwwDhDmt",
       "position": {
-        "x": 523.0821754362249,
-        "y": 1127.7165608700545
+        "x": 705.0097910492727,
+        "y": 1197.8757534515532
       },
       "type": "input",
       "origin": [
@@ -186,7 +200,8 @@
       "measured": {
         "width": 270,
         "height": 150
-      }
+      },
+      "dragging": false
     },
     {
       "data": {
@@ -205,8 +220,8 @@
       },
       "id": "kXHUqwgGLMzhrnksbXdyg",
       "position": {
-        "x": 912.1652853918247,
-        "y": 1123.5328715156934
+        "x": 1086.1116926735313,
+        "y": 1161.5786498578802
       },
       "type": "input",
       "origin": [
@@ -216,7 +231,8 @@
       "measured": {
         "width": 270,
         "height": 150
-      }
+      },
+      "dragging": false
     },
     {
       "data": {
@@ -254,8 +270,8 @@
       },
       "id": "B-LmqLroRrDAr4Rm6zbk6",
       "position": {
-        "x": 911.3967173410323,
-        "y": 1318.8468542816424
+        "x": 1088.6370856717936,
+        "y": 1350.0458238396366
       },
       "type": "input",
       "origin": [
@@ -285,8 +301,8 @@
       },
       "id": "0N6un3J68xH-efbmV7OOp",
       "position": {
-        "x": 909.8502158339014,
-        "y": 1522.9850532229057
+        "x": 1088.9964513752736,
+        "y": 1546.7331450625104
       },
       "type": "input",
       "origin": [
@@ -296,7 +312,8 @@
       "measured": {
         "width": 270,
         "height": 150
-      }
+      },
+      "dragging": false
     },
     {
       "data": {
@@ -334,8 +351,8 @@
       },
       "id": "-_ZX-b0jGrKFQwA6KgocI",
       "position": {
-        "x": 521.6783375440752,
-        "y": 1326.5793618172966
+        "x": 705.4886961365996,
+        "y": 1386.2159173989382
       },
       "type": "input",
       "origin": [
@@ -345,7 +362,39 @@
       "measured": {
         "width": 270,
         "height": 150
-      }
+      },
+      "dragging": false
+    },
+    {
+      "data": {
+        "type": "text",
+        "errorMessage": "",
+        "helperText": "",
+        "label": {
+          "en": "What is your favorite sport?"
+        },
+        "multiple": false,
+        "name": "favorite-sport",
+        "options": [],
+        "pattern": "",
+        "placeholder": "",
+        "required": false
+      },
+      "id": "WHjELjK_SEZvh8VLRJVpq",
+      "position": {
+        "x": 344.80991954411166,
+        "y": 1163.6270714851526
+      },
+      "type": "input",
+      "origin": [
+        0.5,
+        0
+      ],
+      "measured": {
+        "width": 270,
+        "height": 150
+      },
+      "dragging": false
     }
   ]
 }

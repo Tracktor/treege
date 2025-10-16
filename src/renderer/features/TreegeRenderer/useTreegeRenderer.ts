@@ -102,8 +102,12 @@ const findVisibleNodes = (
 
           // Handle conditional edges (branching)
           if (conditionalEdges.length > 0) {
-            // This is a branch point - check if all condition fields have values
-            const allConditionFieldsFilled = conditionalEdges.every((edge) => {
+            // Separate fallback edges from regular conditional edges
+            const fallbackEdges = conditionalEdges.filter((edge) => edge.data?.isFallback);
+            const regularConditionalEdges = conditionalEdges.filter((edge) => !edge.data?.isFallback);
+
+            // Check if all condition fields for regular edges are filled
+            const allConditionFieldsFilled = regularConditionalEdges.every((edge) => {
               const conditions = edge.data?.conditions || [];
               return conditions.every((cond) => {
                 if (!cond.field) return true;
@@ -118,12 +122,18 @@ const findVisibleNodes = (
 
             // If all fields are filled, evaluate conditions and follow matching branches
             if (allConditionFieldsFilled) {
-              conditionalEdges.forEach((edge) => {
+              const matchingEdges = regularConditionalEdges.filter((edge) => {
                 const conditions = edge.data?.conditions || [];
-                if (evaluateConditions(conditions, formValues, nodeMap)) {
-                  queue.push(edge.target);
-                }
+                return evaluateConditions(conditions, formValues, nodeMap);
               });
+
+              if (matchingEdges.length > 0) {
+                // Follow all matching edges
+                matchingEdges.forEach((edge) => queue.push(edge.target));
+              } else if (fallbackEdges.length > 0) {
+                // No conditions matched - follow the fallback edge(s)
+                fallbackEdges.forEach((edge) => queue.push(edge.target));
+              }
             }
             // If fields are not filled, stop here and wait for user input
             // (don't add any conditional targets to the queue)
@@ -242,7 +252,42 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
           return true;
         }
 
-        // For conditional edges, check if the conditions COULD be met in the future
+        // For fallback edges, check if there are any other edges from the same source
+        // that could match instead
+        if (edge.data?.isFallback) {
+          // Get all edges from the same source
+          const edgesFromSource = edgeMap.get(node.id) || [];
+          const nonFallbackEdges = edgesFromSource.filter((e) => !e.data?.isFallback && e.id !== edge.id);
+
+          // Check if any non-fallback edge conditions are filled
+          const hasFilledNonFallbackEdges = nonFallbackEdges.some((e) => {
+            const conds = e.data?.conditions || [];
+            if (conds.length === 0) return true; // Unconditional edge
+
+            return conds.every((cond) => {
+              if (!cond.field) return true;
+              const fieldNode = nodeMap.get(cond.field);
+              const fieldName = isInputNode(fieldNode) ? getFieldName(fieldNode) : cond.field;
+              return hasValue(fieldName, formValues);
+            });
+          });
+
+          // If non-fallback edges have conditions filled but none match, fallback is unexplored
+          if (hasFilledNonFallbackEdges) {
+            const anyNonFallbackMatches = nonFallbackEdges.some((e) => {
+              const conds = e.data?.conditions || [];
+              return evaluateConditions(conds, formValues, nodeMap);
+            });
+
+            // Fallback is unexplored only if no non-fallback edges match
+            return !anyNonFallbackMatches;
+          }
+
+          // If non-fallback conditions are not filled, we might not need fallback
+          return true;
+        }
+
+        // For regular conditional edges, check if the conditions COULD be met in the future
         // If all condition fields are already filled, check if conditions evaluate to true
         const allConditionFieldsFilled = conditions.every((cond) => {
           if (!cond.field) return true;

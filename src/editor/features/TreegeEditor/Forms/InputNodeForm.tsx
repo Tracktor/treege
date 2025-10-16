@@ -107,21 +107,23 @@ const InputNodeForm = () => {
           )}
         />
 
-        <Field
-          name="placeholder"
-          children={(field) => (
-            <FormItem>
-              <Label htmlFor={field.name}>Placeholder</Label>
-              <Input
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={({ target }) => field.handleChange(target.value)}
-              />
-            </FormItem>
-          )}
-        />
+        {selectedNode?.data?.type !== "file" && (
+          <Field
+            name="placeholder"
+            children={(field) => (
+              <FormItem>
+                <Label htmlFor={field.name}>Placeholder</Label>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={({ target }) => field.handleChange(target.value)}
+                />
+              </FormItem>
+            )}
+          />
+        )}
 
         <Field
           name="helperText"
