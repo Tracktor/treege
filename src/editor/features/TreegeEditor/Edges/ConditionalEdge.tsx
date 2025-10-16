@@ -4,6 +4,7 @@ import { Plus, Waypoints, X } from "lucide-react";
 import { MouseEvent, useState } from "react";
 import { useAvailableParentFields } from "@/editor/hooks/useAvailableParentFields";
 import { Button } from "@/shared/components/ui/button";
+import { Checkbox } from "@/shared/components/ui/checkbox";
 import { FormDescription, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
@@ -46,6 +47,7 @@ const ConditionalEdge = ({
   const { handleSubmit, reset, Field } = useForm({
     defaultValues: {
       conditions: data?.conditions || [{ field: source, operator: "===", value: "" }],
+      isFallback: data?.isFallback || false,
       label: data?.label || "",
     },
     listeners: {
@@ -64,11 +66,16 @@ const ConditionalEdge = ({
   };
 
   const handleClear = () => {
-    reset({ conditions: [], label: "" });
-    updateEdgeData(id, { conditions: undefined, label: undefined });
+    reset({ conditions: [], isFallback: false, label: "" });
+    updateEdgeData(id, { conditions: undefined, isFallback: undefined, label: undefined });
   };
 
   const getConditionSummary = () => {
+    // If fallback edge, show "Fallback" label
+    if (data?.isFallback) {
+      return data.label || "Fallback";
+    }
+
     if (!hasConditions) return null;
 
     if (data.label) return data.label;
@@ -92,6 +99,12 @@ const ConditionalEdge = ({
     return `${conditions.length} conditions (mixed)`;
   };
 
+  const getEdgeStrokeColor = () => {
+    if (data?.isFallback) return "var(--color-chart-4)";
+    if (hasConditions) return "var(--color-chart-2)";
+    return "var(--color-chart-3)";
+  };
+
   return (
     <>
       <BaseEdge
@@ -99,8 +112,9 @@ const ConditionalEdge = ({
         markerEnd={markerEnd}
         style={{
           ...style,
-          stroke: hasConditions ? "var(--color-chart-2)" : "var(--color-chart-3)",
-          strokeWidth: hasConditions ? 2 : style?.strokeWidth,
+          stroke: getEdgeStrokeColor(),
+          strokeDasharray: data?.isFallback ? "5,5" : undefined,
+          strokeWidth: hasConditions || data?.isFallback ? 2 : style?.strokeWidth,
         }}
       />
 
@@ -114,9 +128,13 @@ const ConditionalEdge = ({
         >
           <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
-              <Button variant={hasConditions ? "default" : "secondary"} className="h-8 px-2 text-xs" onClick={onEdgeClick}>
+              <Button
+                variant={hasConditions || data?.isFallback ? "default" : "secondary"}
+                className="h-8 px-2 text-xs"
+                onClick={onEdgeClick}
+              >
                 <Waypoints className="w-3 h-3 mr-1" />
-                {hasConditions ? getConditionSummary() : "Condition"}
+                {hasConditions || data?.isFallback ? getConditionSummary() : "Condition"}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-96 p-1" align="center" onClick={(e) => e.stopPropagation()}>
@@ -145,6 +163,28 @@ const ConditionalEdge = ({
                               onChange={(e) => field.handleChange(e.target.value)}
                             />
                             <FormDescription>Custom label for the condition button</FormDescription>
+                          </FormItem>
+                        )}
+                      </Field>
+
+                      <Field name="isFallback">
+                        {(field) => (
+                          <FormItem>
+                            <div className="flex items-center gap-3 p-3 border rounded-lg bg-muted/20">
+                              <Checkbox
+                                id="isFallback"
+                                checked={field.state.value}
+                                onCheckedChange={(checked) => field.handleChange(checked as boolean)}
+                              />
+                              <div className="flex flex-col gap-1">
+                                <Label htmlFor="isFallback" className="cursor-pointer font-medium">
+                                  Fallback / Default path
+                                </Label>
+                                <FormDescription className="text-xs">
+                                  This path will be followed when no other conditions match
+                                </FormDescription>
+                              </div>
+                            </div>
                           </FormItem>
                         )}
                       </Field>
