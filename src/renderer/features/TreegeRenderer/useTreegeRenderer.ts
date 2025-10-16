@@ -176,13 +176,9 @@ const initializeFormValues = (nodes: Node<TreegeNodeData>[], initialValues: Form
 export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<ConditionalEdgeData>[], initialValues: FormValues = {}) => {
   const [formValues, setFormValues] = useState<FormValues>(() => initializeFormValues(nodes, initialValues));
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  // Build graph maps (memoized)
   const nodeMap = useMemo(() => new Map(nodes.map((node) => [node.id, node])), [nodes]);
   const edgeMap = useMemo(() => buildEdgeMap(edges), [edges]);
   const incomingEdgeMap = useMemo(() => buildIncomingEdgeMap(edges), [edges]);
-
-  // Find start node
   const startNode = useMemo(() => findStartNode(nodes, incomingEdgeMap), [nodes, incomingEdgeMap]);
 
   /**
