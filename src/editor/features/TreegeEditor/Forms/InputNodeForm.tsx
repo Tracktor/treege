@@ -139,6 +139,18 @@ const InputNodeForm = () => {
           )}
         />
 
+        {selectedNode?.data?.type === "file" && (
+          <Field
+            name="multiple"
+            children={(field) => (
+              <div className="flex items-center space-x-2">
+                <Switch id="file-multiple" checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
+                <Label htmlFor="file-multiple">Multiple files</Label>
+              </div>
+            )}
+          />
+        )}
+
         {needsOptions && (
           <Collapsible defaultOpen className="flex w-full max-w-[350px] flex-col gap-2">
             <CollapsibleTrigger asChild>
@@ -321,22 +333,8 @@ const InputNodeForm = () => {
                       {(field) => {
                         const inputType = selectedNode?.data?.type;
 
-                        if (inputType === "checkbox") {
-                          return (
-                            <FormItem>
-                              <div className="flex items-center space-x-2">
-                                <Switch
-                                  id="staticValue"
-                                  checked={!!field.state.value}
-                                  onCheckedChange={(value: boolean) => field.handleChange(value)}
-                                />
-                                <Label htmlFor="staticValue">Default Checked</Label>
-                              </div>
-                            </FormItem>
-                          );
-                        }
-
-                        if (inputType === "select" && selectedNode?.data?.multiple) {
+                        // Checkbox or select with multiple selection - show comma-separated input
+                        if ((inputType === "select" || inputType === "checkbox") && selectedNode?.data?.multiple) {
                           return (
                             <FormItem>
                               <Label htmlFor="staticValue">Default Values (comma-separated)</Label>
@@ -356,6 +354,23 @@ const InputNodeForm = () => {
                           );
                         }
 
+                        // Single checkbox - show switch
+                        if (inputType === "checkbox") {
+                          return (
+                            <FormItem>
+                              <div className="flex items-center space-x-2">
+                                <Switch
+                                  id="staticValue"
+                                  checked={!!field.state.value}
+                                  onCheckedChange={(value: boolean) => field.handleChange(value)}
+                                />
+                                <Label htmlFor="staticValue">Default Checked</Label>
+                              </div>
+                            </FormItem>
+                          );
+                        }
+
+                        // Default - show text input
                         return (
                           <FormItem>
                             <Label htmlFor="staticValue">Static Value</Label>
