@@ -70,21 +70,30 @@ const TreegeRenderer = ({
   const onChangeRef = useRef(onChange);
   const validateRef = useRef(validate);
 
-  // Update refs when callbacks change
+  /**
+   * Keep refs updated to avoid re-creating effects
+   */
   useEffect(() => {
     onChangeRef.current = onChange;
   }, [onChange]);
 
+  /**
+   * Keep refs updated to avoid re-creating effects
+   */
   useEffect(() => {
     validateRef.current = validate;
   }, [validate]);
 
-  // Notify parent of form changes
+  /**
+   * Trigger onChange callback when form values change
+   */
   useEffect(() => {
     onChangeRef.current?.(formValues);
   }, [formValues]);
 
-  // Handle custom validation
+  /**
+   * Trigger validation when form values change based on validation mode
+   */
   useEffect(() => {
     if (validateRef.current && (validationMode === "onChange" || validationMode === "onBlur")) {
       const customErrors = validateRef.current(formValues, visibleNodes);

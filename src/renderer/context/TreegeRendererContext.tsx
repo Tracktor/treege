@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext } from "react";
+import { createContext, PropsWithChildren, useContext } from "react";
 import { FormValues } from "@/renderer/types/renderer";
 
 export type TreegeContextValue = {
@@ -9,9 +9,13 @@ export type TreegeContextValue = {
   language: string;
 };
 
+export interface TreegeRendererProviderProps extends PropsWithChildren {
+  value: TreegeContextValue;
+}
+
 export const TreegeRendererContext = createContext<TreegeContextValue | null>(null);
 
-export const TreegeRendererProvider = ({ children, value }: { children: ReactNode; value: TreegeContextValue }) => (
+export const TreegeRendererProvider = ({ children, value }: TreegeRendererProviderProps) => (
   <TreegeRendererContext.Provider value={value}>{children}</TreegeRendererContext.Provider>
 );
 
