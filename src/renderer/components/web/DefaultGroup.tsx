@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
-import { getTranslatedLabel, NodeRenderProps } from "@/renderer";
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
+import type { NodeRenderProps } from "@/renderer/types/renderer";
+import { getTranslatedLabel } from "@/shared/utils/label";
 
 export const DefaultGroup = ({ node, children }: NodeRenderProps & { children: ReactNode }) => {
   const { language } = useTreegeRendererContext();
