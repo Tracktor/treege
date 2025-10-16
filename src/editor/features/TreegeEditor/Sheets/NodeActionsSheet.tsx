@@ -8,6 +8,7 @@ import SelectNodeType from "@/editor/features/TreegeEditor/Inputs/SelectNodeType
 import useFlowActions from "@/editor/hooks/useFlowActions";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
 import useTranslatedLabel from "@/editor/hooks/useTranslatedLabel";
+import { ScrollArea } from "@/shared/components/ui/scroll-area";
 import { Separator } from "@/shared/components/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/shared/components/ui/sheet";
 import { TreegeNodeData } from "@/shared/types/node";
@@ -29,18 +30,20 @@ const NodeActionsSheet = () => {
           <SheetDescription>{label || "\u00A0"}</SheetDescription>
         </SheetHeader>
 
-        <div className="flex flex-col px-4 flex-1 min-h-0 space-y-6 pt-6">
-          <SelectNodeType />
-          <SelectNodeGroup />
+        <ScrollArea className="flex flex-col flex-1 min-h-0 px-4 py-6">
+          <div className="space-y-6">
+            <SelectNodeType />
+            <SelectNodeGroup />
 
-          <Separator />
+            <Separator />
 
-          {isInputNode(selectedNode) && <InputNodeForm />}
-          {isUINode(selectedNode) && <UINodeForm />}
-          {isJsonNode(selectedNode) && <JsonNodeForm />}
-          {isFlowNode(selectedNode) && <FlowNodeForm />}
-          {isGroupNode(selectedNode) && <GroupNodeForm />}
-        </div>
+            {isInputNode(selectedNode) && <InputNodeForm />}
+            {isUINode(selectedNode) && <UINodeForm />}
+            {isJsonNode(selectedNode) && <JsonNodeForm />}
+            {isFlowNode(selectedNode) && <FlowNodeForm />}
+            {isGroupNode(selectedNode) && <GroupNodeForm />}
+          </div>
+        </ScrollArea>
       </SheetContent>
     </Sheet>
   );

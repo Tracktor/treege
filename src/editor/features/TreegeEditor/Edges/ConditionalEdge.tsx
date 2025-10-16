@@ -120,7 +120,7 @@ const ConditionalEdge = ({
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-96 p-1" align="center" onClick={(e) => e.stopPropagation()}>
-              <ScrollArea className="flex flex-col max-h-150 p-3 ">
+              <ScrollArea className="flex flex-col max-h-150 p-3">
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
