@@ -349,7 +349,7 @@ const InputNodeForm = () => {
                                     .split(",")
                                     .map((v: string) => v.trim())
                                     .filter(Boolean);
-                                  field.handleChange(values.length > 0 ? values : undefined);
+                                  field.handleChange(values.length > 0 ? values : null);
                                 }}
                               />
                             </FormItem>
@@ -380,7 +380,7 @@ const InputNodeForm = () => {
                               id="staticValue"
                               placeholder="Enter default value"
                               value={typeof field.state.value === "string" ? field.state.value : ""}
-                              onChange={({ target }) => field.handleChange(target.value || undefined)}
+                              onChange={({ target }) => field.handleChange(target.value || "")}
                             />
                           </FormItem>
                         );
@@ -396,8 +396,8 @@ const InputNodeForm = () => {
                             <Label htmlFor="referenceField">Reference Field</Label>
                             <Select
                               value={field.state.value || ""}
-                              onValueChange={(value: string) => {
-                                field.handleChange(value || undefined);
+                              onValueChange={(value) => {
+                                field.handleChange(value);
                               }}
                             >
                               <SelectTrigger id="referenceField">
