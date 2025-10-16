@@ -79,8 +79,8 @@ export const DefaultSelectInput = ({ node }: InputRenderProps) => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {node.data.options?.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value} disabled={opt.disabled}>
+            {node.data.options?.map((opt, index) => (
+              <SelectItem key={opt.value + index} value={opt.value} disabled={opt.disabled}>
                 {getTranslatedLabel(opt.label)}
               </SelectItem>
             ))}
@@ -115,8 +115,8 @@ export const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
         <div className="space-y-2">
-          {node.data.options.map((opt) => (
-            <div key={opt.value} className="flex items-center gap-3">
+          {node.data.options.map((opt, index) => (
+            <div key={opt.value + index} className="flex items-center gap-3">
               <Checkbox
                 id={`${name}-${opt.value}`}
                 checked={selectedValues.includes(opt.value)}
@@ -194,8 +194,8 @@ export const DefaultRadioInput = ({ node }: InputRenderProps) => {
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <RadioGroup value={value || ""} onValueChange={(val) => setFieldValue(name, val)}>
-        {node.data.options?.map((opt) => (
-          <div key={opt.value} className="flex items-center space-x-2">
+        {node.data.options?.map((opt, index) => (
+          <div key={opt.value + index} className="flex items-center space-x-2">
             <RadioGroupItem value={opt.value} id={`${name}-${opt.value}`} disabled={opt.disabled} />
             <Label htmlFor={`${name}-${opt.value}`} className="text-sm font-normal cursor-pointer">
               {getTranslatedLabel(opt.label)}
