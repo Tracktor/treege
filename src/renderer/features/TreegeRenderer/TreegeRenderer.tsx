@@ -1,5 +1,5 @@
 import { Edge, Node } from "@xyflow/react";
-import { FormEvent, ReactNode, useCallback, useEffect, useMemo, useRef } from "react";
+import { FormEvent, ReactNode, useCallback, useEffect, useRef } from "react";
 import DefaultFormWrapper from "@/renderer/components/DefaultFormWrapper";
 import DefaultGroup from "@/renderer/components/DefaultGroup";
 import { defaultInputRenderers } from "@/renderer/components/DefaultInputs";
@@ -65,17 +65,6 @@ const TreegeRenderer = ({
     nodes,
     edges,
     initialValues,
-  );
-
-  const contextValue = useMemo(
-    () => ({
-      errors,
-      formValues,
-      getFieldValue,
-      language,
-      setFieldValue,
-    }),
-    [errors, formValues, getFieldValue, language, setFieldValue],
   );
 
   const FormWrapper = components.form || DefaultFormWrapper;
@@ -187,7 +176,15 @@ const TreegeRenderer = ({
   }, [formValues, validationMode, visibleNodes, setErrors]);
 
   return (
-    <TreegeRendererProvider value={contextValue}>
+    <TreegeRendererProvider
+      value={{
+        errors,
+        formValues,
+        getFieldValue,
+        language,
+        setFieldValue,
+      }}
+    >
       <FormWrapper onSubmit={handleSubmit}>{topLevelNodes.map((node) => renderNode(node))}</FormWrapper>
     </TreegeRendererProvider>
   );
