@@ -1,5 +1,6 @@
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import { InputRenderProps } from "@/renderer/types/renderer";
+import { Checkbox } from "@/shared/components/ui/checkbox";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
@@ -100,26 +101,20 @@ export const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
 
   return (
     <FormItem className="mb-4">
-      <Label htmlFor={name} className="flex items-center">
-        <Input
-          type="checkbox"
-          id={name}
-          name={name}
-          checked={value || false}
-          onChange={(e) => setFieldValue(name, e.target.checked)}
-          className="mr-2"
-        />
-        <span className="text-sm font-medium">
-          {getTranslatedLabel(node.data.label, language) || node.data.name}
-          {node.data.required && <span className="text-red-500">*</span>}
-        </span>
-      </Label>
+      <div className="flex items-start gap-3">
+        <Checkbox id={name} checked={value || false} onCheckedChange={(checked) => setFieldValue(name, checked)} />
+        <div className="grid gap-2">
+          <Label htmlFor={name} className="text-sm font-medium cursor-pointer">
+            {getTranslatedLabel(node.data.label, language) || node.data.name}
+            {node.data.required && <span className="text-red-500">*</span>}
+          </Label>
+          {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+        </div>
+      </div>
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
     </FormItem>
   );
 };
-
 export const DefaultSwitchInput = ({ node }: InputRenderProps) => {
   const { getFieldValue, setFieldValue, errors, language } = useTreegeRendererContext();
   const name = node.data.name || `${node.id}`;
