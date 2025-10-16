@@ -11,7 +11,9 @@ import { Label } from "@/shared/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 import { ScrollArea } from "@/shared/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
-import { ConditionalEdgeData, EdgeOperator, LogicalOperator } from "@/shared/types/edge";
+import { LOGICAL_OPERATOR } from "@/shared/constants/operator";
+import { ConditionalEdgeData } from "@/shared/types/edge";
+import { LogicalOperator, Operator } from "@/shared/types/operator";
 
 export type ConditionalEdgeType = Edge<ConditionalEdgeData, "conditional">;
 export type ConditionalEdgeProps = EdgeProps<ConditionalEdgeType>;
@@ -86,8 +88,8 @@ const ConditionalEdge = ({
       return `${field} ${conditions[0].operator} ${conditions[0].value}`;
     }
 
-    const andCount = conditions.filter((c) => c.logicalOperator === "AND").length;
-    const orCount = conditions.filter((c) => c.logicalOperator === "OR").length;
+    const andCount = conditions.filter((c) => c.logicalOperator === LOGICAL_OPERATOR.AND).length;
+    const orCount = conditions.filter((c) => c.logicalOperator === LOGICAL_OPERATOR.OR).length;
 
     if (andCount > 0 && orCount === 0) {
       return `${conditions.length} conditions (AND)`;
@@ -234,7 +236,7 @@ const ConditionalEdge = ({
                                             <Label htmlFor={`operator-${index}`}>Operator</Label>
                                             <Select
                                               value={operatorField.state.value || "==="}
-                                              onValueChange={(value: EdgeOperator) => operatorField.handleChange(value)}
+                                              onValueChange={(value: Operator) => operatorField.handleChange(value)}
                                             >
                                               <SelectTrigger id={`operator-${index}`}>
                                                 <SelectValue />
@@ -289,15 +291,15 @@ const ConditionalEdge = ({
                                       {(logicalField) => (
                                         <div className="flex justify-center">
                                           <Select
-                                            value={logicalField.state.value || "AND"}
+                                            value={logicalField.state.value || LOGICAL_OPERATOR.AND}
                                             onValueChange={(value: LogicalOperator) => logicalField.handleChange(value)}
                                           >
                                             <SelectTrigger className="w-32 h-9 font-semibold">
                                               <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
-                                              <SelectItem value="AND">AND</SelectItem>
-                                              <SelectItem value="OR">OR</SelectItem>
+                                              <SelectItem value={LOGICAL_OPERATOR.AND}>AND</SelectItem>
+                                              <SelectItem value={LOGICAL_OPERATOR.OR}>OR</SelectItem>
                                             </SelectContent>
                                           </Select>
                                         </div>
@@ -313,7 +315,12 @@ const ConditionalEdge = ({
                                 size="sm"
                                 className="w-full"
                                 onClick={() => {
-                                  conditionsField.pushValue({ field: source, logicalOperator: "AND", operator: "===", value: "" });
+                                  conditionsField.pushValue({
+                                    field: source,
+                                    logicalOperator: LOGICAL_OPERATOR.AND,
+                                    operator: "===",
+                                    value: "",
+                                  });
                                   handleSubmit().then();
                                 }}
                               >

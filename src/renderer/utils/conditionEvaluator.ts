@@ -1,7 +1,9 @@
 import { Node } from "@xyflow/react";
 import { FormValues } from "@/renderer/types/renderer";
-import { EdgeCondition, EdgeOperator } from "@/shared/types/edge";
+import { LOGICAL_OPERATOR } from "@/shared/constants/operator";
+import { EdgeCondition } from "@/shared/types/edge";
 import { TreegeNodeData } from "@/shared/types/node";
+import { LogicalOperator, Operator } from "@/shared/types/operator";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
 
 /**
@@ -25,7 +27,7 @@ const normalizeValue = (value: any): string | number | boolean | null => {
 /**
  * Compare two values using the specified operator
  */
-const compareValues = (fieldVal: any, condVal: any, operator: EdgeOperator): boolean => {
+const compareValues = (fieldVal: any, condVal: any, operator: Operator): boolean => {
   const normalizedFieldVal = normalizeValue(fieldVal);
   const normalizedCondVal = normalizeValue(condVal);
 
@@ -155,15 +157,13 @@ export const evaluateConditions = (
   for (let i = 1; i < conditions.length; i += 1) {
     const condition = conditions[i];
     const conditionResult = evaluateCondition(condition, formValues, nodeMap);
+    const logicalOperator: LogicalOperator = conditions[i - 1].logicalOperator || LOGICAL_OPERATOR.AND; // The logical operator is stored on the PREVIOUS condition
 
-    // The logical operator is stored on the PREVIOUS condition
-    const logicalOperator = conditions[i - 1].logicalOperator || "AND";
-
-    if (logicalOperator === "AND") {
+    if (logicalOperator === LOGICAL_OPERATOR.AND) {
       result = result && conditionResult;
       // Short-circuit: if result is false with AND, no need to continue
       if (!result) return false;
-    } else if (logicalOperator === "OR") {
+    } else if (logicalOperator === LOGICAL_OPERATOR.OR) {
       result = result || conditionResult;
       // Short-circuit: if result is true with OR, no need to continue
       if (result) return true;
