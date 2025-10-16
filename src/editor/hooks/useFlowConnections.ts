@@ -1,6 +1,4 @@
-import { addEdge, Node, useReactFlow } from "@xyflow/react";
-import type { OnEdgesDelete } from "@xyflow/react/dist/esm/types";
-import type { OnConnect, OnConnectEnd } from "@xyflow/system";
+import { addEdge, Node, OnConnect, OnConnectEnd, OnEdgesDelete, useReactFlow } from "@xyflow/react";
 import { nanoid } from "nanoid";
 import { useCallback } from "react";
 import { defaultNode } from "@/editor/constants/defaultNode";
