@@ -217,6 +217,14 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
   }, [nodes, visibleNodeIds]);
 
   /**
+   * Get top-level visible nodes (nodes without parent or with invisible parent)
+   */
+  const topLevelNodes = useMemo(
+    () => visibleNodes.filter((node) => !node.parentId || !visibleNodes.some((n) => n.id === node.parentId)),
+    [visibleNodes],
+  );
+
+  /**
    * Set field value and clear error for that field
    */
   const setFieldValue = useCallback((fieldName: string, value: any) => {
@@ -290,6 +298,7 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
     resetForm,
     setErrors,
     setFieldValue,
+    topLevelNodes,
     validateForm,
     visibleNodes,
   };

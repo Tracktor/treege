@@ -61,45 +61,26 @@ const TreegeRenderer = ({
   language = "en",
   validationMode = "onSubmit",
 }: TreegeRendererProps) => {
-  const { formValues, setFieldValue, getFieldValue, errors, setErrors, visibleNodes, validateForm } = useTreegeRenderer(
+  const { formValues, setFieldValue, getFieldValue, errors, setErrors, visibleNodes, topLevelNodes, validateForm } = useTreegeRenderer(
     nodes,
     edges,
     initialValues,
   );
 
+  const contextValue = useMemo(
+    () => ({
+      errors,
+      formValues,
+      getFieldValue,
+      language,
+      setFieldValue,
+    }),
+    [errors, formValues, getFieldValue, language, setFieldValue],
+  );
+
+  const FormWrapper = components.form || DefaultFormWrapper;
   const onChangeRef = useRef(onChange);
   const validateRef = useRef(validate);
-
-  /**
-   * Keep refs updated to avoid re-creating effects
-   */
-  useEffect(() => {
-    onChangeRef.current = onChange;
-  }, [onChange]);
-
-  /**
-   * Keep refs updated to avoid re-creating effects
-   */
-  useEffect(() => {
-    validateRef.current = validate;
-  }, [validate]);
-
-  /**
-   * Trigger onChange callback when form values change
-   */
-  useEffect(() => {
-    onChangeRef.current?.(formValues);
-  }, [formValues]);
-
-  /**
-   * Trigger validation when form values change based on validation mode
-   */
-  useEffect(() => {
-    if (validateRef.current && (validationMode === "onChange" || validationMode === "onBlur")) {
-      const customErrors = validateRef.current(formValues, visibleNodes);
-      setErrors((prev) => ({ ...prev, ...customErrors }));
-    }
-  }, [formValues, validationMode, visibleNodes, setErrors]);
 
   /**
    * Handle form submission
@@ -174,21 +155,36 @@ const TreegeRenderer = ({
     [components, visibleNodes],
   );
 
-  // Memoize context value to avoid unnecessary re-renders
-  const contextValue = useMemo(
-    () => ({
-      errors,
-      formValues,
-      getFieldValue,
-      language,
-      setFieldValue,
-    }),
-    [errors, formValues, getFieldValue, language, setFieldValue],
-  );
+  /**
+   * Keep refs updated to avoid re-creating effects
+   */
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
 
-  // Render all top-level visible nodes (nodes without parent or with invisible parent)
-  const topLevelNodes = visibleNodes.filter((node) => !node.parentId || !visibleNodes.some((n) => n.id === node.parentId));
-  const FormWrapper = components.form || DefaultFormWrapper;
+  /**
+   * Keep refs updated to avoid re-creating effects
+   */
+  useEffect(() => {
+    validateRef.current = validate;
+  }, [validate]);
+
+  /**
+   * Trigger onChange callback when form values change
+   */
+  useEffect(() => {
+    onChangeRef.current?.(formValues);
+  }, [formValues]);
+
+  /**
+   * Trigger validation when form values change based on validation mode
+   */
+  useEffect(() => {
+    if (validateRef.current && (validationMode === "onChange" || validationMode === "onBlur")) {
+      const customErrors = validateRef.current(formValues, visibleNodes);
+      setErrors((prev) => ({ ...prev, ...customErrors }));
+    }
+  }, [formValues, validationMode, visibleNodes, setErrors]);
 
   return (
     <TreegeRendererProvider value={contextValue}>
