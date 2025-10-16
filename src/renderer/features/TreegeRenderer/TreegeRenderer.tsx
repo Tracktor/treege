@@ -5,7 +5,7 @@ import DefaultGroup from "@/renderer/components/DefaultGroup";
 import { defaultInputRenderers } from "@/renderer/components/DefaultInputs";
 import { defaultUI } from "@/renderer/components/DefaultUI";
 import { TreegeRendererProvider } from "@/renderer/context/TreegeRendererContext";
-import { useTreegeForm } from "@/renderer/hooks/useTreegeForm";
+import { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
 import { FormValues, TreegeRendererComponents } from "@/renderer/types/renderer";
 import { NODE_TYPE } from "@/shared/constants/node";
 import { TreegeNodeData, UINodeData } from "@/shared/types/node";
@@ -61,7 +61,7 @@ const TreegeRenderer = ({
   language = "en",
   validationMode = "onSubmit",
 }: TreegeRendererProps) => {
-  const { formValues, setFieldValue, getFieldValue, errors, setErrors, visibleNodes, validateForm } = useTreegeForm(
+  const { formValues, setFieldValue, getFieldValue, errors, setErrors, visibleNodes, validateForm } = useTreegeRenderer(
     nodes,
     edges,
     initialValues,

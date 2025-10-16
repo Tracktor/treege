@@ -16,4 +16,4 @@ export * from "@/renderer/utils/conditionEvaluator";
 export { getTranslatedLabel } from "@/shared/utils/label";
 
 // Hooks
-export { useTreegeForm } from "@/renderer/hooks/useTreegeForm";
+export { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";

@@ -171,9 +171,9 @@ const initializeFormValues = (nodes: Node<TreegeNodeData>[], initialValues: Form
 };
 
 /**
- * Hook to manage form state and node visibility based on conditions
+ * Hook to manage renderer state, node visibility, and form values
  */
-export const useTreegeForm = (nodes: Node<TreegeNodeData>[], edges: Edge<ConditionalEdgeData>[], initialValues: FormValues = {}) => {
+export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<ConditionalEdgeData>[], initialValues: FormValues = {}) => {
   const [formValues, setFormValues] = useState<FormValues>(() => initializeFormValues(nodes, initialValues));
   const [errors, setErrors] = useState<Record<string, string>>({});
 
