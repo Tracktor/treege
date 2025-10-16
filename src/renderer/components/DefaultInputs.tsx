@@ -75,7 +75,7 @@ export const DefaultSelectInput = ({ node }: InputRenderProps) => {
       </Label>
       <Select value={value || ""} onValueChange={(val) => setFieldValue(name, val)}>
         <SelectTrigger>
-          <SelectValue placeholder={node.data.placeholder} />
+          <SelectValue placeholder={node.data.placeholder || ""} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
