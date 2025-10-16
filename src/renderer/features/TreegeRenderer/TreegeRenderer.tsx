@@ -1,4 +1,4 @@
-import { Edge, Node } from "@xyflow/react";
+import { Node } from "@xyflow/react";
 import { FormEvent, ReactNode, useCallback, useEffect, useRef } from "react";
 import DefaultFormWrapper from "@/renderer/components/DefaultFormWrapper";
 import DefaultGroup from "@/renderer/components/DefaultGroup";
@@ -7,50 +7,10 @@ import DefaultSubmitButton from "@/renderer/components/DefaultSubmitButton";
 import { defaultUI } from "@/renderer/components/DefaultUI";
 import { TreegeRendererProvider } from "@/renderer/context/TreegeRendererContext";
 import { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
-import { FormValues, TreegeRendererComponents } from "@/renderer/types/renderer";
+import { TreegeRendererProps } from "@/renderer/types/renderer";
 import { NODE_TYPE } from "@/shared/constants/node";
-import { ConditionalEdgeData } from "@/shared/types/edge";
 import { TreegeNodeData, UINodeData } from "@/shared/types/node";
 import { isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
-
-export type TreegeRendererProps = {
-  /**
-   * Flow nodes from the editor
-   */
-  nodes: Node<TreegeNodeData>[];
-  /**
-   * Flow edges from the editor
-   */
-  edges: Edge[] | Edge<ConditionalEdgeData>[];
-  /**
-   * Initial form values
-   */
-  initialValues?: FormValues;
-  /**
-   * Callback when form is submitted
-   */
-  onSubmit?: (values: FormValues) => void;
-  /**
-   * Callback when form values change
-   */
-  onChange?: (values: FormValues) => void;
-  /**
-   * Custom component renderers
-   */
-  components?: TreegeRendererComponents;
-  /**
-   * Current language for translations
-   */
-  language?: string;
-  /**
-   * Validation mode
-   */
-  validationMode?: "onChange" | "onBlur" | "onSubmit";
-  /**
-   * Custom validation function
-   */
-  validate?: (values: FormValues, nodes: Node<TreegeNodeData>[]) => Record<string, string>;
-};
 
 const TreegeRenderer = ({
   nodes,
