@@ -95,8 +95,14 @@ const findVisibleNodes = (
           const conditionalEdges = outgoingEdges.filter((edge) => edge.data?.conditions && edge.data.conditions.length > 0);
           const unconditionalEdges = outgoingEdges.filter((edge) => !edge.data?.conditions || edge.data.conditions.length === 0);
 
-          // Always follow unconditional edges (no branching)
+          // Follow unconditional edges, but gate progression for input nodes until they have a value
           unconditionalEdges.forEach((edge) => {
+            if (isInputNode(node)) {
+              const fieldName = getFieldName(node);
+              if (!hasValue(fieldName, formValues)) {
+                return; // wait for user input
+              }
+            }
             queue.push(edge.target);
           });
 

@@ -79,17 +79,25 @@ const TreegeRenderer = ({
     (e: FormEvent) => {
       e.preventDefault();
 
+      // Run built-in validation (required, pattern)
       const formIsValid = validateForm();
+
+      // Run custom validation if provided
       const customErrors = validateRef.current ? validateRef.current(formValues, visibleNodes) : {};
+
+      // Check if form is valid
       const isValid = formIsValid && Object.keys(customErrors).length === 0;
 
-      setErrors((prev) => ({ ...prev, ...customErrors }));
+      // Replace errors completely with custom errors (no merge to avoid stale errors)
+      if (Object.keys(customErrors).length > 0) {
+        setErrors(customErrors);
+      }
 
       if (isValid && onSubmit) {
         onSubmit(formValues);
       }
     },
-    [validateForm, formValues, visibleNodes, onSubmit, setErrors],
+    [validateForm, formValues, visibleNodes, setErrors, onSubmit],
   );
 
   /**
@@ -172,7 +180,8 @@ const TreegeRenderer = ({
   useEffect(() => {
     if (validateRef.current && (validationMode === "onChange" || validationMode === "onBlur")) {
       const customErrors = validateRef.current(formValues, visibleNodes);
-      setErrors((prev) => ({ ...prev, ...customErrors }));
+      // Replace errors completely (no merge to avoid stale errors)
+      setErrors(customErrors);
     }
   }, [formValues, validationMode, visibleNodes, setErrors]);
 
