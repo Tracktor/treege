@@ -8,7 +8,7 @@ import { defaultUI } from "@/renderer/components/DefaultUI";
 import { TreegeRendererProvider } from "@/renderer/context/TreegeRendererContext";
 import { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
 import { TreegeRendererProps } from "@/renderer/types/renderer";
-import { exportFormValues } from "@/renderer/utils/helpers";
+import { convertFormValuesToNamedFormat, initializeFormValues } from "@/renderer/utils/form";
 import { NODE_TYPE } from "@/shared/constants/node";
 import { InputNodeData, TreegeNodeData, UINodeData } from "@/shared/types/node";
 import { isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
@@ -24,22 +24,23 @@ const TreegeRenderer = ({
   language = "en",
   validationMode = "onSubmit",
 }: TreegeRendererProps) => {
+  const initializedValues = useMemo(() => initializeFormValues(nodes, initialValues), [nodes, initialValues]);
+
   const { formValues, setFieldValue, errors, setErrors, visibleNodes, topLevelNodes, validateForm, isEndOfPath } = useTreegeRenderer(
     nodes,
     edges,
-    initialValues,
+    initializedValues,
   );
 
+  // Components with fallbacks
+  const FormWrapper = components.form || DefaultFormWrapper;
+  const SubmitButton = components.submitButton || DefaultSubmitButton;
   // Refs to avoid re-creating effects
   const onChangeRef = useRef(onChange);
   const validateRef = useRef(validate);
-  // Component
-  const FormWrapper = components.form || DefaultFormWrapper;
-  const SubmitButton = components.submitButton || DefaultSubmitButton;
-
-  // Memoized values
+  // Memoize input nodes and exported values for callbacks
   const inputNodes = useMemo(() => nodes.filter(isInputNode) as Node<InputNodeData>[], [nodes]);
-  const exportedValues = useMemo(() => exportFormValues(formValues, inputNodes), [formValues, inputNodes]);
+  const exportedValues = useMemo(() => convertFormValuesToNamedFormat(formValues, inputNodes), [formValues, inputNodes]);
 
   /**
    * Handle form submission
@@ -64,8 +65,12 @@ const TreegeRenderer = ({
     [validateForm, formValues, visibleNodes, setErrors, onSubmit, exportedValues],
   );
 
+  // ============================================
+  // RENDERING LOGIC
+  // ============================================
+
   /**
-   * Render a single node
+   * Render a single node based on its type
    */
   const renderNode = useCallback(
     (node: Node<TreegeNodeData>): ReactNode => {
@@ -117,15 +122,19 @@ const TreegeRenderer = ({
     [components, visibleNodes],
   );
 
+  // ============================================
+  // SIDE EFFECTS
+  // ============================================
+
   /**
-   * Keep refs updated to avoid re-creating effects
+   * Keep onChange ref updated
    */
   useEffect(() => {
     onChangeRef.current = onChange;
   }, [onChange]);
 
   /**
-   * Keep refs updated to avoid re-creating effects
+   *  Keep validate ref updated
    */
   useEffect(() => {
     validateRef.current = validate;
@@ -139,7 +148,7 @@ const TreegeRenderer = ({
   }, [exportedValues]);
 
   /**
-   * Trigger validation when form values change based on validation mode
+   * Trigger validation on change based on validation mode
    */
   useEffect(() => {
     if (validateRef.current && (validationMode === "onChange" || validationMode === "onBlur")) {

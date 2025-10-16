@@ -2,188 +2,42 @@ import { Edge, Node } from "@xyflow/react";
 import { useCallback, useMemo, useState } from "react";
 import { FormValues } from "@/renderer/types/renderer";
 import { evaluateConditions } from "@/renderer/utils/conditionEvaluator";
+import { checkHasFormFieldValue } from "@/renderer/utils/form";
+import { buildEdgeMap, buildIncomingEdgeMap, findStartNode, findVisibleNodes } from "@/renderer/utils/nodeVisibility";
 import { ConditionalEdgeData } from "@/shared/types/edge";
 import { TreegeNodeData } from "@/shared/types/node";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
 
 /**
- * Check if a field has a value (not empty)
- */
-const hasValue = (fieldName: string | undefined, formValues: FormValues): boolean => {
-  if (!fieldName) return false;
-  const value = formValues[fieldName];
-  return value !== undefined && value !== null && value !== "";
-};
-
-/**
- * Build a map of node ID to outgoing edges
- */
-const buildEdgeMap = (edges: Edge<ConditionalEdgeData>[]): Map<string, Edge<ConditionalEdgeData>[]> => {
-  const edgeMap = new Map<string, Edge<ConditionalEdgeData>[]>();
-  edges.forEach((edge) => {
-    const outgoing = edgeMap.get(edge.source) || [];
-    outgoing.push(edge);
-    edgeMap.set(edge.source, outgoing);
-  });
-  return edgeMap;
-};
-
-/**
- * Build a map of node ID to incoming edges
- */
-const buildIncomingEdgeMap = (edges: Edge<ConditionalEdgeData>[]): Map<string, Edge<ConditionalEdgeData>[]> => {
-  const incomingEdgeMap = new Map<string, Edge<ConditionalEdgeData>[]>();
-  edges.forEach((edge) => {
-    const incoming = incomingEdgeMap.get(edge.target) || [];
-    incoming.push(edge);
-    incomingEdgeMap.set(edge.target, incoming);
-  });
-  return incomingEdgeMap;
-};
-
-/**
- * Find the start node (node without incoming edges)
- */
-const findStartNode = (
-  nodes: Node<TreegeNodeData>[],
-  incomingEdgeMap: Map<string, Edge<ConditionalEdgeData>[]>,
-): Node<TreegeNodeData> | undefined => {
-  const nodesWithoutIncoming = nodes.filter((node) => {
-    const incomingEdges = incomingEdgeMap.get(node.id) || [];
-    return incomingEdges.length === 0;
-  });
-
-  // Prefer input nodes as start, otherwise take first node
-  return nodesWithoutIncoming.find(isInputNode) || nodesWithoutIncoming[0];
-};
-
-/**
- * Find all visible nodes using branch-based progressive rendering
+ * PURE STATE LOGIC HOOK
  *
- * Logic:
- * - Start from the start node
- * - Follow all unconditional edges (always visible)
- * - When reaching a node with multiple conditional edges (a branch point):
- *   - Stop and wait for user input
- *   - Once the user fills the field, evaluate conditions and follow the matching branch
+ * This hook manages the internal form state and visibility logic.
+ * It contains NO side effects (no useEffect).
+ * All state is keyed by nodeId for uniqueness.
+ *
+ * Responsibilities:
+ * - Form values state (keyed by nodeId)
+ * - Errors state
+ * - Node visibility calculation (progressive rendering)
+ * - Form validation (built-in: required, pattern)
+ * - End of path detection
+ *
+ * NOT responsible for:
+ * - Export/conversion to external format (done in component)
+ * - Side effects like onChange callbacks (done in component)
+ * - Custom validation (passed to component)
  */
-const findVisibleNodes = (
-  startNodeId: string,
-  nodeMap: Map<string, Node<TreegeNodeData>>,
-  edgeMap: Map<string, Edge<ConditionalEdgeData>[]>,
-  formValues: FormValues,
-): Set<string> => {
-  const visible = new Set<string>();
-  const visited = new Set<string>();
-  const queue: string[] = [startNodeId];
-
-  while (queue.length > 0) {
-    const nodeId = queue.shift()!;
-
-    if (!visited.has(nodeId)) {
-      visited.add(nodeId);
-      visible.add(nodeId);
-
-      const node = nodeMap.get(nodeId);
-      if (node) {
-        // Get outgoing edges from this node
-        const outgoingEdges = edgeMap.get(nodeId) || [];
-
-        if (outgoingEdges.length > 0) {
-          // Separate conditional and unconditional edges
-          const conditionalEdges = outgoingEdges.filter((edge) => edge.data?.conditions && edge.data.conditions.length > 0);
-          const unconditionalEdges = outgoingEdges.filter((edge) => !edge.data?.conditions || edge.data.conditions.length === 0);
-
-          // Follow all unconditional edges immediately (no gating)
-          unconditionalEdges.forEach((edge) => {
-            queue.push(edge.target);
-          });
-
-          // Handle conditional edges (branching)
-          if (conditionalEdges.length > 0) {
-            // Separate fallback edges from regular conditional edges
-            const fallbackEdges = conditionalEdges.filter((edge) => edge.data?.isFallback);
-            const regularConditionalEdges = conditionalEdges.filter((edge) => !edge.data?.isFallback);
-
-            // Check if all condition fields for regular edges are filled
-            const allConditionFieldsFilled = regularConditionalEdges.every((edge) => {
-              const conditions = edge.data?.conditions || [];
-              return conditions.every((cond) => {
-                if (!cond.field) return true;
-
-                // Try to resolve field as node ID first
-                const fieldNode = nodeMap.get(cond.field);
-                const fieldName = isInputNode(fieldNode) ? fieldNode.id : cond.field;
-
-                return hasValue(fieldName, formValues);
-              });
-            });
-
-            // If all fields are filled, evaluate conditions and follow matching branches
-            if (allConditionFieldsFilled) {
-              const matchingEdges = regularConditionalEdges.filter((edge) => {
-                const conditions = edge.data?.conditions || [];
-                return evaluateConditions(conditions, formValues, nodeMap);
-              });
-
-              if (matchingEdges.length > 0) {
-                // Follow all matching edges
-                matchingEdges.forEach((edge) => queue.push(edge.target));
-              } else if (fallbackEdges.length > 0) {
-                // No conditions matched - follow the fallback edge(s)
-                fallbackEdges.forEach((edge) => queue.push(edge.target));
-              }
-            }
-            // If fields are not filled, stop here and wait for user input
-            // (don't add any conditional targets to the queue)
-          }
-        }
-      }
-    }
-  }
-
-  return visible;
-};
 
 /**
- * Initialize form values with defaults from input nodes
- */
-const initializeFormValues = (nodes: Node<TreegeNodeData>[], initialValues: FormValues): FormValues => {
-  const defaultValues: FormValues = { ...initialValues };
-
-  nodes.forEach((node) => {
-    if (isInputNode(node)) {
-      const fieldName = node.id;
-
-      if (defaultValues[fieldName] !== undefined) return;
-
-      const { defaultValue } = node.data;
-      if (!defaultValue) return;
-
-      // Handle static default value
-      if (defaultValue.type === "static" && defaultValue.staticValue !== undefined) {
-        defaultValues[fieldName] = defaultValue.staticValue;
-      }
-
-      // Handle reference default value
-      if (defaultValue.type === "reference" && defaultValue.referenceField) {
-        const { referenceField } = defaultValue;
-        const refValue = defaultValues[referenceField];
-        if (refValue !== undefined) {
-          defaultValues[fieldName] = refValue;
-        }
-      }
-    }
-  });
-
-  return defaultValues;
-};
-
-/**
- * Hook to manage renderer state, node visibility, and form values
+ * Custom hook for TreegeRenderer - Pure state logic only
+ *
+ * @param nodes - All nodes from the editor
+ * @param edges - All edges from the editor
+ * @param initialValues - Initial form values (already initialized with defaults)
+ * @returns Pure state and computed values (no side effects)
  */
 export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<ConditionalEdgeData>[], initialValues: FormValues = {}) => {
-  const [formValues, setFormValues] = useState<FormValues>(() => initializeFormValues(nodes, initialValues));
+  const [formValues, setFormValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const nodeMap = useMemo(() => new Map(nodes.map((node) => [node.id, node])), [nodes]);
   const edgeMap = useMemo(() => buildEdgeMap(edges), [edges]);
@@ -267,7 +121,7 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
               if (!cond.field) return true;
               const fieldNode = nodeMap.get(cond.field);
               const fieldName = isInputNode(fieldNode) ? fieldNode.id : cond.field;
-              return hasValue(fieldName, formValues);
+              return checkHasFormFieldValue(fieldName, formValues);
             });
           });
 
@@ -294,7 +148,7 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
           const fieldNode = nodeMap.get(cond.field);
           const fieldName = isInputNode(fieldNode) ? fieldNode.id : cond.field;
 
-          return hasValue(fieldName, formValues);
+          return checkHasFormFieldValue(fieldName, formValues);
         });
 
         // If not all fields are filled, we might follow this edge in the future
