@@ -8,6 +8,7 @@ import { TreegeRendererProvider } from "@/renderer/context/TreegeRendererContext
 import { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
 import { FormValues, TreegeRendererComponents } from "@/renderer/types/renderer";
 import { NODE_TYPE } from "@/shared/constants/node";
+import { ConditionalEdgeData } from "@/shared/types/edge";
 import { TreegeNodeData, UINodeData } from "@/shared/types/node";
 import { isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
 
@@ -19,7 +20,7 @@ export type TreegeRendererProps = {
   /**
    * Flow edges from the editor
    */
-  edges: Edge[];
+  edges: Edge[] | Edge<ConditionalEdgeData>[];
   /**
    * Initial form values
    */

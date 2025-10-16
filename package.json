@@ -35,7 +35,7 @@
     "build": "vite build",
     "lint": "eslint . --max-warnings=0 && tsc --noEmit",
     "preview": "vite preview",
-    "prepare": "yarn run build && husky install",
+    "prepare": "vite build && husky install",
     "example": "vite --open /example"
   },
   "dependencies": {
