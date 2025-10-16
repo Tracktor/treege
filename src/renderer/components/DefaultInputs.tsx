@@ -3,6 +3,7 @@ import { InputRenderProps } from "@/renderer/types/renderer";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { getTranslatedLabel } from "@/shared/utils/label";
@@ -153,29 +154,23 @@ export const DefaultRadioInput = ({ node }: InputRenderProps) => {
   const name = node.data.name || `${node.id}`;
   const value = getFieldValue(name);
   const error = errors[name];
-  const firstOptionValue = node.data.options?.[0]?.value;
 
   return (
     <FormItem className="mb-4">
-      <Label htmlFor={firstOptionValue ? `${name}-${firstOptionValue}` : undefined} className="block text-sm font-medium mb-2">
+      <Label className="block text-sm font-medium mb-2">
         {getTranslatedLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
-      {node.data.options?.map((opt) => (
-        <Label key={opt.value} htmlFor={`${name}-${opt.value}`} className="flex items-center mb-1">
-          <Input
-            type="radio"
-            id={`${name}-${opt.value}`}
-            name={name}
-            value={opt.value}
-            checked={value === opt.value}
-            onChange={(e) => setFieldValue(name, e.target.value)}
-            disabled={opt.disabled}
-            className="mr-2"
-          />
-          <span className="text-sm">{getTranslatedLabel(opt.label)}</span>
-        </Label>
-      ))}
+      <RadioGroup value={value || ""} onValueChange={(val) => setFieldValue(name, val)}>
+        {node.data.options?.map((opt) => (
+          <div key={opt.value} className="flex items-center space-x-2">
+            <RadioGroupItem value={opt.value} id={`${name}-${opt.value}`} disabled={opt.disabled} />
+            <Label htmlFor={`${name}-${opt.value}`} className="text-sm font-normal cursor-pointer">
+              {getTranslatedLabel(opt.label)}
+            </Label>
+          </div>
+        ))}
+      </RadioGroup>
       {error && <FormError>{error}</FormError>}
       {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
     </FormItem>
