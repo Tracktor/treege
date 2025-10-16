@@ -33,11 +33,41 @@ import { isInputNode } from "@/shared/utils/nodeTypeGuards";
  *
  * @param nodes - All nodes from the editor
  * @param edges - All edges from the editor
- * @param initialValues - Initial form values (already initialized with defaults)
+ * @param initialValues - Initial form values (will be merged with node defaults)
  * @returns Pure state and computed values (no side effects)
  */
 export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<ConditionalEdgeData>[], initialValues: FormValues = {}) => {
-  const [formValues, setFormValues] = useState<FormValues>(initialValues);
+  const [formValues, setFormValues] = useState<FormValues>(() => {
+    const defaultValues: FormValues = { ...initialValues };
+
+    nodes.forEach((node) => {
+      if (isInputNode(node)) {
+        const fieldName = node.id;
+
+        if (defaultValues[fieldName] !== undefined) return;
+
+        const { defaultValue } = node.data;
+        if (!defaultValue) return;
+
+        // Handle static default value
+        if (defaultValue.type === "static" && defaultValue.staticValue !== undefined) {
+          defaultValues[fieldName] = defaultValue.staticValue;
+        }
+
+        // Handle reference default value
+        if (defaultValue.type === "reference" && defaultValue.referenceField) {
+          const { referenceField } = defaultValue;
+          const refValue = defaultValues[referenceField];
+          if (refValue !== undefined) {
+            defaultValues[fieldName] = refValue;
+          }
+        }
+      }
+    });
+
+    return defaultValues;
+  });
+
   const [errors, setErrors] = useState<Record<string, string>>({});
   const nodeMap = useMemo(() => new Map(nodes.map((node) => [node.id, node])), [nodes]);
   const edgeMap = useMemo(() => buildEdgeMap(edges), [edges]);
@@ -218,20 +248,11 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
     return Object.keys(newErrors).length === 0;
   }, [visibleNodes, formValues]);
 
-  /**
-   * Reset form to initial values
-   */
-  const resetForm = useCallback(() => {
-    setFormValues(initialValues);
-    setErrors({});
-  }, [initialValues]);
-
   return {
     checkValidForm,
     errors,
     formValues,
     isEndOfPath,
-    resetForm,
     setErrors,
     setFieldValue,
     topLevelNodes,

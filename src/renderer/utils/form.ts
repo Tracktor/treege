@@ -1,41 +1,6 @@
 import { Node } from "@xyflow/react";
 import { FormValues } from "@/renderer/types/renderer";
-import { InputNodeData, TreegeNodeData } from "@/shared/types/node";
-import { isInputNode } from "@/shared/utils/nodeTypeGuards";
-
-/**
- * Initialize form values with defaults from input nodes
- */
-export const initializeFormValues = (nodes: Node<TreegeNodeData>[], initialValues: FormValues): FormValues => {
-  const defaultValues: FormValues = { ...initialValues };
-
-  nodes.forEach((node) => {
-    if (isInputNode(node)) {
-      const fieldName = node.id;
-
-      if (defaultValues[fieldName] !== undefined) return;
-
-      const { defaultValue } = node.data;
-      if (!defaultValue) return;
-
-      // Handle static default value
-      if (defaultValue.type === "static" && defaultValue.staticValue !== undefined) {
-        defaultValues[fieldName] = defaultValue.staticValue;
-      }
-
-      // Handle reference default value
-      if (defaultValue.type === "reference" && defaultValue.referenceField) {
-        const { referenceField } = defaultValue;
-        const refValue = defaultValues[referenceField];
-        if (refValue !== undefined) {
-          defaultValues[fieldName] = refValue;
-        }
-      }
-    }
-  });
-
-  return defaultValues;
-};
+import { InputNodeData } from "@/shared/types/node";
 
 /**
  * Check if a form field has a value (not empty)

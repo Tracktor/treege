@@ -8,7 +8,7 @@ import { defaultUI } from "@/renderer/components/web/DefaultUI";
 import { TreegeRendererProvider } from "@/renderer/context/TreegeRendererContext";
 import { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
 import { TreegeRendererProps } from "@/renderer/types/renderer";
-import { convertFormValuesToNamedFormat, initializeFormValues } from "@/renderer/utils/form";
+import { convertFormValuesToNamedFormat } from "@/renderer/utils/form";
 import { NODE_TYPE } from "@/shared/constants/node";
 import { InputNodeData, TreegeNodeData, UINodeData } from "@/shared/types/node";
 import { isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
@@ -24,12 +24,10 @@ const TreegeRenderer = ({
   language = "en",
   validationMode = "onSubmit",
 }: TreegeRendererProps) => {
-  const initializedValues = useMemo(() => initializeFormValues(nodes, initialValues), [nodes, initialValues]);
-
   const { formValues, setFieldValue, errors, setErrors, visibleNodes, topLevelNodes, checkValidForm, isEndOfPath } = useTreegeRenderer(
     nodes,
     edges,
-    initializedValues,
+    initialValues,
   );
 
   // Components with fallbacks
