@@ -99,9 +99,46 @@ export const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
   const value = formValues[name];
   const error = errors[name];
 
+  // If there are options, render a checkbox group (multiple checkboxes)
+  if (node.data.options && node.data.options.length > 0) {
+    const selectedValues = Array.isArray(value) ? value : [];
+
+    const handleCheckboxChange = (optionValue: string, checked: boolean) => {
+      const newValues = checked ? [...selectedValues, optionValue] : selectedValues.filter((v) => v !== optionValue);
+      setFieldValue(name, newValues);
+    };
+
+    return (
+      <FormItem className="mb-4">
+        <Label className="block text-sm font-medium mb-2">
+          {getTranslatedLabel(node.data.label, language) || node.data.name}
+          {node.data.required && <span className="text-red-500">*</span>}
+        </Label>
+        <div className="space-y-2">
+          {node.data.options.map((opt) => (
+            <div key={opt.value} className="flex items-center gap-3">
+              <Checkbox
+                id={`${name}-${opt.value}`}
+                checked={selectedValues.includes(opt.value)}
+                onCheckedChange={(checked) => handleCheckboxChange(opt.value, checked as boolean)}
+                disabled={opt.disabled}
+              />
+              <Label htmlFor={`${name}-${opt.value}`} className="text-sm font-normal cursor-pointer">
+                {getTranslatedLabel(opt.label)}
+              </Label>
+            </div>
+          ))}
+        </div>
+        {error && <FormError>{error}</FormError>}
+        {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+      </FormItem>
+    );
+  }
+
+  // Single checkbox (no options)
   return (
     <FormItem className="mb-4">
-      <div className="flex items-start gap-3">
+      <div className="flex items-center gap-3">
         <Checkbox id={name} checked={value || false} onCheckedChange={(checked) => setFieldValue(name, checked)} />
         <div className="grid gap-2">
           <Label htmlFor={name} className="text-sm font-medium cursor-pointer">
