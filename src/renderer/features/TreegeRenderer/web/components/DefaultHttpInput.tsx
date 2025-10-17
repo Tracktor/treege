@@ -42,10 +42,10 @@ const getValueByPath = (obj: HttpResponse, path: string): unknown => {
 
 /**
  * Replaces template variables in a string with values from formValues
- * Example: "https://api.com/users/${userId}" -> "https://api.com/users/123"
+ * Example: "https://api.com/users/{{userId}}" -> "https://api.com/users/123"
  */
 const replaceTemplateVars = (template: string, formValues: Record<string, unknown>): string =>
-  template.replace(/\$\{(\w+)\}/g, (_, key) => String(formValues[key] || ""));
+  template.replace(/{{(\w+)}}/g, (_, key) => String(formValues[key] || ""));
 
 const DefaultHttpInput = ({ node }: InputRenderProps) => {
   const [loading, setLoading] = useState(false);

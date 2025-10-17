@@ -87,7 +87,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                         <DropdownMenuItem
                           key={availField.nodeId}
                           onClick={() => {
-                            const variable = `\${${availField.nodeId}}`;
+                            const variable = `{{${availField.nodeId}}}`;
                             const currentValue = field.state.value || "";
                             field.handleChange(currentValue + variable);
                             handleSubmit().then();
@@ -95,7 +95,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                         >
                           <div className="flex flex-col">
                             <span className="font-medium">{availField.label}</span>
-                            <span className="text-xs text-muted-foreground">{`\${${availField.nodeId}}`}</span>
+                            <span className="text-xs text-muted-foreground">{`{{${availField.nodeId}}}`}</span>
                           </div>
                         </DropdownMenuItem>
                       ))
@@ -103,7 +103,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <FormDescription>Use template variables like ${"{fieldId}"} to reference other fields</FormDescription>
+              <FormDescription>Use template variables like {"{{fieldId}}"} to reference other fields</FormDescription>
             </FormItem>
           )}
         />
@@ -216,7 +216,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                           <DropdownMenuItem
                             key={availField.nodeId}
                             onClick={() => {
-                              const variable = `\${${availField.nodeId}}`;
+                              const variable = `{{${availField.nodeId}}}`;
                               const currentValue = field.state.value || "";
                               field.handleChange(currentValue + variable);
                               handleSubmit().then();
@@ -224,7 +224,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                           >
                             <div className="flex flex-col">
                               <span className="font-medium">{availField.label}</span>
-                              <span className="text-xs text-muted-foreground">{`\${${availField.nodeId}}`}</span>
+                              <span className="text-xs text-muted-foreground">{`{{${availField.nodeId}}}`}</span>
                             </div>
                           </DropdownMenuItem>
                         ))
@@ -241,7 +241,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                   placeholder='{"key": "value"}'
                   rows={4}
                 />
-                <FormDescription>Use template variables like ${"{fieldId}"} to reference other fields</FormDescription>
+                <FormDescription>Use template variables like {"{{fieldId}}"} to reference other fields</FormDescription>
               </FormItem>
             )}
           />

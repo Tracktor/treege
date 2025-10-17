@@ -59,7 +59,7 @@ export type HttpConfig = {
    */
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   /**
-   * The API URL to call (supports template variables like ${fieldId})
+   * The API URL to call (supports template variables like {{fieldId}})
    */
   url?: string;
   /**
