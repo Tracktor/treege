@@ -1,5 +1,5 @@
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
-import { DefaultHttpInput } from "@/renderer/features/TreegeRenderer/web/components/DefaultHttpInput";
+import DefaultHttpInput from "@/renderer/features/TreegeRenderer/web/components/DefaultHttpInput";
 import { InputRenderProps } from "@/renderer/types/renderer";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
