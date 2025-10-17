@@ -5,8 +5,8 @@ import { TreegeNodeData } from "@/shared/types/node";
 
 export type TreegeContextValue = {
   formValues: FormValues;
+  formErrors: Record<string, string>;
   setFieldValue: (fieldName: string, value: any) => void;
-  errors: Record<string, string>;
   language: string;
   nodes: Node<TreegeNodeData>[];
   edges: Edge[];

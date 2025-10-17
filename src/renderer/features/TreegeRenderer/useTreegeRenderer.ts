@@ -1,9 +1,7 @@
 import { Edge, Node } from "@xyflow/react";
 import { useCallback, useMemo, useState } from "react";
 import { FormValues } from "@/renderer/types/renderer";
-import { evaluateConditions } from "@/renderer/utils/conditions";
-import { buildEdgeMap, buildIncomingEdgeMap, findStartNode, findVisibleNodes, sortNodesByTopology } from "@/renderer/utils/flow";
-import { checkHasFormFieldValue } from "@/renderer/utils/form";
+import { buildEdgeMap, findStartNode, getVisibleNodesInOrder } from "@/renderer/utils/flow";
 import { ConditionalEdgeData } from "@/shared/types/edge";
 import { TreegeNodeData } from "@/shared/types/node";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
@@ -68,132 +66,63 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
     return defaultValues;
   });
 
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+
+  // Build maps for efficient lookups
   const nodeMap = useMemo(() => new Map(nodes.map((node) => [node.id, node])), [nodes]);
   const edgeMap = useMemo(() => buildEdgeMap(edges), [edges]);
-  const incomingEdgeMap = useMemo(() => buildIncomingEdgeMap(edges), [edges]);
-  const startNode = useMemo(() => findStartNode(nodes, incomingEdgeMap), [nodes, incomingEdgeMap]);
+  const startNode = useMemo(() => findStartNode(nodes, edges), [nodes, edges]);
 
   /**
-   * Calculate which nodes should be visible based on current form values
-   * This implements progressive rendering:
-   * 1. Start from the start node (always visible)
-   * 2. Show next nodes only when:
-   *    - Current node has a value (for input nodes)
-   *    - Edge conditions are met (if any)
-   * 3. This creates a step-by-step form experience
+   * Calculate visible nodes using the new unified function
+   * This does everything in one pass:
+   * - Determines visibility based on form values and conditions
+   * - Orders nodes in the correct flow sequence
+   * - Detects if we've reached the end of the path
    */
-  const visibleNodeIds = useMemo(() => {
-    if (!startNode) return new Set<string>();
+  const {
+    isEndOfPath,
+    visibleNodeIds,
+    visibleNodes: orderedVisibleNodes,
+  } = useMemo(() => {
+    if (!startNode) {
+      return {
+        isEndOfPath: true,
+        visibleNodeIds: new Set<string>(),
+        visibleNodes: [],
+      };
+    }
 
-    return findVisibleNodes(startNode.id, nodeMap, edgeMap, formValues);
+    return getVisibleNodesInOrder(startNode.id, nodeMap, edgeMap, formValues);
   }, [startNode, nodeMap, edgeMap, formValues]);
 
   /**
-   * Get all visible nodes (including parent groups of visible nodes)
+   * Add parent groups of visible nodes
+   * If a node is visible and has a parent, the parent group should also be visible
    */
-  const visibleNodes = useMemo(() => {
-    const visible = new Set(visibleNodeIds);
+  const allVisibleNodes = useMemo(() => {
+    const visibleWithParents = new Set(visibleNodeIds);
 
     // Add parent groups of visible nodes
     nodes.forEach((node) => {
       if (visibleNodeIds.has(node.id) && node.parentId) {
-        visible.add(node.parentId);
+        visibleWithParents.add(node.parentId);
       }
     });
 
-    return nodes.filter((node) => visible.has(node.id));
+    return nodes.filter((node) => visibleWithParents.has(node.id));
   }, [nodes, visibleNodeIds]);
 
   /**
    * Get top-level visible nodes (nodes without parent or with invisible parent)
-   * Sorted in topological order based on edges
+   * These are the nodes that should be rendered at the root level
    */
-  const topLevelNodes = useMemo(() => {
-    const topLevel = visibleNodes.filter((node) => !node.parentId || !visibleNodes.some((n) => n.id === node.parentId));
-    return sortNodesByTopology(topLevel, edges, visibleNodeIds);
-  }, [visibleNodes, edges, visibleNodeIds]);
-
-  /**
-   * Check if we're at the end of a path (no more nodes can be revealed)
-   * We're at the end when there are no outgoing edges from any visible node
-   * that could potentially lead to new nodes
-   */
-  const isEndOfPath = useMemo(() => {
-    // Check if there are any visible nodes with outgoing edges that could reveal new nodes
-    const hasUnexploredPaths = visibleNodes.some((node) => {
-      const outgoing = edgeMap.get(node.id) || [];
-
-      return outgoing.some((edge) => {
-        // If target is already visible, this edge won't reveal anything new
-        if (visibleNodeIds.has(edge.target)) return false;
-
-        // Check if this is an unconditional edge
-        const conditions = edge.data?.conditions || [];
-        if (conditions.length === 0) {
-          // Unconditional edge to non-visible node - this should have been followed already
-          // This means we're not at the end yet (edge will be followed when conditions are met)
-          return true;
-        }
-
-        // For fallback edges, check if there are any other edges from the same source
-        // that could match instead
-        if (edge.data?.isFallback) {
-          // Get all edges from the same source
-          const edgesFromSource = edgeMap.get(node.id) || [];
-          const nonFallbackEdges = edgesFromSource.filter((e) => !e.data?.isFallback && e.id !== edge.id);
-
-          // Check if any non-fallback edge conditions are filled
-          const hasFilledNonFallbackEdges = nonFallbackEdges.some((e) => {
-            const conds = e.data?.conditions || [];
-            if (conds.length === 0) return true; // Unconditional edge
-
-            return conds.every((cond) => {
-              if (!cond.field) return true;
-              const fieldNode = nodeMap.get(cond.field);
-              const fieldName = isInputNode(fieldNode) ? fieldNode.id : cond.field;
-              return checkHasFormFieldValue(fieldName, formValues);
-            });
-          });
-
-          // If non-fallback edges have conditions filled but none match, fallback is unexplored
-          if (hasFilledNonFallbackEdges) {
-            const anyNonFallbackMatches = nonFallbackEdges.some((e) => {
-              const conds = e.data?.conditions || [];
-              return evaluateConditions(conds, formValues, nodeMap);
-            });
-
-            // Fallback is unexplored only if no non-fallback edges match
-            return !anyNonFallbackMatches;
-          }
-
-          // If non-fallback conditions are not filled, we might not need fallback
-          return true;
-        }
-
-        // For regular conditional edges, check if the conditions COULD be met in the future
-        // If all condition fields are already filled, check if conditions evaluate to true
-        const allConditionFieldsFilled = conditions.every((cond) => {
-          if (!cond.field) return true;
-
-          const fieldNode = nodeMap.get(cond.field);
-          const fieldName = isInputNode(fieldNode) ? fieldNode.id : cond.field;
-
-          return checkHasFormFieldValue(fieldName, formValues);
-        });
-
-        // If not all fields are filled, we might follow this edge in the future
-        if (!allConditionFieldsFilled) return true;
-
-        // If all fields are filled, check if conditions evaluate to true
-        // If false, this edge will never be followed, so it doesn't count as unexplored
-        return evaluateConditions(conditions, formValues, nodeMap);
-      });
-    });
-
-    // We're at the end if there are no unexplored paths
-    return !hasUnexploredPaths;
-  }, [visibleNodes, edgeMap, visibleNodeIds, nodeMap, formValues]);
+  const topLevelNodes = useMemo(
+    () =>
+      // Filter ordered visible nodes to only include top-level ones
+      orderedVisibleNodes.filter((node: Node<TreegeNodeData>) => !node.parentId || !allVisibleNodes.some((n) => n.id === node.parentId)),
+    [orderedVisibleNodes, allVisibleNodes],
+  );
 
   /**
    * Set field value and clear error for that field
@@ -205,7 +134,7 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
     }));
 
     // Clear error when user types
-    setErrors((prev) => {
+    setFormErrors((prev) => {
       const newErrors = { ...prev };
       delete newErrors[fieldName];
       return newErrors;
@@ -218,7 +147,7 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
   const checkValidForm = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
 
-    visibleNodes.forEach((node) => {
+    allVisibleNodes.forEach((node) => {
       if (isInputNode(node)) {
         const fieldName = node.id;
         const value = formValues[fieldName];
@@ -245,18 +174,18 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
       }
     });
 
-    setErrors(newErrors);
+    setFormErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [visibleNodes, formValues]);
+  }, [allVisibleNodes, formValues]);
 
   return {
     checkValidForm,
-    errors,
+    formErrors,
     formValues,
     isEndOfPath,
-    setErrors,
     setFieldValue,
+    setFormErrors,
     topLevelNodes,
-    visibleNodes,
+    visibleNodes: allVisibleNodes,
   };
 };

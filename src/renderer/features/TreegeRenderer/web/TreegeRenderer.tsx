@@ -24,11 +24,8 @@ const TreegeRenderer = ({
   language = "en",
   validationMode = "onSubmit",
 }: TreegeRendererProps) => {
-  const { formValues, setFieldValue, errors, setErrors, visibleNodes, topLevelNodes, checkValidForm, isEndOfPath } = useTreegeRenderer(
-    nodes,
-    edges,
-    initialValues,
-  );
+  const { formValues, setFieldValue, formErrors, setFormErrors, visibleNodes, topLevelNodes, checkValidForm, isEndOfPath } =
+    useTreegeRenderer(nodes, edges, initialValues);
 
   // Components with fallbacks
   const FormWrapper = components.form || DefaultFormWrapper;
@@ -53,14 +50,14 @@ const TreegeRenderer = ({
 
       // Replace errors completely with custom errors (no merge to avoid stale errors)
       if (Object.keys(customErrors).length > 0) {
-        setErrors(customErrors);
+        setFormErrors(customErrors);
       }
 
       if (isValid && onSubmit) {
         onSubmit(exportedValues);
       }
     },
-    [checkValidForm, formValues, visibleNodes, setErrors, onSubmit, exportedValues],
+    [checkValidForm, formValues, visibleNodes, setFormErrors, onSubmit, exportedValues],
   );
 
   // ============================================
@@ -152,15 +149,15 @@ const TreegeRenderer = ({
     if (validateRef.current && (validationMode === "onChange" || validationMode === "onBlur")) {
       const customErrors = validateRef.current(formValues, visibleNodes);
       // Replace errors completely (no merge to avoid stale errors)
-      setErrors(customErrors);
+      setFormErrors(customErrors);
     }
-  }, [formValues, validationMode, visibleNodes, setErrors]);
+  }, [formValues, validationMode, visibleNodes, setFormErrors]);
 
   return (
     <TreegeRendererProvider
       value={{
         edges,
-        errors,
+        formErrors,
         formValues,
         language,
         nodes,

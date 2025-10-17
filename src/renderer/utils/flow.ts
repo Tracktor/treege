@@ -6,210 +6,195 @@ import { ConditionalEdgeData } from "@/shared/types/edge";
 import { TreegeNodeData } from "@/shared/types/node";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
 
+// ============================================
+// TYPES
+// ============================================
+
 /**
- * Build a map of node ID to outgoing edges
+ * Result from the progressive rendering traversal
+ * Contains everything needed to render the form and determine its state
+ */
+export interface VisibleNodesResult {
+  /** Ordered array of nodes to render (in flow order) */
+  visibleNodes: Node<TreegeNodeData>[];
+
+  /** Whether we've reached the end of the current path (show submit button) */
+  isEndOfPath: boolean;
+
+  /** Set of all visible node IDs for quick lookup */
+  visibleNodeIds: Set<string>;
+}
+
+// ============================================
+// UTILITY FUNCTIONS
+// ============================================
+
+/**
+ * Build a map of node ID to outgoing edges for O(1) lookup during traversal
  */
 export const buildEdgeMap = (edges: Edge<ConditionalEdgeData>[]): Map<string, Edge<ConditionalEdgeData>[]> => {
-  const edgeMap = new Map<string, Edge<ConditionalEdgeData>[]>();
+  const map = new Map<string, Edge<ConditionalEdgeData>[]>();
   edges.forEach((edge) => {
-    const outgoing = edgeMap.get(edge.source) || [];
-    outgoing.push(edge);
-    edgeMap.set(edge.source, outgoing);
+    const list = map.get(edge.source);
+    if (list) list.push(edge);
+    else map.set(edge.source, [edge]);
   });
-  return edgeMap;
-};
-
-/**
- * Build a map of node ID to incoming edges
- */
-export const buildIncomingEdgeMap = (edges: Edge<ConditionalEdgeData>[]): Map<string, Edge<ConditionalEdgeData>[]> => {
-  const incomingEdgeMap = new Map<string, Edge<ConditionalEdgeData>[]>();
-  edges.forEach((edge) => {
-    const incoming = incomingEdgeMap.get(edge.target) || [];
-    incoming.push(edge);
-    incomingEdgeMap.set(edge.target, incoming);
-  });
-  return incomingEdgeMap;
-};
-
-/**
- * Find the start node (node without incoming edges)
- */
-export const findStartNode = (
-  nodes: Node<TreegeNodeData>[],
-  incomingEdgeMap: Map<string, Edge<ConditionalEdgeData>[]>,
-): Node<TreegeNodeData> | undefined => {
-  const nodesWithoutIncoming = nodes.filter((node) => {
-    const incomingEdges = incomingEdgeMap.get(node.id) || [];
-    return incomingEdges.length === 0;
-  });
-
-  // Prefer input nodes as start, otherwise take first node
-  return nodesWithoutIncoming.find(isInputNode) || nodesWithoutIncoming[0];
+  return map;
 };
 
 /**
  * Check if a node is the start node (has no incoming edges)
+ * Used by UI components to determine if a node is the first in the flow
  */
 export const isStartNode = (nodeId: string, edges: Edge[]): boolean => !edges.some((edge) => edge.target === nodeId);
 
 /**
- * Find all visible nodes using branch-based progressive rendering
- *
- * Logic:
- * - Start from the start node
- * - Follow all unconditional edges (always visible)
- * - When reaching a node with multiple conditional edges (a branch point):
- *   - Stop and wait for user input
- *   - Once the user fills the field, evaluate conditions and follow the matching branch
+ * Find the start node (node without incoming edges)
+ * Prefers input nodes as the start, otherwise takes the first node found
  */
-export const findVisibleNodes = (
+export const findStartNode = (nodes: Node<TreegeNodeData>[], edges: Edge[]): Node<TreegeNodeData> | undefined => {
+  const nodesWithoutIncoming = nodes.filter((node) => isStartNode(node.id, edges));
+  return nodesWithoutIncoming.find(isInputNode) || nodesWithoutIncoming[0];
+};
+
+/**
+ * Determine which edges to follow from a node
+ * Core progressive rendering logic - simple and direct
+ */
+const determineEdgesToFollow = (
+  edges: Edge<ConditionalEdgeData>[],
+  formValues: FormValues,
+  nodeMap: Map<string, Node<TreegeNodeData>>,
+): { edgesToFollow: Edge<ConditionalEdgeData>[]; waitingForInput: boolean } => {
+  const edgesToFollow: Edge<ConditionalEdgeData>[] = [];
+
+  // 1. Always follow edges without conditions
+  const unconditional = edges.filter((e) => !e.data?.conditions || e.data.conditions.length === 0);
+  edgesToFollow.push(...unconditional);
+
+  // 2. Handle edges with conditions (excluding fallbacks)
+  const conditional = edges.filter((e) => e.data?.conditions?.length && !e.data?.isFallback);
+
+  if (conditional.length > 0) {
+    // Check if all required fields are filled
+    const allFieldsFilled = conditional.every((edge) =>
+      edge.data!.conditions!.every((cond) => {
+        if (!cond.field) return true;
+        const fieldNode = nodeMap.get(cond.field);
+        const fieldName = isInputNode(fieldNode) ? fieldNode.id : cond.field;
+        return checkHasFormFieldValue(fieldName, formValues);
+      }),
+    );
+
+    // If fields not filled, wait for user input
+    if (!allFieldsFilled) {
+      return { edgesToFollow, waitingForInput: true };
+    }
+
+    // Evaluate conditions and follow matching edges
+    const matching = conditional.filter((e) => evaluateConditions(e.data?.conditions, formValues, nodeMap));
+
+    if (matching.length > 0) {
+      edgesToFollow.push(...matching);
+    } else {
+      // No match - follow fallback edges if any
+      const fallback = edges.filter((e) => e.data?.isFallback);
+      edgesToFollow.push(...fallback);
+    }
+  }
+
+  return { edgesToFollow, waitingForInput: false };
+};
+
+// ============================================
+// MAIN FUNCTION
+// ============================================
+
+/**
+ * Get all visible nodes in the correct order for progressive rendering
+ *
+ * This is the MAIN function that replaces both findVisibleNodes and orderNodesByFlow.
+ * It does everything in a single recursive traversal:
+ * 1. Determines which nodes should be visible based on form values and edge conditions
+ * 2. Orders them in the correct flow sequence for rendering
+ * 3. Detects if we've reached the end of the path (to show submit button)
+ *
+ * Progressive Rendering Logic:
+ * - Start from the first node (no incoming edges)
+ * - Show the current node
+ * - If the node has outgoing edges:
+ *   - Unconditional edges: always follow
+ *   - Conditional edges: only follow if conditions are met AND all required fields are filled
+ *   - Fallback edges: follow only if no conditional edges match
+ * - If we encounter a node where conditional fields are not yet filled, STOP (wait for user input)
+ * - Continue until no more nodes can be revealed
+ *
+ * @param startNodeId - The ID of the start node (node without incoming edges)
+ * @param nodeMap - Map of all nodes by ID
+ * @param edgeMap - Map of outgoing edges by source node ID
+ * @param formValues - Current form values
+ * @returns Object with visible nodes (ordered), end-of-path flag, and visible node IDs set
+ */
+export const getVisibleNodesInOrder = (
   startNodeId: string,
   nodeMap: Map<string, Node<TreegeNodeData>>,
   edgeMap: Map<string, Edge<ConditionalEdgeData>[]>,
   formValues: FormValues,
-): Set<string> => {
-  const visible = new Set<string>();
+): VisibleNodesResult => {
+  const visibleNodes: Node<TreegeNodeData>[] = [];
+  const visibleNodeIds = new Set<string>();
   const visited = new Set<string>();
-  const queue: string[] = [startNodeId];
+  let hasUnexploredPaths = false;
 
-  while (queue.length > 0) {
-    const nodeId = queue.shift()!;
-
-    if (!visited.has(nodeId)) {
-      visited.add(nodeId);
-      visible.add(nodeId);
-
-      const node = nodeMap.get(nodeId);
-      if (node) {
-        // Get outgoing edges from this node
-        const outgoingEdges = edgeMap.get(nodeId) || [];
-
-        if (outgoingEdges.length > 0) {
-          // Separate conditional and unconditional edges
-          const conditionalEdges = outgoingEdges.filter((edge) => edge.data?.conditions && edge.data.conditions.length > 0);
-          const unconditionalEdges = outgoingEdges.filter((edge) => !edge.data?.conditions || edge.data.conditions.length === 0);
-
-          // Follow all unconditional edges immediately (no gating)
-          unconditionalEdges.forEach((edge) => {
-            queue.push(edge.target);
-          });
-
-          // Handle conditional edges (branching)
-          if (conditionalEdges.length > 0) {
-            // Separate fallback edges from regular conditional edges
-            const fallbackEdges = conditionalEdges.filter((edge) => edge.data?.isFallback);
-            const regularConditionalEdges = conditionalEdges.filter((edge) => !edge.data?.isFallback);
-
-            // Check if all condition fields for regular edges are filled
-            const allConditionFieldsFilled = regularConditionalEdges.every((edge) => {
-              const conditions = edge.data?.conditions || [];
-              return conditions.every((cond) => {
-                if (!cond.field) return true;
-
-                // Try to resolve field as node ID first
-                const fieldNode = nodeMap.get(cond.field);
-                const fieldName = isInputNode(fieldNode) ? fieldNode.id : cond.field;
-
-                return checkHasFormFieldValue(fieldName, formValues);
-              });
-            });
-
-            // If all fields are filled, evaluate conditions and follow matching branches
-            if (allConditionFieldsFilled) {
-              const matchingEdges = regularConditionalEdges.filter((edge) => {
-                const conditions = edge.data?.conditions || [];
-                return evaluateConditions(conditions, formValues, nodeMap);
-              });
-
-              if (matchingEdges.length > 0) {
-                // Follow all matching edges
-                matchingEdges.forEach((edge) => queue.push(edge.target));
-              } else if (fallbackEdges.length > 0) {
-                // No conditions matched - follow the fallback edge(s)
-                fallbackEdges.forEach((edge) => queue.push(edge.target));
-              }
-            }
-            // If fields are not filled, stop here and wait for user input
-            // (don't add any conditional targets to the queue)
-          }
-        }
-      }
+  /**
+   * Recursive function to traverse the graph and collect visible nodes
+   */
+  const traverse = (nodeId: string): void => {
+    // Skip if already visited
+    if (visited.has(nodeId)) {
+      return;
     }
-  }
 
-  return visible;
-};
+    visited.add(nodeId);
+    visibleNodeIds.add(nodeId);
 
-/**
- * Sort nodes in topological order based on edges
- * Nodes without incoming edges from the set come first
- *
- * @param nodes - Nodes to sort
- * @param edges - All edges
- * @param visibleNodeIds - Set of visible node IDs (to filter edges)
- * @returns Sorted array of nodes following the graph flow
- */
-export const sortNodesByTopology = (
-  nodes: Node<TreegeNodeData>[],
-  edges: Edge<ConditionalEdgeData>[],
-  visibleNodeIds: Set<string>,
-): Node<TreegeNodeData>[] => {
-  // Filter edges to only include those between visible nodes
-  const relevantEdges = edges.filter((edge) => visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target));
-
-  // Build incoming edge map for visible nodes only
-  const incomingCount = new Map<string, number>();
-  const nodeMap = new Map(nodes.map((node) => [node.id, node]));
-
-  // Initialize all nodes with 0 incoming edges
-  nodes.forEach((node) => {
-    incomingCount.set(node.id, 0);
-  });
-
-  // Count incoming edges
-  relevantEdges.forEach((edge) => {
-    incomingCount.set(edge.target, (incomingCount.get(edge.target) || 0) + 1);
-  });
-
-  // Build adjacency list
-  const adjacencyList = new Map<string, string[]>();
-  relevantEdges.forEach((edge) => {
-    const targets = adjacencyList.get(edge.source) || [];
-    targets.push(edge.target);
-    adjacencyList.set(edge.source, targets);
-  });
-
-  // Kahn's algorithm for topological sort
-  const result: Node<TreegeNodeData>[] = [];
-  const queue: string[] = [];
-
-  // Start with nodes that have no incoming edges
-  nodes.forEach((node) => {
-    if (incomingCount.get(node.id) === 0) {
-      queue.push(node.id);
-    }
-  });
-
-  while (queue.length > 0) {
-    const nodeId = queue.shift()!;
     const node = nodeMap.get(nodeId);
-
-    if (node) {
-      result.push(node);
+    if (!node) {
+      return;
     }
 
-    // Reduce incoming count for all neighbors
-    const neighbors = adjacencyList.get(nodeId) || [];
-    neighbors.forEach((neighborId) => {
-      const count = incomingCount.get(neighborId)! - 1;
-      incomingCount.set(neighborId, count);
+    // Add node to the visible list (in traversal order)
+    visibleNodes.push(node);
 
-      if (count === 0) {
-        queue.push(neighborId);
-      }
+    // Get outgoing edges from this node
+    const outgoingEdges = edgeMap.get(nodeId) || [];
+
+    // Determine which edges we should follow
+    const { edgesToFollow, waitingForInput } = determineEdgesToFollow(outgoingEdges, formValues, nodeMap);
+
+    // If we're waiting for input, we have unexplored paths
+    if (waitingForInput) {
+      hasUnexploredPaths = true;
+      return; // Don't traverse further - wait for user input
+    }
+
+    // If we have edges to follow but none match, we might have unexplored paths
+    if (outgoingEdges.length > 0 && edgesToFollow.length === 0) {
+      hasUnexploredPaths = true;
+    }
+
+    // Follow the determined edges recursively
+    edgesToFollow.forEach((edge) => {
+      traverse(edge.target);
     });
-  }
+  };
 
-  return result;
+  // Start traversal from the start node
+  traverse(startNodeId);
+
+  return {
+    isEndOfPath: !hasUnexploredPaths,
+    visibleNodeIds,
+    visibleNodes,
+  };
 };
