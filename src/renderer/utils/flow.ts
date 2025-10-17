@@ -118,7 +118,6 @@ export const getVisibleNodesInOrder = (
   // Build lookup maps for O(1) access during traversal
   const nodeMap = new Map(nodes.map((n) => [n.id, n]));
   const edgeMap = buildEdgeMap(edges);
-
   const visibleNodes: Node<TreegeNodeData>[] = [];
   const visibleNodeIds = new Set<string>();
   const visited = new Set<string>();
@@ -134,7 +133,10 @@ export const getVisibleNodesInOrder = (
     visibleNodeIds.add(nodeId);
 
     const node = nodeMap.get(nodeId);
-    if (!node) return;
+
+    if (!node) {
+      return;
+    }
 
     visibleNodes.push(node);
 
