@@ -1,26 +1,24 @@
 import { useForm } from "@tanstack/react-form";
 import { useState } from "react";
-import SelectLanguage from "@/editor/features/TreegeEditor/Inputs/SelectLanguage";
+import SelectLanguage from "@/editor/features/TreegeEditor/inputs/SelectLanguage";
 import useFlowActions from "@/editor/hooks/useFlowActions";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
-import { FormItem } from "@/shared/components/ui/form";
+import { FormDescription, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
-import { UI_TYPE } from "@/shared/constants/uiType";
 import { Language } from "@/shared/types/languages";
-import { UINodeData, UIType } from "@/shared/types/node";
+import { FlowNodeData } from "@/shared/types/node";
 
-const UINodeForm = () => {
+const FlowNodeForm = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<Language>("en");
-  const { selectedNode } = useNodesSelection<UINodeData>();
   const { updateSelectedNodeData } = useFlowActions();
+  const { selectedNode } = useNodesSelection<FlowNodeData>();
 
   const { Field } = useForm({
     defaultValues: {
       label: selectedNode?.data?.label || { en: "" },
-      type: selectedNode?.data?.type || UI_TYPE.title,
-    } as UINodeData,
+      targetId: selectedNode?.data?.targetId || "",
+    } as FlowNodeData,
     listeners: {
       onChange: ({ formApi }) => {
         formApi.handleSubmit().then();
@@ -34,7 +32,7 @@ const UINodeForm = () => {
 
   return (
     <form
-      id="ui-node-form"
+      id="flow-node-form"
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -66,22 +64,19 @@ const UINodeForm = () => {
         </div>
 
         <Field
-          name="type"
+          name="targetId"
           children={(field) => (
-            <SelectGroup>
-              <SelectLabel>Type</SelectLabel>
-              <Select value={field.state.value} onValueChange={(newValue: UIType) => field.handleChange(newValue)}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value={UI_TYPE.title}>Title</SelectItem>
-                    <SelectItem value={UI_TYPE.divider}>Divider</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </SelectGroup>
+            <FormItem>
+              <Label htmlFor={field.name}>Target id</Label>
+              <Input
+                id={field.name}
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={({ target }) => field.handleChange(target.value)}
+              />
+              <FormDescription>Unique identifier of the target flow.</FormDescription>
+            </FormItem>
           )}
         />
       </div>
@@ -89,4 +84,4 @@ const UINodeForm = () => {
   );
 };
 
-export default UINodeForm;
+export default FlowNodeForm;

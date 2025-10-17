@@ -1,6 +1,6 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { Braces } from "lucide-react";
-import NodeWrapper from "@/editor/features/TreegeEditor/Nodes/Layout/NodeWrapper";
+import NodeWrapper from "@/editor/features/TreegeEditor/nodes/layout/NodeWrapper";
 import useTranslatedLabel from "@/editor/hooks/useTranslatedLabel";
 import { Badge } from "@/shared/components/ui/badge";
 import { JsonNodeData } from "@/shared/types/node";

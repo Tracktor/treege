@@ -1,11 +1,11 @@
 import { Background, BackgroundVariant, Controls, MiniMap, ReactFlow, ReactFlowProvider } from "@xyflow/react";
 import { TreegeEditorProps } from "@/editor";
-import Logo from "@/editor/components/DataDisplay/logo";
+import Logo from "@/editor/components/data-display/logo";
 import { edgeTypes } from "@/editor/constants/edgeTypes";
 import { nodeTypes } from "@/editor/constants/nodeTypes";
 import { ThemeProvider } from "@/editor/context/ThemeContext";
-import ActionsPanel from "@/editor/features/TreegeEditor/Panel/ActionsPanel";
-import NodeActionsSheet from "@/editor/features/TreegeEditor/Sheets/NodeActionsSheet";
+import ActionsPanel from "@/editor/features/TreegeEditor/panel/ActionsPanel";
+import NodeActionsSheet from "@/editor/features/TreegeEditor/sheets/NodeActionsSheet";
 import useFlowConnections from "@/editor/hooks/useFlowConnections";
 import { Toaster } from "@/shared/components/ui/sonner";
 

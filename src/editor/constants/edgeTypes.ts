@@ -1,4 +1,4 @@
-import ConditionalEdge from "@/editor/features/TreegeEditor/Edges/ConditionalEdge";
+import ConditionalEdge from "@/editor/features/TreegeEditor/edges/ConditionalEdge";
 
 export const edgeTypes = {
   conditional: ConditionalEdge,

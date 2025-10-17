@@ -1,6 +1,6 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { Network } from "lucide-react";
-import NodeWrapper from "@/editor/features/TreegeEditor/Nodes/Layout/NodeWrapper";
+import NodeWrapper from "@/editor/features/TreegeEditor/nodes/layout/NodeWrapper";
 import useTranslatedLabel from "@/editor/hooks/useTranslatedLabel";
 import { Badge } from "@/shared/components/ui/badge";
 import { FlowNodeData } from "@/shared/types/node";

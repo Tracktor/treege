@@ -1,12 +1,12 @@
 import { Node } from "@xyflow/react";
 import { FormEvent, ReactNode, useCallback, useEffect, useMemo, useRef } from "react";
-import DefaultFormWrapper from "@/renderer/components/web/DefaultFormWrapper";
-import DefaultGroup from "@/renderer/components/web/DefaultGroup";
-import { defaultInputRenderers } from "@/renderer/components/web/DefaultInputs";
-import DefaultSubmitButton from "@/renderer/components/web/DefaultSubmitButton";
-import { defaultUI } from "@/renderer/components/web/DefaultUI";
 import { TreegeRendererProvider } from "@/renderer/context/TreegeRendererContext";
 import { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
+import DefaultFormWrapper from "@/renderer/features/TreegeRenderer/web/components/DefaultFormWrapper";
+import DefaultGroup from "@/renderer/features/TreegeRenderer/web/components/DefaultGroup";
+import { defaultInputRenderers } from "@/renderer/features/TreegeRenderer/web/components/DefaultInputs";
+import DefaultSubmitButton from "@/renderer/features/TreegeRenderer/web/components/DefaultSubmitButton";
+import { defaultUI } from "@/renderer/features/TreegeRenderer/web/components/DefaultUI";
 import { TreegeRendererProps } from "@/renderer/types/renderer";
 import { convertFormValuesToNamedFormat } from "@/renderer/utils/form";
 import { NODE_TYPE } from "@/shared/constants/node";

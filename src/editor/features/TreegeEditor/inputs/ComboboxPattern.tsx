@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import ComboboxWithCreate, { ComboboxOption } from "@/editor/components/Input/ComboboxWithCreate";
+import ComboboxWithCreate, { ComboboxOption } from "@/editor/components/input/ComboboxWithCreate";
 import { PATTERN } from "@/shared/constants/pattern";
 
 interface ComboboxPatternProps {

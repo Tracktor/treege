@@ -1,25 +1,26 @@
 import { useForm } from "@tanstack/react-form";
-import CodeEditor from "@uiw/react-textarea-code-editor";
 import { useState } from "react";
-import SelectLanguage from "@/editor/features/TreegeEditor/Inputs/SelectLanguage";
+import SelectLanguage from "@/editor/features/TreegeEditor/inputs/SelectLanguage";
 import useFlowActions from "@/editor/hooks/useFlowActions";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
 import { FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
+import { UI_TYPE } from "@/shared/constants/uiType";
 import { Language } from "@/shared/types/languages";
-import { JsonNodeData } from "@/shared/types/node";
+import { UINodeData, UIType } from "@/shared/types/node";
 
-const JsonNodeForm = () => {
+const UINodeForm = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<Language>("en");
-  const { selectedNode } = useNodesSelection<JsonNodeData>();
+  const { selectedNode } = useNodesSelection<UINodeData>();
   const { updateSelectedNodeData } = useFlowActions();
 
   const { Field } = useForm({
     defaultValues: {
-      json: selectedNode?.data?.json || "",
       label: selectedNode?.data?.label || { en: "" },
-    } as JsonNodeData,
+      type: selectedNode?.data?.type || UI_TYPE.title,
+    } as UINodeData,
     listeners: {
       onChange: ({ formApi }) => {
         formApi.handleSubmit().then();
@@ -33,14 +34,13 @@ const JsonNodeForm = () => {
 
   return (
     <form
-      id="json-node-form"
-      className="flex flex-col h-full pb-4 min-h-0"
+      id="ui-node-form"
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();
       }}
     >
-      <div className="flex flex-col gap-6 h-full">
+      <div className="grid gap-6">
         <div className="flex gap-2 items-end">
           <Field
             name="label"
@@ -66,25 +66,22 @@ const JsonNodeForm = () => {
         </div>
 
         <Field
-          name="json"
+          name="type"
           children={(field) => (
-            <FormItem className="flex flex-col flex-1 min-h-0">
-              <Label htmlFor={field.name}>Json</Label>
-              <CodeEditor
-                value={field.state.value}
-                language="json"
-                data-color-mode="dark"
-                placeholder="Please enter JSON."
-                padding={15}
-                className="dark:bg-input/30"
-                style={{
-                  fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-                  height: "100%",
-                  overflowY: "auto",
-                }}
-                onChange={({ target }) => field.handleChange(target.value)}
-              />
-            </FormItem>
+            <SelectGroup>
+              <SelectLabel>Type</SelectLabel>
+              <Select value={field.state.value} onValueChange={(newValue: UIType) => field.handleChange(newValue)}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value={UI_TYPE.title}>Title</SelectItem>
+                    <SelectItem value={UI_TYPE.divider}>Divider</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </SelectGroup>
           )}
         />
       </div>
@@ -92,4 +89,4 @@ const JsonNodeForm = () => {
   );
 };
 
-export default JsonNodeForm;
+export default UINodeForm;

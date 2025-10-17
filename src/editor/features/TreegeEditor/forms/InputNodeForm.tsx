@@ -1,9 +1,9 @@
 import { useForm } from "@tanstack/react-form";
 import { ChevronsUpDown, Plus, X } from "lucide-react";
 import { useState } from "react";
-import ComboboxPattern from "@/editor/features/TreegeEditor/Inputs/ComboboxPattern";
-import SelectInputType from "@/editor/features/TreegeEditor/Inputs/SelectInputType";
-import SelectLanguage from "@/editor/features/TreegeEditor/Inputs/SelectLanguage";
+import ComboboxPattern from "@/editor/features/TreegeEditor/inputs/ComboboxPattern";
+import SelectInputType from "@/editor/features/TreegeEditor/inputs/SelectInputType";
+import SelectLanguage from "@/editor/features/TreegeEditor/inputs/SelectLanguage";
 import { useAvailableParentFields } from "@/editor/hooks/useAvailableParentFields";
 import useFlowActions from "@/editor/hooks/useFlowActions";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
@@ -437,12 +437,11 @@ const InputNodeForm = () => {
                                 // Initialize objectMapping when selecting toObject
                                 if (value === "toObject") {
                                   const currentDefaultValue = defaultValueField.state.value;
-                                  if (!currentDefaultValue?.objectMapping) {
-                                    defaultValueField.handleChange({
-                                      ...currentDefaultValue,
-                                      objectMapping: [],
-                                    });
-                                  }
+
+                                  defaultValueField.handleChange({
+                                    ...currentDefaultValue,
+                                    objectMapping: [],
+                                  });
                                 }
                               }}
                             >

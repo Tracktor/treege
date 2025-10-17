@@ -2,11 +2,11 @@
 export { default as TreegeRenderer } from "@/renderer/features/TreegeRenderer/web/TreegeRenderer";
 
 // Default web components (for customization reference)
-export * from "@/renderer/components/web/DefaultInputs";
-export * from "@/renderer/components/web/DefaultGroup";
-export * from "@/renderer/components/web/DefaultUI";
-export * from "@/renderer/components/web/DefaultFormWrapper";
-export * from "@/renderer/components/web/DefaultSubmitButton";
+export * from "@/renderer/features/TreegeRenderer/web/components/DefaultFormWrapper";
+export * from "@/renderer/features/TreegeRenderer/web/components/DefaultGroup";
+export * from "@/renderer/features/TreegeRenderer/web/components/DefaultInputs";
+export * from "@/renderer/features/TreegeRenderer/web/components/DefaultSubmitButton";
+export * from "@/renderer/features/TreegeRenderer/web/components/DefaultUI";
 
 // Hooks
 export { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
