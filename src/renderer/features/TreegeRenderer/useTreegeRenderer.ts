@@ -1,9 +1,9 @@
 import { Edge, Node } from "@xyflow/react";
 import { useCallback, useMemo, useState } from "react";
 import { FormValues } from "@/renderer/types/renderer";
-import { evaluateConditions } from "@/renderer/utils/conditionEvaluator";
+import { evaluateConditions } from "@/renderer/utils/conditions";
+import { buildEdgeMap, buildIncomingEdgeMap, findStartNode, findVisibleNodes } from "@/renderer/utils/flow";
 import { checkHasFormFieldValue } from "@/renderer/utils/form";
-import { buildEdgeMap, buildIncomingEdgeMap, findStartNode, findVisibleNodes } from "@/renderer/utils/nodeVisibility";
 import { ConditionalEdgeData } from "@/shared/types/edge";
 import { TreegeNodeData } from "@/shared/types/node";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";

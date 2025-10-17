@@ -1,11 +1,15 @@
+import { Edge, Node } from "@xyflow/react";
 import { createContext, PropsWithChildren, useContext } from "react";
 import { FormValues } from "@/renderer/types/renderer";
+import { TreegeNodeData } from "@/shared/types/node";
 
 export type TreegeContextValue = {
   formValues: FormValues;
   setFieldValue: (fieldName: string, value: any) => void;
   errors: Record<string, string>;
   language: string;
+  nodes: Node<TreegeNodeData>[];
+  edges: Edge[];
 };
 
 export interface TreegeRendererProviderProps extends PropsWithChildren {

@@ -159,9 +159,11 @@ const TreegeRenderer = ({
   return (
     <TreegeRendererProvider
       value={{
+        edges,
         errors,
         formValues,
         language,
+        nodes,
         setFieldValue,
       }}
     >

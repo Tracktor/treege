@@ -1,6 +1,6 @@
 import { Edge, Node } from "@xyflow/react";
 import { FormValues } from "@/renderer/types/renderer";
-import { evaluateConditions } from "@/renderer/utils/conditionEvaluator";
+import { evaluateConditions } from "@/renderer/utils/conditions";
 import { checkHasFormFieldValue } from "@/renderer/utils/form";
 import { ConditionalEdgeData } from "@/shared/types/edge";
 import { TreegeNodeData } from "@/shared/types/node";
@@ -47,6 +47,11 @@ export const findStartNode = (
   // Prefer input nodes as start, otherwise take first node
   return nodesWithoutIncoming.find(isInputNode) || nodesWithoutIncoming[0];
 };
+
+/**
+ * Check if a node is the start node (has no incoming edges)
+ */
+export const isStartNode = (nodeId: string, edges: Edge[]): boolean => !edges.some((edge) => edge.target === nodeId);
 
 /**
  * Find all visible nodes using branch-based progressive rendering

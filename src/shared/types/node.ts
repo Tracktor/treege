@@ -105,7 +105,7 @@ export type UINodeData = BaseNodeData & {
   /**
    * The type of UI component to render (e.g., "button", "text", "image")
    */
-  type: UIType;
+  type?: UIType;
 };
 
 /**

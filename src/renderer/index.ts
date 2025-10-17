@@ -11,9 +11,10 @@ export * from "@/renderer/features/TreegeRenderer/web/components/DefaultUI";
 // Hooks
 export { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
 
-// Utils (platform-agnostic)
-export * from "@/renderer/utils/conditionEvaluator";
+// Utils
+export * from "@/renderer/utils/conditions";
 export * from "@/renderer/utils/form";
+export * from "@/renderer/utils/flow";
 export { getTranslatedLabel } from "@/shared/utils/label";
 
 // Types

@@ -19,7 +19,7 @@ const UINodeForm = () => {
   const { Field } = useForm({
     defaultValues: {
       label: selectedNode?.data?.label || { en: "" },
-      type: selectedNode?.data?.type || UI_TYPE.title,
+      type: selectedNode?.data?.type,
     } as UINodeData,
     listeners: {
       onChange: ({ formApi }) => {
