@@ -32,6 +32,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
         valueField: "",
       },
       responsePath: value?.responsePath || "",
+      searchParam: value?.searchParam || "",
       showLoading: value?.showLoading !== false,
       url: value?.url || "",
     } as HttpConfig,
@@ -268,7 +269,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
           />
 
           <div className="space-y-4">
-            <h5 className="text-sm font-medium">Map to Options (for select/radio/checkbox)</h5>
+            <h5 className="text-sm font-medium">Map to Options</h5>
 
             <Field
               name="responseMapping.valueField"
@@ -306,6 +307,24 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
               )}
             />
           </div>
+
+          <Field
+            name="searchParam"
+            children={(field) => (
+              <FormItem>
+                <Label htmlFor={field.name}>Search Parameter (optional)</Label>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={({ target }) => field.handleChange(target.value)}
+                  placeholder="q, search, query..."
+                />
+                <FormDescription>If set, enables combobox with search that adds this param to API calls (e.g., ?q=Paris)</FormDescription>
+              </FormItem>
+            )}
+          />
         </div>
 
         <div className="space-y-4">

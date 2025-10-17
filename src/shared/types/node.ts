@@ -76,7 +76,7 @@ export type HttpConfig = {
    */
   responsePath?: string;
   /**
-   * Map response to options format (for select/radio/checkbox)
+   * Map response to options format (for select/combobox)
    */
   responseMapping?: {
     /**
@@ -88,6 +88,11 @@ export type HttpConfig = {
      */
     labelField?: string;
   };
+  /**
+   * Query parameter name for search (enables combobox with search)
+   * Example: "q", "search", "query"
+   */
+  searchParam?: string;
   /**
    * Whether to call the API on component mount
    */

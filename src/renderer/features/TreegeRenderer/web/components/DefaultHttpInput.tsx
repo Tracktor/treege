@@ -1,13 +1,15 @@
-import { Loader2 } from "lucide-react";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import { InputRenderProps } from "@/renderer/types/renderer";
-import { Checkbox } from "@/shared/components/ui/checkbox";
+import { Button } from "@/shared/components/ui/button";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/shared/components/ui/command";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
+import { cn } from "@/shared/lib/utils";
 import { getTranslatedLabel } from "@/shared/utils/label";
 
 type HttpResponse = Record<string, unknown> | unknown[];
@@ -46,82 +48,92 @@ const replaceTemplateVars = (template: string, formValues: Record<string, unknow
   template.replace(/\$\{(\w+)\}/g, (_, key) => String(formValues[key] || ""));
 
 const DefaultHttpInput = ({ node }: InputRenderProps) => {
+  const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+  const [options, setOptions] = useState<Array<{ value: string; label: string }>>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [comboboxOpen, setComboboxOpen] = useState(false);
   const { formValues, setFieldValue, formErrors, language } = useTreegeRendererContext();
+  const { httpConfig } = node.data;
   const fieldId = node.id;
   const value = formValues[fieldId];
   const error = formErrors[fieldId];
   const name = node.data.name || fieldId;
-  const { httpConfig } = node.data;
 
-  const [loading, setLoading] = useState(false);
-  const [fetchError, setFetchError] = useState<string | null>(null);
-  const [options, setOptions] = useState<Array<{ value: string; label: string }>>([]);
-
-  const fetchData = useCallback(async () => {
-    if (!httpConfig?.url) {
-      setFetchError("No URL configured");
-      return;
-    }
-
-    setLoading(true);
-    setFetchError(null);
-
-    try {
-      // Replace template variables in URL
-      const url = replaceTemplateVars(httpConfig.url, formValues);
-
-      // Replace template variables in headers
-      const headers: Record<string, string> = {};
-      httpConfig.headers?.forEach((header) => {
-        headers[header.key] = replaceTemplateVars(header.value, formValues);
-      });
-
-      // Replace template variables in body
-      let body: string | undefined;
-      if (httpConfig.body && ["POST", "PUT", "PATCH"].includes(httpConfig.method || "")) {
-        body = replaceTemplateVars(httpConfig.body, formValues);
+  const fetchData = useCallback(
+    async (search?: string) => {
+      if (!httpConfig?.url) {
+        setFetchError("No URL configured");
+        return;
       }
 
-      const response = await fetch(url, {
-        body: body || undefined,
-        headers: {
-          "Content-Type": "application/json",
-          ...headers,
-        },
-        method: httpConfig.method || "GET",
-      });
+      setLoading(true);
+      setFetchError(null);
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      try {
+        // Replace template variables in URL
+        let url = replaceTemplateVars(httpConfig.url, formValues);
+
+        // Add search param if configured and search query provided
+        if (httpConfig.searchParam && search) {
+          const separator = url.includes("?") ? "&" : "?";
+          url = `${url}${separator}${httpConfig.searchParam}=${encodeURIComponent(search)}`;
+        }
+
+        // Replace template variables in headers
+        const headers: Record<string, string> = {};
+        httpConfig.headers?.forEach((header) => {
+          headers[header.key] = replaceTemplateVars(header.value, formValues);
+        });
+
+        // Replace template variables in body
+        let body: string | undefined;
+        if (httpConfig.body && ["POST", "PUT", "PATCH"].includes(httpConfig.method || "")) {
+          body = replaceTemplateVars(httpConfig.body, formValues);
+        }
+
+        const response = await fetch(url, {
+          body: body || undefined,
+          headers: {
+            "Content-Type": "application/json",
+            ...headers,
+          },
+          method: httpConfig.method || "GET",
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const data: HttpResponse = await response.json();
+
+        // Extract data using responsePath
+        const extractedData = httpConfig.responsePath ? getValueByPath(data, httpConfig.responsePath) : data;
+
+        // If responseMapping is configured, map the data to options
+        if (httpConfig.responseMapping && Array.isArray(extractedData)) {
+          const { valueField = "value", labelField = "label" } = httpConfig.responseMapping;
+
+          const mappedOptions = extractedData.map((item) => ({
+            label: String(getValueByPath(item as HttpResponse, labelField) || ""),
+            value: String(getValueByPath(item as HttpResponse, valueField) || ""),
+          }));
+
+          setOptions(mappedOptions);
+        } else {
+          // Store the raw data as the field value
+          setFieldValue(fieldId, extractedData);
+        }
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : "Failed to fetch data";
+        setFetchError(errorMessage);
+        console.error("HTTP Input fetch error:", err);
+      } finally {
+        setLoading(false);
       }
-
-      const data: HttpResponse = await response.json();
-
-      // Extract data using responsePath
-      const extractedData = httpConfig.responsePath ? getValueByPath(data, httpConfig.responsePath) : data;
-
-      // If responseMapping is configured, map the data to options
-      if (httpConfig.responseMapping && Array.isArray(extractedData)) {
-        const { valueField = "value", labelField = "label" } = httpConfig.responseMapping;
-
-        const mappedOptions = extractedData.map((item) => ({
-          label: String(getValueByPath(item as HttpResponse, labelField) || ""),
-          value: String(getValueByPath(item as HttpResponse, valueField) || ""),
-        }));
-
-        setOptions(mappedOptions);
-      } else {
-        // Store the raw data as the field value
-        setFieldValue(fieldId, extractedData);
-      }
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to fetch data";
-      setFetchError(errorMessage);
-      console.error("HTTP Input fetch error:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [httpConfig, formValues, fieldId, setFieldValue]);
+    },
+    [httpConfig, formValues, fieldId, setFieldValue],
+  );
 
   // Fetch on mount if configured
   useEffect(() => {
@@ -129,6 +141,17 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
       fetchData();
     }
   }, [httpConfig?.fetchOnMount, fetchData]);
+
+  // Debounced search for combobox
+  useEffect(() => {
+    if (!httpConfig?.searchParam || !searchQuery) return undefined;
+
+    const timer = setTimeout(() => {
+      fetchData(searchQuery);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery, httpConfig?.searchParam, fetchData]);
 
   // Show loading state
   if (loading && httpConfig?.showLoading) {
@@ -156,68 +179,86 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
         <FormError>{fetchError}</FormError>
-        <button type="button" onClick={fetchData} className="text-sm text-primary hover:underline">
+        <button type="button" onClick={() => fetchData()} className="text-sm text-primary hover:underline">
           Retry
         </button>
       </FormItem>
     );
   }
 
-  // If responseMapping is configured and we have options, render as select/radio/checkbox
-  if (httpConfig?.responseMapping && options.length > 0) {
-    // Determine the display type based on node configuration
-    const displayType = node.data.type === "http" ? "select" : node.data.type;
+  // If responseMapping is configured
+  if (httpConfig?.responseMapping) {
+    const selectedOption = options.find((opt) => opt.value === value);
 
-    if (displayType === "radio") {
+    // Render as Combobox if searchParam is configured
+    if (httpConfig.searchParam) {
       return (
         <FormItem className="mb-4">
-          <Label className="block text-sm font-medium mb-2">
+          <Label>
             {getTranslatedLabel(node.data.label, language) || node.data.name}
             {node.data.required && <span className="text-red-500">*</span>}
           </Label>
-          <RadioGroup value={value || ""} onValueChange={(val) => setFieldValue(fieldId, val)}>
-            {options.map((opt, index) => (
-              <div key={opt.value + index} className="flex items-center space-x-2">
-                <RadioGroupItem value={opt.value} id={`${name}-${opt.value}`} />
-                <Label htmlFor={`${name}-${opt.value}`} className="text-sm font-normal cursor-pointer">
-                  {opt.label}
-                </Label>
-              </div>
-            ))}
-          </RadioGroup>
+          <Popover open={comboboxOpen} onOpenChange={setComboboxOpen}>
+            <PopoverTrigger asChild>
+              <Button variant="outline" role="combobox" aria-expanded={comboboxOpen} className="w-full justify-between">
+                {selectedOption ? selectedOption.label : node.data.placeholder || "Search..."}
+                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-full p-0" align="start">
+              <Command shouldFilter={false}>
+                <CommandInput
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onValueChange={(searchValue) => {
+                    setSearchQuery(searchValue);
+                  }}
+                />
+                <CommandList>
+                  {loading ? (
+                    <div className="flex items-center justify-center p-4">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    </div>
+                  ) : (
+                    <>
+                      <CommandEmpty>No results found.</CommandEmpty>
+                      <CommandGroup>
+                        {options.map((opt) => (
+                          <CommandItem
+                            key={opt.value}
+                            value={opt.value}
+                            onSelect={() => {
+                              setFieldValue(fieldId, opt.value);
+                              setComboboxOpen(false);
+                            }}
+                          >
+                            <Check className={cn("mr-2 h-4 w-4", value === opt.value ? "opacity-100" : "opacity-0")} />
+                            {opt.label}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </>
+                  )}
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
           {error && <FormError>{error}</FormError>}
           {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
         </FormItem>
       );
     }
 
-    if (displayType === "checkbox" && node.data.multiple) {
-      const selectedValues = Array.isArray(value) ? value : [];
-
-      const handleCheckboxChange = (optionValue: string, checked: boolean) => {
-        const newValues = checked ? [...selectedValues, optionValue] : selectedValues.filter((v) => v !== optionValue);
-        setFieldValue(fieldId, newValues);
-      };
-
+    // Render as Select (no search) - only if we have options
+    if (options.length === 0) {
       return (
         <FormItem className="mb-4">
-          <Label className="block text-sm font-medium mb-2">
+          <Label htmlFor={name}>
             {getTranslatedLabel(node.data.label, language) || node.data.name}
             {node.data.required && <span className="text-red-500">*</span>}
           </Label>
-          <div className="space-y-2">
-            {options.map((opt, index) => (
-              <div key={opt.value + index} className="flex items-center gap-3">
-                <Checkbox
-                  id={`${name}-${opt.value}`}
-                  checked={selectedValues.includes(opt.value)}
-                  onCheckedChange={(checked) => handleCheckboxChange(opt.value, checked as boolean)}
-                />
-                <Label htmlFor={`${name}-${opt.value}`} className="text-sm font-normal cursor-pointer">
-                  {opt.label}
-                </Label>
-              </div>
-            ))}
+          <div className="text-sm text-muted-foreground py-2">
+            No data available. Configure &#34;Fetch on mount&#34; or add a search parameter.
           </div>
           {error && <FormError>{error}</FormError>}
           {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
@@ -225,7 +266,6 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
       );
     }
 
-    // Default: render as select
     return (
       <FormItem className="mb-4">
         <Label htmlFor={name}>
