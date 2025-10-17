@@ -35,6 +35,7 @@ import { isInputNode } from "@/shared/utils/nodeTypeGuards";
  * @returns Pure state and computed values (no side effects)
  */
 export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<ConditionalEdgeData>[], initialValues: FormValues = {}) => {
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [formValues, setFormValues] = useState<FormValues>(() => {
     const defaultValues: FormValues = { ...initialValues };
 
@@ -65,8 +66,6 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
 
     return defaultValues;
   });
-
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   // Build maps for efficient lookups
   const nodeMap = useMemo(() => new Map(nodes.map((node) => [node.id, node])), [nodes]);
