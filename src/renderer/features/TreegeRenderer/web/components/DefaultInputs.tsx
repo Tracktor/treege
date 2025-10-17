@@ -1,4 +1,5 @@
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
+import { DefaultHttpInput } from "@/renderer/features/TreegeRenderer/web/components/DefaultHttpInput";
 import { InputRenderProps } from "@/renderer/types/renderer";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
@@ -382,7 +383,7 @@ export const defaultInputRenderers = {
   daterange: DefaultDateInput,
   file: DefaultFileInput,
   hidden: DefaultHiddenInput,
-  http: DefaultTextInput,
+  http: DefaultHttpInput,
   number: DefaultNumberInput,
   password: DefaultPasswordInput,
   radio: DefaultRadioInput,

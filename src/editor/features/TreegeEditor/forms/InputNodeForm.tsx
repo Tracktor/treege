@@ -1,6 +1,7 @@
 import { useForm } from "@tanstack/react-form";
 import { ChevronsUpDown, Plus, X } from "lucide-react";
 import { useState } from "react";
+import HttpConfigForm from "@/editor/features/TreegeEditor/forms/HttpConfigForm";
 import ComboboxPattern from "@/editor/features/TreegeEditor/inputs/ComboboxPattern";
 import SelectInputType from "@/editor/features/TreegeEditor/inputs/SelectInputType";
 import SelectLanguage from "@/editor/features/TreegeEditor/inputs/SelectLanguage";
@@ -29,6 +30,7 @@ const InputNodeForm = () => {
       defaultValue: selectedNode?.data?.defaultValue,
       errorMessage: selectedNode?.data?.errorMessage || "",
       helperText: selectedNode?.data?.helperText || "",
+      httpConfig: selectedNode?.data?.httpConfig,
       label: selectedNode?.data?.label || { en: "" },
       multiple: selectedNode?.data?.multiple || false,
       name: selectedNode?.data?.name || "",
@@ -140,6 +142,34 @@ const InputNodeForm = () => {
             </FormItem>
           )}
         />
+
+        {selectedNode?.data?.type === "http" && (
+          <Collapsible defaultOpen className="flex w-full max-w-[350px] flex-col gap-2">
+            <CollapsibleTrigger asChild>
+              <div className="flex items-center justify-between gap-4">
+                <h4 className="text-sm font-semibold">HTTP Configuration</h4>
+                <Button variant="ghost" size="icon" className="size-8">
+                  <ChevronsUpDown />
+                  <span className="sr-only">Toggle</span>
+                </Button>
+              </div>
+            </CollapsibleTrigger>
+
+            <CollapsibleContent className="flex flex-col gap-4">
+              <Field name="httpConfig">
+                {(field) => (
+                  <HttpConfigForm
+                    value={field.state.value}
+                    onChange={(newConfig) => {
+                      field.handleChange(newConfig);
+                      handleSubmit().then();
+                    }}
+                  />
+                )}
+              </Field>
+            </CollapsibleContent>
+          </Collapsible>
+        )}
 
         {selectedNode?.data?.type === "file" && (
           <Field

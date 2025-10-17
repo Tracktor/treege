@@ -42,6 +42,62 @@ export type GroupNodeData = BaseNodeData & {
   label: TranslatableLabel;
 };
 
+export type HttpHeader = {
+  /**
+   * The header key (e.g., "Authorization", "Content-Type")
+   */
+  key: string;
+  /**
+   * The header value
+   */
+  value: string;
+};
+
+export type HttpConfig = {
+  /**
+   * The HTTP method to use
+   */
+  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  /**
+   * The API URL to call (supports template variables like ${fieldId})
+   */
+  url?: string;
+  /**
+   * Custom headers for the HTTP request
+   */
+  headers?: HttpHeader[];
+  /**
+   * Request body (for POST/PUT/PATCH methods)
+   */
+  body?: string;
+  /**
+   * JSONPath or key to extract from the response
+   * Examples: "data.users", "results[0].name"
+   */
+  responsePath?: string;
+  /**
+   * Map response to options format (for select/radio/checkbox)
+   */
+  responseMapping?: {
+    /**
+     * Path to the value field in response items
+     */
+    valueField?: string;
+    /**
+     * Path to the label field in response items
+     */
+    labelField?: string;
+  };
+  /**
+   * Whether to call the API on component mount
+   */
+  fetchOnMount?: boolean;
+  /**
+   * Whether to show a loading state while fetching
+   */
+  showLoading?: boolean;
+};
+
 export type InputNodeData = BaseNodeData & {
   /**
    * The name of the input field, used for identification and form submission
@@ -92,6 +148,10 @@ export type InputNodeData = BaseNodeData & {
       targetKey: string;
     }>;
   };
+  /**
+   * HTTP configuration for the input field (used with type="http")
+   */
+  httpConfig?: HttpConfig;
 };
 
 export type JsonNodeData = BaseNodeData & {
