@@ -71,14 +71,12 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
       setFetchError(null);
 
       try {
-        // Replace template variables in URL
-        let url = replaceTemplateVars(httpConfig.url, formValues);
-
-        // Add search param if configured and search query provided
-        if (httpConfig.searchParam && search) {
-          const separator = url.includes("?") ? "&" : "?";
-          url = `${url}${separator}${httpConfig.searchParam}=${encodeURIComponent(search)}`;
-        }
+        // Replace template variables in URL and add search param if configured
+        const baseUrl = replaceTemplateVars(httpConfig.url, formValues);
+        const url =
+          httpConfig.searchParam && search
+            ? `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}${httpConfig.searchParam}=${encodeURIComponent(search)}`
+            : baseUrl;
 
         // Replace template variables in headers
         const headers: Record<string, string> = {};
@@ -86,11 +84,11 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
           headers[header.key] = replaceTemplateVars(header.value, formValues);
         });
 
-        // Replace template variables in body
-        let body: string | undefined;
-        if (httpConfig.body && ["POST", "PUT", "PATCH"].includes(httpConfig.method || "")) {
-          body = replaceTemplateVars(httpConfig.body, formValues);
-        }
+        // Replace template variables in body (for POST/PUT/PATCH methods)
+        const body =
+          httpConfig.body && ["POST", "PUT", "PATCH"].includes(httpConfig.method || "")
+            ? replaceTemplateVars(httpConfig.body, formValues)
+            : undefined;
 
         const response = await fetch(url, {
           body: body || undefined,
@@ -102,7 +100,9 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
         });
 
         if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          setFetchError(`HTTP ${response.status}: ${response.statusText}`);
+          setLoading(false);
+          return;
         }
 
         const data: HttpResponse = await response.json();
@@ -170,21 +170,7 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
     );
   }
 
-  // Show fetch error
-  if (fetchError) {
-    return (
-      <FormItem className="mb-4">
-        <Label>
-          {getTranslatedLabel(node.data.label, language) || node.data.name}
-          {node.data.required && <span className="text-red-500">*</span>}
-        </Label>
-        <FormError>{fetchError}</FormError>
-        <button type="button" onClick={() => fetchData()} className="text-sm text-primary hover:underline">
-          Retry
-        </button>
-      </FormItem>
-    );
-  }
+  // Don't block on fetch error - show the input with error message
 
   // If responseMapping is configured
   if (httpConfig?.responseMapping) {
@@ -205,21 +191,31 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-full p-0" align="start">
+            <PopoverContent className="w-[300px] p-0" align="start">
               <Command shouldFilter={false}>
                 <CommandInput
                   placeholder="Search..."
                   value={searchQuery}
                   onValueChange={(searchValue) => {
                     setSearchQuery(searchValue);
+                    setFetchError(null); // Clear error on new search
                   }}
                 />
                 <CommandList>
-                  {loading ? (
+                  {loading && (
                     <div className="flex items-center justify-center p-4">
                       <Loader2 className="h-4 w-4 animate-spin" />
                     </div>
-                  ) : (
+                  )}
+                  {!loading && fetchError && (
+                    <div className="p-4 text-sm text-destructive">
+                      <div>{fetchError}</div>
+                      <button type="button" onClick={() => fetchData(searchQuery)} className="text-primary hover:underline mt-2 block">
+                        Retry
+                      </button>
+                    </div>
+                  )}
+                  {!loading && !fetchError && (
                     <>
                       <CommandEmpty>No results found.</CommandEmpty>
                       <CommandGroup>
