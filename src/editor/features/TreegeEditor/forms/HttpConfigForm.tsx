@@ -1,13 +1,16 @@
 import { useForm } from "@tanstack/react-form";
-import { Plus, X } from "lucide-react";
+import { Plus, Variable, X } from "lucide-react";
+import { useAvailableParentFields } from "@/editor/hooks/useAvailableParentFields";
+import useNodesSelection from "@/editor/hooks/useNodesSelection";
 import { Button } from "@/shared/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/components/ui/dropdown-menu";
 import { FormDescription, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { Switch } from "@/shared/components/ui/switch";
 import { Textarea } from "@/shared/components/ui/textarea";
-import { HttpConfig } from "@/shared/types/node";
+import { HttpConfig, InputNodeData } from "@/shared/types/node";
 
 interface HttpConfigFormProps {
   value: HttpConfig | undefined;
@@ -15,6 +18,9 @@ interface HttpConfigFormProps {
 }
 
 const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
+  const { selectedNode } = useNodesSelection<InputNodeData>();
+  const availableParentFields = useAvailableParentFields(selectedNode?.id);
+
   const { handleSubmit, Field } = useForm({
     defaultValues: {
       body: value?.body || "",
@@ -56,14 +62,46 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
           children={(field) => (
             <FormItem>
               <Label htmlFor={field.name}>API URL</Label>
-              <Input
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={({ target }) => field.handleChange(target.value)}
-                placeholder="https://api.example.com/data"
-              />
+              <div className="flex gap-2">
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={({ target }) => field.handleChange(target.value)}
+                  placeholder="https://api.example.com/data"
+                  className="flex-1"
+                />
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button type="button" variant="outline" size="icon">
+                      <Variable className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    {availableParentFields.length === 0 ? (
+                      <DropdownMenuItem disabled>No fields available</DropdownMenuItem>
+                    ) : (
+                      availableParentFields.map((availField) => (
+                        <DropdownMenuItem
+                          key={availField.nodeId}
+                          onClick={() => {
+                            const variable = `\${${availField.nodeId}}`;
+                            const currentValue = field.state.value || "";
+                            field.handleChange(currentValue + variable);
+                            handleSubmit().then();
+                          }}
+                        >
+                          <div className="flex flex-col">
+                            <span className="font-medium">{availField.label}</span>
+                            <span className="text-xs text-muted-foreground">{`\${${availField.nodeId}}`}</span>
+                          </div>
+                        </DropdownMenuItem>
+                      ))
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
               <FormDescription>Use template variables like ${"{fieldId}"} to reference other fields</FormDescription>
             </FormItem>
           )}
@@ -160,7 +198,39 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
             name="body"
             children={(field) => (
               <FormItem>
-                <Label htmlFor={field.name}>Request Body (JSON)</Label>
+                <div className="flex items-center justify-between mb-2">
+                  <Label htmlFor={field.name}>Request Body (JSON)</Label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button type="button" variant="ghost" size="sm">
+                        <Variable className="h-4 w-4 mr-2" />
+                        Insert variable
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      {availableParentFields.length === 0 ? (
+                        <DropdownMenuItem disabled>No fields available</DropdownMenuItem>
+                      ) : (
+                        availableParentFields.map((availField) => (
+                          <DropdownMenuItem
+                            key={availField.nodeId}
+                            onClick={() => {
+                              const variable = `\${${availField.nodeId}}`;
+                              const currentValue = field.state.value || "";
+                              field.handleChange(currentValue + variable);
+                              handleSubmit().then();
+                            }}
+                          >
+                            <div className="flex flex-col">
+                              <span className="font-medium">{availField.label}</span>
+                              <span className="text-xs text-muted-foreground">{`\${${availField.nodeId}}`}</span>
+                            </div>
+                          </DropdownMenuItem>
+                        ))
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
                 <Textarea
                   id={field.name}
                   name={field.name}
