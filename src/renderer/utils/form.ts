@@ -4,6 +4,9 @@ import { InputNodeData } from "@/shared/types/node";
 
 /**
  * Check if a form field has a value (not empty)
+ * @param fieldName - The name of the form field
+ * @param formValues - The current form values
+ * @returns True if the field has a non-empty value, false otherwise
  */
 export const checkHasFormFieldValue = (fieldName: string | undefined, formValues: FormValues): boolean => {
   if (!fieldName) return false;
@@ -14,6 +17,8 @@ export const checkHasFormFieldValue = (fieldName: string | undefined, formValues
 /**
  * Convert internal form values (keyed by nodeId) to external format (keyed by name)
  * When multiple nodes share the same name, later values overwrite earlier ones
+ * example: convertFormValuesToNamedFormat({ id1: 'Alice', id2: 'Bob' }, [ { id: 'id1', data: { name: 'firstName' } }, { id: 'id2', data: { name: 'lastName' } } ])
+ * returns { firstName: 'Alice', lastName: 'Bob' }
  */
 export const convertFormValuesToNamedFormat = (formValues: FormValues, nodes: Node<InputNodeData>[]): Record<string, any> => {
   const exported: Record<string, any> = {};
