@@ -153,31 +153,22 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
     return () => clearTimeout(timer);
   }, [searchQuery, httpConfig?.searchParam, fetchData]);
 
-  // Show loading state
-  if (loading && httpConfig?.showLoading) {
-    return (
-      <FormItem className="mb-4">
-        <Label>
-          {getTranslatedLabel(node.data.label, language) || node.data.name}
-          {node.data.required && <span className="text-red-500">*</span>}
-        </Label>
-        <div className="flex items-center gap-2 py-2">
-          <Loader2 className="h-4 w-4 animate-spin" />
-          <span className="text-sm text-muted-foreground">Loading...</span>
-        </div>
-        {node.data.helperText && <FormDescription>{node.data.helperText}</FormDescription>}
-      </FormItem>
-    );
-  }
-
-  // Don't block on fetch error - show the input with error message
-
   // If responseMapping is configured
   if (httpConfig?.responseMapping) {
     const selectedOption = options.find((opt) => opt.value === value);
 
     // Render as Combobox if searchParam is configured
     if (httpConfig.searchParam) {
+      const isLoading = loading && httpConfig?.showLoading;
+      const buttonContent = isLoading ? (
+        <div className="flex items-center gap-2">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <span className="text-muted-foreground">{selectedOption?.label || node.data.placeholder || "Search..."}</span>
+        </div>
+      ) : (
+        selectedOption?.label || node.data.placeholder || "Search..."
+      );
+
       return (
         <FormItem className="mb-4">
           <Label>
@@ -187,7 +178,7 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
           <Popover open={comboboxOpen} onOpenChange={setComboboxOpen}>
             <PopoverTrigger asChild>
               <Button variant="outline" role="combobox" aria-expanded={comboboxOpen} className="w-full justify-between">
-                {selectedOption ? selectedOption.label : node.data.placeholder || "Search..."}
+                {buttonContent}
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
@@ -245,8 +236,10 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
       );
     }
 
-    // Render as Select (no search) - only if we have options
-    if (options.length === 0) {
+    // Render as Select (no search)
+    const isLoading = loading && httpConfig?.showLoading;
+
+    if (options.length === 0 && !isLoading) {
       return (
         <FormItem className="mb-4">
           <Label htmlFor={name}>
@@ -268,8 +261,9 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
           {getTranslatedLabel(node.data.label, language) || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
-        <Select value={value || ""} onValueChange={(val) => setFieldValue(fieldId, val)}>
+        <Select value={value || ""} onValueChange={(val) => setFieldValue(fieldId, val)} disabled={isLoading}>
           <SelectTrigger>
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             <SelectValue placeholder={node.data.placeholder || "Select an option"} />
           </SelectTrigger>
           <SelectContent>
