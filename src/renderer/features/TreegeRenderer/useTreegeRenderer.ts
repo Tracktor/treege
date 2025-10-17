@@ -1,7 +1,7 @@
 import { Edge, Node } from "@xyflow/react";
 import { useCallback, useMemo, useState } from "react";
 import { FormValues } from "@/renderer/types/renderer";
-import { buildEdgeMap, findStartNode, getVisibleNodesInOrder } from "@/renderer/utils/flow";
+import { findStartNode, getVisibleNodesInOrder } from "@/renderer/utils/flow";
 import { ConditionalEdgeData } from "@/shared/types/edge";
 import { TreegeNodeData } from "@/shared/types/node";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
@@ -67,14 +67,12 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
     return defaultValues;
   });
 
-  // Build maps for efficient lookups
-  const nodeMap = useMemo(() => new Map(nodes.map((node) => [node.id, node])), [nodes]);
-  const edgeMap = useMemo(() => buildEdgeMap(edges), [edges]);
+  // Find the start node
   const startNode = useMemo(() => findStartNode(nodes, edges), [nodes, edges]);
 
   /**
-   * Calculate visible nodes using the new unified function
-   * This does everything in one pass:
+   * Calculate visible nodes using the unified function
+   * Does everything in one pass:
    * - Determines visibility based on form values and conditions
    * - Orders nodes in the correct flow sequence
    * - Detects if we've reached the end of the path
@@ -92,8 +90,8 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
       };
     }
 
-    return getVisibleNodesInOrder(startNode.id, nodeMap, edgeMap, formValues);
-  }, [startNode, nodeMap, edgeMap, formValues]);
+    return getVisibleNodesInOrder(startNode.id, nodes, edges, formValues);
+  }, [startNode, nodes, edges, formValues]);
 
   /**
    * Add parent groups of visible nodes
