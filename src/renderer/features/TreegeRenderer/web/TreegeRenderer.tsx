@@ -24,7 +24,7 @@ const TreegeRenderer = ({
   language = "en",
   validationMode = "onSubmit",
 }: TreegeRendererProps) => {
-  const { formValues, setFieldValue, formErrors, setFormErrors, visibleNodes, topLevelNodes, checkValidForm, isEndOfPath } =
+  const { canSubmit, checkValidForm, formErrors, formValues, setFieldValue, setFormErrors, visibleNodes, visibleRootNodes } =
     useTreegeRenderer(nodes, edges, initialValues);
 
   // Components with fallbacks
@@ -88,7 +88,7 @@ const TreegeRenderer = ({
           if (!isGroupNode(node)) return null;
 
           const GroupComponent = components.group || DefaultGroup;
-          const childNodes = visibleNodes.filter((n) => n.parentId === node.id);
+          const childNodes = visibleNodes.filter(({ parentId, id }) => parentId === id);
 
           return (
             <GroupComponent key={node.id} node={node}>
@@ -165,8 +165,8 @@ const TreegeRenderer = ({
       }}
     >
       <FormWrapper onSubmit={handleSubmit}>
-        {topLevelNodes.map((node) => renderNode(node))}
-        {isEndOfPath && <SubmitButton label="Submit" />}
+        {visibleRootNodes.map((node) => renderNode(node))}
+        {canSubmit && <SubmitButton label="Submit" />}
       </FormWrapper>
     </TreegeRendererProvider>
   );

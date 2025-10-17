@@ -1,7 +1,7 @@
 import { Edge, Node } from "@xyflow/react";
 import { useCallback, useMemo, useState } from "react";
 import { FormValues } from "@/renderer/types/renderer";
-import { findStartNode, getVisibleNodesInOrder } from "@/renderer/utils/flow";
+import { getVisibleNodesInOrder } from "@/renderer/utils/flow";
 import { ConditionalEdgeData } from "@/shared/types/edge";
 import { TreegeNodeData } from "@/shared/types/node";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
@@ -67,58 +67,9 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
     return defaultValues;
   });
 
-  // Find the start node
-  const startNode = useMemo(() => findStartNode(nodes, edges), [nodes, edges]);
-
-  /**
-   * Calculate visible nodes using the unified function
-   * Does everything in one pass:
-   * - Determines visibility based on form values and conditions
-   * - Orders nodes in the correct flow sequence
-   * - Detects if we've reached the end of the path
-   */
-  const {
-    isEndOfPath,
-    visibleNodeIds,
-    visibleNodes: orderedVisibleNodes,
-  } = useMemo(() => {
-    if (!startNode) {
-      return {
-        isEndOfPath: true,
-        visibleNodeIds: new Set<string>(),
-        visibleNodes: [],
-      };
-    }
-
-    return getVisibleNodesInOrder(startNode.id, nodes, edges, formValues);
-  }, [startNode, nodes, edges, formValues]);
-
-  /**
-   * Add parent groups of visible nodes
-   * If a node is visible and has a parent, the parent group should also be visible
-   */
-  const allVisibleNodes = useMemo(() => {
-    const visibleWithParents = new Set(visibleNodeIds);
-
-    // Add parent groups of visible nodes
-    nodes.forEach((node) => {
-      if (visibleNodeIds.has(node.id) && node.parentId) {
-        visibleWithParents.add(node.parentId);
-      }
-    });
-
-    return nodes.filter((node) => visibleWithParents.has(node.id));
-  }, [nodes, visibleNodeIds]);
-
-  /**
-   * Get top-level visible nodes (nodes without parent or with invisible parent)
-   * These are the nodes that should be rendered at the root level
-   */
-  const topLevelNodes = useMemo(
-    () =>
-      // Filter ordered visible nodes to only include top-level ones
-      orderedVisibleNodes.filter((node: Node<TreegeNodeData>) => !node.parentId || !allVisibleNodes.some((n) => n.id === node.parentId)),
-    [orderedVisibleNodes, allVisibleNodes],
+  const { canSubmit, visibleNodes, visibleRootNodes } = useMemo(
+    () => getVisibleNodesInOrder(nodes, edges, formValues),
+    [nodes, edges, formValues],
   );
 
   /**
@@ -144,7 +95,7 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
   const checkValidForm = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
 
-    allVisibleNodes.forEach((node) => {
+    visibleNodes.forEach((node) => {
       if (isInputNode(node)) {
         const fieldName = node.id;
         const value = formValues[fieldName];
@@ -173,16 +124,16 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
 
     setFormErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [allVisibleNodes, formValues]);
+  }, [visibleNodes, formValues]);
 
   return {
+    canSubmit,
     checkValidForm,
     formErrors,
     formValues,
-    isEndOfPath,
     setFieldValue,
     setFormErrors,
-    topLevelNodes,
-    visibleNodes: allVisibleNodes,
+    visibleNodes,
+    visibleRootNodes,
   };
 };

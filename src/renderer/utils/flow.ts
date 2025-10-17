@@ -10,13 +10,23 @@ import { isInputNode } from "@/shared/utils/nodeTypeGuards";
  * Result from the progressive rendering traversal
  * Contains everything needed to render the form and determine its state
  */
-export interface VisibleNodesResult {
-  /** Ordered array of nodes to render (in flow order) */
-  visibleNodes: Node<TreegeNodeData>[];
-  /** Whether we've reached the end of the current path (show submit button) */
-  isEndOfPath: boolean;
-  /** Set of all visible node IDs for quick lookup */
+export interface VisibleNodesInOrderResult {
+  /**
+   * Whether the form can be submitted (end of path reached)
+   */
+  canSubmit: boolean;
+  /**
+   * Set of all visible node IDs for quick lookup
+   */
   visibleNodeIds: Set<string>;
+  /**
+   * All visible nodes (for validation, includes children of groups)
+   */
+  visibleNodes: Node<TreegeNodeData>[];
+  /**
+   * Visible nodes at root level (to render at top-level, ordered by flow)
+   */
+  visibleRootNodes: Node<TreegeNodeData>[];
 }
 
 /**
@@ -81,6 +91,21 @@ const determineEdgesToFollow = (
   return { edgesToFollow, waitingForInput: false };
 };
 
+/**
+ * Check if a node is the start node (has no incoming edges)
+ * Used by UI components to determine if a node is the first in the flow
+ */
+export const isStartNode = (nodeId: string, edges: Edge[]): boolean => !edges.some((edge) => edge.target === nodeId);
+
+/**
+ * Find the start node (node without incoming edges)
+ * Prefers input nodes as the start, otherwise takes the first node found
+ */
+export const findStartNode = (nodes: Node<TreegeNodeData>[], edges: Edge[]): Node<TreegeNodeData> | undefined => {
+  const nodesWithoutIncoming = nodes.filter((node) => isStartNode(node.id, edges));
+  return nodesWithoutIncoming.find(isInputNode) || nodesWithoutIncoming[0];
+};
+
 // ============================================
 // MAIN FUNCTION
 // ============================================
@@ -88,10 +113,11 @@ const determineEdgesToFollow = (
 /**
  * Get all visible nodes in the correct order for progressive rendering
  *
- * This is the MAIN function - does everything in a single recursive traversal:
- * 1. Determines which nodes should be visible based on form values and edge conditions
- * 2. Orders them in the correct flow sequence for rendering
- * 3. Detects if we've reached the end of the path (to show submit button)
+ * This is the MAIN function - does everything in a single pass:
+ * 1. Finds the start node (node without incoming edges)
+ * 2. Determines which nodes should be visible based on form values and edge conditions
+ * 3. Orders them in the correct flow sequence for rendering
+ * 4. Detects if we've reached the end of the path (to show submit button)
  *
  * Progressive Rendering Logic:
  * - Start from the first node (no incoming edges)
@@ -103,23 +129,35 @@ const determineEdgesToFollow = (
  * - If we encounter a node where conditional fields are not yet filled, STOP (wait for user input)
  * - Continue until no more nodes can be revealed
  *
- * @param startNodeId - The ID of the start node
  * @param nodes - All nodes
  * @param edges - All edges
  * @param formValues - Current form values
- * @returns Object with visible nodes (ordered), end-of-path flag, and visible node IDs set
+ * @returns Object with visible nodes (ordered), submit flag, and visible node IDs set
  */
 export const getVisibleNodesInOrder = (
-  startNodeId: string,
   nodes: Node<TreegeNodeData>[],
   edges: Edge<ConditionalEdgeData>[],
   formValues: FormValues,
-): VisibleNodesResult => {
-  // Build lookup maps for O(1) access during traversal
+): VisibleNodesInOrderResult => {
+  // Find the start node (node without incoming edges)
+  const startNode = findStartNode(nodes, edges);
+
+  if (!startNode) {
+    return {
+      canSubmit: true,
+      visibleNodeIds: new Set<string>(),
+      visibleNodes: [],
+      visibleRootNodes: [],
+    };
+  }
+
+  // Build lookup maps access during traversal
   const nodeMap = new Map(nodes.map((n) => [n.id, n]));
   const edgeMap = buildEdgeMap(edges);
-  const visibleNodes: Node<TreegeNodeData>[] = [];
-  const visibleNodeIds = new Set<string>();
+
+  // Nodes discovered during recursive traversal (ordered by flow)
+  const orderedNodes: Node<TreegeNodeData>[] = [];
+  const orderedNodeIds = new Set<string>();
   const visited = new Set<string>();
   let hasUnexploredPaths = false;
 
@@ -130,15 +168,13 @@ export const getVisibleNodesInOrder = (
     if (visited.has(nodeId)) return;
 
     visited.add(nodeId);
-    visibleNodeIds.add(nodeId);
+    orderedNodeIds.add(nodeId);
 
     const node = nodeMap.get(nodeId);
 
-    if (!node) {
-      return;
-    }
+    if (!node) return;
 
-    visibleNodes.push(node);
+    orderedNodes.push(node);
 
     const outgoingEdges = edgeMap.get(nodeId) || [];
     const { edgesToFollow, waitingForInput } = determineEdgesToFollow(outgoingEdges, formValues, nodeMap);
@@ -155,26 +191,25 @@ export const getVisibleNodesInOrder = (
     edgesToFollow.forEach((edge) => traverse(edge.target));
   };
 
-  traverse(startNodeId);
+  traverse(startNode.id);
+
+  // Add parent groups to visible nodes if a child is visible
+  const visibleNodeIds = new Set(orderedNodeIds);
+  nodes.forEach((node) => {
+    if (orderedNodeIds.has(node.id) && node.parentId) {
+      visibleNodeIds.add(node.parentId);
+    }
+  });
+
+  const visibleNodes = nodes.filter((node) => visibleNodeIds.has(node.id));
+
+  // Get root nodes (nodes without parent or with invisible parent)
+  const visibleRootNodes = orderedNodes.filter((node) => !node.parentId || !visibleNodes.some((n) => n.id === node.parentId));
 
   return {
-    isEndOfPath: !hasUnexploredPaths,
+    canSubmit: !hasUnexploredPaths,
     visibleNodeIds,
     visibleNodes,
+    visibleRootNodes,
   };
-};
-
-/**
- * Check if a node is the start node (has no incoming edges)
- * Used by UI components to determine if a node is the first in the flow
- */
-export const isStartNode = (nodeId: string, edges: Edge[]): boolean => !edges.some((edge) => edge.target === nodeId);
-
-/**
- * Find the start node (node without incoming edges)
- * Prefers input nodes as the start, otherwise takes the first node found
- */
-export const findStartNode = (nodes: Node<TreegeNodeData>[], edges: Edge[]): Node<TreegeNodeData> | undefined => {
-  const nodesWithoutIncoming = nodes.filter((node) => isStartNode(node.id, edges));
-  return nodesWithoutIncoming.find(isInputNode) || nodesWithoutIncoming[0];
 };
