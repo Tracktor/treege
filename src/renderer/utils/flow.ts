@@ -140,3 +140,76 @@ export const findVisibleNodes = (
 
   return visible;
 };
+
+/**
+ * Sort nodes in topological order based on edges
+ * Nodes without incoming edges from the set come first
+ *
+ * @param nodes - Nodes to sort
+ * @param edges - All edges
+ * @param visibleNodeIds - Set of visible node IDs (to filter edges)
+ * @returns Sorted array of nodes following the graph flow
+ */
+export const sortNodesByTopology = (
+  nodes: Node<TreegeNodeData>[],
+  edges: Edge<ConditionalEdgeData>[],
+  visibleNodeIds: Set<string>,
+): Node<TreegeNodeData>[] => {
+  // Filter edges to only include those between visible nodes
+  const relevantEdges = edges.filter((edge) => visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target));
+
+  // Build incoming edge map for visible nodes only
+  const incomingCount = new Map<string, number>();
+  const nodeMap = new Map(nodes.map((node) => [node.id, node]));
+
+  // Initialize all nodes with 0 incoming edges
+  nodes.forEach((node) => {
+    incomingCount.set(node.id, 0);
+  });
+
+  // Count incoming edges
+  relevantEdges.forEach((edge) => {
+    incomingCount.set(edge.target, (incomingCount.get(edge.target) || 0) + 1);
+  });
+
+  // Build adjacency list
+  const adjacencyList = new Map<string, string[]>();
+  relevantEdges.forEach((edge) => {
+    const targets = adjacencyList.get(edge.source) || [];
+    targets.push(edge.target);
+    adjacencyList.set(edge.source, targets);
+  });
+
+  // Kahn's algorithm for topological sort
+  const result: Node<TreegeNodeData>[] = [];
+  const queue: string[] = [];
+
+  // Start with nodes that have no incoming edges
+  nodes.forEach((node) => {
+    if (incomingCount.get(node.id) === 0) {
+      queue.push(node.id);
+    }
+  });
+
+  while (queue.length > 0) {
+    const nodeId = queue.shift()!;
+    const node = nodeMap.get(nodeId);
+
+    if (node) {
+      result.push(node);
+    }
+
+    // Reduce incoming count for all neighbors
+    const neighbors = adjacencyList.get(nodeId) || [];
+    neighbors.forEach((neighborId) => {
+      const count = incomingCount.get(neighborId)! - 1;
+      incomingCount.set(neighborId, count);
+
+      if (count === 0) {
+        queue.push(neighborId);
+      }
+    });
+  }
+
+  return result;
+};

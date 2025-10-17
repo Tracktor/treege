@@ -2,7 +2,7 @@ import { Edge, Node } from "@xyflow/react";
 import { useCallback, useMemo, useState } from "react";
 import { FormValues } from "@/renderer/types/renderer";
 import { evaluateConditions } from "@/renderer/utils/conditions";
-import { buildEdgeMap, buildIncomingEdgeMap, findStartNode, findVisibleNodes } from "@/renderer/utils/flow";
+import { buildEdgeMap, buildIncomingEdgeMap, findStartNode, findVisibleNodes, sortNodesByTopology } from "@/renderer/utils/flow";
 import { checkHasFormFieldValue } from "@/renderer/utils/form";
 import { ConditionalEdgeData } from "@/shared/types/edge";
 import { TreegeNodeData } from "@/shared/types/node";
@@ -107,11 +107,12 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
 
   /**
    * Get top-level visible nodes (nodes without parent or with invisible parent)
+   * Sorted in topological order based on edges
    */
-  const topLevelNodes = useMemo(
-    () => visibleNodes.filter((node) => !node.parentId || !visibleNodes.some((n) => n.id === node.parentId)),
-    [visibleNodes],
-  );
+  const topLevelNodes = useMemo(() => {
+    const topLevel = visibleNodes.filter((node) => !node.parentId || !visibleNodes.some((n) => n.id === node.parentId));
+    return sortNodesByTopology(topLevel, edges, visibleNodeIds);
+  }, [visibleNodes, edges, visibleNodeIds]);
 
   /**
    * Check if we're at the end of a path (no more nodes can be revealed)
