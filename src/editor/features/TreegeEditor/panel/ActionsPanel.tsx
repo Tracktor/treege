@@ -45,7 +45,7 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
       try {
         const json = JSON.parse(e.target?.result as string);
 
-        if (json.nodes && json.edges) {
+        if (json && Array.isArray(json.nodes) && Array.isArray(json.edges)) {
           setNodes(json.nodes);
           setEdges(json.edges);
           toast.success("Import successful!", {

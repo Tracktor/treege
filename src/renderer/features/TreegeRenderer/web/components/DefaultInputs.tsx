@@ -77,7 +77,7 @@ export const DefaultSelectInput = ({ node }: InputRenderProps) => {
         {getTranslatedLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
-      <Select value={value || ""} onValueChange={(val) => setFieldValue(fieldId, val)}>
+      <Select value={value ?? ""} onValueChange={(val) => setFieldValue(fieldId, val)}>
         <SelectTrigger>
           <SelectValue placeholder={node.data.placeholder || ""} />
         </SelectTrigger>

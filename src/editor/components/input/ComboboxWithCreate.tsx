@@ -51,7 +51,14 @@ const ComboboxWithCreate = ({
     !options.some((option) => option.label.toLowerCase() === search.toLowerCase() || option.value?.toLowerCase() === search.toLowerCase());
 
   const handleSelect = (selectedValue: string) => {
-    onValueChange?.(selectedValue === normalizedValue ? "" : selectedValue);
+    if (selectedValue === normalizedValue) {
+      if (allowClear) {
+        onValueChange?.("");
+      }
+      // if clearing isn't allowed, keep selection as-is
+    } else {
+      onValueChange?.(selectedValue);
+    }
     setOpen(false);
     setSearch("");
   };
