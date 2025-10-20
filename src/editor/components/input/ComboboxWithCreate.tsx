@@ -131,10 +131,7 @@ const ComboboxWithCreate = ({
                   >
                     <Check
                       aria-hidden="true"
-                      className={cn(
-                        "mr-2 h-4 w-4",
-                        normalize(option.value) === normalizedValue ? "opacity-100" : "opacity-0"
-                      )}
+                      className={cn("mr-2 h-4 w-4", normalize(option.value) === normalizedValue ? "opacity-100" : "opacity-0")}
                     />
                     {option.label}
                   </CommandItem>
