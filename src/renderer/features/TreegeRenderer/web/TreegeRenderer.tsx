@@ -10,7 +10,6 @@ import { defaultUI } from "@/renderer/features/TreegeRenderer/web/components/Def
 import { TreegeRendererProps } from "@/renderer/types/renderer";
 import { convertFormValuesToNamedFormat } from "@/renderer/utils/form";
 import { NODE_TYPE } from "@/shared/constants/node";
-import { ThemeProvider } from "@/shared/context/ThemeContext";
 import { InputNodeData, TreegeNodeData, UINodeData } from "@/shared/types/node";
 import { isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
 
@@ -156,7 +155,7 @@ const TreegeRenderer = ({
   }, [formValues, validationMode, visibleNodes, setFormErrors]);
 
   return (
-    <ThemeProvider theme={theme}>
+    <div className={theme}>
       <TreegeRendererProvider
         value={{
           edges,
@@ -172,7 +171,7 @@ const TreegeRenderer = ({
           {canSubmit && <SubmitButton label="Submit" />}
         </FormWrapper>
       </TreegeRendererProvider>
-    </ThemeProvider>
+    </div>
   );
 };
 
