@@ -44,7 +44,8 @@ const ComboboxWithCreate = ({
   // Normalize values to a string for consistent comparisons
   const normalize = (v?: string | null) => v ?? "";
   const normalizedValue = normalize(value);
-  const selectedOption = options.find((option) => normalize(option.value) === normalizedValue);
+  const hasSelection = value != null && value !== "";
+  const selectedOption = hasSelection ? options.find((option) => normalize(option.value) === normalizedValue) : undefined;
 
   const canCreate =
     allowCreate &&
@@ -88,7 +89,7 @@ const ComboboxWithCreate = ({
           aria-expanded={open}
           className={cn("w-full justify-between font-normal", className)}
         >
-          <span className="truncate">{selectedOption ? selectedOption.label : placeholder}</span>
+          <span className="truncate">{hasSelection && selectedOption ? selectedOption.label : placeholder}</span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -99,7 +100,7 @@ const ComboboxWithCreate = ({
             <CommandEmpty>{emptyLabel}</CommandEmpty>
 
             {/* Clear option - appears at the end if there's a selection */}
-            {allowClear && value && (
+            {allowClear && hasSelection && (
               <CommandGroup>
                 <CommandItem value="__clear__" onSelect={handleClear} className="text-muted-foreground mt-1">
                   <X className="mr-2 h-4 w-4" />
@@ -131,7 +132,10 @@ const ComboboxWithCreate = ({
                   >
                     <Check
                       aria-hidden="true"
-                      className={cn("mr-2 h-4 w-4", normalize(option.value) === normalizedValue ? "opacity-100" : "opacity-0")}
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        hasSelection && normalize(option.value) === normalizedValue ? "opacity-100" : "opacity-0",
+                      )}
                     />
                     {option.label}
                   </CommandItem>

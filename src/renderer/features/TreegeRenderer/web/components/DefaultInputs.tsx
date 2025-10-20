@@ -33,7 +33,7 @@ export const DefaultTextInput = ({ node }: InputRenderProps) => {
         type="text"
         id={name}
         name={name}
-        value={value || ""}
+        value={value ?? ""}
         onChange={(e) => setFieldValue(fieldId, e.target.value)}
         placeholder={node.data.placeholder}
       />
@@ -428,7 +428,7 @@ export const DefaultPasswordInput = ({ node }: InputRenderProps) => {
         type="password"
         id={name}
         name={name}
-        value={value || ""}
+        value={value ?? ""}
         onChange={(e) => setFieldValue(fieldId, e.target.value)}
         placeholder={node.data.placeholder}
       />
@@ -484,7 +484,7 @@ export const DefaultHiddenInput = ({ node }: InputRenderProps) => {
   const fieldId = node.id;
   const value = formValues[fieldId];
   const name = node.data.name || fieldId;
-  return <Input type="hidden" name={name} value={value || ""} />;
+  return <Input type="hidden" name={name} value={value ?? ""} />;
 };
 
 export const DefaultTextAreaInput = ({ node }: InputRenderProps) => {
@@ -503,7 +503,7 @@ export const DefaultTextAreaInput = ({ node }: InputRenderProps) => {
       <Textarea
         id={name}
         name={name}
-        value={value || ""}
+        value={value ?? ""}
         onChange={(e) => setFieldValue(fieldId, e.target.value)}
         placeholder={node.data.placeholder}
         className="w-full px-3 py-2 border rounded-md"
