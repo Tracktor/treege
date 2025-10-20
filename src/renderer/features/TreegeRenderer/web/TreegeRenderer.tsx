@@ -14,7 +14,7 @@ import { ThemeProvider } from "@/shared/context/ThemeContext";
 import { InputNodeData, TreegeNodeData, UINodeData } from "@/shared/types/node";
 import { isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
 
-const TreegeRendererInternal = ({
+const TreegeRenderer = ({
   nodes,
   edges,
   validate,
@@ -24,7 +24,8 @@ const TreegeRendererInternal = ({
   components = {},
   language = "en",
   validationMode = "onSubmit",
-}: Omit<TreegeRendererProps, "theme">) => {
+  theme = "dark",
+}: TreegeRendererProps) => {
   const { canSubmit, checkValidForm, formErrors, formValues, setFieldValue, setFormErrors, visibleNodes, visibleRootNodes } =
     useTreegeRenderer(nodes, edges, initialValues);
 
@@ -155,28 +156,24 @@ const TreegeRendererInternal = ({
   }, [formValues, validationMode, visibleNodes, setFormErrors]);
 
   return (
-    <TreegeRendererProvider
-      value={{
-        edges,
-        formErrors,
-        formValues,
-        language,
-        nodes,
-        setFieldValue,
-      }}
-    >
-      <FormWrapper onSubmit={handleSubmit}>
-        {visibleRootNodes.map((node) => renderNode(node))}
-        {canSubmit && <SubmitButton label="Submit" />}
-      </FormWrapper>
-    </TreegeRendererProvider>
+    <ThemeProvider theme={theme}>
+      <TreegeRendererProvider
+        value={{
+          edges,
+          formErrors,
+          formValues,
+          language,
+          nodes,
+          setFieldValue,
+        }}
+      >
+        <FormWrapper onSubmit={handleSubmit}>
+          {visibleRootNodes.map((node) => renderNode(node))}
+          {canSubmit && <SubmitButton label="Submit" />}
+        </FormWrapper>
+      </TreegeRendererProvider>
+    </ThemeProvider>
   );
 };
-
-const TreegeRenderer = ({ theme = "dark", ...props }: TreegeRendererProps) => (
-  <ThemeProvider theme={theme}>
-    <TreegeRendererInternal {...props} />
-  </ThemeProvider>
-);
 
 export default TreegeRenderer;
