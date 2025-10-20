@@ -92,15 +92,37 @@
       "data": {
         "type": "text",
         "errorMessage": "",
-        "helperText": "Tell us briefly how you're feeling today.",
+        "helperText": {
+          "en": "Tell us briefly how you're feeling today.",
+          "fr": "Dites-nous brièvement comment vous vous sentez aujourd'hui.",
+          "es": "Cuéntanos brevemente cómo te sientes hoy.",
+          "de": "Erzählen Sie uns kurz, wie Sie sich heute fühlen.",
+          "it": "Raccontaci brevemente come ti senti oggi.",
+          "pt": "Conte-nos brevemente como você está se sentindo hoje.",
+          "ar": "أخبرنا باختصار كيف تشعر اليوم."
+        },
         "label": {
-          "en": "How are you ?"
+          "en": "How are you ?",
+          "fr": "Comment allez-vous ?",
+          "es": "¿Cómo estás?",
+          "de": "Wie geht es Ihnen?",
+          "it": "Come stai?",
+          "pt": "Como você está?",
+          "ar": "كيف حالك؟"
         },
         "multiple": false,
         "name": "how-are-you",
         "options": [],
         "pattern": "",
-        "placeholder": " Type your answer here...",
+        "placeholder": {
+          "en": " Type your answer here...",
+          "fr": " Tapez votre réponse ici...",
+          "es": " Escribe tu respuesta aquí...",
+          "de": " Geben Sie Ihre Antwort hier ein...",
+          "it": " Digita la tua risposta qui...",
+          "pt": " Digite sua resposta aqui...",
+          "ar": " اكتب إجابتك هنا..."
+        },
         "required": true,
         "defaultValue": null
       },
@@ -122,7 +144,13 @@
         "errorMessage": "",
         "helperText": "",
         "label": {
-          "en": "Give me a picture !"
+          "en": "Give me a picture !",
+          "fr": "Donnez-moi une photo !",
+          "es": "¡Dame una foto!",
+          "de": "Gib mir ein Bild!",
+          "it": "Dammi una foto!",
+          "pt": "Me dê uma foto!",
+          "ar": "أعطني صورة!"
         },
         "multiple": false,
         "name": "picture",
@@ -153,7 +181,13 @@
         "errorMessage": "",
         "helperText": "",
         "label": {
-          "en": "How old are you ?"
+          "en": "How old are you ?",
+          "fr": "Quel âge avez-vous ?",
+          "es": "¿Cuántos años tienes?",
+          "de": "Wie alt bist du?",
+          "it": "Quanti anni hai?",
+          "pt": "Quantos anos você tem?",
+          "ar": "كم عمرك؟"
         },
         "multiple": false,
         "name": "age",
@@ -184,7 +218,13 @@
         "errorMessage": "",
         "helperText": "",
         "label": {
-          "en": "What is your favorite cartoon ?"
+          "en": "What is your favorite cartoon ?",
+          "fr": "Quel est votre dessin animé préféré ?",
+          "es": "¿Cuál es tu dibujo animado favorito?",
+          "de": "Was ist deine Lieblings-Zeichentrickserie?",
+          "it": "Qual è il tuo cartone animato preferito?",
+          "pt": "Qual é o seu desenho animado favorito?",
+          "ar": "ما هو الرسوم المتحركة المفضلة لديك؟"
         },
         "multiple": false,
         "name": "favorite-cartoon",
@@ -215,7 +255,13 @@
         "errorMessage": "",
         "helperText": "",
         "label": {
-          "en": "What is your favorite movie ?"
+          "en": "What is your favorite movie ?",
+          "fr": "Quel est votre film préféré ?",
+          "es": "¿Cuál es tu película favorita?",
+          "de": "Was ist dein Lieblingsfilm?",
+          "it": "Qual è il tuo film preferito?",
+          "pt": "Qual é o seu filme favorito?",
+          "ar": "ما هو فيلمك المفضل؟"
         },
         "multiple": false,
         "name": "favorite-movie",
@@ -246,26 +292,50 @@
         "errorMessage": "",
         "helperText": "",
         "label": {
-          "en": "What kind of movie do you prefer ?"
+          "en": "What kind of movie do you prefer ?",
+          "fr": "Quel genre de film préférez-vous ?",
+          "es": "¿Qué tipo de película prefieres?",
+          "de": "Welche Art von Film bevorzugst du?",
+          "it": "Che tipo di film preferisci?",
+          "pt": "Que tipo de filme você prefere?",
+          "ar": "ما نوع الفيلم الذي تفضله؟"
         },
         "multiple": false,
         "name": "kind-movie",
         "options": [
           {
             "label": {
-              "en": "Action"
+              "en": "Action",
+              "fr": "Action",
+              "es": "Acción",
+              "de": "Action",
+              "it": "Azione",
+              "pt": "Ação",
+              "ar": "حركة"
             },
             "value": "action"
           },
           {
             "label": {
-              "en": "Comedy"
+              "en": "Comedy",
+              "fr": "Comédie",
+              "es": "Comedia",
+              "de": "Komödie",
+              "it": "Commedia",
+              "pt": "Comédia",
+              "ar": "كوميديا"
             },
             "value": "comedy"
           },
           {
             "label": {
-              "en": "Horror"
+              "en": "Horror",
+              "fr": "Horreur",
+              "es": "Terror",
+              "de": "Horror",
+              "it": "Horror",
+              "pt": "Terror",
+              "ar": "رعب"
             },
             "value": "horror"
           }
@@ -296,7 +366,13 @@
         "errorMessage": "",
         "helperText": "",
         "label": {
-          "en": "You want to say something"
+          "en": "You want to say something",
+          "fr": "Vous voulez dire quelque chose",
+          "es": "Quieres decir algo",
+          "de": "Du möchtest etwas sagen",
+          "it": "Vuoi dire qualcosa",
+          "pt": "Você quer dizer algo",
+          "ar": "هل تريد قول شيء"
         },
         "multiple": false,
         "name": "something",
@@ -327,26 +403,50 @@
         "errorMessage": "",
         "helperText": "",
         "label": {
-          "en": "Do you like cookie ?"
+          "en": "Do you like cookie ?",
+          "fr": "Aimez-vous les cookies ?",
+          "es": "¿Te gustan las galletas?",
+          "de": "Magst du Kekse?",
+          "it": "Ti piacciono i biscotti?",
+          "pt": "Você gosta de biscoitos?",
+          "ar": "هل تحب الكوكيز؟"
         },
         "multiple": false,
         "name": "do-you-like-cookie",
         "options": [
           {
             "label": {
-              "en": "Like? I live for cookies ! 🍪"
+              "en": "Like? I live for cookies ! 🍪",
+              "fr": "Aimer ? Je vis pour les cookies ! 🍪",
+              "es": "¿Gustar? ¡Vivo por las galletas! 🍪",
+              "de": "Mögen? Ich lebe für Kekse! 🍪",
+              "it": "Piacere? Vivo per i biscotti! 🍪",
+              "pt": "Gostar? Eu vivo por biscoitos! 🍪",
+              "ar": "أحب؟ أنا أعيش من أجل الكوكيز! 🍪"
             },
             "value": "a"
           },
           {
             "label": {
-              "en": "Only if it comes with milk and zero witnesses. 🥛😏"
+              "en": "Only if it comes with milk and zero witnesses. 🥛😏",
+              "fr": "Seulement si ça vient avec du lait et zéro témoins. 🥛😏",
+              "es": "Solo si viene con leche y cero testigos. 🥛😏",
+              "de": "Nur wenn es mit Milch und ohne Zeugen kommt. 🥛😏",
+              "it": "Solo se viene con il latte e zero testimoni. 🥛😏",
+              "pt": "Apenas se vier com leite e zero testemunhas. 🥛😏",
+              "ar": "فقط إذا جاء مع الحليب وبدون شهود. 🥛😏"
             },
             "value": "b"
           },
           {
             "label": {
-              "en": "No… I love them so much I might actually marry one ! 💍🍪"
+              "en": "No… I love them so much I might actually marry one ! 💍🍪",
+              "fr": "Non... Je les aime tellement que je pourrais en épouser un ! 💍🍪",
+              "es": "No... ¡Los amo tanto que podría casarme con uno! 💍🍪",
+              "de": "Nein... Ich liebe sie so sehr, dass ich einen heiraten könnte! 💍🍪",
+              "it": "No... Li amo così tanto che potrei sposarne uno! 💍🍪",
+              "pt": "Não... Eu os amo tanto que posso me casar com um! 💍🍪",
+              "ar": "لا... أحبهم كثيرًا لدرجة أنني قد أتزوج واحدًا! 💍🍪"
             },
             "value": "c"
           }
@@ -377,7 +477,13 @@
         "errorMessage": "",
         "helperText": "",
         "label": {
-          "en": "What is your favorite sport?"
+          "en": "What is your favorite sport?",
+          "fr": "Quel est votre sport préféré ?",
+          "es": "¿Cuál es tu deporte favorito?",
+          "de": "Was ist dein Lieblingssport?",
+          "it": "Qual è il tuo sport preferito?",
+          "pt": "Qual é o seu esporte favorito?",
+          "ar": "ما هي رياضتك المفضلة؟"
         },
         "multiple": false,
         "name": "favorite-sport",
@@ -408,7 +514,13 @@
         "errorMessage": "",
         "helperText": "",
         "label": {
-          "en": "What day is it?"
+          "en": "What day is it?",
+          "fr": "Quel jour sommes-nous ?",
+          "es": "¿Qué día es hoy?",
+          "de": "Welcher Tag ist heute?",
+          "it": "Che giorno è oggi?",
+          "pt": "Que dia é hoje?",
+          "ar": "ما هو اليوم؟"
         },
         "multiple": false,
         "name": "date",
