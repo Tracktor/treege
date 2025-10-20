@@ -10,10 +10,11 @@ import { defaultUI } from "@/renderer/features/TreegeRenderer/web/components/Def
 import { TreegeRendererProps } from "@/renderer/types/renderer";
 import { convertFormValuesToNamedFormat } from "@/renderer/utils/form";
 import { NODE_TYPE } from "@/shared/constants/node";
+import { ThemeProvider } from "@/shared/context/ThemeContext";
 import { InputNodeData, TreegeNodeData, UINodeData } from "@/shared/types/node";
 import { isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
 
-const TreegeRenderer = ({
+const TreegeRendererInternal = ({
   nodes,
   edges,
   validate,
@@ -23,7 +24,7 @@ const TreegeRenderer = ({
   components = {},
   language = "en",
   validationMode = "onSubmit",
-}: TreegeRendererProps) => {
+}: Omit<TreegeRendererProps, "theme">) => {
   const { canSubmit, checkValidForm, formErrors, formValues, setFieldValue, setFormErrors, visibleNodes, visibleRootNodes } =
     useTreegeRenderer(nodes, edges, initialValues);
 
@@ -171,5 +172,11 @@ const TreegeRenderer = ({
     </TreegeRendererProvider>
   );
 };
+
+const TreegeRenderer = ({ theme = "dark", ...props }: TreegeRendererProps) => (
+  <ThemeProvider theme={theme}>
+    <TreegeRendererInternal {...props} />
+  </ThemeProvider>
+);
 
 export default TreegeRenderer;

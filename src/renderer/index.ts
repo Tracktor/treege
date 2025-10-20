@@ -11,6 +11,9 @@ export * from "@/renderer/features/TreegeRenderer/web/components/DefaultUI";
 // Hooks
 export { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
 
+// Theme
+export { ThemeProvider, useTheme } from "@/shared/context/ThemeContext";
+
 // Utils
 export * from "@/renderer/utils/conditions";
 export * from "@/renderer/utils/form";

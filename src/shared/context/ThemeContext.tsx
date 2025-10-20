@@ -6,6 +6,7 @@ type ThemeProviderProps = {
   children: ReactNode;
   defaultTheme?: Theme;
   storageKey?: string;
+  theme?: "dark" | "light";
 };
 
 type ThemeProviderState = {
@@ -20,9 +21,49 @@ const initialState: ThemeProviderState = {
 
 const ThemeContext = createContext<ThemeProviderState>(initialState);
 
-export const ThemeProvider = ({ children, defaultTheme = "system", storageKey = "vite-ui-theme", ...props }: ThemeProviderProps) => {
-  const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem(storageKey) as Theme) || defaultTheme);
+export const ThemeProvider = ({
+  children,
+  defaultTheme = "system",
+  storageKey = "vite-ui-theme",
+  theme: controlledTheme,
+  ...props
+}: ThemeProviderProps) => {
+  const [internalTheme, setInternalTheme] = useState<Theme>(() => {
+    // If controlled, use controlled theme and ignore localStorage
+    if (controlledTheme) return controlledTheme;
+    // Otherwise, use localStorage or default
+    return (localStorage.getItem(storageKey) as Theme) || defaultTheme;
+  });
 
+  // Use controlled theme if provided, otherwise use internal state
+  const theme = controlledTheme ?? internalTheme;
+
+  const value = useMemo(
+    () => ({
+      setTheme: (newTheme: Theme) => {
+        // Don't update localStorage if controlled
+        if (!controlledTheme && typeof window !== "undefined") {
+          localStorage.setItem(storageKey, newTheme);
+        }
+        setInternalTheme(newTheme);
+      },
+      theme,
+    }),
+    [storageKey, theme, controlledTheme],
+  );
+
+  /**
+   * Sync controlled theme changes
+   */
+  useEffect(() => {
+    if (controlledTheme) {
+      setInternalTheme(controlledTheme);
+    }
+  }, [controlledTheme]);
+
+  /**
+   * Apply theme to document root
+   */
   useEffect(() => {
     const root = window.document.documentElement;
 
@@ -37,19 +78,6 @@ export const ThemeProvider = ({ children, defaultTheme = "system", storageKey = 
 
     root.classList.add(theme);
   }, [theme]);
-
-  const value = useMemo(
-    () => ({
-      setTheme: (newTheme: Theme) => {
-        if (typeof window !== "undefined") {
-          localStorage.setItem(storageKey, newTheme);
-        }
-        setTheme(newTheme);
-      },
-      theme,
-    }),
-    [storageKey, theme],
-  );
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading

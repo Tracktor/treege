@@ -3,7 +3,6 @@ import { TreegeEditorProps } from "@/editor";
 import Logo from "@/editor/components/data-display/logo";
 import { edgeTypes } from "@/editor/constants/edgeTypes";
 import { nodeTypes } from "@/editor/constants/nodeTypes";
-import { ThemeProvider } from "@/editor/context/ThemeContext";
 import ActionsPanel from "@/editor/features/TreegeEditor/panel/ActionsPanel";
 import NodeActionsSheet from "@/editor/features/TreegeEditor/sheets/NodeActionsSheet";
 import useFlowConnections from "@/editor/hooks/useFlowConnections";
@@ -38,12 +37,12 @@ const Flow = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave }:
 };
 
 const TreegeEditor = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave }: TreegeEditorProps) => (
-  <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+  <div className="dark h-full">
     <Toaster position="bottom-center" />
     <ReactFlowProvider>
       <Flow defaultEdges={defaultEdges} defaultNodes={defaultNodes} onExportJson={onExportJson} onSave={onSave} defaultFlow={defaultFlow} />
     </ReactFlowProvider>
-  </ThemeProvider>
+  </div>
 );
 
 export default TreegeEditor;

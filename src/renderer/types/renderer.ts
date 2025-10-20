@@ -93,4 +93,10 @@ export type TreegeRendererProps = {
    * Custom validation function
    */
   validate?: (values: FormValues, nodes: Node<TreegeNodeData>[]) => Record<string, string>;
+  /**
+   * Theme for the renderer (controlled mode)
+   * The renderer will apply this theme directly without managing its own state
+   * @default "dark"
+   */
+  theme?: "dark" | "light";
 };
