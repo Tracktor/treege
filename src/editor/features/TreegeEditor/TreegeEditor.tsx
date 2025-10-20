@@ -11,13 +11,13 @@ import { ThemeProvider } from "@/shared/context/ThemeContext";
 
 import "@/editor/styles/style.css";
 
-const Flow = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave }: TreegeEditorProps) => {
+const Flow = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave, theme }: TreegeEditorProps) => {
   const { onConnect, onConnectEnd, onEdgesDelete } = useFlowConnections();
 
   return (
     <ReactFlow
       fitView
-      colorMode="dark"
+      colorMode={theme}
       selectNodesOnDrag={false}
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
@@ -37,8 +37,8 @@ const Flow = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave }:
   );
 };
 
-const TreegeEditor = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave }: TreegeEditorProps) => (
-  <ThemeProvider defaultTheme="dark">
+const TreegeEditor = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave, theme = "dark" }: TreegeEditorProps) => (
+  <ThemeProvider defaultTheme={theme}>
     <Toaster position="bottom-center" />
     <ReactFlowProvider>
       <Flow defaultEdges={defaultEdges} defaultNodes={defaultNodes} onExportJson={onExportJson} onSave={onSave} defaultFlow={defaultFlow} />

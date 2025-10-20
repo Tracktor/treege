@@ -8,20 +8,31 @@ import { Switch } from "@/shared/components/ui/switch";
 const EditorPanel = ({
   defaultFlow,
   onSave,
+  theme,
 }: {
   defaultFlow?: { nodes: Node[]; edges: Edge[] };
   onSave: (data: { nodes: Node[]; edges: Edge[] }) => void;
+  theme: "light" | "dark";
 }) => (
   <div className="h-full flex flex-col">
     <div className="flex-1">
-      <TreegeEditor onSave={onSave} defaultFlow={defaultFlow} />
+      <TreegeEditor onSave={onSave} defaultFlow={defaultFlow} theme={theme} />
     </div>
   </div>
 );
 
-const RendererPanel = ({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) => {
+const RendererPanel = ({
+  nodes,
+  edges,
+  theme,
+  setTheme,
+}: {
+  nodes: Node[];
+  edges: Edge[];
+  theme: "light" | "dark";
+  setTheme: (t: "light" | "dark") => void;
+}) => {
   const [formValues, setFormValues] = useState<FormValues>({});
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
   const hasNodes = nodes.length > 0;
 
   const handleSubmit = (values: Record<string, any>) => {
@@ -92,6 +103,7 @@ const RendererPanel = ({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) => {
 const ExampleLayout = ({ defaultFlow }: { defaultFlow?: { nodes: Node[]; edges: Edge[] } }) => {
   const [savedNodes, setSavedNodes] = useState<Node[]>([]);
   const [savedEdges, setSavedEdges] = useState<Edge[]>([]);
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
 
   const handleSave = ({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) => {
     setSavedNodes(nodes);
@@ -99,14 +111,16 @@ const ExampleLayout = ({ defaultFlow }: { defaultFlow?: { nodes: Node[]; edges: 
   };
 
   return (
+    // <ThemeProvider theme={theme}>
     <div className="h-screen w-screen flex">
       <div className="w-1/2 border-r">
-        <EditorPanel onSave={handleSave} defaultFlow={defaultFlow} />
+        <EditorPanel onSave={handleSave} defaultFlow={defaultFlow} theme={theme} />
       </div>
       <div className="w-1/2">
-        <RendererPanel nodes={savedNodes} edges={savedEdges} />
+        <RendererPanel nodes={savedNodes} edges={savedEdges} theme={theme} setTheme={setTheme} />
       </div>
     </div>
+    // </ThemeProvider>
   );
 };
 
