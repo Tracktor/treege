@@ -1,10 +1,16 @@
+import { ChevronDownIcon } from "lucide-react";
+import * as React from "react";
+import { ChangeEvent, useState } from "react";
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import DefaultHttpInput from "@/renderer/features/TreegeRenderer/web/components/DefaultHttpInput";
 import { InputRenderProps } from "@/renderer/types/renderer";
+import { Button } from "@/shared/components/ui/button";
+import { Calendar } from "@/shared/components/ui/calendar";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { Textarea } from "@/shared/components/ui/textarea";
@@ -223,6 +229,10 @@ export const DefaultDateInput = ({ node }: InputRenderProps) => {
   const value = formValues[fieldId];
   const error = formErrors[fieldId];
   const name = node.data.name || fieldId;
+  const [open, setOpen] = useState(false);
+
+  // Convert value to Date object if it's a string
+  const dateValue = value ? new Date(value) : undefined;
 
   return (
     <FormItem className="mb-4">
@@ -230,14 +240,96 @@ export const DefaultDateInput = ({ node }: InputRenderProps) => {
         {getTranslatedLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
-      <Input
-        type="date"
-        id={name}
-        name={name}
-        value={value || ""}
-        onChange={(e) => setFieldValue(fieldId, e.target.value)}
-        placeholder={node.data.placeholder}
-      />
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button variant="outline" id={name} className="w-full justify-between font-normal">
+            {dateValue ? dateValue.toLocaleDateString() : node.data.placeholder || "Select date"}
+            <ChevronDownIcon className="size-4" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+          <Calendar
+            mode="single"
+            selected={dateValue}
+            captionLayout="dropdown"
+            onSelect={(date) => {
+              setFieldValue(fieldId, date ? date.toISOString() : undefined);
+              setOpen(false);
+            }}
+          />
+        </PopoverContent>
+      </Popover>
+      {error && <FormError>{error}</FormError>}
+      {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+    </FormItem>
+  );
+};
+
+export const DefaultDateRangeInput = ({ node }: InputRenderProps) => {
+  const { formValues, setFieldValue, formErrors, language } = useTreegeRendererContext();
+  const fieldId = node.id;
+  const value = formValues[fieldId];
+  const error = formErrors[fieldId];
+  const [openStart, setOpenStart] = useState(false);
+  const [openEnd, setOpenEnd] = useState(false);
+
+  // Parse range value as array [startDate, endDate]
+  const dateRange = Array.isArray(value) ? value : [];
+  const startDate = dateRange[0] ? new Date(dateRange[0]) : undefined;
+  const endDate = dateRange[1] ? new Date(dateRange[1]) : undefined;
+
+  const handleStartDateSelect = (date: Date | undefined) => {
+    setFieldValue(fieldId, [date ? date.toISOString() : undefined, dateRange[1]]);
+    setOpenStart(false);
+  };
+
+  const handleEndDateSelect = (date: Date | undefined) => {
+    setFieldValue(fieldId, [dateRange[0], date ? date.toISOString() : undefined]);
+    setOpenEnd(false);
+  };
+
+  return (
+    <FormItem className="mb-4">
+      <Label>
+        {getTranslatedLabel(node.data.label, language) || node.data.name}
+        {node.data.required && <span className="text-red-500">*</span>}
+      </Label>
+      <div className="flex gap-2">
+        <Popover open={openStart} onOpenChange={setOpenStart}>
+          <PopoverTrigger asChild className="flex-1">
+            <Button variant="outline" className="w-full justify-between font-normal">
+              {startDate ? startDate.toLocaleDateString() : "Start date"}
+              <ChevronDownIcon className="size-4" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={startDate}
+              captionLayout="dropdown"
+              onSelect={handleStartDateSelect}
+              disabled={(date) => (endDate ? date > endDate : false)}
+            />
+          </PopoverContent>
+        </Popover>
+        <Popover open={openEnd} onOpenChange={setOpenEnd}>
+          <PopoverTrigger asChild className="flex-1">
+            <Button variant="outline" className="w-full justify-between font-normal">
+              {endDate ? endDate.toLocaleDateString() : "End date"}
+              <ChevronDownIcon className="size-4" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={endDate}
+              captionLayout="dropdown"
+              onSelect={handleEndDateSelect}
+              disabled={(date) => (startDate ? date < startDate : false)}
+            />
+          </PopoverContent>
+        </Popover>
+      </div>
       {error && <FormError>{error}</FormError>}
       {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
     </FormItem>
@@ -304,7 +396,7 @@ export const DefaultFileInput = ({ node }: InputRenderProps) => {
   const error = formErrors[fieldId];
   const name = node.data.name || fieldId;
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (!files) {
       setFieldValue(fieldId, undefined);
@@ -380,7 +472,7 @@ export const defaultInputRenderers = {
   autocomplete: DefaultTextInput,
   checkbox: DefaultCheckboxInput,
   date: DefaultDateInput,
-  daterange: DefaultDateInput,
+  daterange: DefaultDateRangeInput,
   file: DefaultFileInput,
   hidden: DefaultHiddenInput,
   http: DefaultHttpInput,

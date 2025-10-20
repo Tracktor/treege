@@ -41,9 +41,10 @@ const ComboboxWithCreate = ({
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
 
-  // Normalize value to string or undefined
-  const normalizedValue = value || "";
-  const selectedOption = options.find((option) => option.value === normalizedValue);
+  // Normalize values to a string for consistent comparisons
+  const normalize = (v?: string | null) => v ?? "";
+  const normalizedValue = normalize(value);
+  const selectedOption = options.find((option) => normalize(option.value) === normalizedValue);
 
   const canCreate =
     allowCreate &&
@@ -128,7 +129,13 @@ const ComboboxWithCreate = ({
                     value={option.label}
                     onSelect={() => handleSelect(option?.value || "")}
                   >
-                    <Check className={cn("mr-2 h-4 w-4", value === option.value ? "opacity-100" : "opacity-0")} />
+                    <Check
+                      aria-hidden="true"
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        normalize(option.value) === normalizedValue ? "opacity-100" : "opacity-0"
+                      )}
+                    />
                     {option.label}
                   </CommandItem>
                 ))}
