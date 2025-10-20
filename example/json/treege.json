@@ -1,12 +1,6 @@
 {
   "edges": [
     {
-      "id": "tWmmJgrcOEFDafUBUGiDB",
-      "source": "edZHIcGqvZTtOGuV0DKIA",
-      "target": "cduBV4jbyp_vuQGLIYa_v",
-      "type": "default"
-    },
-    {
       "id": "a3ttG6QFb8M4mbo2_gI3U",
       "source": "cduBV4jbyp_vuQGLIYa_v",
       "target": "_fMC1wrs60fWlQhk1KMLX",
@@ -81,6 +75,16 @@
       "source": "_fMC1wrs60fWlQhk1KMLX",
       "target": "WHjELjK_SEZvh8VLRJVpq",
       "type": "conditional"
+    },
+    {
+      "source": "edZHIcGqvZTtOGuV0DKIA",
+      "target": "DMTpKuZqmiKU5Ca9ZfEl1",
+      "id": "xy-edge__edZHIcGqvZTtOGuV0DKIA-DMTpKuZqmiKU5Ca9ZfEl1"
+    },
+    {
+      "source": "DMTpKuZqmiKU5Ca9ZfEl1",
+      "target": "cduBV4jbyp_vuQGLIYa_v",
+      "id": "xy-edge__DMTpKuZqmiKU5Ca9ZfEl1-cduBV4jbyp_vuQGLIYa_v"
     }
   ],
   "nodes": [
@@ -97,18 +101,20 @@
         "options": [],
         "pattern": "",
         "placeholder": " Type your answer here...",
-        "required": true
+        "required": true,
+        "defaultValue": null
       },
       "id": "edZHIcGqvZTtOGuV0DKIA",
       "position": {
         "x": 573,
-        "y": 474
+        "y": 255.51412504232331
       },
       "type": "input",
       "measured": {
         "width": 270,
         "height": 150
-      }
+      },
+      "dragging": false
     },
     {
       "data": {
@@ -390,6 +396,33 @@
         0.5,
         0
       ],
+      "measured": {
+        "width": 270,
+        "height": 150
+      },
+      "dragging": false
+    },
+    {
+      "data": {
+        "type": "date",
+        "errorMessage": "",
+        "helperText": "",
+        "label": {
+          "en": "What day is it?"
+        },
+        "multiple": false,
+        "name": "date",
+        "options": [],
+        "pattern": "",
+        "placeholder": "",
+        "required": false
+      },
+      "id": "DMTpKuZqmiKU5Ca9ZfEl1",
+      "position": {
+        "x": 572.5391448316929,
+        "y": 461.8041658342067
+      },
+      "type": "input",
       "measured": {
         "width": 270,
         "height": 150
