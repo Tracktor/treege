@@ -8,5 +8,5 @@ export * from "@/shared/types/edge";
 export * from "@/shared/types/translate";
 
 // Utils
-export * from "@/shared/utils/label";
 export * from "@/shared/utils/nodeTypeGuards";
+export * from "@/shared/utils/translations";

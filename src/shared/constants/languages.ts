@@ -7,3 +7,5 @@ export const LANGUAGES = {
   it: "it",
   pt: "pt",
 } as const;
+
+export type Language = (typeof LANGUAGES)[keyof typeof LANGUAGES];

@@ -1,0 +1,6 @@
+{
+  "validation": {
+    "required": "Questo campo è obbligatorio",
+    "invalidFormat": "Formato non valido"
+  }
+}

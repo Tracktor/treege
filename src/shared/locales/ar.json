@@ -1,0 +1,6 @@
+{
+  "validation": {
+    "required": "هذا الحقل مطلوب",
+    "invalidFormat": "تنسيق غير صالح"
+  }
+}

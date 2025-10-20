@@ -112,7 +112,7 @@ export const useTreegeRenderer = (
         // Required validation
         if (node.data.required) {
           if (value === undefined || value === null || value === "") {
-            newErrors[fieldName] = translate(node.data.errorMessage) || "This field is required";
+            newErrors[fieldName] = translate(node.data.errorMessage) || translate("validation.required");
             return;
           }
         }
@@ -122,7 +122,7 @@ export const useTreegeRenderer = (
           try {
             const regex = new RegExp(node.data.pattern);
             if (!regex.test(String(value))) {
-              newErrors[fieldName] = translate(node.data.errorMessage) || "Invalid format";
+              newErrors[fieldName] = translate(node.data.errorMessage) || translate("validation.invalidFormat");
             }
           } catch (e) {
             console.error(`Invalid pattern for field ${fieldName}:`, e);

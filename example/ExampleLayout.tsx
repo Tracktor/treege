@@ -3,7 +3,9 @@ import { MoonStar, Sun } from "lucide-react";
 import { useState } from "react";
 import TreegeEditor from "@/editor/features/TreegeEditor/TreegeEditor";
 import { FormValues, TreegeRenderer } from "@/renderer";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { Switch } from "@/shared/components/ui/switch";
+import { Language, LANGUAGES } from "@/shared/constants/languages";
 
 const EditorPanel = ({
   defaultFlow,
@@ -33,6 +35,7 @@ const RendererPanel = ({
   setTheme: (t: "light" | "dark") => void;
 }) => {
   const [formValues, setFormValues] = useState<FormValues>({});
+  const [language, setLanguage] = useState<Language>("en");
   const hasNodes = nodes.length > 0;
 
   const handleSubmit = (values: Record<string, any>) => {
@@ -51,15 +54,29 @@ const RendererPanel = ({
           </p>
         </div>
         {hasNodes && (
-          <div className="flex gap-2 items-center">
-            <Sun size={15} />
-            <Switch
-              checked={theme === "dark"}
-              onCheckedChange={(checked) => {
-                setTheme(checked ? "dark" : "light");
-              }}
-            />
-            <MoonStar size={15} />
+          <div className="flex gap-4 items-center">
+            <Select value={language} onValueChange={(value) => setLanguage(value as Language)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select language" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.entries(LANGUAGES).map(([code, value]) => (
+                  <SelectItem key={code} value={value}>
+                    {code.toUpperCase()}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <div className="flex gap-2 items-center">
+              <Sun size={15} />
+              <Switch
+                checked={theme === "dark"}
+                onCheckedChange={(checked) => {
+                  setTheme(checked ? "dark" : "light");
+                }}
+              />
+              <MoonStar size={15} />
+            </div>
           </div>
         )}
       </div>
@@ -73,7 +90,7 @@ const RendererPanel = ({
               onSubmit={handleSubmit}
               onChange={setFormValues}
               validationMode="onSubmit"
-              language="en"
+              language={language}
             />
             <div className="mt-8 p-4 border rounded-lg">
               <h3 className="font-semibold mb-2">Current values:</h3>

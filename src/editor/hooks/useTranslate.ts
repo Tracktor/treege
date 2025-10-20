@@ -1,5 +1,5 @@
 import { Translatable } from "@/shared/types/translate";
-import { getTranslatedText } from "@/shared/utils/label";
+import { getTranslatedText } from "@/shared/utils/translations";
 
 /**
  * Hook for translating text (labels, placeholders, helper text, error messages, etc.)
