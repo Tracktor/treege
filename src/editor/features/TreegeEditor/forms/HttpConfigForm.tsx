@@ -210,26 +210,23 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                           {availableParentFields.length === 0 ? (
                             <DropdownMenuItem disabled>No fields available</DropdownMenuItem>
                           ) : (
-                            availableParentFields.map(
-                              (availField) =>
-                                +(
-                                  <DropdownMenuItem
-                                    key={availField.nodeId}
-                                    onClick={() => {
-                                      const variableId = availField.name || availField.nodeId;
-                                      const variable = `\${${variableId}}`;
-                                      const currentValue = field.state.value || "";
-                                      field.handleChange(currentValue + variable);
-                                      handleSubmit().then();
-                                    }}
-                                  >
-                                    <div className="flex flex-col">
-                                      <span className="font-medium">{availField.label}</span>
-                                      <span className="text-xs text-muted-foreground">{`\${${availField.name || availField.nodeId}}`}</span>
-                                    </div>
-                                  </DropdownMenuItem>
-                                ),
-                            )
+                            availableParentFields.map((availField) => (
+                              <DropdownMenuItem
+                                key={availField.nodeId}
+                                onClick={() => {
+                                  const variableId = availField.name || availField.nodeId;
+                                  const variable = `\${${variableId}}`;
+                                  const currentValue = field.state.value || "";
+                                  field.handleChange(currentValue + variable);
+                                  handleSubmit().then();
+                                }}
+                              >
+                                <div className="flex flex-col">
+                                  <span className="font-medium">{availField.label}</span>
+                                  <span className="text-xs text-muted-foreground">{`\${${availField.name || availField.nodeId}}`}</span>
+                                </div>
+                              </DropdownMenuItem>
+                            ))
                           )}
                         </DropdownMenuContent>
                       </DropdownMenu>
