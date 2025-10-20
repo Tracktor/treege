@@ -71,9 +71,9 @@ const determineEdgesToFollow = (
       }),
     );
 
-    // If fields not filled, wait for user input
+    // If fields not filled, defer conditional edges; still follow any unconditional edges
     if (!allFieldsFilled) {
-      return { edgesToFollow, waitingForInput: true };
+      return { edgesToFollow, waitingForInput: edgesToFollow.length === 0 };
     }
 
     // Evaluate conditions and follow matching edges
@@ -203,8 +203,11 @@ export const getVisibleNodesInOrder = (
 
   const visibleNodes = nodes.filter((node) => visibleNodeIds.has(node.id));
 
-  // Get root nodes (nodes without parent or with invisible parent)
-  const visibleRootNodes = orderedNodes.filter((node) => !node.parentId || !visibleNodes.some((n) => n.id === node.parentId));
+  // Get root nodes (no parent or parent not visible), ordered by first appearance in flow
+  const orderIndex = new Map(orderedNodes.map((n, i) => [n.id, i]));
+  const visibleRootNodes = visibleNodes
+    .filter((node) => !node.parentId || !visibleNodeIds.has(node.parentId))
+    .sort((a, b) => (orderIndex.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (orderIndex.get(b.id) ?? Number.MAX_SAFE_INTEGER));
 
   return {
     canSubmit: !hasUnexploredPaths,
