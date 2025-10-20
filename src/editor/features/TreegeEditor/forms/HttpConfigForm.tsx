@@ -90,7 +90,6 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                             const variable = `{{${availField.nodeId}}}`;
                             const currentValue = field.state.value || "";
                             field.handleChange(currentValue + variable);
-                            handleSubmit().then();
                           }}
                         >
                           <div className="flex flex-col">
@@ -168,7 +167,6 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                         size="icon"
                         onClick={() => {
                           field.removeValue(index);
-                          handleSubmit().then();
                         }}
                       >
                         <X className="h-4 w-4" />
@@ -183,7 +181,6 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                   size="sm"
                   onClick={() => {
                     field.pushValue({ key: "", value: "" });
-                    handleSubmit().then();
                   }}
                 >
                   <Plus className="h-4 w-4 mr-2" />
@@ -219,7 +216,6 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                               const variable = `{{${availField.nodeId}}}`;
                               const currentValue = field.state.value || "";
                               field.handleChange(currentValue + variable);
-                              handleSubmit().then();
                             }}
                           >
                             <div className="flex flex-col">
