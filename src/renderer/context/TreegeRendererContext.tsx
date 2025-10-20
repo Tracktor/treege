@@ -24,5 +24,15 @@ export const TreegeRendererProvider = ({ children, value }: TreegeRendererProvid
 
 export const useTreegeRendererContext = () => {
   const context = useContext(TreegeRendererContext);
-  return context ?? {};
+
+  return (
+    context ?? {
+      edges: [],
+      formErrors: {},
+      formValues: {},
+      language: "",
+      nodes: [],
+      setFieldValue: () => {},
+    }
+  );
 };
