@@ -40,17 +40,18 @@ const ComboboxWithCreate = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
-
   // Normalize values to a string for consistent comparisons
   const normalize = (v?: string | null) => v ?? "";
+  const normalizeSearch = (q: string) => q.trim().toLowerCase();
   const normalizedValue = normalize(value);
-  const hasSelection = value != null && value !== "";
+  const hasSelection = value !== null && value !== "";
   const selectedOption = hasSelection ? options.find((option) => normalize(option.value) === normalizedValue) : undefined;
+  const searchNormalized = normalizeSearch(search);
 
   const canCreate =
     allowCreate &&
-    search.trim() !== "" &&
-    !options.some((option) => option.label.toLowerCase() === search.toLowerCase() || option.value?.toLowerCase() === search.toLowerCase());
+    searchNormalized !== "" &&
+    !options.some((o) => normalizeSearch(o.label) === searchNormalized || normalizeSearch(o.value ?? "") === searchNormalized);
 
   const handleSelect = (selectedValue: string) => {
     if (selectedValue === normalizedValue) {
