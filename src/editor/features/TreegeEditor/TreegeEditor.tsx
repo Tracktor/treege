@@ -29,7 +29,7 @@ const Flow = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave, t
     >
       <Background gap={10} variant={BackgroundVariant.Dots} />
       <ActionsPanel onExportJson={onExportJson} onSave={onSave} />
-      <Logo />
+      <Logo theme={theme} />
       <MiniMap />
       <Controls />
       <NodeActionsSheet />
