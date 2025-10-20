@@ -163,10 +163,12 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
       const buttonContent = isLoading ? (
         <div className="flex items-center gap-2">
           <Loader2 className="h-4 w-4 animate-spin" />
-          <span className="text-muted-foreground">{selectedOption?.label || node.data.placeholder || "Search..."}</span>
+          <span className="text-muted-foreground">
+            {selectedOption?.label || getTranslatedLabel(node.data.placeholder, language) || "Search..."}
+          </span>
         </div>
       ) : (
-        selectedOption?.label || node.data.placeholder || "Search..."
+        selectedOption?.label || getTranslatedLabel(node.data.placeholder, language) || "Search..."
       );
 
       return (
@@ -231,7 +233,7 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
             </PopoverContent>
           </Popover>
           {error && <FormError>{error}</FormError>}
-          {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+          {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
         </FormItem>
       );
     }
@@ -250,7 +252,7 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
             No data available. Configure &#34;Fetch on mount&#34; or add a search parameter.
           </div>
           {error && <FormError>{error}</FormError>}
-          {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+          {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
         </FormItem>
       );
     }
@@ -264,7 +266,7 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
         <Select value={value || ""} onValueChange={(val) => setFieldValue(fieldId, val)} disabled={isLoading}>
           <SelectTrigger>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            <SelectValue placeholder={node.data.placeholder || "Select an option"} />
+            <SelectValue placeholder={getTranslatedLabel(node.data.placeholder, language) || "Select an option"} />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
@@ -277,7 +279,7 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
           </SelectContent>
         </Select>
         {error && <FormError>{error}</FormError>}
-        {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+        {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
       </FormItem>
     );
   }
@@ -291,7 +293,7 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
       </Label>
       <Input type="text" id={name} name={name} value={typeof value === "string" ? value : JSON.stringify(value)} readOnly disabled />
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
     </FormItem>
   );
 };

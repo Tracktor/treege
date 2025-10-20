@@ -1,4 +1,4 @@
-import { TranslatableLabel } from "@/shared/types/translate";
+import { Translatable } from "@/shared/types/translate";
 
 /**
  * Get the translated label, with fallback to English or first available language
@@ -6,7 +6,7 @@ import { TranslatableLabel } from "@/shared/types/translate";
  * @param language - Optional preferred language (defaults to 'en')
  * @returns The translated string or empty string if none available
  */
-export const getTranslatedLabel = (label?: TranslatableLabel | string, language: string = "en"): string => {
+export const getTranslatedLabel = (label?: Translatable | string, language: string = "en"): string => {
   if (!label) {
     return "";
   }

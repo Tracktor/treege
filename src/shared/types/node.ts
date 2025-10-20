@@ -1,7 +1,7 @@
 import { Node } from "@xyflow/react";
 import { INPUT_TYPE } from "@/shared/constants/inputType";
 import { UI_TYPE } from "@/shared/constants/uiType";
-import { TranslatableLabel } from "@/shared/types/translate";
+import { Translatable } from "@/shared/types/translate";
 
 export type UIType = (typeof UI_TYPE)[keyof typeof UI_TYPE];
 export type InputType = (typeof INPUT_TYPE)[keyof typeof INPUT_TYPE];
@@ -14,7 +14,7 @@ export type InputOption = {
   /**
    * The label of the option, which can be translated
    */
-  label: TranslatableLabel;
+  label: Translatable;
   /**
    * Whether the option is disabled and cannot be selected
    */
@@ -25,7 +25,7 @@ export type BaseNodeData = {
   /**
    * A label for the node, which can be translated
    */
-  label?: TranslatableLabel;
+  label?: Translatable;
 };
 
 export type FlowNodeData = BaseNodeData & {
@@ -39,7 +39,7 @@ export type GroupNodeData = BaseNodeData & {
   /**
    * A label for the group node, which can be translated
    */
-  label: TranslatableLabel;
+  label: Translatable;
 };
 
 export type HttpHeader = {
@@ -113,13 +113,13 @@ export type InputNodeData = BaseNodeData & {
    */
   type?: InputType;
   /**
-   * A sublabel for the input field
+   * A sublabel for the input field, which can be translated
    */
-  helperText?: string;
+  helperText?: Translatable;
   /**
-   * Placeholder text for the input field
+   * Placeholder text for the input field, which can be translated
    */
-  placeholder?: string;
+  placeholder?: Translatable;
   /**
    * Whether the input field is required
    */
@@ -129,9 +129,9 @@ export type InputNodeData = BaseNodeData & {
    */
   pattern?: string;
   /**
-   * An error message to display if validation fails
+   * An error message to display if validation fails, which can be translated
    */
-  errorMessage?: string;
+  errorMessage?: Translatable;
   /**
    * Options for select, radio, or checkbox input types
    */

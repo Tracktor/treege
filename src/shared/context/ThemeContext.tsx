@@ -32,7 +32,10 @@ export const ThemeProvider = ({
     // If controlled, use controlled theme and ignore localStorage
     if (controlledTheme) return controlledTheme;
     // Otherwise, use localStorage or default
-    return (localStorage.getItem(storageKey) as Theme) || defaultTheme;
+    if (typeof window !== "undefined") {
+      return (localStorage.getItem(storageKey) as Theme) || defaultTheme;
+    }
+    return defaultTheme;
   });
 
   // Use controlled theme if provided, otherwise use internal state

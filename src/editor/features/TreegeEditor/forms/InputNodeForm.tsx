@@ -28,15 +28,15 @@ const InputNodeForm = () => {
   const { handleSubmit, Field } = useForm({
     defaultValues: {
       defaultValue: selectedNode?.data?.defaultValue,
-      errorMessage: selectedNode?.data?.errorMessage || "",
-      helperText: selectedNode?.data?.helperText || "",
+      errorMessage: selectedNode?.data?.errorMessage || { en: "" },
+      helperText: selectedNode?.data?.helperText || { en: "" },
       httpConfig: selectedNode?.data?.httpConfig,
       label: selectedNode?.data?.label || { en: "" },
       multiple: selectedNode?.data?.multiple || false,
       name: selectedNode?.data?.name || "",
       options: selectedNode?.data?.options || [],
       pattern: selectedNode?.data?.pattern || "",
-      placeholder: selectedNode?.data?.placeholder || "",
+      placeholder: selectedNode?.data?.placeholder || { en: "" },
       required: selectedNode?.data?.required || false,
       type: selectedNode?.data?.type || "",
     } as InputNodeData,
@@ -73,7 +73,7 @@ const InputNodeForm = () => {
                   onBlur={field.handleBlur}
                   onChange={({ target }) => {
                     field.handleChange({
-                      ...field.state.value,
+                      ...(typeof field.state.value === "object" && field.state.value !== null ? field.state.value : {}),
                       [selectedLanguage]: target.value,
                     });
                   }}
@@ -110,38 +110,54 @@ const InputNodeForm = () => {
         />
 
         {selectedNode?.data?.type !== "file" && (
+          <div className="flex gap-2 items-end">
+            <Field
+              name="placeholder"
+              children={(field) => (
+                <FormItem className="flex-1">
+                  <Label htmlFor={field.name}>Placeholder</Label>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value?.[selectedLanguage] || ""}
+                    onBlur={field.handleBlur}
+                    onChange={({ target }) => {
+                      field.handleChange({
+                        ...(typeof field.state.value === "object" && field.state.value !== null ? field.state.value : {}),
+                        [selectedLanguage]: target.value,
+                      });
+                    }}
+                  />
+                </FormItem>
+              )}
+            />
+            <SelectLanguage value={selectedLanguage} onValueChange={setSelectedLanguage} />
+          </div>
+        )}
+
+        <div className="flex gap-2 items-end">
           <Field
-            name="placeholder"
+            name="helperText"
             children={(field) => (
-              <FormItem>
-                <Label htmlFor={field.name}>Placeholder</Label>
+              <FormItem className="flex-1">
+                <Label htmlFor={field.name}>Helper text</Label>
                 <Input
                   id={field.name}
                   name={field.name}
-                  value={field.state.value}
+                  value={field.state.value?.[selectedLanguage] || ""}
                   onBlur={field.handleBlur}
-                  onChange={({ target }) => field.handleChange(target.value)}
+                  onChange={({ target }) => {
+                    field.handleChange({
+                      ...(typeof field.state.value === "object" && field.state.value !== null ? field.state.value : {}),
+                      [selectedLanguage]: target.value,
+                    });
+                  }}
                 />
               </FormItem>
             )}
           />
-        )}
-
-        <Field
-          name="helperText"
-          children={(field) => (
-            <FormItem>
-              <Label htmlFor={field.name}>Helper text</Label>
-              <Input
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={({ target }) => field.handleChange(target.value)}
-              />
-            </FormItem>
-          )}
-        />
+          <SelectLanguage value={selectedLanguage} onValueChange={setSelectedLanguage} />
+        </div>
 
         {selectedNode?.data?.type === "http" && (
           <Collapsible defaultOpen className="flex w-full max-w-[350px] flex-col gap-2">
@@ -211,7 +227,9 @@ const InputNodeForm = () => {
                                 value={subField.state.value?.[selectedLanguage] || ""}
                                 onChange={({ target }) => {
                                   subField.handleChange({
-                                    ...subField.state.value,
+                                    ...(typeof subField.state.value === "object" && subField.state.value !== null
+                                      ? subField.state.value
+                                      : {}),
                                     [selectedLanguage]: target.value,
                                   });
                                 }}
@@ -308,21 +326,29 @@ const InputNodeForm = () => {
               )}
             />
 
-            <Field
-              name="errorMessage"
-              children={(field) => (
-                <FormItem>
-                  <Label htmlFor={field.name}>Error message</Label>
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={({ target }) => field.handleChange(target.value)}
-                  />
-                </FormItem>
-              )}
-            />
+            <div className="flex gap-2 items-end">
+              <Field
+                name="errorMessage"
+                children={(field) => (
+                  <FormItem className="flex-1">
+                    <Label htmlFor={field.name}>Error message</Label>
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value?.[selectedLanguage] || ""}
+                      onBlur={field.handleBlur}
+                      onChange={({ target }) => {
+                        field.handleChange({
+                          ...(typeof field.state.value === "object" && field.state.value !== null ? field.state.value : {}),
+                          [selectedLanguage]: target.value,
+                        });
+                      }}
+                    />
+                  </FormItem>
+                )}
+              />
+              <SelectLanguage value={selectedLanguage} onValueChange={setSelectedLanguage} />
+            </div>
           </CollapsibleContent>
         </Collapsible>
 

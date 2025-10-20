@@ -73,6 +73,7 @@ const RendererPanel = ({
               onSubmit={handleSubmit}
               onChange={setFormValues}
               validationMode="onSubmit"
+              language="en"
             />
             <div className="mt-8 p-4 border rounded-lg">
               <h3 className="font-semibold mb-2">Current values:</h3>

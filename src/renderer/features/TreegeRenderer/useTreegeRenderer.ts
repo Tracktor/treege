@@ -4,6 +4,7 @@ import { FormValues } from "@/renderer/types/renderer";
 import { getVisibleNodesInOrder } from "@/renderer/utils/flow";
 import { ConditionalEdgeData } from "@/shared/types/edge";
 import { TreegeNodeData } from "@/shared/types/node";
+import { getTranslatedLabel } from "@/shared/utils/label";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
 
 /**
@@ -32,9 +33,15 @@ import { isInputNode } from "@/shared/utils/nodeTypeGuards";
  * @param nodes - All nodes from the editor
  * @param edges - All edges from the editor
  * @param initialValues - Initial form values (will be merged with node defaults)
+ * @param language - Preferred language for translations (defaults to 'en')
  * @returns Pure state and computed values (no side effects)
  */
-export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<ConditionalEdgeData>[], initialValues: FormValues = {}) => {
+export const useTreegeRenderer = (
+  nodes: Node<TreegeNodeData>[],
+  edges: Edge<ConditionalEdgeData>[],
+  initialValues: FormValues = {},
+  language: string = "en",
+) => {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [formValues, setFormValues] = useState<FormValues>(() => {
     const defaultValues: FormValues = { ...initialValues };
@@ -103,7 +110,7 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
         // Required validation
         if (node.data.required) {
           if (value === undefined || value === null || value === "") {
-            newErrors[fieldName] = node.data.errorMessage || "This field is required";
+            newErrors[fieldName] = getTranslatedLabel(node.data.errorMessage, language) || "This field is required";
             return;
           }
         }
@@ -113,7 +120,7 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
           try {
             const regex = new RegExp(node.data.pattern);
             if (!regex.test(String(value))) {
-              newErrors[fieldName] = node.data.errorMessage || "Invalid format";
+              newErrors[fieldName] = getTranslatedLabel(node.data.errorMessage, language) || "Invalid format";
             }
           } catch (e) {
             console.error(`Invalid pattern for field ${fieldName}:`, e);
@@ -124,7 +131,7 @@ export const useTreegeRenderer = (nodes: Node<TreegeNodeData>[], edges: Edge<Con
 
     setFormErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [visibleNodes, formValues]);
+  }, [visibleNodes, formValues, language]);
 
   return {
     canSubmit,

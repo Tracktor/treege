@@ -35,10 +35,10 @@ export const DefaultTextInput = ({ node }: InputRenderProps) => {
         name={name}
         value={value ?? ""}
         onChange={(e) => setFieldValue(fieldId, e.target.value)}
-        placeholder={node.data.placeholder}
+        placeholder={getTranslatedLabel(node.data.placeholder, language)}
       />
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
     </FormItem>
   );
 };
@@ -62,10 +62,10 @@ export const DefaultNumberInput = ({ node }: InputRenderProps) => {
         name={name}
         value={value ?? ""}
         onChange={(e) => setFieldValue(fieldId, e.target.value === "" ? undefined : Number(e.target.value))}
-        placeholder={node.data.placeholder}
+        placeholder={getTranslatedLabel(node.data.placeholder, language)}
       />
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
     </FormItem>
   );
 };
@@ -86,7 +86,7 @@ export const DefaultSelectInput = ({ node }: InputRenderProps) => {
       </Label>
       <Select value={normalizedValue} onValueChange={(val) => setFieldValue(fieldId, val)}>
         <SelectTrigger>
-          <SelectValue placeholder={node.data.placeholder || ""} />
+          <SelectValue placeholder={getTranslatedLabel(node.data.placeholder, language) || ""} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
@@ -99,7 +99,7 @@ export const DefaultSelectInput = ({ node }: InputRenderProps) => {
         </SelectContent>
       </Select>
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
     </FormItem>
   );
 };
@@ -142,7 +142,7 @@ export const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
           ))}
         </div>
         {error && <FormError>{error}</FormError>}
-        {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+        {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
       </FormItem>
     );
   }
@@ -157,7 +157,7 @@ export const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
             {getTranslatedLabel(node.data.label, language) || node.data.name}
             {node.data.required && <span className="text-red-500">*</span>}
           </Label>
-          {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+          {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
         </div>
       </div>
       {error && <FormError>{error}</FormError>}
@@ -179,7 +179,7 @@ export const DefaultSwitchInput = ({ node }: InputRenderProps) => {
           {getTranslatedLabel(node.data.label, language) || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
-        {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+        {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
       </div>
       <Input
         type="checkbox"
@@ -220,7 +220,7 @@ export const DefaultRadioInput = ({ node }: InputRenderProps) => {
         ))}
       </RadioGroup>
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
     </FormItem>
   );
 };
@@ -245,7 +245,7 @@ export const DefaultDateInput = ({ node }: InputRenderProps) => {
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="outline" id={name} className="w-full justify-between font-normal">
-            {dateValue ? dateValue.toLocaleDateString() : node.data.placeholder || "Select date"}
+            {dateValue ? dateValue.toLocaleDateString() : getTranslatedLabel(node.data.placeholder, language) || "Select date"}
             <ChevronDownIcon className="size-4" />
           </Button>
         </PopoverTrigger>
@@ -262,7 +262,7 @@ export const DefaultDateInput = ({ node }: InputRenderProps) => {
         </PopoverContent>
       </Popover>
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
     </FormItem>
   );
 };
@@ -333,7 +333,7 @@ export const DefaultDateRangeInput = ({ node }: InputRenderProps) => {
         </Popover>
       </div>
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
     </FormItem>
   );
 };
@@ -357,11 +357,11 @@ export const DefaultTimeInput = ({ node }: InputRenderProps) => {
         name={name}
         value={value || ""}
         onChange={(e) => setFieldValue(fieldId, e.target.value)}
-        placeholder={node.data.placeholder}
+        placeholder={getTranslatedLabel(node.data.placeholder, language)}
         className="bg-background"
       />
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
     </FormItem>
   );
 };
@@ -408,7 +408,7 @@ export const DefaultTimeRangeInput = ({ node }: InputRenderProps) => {
         />
       </div>
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
     </FormItem>
   );
 };
@@ -432,10 +432,10 @@ export const DefaultPasswordInput = ({ node }: InputRenderProps) => {
         name={name}
         value={value ?? ""}
         onChange={(e) => setFieldValue(fieldId, e.target.value)}
-        placeholder={node.data.placeholder}
+        placeholder={getTranslatedLabel(node.data.placeholder, language)}
       />
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
     </FormItem>
   );
 };
@@ -473,10 +473,10 @@ export const DefaultFileInput = ({ node }: InputRenderProps) => {
         name={name}
         onChange={handleFileChange}
         multiple={node.data.multiple}
-        placeholder={node.data.placeholder}
+        placeholder={getTranslatedLabel(node.data.placeholder, language)}
       />
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
     </FormItem>
   );
 };
@@ -507,12 +507,12 @@ export const DefaultTextAreaInput = ({ node }: InputRenderProps) => {
         name={name}
         value={value ?? ""}
         onChange={(e) => setFieldValue(fieldId, e.target.value)}
-        placeholder={node.data.placeholder}
+        placeholder={getTranslatedLabel(node.data.placeholder, language)}
         className="w-full px-3 py-2 border rounded-md"
         rows={4}
       />
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{node.data.helperText}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
     </FormItem>
   );
 };

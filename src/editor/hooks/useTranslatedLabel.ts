@@ -1,4 +1,4 @@
-import { TranslatableLabel } from "@/shared/types/translate";
+import { Translatable } from "@/shared/types/translate";
 import { getTranslatedLabel } from "@/shared/utils/label";
 
 /**
@@ -6,7 +6,7 @@ import { getTranslatedLabel } from "@/shared/utils/label";
  */
 const useTranslatedLabel = () => {
   const preferredLanguage = "en";
-  return (label?: TranslatableLabel) => getTranslatedLabel(label, preferredLanguage);
+  return (label?: Translatable) => getTranslatedLabel(label, preferredLanguage);
 };
 
 export default useTranslatedLabel;

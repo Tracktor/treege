@@ -27,7 +27,7 @@ const TreegeRenderer = ({
   theme = "dark",
 }: TreegeRendererProps) => {
   const { canSubmit, checkValidForm, formErrors, formValues, setFieldValue, setFormErrors, visibleNodes, visibleRootNodes } =
-    useTreegeRenderer(nodes, edges, initialValues);
+    useTreegeRenderer(nodes, edges, initialValues, language);
 
   // Components with fallbacks
   const FormWrapper = components.form || DefaultFormWrapper;
