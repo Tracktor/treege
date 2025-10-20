@@ -1,12 +1,13 @@
 import { Background, BackgroundVariant, Controls, MiniMap, ReactFlow, ReactFlowProvider } from "@xyflow/react";
-import { TreegeEditorProps } from "@/editor";
 import Logo from "@/editor/components/data-display/logo";
 import { edgeTypes } from "@/editor/constants/edgeTypes";
 import { nodeTypes } from "@/editor/constants/nodeTypes";
 import ActionsPanel from "@/editor/features/TreegeEditor/panel/ActionsPanel";
 import NodeActionsSheet from "@/editor/features/TreegeEditor/sheets/NodeActionsSheet";
 import useFlowConnections from "@/editor/hooks/useFlowConnections";
+import { TreegeEditorProps } from "@/editor/types/editor";
 import { Toaster } from "@/shared/components/ui/sonner";
+import { ThemeProvider } from "@/shared/context/ThemeContext";
 
 import "@/editor/styles/style.css";
 
@@ -37,12 +38,12 @@ const Flow = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave }:
 };
 
 const TreegeEditor = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave }: TreegeEditorProps) => (
-  <div className="dark h-full">
+  <ThemeProvider defaultTheme="dark">
     <Toaster position="bottom-center" />
     <ReactFlowProvider>
       <Flow defaultEdges={defaultEdges} defaultNodes={defaultNodes} onExportJson={onExportJson} onSave={onSave} defaultFlow={defaultFlow} />
     </ReactFlowProvider>
-  </div>
+  </ThemeProvider>
 );
 
 export default TreegeEditor;

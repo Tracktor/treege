@@ -24,8 +24,6 @@ const RendererPanel = ({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) => {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
   const hasNodes = nodes.length > 0;
 
-  console.log(theme);
-
   const handleSubmit = (values: Record<string, any>) => {
     console.log("Form submitted:", values);
     // eslint-disable-next-line no-alert

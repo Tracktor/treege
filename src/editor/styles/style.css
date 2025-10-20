@@ -37,8 +37,8 @@ div.react-flow__node__wrapper {
     border: 3px solid transparent !important;
     box-shadow: 0 0 20px 6px oklch(from var(--treege-color-primary) l c h / 10%), 0 0 20px oklch(from var(--treege-color-tertiary) l c h / 10%);
     background: linear-gradient(
-            oklch(from var(--color-card) l c h / 33%),
-            oklch(from var(--color-card) l c h / 33%)) padding-box,
+            oklch(from oklch(0.205 0 0) l c h / 33%),
+            oklch(from oklch(0.205 0 0) l c h / 33%)) padding-box,
     linear-gradient(145deg,
             oklch(from var(--treege-color-primary) l c h / 40%),
             oklch(0 0 0 / 0),
@@ -48,8 +48,8 @@ div.react-flow__node__wrapper {
 /* Neon node in group */
 div.react-flow__node__wrapper.in-group {
     background: linear-gradient(
-            oklch(from var(--color-card) l c h / 33%),
-            oklch(from var(--color-card) l c h / 33%)) padding-box,
+            oklch(from oklch(0.205 0 0) l c h / 33%),
+            oklch(from oklch(0.205 0 0) l c h / 33%)) padding-box,
     linear-gradient(145deg,
             oklch(from var(--color-chart-2) l c h / 33%),
             oklch(0 0 0 / 0),
