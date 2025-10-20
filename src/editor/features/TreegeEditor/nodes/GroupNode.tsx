@@ -1,6 +1,6 @@
 import { Node, NodeProps, NodeResizer } from "@xyflow/react";
 import { Boxes } from "lucide-react";
-import useTranslatedLabel from "@/editor/hooks/useTranslatedLabel";
+import useTranslate from "@/editor/hooks/useTranslate";
 import { Badge } from "@/shared/components/ui/badge";
 import { GroupNodeData } from "@/shared/types/node";
 
@@ -8,8 +8,8 @@ export type GroupNodeType = Node<GroupNodeData, "group">;
 export type GroupNodeProps = NodeProps<GroupNodeType>;
 
 const GroupNode = ({ data }: GroupNodeProps) => {
-  const translateLabel = useTranslatedLabel();
-  const label = translateLabel(data?.label);
+  const translate = useTranslate();
+  const label = translate(data?.label);
 
   return (
     <>

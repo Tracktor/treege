@@ -1,6 +1,7 @@
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
+import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
 import { Button } from "@/shared/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/shared/components/ui/command";
@@ -10,7 +11,6 @@ import { Label } from "@/shared/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { cn } from "@/shared/lib/utils";
-import { getTranslatedLabel } from "@/shared/utils/label";
 
 type HttpResponse = Record<string, unknown> | unknown[];
 
@@ -53,7 +53,8 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
   const [options, setOptions] = useState<Array<{ value: string; label: string }>>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [comboboxOpen, setComboboxOpen] = useState(false);
-  const { formValues, setFieldValue, formErrors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, formErrors } = useTreegeRendererContext();
+  const t = useTranslate();
   const { httpConfig } = node.data;
   const fieldId = node.id;
   const value = formValues[fieldId];
@@ -163,18 +164,16 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
       const buttonContent = isLoading ? (
         <div className="flex items-center gap-2">
           <Loader2 className="h-4 w-4 animate-spin" />
-          <span className="text-muted-foreground">
-            {selectedOption?.label || getTranslatedLabel(node.data.placeholder, language) || "Search..."}
-          </span>
+          <span className="text-muted-foreground">{selectedOption?.label || t(node.data.placeholder) || "Search..."}</span>
         </div>
       ) : (
-        selectedOption?.label || getTranslatedLabel(node.data.placeholder, language) || "Search..."
+        selectedOption?.label || t(node.data.placeholder) || "Search..."
       );
 
       return (
         <FormItem className="mb-4">
           <Label>
-            {getTranslatedLabel(node.data.label, language) || node.data.name}
+            {t(node.data.label) || node.data.name}
             {node.data.required && <span className="text-red-500">*</span>}
           </Label>
           <Popover open={comboboxOpen} onOpenChange={setComboboxOpen}>
@@ -233,7 +232,7 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
             </PopoverContent>
           </Popover>
           {error && <FormError>{error}</FormError>}
-          {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
+          {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
         </FormItem>
       );
     }
@@ -245,14 +244,14 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
       return (
         <FormItem className="mb-4">
           <Label htmlFor={name}>
-            {getTranslatedLabel(node.data.label, language) || node.data.name}
+            {t(node.data.label) || node.data.name}
             {node.data.required && <span className="text-red-500">*</span>}
           </Label>
           <div className="text-sm text-muted-foreground py-2">
             No data available. Configure &#34;Fetch on mount&#34; or add a search parameter.
           </div>
           {error && <FormError>{error}</FormError>}
-          {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
+          {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
         </FormItem>
       );
     }
@@ -260,13 +259,13 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
     return (
       <FormItem className="mb-4">
         <Label htmlFor={name}>
-          {getTranslatedLabel(node.data.label, language) || node.data.name}
+          {t(node.data.label) || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
         <Select value={value || ""} onValueChange={(val) => setFieldValue(fieldId, val)} disabled={isLoading}>
           <SelectTrigger>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            <SelectValue placeholder={getTranslatedLabel(node.data.placeholder, language) || "Select an option"} />
+            <SelectValue placeholder={t(node.data.placeholder) || "Select an option"} />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
@@ -279,7 +278,7 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
           </SelectContent>
         </Select>
         {error && <FormError>{error}</FormError>}
-        {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
+        {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
       </FormItem>
     );
   }
@@ -288,12 +287,12 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {getTranslatedLabel(node.data.label, language) || node.data.name}
+        {t(node.data.label) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input type="text" id={name} name={name} value={typeof value === "string" ? value : JSON.stringify(value)} readOnly disabled />
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
     </FormItem>
   );
 };

@@ -18,7 +18,7 @@ export { ThemeProvider, useTheme } from "@/shared/context/ThemeContext";
 export * from "@/renderer/utils/conditions";
 export * from "@/renderer/utils/form";
 export * from "@/renderer/utils/flow";
-export { getTranslatedLabel } from "@/shared/utils/label";
+export { getTranslatedText } from "@/shared/utils/label";
 
 // Types
 export * from "@/renderer/types/renderer";

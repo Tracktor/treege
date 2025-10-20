@@ -1,7 +1,7 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { Braces } from "lucide-react";
 import NodeWrapper from "@/editor/features/TreegeEditor/nodes/layout/NodeWrapper";
-import useTranslatedLabel from "@/editor/hooks/useTranslatedLabel";
+import useTranslate from "@/editor/hooks/useTranslate";
 import { Badge } from "@/shared/components/ui/badge";
 import { JsonNodeData } from "@/shared/types/node";
 
@@ -9,8 +9,8 @@ export type JsonNodeType = Node<JsonNodeData, "json">;
 export type JsonNodeProps = NodeProps<JsonNodeType>;
 
 const JsonNode = ({ data, isConnectable, type, parentId }: JsonNodeProps) => {
-  const translateLabel = useTranslatedLabel();
-  const label = translateLabel(data?.label);
+  const translate = useTranslate();
+  const label = translate(data?.label);
 
   return (
     <NodeWrapper inGroup={!!parentId}>

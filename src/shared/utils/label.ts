@@ -1,19 +1,20 @@
 import { Translatable } from "@/shared/types/translate";
 
 /**
- * Get the translated label, with fallback to English or first available language
- * @param label - The translatable label object
+ * Get the translated text (label, placeholder, helper text, error message, etc.)
+ * with fallback to English or first available language
+ * @param text - The translatable text object or plain string
  * @param language - Optional preferred language (defaults to 'en')
  * @returns The translated string or empty string if none available
  */
-export const getTranslatedLabel = (label?: Translatable | string, language: string = "en"): string => {
-  if (!label) {
+export const getTranslatedText = (text?: Translatable | string, language: string = "en"): string => {
+  if (!text) {
     return "";
   }
 
-  if (typeof label === "string") {
-    return label;
+  if (typeof text === "string") {
+    return text;
   }
 
-  return label[language] || label.en || Object.values(label).find(Boolean) || "";
+  return text[language] || text.en || Object.values(text).find(Boolean) || "";
 };

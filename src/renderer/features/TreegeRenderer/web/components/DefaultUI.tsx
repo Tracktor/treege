@@ -1,13 +1,13 @@
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
+import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { UiRenderProps } from "@/renderer/types/renderer";
 import { isStartNode } from "@/renderer/utils/flow";
 import { Separator } from "@/shared/components/ui/separator";
 import { cn } from "@/shared/lib/utils";
-import { getTranslatedLabel } from "@/shared/utils/label";
 
 export const Divider = ({ node }: UiRenderProps) => {
-  const { language } = useTreegeRendererContext();
-  const label = getTranslatedLabel(node.data?.label, language);
+  const t = useTranslate();
+  const label = t(node.data?.label);
 
   if (label) {
     return (
@@ -23,10 +23,11 @@ export const Divider = ({ node }: UiRenderProps) => {
 };
 
 export const Title = ({ node }: UiRenderProps) => {
-  const { language, edges } = useTreegeRendererContext();
+  const { edges } = useTreegeRendererContext();
+  const t = useTranslate();
   const isFirst = isStartNode(node.id, edges);
 
-  return <h2 className={cn("text-2xl font-bold mb-5", !isFirst && "mt-10")}>{getTranslatedLabel(node.data?.label, language)}</h2>;
+  return <h2 className={cn("text-2xl font-bold mb-5", !isFirst && "mt-10")}>{t(node.data?.label)}</h2>;
 };
 export const defaultUI = {
   divider: Divider,

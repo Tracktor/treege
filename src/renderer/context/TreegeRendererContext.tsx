@@ -24,9 +24,5 @@ export const TreegeRendererProvider = ({ children, value }: TreegeRendererProvid
 
 export const useTreegeRendererContext = () => {
   const context = useContext(TreegeRendererContext);
-
-  if (!context) {
-    throw new Error("useTreegeContext must be used within TreegeRenderer");
-  }
-  return context;
+  return context ?? {};
 };

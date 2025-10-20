@@ -1,7 +1,7 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { Network } from "lucide-react";
 import NodeWrapper from "@/editor/features/TreegeEditor/nodes/layout/NodeWrapper";
-import useTranslatedLabel from "@/editor/hooks/useTranslatedLabel";
+import useTranslate from "@/editor/hooks/useTranslate";
 import { Badge } from "@/shared/components/ui/badge";
 import { FlowNodeData } from "@/shared/types/node";
 
@@ -9,8 +9,8 @@ export type FlowNodeType = Node<FlowNodeData, "flow">;
 export type FlowNodeProps = NodeProps<FlowNodeType>;
 
 const FlowNode = ({ data, isConnectable, type, parentId }: FlowNodeProps) => {
-  const translateLabel = useTranslatedLabel();
-  const label = translateLabel(data?.label);
+  const translate = useTranslate();
+  const label = translate(data?.label);
 
   return (
     <NodeWrapper inGroup={!!parentId}>

@@ -1,10 +1,10 @@
 import { Edge, Node } from "@xyflow/react";
 import { useCallback, useMemo, useState } from "react";
+import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { FormValues } from "@/renderer/types/renderer";
 import { getVisibleNodesInOrder } from "@/renderer/utils/flow";
 import { ConditionalEdgeData } from "@/shared/types/edge";
 import { TreegeNodeData } from "@/shared/types/node";
-import { getTranslatedLabel } from "@/shared/utils/label";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
 
 /**
@@ -42,6 +42,8 @@ export const useTreegeRenderer = (
   initialValues: FormValues = {},
   language: string = "en",
 ) => {
+  const translate = useTranslate(language);
+
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [formValues, setFormValues] = useState<FormValues>(() => {
     const defaultValues: FormValues = { ...initialValues };
@@ -110,7 +112,7 @@ export const useTreegeRenderer = (
         // Required validation
         if (node.data.required) {
           if (value === undefined || value === null || value === "") {
-            newErrors[fieldName] = getTranslatedLabel(node.data.errorMessage, language) || "This field is required";
+            newErrors[fieldName] = translate(node.data.errorMessage) || "This field is required";
             return;
           }
         }
@@ -120,7 +122,7 @@ export const useTreegeRenderer = (
           try {
             const regex = new RegExp(node.data.pattern);
             if (!regex.test(String(value))) {
-              newErrors[fieldName] = getTranslatedLabel(node.data.errorMessage, language) || "Invalid format";
+              newErrors[fieldName] = translate(node.data.errorMessage) || "Invalid format";
             }
           } catch (e) {
             console.error(`Invalid pattern for field ${fieldName}:`, e);
@@ -131,7 +133,7 @@ export const useTreegeRenderer = (
 
     setFormErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [visibleNodes, formValues, language]);
+  }, [visibleNodes, formValues, translate]);
 
   return {
     canSubmit,

@@ -1,7 +1,7 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { RectangleEllipsis, Type } from "lucide-react";
 import NodeWrapper from "@/editor/features/TreegeEditor/nodes/layout/NodeWrapper";
-import useTranslatedLabel from "@/editor/hooks/useTranslatedLabel";
+import useTranslate from "@/editor/hooks/useTranslate";
 import { Badge } from "@/shared/components/ui/badge";
 import { InputNodeData } from "@/shared/types/node";
 
@@ -9,8 +9,8 @@ export type InputNodeType = Node<InputNodeData, "input">;
 export type InputNodeProps = NodeProps<InputNodeType>;
 
 const InputNode = ({ data, isConnectable, type, parentId }: InputNodeProps) => {
-  const translateLabel = useTranslatedLabel();
-  const label = translateLabel(data?.label);
+  const translate = useTranslate();
+  const label = translate(data?.label);
 
   return (
     <NodeWrapper inGroup={!!parentId}>

@@ -7,7 +7,7 @@ import SelectNodeGroup from "@/editor/features/TreegeEditor/inputs/SelectNodeGro
 import SelectNodeType from "@/editor/features/TreegeEditor/inputs/SelectNodeType";
 import useFlowActions from "@/editor/hooks/useFlowActions";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
-import useTranslatedLabel from "@/editor/hooks/useTranslatedLabel";
+import useTranslate from "@/editor/hooks/useTranslate";
 import { ScrollArea } from "@/shared/components/ui/scroll-area";
 import { Separator } from "@/shared/components/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/shared/components/ui/sheet";
@@ -17,8 +17,8 @@ import { isFlowNode, isGroupNode, isInputNode, isJsonNode, isUINode } from "@/sh
 const NodeActionsSheet = () => {
   const { selectedNode, hasSelectedNodes } = useNodesSelection<TreegeNodeData>();
   const { clearSelection } = useFlowActions();
-  const translateLabel = useTranslatedLabel();
-  const label = translateLabel(selectedNode?.data?.label);
+  const translate = useTranslate();
+  const label = translate(selectedNode?.data?.label);
 
   return (
     <Sheet open={hasSelectedNodes} onOpenChange={clearSelection}>

@@ -3,6 +3,7 @@ import * as React from "react";
 import { ChangeEvent, useState } from "react";
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import DefaultHttpInput from "@/renderer/features/TreegeRenderer/web/components/DefaultHttpInput";
+import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
 import { Button } from "@/shared/components/ui/button";
 import { Calendar } from "@/shared/components/ui/calendar";
@@ -14,10 +15,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/
 import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { Textarea } from "@/shared/components/ui/textarea";
-import { getTranslatedLabel } from "@/shared/utils/label";
 
 export const DefaultTextInput = ({ node }: InputRenderProps) => {
-  const { formValues, setFieldValue, formErrors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, formErrors } = useTreegeRendererContext();
+  const t = useTranslate();
   const fieldId = node.id;
   const value = formValues[fieldId];
   const error = formErrors[fieldId];
@@ -26,7 +27,7 @@ export const DefaultTextInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {getTranslatedLabel(node.data.label, language) || node.data.name}
+        {t(node.data.label) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
@@ -35,16 +36,17 @@ export const DefaultTextInput = ({ node }: InputRenderProps) => {
         name={name}
         value={value ?? ""}
         onChange={(e) => setFieldValue(fieldId, e.target.value)}
-        placeholder={getTranslatedLabel(node.data.placeholder, language)}
+        placeholder={t(node.data.placeholder)}
       />
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
     </FormItem>
   );
 };
 
 export const DefaultNumberInput = ({ node }: InputRenderProps) => {
-  const { formValues, setFieldValue, formErrors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, formErrors } = useTreegeRendererContext();
+  const t = useTranslate();
   const fieldId = node.id;
   const value = formValues[fieldId];
   const error = formErrors[fieldId];
@@ -53,7 +55,7 @@ export const DefaultNumberInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {getTranslatedLabel(node.data.label, language) || node.data.name}
+        {t(node.data.label) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
@@ -62,16 +64,17 @@ export const DefaultNumberInput = ({ node }: InputRenderProps) => {
         name={name}
         value={value ?? ""}
         onChange={(e) => setFieldValue(fieldId, e.target.value === "" ? undefined : Number(e.target.value))}
-        placeholder={getTranslatedLabel(node.data.placeholder, language)}
+        placeholder={t(node.data.placeholder)}
       />
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
     </FormItem>
   );
 };
 
 export const DefaultSelectInput = ({ node }: InputRenderProps) => {
-  const { formValues, setFieldValue, formErrors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, formErrors } = useTreegeRendererContext();
+  const t = useTranslate();
   const fieldId = node.id;
   const value = formValues[fieldId];
   const error = formErrors[fieldId];
@@ -81,31 +84,32 @@ export const DefaultSelectInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {getTranslatedLabel(node.data.label, language) || node.data.name}
+        {t(node.data.label) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Select value={normalizedValue} onValueChange={(val) => setFieldValue(fieldId, val)}>
         <SelectTrigger>
-          <SelectValue placeholder={getTranslatedLabel(node.data.placeholder, language) || ""} />
+          <SelectValue placeholder={t(node.data.placeholder) || ""} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             {node.data.options?.map((opt, index) => (
               <SelectItem key={`${opt.value}-${index}`} value={String(opt.value)} disabled={opt.disabled}>
-                {getTranslatedLabel(opt.label, language)}
+                {t(opt.label)}
               </SelectItem>
             ))}
           </SelectGroup>
         </SelectContent>
       </Select>
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
     </FormItem>
   );
 };
 
 export const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
-  const { formValues, setFieldValue, formErrors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, formErrors } = useTreegeRendererContext();
+  const t = useTranslate();
   const fieldId = node.id;
   const value = formValues[fieldId];
   const error = formErrors[fieldId];
@@ -123,7 +127,7 @@ export const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
     return (
       <FormItem className="mb-4">
         <Label className="block text-sm font-medium mb-2">
-          {getTranslatedLabel(node.data.label, language) || node.data.name}
+          {t(node.data.label) || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
         <div className="space-y-2">
@@ -136,13 +140,13 @@ export const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
                 disabled={opt.disabled}
               />
               <Label htmlFor={`${name}-${opt.value}`} className="text-sm font-normal cursor-pointer">
-                {getTranslatedLabel(opt.label, language)}
+                {t(opt.label)}
               </Label>
             </div>
           ))}
         </div>
         {error && <FormError>{error}</FormError>}
-        {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
+        {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
       </FormItem>
     );
   }
@@ -154,10 +158,10 @@ export const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
         <Checkbox id={name} checked={value || false} onCheckedChange={(checked) => setFieldValue(fieldId, checked)} />
         <div className="grid gap-2">
           <Label htmlFor={name} className="text-sm font-medium cursor-pointer">
-            {getTranslatedLabel(node.data.label, language) || node.data.name}
+            {t(node.data.label) || node.data.name}
             {node.data.required && <span className="text-red-500">*</span>}
           </Label>
-          {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
+          {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
         </div>
       </div>
       {error && <FormError>{error}</FormError>}
@@ -166,7 +170,8 @@ export const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
 };
 
 export const DefaultSwitchInput = ({ node }: InputRenderProps) => {
-  const { formValues, setFieldValue, formErrors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, formErrors } = useTreegeRendererContext();
+  const t = useTranslate();
   const fieldId = node.id;
   const value = formValues[fieldId];
   const error = formErrors[fieldId];
@@ -176,10 +181,10 @@ export const DefaultSwitchInput = ({ node }: InputRenderProps) => {
     <FormItem className="mb-4 flex items-center justify-between">
       <div>
         <Label htmlFor={name} className="block text-sm font-medium">
-          {getTranslatedLabel(node.data.label, language) || node.data.name}
+          {t(node.data.label) || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
-        {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
+        {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
       </div>
       <Input
         type="checkbox"
@@ -196,7 +201,8 @@ export const DefaultSwitchInput = ({ node }: InputRenderProps) => {
 };
 
 export const DefaultRadioInput = ({ node }: InputRenderProps) => {
-  const { formValues, setFieldValue, formErrors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, formErrors } = useTreegeRendererContext();
+  const t = useTranslate();
   const fieldId = node.id;
   const value = formValues[fieldId];
   const error = formErrors[fieldId];
@@ -206,7 +212,7 @@ export const DefaultRadioInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label className="block text-sm font-medium mb-2">
-        {getTranslatedLabel(node.data.label, language) || node.data.name}
+        {t(node.data.label) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <RadioGroup value={normalizedValue} onValueChange={(val) => setFieldValue(fieldId, val)}>
@@ -214,19 +220,20 @@ export const DefaultRadioInput = ({ node }: InputRenderProps) => {
           <div key={opt.value + index} className="flex items-center space-x-2">
             <RadioGroupItem value={String(opt.value)} id={`${name}-${opt.value}`} disabled={opt.disabled} />
             <Label htmlFor={`${name}-${opt.value}`} className="text-sm font-normal cursor-pointer">
-              {getTranslatedLabel(opt.label, language)}
+              {t(opt.label)}
             </Label>
           </div>
         ))}
       </RadioGroup>
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
     </FormItem>
   );
 };
 
 export const DefaultDateInput = ({ node }: InputRenderProps) => {
-  const { formValues, setFieldValue, formErrors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, formErrors } = useTreegeRendererContext();
+  const t = useTranslate();
   const fieldId = node.id;
   const value = formValues[fieldId];
   const error = formErrors[fieldId];
@@ -239,13 +246,13 @@ export const DefaultDateInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {getTranslatedLabel(node.data.label, language) || node.data.name}
+        {t(node.data.label) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="outline" id={name} className="w-full justify-between font-normal">
-            {dateValue ? dateValue.toLocaleDateString() : getTranslatedLabel(node.data.placeholder, language) || "Select date"}
+            {dateValue ? dateValue.toLocaleDateString() : t(node.data.placeholder) || "Select date"}
             <ChevronDownIcon className="size-4" />
           </Button>
         </PopoverTrigger>
@@ -262,13 +269,14 @@ export const DefaultDateInput = ({ node }: InputRenderProps) => {
         </PopoverContent>
       </Popover>
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
     </FormItem>
   );
 };
 
 export const DefaultDateRangeInput = ({ node }: InputRenderProps) => {
-  const { formValues, setFieldValue, formErrors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, formErrors } = useTreegeRendererContext();
+  const t = useTranslate();
   const fieldId = node.id;
   const value = formValues[fieldId];
   const error = formErrors[fieldId];
@@ -293,7 +301,7 @@ export const DefaultDateRangeInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label>
-        {getTranslatedLabel(node.data.label, language) || node.data.name}
+        {t(node.data.label) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <div className="flex gap-2">
@@ -333,13 +341,14 @@ export const DefaultDateRangeInput = ({ node }: InputRenderProps) => {
         </Popover>
       </div>
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
     </FormItem>
   );
 };
 
 export const DefaultTimeInput = ({ node }: InputRenderProps) => {
-  const { formValues, setFieldValue, formErrors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, formErrors } = useTreegeRendererContext();
+  const t = useTranslate();
   const fieldId = node.id;
   const value = formValues[fieldId];
   const error = formErrors[fieldId];
@@ -348,7 +357,7 @@ export const DefaultTimeInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {getTranslatedLabel(node.data.label, language) || node.data.name}
+        {t(node.data.label) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
@@ -357,17 +366,18 @@ export const DefaultTimeInput = ({ node }: InputRenderProps) => {
         name={name}
         value={value || ""}
         onChange={(e) => setFieldValue(fieldId, e.target.value)}
-        placeholder={getTranslatedLabel(node.data.placeholder, language)}
+        placeholder={t(node.data.placeholder)}
         className="bg-background"
       />
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
     </FormItem>
   );
 };
 
 export const DefaultTimeRangeInput = ({ node }: InputRenderProps) => {
-  const { formValues, setFieldValue, formErrors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, formErrors } = useTreegeRendererContext();
+  const t = useTranslate();
   const fieldId = node.id;
   const value = formValues[fieldId];
   const error = formErrors[fieldId];
@@ -388,7 +398,7 @@ export const DefaultTimeRangeInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label>
-        {getTranslatedLabel(node.data.label, language) || node.data.name}
+        {t(node.data.label) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <div className="flex gap-2">
@@ -408,13 +418,14 @@ export const DefaultTimeRangeInput = ({ node }: InputRenderProps) => {
         />
       </div>
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
     </FormItem>
   );
 };
 
 export const DefaultPasswordInput = ({ node }: InputRenderProps) => {
-  const { formValues, setFieldValue, formErrors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, formErrors } = useTreegeRendererContext();
+  const t = useTranslate();
   const fieldId = node.id;
   const value = formValues[fieldId];
   const error = formErrors[fieldId];
@@ -423,7 +434,7 @@ export const DefaultPasswordInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {getTranslatedLabel(node.data.label, language) || node.data.name}
+        {t(node.data.label) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
@@ -432,16 +443,17 @@ export const DefaultPasswordInput = ({ node }: InputRenderProps) => {
         name={name}
         value={value ?? ""}
         onChange={(e) => setFieldValue(fieldId, e.target.value)}
-        placeholder={getTranslatedLabel(node.data.placeholder, language)}
+        placeholder={t(node.data.placeholder)}
       />
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
     </FormItem>
   );
 };
 
 export const DefaultFileInput = ({ node }: InputRenderProps) => {
-  const { setFieldValue, formErrors, language } = useTreegeRendererContext();
+  const { setFieldValue, formErrors } = useTreegeRendererContext();
+  const t = useTranslate();
   const fieldId = node.id;
   const error = formErrors[fieldId];
   const name = node.data.name || fieldId;
@@ -464,7 +476,7 @@ export const DefaultFileInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {getTranslatedLabel(node.data.label, language) || node.data.name}
+        {t(node.data.label) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
@@ -473,10 +485,10 @@ export const DefaultFileInput = ({ node }: InputRenderProps) => {
         name={name}
         onChange={handleFileChange}
         multiple={node.data.multiple}
-        placeholder={getTranslatedLabel(node.data.placeholder, language)}
+        placeholder={t(node.data.placeholder)}
       />
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
     </FormItem>
   );
 };
@@ -490,7 +502,8 @@ export const DefaultHiddenInput = ({ node }: InputRenderProps) => {
 };
 
 export const DefaultTextAreaInput = ({ node }: InputRenderProps) => {
-  const { formValues, setFieldValue, formErrors, language } = useTreegeRendererContext();
+  const { formValues, setFieldValue, formErrors } = useTreegeRendererContext();
+  const t = useTranslate();
   const fieldId = node.id;
   const value = formValues[fieldId];
   const error = formErrors[fieldId];
@@ -499,7 +512,7 @@ export const DefaultTextAreaInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {getTranslatedLabel(node.data.label, language) || node.data.name}
+        {t(node.data.label) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Textarea
@@ -507,12 +520,12 @@ export const DefaultTextAreaInput = ({ node }: InputRenderProps) => {
         name={name}
         value={value ?? ""}
         onChange={(e) => setFieldValue(fieldId, e.target.value)}
-        placeholder={getTranslatedLabel(node.data.placeholder, language)}
+        placeholder={t(node.data.placeholder)}
         className="w-full px-3 py-2 border rounded-md"
         rows={4}
       />
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{getTranslatedLabel(node.data.helperText, language)}</FormDescription>}
+      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
     </FormItem>
   );
 };
