@@ -195,9 +195,14 @@ export const getVisibleNodesInOrder = (
 
   // Add parent groups to visible nodes if a child is visible
   const visibleNodeIds = new Set(orderedNodeIds);
+  const idToNode = new Map(nodes.map((n) => [n.id, n]));
   nodes.forEach((node) => {
-    if (orderedNodeIds.has(node.id) && node.parentId) {
-      visibleNodeIds.add(node.parentId);
+    if (!orderedNodeIds.has(node.id)) return;
+
+    let { parentId } = node;
+    while (parentId) {
+      visibleNodeIds.add(parentId);
+      parentId = idToNode.get(parentId)?.parentId;
     }
   });
 
