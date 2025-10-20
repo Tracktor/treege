@@ -76,6 +76,7 @@ export const DefaultSelectInput = ({ node }: InputRenderProps) => {
   const value = formValues[fieldId];
   const error = formErrors[fieldId];
   const name = node.data.name || fieldId;
+  const normalizedValue = value === null ? "" : String(value);
 
   return (
     <FormItem className="mb-4">
@@ -83,15 +84,15 @@ export const DefaultSelectInput = ({ node }: InputRenderProps) => {
         {getTranslatedLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
-      <Select value={value ?? ""} onValueChange={(val) => setFieldValue(fieldId, val)}>
+      <Select value={normalizedValue} onValueChange={(val) => setFieldValue(fieldId, val)}>
         <SelectTrigger>
           <SelectValue placeholder={node.data.placeholder || ""} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             {node.data.options?.map((opt, index) => (
-              <SelectItem key={opt.value + index} value={opt.value} disabled={opt.disabled}>
-                {getTranslatedLabel(opt.label)}
+              <SelectItem key={`${opt.value}-${index}`} value={String(opt.value)} disabled={opt.disabled}>
+                {getTranslatedLabel(opt.label, language)}
               </SelectItem>
             ))}
           </SelectGroup>
@@ -112,7 +113,7 @@ export const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
 
   // If there are options, render a checkbox group (multiple checkboxes)
   if (node.data.options && node.data.options.length > 0) {
-    const selectedValues = Array.isArray(value) ? value : [];
+    const selectedValues = Array.isArray(value) ? value.map(String) : [];
 
     const handleCheckboxChange = (optionValue: string, checked: boolean) => {
       const newValues = checked ? [...selectedValues, optionValue] : selectedValues.filter((v) => v !== optionValue);
@@ -130,12 +131,12 @@ export const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
             <div key={opt.value + index} className="flex items-center gap-3">
               <Checkbox
                 id={`${name}-${opt.value}`}
-                checked={selectedValues.includes(opt.value)}
-                onCheckedChange={(checked) => handleCheckboxChange(opt.value, checked as boolean)}
+                checked={selectedValues.includes(String(opt.value))}
+                onCheckedChange={(checked) => handleCheckboxChange(String(opt.value), checked as boolean)}
                 disabled={opt.disabled}
               />
               <Label htmlFor={`${name}-${opt.value}`} className="text-sm font-normal cursor-pointer">
-                {getTranslatedLabel(opt.label)}
+                {getTranslatedLabel(opt.label, language)}
               </Label>
             </div>
           ))}
@@ -200,6 +201,7 @@ export const DefaultRadioInput = ({ node }: InputRenderProps) => {
   const value = formValues[fieldId];
   const error = formErrors[fieldId];
   const name = node.data.name || fieldId;
+  const normalizedValue = value === null ? "" : String(value);
 
   return (
     <FormItem className="mb-4">
@@ -207,12 +209,12 @@ export const DefaultRadioInput = ({ node }: InputRenderProps) => {
         {getTranslatedLabel(node.data.label, language) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
-      <RadioGroup value={value || ""} onValueChange={(val) => setFieldValue(fieldId, val)}>
+      <RadioGroup value={normalizedValue} onValueChange={(val) => setFieldValue(fieldId, val)}>
         {node.data.options?.map((opt, index) => (
           <div key={opt.value + index} className="flex items-center space-x-2">
-            <RadioGroupItem value={opt.value} id={`${name}-${opt.value}`} disabled={opt.disabled} />
+            <RadioGroupItem value={String(opt.value)} id={`${name}-${opt.value}`} disabled={opt.disabled} />
             <Label htmlFor={`${name}-${opt.value}`} className="text-sm font-normal cursor-pointer">
-              {getTranslatedLabel(opt.label)}
+              {getTranslatedLabel(opt.label, language)}
             </Label>
           </div>
         ))}
