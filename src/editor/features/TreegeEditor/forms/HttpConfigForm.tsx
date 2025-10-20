@@ -12,6 +12,8 @@ import { Switch } from "@/shared/components/ui/switch";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { HttpConfig, InputNodeData } from "@/shared/types/node";
 
+const METHODS_NEEDING_BODY = ["POST", "PUT", "PATCH"];
+
 interface HttpConfigFormProps {
   value: HttpConfig | undefined;
   onChange: (config: HttpConfig | undefined) => void;
@@ -46,8 +48,6 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
       onChange(formValue);
     },
   });
-
-  const needsBody = ["POST", "PUT", "PATCH"].includes(value?.method || "");
 
   return (
     <form
@@ -191,57 +191,65 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
           </Field>
         </div>
 
-        {needsBody && (
-          <Field
-            name="body"
-            children={(field) => (
-              <FormItem>
-                <div className="flex items-center justify-between mb-2">
-                  <Label htmlFor={field.name}>Request Body (JSON)</Label>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button type="button" variant="ghost" size="sm">
-                        <Variable className="h-4 w-4 mr-2" />
-                        Insert variable
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      {availableParentFields.length === 0 ? (
-                        <DropdownMenuItem disabled>No fields available</DropdownMenuItem>
-                      ) : (
-                        availableParentFields.map((availField) => (
-                          <DropdownMenuItem
-                            key={availField.nodeId}
-                            onClick={() => {
-                              const variable = `{{${availField.nodeId}}}`;
-                              const currentValue = field.state.value || "";
-                              field.handleChange(currentValue + variable);
-                            }}
-                          >
-                            <div className="flex flex-col">
-                              <span className="font-medium">{availField.label}</span>
-                              <span className="text-xs text-muted-foreground">{`{{${availField.nodeId}}}`}</span>
-                            </div>
-                          </DropdownMenuItem>
-                        ))
-                      )}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-                <Textarea
-                  id={field.name}
-                  name={field.name}
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={({ target }) => field.handleChange(target.value)}
-                  placeholder='{"key": "value"}'
-                  rows={4}
-                />
-                <FormDescription>Use template variables like {"{{fieldId}}"} to reference other fields</FormDescription>
-              </FormItem>
-            )}
-          />
-        )}
+        <Field name="method">
+          {(methodField) =>
+            METHODS_NEEDING_BODY.includes(methodField.state.value || "") && (
+              <Field name="body">
+                {(field) => (
+                  <FormItem>
+                    <div className="flex items-center justify-between mb-2">
+                      <Label htmlFor={field.name}>Request Body (JSON)</Label>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button type="button" variant="ghost" size="sm">
+                            <Variable className="h-4 w-4 mr-2" />
+                            Insert variable
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          {availableParentFields.length === 0 ? (
+                            <DropdownMenuItem disabled>No fields available</DropdownMenuItem>
+                          ) : (
+                            availableParentFields.map(
+                              (availField) =>
+                                +(
+                                  <DropdownMenuItem
+                                    key={availField.nodeId}
+                                    onClick={() => {
+                                      const variableId = availField.name || availField.nodeId;
+                                      const variable = `\${${variableId}}`;
+                                      const currentValue = field.state.value || "";
+                                      field.handleChange(currentValue + variable);
+                                      handleSubmit().then();
+                                    }}
+                                  >
+                                    <div className="flex flex-col">
+                                      <span className="font-medium">{availField.label}</span>
+                                      <span className="text-xs text-muted-foreground">{`\${${availField.name || availField.nodeId}}`}</span>
+                                    </div>
+                                  </DropdownMenuItem>
+                                ),
+                            )
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                    <Textarea
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={({ target }) => field.handleChange(target.value)}
+                      placeholder='{"key": "value"}'
+                      rows={4}
+                    />
+                    <FormDescription>Use template variables like ${"{fieldId}"} to reference other fields</FormDescription>
+                  </FormItem>
+                )}
+              </Field>
+            )
+          }
+        </Field>
 
         <div className="space-y-4">
           <h4 className="text-sm font-semibold">Response Configuration</h4>
