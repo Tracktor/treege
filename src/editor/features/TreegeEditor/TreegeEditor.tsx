@@ -41,7 +41,14 @@ const TreegeEditor = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, o
   <ThemeProvider defaultTheme={theme}>
     <Toaster position="bottom-center" />
     <ReactFlowProvider>
-      <Flow defaultEdges={defaultEdges} defaultNodes={defaultNodes} onExportJson={onExportJson} onSave={onSave} defaultFlow={defaultFlow} />
+      <Flow
+        defaultEdges={defaultEdges}
+        defaultNodes={defaultNodes}
+        onExportJson={onExportJson}
+        onSave={onSave}
+        defaultFlow={defaultFlow}
+        theme={theme}
+      />
     </ReactFlowProvider>
   </ThemeProvider>
 );
