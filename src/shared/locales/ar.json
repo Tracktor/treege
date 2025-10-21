@@ -202,7 +202,8 @@
       "selectOption": "اختر خياراً"
     },
     "defaultSubmitButton": {
-      "submit": "إرسال"
+      "submit": "إرسال",
+      "requiredFieldsMissing": "حقول مطلوبة مفقودة:"
     }
   }
 }

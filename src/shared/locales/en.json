@@ -202,7 +202,8 @@
       "selectOption": "Select an option"
     },
     "defaultSubmitButton": {
-      "submit": "Submit"
+      "submit": "Submit",
+      "requiredFieldsMissing": "Required fields missing"
     }
   }
 }

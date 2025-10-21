@@ -202,7 +202,8 @@
       "selectOption": "Option auswählen"
     },
     "defaultSubmitButton": {
-      "submit": "Senden"
+      "submit": "Senden",
+      "requiredFieldsMissing": "Erforderliche Felder fehlen"
     }
   }
 }

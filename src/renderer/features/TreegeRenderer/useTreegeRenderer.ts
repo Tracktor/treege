@@ -137,52 +137,43 @@ export const useTreegeRenderer = (
   }, [visibleNodes, formValues, translate]);
 
   /**
-   * Check if form is currently valid (without setting errors)
-   * Used to determine if submit button should be enabled
+   * Get list of missing required fields for tooltip
+   * Returns array of field labels that are required but not filled
    */
-  const isFormValid = useMemo(
-    (): boolean =>
-      visibleNodes.every((node) => {
-        if (!isInputNode(node)) return true;
+  const missingRequiredFields = useMemo(() => {
+    const missing: string[] = [];
 
-        const fieldName = node.id;
-        const value = formValues[fieldName];
+    visibleNodes.forEach((node) => {
+      if (!isInputNode(node)) return;
 
-        // Check required
-        if (node.data.required) {
-          if (value === undefined || value === null || value === "") {
-            return false;
-          }
+      const fieldName = node.id;
+      const value = formValues[fieldName];
+
+      // Check if required field is empty
+      if (node.data.required) {
+        if (value === undefined || value === null || value === "") {
+          const label = translate(node.data.label) || fieldName;
+          missing.push(label);
         }
+      }
+    });
 
-        // Check pattern
-        if (value && node.data.pattern) {
-          try {
-            const regex = new RegExp(node.data.pattern);
-            if (!regex.test(String(value))) {
-              return false;
-            }
-          } catch (e) {
-            return false;
-          }
-        }
+    return missing;
+  }, [visibleNodes, formValues, translate]);
 
-        return true;
-      }),
-    [visibleNodes, formValues],
-  );
   /**
-   * Can submit when:
-   * 1. End of flow path has been reached (no more unexplored paths)
-   * 2. AND all visible form fields are valid
+   * Can submit when end of flow path has been reached
+   * Note: This doesn't check form validity - the UI should show
+   * the submit button but disable it or show a tooltip if form is invalid
    */
-  const canSubmit = endOfPathReached && isFormValid;
+  const canSubmit = endOfPathReached;
 
   return {
     canSubmit,
     checkValidForm,
     formErrors,
     formValues,
+    missingRequiredFields,
     setFieldValue,
     setFormErrors,
     translate,

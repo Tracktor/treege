@@ -51,6 +51,7 @@
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-switch": "^1.2.6",
+    "@radix-ui/react-tooltip": "^1.2.8",
     "@tanstack/react-form": "^1.23.5",
     "@uiw/react-textarea-code-editor": "^3.1.1",
     "@xyflow/react": "^12.8.6",
