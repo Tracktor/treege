@@ -185,6 +185,7 @@ export const useTreegeRenderer = (
     formValues,
     setFieldValue,
     setFormErrors,
+    translate,
     visibleNodes,
     visibleRootNodes,
   };
