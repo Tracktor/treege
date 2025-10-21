@@ -117,7 +117,10 @@ export const useTreegeRenderer = (
 
           // Required validation
           if (node.data.required) {
-            if (value === undefined || value === null || value === "") {
+            const isEmptyString = typeof value === "string" && value.trim() === "";
+            const isEmptyArray = Array.isArray(value) && value.length === 0;
+
+            if (value === undefined || value === null || isEmptyString || isEmptyArray) {
               builtInErrors[fieldName] = translate(node.data.errorMessage) || translate("validation.required");
               return;
             }
