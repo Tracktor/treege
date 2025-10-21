@@ -2,7 +2,7 @@ import { Edge, Node } from "@xyflow/react";
 import { useCallback, useMemo, useState } from "react";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { FormValues } from "@/renderer/types/renderer";
-import { getVisibleNodesInOrder } from "@/renderer/utils/flow";
+import { getFlowRenderState } from "@/renderer/utils/flow";
 import { ConditionalEdgeData } from "@/shared/types/edge";
 import { TreegeNodeData } from "@/shared/types/node";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
@@ -77,7 +77,7 @@ export const useTreegeRenderer = (
   });
 
   const { endOfPathReached, visibleNodes, visibleRootNodes } = useMemo(
-    () => getVisibleNodesInOrder(nodes, edges, formValues),
+    () => getFlowRenderState(nodes, edges, formValues),
     [nodes, edges, formValues],
   );
 

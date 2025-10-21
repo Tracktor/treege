@@ -7,10 +7,10 @@ import { TreegeNodeData } from "@/shared/types/node";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
 
 /**
- * Result from the progressive rendering traversal
+ * Result from computing the flow render state
  * Contains everything needed to render the form and determine its state
  */
-export interface VisibleNodesInOrderResult {
+export interface FlowRenderState {
   /**
    * Whether the end of the flow path has been reached (no more unexplored paths)
    * This does NOT mean the form is valid - just that we've traversed as far as possible
@@ -112,13 +112,13 @@ export const findStartNode = (nodes: Node<TreegeNodeData>[], edges: Edge[]): Nod
 // ============================================
 
 /**
- * Get all visible nodes in the correct order for progressive rendering
+ * Get the complete render state for the flow
  *
- * This is the MAIN function - does everything in a single pass:
+ * This is the MAIN function that computes everything needed to render the form:
  * 1. Finds the start node (node without incoming edges)
  * 2. Determines which nodes should be visible based on form values and edge conditions
  * 3. Orders them in the correct flow sequence for rendering
- * 4. Detects if we've reached the end of the path (to show submit button)
+ * 4. Detects if we've reached the end of the path (important for submit button state)
  *
  * Progressive Rendering Logic:
  * - Start from the first node (no incoming edges)
@@ -130,16 +130,16 @@ export const findStartNode = (nodes: Node<TreegeNodeData>[], edges: Edge[]): Nod
  * - If we encounter a node where conditional fields are not yet filled, STOP (wait for user input)
  * - Continue until no more nodes can be revealed
  *
- * @param nodes - All nodes
- * @param edges - All edges
+ * @param nodes - All nodes from the editor
+ * @param edges - All edges from the editor
  * @param formValues - Current form values
- * @returns Object with visible nodes (ordered), submit flag, and visible node IDs set
+ * @returns Complete flow render state (visible nodes, end-of-path flag, etc.)
  */
-export const getVisibleNodesInOrder = (
+export const getFlowRenderState = (
   nodes: Node<TreegeNodeData>[],
   edges: Edge<ConditionalEdgeData>[],
   formValues: FormValues,
-): VisibleNodesInOrderResult => {
+): FlowRenderState => {
   // Find the start node (node without incoming edges)
   const startNode = findStartNode(nodes, edges);
 
