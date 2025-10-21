@@ -16,8 +16,8 @@
   "editor": {
     "actionsPanel": {
       "addNode": "Add Node",
-      "importJson": "Import Json",
-      "exportJson": "Export Json",
+      "importJson": "Import JSON",
+      "exportJson": "Export JSON",
       "importSuccess": "Import successful!",
       "importSuccessDesc": "The flow has been imported successfully.",
       "invalidJson": "Invalid JSON file.",
@@ -208,8 +208,7 @@
     },
     "defaultAddressInput": {
       "enterAddress": "Enter an address...",
-      "noAddressesFound": "No addresses found.",
-      "usingNominatim": "Using free OpenStreetMap geocoding. Provide a Google API key for better results."
+      "noAddressesFound": "No addresses found."
     }
   }
 }

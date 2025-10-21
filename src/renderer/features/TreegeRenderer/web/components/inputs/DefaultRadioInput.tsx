@@ -12,7 +12,7 @@ const DefaultRadioInput = ({ node }: InputRenderProps) => {
   const value = formValues[fieldId];
   const error = formErrors[fieldId];
   const name = node.data.name || fieldId;
-  const normalizedValue = value === null ? "" : String(value);
+  const normalizedValue = value ? String(value) : "";
 
   return (
     <FormItem className="mb-4">

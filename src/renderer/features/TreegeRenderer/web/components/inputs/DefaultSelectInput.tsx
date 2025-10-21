@@ -12,7 +12,9 @@ const DefaultSelectInput = ({ node }: InputRenderProps) => {
   const value = formValues[fieldId];
   const error = formErrors[fieldId];
   const name = node.data.name || fieldId;
-  const normalizedValue = value === null ? "" : String(value);
+  const normalizedValue = value ? String(value) : "";
+
+  console.log(name);
 
   return (
     <FormItem className="mb-4">
@@ -21,7 +23,7 @@ const DefaultSelectInput = ({ node }: InputRenderProps) => {
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Select value={normalizedValue} onValueChange={(val) => setFieldValue(fieldId, val)}>
-        <SelectTrigger>
+        <SelectTrigger id={name}>
           <SelectValue placeholder={t(node.data.placeholder) || ""} />
         </SelectTrigger>
         <SelectContent>

@@ -208,8 +208,7 @@
     },
     "defaultAddressInput": {
       "enterAddress": "Inserisci un indirizzo...",
-      "noAddressesFound": "Nessun indirizzo trovato.",
-      "usingNominatim": "Utilizza la geocodifica gratuita di OpenStreetMap. Fornire una chiave API Google per risultati migliori."
+      "noAddressesFound": "Nessun indirizzo trovato."
     }
   }
 }

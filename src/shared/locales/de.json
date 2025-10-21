@@ -208,8 +208,7 @@
     },
     "defaultAddressInput": {
       "enterAddress": "Geben Sie eine Adresse ein...",
-      "noAddressesFound": "Keine Adressen gefunden.",
-      "usingNominatim": "Verwendet kostenlose OpenStreetMap-Geokodierung. Geben Sie einen Google-API-Schlüssel für bessere Ergebnisse an."
+      "noAddressesFound": "Keine Adressen gefunden."
     }
   }
 }

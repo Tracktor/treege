@@ -50,7 +50,7 @@ export type TreegeRendererComponents = {
    * Custom submit button
    * @param props
    */
-  submitButton?: (props: { label?: string }) => ReactNode;
+  submitButton?: (props: { label?: string; missingFields?: string[] }) => ReactNode;
 };
 
 /**

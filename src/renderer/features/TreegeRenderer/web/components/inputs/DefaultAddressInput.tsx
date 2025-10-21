@@ -16,15 +16,17 @@ type AddressSuggestion = {
 /**
  * Fetch address suggestions from Nominatim (OpenStreetMap)
  */
-const fetchNominatimSuggestions = async (query: string): Promise<AddressSuggestion[]> => {
+const fetchNominatimSuggestions = async (query: string, language?: string): Promise<AddressSuggestion[]> => {
   if (!query || query.trim().length < 3) return [];
 
   try {
     const response = await fetch(
-      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&addressdetails=1&limit=5`,
+      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=jsonv2&addressdetails=1&limit=5`,
       {
         headers: {
+          Accept: "application/json",
           "User-Agent": "Treege Renderer",
+          ...(language && { "Accept-Language": language }),
         },
       },
     );
@@ -78,7 +80,7 @@ const DefaultAddressInput = ({ node }: InputRenderProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
   const [popoverOpen, setPopoverOpen] = useState(false);
-  const { formValues, setFieldValue, formErrors, googleApiKey } = useTreegeRendererContext();
+  const { formValues, setFieldValue, formErrors, googleApiKey, language } = useTreegeRendererContext();
   const t = useTranslate();
   const fieldId = node.id;
   const value = formValues[fieldId] || "";
@@ -102,12 +104,15 @@ const DefaultAddressInput = ({ node }: InputRenderProps) => {
     }
 
     const timer = setTimeout(async () => {
-      const results = googleApiKey ? await fetchGooglePlacesSuggestions(searchQuery) : await fetchNominatimSuggestions(searchQuery);
+      const results = googleApiKey
+        ? await fetchGooglePlacesSuggestions(searchQuery)
+        : await fetchNominatimSuggestions(searchQuery, language);
+
       setSuggestions(results);
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchQuery, googleApiKey]);
+  }, [searchQuery, googleApiKey, language]);
 
   const handleInputChange = useCallback(
     (newValue: string) => {
@@ -169,7 +174,6 @@ const DefaultAddressInput = ({ node }: InputRenderProps) => {
         </div>
         {error && <FormError>{error}</FormError>}
         {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
-        {!googleApiKey && <FormDescription className="text-xs">{t("renderer.defaultAddressInput.usingNominatim")}</FormDescription>}
       </FormItem>
     </>
   );

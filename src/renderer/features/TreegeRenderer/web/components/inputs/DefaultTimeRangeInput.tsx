@@ -18,11 +18,11 @@ const DefaultTimeRangeInput = ({ node }: InputRenderProps) => {
   const endTime = timeRange[1] || "";
 
   const handleStartTimeChange = (newValue: string) => {
-    setFieldValue(fieldId, [newValue, timeRange[1]]);
+    setFieldValue(fieldId, [newValue, endTime]);
   };
 
   const handleEndTimeChange = (newValue: string) => {
-    setFieldValue(fieldId, [timeRange[0], newValue]);
+    setFieldValue(fieldId, [startTime, newValue]);
   };
 
   return (

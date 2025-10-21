@@ -175,11 +175,14 @@ const useFlowConnections = () => {
   const isValidConnection = useCallback(
     (connection: { source: string; target: string }) => {
       const sourceNode = getNode(connection.source);
+
+      if (!sourceNode) return false;
+
       const edges = getEdges();
       const existingEdgesFromSource = edges.filter((edge) => edge.source === connection.source);
 
       // If source already has at least one edge and is NOT an input node, block the connection
-      return !(existingEdgesFromSource.length > 0 && sourceNode && !isInputNode(sourceNode));
+      return !(existingEdgesFromSource.length > 0 && !isInputNode(sourceNode));
     },
     [getNode, getEdges],
   );
