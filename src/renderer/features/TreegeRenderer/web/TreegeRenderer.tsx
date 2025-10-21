@@ -9,6 +9,7 @@ import DefaultSubmitButton from "@/renderer/features/TreegeRenderer/web/componen
 import { defaultUI } from "@/renderer/features/TreegeRenderer/web/components/DefaultUI";
 import { TreegeRendererProps } from "@/renderer/types/renderer";
 import { convertFormValuesToNamedFormat } from "@/renderer/utils/form";
+import { getFieldNameFromNodeId } from "@/renderer/utils/node";
 import { NODE_TYPE } from "@/shared/constants/node";
 import { ThemeProvider } from "@/shared/context/ThemeContext";
 import { InputNodeData, TreegeNodeData, UINodeData } from "@/shared/types/node";
@@ -154,6 +155,23 @@ const TreegeRenderer = ({
       validateForm(validateRef.current);
     }
   }, [formValues, validationMode, validateForm]);
+
+  /**
+   * Focus the first input field with an error when errors change
+   */
+  useEffect(() => {
+    const firstErrorNodeId = Object.keys(formErrors)[0];
+
+    if (firstErrorNodeId) {
+      const fieldName = getFieldNameFromNodeId(firstErrorNodeId, inputNodes);
+
+      if (fieldName) {
+        // Try to find the input by name attribute
+        const input = document.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(`[name="${fieldName}"]`);
+        input?.focus();
+      }
+    }
+  }, [formErrors, inputNodes]);
 
   return (
     <ThemeProvider theme={theme}>
