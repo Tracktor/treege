@@ -22,8 +22,6 @@ export const useTranslate = (language?: string) => {
   const context = useTreegeEditorContext();
   const lang = language ?? context.language;
 
-  console.log(lang);
-
   return useTranslateShared(lang);
 };
 

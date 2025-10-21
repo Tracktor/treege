@@ -161,15 +161,8 @@ export const useTreegeRenderer = (
     return missing;
   }, [visibleNodes, formValues, translate]);
 
-  /**
-   * Can submit when end of flow path has been reached
-   * Note: This doesn't check form validity - the UI should show
-   * the submit button but disable it or show a tooltip if form is invalid
-   */
-  const canSubmit = endOfPathReached;
-
   return {
-    canSubmit,
+    canSubmit: endOfPathReached,
     checkValidForm,
     formErrors,
     formValues,
