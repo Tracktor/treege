@@ -10,14 +10,14 @@ const SelectNodeType = () => {
   const { updateSelectedNodeType } = useFlowActions();
   const value = selectedNode?.type || "";
   const isGroup = isGroupNode(selectedNode);
-  const translate = useTranslate();
+  const t = useTranslate();
 
   return (
     <SelectGroup>
-      <SelectLabel>{translate("editor.selectNodeType.nodeType")}</SelectLabel>
+      <SelectLabel>{t("editor.selectNodeType.nodeType")}</SelectLabel>
       <Select value={value} onValueChange={(newValue) => updateSelectedNodeType(newValue)} disabled={isGroup}>
         <SelectTrigger className="w-full">
-          <SelectValue placeholder={translate("editor.selectNodeType.nodeType")} />
+          <SelectValue placeholder={t("editor.selectNodeType.nodeType")} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>

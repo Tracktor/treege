@@ -204,6 +204,11 @@
     "defaultSubmitButton": {
       "submit": "Submit",
       "requiredFieldsMissing": "Required fields missing"
+    },
+    "defaultAddressInput": {
+      "enterAddress": "Enter an address...",
+      "noAddressesFound": "No addresses found.",
+      "usingNominatim": "Using free OpenStreetMap geocoding. Provide a Google API key for better results."
     }
   }
 }

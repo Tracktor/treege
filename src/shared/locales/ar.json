@@ -204,6 +204,11 @@
     "defaultSubmitButton": {
       "submit": "إرسال",
       "requiredFieldsMissing": "حقول مطلوبة مفقودة:"
+    },
+    "defaultAddressInput": {
+      "enterAddress": "أدخل عنواناً...",
+      "noAddressesFound": "لم يتم العثور على عناوين.",
+      "usingNominatim": "يستخدم ترميز جغرافي مجاني من OpenStreetMap. قدم مفتاح API من Google للحصول على نتائج أفضل."
     }
   }
 }

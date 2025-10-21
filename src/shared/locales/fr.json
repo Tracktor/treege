@@ -204,6 +204,11 @@
     "defaultSubmitButton": {
       "submit": "Envoyer",
       "requiredFieldsMissing": "Champs requis manquants"
+    },
+    "defaultAddressInput": {
+      "enterAddress": "Entrez une adresse...",
+      "noAddressesFound": "Aucune adresse trouvée.",
+      "usingNominatim": "Utilise le géocodage gratuit d'OpenStreetMap. Fournissez une clé API Google pour de meilleurs résultats."
     }
   }
 }

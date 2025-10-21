@@ -19,7 +19,7 @@ const SelectNodeGroup = () => {
   const { setNodes } = useReactFlow();
   const currentParentId = selectedNode?.parentId || "none";
   const isGroup = isGroupNode(selectedNode);
-  const translate = useTranslate();
+  const t = useTranslate();
 
   if (isGroup) {
     return null;
@@ -126,15 +126,15 @@ const SelectNodeGroup = () => {
 
   return (
     <div className="space-y-2">
-      <Label>{translate("editor.selectNodeGroup.group")}</Label>
+      <Label>{t("editor.selectNodeGroup.group")}</Label>
       <div className="flex gap-2">
         <Select value={currentParentId} onValueChange={handleGroupChange}>
           <SelectTrigger className="flex-1">
-            <SelectValue placeholder={translate("editor.selectNodeGroup.noGroup")} />
+            <SelectValue placeholder={t("editor.selectNodeGroup.noGroup")} />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value="none">{translate("editor.selectNodeGroup.noGroup")}</SelectItem>
+              <SelectItem value="none">{t("editor.selectNodeGroup.noGroup")}</SelectItem>
               {groupNodes.map((node) => (
                 <SelectItem key={node.id} value={node.id}>
                   {node.data.label?.en ? String(node.data.label?.en) : node.id}

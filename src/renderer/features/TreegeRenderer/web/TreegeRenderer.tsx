@@ -28,17 +28,8 @@ const TreegeRenderer = ({
   validationMode = "onSubmit",
   theme = "dark",
 }: TreegeRendererProps) => {
-  const {
-    canSubmit,
-    formErrors,
-    formValues,
-    missingRequiredFields,
-    visibleNodes,
-    visibleRootNodes,
-    setFieldValue,
-    translate,
-    validateForm,
-  } = useTreegeRenderer(nodes, edges, initialValues, language);
+  const { canSubmit, formErrors, formValues, missingRequiredFields, visibleNodes, visibleRootNodes, setFieldValue, validateForm, t } =
+    useTreegeRenderer(nodes, edges, initialValues, language);
 
   // Components with fallbacks
   const FormWrapper = components.form || DefaultFormWrapper;
@@ -189,7 +180,7 @@ const TreegeRenderer = ({
       >
         <FormWrapper onSubmit={handleSubmit}>
           {visibleRootNodes.map((node) => renderNode(node))}
-          {canSubmit && <SubmitButton label={translate("renderer.defaultSubmitButton.submit")} missingFields={missingRequiredFields} />}
+          {canSubmit && <SubmitButton label={t("renderer.defaultSubmitButton.submit")} missingFields={missingRequiredFields} />}
         </FormWrapper>
       </TreegeRendererProvider>
     </ThemeProvider>

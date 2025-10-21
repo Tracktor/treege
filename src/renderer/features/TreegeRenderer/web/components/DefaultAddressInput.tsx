@@ -139,7 +139,7 @@ const DefaultAddressInput = ({ node }: InputRenderProps) => {
             onFocus={() => {
               if (suggestions.length > 0) setPopoverOpen(true);
             }}
-            placeholder={t(node.data.placeholder) || "Enter an address..."}
+            placeholder={t(node.data.placeholder) || t("renderer.defaultAddressInput.enterAddress")}
             className="pr-10"
             autoComplete="off"
           />
@@ -148,7 +148,7 @@ const DefaultAddressInput = ({ node }: InputRenderProps) => {
             <div className="absolute z-50 w-full mt-1 bg-popover border rounded-md shadow-md">
               <Command>
                 <CommandList>
-                  <CommandEmpty>No addresses found.</CommandEmpty>
+                  <CommandEmpty>{t("renderer.defaultAddressInput.noAddressesFound")}</CommandEmpty>
                   <CommandGroup>
                     {suggestions.map((suggestion, index) => (
                       <CommandItem
@@ -169,6 +169,7 @@ const DefaultAddressInput = ({ node }: InputRenderProps) => {
         </div>
         {error && <FormError>{error}</FormError>}
         {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
+        {!googleApiKey && <FormDescription className="text-xs">{t("renderer.defaultAddressInput.usingNominatim")}</FormDescription>}
       </FormItem>
     </>
   );

@@ -42,7 +42,7 @@ export const useTreegeRenderer = (
   initialValues: FormValues = {},
   language: string = "en",
 ) => {
-  const translate = useTranslate(language);
+  const t = useTranslate(language);
 
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [formValues, setFormValues] = useState<FormValues>(() => {
@@ -121,7 +121,7 @@ export const useTreegeRenderer = (
             const isEmptyArray = Array.isArray(value) && value.length === 0;
 
             if (value === undefined || value === null || isEmptyString || isEmptyArray) {
-              builtInErrors[fieldName] = translate(node.data.errorMessage) || translate("validation.required");
+              builtInErrors[fieldName] = t(node.data.errorMessage) || t("validation.required");
               return;
             }
           }
@@ -131,7 +131,7 @@ export const useTreegeRenderer = (
             try {
               const regex = new RegExp(node.data.pattern);
               if (!regex.test(String(value))) {
-                builtInErrors[fieldName] = translate(node.data.errorMessage) || translate("validation.invalidFormat");
+                builtInErrors[fieldName] = t(node.data.errorMessage) || t("validation.invalidFormat");
               }
             } catch (e) {
               console.error(`Invalid pattern for field ${fieldName}:`, e);
@@ -159,7 +159,7 @@ export const useTreegeRenderer = (
         isValid: Object.keys(finalErrors).length === 0,
       };
     },
-    [visibleNodes, formValues, translate],
+    [visibleNodes, formValues, t],
   );
 
   /**
@@ -178,14 +178,14 @@ export const useTreegeRenderer = (
       // Check if required field is empty
       if (node.data.required) {
         if (value === undefined || value === null || value === "") {
-          const label = translate(node.data.label) || fieldName;
+          const label = t(node.data.label) || fieldName;
           missing.push(label);
         }
       }
     });
 
     return missing;
-  }, [visibleNodes, formValues, translate]);
+  }, [visibleNodes, formValues, t]);
 
   return {
     canSubmit: endOfPathReached,
@@ -194,7 +194,7 @@ export const useTreegeRenderer = (
     missingRequiredFields,
     setFieldValue,
     setFormErrors,
-    translate,
+    t,
     validateForm,
     visibleNodes,
     visibleRootNodes,

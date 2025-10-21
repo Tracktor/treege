@@ -9,7 +9,7 @@ type DefaultSubmitButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const DefaultSubmitButton = ({ label = "Submit", missingFields = [], ...props }: DefaultSubmitButtonProps) => {
   const hasTooltip = missingFields.length > 0;
-  const translate = useTranslate();
+  const t = useTranslate();
 
   const button = (
     <button
@@ -31,7 +31,7 @@ const DefaultSubmitButton = ({ label = "Submit", missingFields = [], ...props }:
         <TooltipTrigger asChild>{button}</TooltipTrigger>
         <TooltipContent>
           <div className="space-y-1">
-            <p className="font-semibold">{translate("renderer.defaultSubmitButton.requiredFieldsMissing")}:</p>
+            <p className="font-semibold">{t("renderer.defaultSubmitButton.requiredFieldsMissing")}:</p>
             <ul className="list-disc list-inside">
               {missingFields.map((field, index) => (
                 <li key={index}>{field}</li>
