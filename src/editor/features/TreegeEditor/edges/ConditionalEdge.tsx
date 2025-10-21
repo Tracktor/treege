@@ -184,9 +184,7 @@ const ConditionalEdge = ({
                                 <Label htmlFor="isFallback" className="cursor-pointer font-medium">
                                   {t("editor.conditionalEdge.fallbackPath")}
                                 </Label>
-                                <FormDescription className="text-xs">
-                                  {t("editor.conditionalEdge.fallbackPathDesc")}
-                                </FormDescription>
+                                <FormDescription className="text-xs">{t("editor.conditionalEdge.fallbackPathDesc")}</FormDescription>
                               </div>
                             </div>
                           </FormItem>

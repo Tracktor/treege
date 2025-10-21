@@ -28,15 +28,14 @@ const TreegeRenderer = ({
 }: TreegeRendererProps) => {
   const {
     canSubmit,
-    checkValidForm,
     formErrors,
     formValues,
     missingRequiredFields,
-    setFieldValue,
-    setFormErrors,
-    translate,
     visibleNodes,
     visibleRootNodes,
+    setFieldValue,
+    translate,
+    validateForm,
   } = useTreegeRenderer(nodes, edges, initialValues, language);
 
   // Components with fallbacks
@@ -56,20 +55,13 @@ const TreegeRenderer = ({
     (e: FormEvent) => {
       e.preventDefault();
 
-      const formIsValid = checkValidForm();
-      const customErrors = validateRef.current ? validateRef.current(formValues, visibleNodes) : {};
-      const isValid = formIsValid && Object.keys(customErrors).length === 0;
-
-      // Replace errors completely with custom errors (no merge to avoid stale errors)
-      if (Object.keys(customErrors).length > 0) {
-        setFormErrors(customErrors);
-      }
+      const { isValid } = validateForm(validateRef.current);
 
       if (isValid && onSubmit) {
         onSubmit(exportedValues);
       }
     },
-    [checkValidForm, formValues, visibleNodes, setFormErrors, onSubmit, exportedValues],
+    [validateForm, onSubmit, exportedValues],
   );
 
   // ============================================
@@ -155,15 +147,13 @@ const TreegeRenderer = ({
   }, [exportedValues]);
 
   /**
-   * Run custom validation on form values change if validationMode is "onChange" or "onBlur"
+   * Run validation on form values change if validationMode is "onChange" or "onBlur"
    */
   useEffect(() => {
-    if (validateRef.current && (validationMode === "onChange" || validationMode === "onBlur")) {
-      const customErrors = validateRef.current(formValues, visibleNodes);
-      // Replace errors completely (no merge to avoid stale errors)
-      setFormErrors(customErrors);
+    if (validationMode === "onChange" || validationMode === "onBlur") {
+      validateForm(validateRef.current);
     }
-  }, [formValues, validationMode, visibleNodes, setFormErrors]);
+  }, [formValues, validationMode, validateForm]);
 
   return (
     <ThemeProvider theme={theme}>

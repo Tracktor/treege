@@ -99,42 +99,65 @@ export const useTreegeRenderer = (
   }, []);
 
   /**
-   * Check if form is valid based on visible input nodes
-   * Returns true if all required fields are filled and all patterns match
+   * Validate form with both built-in and custom validation
+   * Custom errors take precedence over built-in errors when both exist
+   *
+   * @param customValidate - Optional custom validation function
+   * @returns Validation result with isValid flag and errors object
    */
-  const checkValidForm = useCallback((): boolean => {
-    const newErrors: Record<string, string> = {};
+  const validateForm = useCallback(
+    (customValidate?: (values: FormValues, visibleNodesList: Node<TreegeNodeData>[]) => Record<string, string>) => {
+      // Step 1: Run built-in validation (required, pattern)
+      const builtInErrors: Record<string, string> = {};
 
-    visibleNodes.forEach((node) => {
-      if (isInputNode(node)) {
-        const fieldName = node.id;
-        const value = formValues[fieldName];
+      visibleNodes.forEach((node) => {
+        if (isInputNode(node)) {
+          const fieldName = node.id;
+          const value = formValues[fieldName];
 
-        // Required validation
-        if (node.data.required) {
-          if (value === undefined || value === null || value === "") {
-            newErrors[fieldName] = translate(node.data.errorMessage) || translate("validation.required");
-            return;
-          }
-        }
-
-        // Pattern validation (only if value is not empty)
-        if (value && node.data.pattern) {
-          try {
-            const regex = new RegExp(node.data.pattern);
-            if (!regex.test(String(value))) {
-              newErrors[fieldName] = translate(node.data.errorMessage) || translate("validation.invalidFormat");
+          // Required validation
+          if (node.data.required) {
+            if (value === undefined || value === null || value === "") {
+              builtInErrors[fieldName] = translate(node.data.errorMessage) || translate("validation.required");
+              return;
             }
-          } catch (e) {
-            console.error(`Invalid pattern for field ${fieldName}:`, e);
+          }
+
+          // Pattern validation (only if value is not empty)
+          if (value && node.data.pattern) {
+            try {
+              const regex = new RegExp(node.data.pattern);
+              if (!regex.test(String(value))) {
+                builtInErrors[fieldName] = translate(node.data.errorMessage) || translate("validation.invalidFormat");
+              }
+            } catch (e) {
+              console.error(`Invalid pattern for field ${fieldName}:`, e);
+            }
           }
         }
-      }
-    });
+      });
 
-    setFormErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }, [visibleNodes, formValues, translate]);
+      // Step 2: Run custom validation if provided
+      const customErrors = customValidate ? customValidate(formValues, visibleNodes) : {};
+
+      // Step 3: Merge errors - custom errors take precedence
+      const finalErrors = {
+        ...builtInErrors,
+        ...customErrors,
+      };
+
+      // Step 4: Update form errors state
+      setFormErrors(finalErrors);
+
+      // Step 5: Return validation result
+      return {
+        errors: finalErrors,
+        hasCustomErrors: Object.keys(customErrors).length > 0,
+        isValid: Object.keys(finalErrors).length === 0,
+      };
+    },
+    [visibleNodes, formValues, translate],
+  );
 
   /**
    * Get list of missing required fields for tooltip
@@ -163,13 +186,13 @@ export const useTreegeRenderer = (
 
   return {
     canSubmit: endOfPathReached,
-    checkValidForm,
     formErrors,
     formValues,
     missingRequiredFields,
     setFieldValue,
     setFormErrors,
     translate,
+    validateForm,
     visibleNodes,
     visibleRootNodes,
   };
