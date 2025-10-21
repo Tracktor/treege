@@ -155,7 +155,7 @@ const TreegeRenderer = ({
   }, [exportedValues]);
 
   /**
-   * Trigger validation on change based on validation mode
+   * Run custom validation on form values change if validationMode is "onChange" or "onBlur"
    */
   useEffect(() => {
     if (validateRef.current && (validationMode === "onChange" || validationMode === "onBlur")) {
