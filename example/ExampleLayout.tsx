@@ -11,14 +11,16 @@ const EditorPanel = ({
   defaultFlow,
   onSave,
   theme,
+  language,
 }: {
   defaultFlow?: { nodes: Node[]; edges: Edge[] };
   onSave: (data: { nodes: Node[]; edges: Edge[] }) => void;
   theme: "light" | "dark";
+  language: Language;
 }) => (
   <div className="h-full flex flex-col">
     <div className="flex-1">
-      <TreegeEditor onSave={onSave} defaultFlow={defaultFlow} theme={theme} />
+      <TreegeEditor onSave={onSave} defaultFlow={defaultFlow} theme={theme} language={language} />
     </div>
   </div>
 );
@@ -28,14 +30,17 @@ const RendererPanel = ({
   edges,
   theme,
   setTheme,
+  language,
+  setLanguage,
 }: {
   nodes: Node[];
   edges: Edge[];
   theme: "light" | "dark";
   setTheme: (t: "light" | "dark") => void;
+  language: Language;
+  setLanguage: (l: Language) => void;
 }) => {
   const [formValues, setFormValues] = useState<FormValues>({});
-  const [language, setLanguage] = useState<Language>("en");
   const hasNodes = nodes.length > 0;
 
   const handleSubmit = (values: Record<string, any>) => {
@@ -122,6 +127,7 @@ const ExampleLayout = ({ defaultFlow }: { defaultFlow?: { nodes: Node[]; edges: 
   const [savedNodes, setSavedNodes] = useState<Node[]>([]);
   const [savedEdges, setSavedEdges] = useState<Edge[]>([]);
   const [theme, setTheme] = useState<"light" | "dark">("dark");
+  const [language, setLanguage] = useState<Language>("en");
 
   const handleSave = ({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) => {
     setSavedNodes(nodes);
@@ -132,10 +138,17 @@ const ExampleLayout = ({ defaultFlow }: { defaultFlow?: { nodes: Node[]; edges: 
     // <ThemeProvider theme={theme}>
     <div className="h-screen w-screen flex">
       <div className="w-1/2 border-r">
-        <EditorPanel onSave={handleSave} defaultFlow={defaultFlow} theme={theme} />
+        <EditorPanel onSave={handleSave} defaultFlow={defaultFlow} theme={theme} language={language} />
       </div>
       <div className="w-1/2">
-        <RendererPanel nodes={savedNodes} edges={savedEdges} theme={theme} setTheme={setTheme} />
+        <RendererPanel
+          nodes={savedNodes}
+          edges={savedEdges}
+          theme={theme}
+          setTheme={setTheme}
+          language={language}
+          setLanguage={setLanguage}
+        />
       </div>
     </div>
     // </ThemeProvider>

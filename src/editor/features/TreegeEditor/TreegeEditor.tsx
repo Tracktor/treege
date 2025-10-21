@@ -2,6 +2,7 @@ import { Background, BackgroundVariant, Controls, MiniMap, ReactFlow, ReactFlowP
 import Logo from "@/editor/components/data-display/logo";
 import { edgeTypes } from "@/editor/constants/edgeTypes";
 import { nodeTypes } from "@/editor/constants/nodeTypes";
+import { TreegeEditorProvider } from "@/editor/context/TreegeEditorContext";
 import ActionsPanel from "@/editor/features/TreegeEditor/panel/ActionsPanel";
 import NodeActionsSheet from "@/editor/features/TreegeEditor/sheets/NodeActionsSheet";
 import useFlowConnections from "@/editor/hooks/useFlowConnections";
@@ -37,19 +38,29 @@ const Flow = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave, t
   );
 };
 
-const TreegeEditor = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave, theme = "dark" }: TreegeEditorProps) => (
+const TreegeEditor = ({
+  defaultEdges,
+  defaultNodes,
+  defaultFlow,
+  onExportJson,
+  onSave,
+  theme = "dark",
+  language = "en",
+}: TreegeEditorProps) => (
   <ThemeProvider defaultTheme={theme}>
-    <Toaster position="bottom-center" />
-    <ReactFlowProvider>
-      <Flow
-        defaultEdges={defaultEdges}
-        defaultNodes={defaultNodes}
-        onExportJson={onExportJson}
-        onSave={onSave}
-        defaultFlow={defaultFlow}
-        theme={theme}
-      />
-    </ReactFlowProvider>
+    <TreegeEditorProvider value={{ language }}>
+      <Toaster position="bottom-center" />
+      <ReactFlowProvider>
+        <Flow
+          defaultEdges={defaultEdges}
+          defaultNodes={defaultNodes}
+          onExportJson={onExportJson}
+          onSave={onSave}
+          defaultFlow={defaultFlow}
+          theme={theme}
+        />
+      </ReactFlowProvider>
+    </TreegeEditorProvider>
   </ThemeProvider>
 );
 

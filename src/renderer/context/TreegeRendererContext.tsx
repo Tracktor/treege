@@ -3,7 +3,7 @@ import { createContext, PropsWithChildren, useContext } from "react";
 import { FormValues } from "@/renderer/types/renderer";
 import { TreegeNodeData } from "@/shared/types/node";
 
-export type TreegeContextValue = {
+export type TreegeRendererContextValue = {
   formValues: FormValues;
   formErrors: Record<string, string>;
   setFieldValue: (fieldName: string, value: any) => void;
@@ -13,10 +13,10 @@ export type TreegeContextValue = {
 };
 
 export interface TreegeRendererProviderProps extends PropsWithChildren {
-  value: TreegeContextValue;
+  value: TreegeRendererContextValue;
 }
 
-export const TreegeRendererContext = createContext<TreegeContextValue | null>(null);
+export const TreegeRendererContext = createContext<TreegeRendererContextValue | null>(null);
 
 export const TreegeRendererProvider = ({ children, value }: TreegeRendererProviderProps) => (
   <TreegeRendererContext.Provider value={value}>{children}</TreegeRendererContext.Provider>

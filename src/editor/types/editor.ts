@@ -23,9 +23,12 @@ export interface TreegeEditorProps {
    * @param data
    */
   onSave?: (data: { nodes: Node[]; edges: Edge[] }) => void;
-
   /**
    * Theme for the editor interface.
    */
   theme?: "dark" | "light";
+  /**
+   * Language for the editor interface.
+   */
+  language?: string;
 }
