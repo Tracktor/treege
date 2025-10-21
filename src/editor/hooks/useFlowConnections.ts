@@ -2,13 +2,14 @@ import { addEdge, Node, OnConnect, OnConnectEnd, OnEdgesDelete, useReactFlow } f
 import { nanoid } from "nanoid";
 import { useCallback } from "react";
 import { defaultNode } from "@/editor/constants/defaultNode";
+import { isInputNode } from "@/shared/utils/nodeTypeGuards";
 
 /**
  * Custom hook to manage flow connections, including connecting nodes,
  * handling connection ends, and deleting edges with conditional logic.
  */
 const useFlowConnections = () => {
-  const { setNodes, setEdges, screenToFlowPosition } = useReactFlow();
+  const { setNodes, setEdges, screenToFlowPosition, getNode, getEdges } = useReactFlow();
 
   /**
    * Handles the connection of two nodes in the flow.
@@ -18,10 +19,12 @@ const useFlowConnections = () => {
       setEdges((edgesSnapshot) => {
         const newEdges = addEdge(params, edgesSnapshot);
         const sourceId = params.source;
+        const sourceNode = getNode(sourceId);
         const childrenEdges = newEdges.filter((edge) => edge.source === sourceId);
 
         // If parent has more than one child, set all its edges to be "conditional"
-        if (childrenEdges.length > 1) {
+        // Only create conditional edges if the source node is an input node
+        if (childrenEdges.length > 1 && sourceNode && isInputNode(sourceNode)) {
           return newEdges.map((edge) => {
             if (edge.source === sourceId) {
               return {
@@ -40,7 +43,7 @@ const useFlowConnections = () => {
         return newEdges;
       });
     },
-    [setEdges],
+    [setEdges, getNode],
   );
 
   /**
@@ -50,10 +53,21 @@ const useFlowConnections = () => {
     (event, connectionState) => {
       if (!connectionState.isValid) {
         const { clientX, clientY } = "changedTouches" in event ? event.changedTouches[0] : event;
-        const nodeId = nanoid();
-        const edgeId = nanoid();
         const sourceNode = connectionState.fromNode;
         const sourceId = connectionState.fromNode?.id || "";
+
+        // Check if source node can have multiple children
+        const edges = getEdges();
+        const existingEdgesFromSource = edges.filter((edge) => edge.source === sourceId);
+        const isSourceInputNode = sourceNode && isInputNode(sourceNode);
+
+        // Block creation if source already has children and is NOT an input node
+        if (existingEdgesFromSource.length > 0 && !isSourceInputNode) {
+          return;
+        }
+
+        const nodeId = nanoid();
+        const edgeId = nanoid();
 
         const newNode: Node = {
           ...defaultNode,
@@ -74,25 +88,26 @@ const useFlowConnections = () => {
         setNodes((node) => node.concat(newNode));
 
         // Create a new edge from the source node to the newly created node
-        setEdges((edges) => {
-          const childrenEdges = edges.filter((edge) => edge.source === sourceId);
+        setEdges((edgesSnapshot) => {
+          const childrenEdges = edgesSnapshot.filter((edge) => edge.source === sourceId);
           const willHaveSiblings = childrenEdges.length > 0;
 
           const newEdge = {
-            data: willHaveSiblings
-              ? {
-                  conditions: [{ field: sourceId, operator: "===", value: "" }],
-                }
-              : undefined,
+            data:
+              willHaveSiblings && isSourceInputNode
+                ? {
+                    conditions: [{ field: sourceId, operator: "===", value: "" }],
+                  }
+                : undefined,
             id: edgeId,
             source: sourceId,
             target: nodeId,
-            type: willHaveSiblings ? "conditional" : "default",
+            type: willHaveSiblings && isSourceInputNode ? "conditional" : "default",
           };
 
-          // If the source node will have siblings, update all its edges to be "conditional"
-          if (willHaveSiblings) {
-            return edges
+          // If the source node will have siblings and is an input node, update all its edges to be "conditional"
+          if (willHaveSiblings && isSourceInputNode) {
+            return edgesSnapshot
               .map((edge) => {
                 if (edge.source === sourceId) {
                   return {
@@ -109,11 +124,11 @@ const useFlowConnections = () => {
               .concat(newEdge);
           }
 
-          return edges.concat(newEdge);
+          return edgesSnapshot.concat(newEdge);
         });
       }
     },
-    [screenToFlowPosition, setEdges, setNodes],
+    [screenToFlowPosition, setEdges, setNodes, getEdges],
   );
 
   /**
@@ -147,7 +162,24 @@ const useFlowConnections = () => {
     [setEdges],
   );
 
+  /**
+   * Validates if a connection can be created between two nodes.
+   * Prevents multiple edges from non-input nodes (only input nodes can have conditional edges).
+   */
+  const isValidConnection = useCallback(
+    (connection: { source: string; target: string }) => {
+      const sourceNode = getNode(connection.source);
+      const edges = getEdges();
+      const existingEdgesFromSource = edges.filter((edge) => edge.source === connection.source);
+
+      // If source already has at least one edge and is NOT an input node, block the connection
+      return !(existingEdgesFromSource.length > 0 && sourceNode && !isInputNode(sourceNode));
+    },
+    [getNode, getEdges],
+  );
+
   return {
+    isValidConnection,
     onConnect,
     onConnectEnd,
     onEdgesDelete,

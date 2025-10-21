@@ -13,7 +13,7 @@ import { ThemeProvider } from "@/shared/context/ThemeContext";
 import "@/editor/styles/style.css";
 
 const Flow = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave, theme }: TreegeEditorProps) => {
-  const { onConnect, onConnectEnd, onEdgesDelete } = useFlowConnections();
+  const { onConnect, onConnectEnd, onEdgesDelete, isValidConnection } = useFlowConnections();
 
   return (
     <ReactFlow
@@ -27,6 +27,7 @@ const Flow = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave, t
       onConnect={onConnect}
       onConnectEnd={onConnectEnd}
       onEdgesDelete={onEdgesDelete}
+      isValidConnection={isValidConnection}
     >
       <Background gap={10} variant={BackgroundVariant.Dots} />
       <ActionsPanel onExportJson={onExportJson} onSave={onSave} />
