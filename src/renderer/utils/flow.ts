@@ -12,9 +12,10 @@ import { isInputNode } from "@/shared/utils/nodeTypeGuards";
  */
 export interface VisibleNodesInOrderResult {
   /**
-   * Whether the form can be submitted (end of path reached)
+   * Whether the end of the flow path has been reached (no more unexplored paths)
+   * This does NOT mean the form is valid - just that we've traversed as far as possible
    */
-  canSubmit: boolean;
+  endOfPathReached: boolean;
   /**
    * Set of all visible node IDs for quick lookup
    */
@@ -144,7 +145,7 @@ export const getVisibleNodesInOrder = (
 
   if (!startNode) {
     return {
-      canSubmit: true,
+      endOfPathReached: true,
       visibleNodeIds: new Set<string>(),
       visibleNodes: [],
       visibleRootNodes: [],
@@ -215,7 +216,7 @@ export const getVisibleNodesInOrder = (
     .sort((a, b) => (orderIndex.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (orderIndex.get(b.id) ?? Number.MAX_SAFE_INTEGER));
 
   return {
-    canSubmit: !hasUnexploredPaths,
+    endOfPathReached: !hasUnexploredPaths,
     visibleNodeIds,
     visibleNodes,
     visibleRootNodes,

@@ -19,7 +19,7 @@ import { isInputNode } from "@/shared/utils/nodeTypeGuards";
  * - Errors state
  * - Node visibility calculation (progressive rendering)
  * - Form validation (built-in: required, pattern)
- * - End of path detection
+ * - Submit button state (combines end-of-path detection + form validity)
  *
  * NOT responsible for:
  * - Export/conversion to external format (done in component)
@@ -76,7 +76,7 @@ export const useTreegeRenderer = (
     return defaultValues;
   });
 
-  const { canSubmit, visibleNodes, visibleRootNodes } = useMemo(
+  const { endOfPathReached, visibleNodes, visibleRootNodes } = useMemo(
     () => getVisibleNodesInOrder(nodes, edges, formValues),
     [nodes, edges, formValues],
   );
@@ -100,6 +100,7 @@ export const useTreegeRenderer = (
 
   /**
    * Check if form is valid based on visible input nodes
+   * Returns true if all required fields are filled and all patterns match
    */
   const checkValidForm = useCallback((): boolean => {
     const newErrors: Record<string, string> = {};
@@ -134,6 +135,48 @@ export const useTreegeRenderer = (
     setFormErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }, [visibleNodes, formValues, translate]);
+
+  /**
+   * Check if form is currently valid (without setting errors)
+   * Used to determine if submit button should be enabled
+   */
+  const isFormValid = useMemo(
+    (): boolean =>
+      visibleNodes.every((node) => {
+        if (!isInputNode(node)) return true;
+
+        const fieldName = node.id;
+        const value = formValues[fieldName];
+
+        // Check required
+        if (node.data.required) {
+          if (value === undefined || value === null || value === "") {
+            return false;
+          }
+        }
+
+        // Check pattern
+        if (value && node.data.pattern) {
+          try {
+            const regex = new RegExp(node.data.pattern);
+            if (!regex.test(String(value))) {
+              return false;
+            }
+          } catch (e) {
+            return false;
+          }
+        }
+
+        return true;
+      }),
+    [visibleNodes, formValues],
+  );
+  /**
+   * Can submit when:
+   * 1. End of flow path has been reached (no more unexplored paths)
+   * 2. AND all visible form fields are valid
+   */
+  const canSubmit = endOfPathReached && isFormValid;
 
   return {
     canSubmit,

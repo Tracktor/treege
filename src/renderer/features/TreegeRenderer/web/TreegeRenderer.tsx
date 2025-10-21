@@ -169,7 +169,7 @@ const TreegeRenderer = ({
       >
         <FormWrapper onSubmit={handleSubmit}>
           {visibleRootNodes.map((node) => renderNode(node))}
-          {canSubmit && <SubmitButton label="Submit" />}
+          <SubmitButton label="Submit" disabled={!canSubmit} />
         </FormWrapper>
       </TreegeRendererProvider>
     </ThemeProvider>
