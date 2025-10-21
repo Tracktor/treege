@@ -2,5 +2,204 @@
   "validation": {
     "required": "Questo campo è obbligatorio",
     "invalidFormat": "Formato non valido"
+  },
+  "common": {
+    "save": "Salva",
+    "cancel": "Annulla",
+    "close": "Chiudi",
+    "clear": "Cancella",
+    "submit": "Invia",
+    "create": "Crea",
+    "retry": "Riprova",
+    "toggle": "Attiva/Disattiva"
+  },
+  "editor": {
+    "actionsPanel": {
+      "addNode": "Aggiungi nodo",
+      "importJson": "Importa JSON",
+      "exportJson": "Esporta JSON",
+      "importSuccess": "Importazione riuscita!",
+      "importSuccessDesc": "Il flusso è stato importato con successo.",
+      "invalidJson": "File JSON non valido.",
+      "invalidJsonDesc": "Il file deve contenere array di nodi e archi.",
+      "parseError": "Errore nell'analisi del file JSON.",
+      "parseErrorDesc": "Prova a correggere il file e importarlo di nuovo.",
+      "downloadSuccess": "Download riuscito.",
+      "downloadSuccessDesc": "Il flusso è stato esportato con successo."
+    },
+    "conditionalEdge": {
+      "fallback": "Predefinito",
+      "condition": "Condizione",
+      "displayConditions": "Mostra condizioni",
+      "displayConditionsDesc": "Questo campo verrà mostrato se vengono soddisfatte le seguenti condizioni.",
+      "label": "Etichetta (opzionale)",
+      "labelPlaceholder": "Es: Se idoneo",
+      "labelDesc": "Etichetta personalizzata per il pulsante della condizione",
+      "fallbackPath": "Percorso predefinito / di fallback",
+      "fallbackPathDesc": "Questo percorso verrà seguito quando nessun'altra condizione corrisponde",
+      "conditions": "Condizioni",
+      "field": "Campo",
+      "selectField": "Seleziona un campo",
+      "noFieldsAvailable": "Nessun campo disponibile",
+      "operator": "Operatore",
+      "value": "Valore",
+      "valuePlaceholder": "Es: 18",
+      "removeCondition": "Rimuovi condizione",
+      "and": "E",
+      "or": "O",
+      "addCondition": "Aggiungi condizione"
+    },
+    "inputNodeForm": {
+      "label": "Etichetta",
+      "name": "Nome",
+      "placeholder": "Segnaposto",
+      "helperText": "Testo di aiuto",
+      "httpConfiguration": "Configurazione HTTP",
+      "multipleFiles": "File multipli",
+      "options": "Opzioni",
+      "optionLabel": "Etichetta",
+      "optionValue": "Valore",
+      "addOption": "+ Aggiungi opzione",
+      "multipleSelection": "Selezione multipla",
+      "validation": "Validazione",
+      "required": "Obbligatorio",
+      "pattern": "Schema",
+      "errorMessage": "Messaggio di errore",
+      "advancedConfiguration": "Configurazione avanzata",
+      "defaultValueType": "Tipo di valore predefinito",
+      "selectType": "Seleziona tipo",
+      "defaultValueTypeNone": "Nessuno",
+      "defaultValueTypeStatic": "Valore statico",
+      "defaultValueTypeReference": "Campo di riferimento",
+      "defaultValuesCommaSeparated": "Valori predefiniti (separati da virgole)",
+      "defaultValuesPlaceholder": "valore1, valore2, valore3",
+      "defaultChecked": "Selezionato per impostazione predefinita",
+      "staticValue": "Valore statico",
+      "staticValuePlaceholder": "Inserisci valore predefinito",
+      "referenceField": "Campo di riferimento",
+      "selectReferenceField": "Seleziona un campo",
+      "noParentFieldsAvailable": "Nessun campo genitore disponibile",
+      "addInputFieldsBeforeReference": "Aggiungi campi di input prima di questo nodo per riferirli",
+      "transformType": "Tipo di trasformazione",
+      "selectTransformation": "Seleziona trasformazione",
+      "transformNone": "Nessuna trasformazione",
+      "transformString": "Converti in stringa",
+      "transformNumber": "Converti in numero",
+      "transformBoolean": "Converti in booleano",
+      "transformArray": "Converti in array",
+      "transformMapToObject": "Mappa su oggetto",
+      "transformDesc": "Trasforma il valore riferito per corrispondere al tipo di questo campo",
+      "objectMapping": "Mappatura oggetto",
+      "sourceKey": "Chiave sorgente",
+      "targetKey": "Chiave destinazione",
+      "addMapping": "Aggiungi mappatura",
+      "objectMappingDesc": "Mappa le proprietà dell'oggetto sorgente su una nuova struttura"
+    },
+    "flowNodeForm": {
+      "label": "Etichetta",
+      "targetId": "ID di destinazione",
+      "targetIdDesc": "Identificatore univoco del flusso di destinazione."
+    },
+    "groupNodeForm": {
+      "label": "Etichetta"
+    },
+    "uiNodeForm": {
+      "label": "Etichetta",
+      "type": "Tipo",
+      "typeTitle": "Titolo",
+      "typeDivider": "Divisore"
+    },
+    "httpConfigForm": {
+      "apiUrl": "URL API",
+      "apiUrlPlaceholder": "https://api.esempio.com/data",
+      "apiUrlDesc": "Usa variabili template come {{fieldId}} per riferire altri campi",
+      "httpMethod": "Metodo HTTP",
+      "selectMethod": "Seleziona metodo",
+      "methodGet": "GET",
+      "methodPost": "POST",
+      "methodPut": "PUT",
+      "methodDelete": "DELETE",
+      "methodPatch": "PATCH",
+      "headers": "Intestazioni",
+      "headerName": "Nome intestazione",
+      "headerValue": "Valore intestazione",
+      "addHeader": "Aggiungi intestazione",
+      "requestBody": "Corpo della richiesta (JSON)",
+      "insertVariable": "Inserisci variabile",
+      "requestBodyPlaceholder": "{\"chiave\": \"valore\"}",
+      "requestBodyDesc": "Usa variabili template come ${fieldId} per riferire altri campi",
+      "responseConfiguration": "Configurazione della risposta",
+      "responsePath": "Percorso della risposta",
+      "responsePathPlaceholder": "data.users o results[0]",
+      "responsePathDesc": "Estrai dati dalla risposta usando la notazione a punti o l'indicizzazione dell'array",
+      "mapToOptions": "Mappa su opzioni",
+      "valueField": "Campo valore",
+      "valueFieldPlaceholder": "id",
+      "valueFieldDesc": "Campo da usare come valore dell'opzione (es: id)",
+      "labelField": "Campo etichetta",
+      "labelFieldPlaceholder": "nome",
+      "labelFieldDesc": "Campo da usare come etichetta dell'opzione (es: nome)",
+      "searchParameter": "Parametro di ricerca (opzionale)",
+      "searchParameterPlaceholder": "q, ricerca, query...",
+      "searchParameterDesc": "Se impostato, abilita una casella di ricerca che aggiunge questo parametro alle chiamate API (es: ?q=Parigi)",
+      "behavior": "Comportamento",
+      "fetchOnMount": "Carica al montaggio",
+      "showLoadingState": "Mostra stato di caricamento"
+    },
+    "jsonNodeForm": {
+      "label": "Etichetta",
+      "json": "JSON",
+      "jsonPlaceholder": "Inserisci JSON."
+    },
+    "selectNodeGroup": {
+      "groupAlreadyExists": "Questo gruppo esiste già",
+      "groupAlreadyExistsDesc": "Usa il selettore per aggiungere il nodo a un gruppo esistente.",
+      "groupCreated": "Gruppo creato",
+      "groupCreatedDesc": "Il gruppo \"{groupName}\" è stato creato con successo.",
+      "group": "Gruppo",
+      "noGroup": "Nessun gruppo",
+      "createNewGroup": "Crea un nuovo gruppo",
+      "newGroup": "Nuovo gruppo",
+      "newGroupDesc": "Il gruppo verrà creato attorno al nodo selezionato.",
+      "groupName": "Nome del gruppo",
+      "groupNamePlaceholder": "Es: Passo 1 - Informazioni personali"
+    },
+    "comboboxPattern": {
+      "custom": "Personalizzato: {value}",
+      "selectOrCreate": "Seleziona o crea uno schema",
+      "search": "Cerca schemi...",
+      "usePattern": "Usa schema: {query}"
+    },
+    "selectNodeType": {
+      "nodeType": "Tipo di nodo"
+    },
+    "comboboxWithCreate": {
+      "clearSelection": "Cancella selezione",
+      "noResults": "Nessun risultato trovato"
+    }
+  },
+  "renderer": {
+    "defaultInputs": {
+      "required": "*",
+      "selectDate": "Seleziona data",
+      "startDate": "Data di inizio",
+      "endDate": "Data di fine",
+      "startTime": "Ora di inizio",
+      "endTime": "Ora di fine"
+    },
+    "defaultHttpInput": {
+      "noUrlConfigured": "Nessun URL configurato",
+      "httpError": "HTTP {status}: {statusText}",
+      "fetchFailed": "Impossibile recuperare i dati",
+      "searching": "Ricerca in corso...",
+      "search": "Cerca...",
+      "retry": "Riprova",
+      "noResults": "Nessun risultato trovato.",
+      "noDataAvailable": "Nessun dato disponibile. Configura \"Carica al montaggio\" o aggiungi un parametro di ricerca.",
+      "selectOption": "Seleziona un'opzione"
+    },
+    "defaultSubmitButton": {
+      "submit": "Invia"
+    }
   }
 }

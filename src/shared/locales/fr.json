@@ -2,5 +2,204 @@
   "validation": {
     "required": "Ce champ est requis",
     "invalidFormat": "Format invalide"
+  },
+  "common": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "clear": "Effacer",
+    "submit": "Soumettre",
+    "create": "Créer",
+    "retry": "Réessayer",
+    "toggle": "Basculer"
+  },
+  "editor": {
+    "actionsPanel": {
+      "addNode": "Ajouter un nœud",
+      "importJson": "Importer JSON",
+      "exportJson": "Exporter JSON",
+      "importSuccess": "Importation réussie !",
+      "importSuccessDesc": "Le flux a été importé avec succès.",
+      "invalidJson": "Fichier JSON invalide.",
+      "invalidJsonDesc": "Le fichier doit contenir des tableaux de nœuds et d'arêtes.",
+      "parseError": "Erreur d'analyse du fichier JSON.",
+      "parseErrorDesc": "Essayez de corriger le fichier et de l'importer à nouveau.",
+      "downloadSuccess": "Téléchargement réussi.",
+      "downloadSuccessDesc": "Le flux a été exporté avec succès."
+    },
+    "conditionalEdge": {
+      "fallback": "Par défaut",
+      "condition": "Condition",
+      "displayConditions": "Afficher les conditions",
+      "displayConditionsDesc": "Ce champ sera affiché si les conditions suivantes sont remplies.",
+      "label": "Libellé (optionnel)",
+      "labelPlaceholder": "Ex : Si éligible",
+      "labelDesc": "Libellé personnalisé pour le bouton de condition",
+      "fallbackPath": "Chemin par défaut / de secours",
+      "fallbackPathDesc": "Ce chemin sera suivi lorsqu'aucune autre condition ne correspond",
+      "conditions": "Conditions",
+      "field": "Champ",
+      "selectField": "Sélectionner un champ",
+      "noFieldsAvailable": "Aucun champ disponible",
+      "operator": "Opérateur",
+      "value": "Valeur",
+      "valuePlaceholder": "Ex : 18",
+      "removeCondition": "Supprimer la condition",
+      "and": "ET",
+      "or": "OU",
+      "addCondition": "Ajouter une condition"
+    },
+    "inputNodeForm": {
+      "label": "Libellé",
+      "name": "Nom",
+      "placeholder": "Texte indicatif",
+      "helperText": "Texte d'aide",
+      "httpConfiguration": "Configuration HTTP",
+      "multipleFiles": "Fichiers multiples",
+      "options": "Options",
+      "optionLabel": "Libellé",
+      "optionValue": "Valeur",
+      "addOption": "+ Ajouter une option",
+      "multipleSelection": "Sélection multiple",
+      "validation": "Validation",
+      "required": "Requis",
+      "pattern": "Motif",
+      "errorMessage": "Message d'erreur",
+      "advancedConfiguration": "Configuration avancée",
+      "defaultValueType": "Type de valeur par défaut",
+      "selectType": "Sélectionner un type",
+      "defaultValueTypeNone": "Aucun",
+      "defaultValueTypeStatic": "Valeur statique",
+      "defaultValueTypeReference": "Champ de référence",
+      "defaultValuesCommaSeparated": "Valeurs par défaut (séparées par des virgules)",
+      "defaultValuesPlaceholder": "valeur1, valeur2, valeur3",
+      "defaultChecked": "Coché par défaut",
+      "staticValue": "Valeur statique",
+      "staticValuePlaceholder": "Entrer une valeur par défaut",
+      "referenceField": "Champ de référence",
+      "selectReferenceField": "Sélectionner un champ",
+      "noParentFieldsAvailable": "Aucun champ parent disponible",
+      "addInputFieldsBeforeReference": "Ajoutez des champs de saisie avant ce nœud pour les référencer",
+      "transformType": "Type de transformation",
+      "selectTransformation": "Sélectionner une transformation",
+      "transformNone": "Aucune transformation",
+      "transformString": "Convertir en chaîne",
+      "transformNumber": "Convertir en nombre",
+      "transformBoolean": "Convertir en booléen",
+      "transformArray": "Convertir en tableau",
+      "transformMapToObject": "Mapper vers un objet",
+      "transformDesc": "Transformer la valeur référencée pour correspondre au type de ce champ",
+      "objectMapping": "Mappage d'objet",
+      "sourceKey": "Clé source",
+      "targetKey": "Clé cible",
+      "addMapping": "Ajouter un mappage",
+      "objectMappingDesc": "Mapper les propriétés de l'objet source vers une nouvelle structure"
+    },
+    "flowNodeForm": {
+      "label": "Libellé",
+      "targetId": "ID cible",
+      "targetIdDesc": "Identifiant unique du flux cible."
+    },
+    "groupNodeForm": {
+      "label": "Libellé"
+    },
+    "uiNodeForm": {
+      "label": "Libellé",
+      "type": "Type",
+      "typeTitle": "Titre",
+      "typeDivider": "Séparateur"
+    },
+    "httpConfigForm": {
+      "apiUrl": "URL de l'API",
+      "apiUrlPlaceholder": "https://api.exemple.com/data",
+      "apiUrlDesc": "Utilisez des variables de modèle comme {{fieldId}} pour référencer d'autres champs",
+      "httpMethod": "Méthode HTTP",
+      "selectMethod": "Sélectionner une méthode",
+      "methodGet": "GET",
+      "methodPost": "POST",
+      "methodPut": "PUT",
+      "methodDelete": "DELETE",
+      "methodPatch": "PATCH",
+      "headers": "En-têtes",
+      "headerName": "Nom de l'en-tête",
+      "headerValue": "Valeur de l'en-tête",
+      "addHeader": "Ajouter un en-tête",
+      "requestBody": "Corps de la requête (JSON)",
+      "insertVariable": "Insérer une variable",
+      "requestBodyPlaceholder": "{\"clé\": \"valeur\"}",
+      "requestBodyDesc": "Utilisez des variables de modèle comme ${fieldId} pour référencer d'autres champs",
+      "responseConfiguration": "Configuration de la réponse",
+      "responsePath": "Chemin de la réponse",
+      "responsePathPlaceholder": "data.users ou results[0]",
+      "responsePathDesc": "Extraire les données de la réponse en utilisant la notation par points ou l'indexation de tableau",
+      "mapToOptions": "Mapper vers les options",
+      "valueField": "Champ de valeur",
+      "valueFieldPlaceholder": "id",
+      "valueFieldDesc": "Champ à utiliser comme valeur d'option (ex : id)",
+      "labelField": "Champ de libellé",
+      "labelFieldPlaceholder": "nom",
+      "labelFieldDesc": "Champ à utiliser comme libellé d'option (ex : nom)",
+      "searchParameter": "Paramètre de recherche (optionnel)",
+      "searchParameterPlaceholder": "q, recherche, requête...",
+      "searchParameterDesc": "Si défini, active une zone de recherche qui ajoute ce paramètre aux appels API (ex : ?q=Paris)",
+      "behavior": "Comportement",
+      "fetchOnMount": "Charger au montage",
+      "showLoadingState": "Afficher l'état de chargement"
+    },
+    "jsonNodeForm": {
+      "label": "Libellé",
+      "json": "JSON",
+      "jsonPlaceholder": "Veuillez entrer du JSON."
+    },
+    "selectNodeGroup": {
+      "groupAlreadyExists": "Ce groupe existe déjà",
+      "groupAlreadyExistsDesc": "Utilisez le sélecteur pour ajouter le nœud à un groupe existant.",
+      "groupCreated": "Groupe créé",
+      "groupCreatedDesc": "Le groupe \"{groupName}\" a été créé avec succès.",
+      "group": "Groupe",
+      "noGroup": "Aucun groupe",
+      "createNewGroup": "Créer un nouveau groupe",
+      "newGroup": "Nouveau groupe",
+      "newGroupDesc": "Le groupe sera créé autour du nœud sélectionné.",
+      "groupName": "Nom du groupe",
+      "groupNamePlaceholder": "Ex : Étape 1 - Informations personnelles"
+    },
+    "comboboxPattern": {
+      "custom": "Personnalisé : {value}",
+      "selectOrCreate": "Sélectionner ou créer un motif",
+      "search": "Rechercher des motifs...",
+      "usePattern": "Utiliser le motif : {query}"
+    },
+    "selectNodeType": {
+      "nodeType": "Type de nœud"
+    },
+    "comboboxWithCreate": {
+      "clearSelection": "Effacer la sélection",
+      "noResults": "Aucun résultat trouvé"
+    }
+  },
+  "renderer": {
+    "defaultInputs": {
+      "required": "*",
+      "selectDate": "Sélectionner une date",
+      "startDate": "Date de début",
+      "endDate": "Date de fin",
+      "startTime": "Heure de début",
+      "endTime": "Heure de fin"
+    },
+    "defaultHttpInput": {
+      "noUrlConfigured": "Aucune URL configurée",
+      "httpError": "HTTP {status} : {statusText}",
+      "fetchFailed": "Échec de la récupération des données",
+      "searching": "Recherche...",
+      "search": "Recherche...",
+      "retry": "Réessayer",
+      "noResults": "Aucun résultat trouvé.",
+      "noDataAvailable": "Aucune donnée disponible. Configurez \"Charger au montage\" ou ajoutez un paramètre de recherche.",
+      "selectOption": "Sélectionner une option"
+    },
+    "defaultSubmitButton": {
+      "submit": "Soumettre"
+    }
   }
 }

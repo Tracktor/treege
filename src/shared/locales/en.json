@@ -2,5 +2,204 @@
   "validation": {
     "required": "This field is required",
     "invalidFormat": "Invalid format"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "clear": "Clear",
+    "submit": "Submit",
+    "create": "Create",
+    "retry": "Retry",
+    "toggle": "Toggle"
+  },
+  "editor": {
+    "actionsPanel": {
+      "addNode": "Add Node",
+      "importJson": "Import Json",
+      "exportJson": "Export Json",
+      "importSuccess": "Import successful!",
+      "importSuccessDesc": "The flow has been imported successfully.",
+      "invalidJson": "Invalid JSON file.",
+      "invalidJsonDesc": "The file must contain nodes and edges arrays.",
+      "parseError": "Error parsing JSON file.",
+      "parseErrorDesc": "Try to fix the file and import it again.",
+      "downloadSuccess": "Download successfully.",
+      "downloadSuccessDesc": "The flow has been exported successfully."
+    },
+    "conditionalEdge": {
+      "fallback": "Fallback",
+      "condition": "Condition",
+      "displayConditions": "Display conditions",
+      "displayConditionsDesc": "This field will be shown if the following conditions are met.",
+      "label": "Label (optional)",
+      "labelPlaceholder": "Ex: If eligible",
+      "labelDesc": "Custom label for the condition button",
+      "fallbackPath": "Fallback / Default path",
+      "fallbackPathDesc": "This path will be followed when no other conditions match",
+      "conditions": "Conditions",
+      "field": "Field",
+      "selectField": "Select a field",
+      "noFieldsAvailable": "No fields available",
+      "operator": "Operator",
+      "value": "Value",
+      "valuePlaceholder": "Ex: 18",
+      "removeCondition": "Remove condition",
+      "and": "AND",
+      "or": "OR",
+      "addCondition": "Add condition"
+    },
+    "inputNodeForm": {
+      "label": "Label",
+      "name": "Name",
+      "placeholder": "Placeholder",
+      "helperText": "Helper text",
+      "httpConfiguration": "HTTP Configuration",
+      "multipleFiles": "Multiple files",
+      "options": "Options",
+      "optionLabel": "Label",
+      "optionValue": "Value",
+      "addOption": "+ Add option",
+      "multipleSelection": "Multiple selection",
+      "validation": "Validation",
+      "required": "Required",
+      "pattern": "Pattern",
+      "errorMessage": "Error message",
+      "advancedConfiguration": "Advanced Configuration",
+      "defaultValueType": "Default Value Type",
+      "selectType": "Select type",
+      "defaultValueTypeNone": "None",
+      "defaultValueTypeStatic": "Static Value",
+      "defaultValueTypeReference": "Reference Field",
+      "defaultValuesCommaSeparated": "Default Values (comma-separated)",
+      "defaultValuesPlaceholder": "value1, value2, value3",
+      "defaultChecked": "Default Checked",
+      "staticValue": "Static Value",
+      "staticValuePlaceholder": "Enter default value",
+      "referenceField": "Reference Field",
+      "selectReferenceField": "Select a field",
+      "noParentFieldsAvailable": "No parent fields available",
+      "addInputFieldsBeforeReference": "Add input fields before this node to reference them",
+      "transformType": "Transform Type",
+      "selectTransformation": "Select transformation",
+      "transformNone": "No transformation",
+      "transformString": "Convert to String",
+      "transformNumber": "Convert to Number",
+      "transformBoolean": "Convert to Boolean",
+      "transformArray": "Convert to Array",
+      "transformMapToObject": "Map to Object",
+      "transformDesc": "Transform the referenced value to match this field's type",
+      "objectMapping": "Object Mapping",
+      "sourceKey": "Source key",
+      "targetKey": "Target key",
+      "addMapping": "Add Mapping",
+      "objectMappingDesc": "Map properties from the source object to a new structure"
+    },
+    "flowNodeForm": {
+      "label": "Label",
+      "targetId": "Target id",
+      "targetIdDesc": "Unique identifier of the target flow."
+    },
+    "groupNodeForm": {
+      "label": "Label"
+    },
+    "uiNodeForm": {
+      "label": "Label",
+      "type": "Type",
+      "typeTitle": "Title",
+      "typeDivider": "Divider"
+    },
+    "httpConfigForm": {
+      "apiUrl": "API URL",
+      "apiUrlPlaceholder": "https://api.example.com/data",
+      "apiUrlDesc": "Use template variables like {{fieldId}} to reference other fields",
+      "httpMethod": "HTTP Method",
+      "selectMethod": "Select method",
+      "methodGet": "GET",
+      "methodPost": "POST",
+      "methodPut": "PUT",
+      "methodDelete": "DELETE",
+      "methodPatch": "PATCH",
+      "headers": "Headers",
+      "headerName": "Header name",
+      "headerValue": "Header value",
+      "addHeader": "Add header",
+      "requestBody": "Request Body (JSON)",
+      "insertVariable": "Insert variable",
+      "requestBodyPlaceholder": "{\"key\": \"value\"}",
+      "requestBodyDesc": "Use template variables like ${fieldId} to reference other fields",
+      "responseConfiguration": "Response Configuration",
+      "responsePath": "Response Path",
+      "responsePathPlaceholder": "data.users or results[0]",
+      "responsePathDesc": "Extract data from response using dot notation or array indexing",
+      "mapToOptions": "Map to Options",
+      "valueField": "Value Field",
+      "valueFieldPlaceholder": "id",
+      "valueFieldDesc": "Field to use as option value (e.g., id)",
+      "labelField": "Label Field",
+      "labelFieldPlaceholder": "name",
+      "labelFieldDesc": "Field to use as option label (e.g., name)",
+      "searchParameter": "Search Parameter (optional)",
+      "searchParameterPlaceholder": "q, search, query...",
+      "searchParameterDesc": "If set, enables combobox with search that adds this param to API calls (e.g., ?q=Paris)",
+      "behavior": "Behavior",
+      "fetchOnMount": "Fetch on mount",
+      "showLoadingState": "Show loading state"
+    },
+    "jsonNodeForm": {
+      "label": "Label",
+      "json": "Json",
+      "jsonPlaceholder": "Please enter JSON."
+    },
+    "selectNodeGroup": {
+      "groupAlreadyExists": "This group already exists",
+      "groupAlreadyExistsDesc": "Use the selector to add the node to an existing group.",
+      "groupCreated": "Group created",
+      "groupCreatedDesc": "The group \"{groupName}\" has been created successfully.",
+      "group": "Group",
+      "noGroup": "No group",
+      "createNewGroup": "Create a new group",
+      "newGroup": "New group",
+      "newGroupDesc": "The group will be created around the selected node.",
+      "groupName": "Group name",
+      "groupNamePlaceholder": "Ex: Step 1 - Personal info"
+    },
+    "comboboxPattern": {
+      "custom": "Custom: {value}",
+      "selectOrCreate": "Select or create a pattern",
+      "search": "Search patterns...",
+      "usePattern": "Use pattern: {query}"
+    },
+    "selectNodeType": {
+      "nodeType": "Node Type"
+    },
+    "comboboxWithCreate": {
+      "clearSelection": "Clear selection",
+      "noResults": "No results found"
+    }
+  },
+  "renderer": {
+    "defaultInputs": {
+      "required": "*",
+      "selectDate": "Select date",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "startTime": "Start time",
+      "endTime": "End time"
+    },
+    "defaultHttpInput": {
+      "noUrlConfigured": "No URL configured",
+      "httpError": "HTTP {status}: {statusText}",
+      "fetchFailed": "Failed to fetch data",
+      "searching": "Search...",
+      "search": "Search...",
+      "retry": "Retry",
+      "noResults": "No results found.",
+      "noDataAvailable": "No data available. Configure \"Fetch on mount\" or add a search parameter.",
+      "selectOption": "Select an option"
+    },
+    "defaultSubmitButton": {
+      "submit": "Submit"
+    }
   }
 }

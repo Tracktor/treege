@@ -2,5 +2,204 @@
   "validation": {
     "required": "هذا الحقل مطلوب",
     "invalidFormat": "تنسيق غير صالح"
+  },
+  "common": {
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "close": "إغلاق",
+    "clear": "مسح",
+    "submit": "إرسال",
+    "create": "إنشاء",
+    "retry": "إعادة المحاولة",
+    "toggle": "تبديل"
+  },
+  "editor": {
+    "actionsPanel": {
+      "addNode": "إضافة عقدة",
+      "importJson": "استيراد JSON",
+      "exportJson": "تصدير JSON",
+      "importSuccess": "تم الاستيراد بنجاح!",
+      "importSuccessDesc": "تم استيراد التدفق بنجاح.",
+      "invalidJson": "ملف JSON غير صالح.",
+      "invalidJsonDesc": "يجب أن يحتوي الملف على مصفوفات من العقد والحواف.",
+      "parseError": "خطأ في تحليل ملف JSON.",
+      "parseErrorDesc": "حاول إصلاح الملف واستيراده مرة أخرى.",
+      "downloadSuccess": "تم التنزيل بنجاح.",
+      "downloadSuccessDesc": "تم تصدير التدفق بنجاح."
+    },
+    "conditionalEdge": {
+      "fallback": "افتراضي",
+      "condition": "شرط",
+      "displayConditions": "عرض الشروط",
+      "displayConditionsDesc": "سيتم عرض هذا الحقل إذا تم استيفاء الشروط التالية.",
+      "label": "التسمية (اختياري)",
+      "labelPlaceholder": "مثال: إذا كان مؤهلاً",
+      "labelDesc": "تسمية مخصصة لزر الشرط",
+      "fallbackPath": "المسار الافتراضي / الاحتياطي",
+      "fallbackPathDesc": "سيتم اتباع هذا المسار عندما لا تتطابق أي شروط أخرى",
+      "conditions": "الشروط",
+      "field": "حقل",
+      "selectField": "اختر حقلاً",
+      "noFieldsAvailable": "لا توجد حقول متاحة",
+      "operator": "عامل التشغيل",
+      "value": "قيمة",
+      "valuePlaceholder": "مثال: 18",
+      "removeCondition": "إزالة الشرط",
+      "and": "و",
+      "or": "أو",
+      "addCondition": "إضافة شرط"
+    },
+    "inputNodeForm": {
+      "label": "التسمية",
+      "name": "الاسم",
+      "placeholder": "نص توضيحي",
+      "helperText": "نص مساعد",
+      "httpConfiguration": "تكوين HTTP",
+      "multipleFiles": "ملفات متعددة",
+      "options": "خيارات",
+      "optionLabel": "التسمية",
+      "optionValue": "القيمة",
+      "addOption": "+ إضافة خيار",
+      "multipleSelection": "اختيار متعدد",
+      "validation": "التحقق",
+      "required": "مطلوب",
+      "pattern": "نمط",
+      "errorMessage": "رسالة خطأ",
+      "advancedConfiguration": "تكوين متقدم",
+      "defaultValueType": "نوع القيمة الافتراضية",
+      "selectType": "اختر النوع",
+      "defaultValueTypeNone": "لا شيء",
+      "defaultValueTypeStatic": "قيمة ثابتة",
+      "defaultValueTypeReference": "حقل مرجعي",
+      "defaultValuesCommaSeparated": "القيم الافتراضية (مفصولة بفواصل)",
+      "defaultValuesPlaceholder": "قيمة1، قيمة2، قيمة3",
+      "defaultChecked": "محدد افتراضياً",
+      "staticValue": "قيمة ثابتة",
+      "staticValuePlaceholder": "أدخل القيمة الافتراضية",
+      "referenceField": "حقل مرجعي",
+      "selectReferenceField": "اختر حقلاً",
+      "noParentFieldsAvailable": "لا توجد حقول أصلية متاحة",
+      "addInputFieldsBeforeReference": "أضف حقول إدخال قبل هذه العقدة للإشارة إليها",
+      "transformType": "نوع التحويل",
+      "selectTransformation": "اختر التحويل",
+      "transformNone": "بدون تحويل",
+      "transformString": "تحويل إلى نص",
+      "transformNumber": "تحويل إلى رقم",
+      "transformBoolean": "تحويل إلى منطقي",
+      "transformArray": "تحويل إلى مصفوفة",
+      "transformMapToObject": "تعيين إلى كائن",
+      "transformDesc": "تحويل القيمة المرجعية لتتطابق مع نوع هذا الحقل",
+      "objectMapping": "تعيين الكائن",
+      "sourceKey": "مفتاح المصدر",
+      "targetKey": "مفتاح الوجهة",
+      "addMapping": "إضافة تعيين",
+      "objectMappingDesc": "تعيين خصائص الكائن المصدر إلى بنية جديدة"
+    },
+    "flowNodeForm": {
+      "label": "التسمية",
+      "targetId": "معرف الوجهة",
+      "targetIdDesc": "المعرف الفريد للتدفق المستهدف."
+    },
+    "groupNodeForm": {
+      "label": "التسمية"
+    },
+    "uiNodeForm": {
+      "label": "التسمية",
+      "type": "النوع",
+      "typeTitle": "عنوان",
+      "typeDivider": "فاصل"
+    },
+    "httpConfigForm": {
+      "apiUrl": "رابط API",
+      "apiUrlPlaceholder": "https://api.example.com/data",
+      "apiUrlDesc": "استخدم متغيرات القالب مثل {{fieldId}} للإشارة إلى الحقول الأخرى",
+      "httpMethod": "طريقة HTTP",
+      "selectMethod": "اختر الطريقة",
+      "methodGet": "GET",
+      "methodPost": "POST",
+      "methodPut": "PUT",
+      "methodDelete": "DELETE",
+      "methodPatch": "PATCH",
+      "headers": "رؤوس",
+      "headerName": "اسم الرأس",
+      "headerValue": "قيمة الرأس",
+      "addHeader": "إضافة رأس",
+      "requestBody": "جسم الطلب (JSON)",
+      "insertVariable": "إدراج متغير",
+      "requestBodyPlaceholder": "{\"مفتاح\": \"قيمة\"}",
+      "requestBodyDesc": "استخدم متغيرات القالب مثل ${fieldId} للإشارة إلى الحقول الأخرى",
+      "responseConfiguration": "تكوين الاستجابة",
+      "responsePath": "مسار الاستجابة",
+      "responsePathPlaceholder": "data.users أو results[0]",
+      "responsePathDesc": "استخراج البيانات من الاستجابة باستخدام نقطة التدوين أو فهرسة المصفوفة",
+      "mapToOptions": "تعيين إلى الخيارات",
+      "valueField": "حقل القيمة",
+      "valueFieldPlaceholder": "id",
+      "valueFieldDesc": "الحقل المستخدم كقيمة خيار (مثال: id)",
+      "labelField": "حقل التسمية",
+      "labelFieldPlaceholder": "الاسم",
+      "labelFieldDesc": "الحقل المستخدم كتسمية خيار (مثال: الاسم)",
+      "searchParameter": "معامل البحث (اختياري)",
+      "searchParameterPlaceholder": "q، بحث، استعلام...",
+      "searchParameterDesc": "إذا تم تعيينه، يتم تمكين مربع بحث يضيف هذا المعامل إلى استدعاءات API (مثال: ?q=باريس)",
+      "behavior": "السلوك",
+      "fetchOnMount": "جلب عند التحميل",
+      "showLoadingState": "إظهار حالة التحميل"
+    },
+    "jsonNodeForm": {
+      "label": "التسمية",
+      "json": "JSON",
+      "jsonPlaceholder": "الرجاء إدخال JSON."
+    },
+    "selectNodeGroup": {
+      "groupAlreadyExists": "هذه المجموعة موجودة بالفعل",
+      "groupAlreadyExistsDesc": "استخدم المحدد لإضافة العقدة إلى مجموعة موجودة.",
+      "groupCreated": "تم إنشاء المجموعة",
+      "groupCreatedDesc": "تم إنشاء المجموعة \"{groupName}\" بنجاح.",
+      "group": "مجموعة",
+      "noGroup": "بدون مجموعة",
+      "createNewGroup": "إنشاء مجموعة جديدة",
+      "newGroup": "مجموعة جديدة",
+      "newGroupDesc": "سيتم إنشاء المجموعة حول العقدة المحددة.",
+      "groupName": "اسم المجموعة",
+      "groupNamePlaceholder": "مثال: الخطوة 1 - معلومات شخصية"
+    },
+    "comboboxPattern": {
+      "custom": "مخصص: {value}",
+      "selectOrCreate": "اختر أو أنشئ نمطاً",
+      "search": "البحث عن أنماط...",
+      "usePattern": "استخدم النمط: {query}"
+    },
+    "selectNodeType": {
+      "nodeType": "نوع العقدة"
+    },
+    "comboboxWithCreate": {
+      "clearSelection": "مسح التحديد",
+      "noResults": "لم يتم العثور على نتائج"
+    }
+  },
+  "renderer": {
+    "defaultInputs": {
+      "required": "*",
+      "selectDate": "اختر التاريخ",
+      "startDate": "تاريخ البدء",
+      "endDate": "تاريخ الانتهاء",
+      "startTime": "وقت البدء",
+      "endTime": "وقت الانتهاء"
+    },
+    "defaultHttpInput": {
+      "noUrlConfigured": "لم يتم تكوين رابط",
+      "httpError": "HTTP {status}: {statusText}",
+      "fetchFailed": "فشل في جلب البيانات",
+      "searching": "جاري البحث...",
+      "search": "بحث...",
+      "retry": "إعادة المحاولة",
+      "noResults": "لم يتم العثور على نتائج.",
+      "noDataAvailable": "لا توجد بيانات متاحة. قم بتكوين \"جلب عند التحميل\" أو أضف معامل بحث.",
+      "selectOption": "اختر خياراً"
+    },
+    "defaultSubmitButton": {
+      "submit": "إرسال"
+    }
   }
 }

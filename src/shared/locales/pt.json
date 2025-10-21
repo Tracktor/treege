@@ -2,5 +2,204 @@
   "validation": {
     "required": "Este campo é obrigatório",
     "invalidFormat": "Formato inválido"
+  },
+  "common": {
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "clear": "Limpar",
+    "submit": "Enviar",
+    "create": "Criar",
+    "retry": "Tentar novamente",
+    "toggle": "Alternar"
+  },
+  "editor": {
+    "actionsPanel": {
+      "addNode": "Adicionar nó",
+      "importJson": "Importar JSON",
+      "exportJson": "Exportar JSON",
+      "importSuccess": "Importação bem-sucedida!",
+      "importSuccessDesc": "O fluxo foi importado com sucesso.",
+      "invalidJson": "Arquivo JSON inválido.",
+      "invalidJsonDesc": "O arquivo deve conter arrays de nós e arestas.",
+      "parseError": "Erro ao analisar o arquivo JSON.",
+      "parseErrorDesc": "Tente corrigir o arquivo e importá-lo novamente.",
+      "downloadSuccess": "Download bem-sucedido.",
+      "downloadSuccessDesc": "O fluxo foi exportado com sucesso."
+    },
+    "conditionalEdge": {
+      "fallback": "Padrão",
+      "condition": "Condição",
+      "displayConditions": "Exibir condições",
+      "displayConditionsDesc": "Este campo será exibido se as seguintes condições forem atendidas.",
+      "label": "Rótulo (opcional)",
+      "labelPlaceholder": "Ex: Se elegível",
+      "labelDesc": "Rótulo personalizado para o botão de condição",
+      "fallbackPath": "Caminho padrão / de fallback",
+      "fallbackPathDesc": "Este caminho será seguido quando nenhuma outra condição corresponder",
+      "conditions": "Condições",
+      "field": "Campo",
+      "selectField": "Selecione um campo",
+      "noFieldsAvailable": "Nenhum campo disponível",
+      "operator": "Operador",
+      "value": "Valor",
+      "valuePlaceholder": "Ex: 18",
+      "removeCondition": "Remover condição",
+      "and": "E",
+      "or": "OU",
+      "addCondition": "Adicionar condição"
+    },
+    "inputNodeForm": {
+      "label": "Rótulo",
+      "name": "Nome",
+      "placeholder": "Espaço reservado",
+      "helperText": "Texto de ajuda",
+      "httpConfiguration": "Configuração HTTP",
+      "multipleFiles": "Arquivos múltiplos",
+      "options": "Opções",
+      "optionLabel": "Rótulo",
+      "optionValue": "Valor",
+      "addOption": "+ Adicionar opção",
+      "multipleSelection": "Seleção múltipla",
+      "validation": "Validação",
+      "required": "Obrigatório",
+      "pattern": "Padrão",
+      "errorMessage": "Mensagem de erro",
+      "advancedConfiguration": "Configuração avançada",
+      "defaultValueType": "Tipo de valor padrão",
+      "selectType": "Selecionar tipo",
+      "defaultValueTypeNone": "Nenhum",
+      "defaultValueTypeStatic": "Valor estático",
+      "defaultValueTypeReference": "Campo de referência",
+      "defaultValuesCommaSeparated": "Valores padrão (separados por vírgulas)",
+      "defaultValuesPlaceholder": "valor1, valor2, valor3",
+      "defaultChecked": "Marcado por padrão",
+      "staticValue": "Valor estático",
+      "staticValuePlaceholder": "Digite o valor padrão",
+      "referenceField": "Campo de referência",
+      "selectReferenceField": "Selecione um campo",
+      "noParentFieldsAvailable": "Nenhum campo pai disponível",
+      "addInputFieldsBeforeReference": "Adicione campos de entrada antes deste nó para referenciá-los",
+      "transformType": "Tipo de transformação",
+      "selectTransformation": "Selecionar transformação",
+      "transformNone": "Sem transformação",
+      "transformString": "Converter para string",
+      "transformNumber": "Converter para número",
+      "transformBoolean": "Converter para booleano",
+      "transformArray": "Converter para array",
+      "transformMapToObject": "Mapear para objeto",
+      "transformDesc": "Transformar o valor referenciado para corresponder ao tipo deste campo",
+      "objectMapping": "Mapeamento de objeto",
+      "sourceKey": "Chave de origem",
+      "targetKey": "Chave de destino",
+      "addMapping": "Adicionar mapeamento",
+      "objectMappingDesc": "Mapear as propriedades do objeto de origem para uma nova estrutura"
+    },
+    "flowNodeForm": {
+      "label": "Rótulo",
+      "targetId": "ID de destino",
+      "targetIdDesc": "Identificador único do fluxo de destino."
+    },
+    "groupNodeForm": {
+      "label": "Rótulo"
+    },
+    "uiNodeForm": {
+      "label": "Rótulo",
+      "type": "Tipo",
+      "typeTitle": "Título",
+      "typeDivider": "Divisor"
+    },
+    "httpConfigForm": {
+      "apiUrl": "URL da API",
+      "apiUrlPlaceholder": "https://api.exemplo.com/data",
+      "apiUrlDesc": "Use variáveis de modelo como {{fieldId}} para referenciar outros campos",
+      "httpMethod": "Método HTTP",
+      "selectMethod": "Selecionar método",
+      "methodGet": "GET",
+      "methodPost": "POST",
+      "methodPut": "PUT",
+      "methodDelete": "DELETE",
+      "methodPatch": "PATCH",
+      "headers": "Cabeçalhos",
+      "headerName": "Nome do cabeçalho",
+      "headerValue": "Valor do cabeçalho",
+      "addHeader": "Adicionar cabeçalho",
+      "requestBody": "Corpo da requisição (JSON)",
+      "insertVariable": "Inserir variável",
+      "requestBodyPlaceholder": "{\"chave\": \"valor\"}",
+      "requestBodyDesc": "Use variáveis de modelo como ${fieldId} para referenciar outros campos",
+      "responseConfiguration": "Configuração da resposta",
+      "responsePath": "Caminho da resposta",
+      "responsePathPlaceholder": "data.users ou results[0]",
+      "responsePathDesc": "Extrair dados da resposta usando notação de ponto ou indexação de array",
+      "mapToOptions": "Mapear para opções",
+      "valueField": "Campo de valor",
+      "valueFieldPlaceholder": "id",
+      "valueFieldDesc": "Campo a ser usado como valor da opção (ex: id)",
+      "labelField": "Campo de rótulo",
+      "labelFieldPlaceholder": "nome",
+      "labelFieldDesc": "Campo a ser usado como rótulo da opção (ex: nome)",
+      "searchParameter": "Parâmetro de pesquisa (opcional)",
+      "searchParameterPlaceholder": "q, pesquisa, consulta...",
+      "searchParameterDesc": "Se definido, habilita uma caixa de pesquisa que adiciona este parâmetro às chamadas de API (ex: ?q=Paris)",
+      "behavior": "Comportamento",
+      "fetchOnMount": "Buscar na montagem",
+      "showLoadingState": "Mostrar estado de carregamento"
+    },
+    "jsonNodeForm": {
+      "label": "Rótulo",
+      "json": "JSON",
+      "jsonPlaceholder": "Por favor, insira JSON."
+    },
+    "selectNodeGroup": {
+      "groupAlreadyExists": "Este grupo já existe",
+      "groupAlreadyExistsDesc": "Use o seletor para adicionar o nó a um grupo existente.",
+      "groupCreated": "Grupo criado",
+      "groupCreatedDesc": "O grupo \"{groupName}\" foi criado com sucesso.",
+      "group": "Grupo",
+      "noGroup": "Sem grupo",
+      "createNewGroup": "Criar um novo grupo",
+      "newGroup": "Novo grupo",
+      "newGroupDesc": "O grupo será criado em torno do nó selecionado.",
+      "groupName": "Nome do grupo",
+      "groupNamePlaceholder": "Ex: Passo 1 - Informações pessoais"
+    },
+    "comboboxPattern": {
+      "custom": "Personalizado: {value}",
+      "selectOrCreate": "Selecionar ou criar um padrão",
+      "search": "Pesquisar padrões...",
+      "usePattern": "Usar padrão: {query}"
+    },
+    "selectNodeType": {
+      "nodeType": "Tipo de nó"
+    },
+    "comboboxWithCreate": {
+      "clearSelection": "Limpar seleção",
+      "noResults": "Nenhum resultado encontrado"
+    }
+  },
+  "renderer": {
+    "defaultInputs": {
+      "required": "*",
+      "selectDate": "Selecionar data",
+      "startDate": "Data de início",
+      "endDate": "Data de fim",
+      "startTime": "Hora de início",
+      "endTime": "Hora de fim"
+    },
+    "defaultHttpInput": {
+      "noUrlConfigured": "Nenhuma URL configurada",
+      "httpError": "HTTP {status}: {statusText}",
+      "fetchFailed": "Falha ao buscar dados",
+      "searching": "Pesquisando...",
+      "search": "Pesquisar...",
+      "retry": "Tentar novamente",
+      "noResults": "Nenhum resultado encontrado.",
+      "noDataAvailable": "Nenhum dado disponível. Configure \"Buscar na montagem\" ou adicione um parâmetro de pesquisa.",
+      "selectOption": "Selecione uma opção"
+    },
+    "defaultSubmitButton": {
+      "submit": "Enviar"
+    }
   }
 }
