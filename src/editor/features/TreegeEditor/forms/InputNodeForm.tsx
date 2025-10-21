@@ -8,6 +8,7 @@ import SelectLanguage from "@/editor/features/TreegeEditor/inputs/SelectLanguage
 import { useAvailableParentFields } from "@/editor/hooks/useAvailableParentFields";
 import useFlowActions from "@/editor/hooks/useFlowActions";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
+import useTranslate from "@/editor/hooks/useTranslate";
 import { Button } from "@/shared/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/components/ui/collapsible";
 import { FormDescription, FormItem } from "@/shared/components/ui/form";
@@ -24,6 +25,7 @@ const InputNodeForm = () => {
   const { updateSelectedNodeData } = useFlowActions();
   const needsOptions = ["select", "radio", "autocomplete", "checkbox"].includes(selectedNode?.data?.type || "");
   const availableParentFields = useAvailableParentFields(selectedNode?.id);
+  const t = useTranslate();
 
   const { handleSubmit, Field } = useForm({
     defaultValues: {
@@ -65,7 +67,7 @@ const InputNodeForm = () => {
             name="label"
             children={(field) => (
               <FormItem className="flex-1">
-                <Label htmlFor={field.name}>Label</Label>
+                <Label htmlFor={field.name}>{t("editor.inputNodeForm.label")}</Label>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -97,7 +99,7 @@ const InputNodeForm = () => {
           name="name"
           children={(field) => (
             <FormItem>
-              <Label htmlFor={field.name}>Name</Label>
+              <Label htmlFor={field.name}>{t("editor.inputNodeForm.name")}</Label>
               <Input
                 id={field.name}
                 name={field.name}
@@ -115,7 +117,7 @@ const InputNodeForm = () => {
               name="placeholder"
               children={(field) => (
                 <FormItem className="flex-1">
-                  <Label htmlFor={field.name}>Placeholder</Label>
+                  <Label htmlFor={field.name}>{t("editor.inputNodeForm.placeholder")}</Label>
                   <Input
                     id={field.name}
                     name={field.name}
@@ -140,7 +142,7 @@ const InputNodeForm = () => {
             name="helperText"
             children={(field) => (
               <FormItem className="flex-1">
-                <Label htmlFor={field.name}>Helper text</Label>
+                <Label htmlFor={field.name}>{t("editor.inputNodeForm.helperText")}</Label>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -163,10 +165,10 @@ const InputNodeForm = () => {
           <Collapsible defaultOpen className="flex w-full max-w-[350px] flex-col gap-2">
             <CollapsibleTrigger asChild>
               <div className="flex items-center justify-between gap-4">
-                <h4 className="text-sm font-semibold">HTTP Configuration</h4>
+                <h4 className="text-sm font-semibold">{t("editor.inputNodeForm.httpConfiguration")}</h4>
                 <Button variant="ghost" size="icon" className="size-8">
                   <ChevronsUpDown />
-                  <span className="sr-only">Toggle</span>
+                  <span className="sr-only">{t("common.toggle")}</span>
                 </Button>
               </div>
             </CollapsibleTrigger>
@@ -193,7 +195,7 @@ const InputNodeForm = () => {
             children={(field) => (
               <div className="flex items-center space-x-2">
                 <Switch id="file-multiple" checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
-                <Label htmlFor="file-multiple">Multiple files</Label>
+                <Label htmlFor="file-multiple">{t("editor.inputNodeForm.multipleFiles")}</Label>
               </div>
             )}
           />
@@ -203,10 +205,10 @@ const InputNodeForm = () => {
           <Collapsible defaultOpen className="flex w-full max-w-[350px] flex-col gap-2">
             <CollapsibleTrigger asChild>
               <div className="flex items-center justify-between gap-4">
-                <h4 className="text-sm font-semibold">Options</h4>
+                <h4 className="text-sm font-semibold">{t("editor.inputNodeForm.options")}</h4>
                 <Button variant="ghost" size="icon" className="size-8">
                   <ChevronsUpDown />
-                  <span className="sr-only">Toggle</span>
+                  <span className="sr-only">{t("common.toggle")}</span>
                 </Button>
               </div>
             </CollapsibleTrigger>
@@ -223,7 +225,7 @@ const InputNodeForm = () => {
                           <Field name={`options[${index}].label`}>
                             {(subField) => (
                               <Input
-                                placeholder="Label"
+                                placeholder={t("editor.inputNodeForm.optionLabel")}
                                 value={subField.state.value?.[selectedLanguage] || ""}
                                 onChange={({ target }) => {
                                   subField.handleChange({
@@ -240,7 +242,7 @@ const InputNodeForm = () => {
                           <Field name={`options[${index}].value`}>
                             {(subField) => (
                               <Input
-                                placeholder="Value"
+                                placeholder={t("editor.inputNodeForm.optionValue")}
                                 value={subField.state.value || ""}
                                 onChange={({ target }) => subField.handleChange(target.value)}
                               />
@@ -271,7 +273,7 @@ const InputNodeForm = () => {
                         handleSubmit().then();
                       }}
                     >
-                      + Add option
+                      {t("editor.inputNodeForm.addOption")}
                     </Button>
                   </div>
                 )}
@@ -283,7 +285,7 @@ const InputNodeForm = () => {
                   children={(field) => (
                     <div className="flex items-center space-x-2">
                       <Switch id="multiple" checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
-                      <Label htmlFor="multiple">Multiple selection</Label>
+                      <Label htmlFor="multiple">{t("editor.inputNodeForm.multipleSelection")}</Label>
                     </div>
                   )}
                 />
@@ -295,10 +297,10 @@ const InputNodeForm = () => {
         <Collapsible className="flex w-full max-w-[350px] flex-col gap-2">
           <CollapsibleTrigger asChild>
             <div className="flex items-center justify-between gap-4">
-              <h4 className="text-sm font-semibold">Validation</h4>
+              <h4 className="text-sm font-semibold">{t("editor.inputNodeForm.validation")}</h4>
               <Button variant="ghost" size="icon" className="size-8">
                 <ChevronsUpDown />
-                <span className="sr-only">Toggle</span>
+                <span className="sr-only">{t("common.toggle")}</span>
               </Button>
             </div>
           </CollapsibleTrigger>
@@ -310,7 +312,7 @@ const InputNodeForm = () => {
                 <FormItem>
                   <div className="flex items-center space-x-2">
                     <Switch id="required" checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
-                    <Label htmlFor="required">Required</Label>
+                    <Label htmlFor="required">{t("editor.inputNodeForm.required")}</Label>
                   </div>
                 </FormItem>
               )}
@@ -320,7 +322,7 @@ const InputNodeForm = () => {
               name="pattern"
               children={(field) => (
                 <FormItem>
-                  <Label htmlFor={field.name}>Pattern</Label>
+                  <Label htmlFor={field.name}>{t("editor.inputNodeForm.pattern")}</Label>
                   <ComboboxPattern value={field.state.value} onValueChange={field.handleChange} />
                 </FormItem>
               )}
@@ -331,7 +333,7 @@ const InputNodeForm = () => {
                 name="errorMessage"
                 children={(field) => (
                   <FormItem className="flex-1">
-                    <Label htmlFor={field.name}>Error message</Label>
+                    <Label htmlFor={field.name}>{t("editor.inputNodeForm.errorMessage")}</Label>
                     <Input
                       id={field.name}
                       name={field.name}
@@ -355,10 +357,10 @@ const InputNodeForm = () => {
         <Collapsible className="flex w-full max-w-[350px] flex-col gap-2">
           <CollapsibleTrigger asChild>
             <div className="flex items-center justify-between gap-4">
-              <h4 className="text-sm font-semibold">Advanced Configuration</h4>
+              <h4 className="text-sm font-semibold">{t("editor.inputNodeForm.advancedConfiguration")}</h4>
               <Button variant="ghost" size="icon" className="size-8">
                 <ChevronsUpDown />
-                <span className="sr-only">Toggle</span>
+                <span className="sr-only">{t("common.toggle")}</span>
               </Button>
             </div>
           </CollapsibleTrigger>
@@ -368,7 +370,7 @@ const InputNodeForm = () => {
               {(defaultValueField) => (
                 <>
                   <FormItem>
-                    <Label htmlFor="defaultValueType">Default Value Type</Label>
+                    <Label htmlFor="defaultValueType">{t("editor.inputNodeForm.defaultValueType")}</Label>
                     <Select
                       value={defaultValueField.state.value?.type || "none"}
                       onValueChange={(value: "none" | "static" | "reference") => {
@@ -376,12 +378,12 @@ const InputNodeForm = () => {
                       }}
                     >
                       <SelectTrigger id="defaultValueType">
-                        <SelectValue placeholder="Select type" />
+                        <SelectValue placeholder={t("editor.inputNodeForm.selectType")} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="none">None</SelectItem>
-                        <SelectItem value="static">Static Value</SelectItem>
-                        <SelectItem value="reference">Reference Field</SelectItem>
+                        <SelectItem value="none">{t("editor.inputNodeForm.defaultValueTypeNone")}</SelectItem>
+                        <SelectItem value="static">{t("editor.inputNodeForm.defaultValueTypeStatic")}</SelectItem>
+                        <SelectItem value="reference">{t("editor.inputNodeForm.defaultValueTypeReference")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormItem>
@@ -395,10 +397,10 @@ const InputNodeForm = () => {
                         if ((inputType === "select" || inputType === "checkbox") && selectedNode?.data?.multiple) {
                           return (
                             <FormItem>
-                              <Label htmlFor="staticValue">Default Values (comma-separated)</Label>
+                              <Label htmlFor="staticValue">{t("editor.inputNodeForm.defaultValuesCommaSeparated")}</Label>
                               <Input
                                 id="staticValue"
-                                placeholder="value1, value2, value3"
+                                placeholder={t("editor.inputNodeForm.defaultValuesPlaceholder")}
                                 value={Array.isArray(field.state.value) ? field.state.value.join(", ") : ""}
                                 onChange={({ target }) => {
                                   const values = target.value
@@ -422,7 +424,7 @@ const InputNodeForm = () => {
                                   checked={!!field.state.value}
                                   onCheckedChange={(value: boolean) => field.handleChange(value)}
                                 />
-                                <Label htmlFor="staticValue">Default Checked</Label>
+                                <Label htmlFor="staticValue">{t("editor.inputNodeForm.defaultChecked")}</Label>
                               </div>
                             </FormItem>
                           );
@@ -431,10 +433,10 @@ const InputNodeForm = () => {
                         // Default - show text input
                         return (
                           <FormItem>
-                            <Label htmlFor="staticValue">Static Value</Label>
+                            <Label htmlFor="staticValue">{t("editor.inputNodeForm.staticValue")}</Label>
                             <Input
                               id="staticValue"
-                              placeholder="Enter default value"
+                              placeholder={t("editor.inputNodeForm.staticValuePlaceholder")}
                               value={typeof field.state.value === "string" ? field.state.value : ""}
                               onChange={({ target }) => field.handleChange(target.value || "")}
                             />
@@ -449,7 +451,7 @@ const InputNodeForm = () => {
                       <Field name="defaultValue.referenceField">
                         {(field) => (
                           <FormItem>
-                            <Label htmlFor="referenceField">Reference Field</Label>
+                            <Label htmlFor="referenceField">{t("editor.inputNodeForm.referenceField")}</Label>
                             <Select
                               value={field.state.value || ""}
                               onValueChange={(value) => {
@@ -457,12 +459,12 @@ const InputNodeForm = () => {
                               }}
                             >
                               <SelectTrigger id="referenceField">
-                                <SelectValue placeholder="Select a field" />
+                                <SelectValue placeholder={t("editor.inputNodeForm.selectReferenceField")} />
                               </SelectTrigger>
                               <SelectContent>
                                 {availableParentFields.length === 0 ? (
                                   <SelectItem value="none" disabled>
-                                    No parent fields available
+                                    {t("editor.inputNodeForm.noParentFieldsAvailable")}
                                   </SelectItem>
                                 ) : (
                                   availableParentFields.map((availField) => (
@@ -474,7 +476,7 @@ const InputNodeForm = () => {
                               </SelectContent>
                             </Select>
                             {availableParentFields.length === 0 && (
-                              <FormDescription>Add input fields before this node to reference them</FormDescription>
+                              <FormDescription>{t("editor.inputNodeForm.addInputFieldsBeforeReference")}</FormDescription>
                             )}
                           </FormItem>
                         )}
@@ -483,7 +485,7 @@ const InputNodeForm = () => {
                       <Field name="defaultValue.transformFunction">
                         {(field) => (
                           <FormItem>
-                            <Label htmlFor="transformFunction">Transform Type</Label>
+                            <Label htmlFor="transformFunction">{t("editor.inputNodeForm.transformType")}</Label>
                             <Select
                               value={field.state.value || "none"}
                               onValueChange={(value: "none" | "toString" | "toNumber" | "toBoolean" | "toArray" | "toObject") => {
@@ -502,18 +504,18 @@ const InputNodeForm = () => {
                               }}
                             >
                               <SelectTrigger id="transformFunction">
-                                <SelectValue placeholder="Select transformation" />
+                                <SelectValue placeholder={t("editor.inputNodeForm.selectTransformation")} />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="none">No transformation</SelectItem>
-                                <SelectItem value="toString">Convert to String</SelectItem>
-                                <SelectItem value="toNumber">Convert to Number</SelectItem>
-                                <SelectItem value="toBoolean">Convert to Boolean</SelectItem>
-                                <SelectItem value="toArray">Convert to Array</SelectItem>
-                                <SelectItem value="toObject">Map to Object</SelectItem>
+                                <SelectItem value="none">{t("editor.inputNodeForm.transformNone")}</SelectItem>
+                                <SelectItem value="toString">{t("editor.inputNodeForm.transformString")}</SelectItem>
+                                <SelectItem value="toNumber">{t("editor.inputNodeForm.transformNumber")}</SelectItem>
+                                <SelectItem value="toBoolean">{t("editor.inputNodeForm.transformBoolean")}</SelectItem>
+                                <SelectItem value="toArray">{t("editor.inputNodeForm.transformArray")}</SelectItem>
+                                <SelectItem value="toObject">{t("editor.inputNodeForm.transformMapToObject")}</SelectItem>
                               </SelectContent>
                             </Select>
-                            <FormDescription>Transform the referenced value to match this field&#39;s type</FormDescription>
+                            <FormDescription>{t("editor.inputNodeForm.transformDesc")}</FormDescription>
                           </FormItem>
                         )}
                       </Field>
@@ -522,14 +524,14 @@ const InputNodeForm = () => {
                         <Field name="defaultValue.objectMapping" mode="array">
                           {(mappingField) => (
                             <FormItem>
-                              <Label>Object Mapping</Label>
+                              <Label>{t("editor.inputNodeForm.objectMapping")}</Label>
                               <div className="space-y-2">
                                 {mappingField.state.value?.map((_, index) => (
                                   <div key={`mapping-${index}`} className="flex gap-2 items-center">
                                     <Field name={`defaultValue.objectMapping[${index}].sourceKey`}>
                                       {(sourceField) => (
                                         <Input
-                                          placeholder="Source key"
+                                          placeholder={t("editor.inputNodeForm.sourceKey")}
                                           value={sourceField.state.value || ""}
                                           onChange={({ target }) => sourceField.handleChange(target.value)}
                                         />
@@ -541,7 +543,7 @@ const InputNodeForm = () => {
                                     <Field name={`defaultValue.objectMapping[${index}].targetKey`}>
                                       {(targetField) => (
                                         <Input
-                                          placeholder="Target key"
+                                          placeholder={t("editor.inputNodeForm.targetKey")}
                                           value={targetField.state.value || ""}
                                           onChange={({ target }) => targetField.handleChange(target.value)}
                                         />
@@ -573,10 +575,10 @@ const InputNodeForm = () => {
                                   }}
                                 >
                                   <Plus className="h-4 w-4 mr-2" />
-                                  Add Mapping
+                                  {t("editor.inputNodeForm.addMapping")}
                                 </Button>
                               </div>
-                              <FormDescription>Map properties from the source object to a new structure</FormDescription>
+                              <FormDescription>{t("editor.inputNodeForm.objectMappingDesc")}</FormDescription>
                             </FormItem>
                           )}
                         </Field>

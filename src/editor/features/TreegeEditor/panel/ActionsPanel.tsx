@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 import { ChangeEvent, useRef } from "react";
 import { toast } from "sonner";
 import { defaultNode } from "@/editor/constants/defaultNode";
+import useTranslate from "@/editor/hooks/useTranslate";
 import { Button } from "@/shared/components/ui/button";
 
 export interface ActionsPanelProps {
@@ -15,6 +16,7 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
   const nodes = useNodes();
   const edges = useEdges();
   const inputFileRef = useRef<HTMLInputElement>(null);
+  const t = useTranslate();
 
   const handleAddNode = () => {
     const centerX = (window.innerWidth || 0) / 2;
@@ -48,17 +50,17 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
         if (json && Array.isArray(json.nodes) && Array.isArray(json.edges)) {
           setNodes(json.nodes);
           setEdges(json.edges);
-          toast.success("Import successful!", {
-            description: "The flow has been imported successfully.",
+          toast.success(t("editor.actionsPanel.importSuccess"), {
+            description: t("editor.actionsPanel.importSuccessDesc"),
           });
         } else {
-          toast.error("Invalid JSON file.", {
-            description: "The file must contain nodes and edges arrays.",
+          toast.error(t("editor.actionsPanel.invalidJson"), {
+            description: t("editor.actionsPanel.invalidJsonDesc"),
           });
         }
       } catch (error) {
-        toast.error("Error parsing JSON file.", {
-          description: "Try to fix the file and import it again.",
+        toast.error(t("editor.actionsPanel.parseError"), {
+          description: t("editor.actionsPanel.parseErrorDesc"),
         });
       }
 
@@ -79,8 +81,8 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
     a.download = "treege.json";
     a.click();
 
-    toast.success("Download successfully.", {
-      description: "The flow has been exported successfully.",
+    toast.success(t("editor.actionsPanel.downloadSuccess"), {
+      description: t("editor.actionsPanel.downloadSuccessDesc"),
     });
 
     onExportJson?.({ edges, nodes });
@@ -93,16 +95,16 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
   return (
     <Panel position="top-right" className="flex gap-2">
       <Button variant="outline" size="sm" onClick={handleAddNode}>
-        <Plus /> Add Node
+        <Plus /> {t("editor.actionsPanel.addNode")}
       </Button>
       <Button variant="outline" size="sm" onClick={() => inputFileRef?.current?.click()}>
-        <Download /> Import Json
+        <Download /> {t("editor.actionsPanel.importJson")}
       </Button>
       <Button variant="outline" size="sm" onClick={handleExport}>
-        <ArrowRightFromLine /> Export Json
+        <ArrowRightFromLine /> {t("editor.actionsPanel.exportJson")}
       </Button>
       <Button variant="outline" size="sm" onClick={handleSave}>
-        <Save /> Save
+        <Save /> {t("common.save")}
       </Button>
       <input type="file" accept="application/json,.json" className="hidden" ref={inputFileRef} onChange={handleImport} />
     </Panel>
