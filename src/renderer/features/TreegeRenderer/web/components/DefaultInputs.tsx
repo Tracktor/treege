@@ -252,7 +252,7 @@ export const DefaultDateInput = ({ node }: InputRenderProps) => {
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="outline" id={name} className="w-full justify-between font-normal">
-            {dateValue ? dateValue.toLocaleDateString() : t(node.data.placeholder) || "Select date"}
+            {dateValue ? dateValue.toLocaleDateString() : t(node.data.placeholder) || t("renderer.defaultInputs.selectDate")}
             <ChevronDownIcon className="size-4" />
           </Button>
         </PopoverTrigger>

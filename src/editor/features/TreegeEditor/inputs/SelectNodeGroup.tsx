@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 import { useState } from "react";
 import { toast } from "sonner";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
+import useTranslate from "@/editor/hooks/useTranslate";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
@@ -18,6 +19,7 @@ const SelectNodeGroup = () => {
   const { setNodes } = useReactFlow();
   const currentParentId = selectedNode?.parentId || "none";
   const isGroup = isGroupNode(selectedNode);
+  const translate = useTranslate();
 
   if (isGroup) {
     return null;
@@ -124,15 +126,15 @@ const SelectNodeGroup = () => {
 
   return (
     <div className="space-y-2">
-      <Label>Group</Label>
+      <Label>{translate("editor.selectNodeGroup.group")}</Label>
       <div className="flex gap-2">
         <Select value={currentParentId} onValueChange={handleGroupChange}>
           <SelectTrigger className="flex-1">
-            <SelectValue placeholder="No group" />
+            <SelectValue placeholder={translate("editor.selectNodeGroup.noGroup")} />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value="none">No group</SelectItem>
+              <SelectItem value="none">{translate("editor.selectNodeGroup.noGroup")}</SelectItem>
               {groupNodes.map((node) => (
                 <SelectItem key={node.id} value={node.id}>
                   {node.data.label?.en ? String(node.data.label?.en) : node.id}

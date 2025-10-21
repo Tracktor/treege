@@ -1,6 +1,7 @@
 import { nodeTypes } from "@/editor/constants/nodeTypes";
 import useFlowActions from "@/editor/hooks/useFlowActions";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
+import useTranslate from "@/editor/hooks/useTranslate";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { isGroupNode } from "@/shared/utils/nodeTypeGuards";
 
@@ -9,13 +10,14 @@ const SelectNodeType = () => {
   const { updateSelectedNodeType } = useFlowActions();
   const value = selectedNode?.type || "";
   const isGroup = isGroupNode(selectedNode);
+  const translate = useTranslate();
 
   return (
     <SelectGroup>
-      <SelectLabel>Node Type</SelectLabel>
+      <SelectLabel>{translate("editor.selectNodeType.nodeType")}</SelectLabel>
       <Select value={value} onValueChange={(newValue) => updateSelectedNodeType(newValue)} disabled={isGroup}>
         <SelectTrigger className="w-full">
-          <SelectValue placeholder="Node Type" />
+          <SelectValue placeholder={translate("editor.selectNodeType.nodeType")} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
