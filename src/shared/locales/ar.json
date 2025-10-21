@@ -123,6 +123,7 @@
       "methodPut": "PUT",
       "methodDelete": "DELETE",
       "methodPatch": "PATCH",
+      "noFieldsAvailable": "لا توجد حقول متاحة",
       "headers": "رؤوس",
       "headerName": "اسم الرأس",
       "headerValue": "قيمة الرأس",

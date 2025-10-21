@@ -123,6 +123,7 @@
       "methodPut": "PUT",
       "methodDelete": "DELETE",
       "methodPatch": "PATCH",
+      "noFieldsAvailable": "No hay campos disponibles",
       "headers": "Encabezados",
       "headerName": "Nombre del encabezado",
       "headerValue": "Valor del encabezado",

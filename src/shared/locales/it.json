@@ -123,6 +123,7 @@
       "methodPut": "PUT",
       "methodDelete": "DELETE",
       "methodPatch": "PATCH",
+      "noFieldsAvailable": "Nessun campo disponibile",
       "headers": "Intestazioni",
       "headerName": "Nome intestazione",
       "headerValue": "Valore intestazione",

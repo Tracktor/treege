@@ -2,6 +2,7 @@ import { useForm } from "@tanstack/react-form";
 import { Plus, Variable, X } from "lucide-react";
 import { useAvailableParentFields } from "@/editor/hooks/useAvailableParentFields";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
+import useTranslate from "@/editor/hooks/useTranslate";
 import { Button } from "@/shared/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/components/ui/dropdown-menu";
 import { FormDescription, FormItem } from "@/shared/components/ui/form";
@@ -21,6 +22,7 @@ interface HttpConfigFormProps {
 
 const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
   const { selectedNode } = useNodesSelection<InputNodeData>();
+  const t = useTranslate();
   const availableParentFields = useAvailableParentFields(selectedNode?.id);
 
   const { handleSubmit, Field } = useForm({
@@ -81,7 +83,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     {availableParentFields.length === 0 ? (
-                      <DropdownMenuItem disabled>No fields available</DropdownMenuItem>
+                      <DropdownMenuItem disabled>{t("editor.httpConfigForm.noFieldsAvailable")}</DropdownMenuItem>
                     ) : (
                       availableParentFields.map((availField) => (
                         <DropdownMenuItem
@@ -208,7 +210,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           {availableParentFields.length === 0 ? (
-                            <DropdownMenuItem disabled>No fields available</DropdownMenuItem>
+                            <DropdownMenuItem disabled>{t("editor.httpConfigForm.noFieldsAvailable")}</DropdownMenuItem>
                           ) : (
                             availableParentFields.map((availField) => (
                               <DropdownMenuItem
