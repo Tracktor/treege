@@ -364,7 +364,7 @@ export const DefaultTimeInput = ({ node }: InputRenderProps) => {
         type="time"
         id={name}
         name={name}
-        value={value || ""}
+        value={value ?? ""}
         onChange={(e) => setFieldValue(fieldId, e.target.value)}
         placeholder={t(node.data.placeholder)}
         className="bg-background"
