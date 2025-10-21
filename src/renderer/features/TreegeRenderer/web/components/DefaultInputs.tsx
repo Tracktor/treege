@@ -2,6 +2,7 @@ import { ChevronDownIcon } from "lucide-react";
 import * as React from "react";
 import { ChangeEvent, useState } from "react";
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
+import DefaultAddressInput from "@/renderer/features/TreegeRenderer/web/components/DefaultAddressInput";
 import DefaultHttpInput from "@/renderer/features/TreegeRenderer/web/components/DefaultHttpInput";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
@@ -531,7 +532,7 @@ export const DefaultTextAreaInput = ({ node }: InputRenderProps) => {
 };
 
 export const defaultInputRenderers = {
-  address: DefaultTextInput,
+  address: DefaultAddressInput,
   autocomplete: DefaultTextInput,
   checkbox: DefaultCheckboxInput,
   date: DefaultDateInput,

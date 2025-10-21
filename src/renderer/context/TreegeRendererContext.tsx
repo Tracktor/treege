@@ -4,12 +4,13 @@ import { FormValues } from "@/renderer/types/renderer";
 import { TreegeNodeData } from "@/shared/types/node";
 
 export type TreegeRendererContextValue = {
-  formValues: FormValues;
+  edges: Edge[];
   formErrors: Record<string, string>;
-  setFieldValue: (fieldName: string, value: any) => void;
+  formValues: FormValues;
+  googleApiKey?: string;
   language: string;
   nodes: Node<TreegeNodeData>[];
-  edges: Edge[];
+  setFieldValue: (fieldName: string, value: any) => void;
 };
 
 export interface TreegeRendererProviderProps extends PropsWithChildren {
@@ -30,6 +31,7 @@ export const useTreegeRendererContext = () => {
       edges: [],
       formErrors: {},
       formValues: {},
+      googleApiKey: undefined,
       language: "",
       nodes: [],
       setFieldValue: () => {},

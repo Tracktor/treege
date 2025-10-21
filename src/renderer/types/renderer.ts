@@ -98,4 +98,9 @@ export type TreegeRendererProps = {
    * @default "dark"
    */
   theme?: "dark" | "light";
+  /**
+   * Google Maps API key for address autocomplete
+   * If not provided, falls back to free Nominatim (OpenStreetMap)
+   */
+  googleApiKey?: string;
 };

@@ -69,6 +69,7 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.13",
+    "@types/google.maps": "^3.58.1",
     "@types/node": "^24.5.2",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
