@@ -54,9 +54,10 @@ const useFlowConnections = () => {
       if (!connectionState.isValid) {
         const { clientX, clientY } = "changedTouches" in event ? event.changedTouches[0] : event;
         const sourceNode = connectionState.fromNode;
-        const sourceId = connectionState.fromNode?.id || "";
 
-        // Check if source node can have multiple children
+        if (!sourceNode) return; // no valid start node, abort
+
+        const sourceId = sourceNode.id;
         const edges = getEdges();
         const existingEdgesFromSource = edges.filter((edge) => edge.source === sourceId);
         const isSourceInputNode = sourceNode && isInputNode(sourceNode);
