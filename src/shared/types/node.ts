@@ -1,10 +1,16 @@
-import { Node } from "@xyflow/react";
+import { Edge, Node } from "@xyflow/react";
 import { INPUT_TYPE } from "@/shared/constants/inputType";
 import { UI_TYPE } from "@/shared/constants/uiType";
 import { Translatable } from "@/shared/types/translate";
 
 export type UIType = (typeof UI_TYPE)[keyof typeof UI_TYPE];
 export type InputType = (typeof INPUT_TYPE)[keyof typeof INPUT_TYPE];
+
+export interface Flow {
+  id: string;
+  nodes: Node[];
+  edges: Edge[];
+}
 
 export type InputOption = {
   /**

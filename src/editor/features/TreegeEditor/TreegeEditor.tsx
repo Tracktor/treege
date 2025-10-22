@@ -12,7 +12,7 @@ import { ThemeProvider } from "@/shared/context/ThemeContext";
 
 import "@/editor/styles/style.css";
 
-const Flow = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave, theme }: TreegeEditorProps) => {
+const Flow = ({ edges, nodes, flow, onExportJson, onSave, theme }: TreegeEditorProps) => {
   const { onConnect, onConnectEnd, onEdgesDelete, isValidConnection } = useFlowConnections();
 
   return (
@@ -22,8 +22,8 @@ const Flow = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave, t
       selectNodesOnDrag={false}
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
-      defaultEdges={defaultEdges || defaultFlow?.edges || []}
-      defaultNodes={defaultNodes || defaultFlow?.nodes || []}
+      defaultEdges={edges || flow?.edges || []}
+      defaultNodes={nodes || flow?.nodes || []}
       onConnect={onConnect}
       onConnectEnd={onConnectEnd}
       onEdgesDelete={onEdgesDelete}
@@ -39,27 +39,12 @@ const Flow = ({ defaultEdges, defaultNodes, defaultFlow, onExportJson, onSave, t
   );
 };
 
-const TreegeEditor = ({
-  defaultEdges,
-  defaultNodes,
-  defaultFlow,
-  onExportJson,
-  onSave,
-  theme = "dark",
-  language = "en",
-}: TreegeEditorProps) => (
+const TreegeEditor = ({ edges, nodes, flow, onExportJson, onSave, theme = "dark", language = "en" }: TreegeEditorProps) => (
   <ThemeProvider defaultTheme={theme}>
     <TreegeEditorProvider value={{ language }}>
       <Toaster position="bottom-center" />
       <ReactFlowProvider>
-        <Flow
-          defaultEdges={defaultEdges}
-          defaultNodes={defaultNodes}
-          onExportJson={onExportJson}
-          onSave={onSave}
-          defaultFlow={defaultFlow}
-          theme={theme}
-        />
+        <Flow edges={edges} nodes={nodes} onExportJson={onExportJson} onSave={onSave} flow={flow} theme={theme} />
       </ReactFlowProvider>
     </TreegeEditorProvider>
   </ThemeProvider>

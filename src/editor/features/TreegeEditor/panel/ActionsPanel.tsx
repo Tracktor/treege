@@ -1,4 +1,4 @@
-import { Edge, Node, Panel, useEdges, useNodes, useReactFlow } from "@xyflow/react";
+import { Panel, useEdges, useNodes, useReactFlow } from "@xyflow/react";
 import { ArrowRightFromLine, Download, Plus, Save } from "lucide-react";
 import { nanoid } from "nanoid";
 import { ChangeEvent, useRef } from "react";
@@ -6,11 +6,15 @@ import { toast } from "sonner";
 import { defaultNode } from "@/editor/constants/defaultNode";
 import useTranslate from "@/editor/hooks/useTranslate";
 import { Button } from "@/shared/components/ui/button";
+import { Flow } from "@/shared/types/node";
 
 export interface ActionsPanelProps {
-  onExportJson?: (data: { nodes: Node[]; edges: Edge[] }) => void;
-  onSave?: (data: { nodes: Node[]; edges: Edge[] }) => void;
+  onExportJson?: (data: Flow) => void;
+  onSave?: (data: Flow) => void;
 }
+
+const id = nanoid();
+
 const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
   const { setNodes, setEdges, addNodes, screenToFlowPosition } = useReactFlow();
   const nodes = useNodes();
@@ -73,7 +77,8 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
   };
 
   const handleExport = () => {
-    const blob = new Blob([JSON.stringify({ edges, nodes }, null, 2)], { type: "application/json" });
+    const data = { edges, id, nodes };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
 
@@ -85,11 +90,11 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
       description: t("editor.actionsPanel.downloadSuccessDesc"),
     });
 
-    onExportJson?.({ edges, nodes });
+    onExportJson?.(data);
   };
 
   const handleSave = () => {
-    onSave?.({ edges, nodes });
+    onSave?.({ edges, id, nodes });
   };
 
   return (

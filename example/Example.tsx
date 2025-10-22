@@ -1,7 +1,7 @@
-import { Edge, Node } from "@xyflow/react";
+import { Flow } from "@/shared/types/node";
 import ExampleLayout from "~/example/ExampleLayout";
 import example from "~/example/json/treege.json";
 
-const Example = () => <ExampleLayout defaultFlow={example as { nodes: Node[]; edges: Edge[] }} />;
+const Example = () => <ExampleLayout flow={example as Flow} />;
 
 export default Example;

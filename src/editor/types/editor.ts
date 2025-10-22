@@ -1,19 +1,20 @@
 import { Edge, Node } from "@xyflow/react";
+import { Flow } from "@/shared/types/node";
 
 export interface TreegeEditorProps {
-  /**
-   * Default nodes to initialize the nodes in the flow.
-   */
-  defaultNodes?: Node[];
-  /**
-   * Default edges to initialize the edges in the flow.
-   */
-  defaultEdges?: Edge[];
   /**
    * Default flow structure containing combined nodes and edges.
    * Note: Individual defaultNodes/defaultEdges props take precedence over this.
    */
-  defaultFlow?: { nodes: Node[]; edges: Edge[] };
+  flow?: Flow;
+  /**
+   * Default nodes to initialize the nodes in the flow.
+   */
+  nodes?: Node[];
+  /**
+   * Default edges to initialize the edges in the flow.
+   */
+  edges?: Edge[];
   /**
    * Callback function triggered when exporting JSON data.
    */
@@ -22,7 +23,7 @@ export interface TreegeEditorProps {
    * Callback function triggered when saving the flow data.
    * @param data
    */
-  onSave?: (data: { nodes: Node[]; edges: Edge[] }) => void;
+  onSave?: (data: Flow) => void;
   /**
    * Theme for the editor interface.
    */

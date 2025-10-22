@@ -1,7 +1,7 @@
 import { Edge, Node } from "@xyflow/react";
 import { FormEvent, ReactNode } from "react";
 import { ConditionalEdgeData } from "@/shared/types/edge";
-import { InputNodeData, InputType, TreegeNodeData, UINodeData, UIType } from "@/shared/types/node";
+import { Flow, InputNodeData, InputType, TreegeNodeData, UINodeData, UIType } from "@/shared/types/node";
 
 /**
  * Form values stored during rendering
@@ -57,6 +57,10 @@ export type TreegeRendererComponents = {
  * Props for the TreegeRenderer component
  */
 export type TreegeRendererProps = {
+  /**
+   * Flow structure containing nodes and edges
+   */
+  flow?: Flow;
   /**
    * Flow nodes from the editor
    */

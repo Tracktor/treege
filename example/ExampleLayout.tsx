@@ -6,21 +6,22 @@ import { FormValues, TreegeRenderer } from "@/renderer";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { Switch } from "@/shared/components/ui/switch";
 import { Language, LANGUAGES } from "@/shared/constants/languages";
+import { Flow } from "@/shared/types/node";
 
 const EditorPanel = ({
-  defaultFlow,
+  flow,
   onSave,
   theme,
   language,
 }: {
-  defaultFlow?: { nodes: Node[]; edges: Edge[] };
-  onSave: (data: { nodes: Node[]; edges: Edge[] }) => void;
+  flow?: Flow;
+  onSave: (data: Flow) => void;
   theme: "light" | "dark";
   language: Language;
 }) => (
   <div className="h-full flex flex-col">
     <div className="flex-1">
-      <TreegeEditor onSave={onSave} defaultFlow={defaultFlow} theme={theme} language={language} />
+      <TreegeEditor onSave={onSave} flow={flow} theme={theme} language={language} />
     </div>
   </div>
 );
@@ -123,7 +124,7 @@ const RendererPanel = ({
   );
 };
 
-const ExampleLayout = ({ defaultFlow }: { defaultFlow?: { nodes: Node[]; edges: Edge[] } }) => {
+const ExampleLayout = ({ flow }: { flow?: Flow }) => {
   const [savedNodes, setSavedNodes] = useState<Node[]>([]);
   const [savedEdges, setSavedEdges] = useState<Edge[]>([]);
   const [theme, setTheme] = useState<"light" | "dark">("dark");
@@ -135,10 +136,9 @@ const ExampleLayout = ({ defaultFlow }: { defaultFlow?: { nodes: Node[]; edges: 
   };
 
   return (
-    // <ThemeProvider theme={theme}>
     <div className="h-screen w-screen flex">
       <div className="w-1/2 border-r">
-        <EditorPanel onSave={handleSave} defaultFlow={defaultFlow} theme={theme} language={language} />
+        <EditorPanel onSave={handleSave} flow={flow} theme={theme} language={language} />
       </div>
       <div className="w-1/2">
         <RendererPanel
