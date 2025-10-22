@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 import { ChangeEvent, useRef } from "react";
 import { toast } from "sonner";
 import { defaultNode } from "@/editor/constants/defaultNode";
+import { useTreegeEditorContext } from "@/editor/context/TreegeEditorContext";
 import useTranslate from "@/editor/hooks/useTranslate";
 import { Button } from "@/shared/components/ui/button";
 import { Flow } from "@/shared/types/node";
@@ -13,10 +14,12 @@ export interface ActionsPanelProps {
   onSave?: (data: Flow) => void;
 }
 
-const id = nanoid();
+const uniqueId = nanoid();
 
 const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
+  const { flowId, setFlowId } = useTreegeEditorContext();
   const { setNodes, setEdges, addNodes, screenToFlowPosition } = useReactFlow();
+  const id = flowId || uniqueId;
   const nodes = useNodes();
   const edges = useEdges();
   const inputFileRef = useRef<HTMLInputElement>(null);
@@ -90,10 +93,18 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
       description: t("editor.actionsPanel.downloadSuccessDesc"),
     });
 
+    if (!flowId) {
+      setFlowId?.(id);
+    }
+
     onExportJson?.(data);
   };
 
   const handleSave = () => {
+    if (!flowId) {
+      setFlowId?.(id);
+    }
+
     onSave?.({ edges, id, nodes });
   };
 
