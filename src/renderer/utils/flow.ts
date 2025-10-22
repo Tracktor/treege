@@ -228,17 +228,23 @@ export const getFlowRenderState = (
  * 3. Redirects edges that point to FlowNodes to the first node of the target flow
  * 4. Connects the last nodes of sub-flows to the nodes that followed the FlowNode
  *
- * @param flowsInput - A single Flow or an array of flows where the first is the main flow, others are sub-flows
+ * @param flows - A single Flow or an array of flows where the first is the main flow, others are sub-flows
  * @returns An object containing the flattened nodes, edges, and normalized flows array
  */
-export const flattenFlows = (flowsInput: Flow | Flow[]): { nodes: Node<TreegeNodeData>[]; edges: Edge[]; flows: Flow[] } => {
+export const flattenFlows = (flows: Flow | Flow[]): { nodes: Node<TreegeNodeData>[]; edges: Edge[]; flows: Flow[] } => {
   // Normalize to array
-  const flows = Array.isArray(flowsInput) ? flowsInput : [flowsInput];
-  const mainFlow = flows[0];
+  const flowArray = Array.isArray(flows) ? flows : [flows];
+  const mainFlow = flowArray[0];
 
   if (!mainFlow) {
-    return { edges: [], flows, nodes: [] };
+    return { edges: [], flows: flowArray, nodes: [] };
   }
+
+  // If only one flow, no need to flatten - just return it as is
+  if (flowArray.length === 1) {
+    return { edges: mainFlow.edges, flows: flowArray, nodes: mainFlow.nodes };
+  }
+
   const mergedNodes: Node<TreegeNodeData>[] = [];
   const mergedEdges: Edge[] = [...mainFlow.edges];
   const processedFlowIds = new Set<string>([mainFlow.id]);
@@ -253,7 +259,7 @@ export const flattenFlows = (flowsInput: Flow | Flow[]): { nodes: Node<TreegeNod
         const targetFlowId = flowData.targetId;
 
         if (targetFlowId && !processedFlowIds.has(targetFlowId)) {
-          const targetFlow = flows.find((flow) => flow.id === targetFlowId);
+          const targetFlow = flowArray.find((flow) => flow.id === targetFlowId);
 
           if (targetFlow) {
             processedFlowIds.add(targetFlowId);
@@ -322,7 +328,7 @@ export const flattenFlows = (flowsInput: Flow | Flow[]): { nodes: Node<TreegeNod
     if (subFlowEdges && subFlowEdges.length > 0) {
       // Find all "terminal" nodes of the sub-flow (nodes that have no outgoing edges within the sub-flow)
       const subFlowNodeIds = new Set<string>();
-      flows.forEach((flow) => {
+      flowArray.forEach((flow) => {
         if (flow.nodes.some((n) => n.id === firstNodeId)) {
           flow.nodes.forEach((n) => subFlowNodeIds.add(n.id));
         }
@@ -352,7 +358,7 @@ export const flattenFlows = (flowsInput: Flow | Flow[]): { nodes: Node<TreegeNod
 
   return {
     edges: updatedEdges,
-    flows,
+    flows: flowArray,
     nodes: mergedNodes,
   };
 };

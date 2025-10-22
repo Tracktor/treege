@@ -10,10 +10,10 @@ import { defaultUI } from "@/renderer/features/TreegeRenderer/web/components/Def
 import { TreegeRendererProps } from "@/renderer/types/renderer";
 import { flattenFlows } from "@/renderer/utils/flow";
 import { convertFormValuesToNamedFormat } from "@/renderer/utils/form";
-import { getFieldNameFromNodeId } from "@/renderer/utils/node";
+import { getFieldNameFromNodeId, getInputNodes } from "@/renderer/utils/node";
 import { NODE_TYPE } from "@/shared/constants/node";
 import { ThemeProvider } from "@/shared/context/ThemeContext";
-import { InputNodeData, TreegeNodeData, UINodeData } from "@/shared/types/node";
+import { TreegeNodeData, UINodeData } from "@/shared/types/node";
 import { isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
 
 const TreegeRenderer = ({
@@ -40,7 +40,7 @@ const TreegeRenderer = ({
   const onChangeRef = useRef(onChange);
   const validateRef = useRef(validate);
   // Memoize input nodes and exported values for callbacks
-  const inputNodes = useMemo(() => nodes.filter(isInputNode) as Node<InputNodeData>[], [nodes]);
+  const inputNodes = useMemo(() => getInputNodes(nodes), [nodes]);
   const exportedValues = useMemo(() => convertFormValuesToNamedFormat(formValues, inputNodes), [formValues, inputNodes]);
 
   /**

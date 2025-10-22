@@ -1,5 +1,13 @@
 import { Node } from "@xyflow/react";
-import { InputNodeData } from "@/shared/types/node";
+import { InputNodeData, TreegeNodeData } from "@/shared/types/node";
+import { isInputNode } from "@/shared/utils/nodeTypeGuards";
+
+/**
+ * Filter nodes to get only input nodes
+ * @param nodes - Array of nodes to filter
+ * @returns Array of input nodes only
+ */
+export const getInputNodes = (nodes: Node<TreegeNodeData>[]): Node<InputNodeData>[] => nodes.filter(isInputNode) as Node<InputNodeData>[];
 
 /**
  * Get the field name (DOM name attribute) for a given node ID
