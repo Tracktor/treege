@@ -193,23 +193,35 @@ export const getFlowRenderState = (
   // Add parent groups to visible nodes if a child is visible
   const visibleNodeIds = new Set(orderedNodeIds);
   const idToNode = new Map(nodes.map((n) => [n.id, n]));
+
+  // Create order index from flow traversal to maintain correct order
+  const orderIndex = new Map(orderedNodes.map((n, i) => [n.id, i]));
+
+  // Assign group nodes the index of their first child in the flow
   nodes.forEach((node) => {
     if (!orderedNodeIds.has(node.id)) return;
 
     let { parentId } = node;
     while (parentId) {
       visibleNodeIds.add(parentId);
+      // If this parent group doesn't have an order yet, use this child's order
+      if (!orderIndex.has(parentId)) {
+        const childOrder = orderIndex.get(node.id);
+        if (childOrder !== undefined) {
+          orderIndex.set(parentId, childOrder);
+        }
+      }
       parentId = idToNode.get(parentId)?.parentId;
     }
   });
 
-  const visibleNodes = nodes.filter((node) => visibleNodeIds.has(node.id));
-
-  // Get root nodes (no parent or parent not visible), ordered by first appearance in flow
-  const orderIndex = new Map(orderedNodes.map((n, i) => [n.id, i]));
-  const visibleRootNodes = visibleNodes
-    .filter((node) => !node.parentId || !visibleNodeIds.has(node.parentId))
+  // Sort all visible nodes by flow order (important for group children)
+  const visibleNodes = nodes
+    .filter((node) => visibleNodeIds.has(node.id))
     .sort((a, b) => (orderIndex.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (orderIndex.get(b.id) ?? Number.MAX_SAFE_INTEGER));
+
+  // Get root nodes (no parent or parent not visible)
+  const visibleRootNodes = visibleNodes.filter((node) => !node.parentId || !visibleNodeIds.has(node.parentId));
 
   return {
     endOfPathReached: !hasUnexploredPaths,

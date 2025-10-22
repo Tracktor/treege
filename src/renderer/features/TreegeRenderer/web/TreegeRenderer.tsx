@@ -87,7 +87,8 @@ const TreegeRenderer = ({
           if (!isGroupNode(node)) return null;
 
           const GroupComponent = components.group || DefaultGroup;
-          const childNodes = visibleNodes.filter(({ parentId, id }) => parentId === id);
+          // Filter children - visibleNodes maintains flow order from getFlowRenderState
+          const childNodes = visibleNodes.filter((child) => child.parentId === node.id);
 
           return (
             <GroupComponent key={node.id} node={node}>
