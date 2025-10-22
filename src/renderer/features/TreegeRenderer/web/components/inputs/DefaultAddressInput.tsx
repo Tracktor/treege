@@ -60,7 +60,7 @@ const fetchGooglePlacesSuggestions = async (query: string): Promise<AddressSugge
 
     const service = new window.google.maps.places.AutocompleteService();
     service.getPlacePredictions({ input: query }, (predictions, status) => {
-      if (status !== "OK" || !predictions) {
+      if (status !== google.maps.places.PlacesServiceStatus.OK || !predictions) {
         console.warn("Google Places API status:", status);
         resolve([]);
         return;
@@ -149,7 +149,7 @@ const DefaultAddressInput = ({ node }: InputRenderProps) => {
             autoComplete="off"
           />
           <MapPin className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-          {popoverOpen && suggestions.length > 0 && (
+          {popoverOpen && (
             <div className="absolute z-50 w-full mt-1 bg-popover border rounded-md shadow-md">
               <Command>
                 <CommandList>

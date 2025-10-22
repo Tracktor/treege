@@ -14,8 +14,6 @@ const DefaultSelectInput = ({ node }: InputRenderProps) => {
   const name = node.data.name || fieldId;
   const normalizedValue = value ? String(value) : "";
 
-  console.log(name);
-
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
