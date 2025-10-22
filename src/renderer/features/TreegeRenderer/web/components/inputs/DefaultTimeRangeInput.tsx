@@ -33,17 +33,23 @@ const DefaultTimeRangeInput = ({ node }: InputRenderProps) => {
       </Label>
       <div className="flex gap-2">
         <Input
+          aria-label={`${t(node.data.label) || node.data.name} - ${t("renderer.defaultInputs.startTime")}`}
+          aria-invalid={!!error}
+          aria-describedby={error ? `${fieldId}-error` : undefined}
           type="time"
           value={startTime}
           onChange={(e) => handleStartTimeChange(e.target.value)}
-          placeholder="Start time"
+          placeholder={t("renderer.defaultInputs.startTime")}
           className="bg-background flex-1"
         />
         <Input
+          aria-label={`${t(node.data.label) || node.data.name} - ${t("renderer.defaultInputs.endTime")}`}
+          aria-invalid={!!error}
+          aria-describedby={error ? `${fieldId}-error` : undefined}
           type="time"
           value={endTime}
           onChange={(e) => handleEndTimeChange(e.target.value)}
-          placeholder="End time"
+          placeholder={t("renderer.defaultInputs.endTime")}
           className="bg-background flex-1"
         />
       </div>
