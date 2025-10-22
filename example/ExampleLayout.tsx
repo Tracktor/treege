@@ -1,4 +1,3 @@
-import { Edge, Node } from "@xyflow/react";
 import { MoonStar, Sun } from "lucide-react";
 import { useState } from "react";
 import TreegeEditor from "@/editor/features/TreegeEditor/TreegeEditor";
@@ -27,22 +26,20 @@ const EditorPanel = ({
 );
 
 const RendererPanel = ({
-  nodes,
-  edges,
+  flow,
   theme,
   setTheme,
   language,
   setLanguage,
 }: {
-  nodes: Node[];
-  edges: Edge[];
+  flow: Flow | null;
   theme: "light" | "dark";
   setTheme: (t: "light" | "dark") => void;
   language: Language;
   setLanguage: (l: Language) => void;
 }) => {
   const [formValues, setFormValues] = useState<FormValues>({});
-  const hasNodes = nodes.length > 0;
+  const hasNodes = flow && flow.nodes.length > 0;
 
   const handleSubmit = (values: Record<string, any>) => {
     console.log("Form submitted:", values);
@@ -56,7 +53,7 @@ const RendererPanel = ({
         <div>
           <h2 className="text-lg font-semibold">Form Preview</h2>
           <p className="text-sm text-muted-foreground mt-1">
-            {nodes.length > 0 ? `${nodes.length} nodes, ${edges.length} edges` : "Save to see the render"}
+            {hasNodes ? `${flow.nodes.length} nodes, ${flow.edges.length} edges` : "Save to see the render"}
           </p>
         </div>
         {hasNodes && (
@@ -87,11 +84,10 @@ const RendererPanel = ({
         )}
       </div>
       <div className="flex-1 overflow-auto p-6">
-        {hasNodes ? (
+        {hasNodes && flow ? (
           <>
             <TreegeRenderer
-              nodes={nodes}
-              edges={edges}
+              flows={flow}
               theme={theme}
               onSubmit={handleSubmit}
               onChange={setFormValues}
@@ -125,14 +121,12 @@ const RendererPanel = ({
 };
 
 const ExampleLayout = ({ flow }: { flow?: Flow }) => {
-  const [savedNodes, setSavedNodes] = useState<Node[]>([]);
-  const [savedEdges, setSavedEdges] = useState<Edge[]>([]);
+  const [savedFlow, setSavedFlow] = useState<Flow | null>(null);
   const [theme, setTheme] = useState<"light" | "dark">("dark");
   const [language, setLanguage] = useState<Language>("en");
 
-  const handleSave = ({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) => {
-    setSavedNodes(nodes);
-    setSavedEdges(edges);
+  const handleSave = (flowData: Flow) => {
+    setSavedFlow(flowData);
   };
 
   return (
@@ -141,14 +135,7 @@ const ExampleLayout = ({ flow }: { flow?: Flow }) => {
         <EditorPanel onSave={handleSave} flow={flow} theme={theme} language={language} />
       </div>
       <div className="w-1/2">
-        <RendererPanel
-          nodes={savedNodes}
-          edges={savedEdges}
-          theme={theme}
-          setTheme={setTheme}
-          language={language}
-          setLanguage={setLanguage}
-        />
+        <RendererPanel flow={savedFlow} theme={theme} setTheme={setTheme} language={language} setLanguage={setLanguage} />
       </div>
     </div>
     // </ThemeProvider>

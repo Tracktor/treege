@@ -8,6 +8,7 @@ import { defaultInputRenderers } from "@/renderer/features/TreegeRenderer/web/co
 import DefaultSubmitButton from "@/renderer/features/TreegeRenderer/web/components/DefaultSubmitButton";
 import { defaultUI } from "@/renderer/features/TreegeRenderer/web/components/DefaultUI";
 import { TreegeRendererProps } from "@/renderer/types/renderer";
+import { flattenFlows } from "@/renderer/utils/flow";
 import { convertFormValuesToNamedFormat } from "@/renderer/utils/form";
 import { getFieldNameFromNodeId } from "@/renderer/utils/node";
 import { NODE_TYPE } from "@/shared/constants/node";
@@ -16,8 +17,7 @@ import { InputNodeData, TreegeNodeData, UINodeData } from "@/shared/types/node";
 import { isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
 
 const TreegeRenderer = ({
-  nodes,
-  edges,
+  flows,
   validate,
   onSubmit,
   onChange,
@@ -28,6 +28,8 @@ const TreegeRenderer = ({
   validationMode = "onSubmit",
   theme = "dark",
 }: TreegeRendererProps) => {
+  const { nodes, edges, flows: flowsArray } = useMemo(() => flattenFlows(flows), [flows]);
+
   const { canSubmit, formErrors, formValues, missingRequiredFields, visibleNodes, visibleRootNodes, setFieldValue, validateForm, t } =
     useTreegeRenderer(nodes, edges, initialValues, language);
 
@@ -106,6 +108,12 @@ const TreegeRenderer = ({
           return <Renderer key={node.id} node={node} />;
         }
 
+        case NODE_TYPE.flow: {
+          // FlowNodes are already merged in the pre-processing step
+          // So we should never reach here, but just in case, return null
+          return null;
+        }
+
         default:
           console.warn("Unknown node type:", type);
           return null;
@@ -170,6 +178,7 @@ const TreegeRenderer = ({
       <TreegeRendererProvider
         value={{
           edges,
+          flows: flowsArray,
           formErrors,
           formValues,
           googleApiKey,

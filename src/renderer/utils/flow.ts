@@ -3,8 +3,8 @@ import { FormValues } from "@/renderer/types/renderer";
 import { evaluateConditions } from "@/renderer/utils/conditions";
 import { checkHasFormFieldValue } from "@/renderer/utils/form";
 import { ConditionalEdgeData } from "@/shared/types/edge";
-import { TreegeNodeData } from "@/shared/types/node";
-import { isInputNode } from "@/shared/utils/nodeTypeGuards";
+import { Flow, FlowNodeData, TreegeNodeData } from "@/shared/types/node";
+import { isFlowNode, isInputNode } from "@/shared/utils/nodeTypeGuards";
 
 /**
  * Result from computing the flow render state
@@ -106,10 +106,6 @@ export const findStartNode = (nodes: Node<TreegeNodeData>[], edges: Edge[]): Nod
   const nodesWithoutIncoming = nodes.filter((node) => isStartNode(node.id, edges));
   return nodesWithoutIncoming.find(isInputNode) || nodesWithoutIncoming[0];
 };
-
-// ============================================
-// MAIN FUNCTION
-// ============================================
 
 /**
  * Get the complete render state for the flow
@@ -220,5 +216,143 @@ export const getFlowRenderState = (
     visibleNodeIds,
     visibleNodes,
     visibleRootNodes,
+  };
+};
+
+/**
+ * Flatten flows by recursively replacing FlowNodes with their target flow's nodes
+ *
+ * This function takes a flow or an array of flows where the first is the main flow, then:
+ * 1. Replaces each FlowNode with the nodes from its target flow
+ * 2. Preserves the order of nodes by inserting sub-flow nodes at the FlowNode position
+ * 3. Redirects edges that point to FlowNodes to the first node of the target flow
+ * 4. Connects the last nodes of sub-flows to the nodes that followed the FlowNode
+ *
+ * @param flowsInput - A single Flow or an array of flows where the first is the main flow, others are sub-flows
+ * @returns An object containing the flattened nodes, edges, and normalized flows array
+ */
+export const flattenFlows = (flowsInput: Flow | Flow[]): { nodes: Node<TreegeNodeData>[]; edges: Edge[]; flows: Flow[] } => {
+  // Normalize to array
+  const flows = Array.isArray(flowsInput) ? flowsInput : [flowsInput];
+  const mainFlow = flows[0];
+
+  if (!mainFlow) {
+    return { edges: [], flows, nodes: [] };
+  }
+  const mergedNodes: Node<TreegeNodeData>[] = [];
+  const mergedEdges: Edge[] = [...mainFlow.edges];
+  const processedFlowIds = new Set<string>([mainFlow.id]);
+  const flowNodeReplacements = new Map<string, string>(); // Map FlowNode ID -> first node ID of target flow
+
+  const processNodes = (nodes: Node<TreegeNodeData>[]): Node<TreegeNodeData>[] => {
+    const result: Node<TreegeNodeData>[] = [];
+
+    nodes.forEach((node) => {
+      if (isFlowNode(node)) {
+        const flowData = node.data as FlowNodeData;
+        const targetFlowId = flowData.targetId;
+
+        if (targetFlowId && !processedFlowIds.has(targetFlowId)) {
+          const targetFlow = flows.find((flow) => flow.id === targetFlowId);
+
+          if (targetFlow) {
+            processedFlowIds.add(targetFlowId);
+
+            // Find the first root node in the target flow to replace the FlowNode
+            const firstRootNode = targetFlow.nodes.find((n) => !n.parentId);
+
+            if (firstRootNode) {
+              // Map the FlowNode ID to the first node ID of the target flow
+              flowNodeReplacements.set(node.id, firstRootNode.id);
+            }
+
+            // Add edges from the target flow
+            mergedEdges.push(...targetFlow.edges);
+
+            // Process target flow nodes recursively and insert them at this position
+            const processedSubFlowNodes = processNodes(targetFlow.nodes);
+            result.push(...processedSubFlowNodes);
+          } else {
+            console.warn(`Flow with id "${targetFlowId}" not found`);
+          }
+        }
+      } else {
+        // Add non-flow nodes to result
+        result.push(node);
+      }
+    });
+
+    return result;
+  };
+
+  mergedNodes.push(...processNodes(mainFlow.nodes));
+
+  // Find edges that have FlowNodes as source or target
+  // We need to connect the last node of the sub-flow to the node that follows the FlowNode
+  const edgesFromFlowNodes = new Map<string, Edge[]>(); // FlowNode ID -> edges where FlowNode is source
+
+  mergedEdges.forEach((edge) => {
+    if (flowNodeReplacements.has(edge.source)) {
+      if (!edgesFromFlowNodes.has(edge.source)) {
+        edgesFromFlowNodes.set(edge.source, []);
+      }
+      edgesFromFlowNodes.get(edge.source)!.push(edge);
+    }
+  });
+
+  // Replace edges that target FlowNodes with edges that target the first node of the sub-flow
+  const updatedEdges = mergedEdges
+    .map((edge) => {
+      if (flowNodeReplacements.has(edge.target)) {
+        // Edges pointing TO FlowNode should point to first node of sub-flow
+        return { ...edge, target: flowNodeReplacements.get(edge.target)! };
+      }
+      if (flowNodeReplacements.has(edge.source)) {
+        // Edges FROM FlowNode should be removed (we'll recreate them from last node)
+        return null;
+      }
+      return edge;
+    })
+    .filter((edge): edge is Edge => edge !== null);
+
+  // For each FlowNode, find the last nodes of its sub-flow and connect them to the nodes that followed the FlowNode
+  flowNodeReplacements.forEach((firstNodeId, flowNodeId) => {
+    const subFlowEdges = edgesFromFlowNodes.get(flowNodeId);
+
+    if (subFlowEdges && subFlowEdges.length > 0) {
+      // Find all "terminal" nodes of the sub-flow (nodes that have no outgoing edges within the sub-flow)
+      const subFlowNodeIds = new Set<string>();
+      flows.forEach((flow) => {
+        if (flow.nodes.some((n) => n.id === firstNodeId)) {
+          flow.nodes.forEach((n) => subFlowNodeIds.add(n.id));
+        }
+      });
+
+      const nodesWithOutgoingEdges = new Set<string>();
+      updatedEdges.forEach((edge) => {
+        if (subFlowNodeIds.has(edge.source)) {
+          nodesWithOutgoingEdges.add(edge.source);
+        }
+      });
+
+      const terminalNodes = Array.from(subFlowNodeIds).filter((nodeId) => !nodesWithOutgoingEdges.has(nodeId));
+
+      // Connect terminal nodes to the targets of the original FlowNode edges
+      terminalNodes.forEach((terminalNodeId) => {
+        subFlowEdges.forEach((originalEdge) => {
+          updatedEdges.push({
+            ...originalEdge,
+            id: `${terminalNodeId}-${originalEdge.target}`,
+            source: terminalNodeId,
+          });
+        });
+      });
+    }
+  });
+
+  return {
+    edges: updatedEdges,
+    flows,
+    nodes: mergedNodes,
   };
 };

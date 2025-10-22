@@ -1,6 +1,5 @@
-import { Edge, Node } from "@xyflow/react";
+import { Node } from "@xyflow/react";
 import { FormEvent, ReactNode } from "react";
-import { ConditionalEdgeData } from "@/shared/types/edge";
 import { Flow, InputNodeData, InputType, TreegeNodeData, UINodeData, UIType } from "@/shared/types/node";
 
 /**
@@ -58,17 +57,11 @@ export type TreegeRendererComponents = {
  */
 export type TreegeRendererProps = {
   /**
-   * Flow structure containing nodes and edges
+   * Flow or array of flows
+   * - If a single Flow: renders that flow
+   * - If an array: first flow is the main flow, others are sub-flows available for FlowNodes
    */
-  flow?: Flow;
-  /**
-   * Flow nodes from the editor
-   */
-  nodes: Node<TreegeNodeData>[];
-  /**
-   * Flow edges from the editor
-   */
-  edges: Edge[] | Edge<ConditionalEdgeData>[];
+  flows: Flow | Flow[];
   /**
    * Initial form values
    */
