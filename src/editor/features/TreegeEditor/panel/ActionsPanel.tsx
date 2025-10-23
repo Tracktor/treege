@@ -146,11 +146,11 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
               <span className="text-xs text-muted-foreground">Treege ID</span>
               <button
                 onClick={handleCopyId}
-                className="flex items-center gap-2 text-sm font-mono text-muted-foreground hover:text-primary transition-colors"
+                className="flex items-center gap-2 font-mono text-muted-foreground hover:text-primary transition-colors"
                 type="button"
               >
                 <Copy className="h-3 w-3" />
-                <span className="truncate">{id}</span>
+                <span className="truncate text-xs">{id}</span>
               </button>
             </div>
           </DropdownMenuLabel>
