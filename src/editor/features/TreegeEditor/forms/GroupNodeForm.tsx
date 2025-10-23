@@ -24,20 +24,19 @@ const GroupNodeForm = () => {
       },
       onChangeDebounceMs: 150,
     },
-    onSubmit: async ({ value }) => {
+    onSubmit: ({ value }) => {
       updateSelectedNodeData(value);
     },
   });
 
   return (
     <form
-      id="group-node-form"
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();
       }}
     >
-      <div className="flex gap-2 items-end">
+      <div className="flex items-end gap-2">
         <Field
           name="label"
           children={(field) => (

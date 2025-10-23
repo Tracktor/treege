@@ -95,7 +95,9 @@ const TreegeRenderer = ({
 
       switch (type) {
         case NODE_TYPE.input: {
-          if (!isInputNode(node)) return null;
+          if (!isInputNode(node)) {
+            return null;
+          }
 
           const inputData = node.data;
           const inputType = inputData.type || "text";
@@ -107,7 +109,9 @@ const TreegeRenderer = ({
         }
 
         case NODE_TYPE.group: {
-          if (!isGroupNode(node)) return null;
+          if (!isGroupNode(node)) {
+            return null;
+          }
 
           const GroupComponent = components.group || DefaultGroup;
           // Filter children - visibleNodes maintains flow order from getFlowRenderState
@@ -121,7 +125,9 @@ const TreegeRenderer = ({
         }
 
         case NODE_TYPE.ui: {
-          if (!isUINode(node)) return null;
+          if (!isUINode(node)) {
+            return null;
+          }
 
           const uiData = node.data as UINodeData;
           const uiType = uiData.type || "title";
@@ -178,7 +184,7 @@ const TreegeRenderer = ({
     if (validationMode === "onChange") {
       validateForm(validateRef.current);
     }
-  }, [formValues, validationMode, validateForm]);
+  }, [validationMode, validateForm]);
 
   return (
     <ThemeProvider theme={theme} storageKey="treege-renderer-theme">

@@ -30,7 +30,10 @@ export const ThemeProvider = ({
 }: ThemeProviderProps) => {
   const [internalTheme, setInternalTheme] = useState<Theme>(() => {
     // If controlled, use controlled theme and ignore localStorage
-    if (controlledTheme) return controlledTheme;
+    if (controlledTheme) {
+      return controlledTheme;
+    }
+
     // Otherwise, use localStorage or default
     if (typeof window !== "undefined") {
       return (localStorage.getItem(storageKey) as Theme) || defaultTheme;
@@ -102,7 +105,9 @@ export const ThemeProvider = ({
 export const useTheme = () => {
   const context = useContext(ThemeContext);
 
-  if (context === undefined) throw new Error("useTheme must be used within a ThemeProvider");
+  if (context === undefined) {
+    throw new Error("useTheme must be used within a ThemeProvider");
+  }
 
   return context;
 };

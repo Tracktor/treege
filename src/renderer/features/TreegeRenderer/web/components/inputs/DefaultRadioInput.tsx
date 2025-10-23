@@ -16,7 +16,7 @@ const DefaultRadioInput = ({ node }: InputRenderProps) => {
 
   return (
     <FormItem className="mb-4">
-      <Label className="block text-sm font-medium mb-2">
+      <Label className="mb-2 block font-medium text-sm">
         {t(node.data.label) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
@@ -24,7 +24,7 @@ const DefaultRadioInput = ({ node }: InputRenderProps) => {
         {node.data.options?.map((opt, index) => (
           <div key={opt.value + index} className="flex items-center space-x-2">
             <RadioGroupItem value={String(opt.value)} id={`${name}-${opt.value}`} disabled={opt.disabled} />
-            <Label htmlFor={`${name}-${opt.value}`} className="text-sm font-normal cursor-pointer">
+            <Label htmlFor={`${name}-${opt.value}`} className="cursor-pointer font-normal text-sm">
               {t(opt.label)}
             </Label>
           </div>

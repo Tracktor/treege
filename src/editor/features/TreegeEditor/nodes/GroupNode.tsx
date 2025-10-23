@@ -14,8 +14,8 @@ const GroupNode = ({ data }: GroupNodeProps) => {
   return (
     <>
       <NodeResizer />
-      <div className="absolute left-6 -top-3.5 ">
-        <Badge className="bg-chart-2 max-w-50">
+      <div className="-top-3.5 absolute left-6">
+        <Badge className="max-w-50 bg-chart-2">
           <Boxes className="!w-3 !h-3" />
           {label}
         </Badge>

@@ -55,7 +55,9 @@ const useFlowConnections = () => {
         const { clientX, clientY } = "changedTouches" in event ? event.changedTouches[0] : event;
         const sourceNode = connectionState.fromNode;
 
-        if (!sourceNode) return; // no valid start node, abort
+        if (!sourceNode) {
+          return; // no valid start node, abort
+        }
 
         const sourceId = sourceNode.id;
         const edges = getEdges();
@@ -176,7 +178,9 @@ const useFlowConnections = () => {
     (connection: { source: string; target: string }) => {
       const sourceNode = getNode(connection.source);
 
-      if (!sourceNode) return false;
+      if (!sourceNode) {
+        return false;
+      }
 
       const edges = getEdges();
       const existingEdgesFromSource = edges.filter((edge) => edge.source === connection.source);

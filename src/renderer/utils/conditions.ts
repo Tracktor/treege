@@ -10,11 +10,19 @@ import { isInputNode } from "@/shared/utils/nodeTypeGuards";
  * Normalize values for comparison
  * Handles string/number conversion and edge cases
  */
-const normalizeValue = (value: any): string | number | boolean | null => {
-  if (value === null || value === undefined) return null;
-  if (typeof value === "boolean") return value;
-  if (typeof value === "number") return value;
-  if (typeof value === "string") return value;
+const normalizeValue = (value: unknown): string | number | boolean | null => {
+  if (value === null || value === undefined) {
+    return null;
+  }
+  if (typeof value === "boolean") {
+    return value;
+  }
+  if (typeof value === "number") {
+    return value;
+  }
+  if (typeof value === "string") {
+    return value;
+  }
 
   // Convert arrays and objects to JSON strings for comparison
   if (typeof value === "object") {
@@ -27,7 +35,7 @@ const normalizeValue = (value: any): string | number | boolean | null => {
 /**
  * Compare two values using the specified operator
  */
-const compareValues = (fieldVal: any, condVal: any, operator: Operator): boolean => {
+const compareValues = (fieldVal: unknown, condVal: unknown, operator: Operator): boolean => {
   const normalizedFieldVal = normalizeValue(fieldVal);
   const normalizedCondVal = normalizeValue(condVal);
 
@@ -162,11 +170,15 @@ export const evaluateConditions = (
     if (logicalOperator === LOGICAL_OPERATOR.AND) {
       result = result && conditionResult;
       // Short-circuit: if result is false with AND, no need to continue
-      if (!result) return false;
+      if (!result) {
+        return false;
+      }
     } else if (logicalOperator === LOGICAL_OPERATOR.OR) {
       result = result || conditionResult;
       // Short-circuit: if result is true with OR, no need to continue
-      if (result) return true;
+      if (result) {
+        return true;
+      }
     }
   }
 

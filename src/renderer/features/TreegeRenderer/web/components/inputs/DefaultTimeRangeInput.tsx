@@ -40,7 +40,7 @@ const DefaultTimeRangeInput = ({ node }: InputRenderProps) => {
           value={startTime}
           onChange={(e) => handleStartTimeChange(e.target.value)}
           placeholder={t("renderer.defaultInputs.startTime")}
-          className="bg-background flex-1"
+          className="flex-1 bg-background"
         />
         <Input
           aria-label={`${t(node.data.label) || node.data.name} - ${t("renderer.defaultInputs.endTime")}`}
@@ -50,7 +50,7 @@ const DefaultTimeRangeInput = ({ node }: InputRenderProps) => {
           value={endTime}
           onChange={(e) => handleEndTimeChange(e.target.value)}
           placeholder={t("renderer.defaultInputs.endTime")}
-          className="bg-background flex-1"
+          className="flex-1 bg-background"
         />
       </div>
       {error && <FormError>{error}</FormError>}

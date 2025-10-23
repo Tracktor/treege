@@ -18,7 +18,7 @@ const UINode = ({ data, isConnectable, type, parentId }: UINodeProps) => {
       <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
 
       {/* Label */}
-      <div className="text-2xl text-nowrap text-ellipsis overflow-hidden max-w-full mb-1 capitalize">{label}</div>
+      <div className="mb-1 max-w-full overflow-hidden text-ellipsis text-nowrap text-2xl capitalize">{label}</div>
 
       {/* Type */}
 

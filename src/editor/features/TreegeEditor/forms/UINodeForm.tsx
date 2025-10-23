@@ -27,21 +27,20 @@ const UINodeForm = () => {
       },
       onChangeDebounceMs: 150,
     },
-    onSubmit: async ({ value }) => {
+    onSubmit: ({ value }) => {
       updateSelectedNodeData(value);
     },
   });
 
   return (
     <form
-      id="ui-node-form"
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();
       }}
     >
       <div className="grid gap-6">
-        <div className="flex gap-2 items-end">
+        <div className="flex items-end gap-2">
           <Field
             name="label"
             children={(field) => (

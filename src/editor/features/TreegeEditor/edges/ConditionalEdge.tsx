@@ -2,7 +2,7 @@ import { useForm } from "@tanstack/react-form";
 import { BaseEdge, Edge, EdgeLabelRenderer, EdgeProps, getBezierPath, useReactFlow } from "@xyflow/react";
 import { Plus, Waypoints, X } from "lucide-react";
 import { MouseEvent, useState } from "react";
-import { useAvailableParentFields } from "@/editor/hooks/useAvailableParentFields";
+import useAvailableParentFields from "@/editor/hooks/useAvailableParentFields";
 import useTranslate from "@/editor/hooks/useTranslate";
 import { Button } from "@/shared/components/ui/button";
 import { Checkbox } from "@/shared/components/ui/checkbox";

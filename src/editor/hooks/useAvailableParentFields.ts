@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { InputNodeData, TreegeNode } from "@/shared/types/node";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
 
-export const useAvailableParentFields = (currentNodeId?: string) => {
+const useAvailableParentFields = (currentNodeId?: string) => {
   const nodes = useNodes() as TreegeNode[];
   const edges = useEdges();
 

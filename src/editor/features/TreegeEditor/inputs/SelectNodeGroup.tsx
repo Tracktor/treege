@@ -26,7 +26,9 @@ const SelectNodeGroup = () => {
   }
 
   const handleGroupChange = (parentId: string) => {
-    if (!selectedNode) return;
+    if (!selectedNode) {
+      return;
+    }
 
     setNodes((nds) => {
       if (parentId === "none") {
@@ -40,7 +42,9 @@ const SelectNodeGroup = () => {
       }
 
       const groupNode = nds.find((n) => n.id === parentId);
-      if (!groupNode) return nds;
+      if (!groupNode) {
+        return nds;
+      }
 
       return nds.map((node) => {
         if (node.id === selectedNode.id) {

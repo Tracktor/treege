@@ -6,7 +6,7 @@ export const DefaultGroup = ({ node, children }: NodeRenderProps & { children: R
   const t = useTranslate();
 
   return (
-    <section className="mb-6 p-4 border rounded-lg ">
+    <section className="mb-6 rounded-lg border p-4">
       {node.data.label && <h3 className="text-lg font-semibold mb-4">{t(node.data.label)}</h3>}
       {children}
     </section>
