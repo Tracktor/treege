@@ -1,10 +1,10 @@
 import { createContext, PropsWithChildren, useContext, useMemo, useState } from "react";
 
-export type TreegeEditorContextValue = {
+export interface TreegeEditorContextValue {
   language: string;
   flowId?: string;
   setFlowId?: (flow?: string) => void;
-};
+}
 
 export interface TreegeEditorProviderProps extends PropsWithChildren {
   value: TreegeEditorContextValue;

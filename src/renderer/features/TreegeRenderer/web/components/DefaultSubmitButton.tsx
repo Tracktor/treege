@@ -1,13 +1,8 @@
-import { ButtonHTMLAttributes, ReactNode } from "react";
+import { ButtonHTMLAttributes } from "react";
 
-export type SubmitButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+export interface SubmitButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string;
-};
-
-export type SubmitButtonWrapperProps = {
-  children: ReactNode;
-  missingFields?: string[];
-};
+}
 
 /**
  * Default submit button

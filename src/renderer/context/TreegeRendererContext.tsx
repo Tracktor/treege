@@ -3,7 +3,7 @@ import { createContext, PropsWithChildren, useContext } from "react";
 import { FormValues } from "@/renderer/types/renderer";
 import { Flow, TreegeNodeData } from "@/shared/types/node";
 
-export type TreegeRendererContextValue = {
+export interface TreegeRendererContextValue {
   flows: Flow[];
   edges: Edge[];
   nodes: Node<TreegeNodeData>[];
@@ -12,7 +12,7 @@ export type TreegeRendererContextValue = {
   googleApiKey?: string;
   language: string;
   setFieldValue: (fieldName: string, value: any) => void;
-};
+}
 
 export interface TreegeRendererProviderProps extends PropsWithChildren {
   value: TreegeRendererContextValue;

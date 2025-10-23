@@ -88,7 +88,7 @@ export type TreegeRendererProps = {
   /**
    * Validation mode
    */
-  validationMode?: "onChange" | "onBlur" | "onSubmit";
+  validationMode?: "onChange" | "onSubmit";
   /**
    * Custom validation function
    */

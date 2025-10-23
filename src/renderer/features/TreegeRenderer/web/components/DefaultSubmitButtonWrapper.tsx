@@ -1,6 +1,11 @@
-import { SubmitButtonWrapperProps } from "@/renderer";
+import { ReactNode } from "react";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/shared/components/ui/tooltip";
+
+export interface SubmitButtonWrapperProps {
+  children: ReactNode;
+  missingFields?: string[];
+}
 
 /**
  * Default submit button wrapper with tooltip for missing fields

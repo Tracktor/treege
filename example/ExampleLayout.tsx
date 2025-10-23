@@ -138,7 +138,6 @@ const ExampleLayout = ({ flow }: { flow?: Flow }) => {
         <RendererPanel flow={savedFlow} theme={theme} setTheme={setTheme} language={language} setLanguage={setLanguage} />
       </div>
     </div>
-    // </ThemeProvider>
   );
 };
 
