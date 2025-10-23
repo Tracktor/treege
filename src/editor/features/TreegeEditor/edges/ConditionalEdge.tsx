@@ -51,7 +51,7 @@ const ConditionalEdge = ({
   const { handleSubmit, reset, Field } = useForm({
     defaultValues: {
       conditions: data?.conditions || [{ field: source, operator: "===", value: "" }],
-      isFallback: data?.isFallback || false,
+      isFallback: data?.isFallback,
       label: data?.label || "",
     },
     listeners: {

@@ -60,7 +60,7 @@ const SelectNodeGroup = () => {
   };
 
   const handleCreateGroup = () => {
-    if (!newGroupLabel.trim() || !selectedNode) {
+    if (!(newGroupLabel.trim() && selectedNode)) {
       return;
     }
 

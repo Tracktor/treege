@@ -27,7 +27,7 @@ const DefaultSwitchInput = ({ node }: InputRenderProps) => {
         role="switch"
         id={name}
         name={name}
-        checked={value || false}
+        checked={value}
         onChange={(e) => setFieldValue(fieldId, e.target.checked)}
         className="ml-4"
       />

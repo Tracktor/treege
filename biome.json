@@ -1,0 +1,14 @@
+{
+  "extends": ["@tracktor/biome-config-react"],
+  "linter": {
+    "rules": {
+      "correctness": {
+        "noChildrenProp": "off",
+        "noNestedComponentDefinitions": "warn"
+      },
+      "suspicious": {
+        "noUnknownAtRules": "off"
+      }
+    }
+  }
+}

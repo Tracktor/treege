@@ -28,7 +28,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
   const { handleSubmit, Field } = useForm({
     defaultValues: {
       body: value?.body || "",
-      fetchOnMount: value?.fetchOnMount || false,
+      fetchOnMount: value?.fetchOnMount,
       headers: value?.headers || [],
       method: value?.method || "GET",
       responseMapping: value?.responseMapping || {

@@ -37,8 +37,11 @@ const buildEdgeMap = (edges: Edge<ConditionalEdgeData>[]): Map<string, Edge<Cond
   const map = new Map<string, Edge<ConditionalEdgeData>[]>();
   edges.forEach((edge) => {
     const list = map.get(edge.source);
-    if (list) list.push(edge);
-    else map.set(edge.source, [edge]);
+    if (list) {
+      list.push(edge);
+    } else {
+      map.set(edge.source, [edge]);
+    }
   });
   return map;
 };
@@ -63,14 +66,21 @@ const determineEdgesToFollow = (
 
   if (conditional.length > 0) {
     // Check if all required fields are filled
-    const allFieldsFilled = conditional.every((edge) =>
-      edge.data!.conditions!.every((cond) => {
-        if (!cond.field) return true;
+    const allFieldsFilled = conditional.every((edge) => {
+      if (!edge.data?.conditions) {
+        return false;
+      }
+
+      return edge.data.conditions.every((cond) => {
+        if (!cond.field) {
+          return true;
+        }
+
         const fieldNode = nodeMap.get(cond.field);
         const fieldName = isInputNode(fieldNode) ? fieldNode.id : cond.field;
         return checkFormFieldHasValue(fieldName, formValues);
-      }),
-    );
+      });
+    });
 
     // If fields not filled, defer conditional edges; still follow any unconditional edges
     if (!allFieldsFilled) {
@@ -162,14 +172,18 @@ export const getFlowRenderState = (
    * Recursive function to traverse the graph and collect visible nodes
    */
   const traverse = (nodeId: string): void => {
-    if (visited.has(nodeId)) return;
+    if (visited.has(nodeId)) {
+      return;
+    }
 
     visited.add(nodeId);
     orderedNodeIds.add(nodeId);
 
     const node = nodeMap.get(nodeId);
 
-    if (!node) return;
+    if (!node) {
+      return;
+    }
 
     orderedNodes.push(node);
 
@@ -185,7 +199,9 @@ export const getFlowRenderState = (
       hasUnexploredPaths = true;
     }
 
-    edgesToFollow.forEach((edge) => traverse(edge.target));
+    edgesToFollow.forEach((edge) => {
+      traverse(edge.target);
+    });
   };
 
   traverse(startNode.id);
@@ -199,7 +215,9 @@ export const getFlowRenderState = (
 
   // Assign group nodes the index of their first child in the flow
   nodes.forEach((node) => {
-    if (!orderedNodeIds.has(node.id)) return;
+    if (!orderedNodeIds.has(node.id)) {
+      return;
+    }
 
     let { parentId } = node;
     while (parentId) {
@@ -221,7 +239,7 @@ export const getFlowRenderState = (
     .sort((a, b) => (orderIndex.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (orderIndex.get(b.id) ?? Number.MAX_SAFE_INTEGER));
 
   // Get root nodes (no parent or parent not visible)
-  const visibleRootNodes = visibleNodes.filter((node) => !node.parentId || !visibleNodeIds.has(node.parentId));
+  const visibleRootNodes = visibleNodes.filter((node) => !(node.parentId && visibleNodeIds.has(node.parentId)));
 
   return {
     endOfPathReached: !hasUnexploredPaths,
@@ -326,7 +344,11 @@ export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
       if (!edgesFromFlowNodes.has(edge.source)) {
         edgesFromFlowNodes.set(edge.source, []);
       }
-      edgesFromFlowNodes.get(edge.source)!.push(edge);
+
+      const list = edgesFromFlowNodes.get(edge.source);
+      if (list) {
+        list.push(edge);
+      }
     }
   });
 
@@ -335,7 +357,7 @@ export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
     .map((edge) => {
       if (flowNodeReplacements.has(edge.target)) {
         // Edges pointing TO FlowNode should point to first node of sub-flow
-        return { ...edge, target: flowNodeReplacements.get(edge.target)! };
+        return { ...edge, target: flowNodeReplacements.get(edge.target) };
       }
       if (flowNodeReplacements.has(edge.source)) {
         // Edges FROM FlowNode should be removed (we'll recreate them from last node)
@@ -353,9 +375,14 @@ export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
       // Find all "terminal" nodes of the sub-flow (nodes that have no outgoing edges within the sub-flow)
       const subFlowNodeIds = new Set<string>();
       flowArray.forEach((flow) => {
-        if (flow.nodes.some((n) => n.id === firstNodeId)) {
-          flow.nodes.forEach((n) => subFlowNodeIds.add(n.id));
+        const hasFirstNode = flow.nodes.some((n) => n.id === firstNodeId);
+        if (!hasFirstNode) {
+          return;
         }
+
+        flow.nodes.forEach((n) => {
+          subFlowNodeIds.add(n.id);
+        });
       });
 
       const nodesWithOutgoingEdges = new Set<string>();
