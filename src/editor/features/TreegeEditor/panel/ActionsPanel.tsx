@@ -98,6 +98,9 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
     a.download = "treege.json";
     a.click();
 
+    // Revoke the object URL to prevent memory leaks
+    URL.revokeObjectURL(url);
+
     toast.success(t("editor.actionsPanel.downloadSuccess"), {
       description: t("editor.actionsPanel.downloadSuccessDesc"),
     });
@@ -186,7 +189,7 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
 
           <DropdownMenuGroup>
             <DropdownMenuItem onClick={handleClear} className="text-destructive focus:text-destructive">
-              <Trash2 /> {t("editor.actionsPanel.clear")}
+              <Trash2 className="text-destructive" /> {t("editor.actionsPanel.clear")}
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
