@@ -25,7 +25,9 @@
       "parseError": "خطأ في تحليل ملف JSON.",
       "parseErrorDesc": "حاول إصلاح الملف واستيراده مرة أخرى.",
       "downloadSuccess": "تم التنزيل بنجاح.",
-      "downloadSuccessDesc": "تم تصدير التدفق بنجاح."
+      "downloadSuccessDesc": "تم تصدير التدفق بنجاح.",
+      "idCopied": "تم نسخ معرف التدفق!",
+      "copyFailed": "فشل نسخ معرف التدفق"
     },
     "conditionalEdge": {
       "fallback": "افتراضي",

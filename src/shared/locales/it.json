@@ -25,7 +25,9 @@
       "parseError": "Errore nell'analisi del file JSON.",
       "parseErrorDesc": "Prova a correggere il file e importarlo di nuovo.",
       "downloadSuccess": "Download riuscito.",
-      "downloadSuccessDesc": "Il flusso è stato esportato con successo."
+      "downloadSuccessDesc": "Il flusso è stato esportato con successo.",
+      "idCopied": "ID del flusso copiato!",
+      "copyFailed": "Impossibile copiare l'ID del flusso"
     },
     "conditionalEdge": {
       "fallback": "Predefinito",

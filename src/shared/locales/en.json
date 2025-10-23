@@ -25,7 +25,9 @@
       "parseError": "Error parsing JSON file.",
       "parseErrorDesc": "Try to fix the file and import it again.",
       "downloadSuccess": "Download successfully.",
-      "downloadSuccessDesc": "The flow has been exported successfully."
+      "downloadSuccessDesc": "The flow has been exported successfully.",
+      "idCopied": "Flow ID copied!",
+      "copyFailed": "Failed to copy Flow ID"
     },
     "conditionalEdge": {
       "fallback": "Fallback",

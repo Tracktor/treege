@@ -25,7 +25,9 @@
       "parseError": "Fehler beim Parsen der JSON-Datei.",
       "parseErrorDesc": "Versuchen Sie, die Datei zu korrigieren und erneut zu importieren.",
       "downloadSuccess": "Download erfolgreich.",
-      "downloadSuccessDesc": "Der Ablauf wurde erfolgreich exportiert."
+      "downloadSuccessDesc": "Der Ablauf wurde erfolgreich exportiert.",
+      "idCopied": "Flow‑ID kopiert!",
+      "copyFailed": "Kopieren der Flow‑ID fehlgeschlagen"
     },
     "conditionalEdge": {
       "fallback": "Standard",

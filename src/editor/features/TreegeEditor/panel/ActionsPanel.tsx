@@ -1,5 +1,5 @@
 import { Panel, useEdges, useNodes, useReactFlow } from "@xyflow/react";
-import { ArrowRightFromLine, Download, Plus, Save } from "lucide-react";
+import { ArrowRightFromLine, Copy, Download, EllipsisVertical, Plus, Save } from "lucide-react";
 import { nanoid } from "nanoid";
 import { ChangeEvent, useRef } from "react";
 import { toast } from "sonner";
@@ -7,6 +7,15 @@ import { defaultNode } from "@/editor/constants/defaultNode";
 import { useTreegeEditorContext } from "@/editor/context/TreegeEditorContext";
 import useTranslate from "@/editor/hooks/useTranslate";
 import { Button } from "@/shared/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/shared/components/ui/dropdown-menu";
 import { Flow } from "@/shared/types/node";
 
 export interface ActionsPanelProps {
@@ -108,20 +117,65 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
     onSave?.({ edges, id, nodes });
   };
 
+  const handleCopyId = async () => {
+    try {
+      await navigator.clipboard.writeText(id);
+      toast.success(t("editor.actionsPanel.idCopied"), {
+        description: id,
+      });
+    } catch {
+      toast.error(t("editor.actionsPanel.copyFailed"));
+    }
+  };
+
   return (
     <Panel position="top-right" className="flex gap-2">
       <Button variant="outline" size="sm" onClick={handleAddNode}>
         <Plus /> {t("editor.actionsPanel.addNode")}
       </Button>
-      <Button variant="outline" size="sm" onClick={() => inputFileRef?.current?.click()}>
-        <Download /> {t("editor.actionsPanel.importJson")}
-      </Button>
-      <Button variant="outline" size="sm" onClick={handleExport}>
-        <ArrowRightFromLine /> {t("editor.actionsPanel.exportJson")}
-      </Button>
-      <Button variant="outline" size="sm" onClick={handleSave}>
-        <Save /> {t("common.save")}
-      </Button>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" size="sm">
+            <EllipsisVertical />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start">
+          <DropdownMenuLabel className="font-normal">
+            <div className="flex flex-col gap-1">
+              <span className="text-xs text-muted-foreground">Treege ID</span>
+              <button
+                onClick={handleCopyId}
+                className="flex items-center gap-2 text-sm font-mono text-muted-foreground hover:text-primary transition-colors"
+                type="button"
+              >
+                <Copy className="h-3 w-3" />
+                <span className="truncate">{id}</span>
+              </button>
+            </div>
+          </DropdownMenuLabel>
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuGroup>
+            <DropdownMenuItem onClick={() => inputFileRef?.current?.click()}>
+              <Download /> {t("editor.actionsPanel.importJson")}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleExport}>
+              <ArrowRightFromLine /> {t("editor.actionsPanel.exportJson")}
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuGroup>
+            <DropdownMenuItem onClick={handleSave}>
+              <Save /> {t("common.save")}
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
       <input type="file" accept="application/json,.json" className="hidden" ref={inputFileRef} onChange={handleImport} />
     </Panel>
   );

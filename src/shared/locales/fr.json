@@ -25,7 +25,9 @@
       "parseError": "Erreur d'analyse du fichier JSON.",
       "parseErrorDesc": "Essayez de corriger le fichier et de l'importer à nouveau.",
       "downloadSuccess": "Téléchargement réussi.",
-      "downloadSuccessDesc": "Le flux a été exporté avec succès."
+      "downloadSuccessDesc": "Le flux a été exporté avec succès.",
+      "idCopied": "ID du flux copié !",
+      "copyFailed": "Échec de la copie de l'ID du flux"
     },
     "conditionalEdge": {
       "fallback": "Par défaut",
