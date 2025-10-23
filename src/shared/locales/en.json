@@ -18,6 +18,7 @@
       "addNode": "Add Node",
       "importJson": "Import JSON",
       "exportJson": "Export JSON",
+      "clear": "Clear",
       "importSuccess": "Import successful!",
       "importSuccessDesc": "The flow has been imported successfully.",
       "invalidJson": "Invalid JSON file.",
@@ -26,6 +27,8 @@
       "parseErrorDesc": "Try to fix the file and import it again.",
       "downloadSuccess": "Download successfully.",
       "downloadSuccessDesc": "The flow has been exported successfully.",
+      "clearSuccess": "Flow cleared!",
+      "clearSuccessDesc": "All nodes and edges have been removed.",
       "idCopied": "Flow ID copied!",
       "copyFailed": "Failed to copy Flow ID"
     },

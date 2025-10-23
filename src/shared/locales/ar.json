@@ -18,6 +18,7 @@
       "addNode": "إضافة عقدة",
       "importJson": "استيراد JSON",
       "exportJson": "تصدير JSON",
+      "clear": "مسح التدفق",
       "importSuccess": "تم الاستيراد بنجاح!",
       "importSuccessDesc": "تم استيراد التدفق بنجاح.",
       "invalidJson": "ملف JSON غير صالح.",
@@ -26,6 +27,8 @@
       "parseErrorDesc": "حاول إصلاح الملف واستيراده مرة أخرى.",
       "downloadSuccess": "تم التنزيل بنجاح.",
       "downloadSuccessDesc": "تم تصدير التدفق بنجاح.",
+      "clearSuccess": "تم مسح التدفق!",
+      "clearSuccessDesc": "تم إزالة جميع العقد والحواف.",
       "idCopied": "تم نسخ معرف التدفق!",
       "copyFailed": "فشل نسخ معرف التدفق"
     },

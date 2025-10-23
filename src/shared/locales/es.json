@@ -18,6 +18,7 @@
       "addNode": "Agregar nodo",
       "importJson": "Importar JSON",
       "exportJson": "Exportar JSON",
+      "clear": "Limpiar",
       "importSuccess": "¡Importación exitosa!",
       "importSuccessDesc": "El flujo se ha importado correctamente.",
       "invalidJson": "Archivo JSON inválido.",
@@ -26,6 +27,8 @@
       "parseErrorDesc": "Intenta corregir el archivo e importarlo nuevamente.",
       "downloadSuccess": "Descarga exitosa.",
       "downloadSuccessDesc": "El flujo se ha exportado correctamente.",
+      "clearSuccess": "¡Flujo limpiado!",
+      "clearSuccessDesc": "Todos los nodos y aristas han sido eliminados.",
       "idCopied": "ID del flujo copiado!",
       "copyFailed": "No se pudo copiar el ID del flujo"
     },

@@ -18,6 +18,7 @@
       "addNode": "Ajouter un nœud",
       "importJson": "Importer JSON",
       "exportJson": "Exporter JSON",
+      "clear": "Supprimer",
       "importSuccess": "Importation réussie !",
       "importSuccessDesc": "Le flux a été importé avec succès.",
       "invalidJson": "Fichier JSON invalide.",
@@ -26,6 +27,8 @@
       "parseErrorDesc": "Essayez de corriger le fichier et de l'importer à nouveau.",
       "downloadSuccess": "Téléchargement réussi.",
       "downloadSuccessDesc": "Le flux a été exporté avec succès.",
+      "clearSuccess": "Flux vidé !",
+      "clearSuccessDesc": "Tous les nœuds et arêtes ont été supprimés.",
       "idCopied": "ID du flux copié !",
       "copyFailed": "Échec de la copie de l'ID du flux"
     },

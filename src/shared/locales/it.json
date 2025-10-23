@@ -18,6 +18,7 @@
       "addNode": "Aggiungi nodo",
       "importJson": "Importa JSON",
       "exportJson": "Esporta JSON",
+      "clear": "Pulisci",
       "importSuccess": "Importazione riuscita!",
       "importSuccessDesc": "Il flusso è stato importato con successo.",
       "invalidJson": "File JSON non valido.",
@@ -26,6 +27,8 @@
       "parseErrorDesc": "Prova a correggere il file e importarlo di nuovo.",
       "downloadSuccess": "Download riuscito.",
       "downloadSuccessDesc": "Il flusso è stato esportato con successo.",
+      "clearSuccess": "Flusso pulito!",
+      "clearSuccessDesc": "Tutti i nodi e gli archi sono stati rimossi.",
       "idCopied": "ID del flusso copiato!",
       "copyFailed": "Impossibile copiare l'ID del flusso"
     },

@@ -1,5 +1,5 @@
 import { Panel, useEdges, useNodes, useReactFlow } from "@xyflow/react";
-import { ArrowRightFromLine, Copy, Download, EllipsisVertical, Plus, Save } from "lucide-react";
+import { ArrowRightFromLine, Copy, Download, EllipsisVertical, Plus, Save, Trash2 } from "lucide-react";
 import { nanoid } from "nanoid";
 import { ChangeEvent, useRef } from "react";
 import { toast } from "sonner";
@@ -128,6 +128,14 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
     }
   };
 
+  const handleClear = () => {
+    setNodes([]);
+    setEdges([]);
+    toast.success(t("editor.actionsPanel.clearSuccess"), {
+      description: t("editor.actionsPanel.clearSuccessDesc"),
+    });
+  };
+
   return (
     <Panel position="top-right" className="flex gap-2">
       <Button variant="outline" size="sm" onClick={handleAddNode}>
@@ -171,6 +179,14 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
           <DropdownMenuGroup>
             <DropdownMenuItem onClick={handleSave}>
               <Save /> {t("common.save")}
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuGroup>
+            <DropdownMenuItem onClick={handleClear} className="text-destructive focus:text-destructive">
+              <Trash2 /> {t("editor.actionsPanel.clear")}
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>

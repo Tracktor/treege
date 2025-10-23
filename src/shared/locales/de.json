@@ -18,6 +18,7 @@
       "addNode": "Knoten hinzufügen",
       "importJson": "JSON importieren",
       "exportJson": "JSON exportieren",
+      "clear": "Löschen",
       "importSuccess": "Import erfolgreich!",
       "importSuccessDesc": "Der Ablauf wurde erfolgreich importiert.",
       "invalidJson": "Ungültige JSON-Datei.",
@@ -26,6 +27,8 @@
       "parseErrorDesc": "Versuchen Sie, die Datei zu korrigieren und erneut zu importieren.",
       "downloadSuccess": "Download erfolgreich.",
       "downloadSuccessDesc": "Der Ablauf wurde erfolgreich exportiert.",
+      "clearSuccess": "Fluss geleert!",
+      "clearSuccessDesc": "Alle Knoten und Kanten wurden entfernt.",
       "idCopied": "Flow‑ID kopiert!",
       "copyFailed": "Kopieren der Flow‑ID fehlgeschlagen"
     },
