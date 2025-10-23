@@ -3,6 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { FormValues } from "@/renderer/types/renderer";
 import { getFlowRenderState } from "@/renderer/utils/flow";
+import { isFieldEmpty } from "@/renderer/utils/form";
 import { ConditionalEdgeData } from "@/shared/types/edge";
 import { TreegeNodeData } from "@/shared/types/node";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
@@ -116,18 +117,13 @@ export const useTreegeRenderer = (
           const value = formValues[fieldName];
 
           // Required validation
-          if (node.data.required) {
-            const isEmptyString = typeof value === "string" && value.trim() === "";
-            const isEmptyArray = Array.isArray(value) && value.length === 0;
-
-            if (value === undefined || value === null || isEmptyString || isEmptyArray) {
-              builtInErrors[fieldName] = t(node.data.errorMessage) || t("validation.required");
-              return;
-            }
+          if (node.data.required && isFieldEmpty(value)) {
+            builtInErrors[fieldName] = t(node.data.errorMessage) || t("validation.required");
+            return;
           }
 
           // Pattern validation (only if value is not empty)
-          if (value && node.data.pattern) {
+          if (!isFieldEmpty(value) && node.data.pattern) {
             try {
               const regex = new RegExp(node.data.pattern);
               if (!regex.test(String(value))) {
@@ -176,14 +172,9 @@ export const useTreegeRenderer = (
       const value = formValues[fieldName];
 
       // Check if required field is empty
-      if (node.data.required) {
-        const isEmptyString = typeof value === "string" && value.trim() === "";
-        const isEmptyArray = Array.isArray(value) && value.length === 0;
-
-        if (value === undefined || value === null || isEmptyString || isEmptyArray) {
-          const label = t(node.data.label) || fieldName;
-          missing.push(label);
-        }
+      if (node.data.required && isFieldEmpty(value)) {
+        const label = t(node.data.label) || fieldName;
+        missing.push(label);
       }
     });
 

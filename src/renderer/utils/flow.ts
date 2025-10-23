@@ -1,7 +1,7 @@
 import { Edge, Node } from "@xyflow/react";
 import { FormValues } from "@/renderer/types/renderer";
 import { evaluateConditions } from "@/renderer/utils/conditions";
-import { checkHasFormFieldValue } from "@/renderer/utils/form";
+import { checkFormFieldHasValue } from "@/renderer/utils/form";
 import { ConditionalEdgeData } from "@/shared/types/edge";
 import { Flow, FlowNodeData, TreegeNodeData } from "@/shared/types/node";
 import { isFlowNode, isInputNode } from "@/shared/utils/nodeTypeGuards";
@@ -68,7 +68,7 @@ const determineEdgesToFollow = (
         if (!cond.field) return true;
         const fieldNode = nodeMap.get(cond.field);
         const fieldName = isInputNode(fieldNode) ? fieldNode.id : cond.field;
-        return checkHasFormFieldValue(fieldName, formValues);
+        return checkFormFieldHasValue(fieldName, formValues);
       }),
     );
 
