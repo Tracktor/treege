@@ -34,7 +34,7 @@
       },
       "devDependencies": {
         "@tailwindcss/vite": "^4.1.13",
-        "@tracktor/biome-config-react": "^1.1.1",
+        "@tracktor/biome-config-react": "^1.2.0",
         "@types/google.maps": "^3.58.1",
         "@types/node": "^24.5.2",
         "@types/react": "^19.1.0",
@@ -378,7 +378,7 @@
 
     "@tanstack/store": ["@tanstack/store@0.7.7", "", {}, "sha512-xa6pTan1bcaqYDS9BDpSiS63qa6EoDkPN9RsRaxHuDdVDNntzq3xNwR5YKTU/V3SkSyC9T4YVOPh2zRQN0nhIQ=="],
 
-    "@tracktor/biome-config-react": ["@tracktor/biome-config-react@1.1.1", "", { "dependencies": { "@biomejs/biome": "^2.2.6" } }, "sha512-HuCllD0ADpMxiqUwZY0KPQhijRuI2zlGbkSd3n6duLCINLTX3YGamyEjLDwEn1RRqlwBwNd6Xw5JVfePMeWCWw=="],
+    "@tracktor/biome-config-react": ["@tracktor/biome-config-react@1.2.0", "", { "dependencies": { "@biomejs/biome": "^2.2.6" } }, "sha512-ZV3RsPwgtZmPPH2IKDErxNLjfOAYrtt295JvLd0oisu0CAVlhOwWMygHnIQfoWtOostA740EgFMzaaEmMcMXGQ=="],
 
     "@types/argparse": ["@types/argparse@1.0.38", "", {}, "sha512-ebDJ9b0e702Yr7pWgB0jzm+CX4Srzz8RcXtLJDJB+BSccqMa36uyH/zUsSYao5+BD1ytv3k3rPYCq4mAE1hsXA=="],
 
