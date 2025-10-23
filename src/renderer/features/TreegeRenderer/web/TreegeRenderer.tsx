@@ -63,18 +63,19 @@ const TreegeRenderer = ({
 
       if (isValid && onSubmit) {
         onSubmit(exportedValues);
-      } else {
-        // Focus the first input field with an error
-        const firstErrorNodeId = Object.keys(errors)[0];
+        return;
+      }
 
-        if (firstErrorNodeId) {
-          const fieldName = getFieldNameFromNodeId(firstErrorNodeId, inputNodes);
+      // Focus the first input field with an error
+      const firstErrorNodeId = Object.keys(errors)[0];
 
-          if (fieldName) {
-            // Try to find the input by name attribute
-            const input = document.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(`[name="${fieldName}"]`);
-            input?.focus();
-          }
+      if (firstErrorNodeId) {
+        const fieldName = getFieldNameFromNodeId(firstErrorNodeId, inputNodes);
+
+        if (fieldName) {
+          // Try to find the input by name attribute
+          const input = document.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(`[name="${fieldName}"]`);
+          input?.focus();
         }
       }
     },
