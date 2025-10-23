@@ -180,7 +180,7 @@ export const useTreegeRenderer = (flows: Flow | Flow[] | null | undefined, initi
   }, [visibleNodes, formValues, t]);
 
   return {
-    canSubmit: endOfPathReached,
+    canSubmit: endOfPathReached && nodes.length > 0,
     formErrors,
     formValues,
     inputNodes,
