@@ -270,26 +270,24 @@ export const flattenFlows = (flows: Flow | Flow[]): { nodes: Node<TreegeNodeData
         const flowData = node.data as FlowNodeData;
         const targetFlowId = flowData.targetId;
 
-        if (targetFlowId && !processedFlowIds.has(targetFlowId)) {
+        if (targetFlowId) {
           const targetFlow = flowArray.find((flow) => flow.id === targetFlowId);
 
           if (targetFlow) {
-            processedFlowIds.add(targetFlowId);
-
-            // Find the first root node in the target flow to replace the FlowNode
+            // Always map this FlowNode to the first root node of the target flow
+            // (even if we've already processed this target flow)
             const firstRootNode = targetFlow.nodes.find((n) => !n.parentId);
-
             if (firstRootNode) {
-              // Map the FlowNode ID to the first node ID of the target flow
               flowNodeReplacements.set(node.id, firstRootNode.id);
             }
 
-            // Add edges from the target flow
-            mergedEdges.push(...targetFlow.edges);
-
-            // Process target flow nodes recursively and insert them at this position
-            const processedSubFlowNodes = processNodes(targetFlow.nodes);
-            result.push(...processedSubFlowNodes);
+            // Inline sub-flow nodes only once per unique flow id
+            if (!processedFlowIds.has(targetFlowId)) {
+              processedFlowIds.add(targetFlowId);
+              mergedEdges.push(...targetFlow.edges);
+              const processedSubFlowNodes = processNodes(targetFlow.nodes);
+              result.push(...processedSubFlowNodes);
+            }
           } else {
             console.warn(`Flow with id "${targetFlowId}" not found`);
           }
