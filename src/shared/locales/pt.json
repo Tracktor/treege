@@ -128,7 +128,7 @@
       "methodPut": "PUT",
       "methodDelete": "DELETE",
       "methodPatch": "PATCH",
-      "noFieldsAvailable": "",
+      "noFieldsAvailable": "Nenhum campo disponível",
       "headers": "Cabeçalhos",
       "headerName": "Nome do cabeçalho",
       "headerValue": "Valor do cabeçalho",
