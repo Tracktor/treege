@@ -82,19 +82,22 @@ const RendererPanel = ({
         </div>
       </div>
       <div className="flex-1 overflow-auto p-6">
-        <TreegeRenderer
-          flows={flow}
-          theme={theme}
-          onSubmit={handleSubmit}
-          onChange={setFormValues}
-          validationMode="onSubmit"
-          language={language}
-        />
-        <div className="mt-8 p-4 border rounded-lg">
-          <h3 className="font-semibold mb-2">Current values:</h3>
-          <pre className="text-xs p-2 rounded overflow-auto">{JSON.stringify(formValues, null, 2)}</pre>
-        </div>
-        {hasNodes && flow ? null : (
+        {hasNodes && flow ? (
+          <>
+            <TreegeRenderer
+              flows={flow}
+              theme={theme}
+              onSubmit={handleSubmit}
+              onChange={setFormValues}
+              validationMode="onSubmit"
+              language={language}
+            />
+            <div className="mt-8 p-4 border rounded-lg">
+              <h3 className="font-semibold mb-2">Current values:</h3>
+              <pre className="text-xs p-2 rounded overflow-auto">{JSON.stringify(formValues, null, 2)}</pre>
+            </div>
+          </>
+        ) : (
           <div className="flex items-center justify-center h-full text-gray-400">
             <div className="text-center">
               <svg className="mx-auto h-12 w-12 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
