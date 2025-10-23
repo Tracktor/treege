@@ -56,49 +56,46 @@ const RendererPanel = ({
             {hasNodes ? `${flow.nodes.length} nodes, ${flow.edges.length} edges` : "Save to see the render"}
           </p>
         </div>
-        {hasNodes && (
-          <div className="flex gap-4 items-center">
-            <Select value={language} onValueChange={(value) => setLanguage(value as Language)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select language" />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.entries(LANGUAGES).map(([code, value]) => (
-                  <SelectItem key={code} value={value}>
-                    {code.toUpperCase()}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <div className="flex gap-2 items-center">
-              <Sun size={15} />
-              <Switch
-                checked={theme === "dark"}
-                onCheckedChange={(checked) => {
-                  setTheme(checked ? "dark" : "light");
-                }}
-              />
-              <MoonStar size={15} />
-            </div>
+        <div className="flex gap-4 items-center">
+          <Select value={language} onValueChange={(value) => setLanguage(value as Language)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select language" />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(LANGUAGES).map(([code, value]) => (
+                <SelectItem key={code} value={value}>
+                  {code.toUpperCase()}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <div className="flex gap-2 items-center">
+            <Sun size={15} />
+            <Switch
+              checked={theme === "dark"}
+              onCheckedChange={(checked) => {
+                setTheme(checked ? "dark" : "light");
+              }}
+            />
+            <MoonStar size={15} />
           </div>
-        )}
+        </div>
       </div>
       <div className="flex-1 overflow-auto p-6">
+        <TreegeRenderer
+          flows={flow}
+          theme={theme}
+          onSubmit={handleSubmit}
+          onChange={setFormValues}
+          validationMode="onSubmit"
+          language={language}
+        />
+        <div className="mt-8 p-4 border rounded-lg">
+          <h3 className="font-semibold mb-2">Current values:</h3>
+          <pre className="text-xs p-2 rounded overflow-auto">{JSON.stringify(formValues, null, 2)}</pre>
+        </div>
         {hasNodes && flow ? (
-          <>
-            <TreegeRenderer
-              flows={flow}
-              theme={theme}
-              onSubmit={handleSubmit}
-              onChange={setFormValues}
-              validationMode="onSubmit"
-              language={language}
-            />
-            <div className="mt-8 p-4 border rounded-lg">
-              <h3 className="font-semibold mb-2">Current values:</h3>
-              <pre className="text-xs p-2 rounded overflow-auto">{JSON.stringify(formValues, null, 2)}</pre>
-            </div>
-          </>
+          <></>
         ) : (
           <div className="flex items-center justify-center h-full text-gray-400">
             <div className="text-center">
