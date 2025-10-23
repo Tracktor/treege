@@ -2,96 +2,102 @@
 @import "../../shared/styles/style.css";
 
 :root {
-    --node-width: 280px;
-    --node-height: 150px;
-    --node-border-radius: 40px;
-    --treege-color-primary: #13d3b4;
-    --treege-color-tertiary: #0065a8;
-    --treege-color-secondary: #007ff6;
+  --node-width: 280px;
+  --node-height: 150px;
+  --node-border-radius: 40px;
+  --treege-color-primary: #13d3b4;
+  --treege-color-tertiary: #0065a8;
+  --treege-color-secondary: #007ff6;
 }
 
 button {
-    @apply cursor-pointer select-none;
+  @apply cursor-pointer select-none;
 }
 
 #root {
-    height: 100vh;
-    width: 100vw;
+  height: 100vh;
+  width: 100vw;
 }
 
 .react-flow__panel > a {
-    @apply hidden;
+  @apply hidden;
 }
 
 /* Default node */
 div.react-flow__node {
-    border: 0 !important;
+  border: 0 !important;
 }
 
 /* Neon node */
 div.react-flow__node__wrapper {
-    @apply flex justify-center flex-col p-7;
-    width: 270px;
-    height: 150px;
-    border-radius: 40px;
-    border: 3px solid transparent !important;
-    box-shadow: 0 0 20px 6px oklch(from var(--treege-color-primary) l c h / 10%), 0 0 20px oklch(from var(--treege-color-tertiary) l c h / 10%);
-    background: linear-gradient(
-            oklch(from var(--color-card) l c h / 33%),
-            oklch(from var(--color-card) l c h / 33%)) padding-box,
-    linear-gradient(145deg,
-            oklch(from var(--treege-color-primary) l c h / 40%),
-            oklch(0 0 0 / 0),
-            oklch(from var(--treege-color-secondary) l c h / 40%)) border-box;
+  @apply flex justify-center flex-col p-7;
+  width: 270px;
+  height: 150px;
+  border-radius: 40px;
+  border: 3px solid transparent !important;
+  box-shadow:
+    0 0 20px 6px oklch(from var(--treege-color-primary) l c h / 10%),
+    0 0 20px oklch(from var(--treege-color-tertiary) l c h / 10%);
+  background:
+    linear-gradient(oklch(from var(--color-card) l c h / 33%), oklch(from var(--color-card) l c h / 33%)) padding-box,
+    linear-gradient(
+      145deg,
+      oklch(from var(--treege-color-primary) l c h / 40%),
+      oklch(0 0 0 / 0),
+      oklch(from var(--treege-color-secondary) l c h / 40%)
+    )
+    border-box;
 }
 
 /* Neon node in group */
 div.react-flow__node__wrapper.in-group {
-    background: linear-gradient(
-            oklch(from var(--color-card) l c h / 33%),
-            oklch(from var(--color-card) l c h / 33%)) padding-box,
-    linear-gradient(145deg,
-            oklch(from var(--color-chart-2) l c h / 33%),
-            oklch(0 0 0 / 0),
-            oklch(from var(--color-chart-2) l c h / 33%)) border-box;}
+  background:
+    linear-gradient(oklch(from var(--color-card) l c h / 33%), oklch(from var(--color-card) l c h / 33%)) padding-box,
+    linear-gradient(145deg, oklch(from var(--color-chart-2) l c h / 33%), oklch(0 0 0 / 0), oklch(from var(--color-chart-2) l c h / 33%))
+    border-box;
+}
 
 /* Neon node selected */
 div.react-flow__node.selected .react-flow__node__wrapper {
-    box-shadow: 0 0 20px 6px oklch(from var(--treege-color-primary) l c h / 30%), 0 0 20px oklch(from var(--treege-color-tertiary) l c h / 30%);
+  box-shadow:
+    0 0 20px 6px oklch(from var(--treege-color-primary) l c h / 30%),
+    0 0 20px oklch(from var(--treege-color-tertiary) l c h / 30%);
 }
 
 /* Group node */
-div.react-flow__node-group, div.react-flow__node-group.selected {
-    background: oklch(from var(--color-chart-2) l c h / 5%);
-    box-shadow: none;
-    border: 3px dashed var(--color-chart-2) !important;
+div.react-flow__node-group,
+div.react-flow__node-group.selected {
+  background: oklch(from var(--color-chart-2) l c h / 5%);
+  box-shadow: none;
+  border: 3px dashed var(--color-chart-2) !important;
 }
 
 /* Group node  resize */
 div.react-flow__node-group .react-flow__resize-control {
-    padding: 4px;
-    opacity: 0;
-    transition: opacity 0.2s;
+  padding: 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
 }
 
 /* Group node hover display  */
-div.react-flow__node-group:hover .react-flow__resize-control, .react-flow__resize-control:hover {
-    opacity: 1;
+div.react-flow__node-group:hover .react-flow__resize-control,
+.react-flow__resize-control:hover {
+  opacity: 1;
 }
 
 /* Handle */
 div.react-flow__handle {
-    width: 15px;
-    height: 15px;
-    background-color: var(--muted-foreground);
+  width: 15px;
+  height: 15px;
+  background-color: var(--muted-foreground);
 }
 
 /* Edge */
 path.react-flow__edge-path {
-    stroke: var(--muted-foreground);
+  stroke: var(--muted-foreground);
 }
 
 /* Json editor */
 .w-tc-editor {
-    @apply bg-input/30 dark:bg-input/30 rounded-md border border-input;
+  @apply bg-input/30 dark:bg-input/30 rounded-md border border-input;
 }

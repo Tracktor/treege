@@ -51,7 +51,7 @@ const ConditionalEdge = ({
   const { handleSubmit, reset, Field } = useForm({
     defaultValues: {
       conditions: data?.conditions || [{ field: source, operator: "===", value: "" }],
-      isFallback: data?.isFallback || false,
+      isFallback: !!data?.isFallback,
       label: data?.label || "",
     },
     listeners: {
@@ -60,7 +60,7 @@ const ConditionalEdge = ({
       },
       onChangeDebounceMs: 150,
     },
-    onSubmit: async ({ value }) => {
+    onSubmit: ({ value }) => {
       updateEdgeData(id, value);
     },
   });
@@ -80,9 +80,13 @@ const ConditionalEdge = ({
       return data.label || t("editor.conditionalEdge.fallback");
     }
 
-    if (!hasConditions) return null;
+    if (!hasConditions) {
+      return null;
+    }
 
-    if (data.label) return data.label;
+    if (data.label) {
+      return data.label;
+    }
 
     const conditions = data.conditions!;
     if (conditions.length === 1) {
@@ -104,8 +108,12 @@ const ConditionalEdge = ({
   };
 
   const getEdgeStrokeColor = () => {
-    if (data?.isFallback) return "var(--color-chart-4)";
-    if (hasConditions) return "var(--color-chart-2)";
+    if (data?.isFallback) {
+      return "var(--color-chart-4)";
+    }
+    if (hasConditions) {
+      return "var(--color-chart-2)";
+    }
     return "var(--color-chart-3)";
   };
 
@@ -137,12 +145,12 @@ const ConditionalEdge = ({
                 className="h-8 px-2 text-xs"
                 onClick={onEdgeClick}
               >
-                <Waypoints className="w-3 h-3 mr-1" />
+                <Waypoints className="mr-1 h-3 w-3" />
                 {hasConditions || data?.isFallback ? getConditionSummary() : t("editor.conditionalEdge.condition")}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-96 p-1" align="center" onClick={(e) => e.stopPropagation()}>
-              <ScrollArea className="flex flex-col max-h-150 p-3">
+              <ScrollArea className="flex max-h-150 flex-col p-3">
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
@@ -152,7 +160,7 @@ const ConditionalEdge = ({
                   <div className="grid gap-5">
                     <div className="space-y-2">
                       <h4 className="font-medium leading-none">{t("editor.conditionalEdge.displayConditions")}</h4>
-                      <p className="text-sm text-muted-foreground">{t("editor.conditionalEdge.displayConditionsDesc")}</p>
+                      <p className="text-muted-foreground text-sm">{t("editor.conditionalEdge.displayConditionsDesc")}</p>
                     </div>
 
                     <div className="grid gap-4">
@@ -174,7 +182,7 @@ const ConditionalEdge = ({
                       <Field name="isFallback">
                         {(field) => (
                           <FormItem>
-                            <div className="flex items-center gap-3 p-3 border rounded-lg bg-muted/20">
+                            <div className="flex items-center gap-3 rounded-lg border bg-muted/20 p-3">
                               <Checkbox
                                 id="isFallback"
                                 checked={field.state.value}
@@ -199,7 +207,7 @@ const ConditionalEdge = ({
                             <div className="space-y-2">
                               {conditionsField.state.value?.map((_, index) => (
                                 <div key={`condition-${index}`} className="space-y-2">
-                                  <div className="p-3 border rounded-lg bg-muted/30 space-y-2">
+                                  <div className="space-y-2 rounded-lg border bg-muted/30 p-3">
                                     <Field name={`conditions[${index}].field`}>
                                       {(fieldField) => (
                                         <FormItem>
@@ -280,7 +288,7 @@ const ConditionalEdge = ({
                                           handleSubmit().then();
                                         }}
                                       >
-                                        <X className="w-4 h-4 mr-1" />
+                                        <X className="mr-1 h-4 w-4" />
                                         {t("editor.conditionalEdge.removeCondition")}
                                       </Button>
                                     )}
@@ -294,7 +302,7 @@ const ConditionalEdge = ({
                                             value={logicalField.state.value || LOGICAL_OPERATOR.AND}
                                             onValueChange={(value: LogicalOperator) => logicalField.handleChange(value)}
                                           >
-                                            <SelectTrigger className="w-32 h-9 font-semibold">
+                                            <SelectTrigger className="h-9 w-32 font-semibold">
                                               <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
@@ -324,7 +332,7 @@ const ConditionalEdge = ({
                                   handleSubmit().then();
                                 }}
                               >
-                                <Plus className="w-4 h-4 mr-2" />
+                                <Plus className="mr-2 h-4 w-4" />
                                 {t("editor.conditionalEdge.addCondition")}
                               </Button>
                             </div>
@@ -333,9 +341,9 @@ const ConditionalEdge = ({
                       </Field>
                     </div>
 
-                    <div className="flex justify-end pt-2 gap-2">
+                    <div className="flex justify-end gap-2 pt-2">
                       <Button type="button" size="sm" variant="outline" onClick={handleClear}>
-                        <X className="w-4 h-4 mr-1" />
+                        <X className="mr-1 h-4 w-4" />
                         {t("common.clear")}
                       </Button>
                       <Button type="button" size="sm" onClick={() => setIsOpen(false)}>

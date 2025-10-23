@@ -1,8 +1,6 @@
-export { default as TreegeEditor } from "@/editor/features/TreegeEditor/TreegeEditor";
 export * from "@/editor/features/TreegeEditor/TreegeEditor";
-
-// Theme (re-exported from shared for convenience)
-export { ThemeProvider, useTheme } from "@/shared/context/ThemeContext";
-
+export { default as TreegeEditor } from "@/editor/features/TreegeEditor/TreegeEditor";
 // Types
 export * from "@/editor/types/editor";
+// Theme (re-exported from shared for convenience)
+export { ThemeProvider, useTheme } from "@/shared/context/ThemeContext";

@@ -145,7 +145,7 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
 
   // Debounced search for combobox
   useEffect(() => {
-    if (!httpConfig?.searchParam || !searchQuery) return undefined;
+    if (!(httpConfig?.searchParam && searchQuery)) return undefined;
 
     const timer = setTimeout(() => {
       fetchData(searchQuery);
@@ -207,7 +207,7 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
                       </button>
                     </div>
                   )}
-                  {!loading && !fetchError && (
+                  {!(loading || fetchError) && (
                     <>
                       <CommandEmpty>No results found.</CommandEmpty>
                       <CommandGroup>

@@ -53,7 +53,7 @@ const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <div className="flex items-center gap-3">
-        <Checkbox id={name} checked={value || false} onCheckedChange={(checked) => setFieldValue(fieldId, checked)} />
+        <Checkbox id={name} checked={value} onCheckedChange={(checked) => setFieldValue(fieldId, checked)} />
         <div className="grid gap-2">
           <Label htmlFor={name} className="text-sm font-medium cursor-pointer">
             {t(node.data.label) || node.data.name}

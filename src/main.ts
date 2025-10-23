@@ -1,10 +1,9 @@
 // Features
 export * from "@/editor";
 export * from "@/renderer";
-
+export * from "@/shared/types/edge";
 // Types
 export * from "@/shared/types/node";
-export * from "@/shared/types/edge";
 export * from "@/shared/types/translate";
 
 // Utils

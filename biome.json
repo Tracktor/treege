@@ -1,0 +1,10 @@
+{
+  "extends": ["@tracktor/biome-config-react"],
+  "linter": {
+    "rules": {
+      "suspicious": {
+        "noUnknownAtRules": "off"
+      }
+    }
+  }
+}

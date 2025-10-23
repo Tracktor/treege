@@ -49,7 +49,7 @@ const compareValues = (fieldVal: any, condVal: any, operator: Operator): boolean
     const numCondVal = Number(normalizedCondVal);
 
     // If both can be converted to valid numbers, use numeric comparison
-    if (!Number.isNaN(numFieldVal) && !Number.isNaN(numCondVal)) {
+    if (!(Number.isNaN(numFieldVal) || Number.isNaN(numCondVal))) {
       switch (operator) {
         case ">":
           return numFieldVal > numCondVal;
@@ -75,7 +75,7 @@ const compareValues = (fieldVal: any, condVal: any, operator: Operator): boolean
       const numFieldVal = Number(normalizedFieldVal);
       const numCondVal = Number(normalizedCondVal);
 
-      if (!Number.isNaN(numFieldVal) && !Number.isNaN(numCondVal)) {
+      if (!(Number.isNaN(numFieldVal) || Number.isNaN(numCondVal))) {
         return numFieldVal === numCondVal;
       }
 
@@ -88,7 +88,7 @@ const compareValues = (fieldVal: any, condVal: any, operator: Operator): boolean
       const numFieldVal = Number(normalizedFieldVal);
       const numCondVal = Number(normalizedCondVal);
 
-      if (!Number.isNaN(numFieldVal) && !Number.isNaN(numCondVal)) {
+      if (!(Number.isNaN(numFieldVal) || Number.isNaN(numCondVal))) {
         return numFieldVal !== numCondVal;
       }
 
@@ -114,7 +114,7 @@ export const evaluateCondition = (
 
   // If condition is incomplete, consider it as always true
   // This allows edges without conditions to always be followed
-  if (!field || !operator || value === undefined) {
+  if (!(field && operator) || value === undefined) {
     return true;
   }
 
