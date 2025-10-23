@@ -59,13 +59,26 @@ const TreegeRenderer = ({
     (e: FormEvent) => {
       e.preventDefault();
 
-      const { isValid } = validateForm(validateRef.current);
+      const { isValid, errors } = validateForm(validateRef.current);
 
       if (isValid && onSubmit) {
         onSubmit(exportedValues);
+      } else {
+        // Focus the first input field with an error
+        const firstErrorNodeId = Object.keys(errors)[0];
+
+        if (firstErrorNodeId) {
+          const fieldName = getFieldNameFromNodeId(firstErrorNodeId, inputNodes);
+
+          if (fieldName) {
+            // Try to find the input by name attribute
+            const input = document.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(`[name="${fieldName}"]`);
+            input?.focus();
+          }
+        }
       }
     },
-    [validateForm, onSubmit, exportedValues],
+    [validateForm, onSubmit, exportedValues, inputNodes],
   );
 
   // ============================================
@@ -165,23 +178,6 @@ const TreegeRenderer = ({
       validateForm(validateRef.current);
     }
   }, [formValues, validationMode, validateForm]);
-
-  /**
-   * Focus the first input field with an error when errors change
-   */
-  useEffect(() => {
-    const firstErrorNodeId = Object.keys(formErrors)[0];
-
-    if (firstErrorNodeId) {
-      const fieldName = getFieldNameFromNodeId(firstErrorNodeId, inputNodes);
-
-      if (fieldName) {
-        // Try to find the input by name attribute
-        const input = document.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(`[name="${fieldName}"]`);
-        input?.focus();
-      }
-    }
-  }, [formErrors, inputNodes]);
 
   return (
     <ThemeProvider theme={theme} storageKey="treege-renderer-theme">
