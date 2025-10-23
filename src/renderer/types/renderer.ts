@@ -46,10 +46,13 @@ export type TreegeRendererComponents = {
    */
   form?: (props: { children: ReactNode; onSubmit: (e: FormEvent) => void }) => ReactNode;
   /**
-   * Custom submit button
-   * @param props
+   * Custom submit button (pure button without wrapper)
    */
-  submitButton?: (props: { label?: string; missingFields?: string[] }) => ReactNode;
+  submitButton?: (props: { label?: string }) => ReactNode;
+  /**
+   * Custom submit button wrapper (e.g., for tooltip with missing fields)
+   */
+  submitButtonWrapper?: (props: { children: ReactNode; missingFields?: string[] }) => ReactNode;
 };
 
 /**

@@ -6,6 +6,7 @@ import DefaultFormWrapper from "@/renderer/features/TreegeRenderer/web/component
 import DefaultGroup from "@/renderer/features/TreegeRenderer/web/components/DefaultGroup";
 import { defaultInputRenderers } from "@/renderer/features/TreegeRenderer/web/components/DefaultInputs";
 import DefaultSubmitButton from "@/renderer/features/TreegeRenderer/web/components/DefaultSubmitButton";
+import DefaultSubmitButtonWrapper from "@/renderer/features/TreegeRenderer/web/components/DefaultSubmitButtonWrapper";
 import { defaultUI } from "@/renderer/features/TreegeRenderer/web/components/DefaultUI";
 import { TreegeRendererProps } from "@/renderer/types/renderer";
 import { flattenFlows } from "@/renderer/utils/flow";
@@ -36,6 +37,7 @@ const TreegeRenderer = ({
   // Components with fallbacks
   const FormWrapper = components.form || DefaultFormWrapper;
   const SubmitButton = components.submitButton || DefaultSubmitButton;
+  const SubmitButtonWrapper = components.submitButtonWrapper || DefaultSubmitButtonWrapper;
   // Refs to avoid re-creating effects
   const onChangeRef = useRef(onChange);
   const validateRef = useRef(validate);
@@ -190,7 +192,11 @@ const TreegeRenderer = ({
       >
         <FormWrapper onSubmit={handleSubmit}>
           {visibleRootNodes.map((node) => renderNode(node))}
-          {canSubmit && <SubmitButton label={t("renderer.defaultSubmitButton.submit")} missingFields={missingRequiredFields} />}
+          {canSubmit && (
+            <SubmitButtonWrapper missingFields={missingRequiredFields}>
+              <SubmitButton label={t("renderer.defaultSubmitButton.submit")} />
+            </SubmitButtonWrapper>
+          )}
         </FormWrapper>
       </TreegeRendererProvider>
     </ThemeProvider>
