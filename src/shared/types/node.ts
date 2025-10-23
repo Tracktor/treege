@@ -165,13 +165,6 @@ export type InputNodeData = BaseNodeData & {
   httpConfig?: HttpConfig;
 };
 
-export type JsonNodeData = BaseNodeData & {
-  /**
-   * The JSON string to be processed or displayed
-   */
-  json?: string;
-};
-
 export type UINodeData = BaseNodeData & {
   /**
    * The type of UI component to render (e.g., "button", "text", "image")
@@ -182,7 +175,7 @@ export type UINodeData = BaseNodeData & {
 /**
  * Union type representing all possible node data types in the Treege system
  */
-export type TreegeNodeData = InputNodeData | UINodeData | FlowNodeData | GroupNodeData | JsonNodeData;
+export type TreegeNodeData = InputNodeData | UINodeData | FlowNodeData | GroupNodeData;
 
 /**
  * A TreegeNode represents a node in the flowchart with specific data and properties

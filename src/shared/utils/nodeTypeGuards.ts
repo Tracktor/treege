@@ -1,5 +1,5 @@
 import { Node } from "@xyflow/react";
-import { FlowNodeData, GroupNodeData, InputNodeData, JsonNodeData, TreegeNode, UINodeData } from "@/shared/types/node";
+import { FlowNodeData, GroupNodeData, InputNodeData, TreegeNode, UINodeData } from "@/shared/types/node";
 
 /**
  * Type guard to check if a node is an InputNode
@@ -24,9 +24,3 @@ export const isFlowNode = (node: TreegeNode | undefined): node is Node<FlowNodeD
  * @param node
  */
 export const isGroupNode = (node: TreegeNode | undefined): node is Node<GroupNodeData, "group"> => node?.type === "group";
-
-/**
- * Type guard to check if a node is a JsonNode
- * @param node
- */
-export const isJsonNode = (node: TreegeNode | undefined): node is Node<JsonNodeData, "json"> => node?.type === "json";

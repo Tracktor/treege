@@ -131,10 +131,10 @@ const ExampleLayout = ({ flow }: { flow?: Flow }) => {
 
   return (
     <div className="h-screen w-screen flex">
-      <div className="w-1/2 border-r">
+      <div className="w-8/12 border-r">
         <EditorPanel onSave={handleSave} flow={flow} theme={theme} language={language} />
       </div>
-      <div className="w-1/2">
+      <div className="w-4/12">
         <RendererPanel flow={savedFlow} theme={theme} setTheme={setTheme} language={language} setLanguage={setLanguage} />
       </div>
     </div>

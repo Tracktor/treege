@@ -1,7 +1,6 @@
 import FlowNodeForm from "@/editor/features/TreegeEditor/forms/FlowNodeForm";
 import GroupNodeForm from "@/editor/features/TreegeEditor/forms/GroupNodeForm";
 import InputNodeForm from "@/editor/features/TreegeEditor/forms/InputNodeForm";
-import JsonNodeForm from "@/editor/features/TreegeEditor/forms/JsonNodeForm";
 import UINodeForm from "@/editor/features/TreegeEditor/forms/UINodeForm";
 import SelectNodeGroup from "@/editor/features/TreegeEditor/inputs/SelectNodeGroup";
 import SelectNodeType from "@/editor/features/TreegeEditor/inputs/SelectNodeType";
@@ -12,7 +11,7 @@ import { ScrollArea } from "@/shared/components/ui/scroll-area";
 import { Separator } from "@/shared/components/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/shared/components/ui/sheet";
 import { TreegeNodeData } from "@/shared/types/node";
-import { isFlowNode, isGroupNode, isInputNode, isJsonNode, isUINode } from "@/shared/utils/nodeTypeGuards";
+import { isFlowNode, isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
 
 const NodeActionsSheet = () => {
   const { selectedNode, hasSelectedNodes } = useNodesSelection<TreegeNodeData>();
@@ -39,7 +38,6 @@ const NodeActionsSheet = () => {
 
             {isInputNode(selectedNode) && <InputNodeForm />}
             {isUINode(selectedNode) && <UINodeForm />}
-            {isJsonNode(selectedNode) && <JsonNodeForm />}
             {isFlowNode(selectedNode) && <FlowNodeForm />}
             {isGroupNode(selectedNode) && <GroupNodeForm />}
           </div>
