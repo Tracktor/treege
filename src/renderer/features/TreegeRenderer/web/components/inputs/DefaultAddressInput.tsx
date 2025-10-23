@@ -39,7 +39,7 @@ const fetchNominatimSuggestions = async (query: string, language?: string): Prom
 
     const data = await response.json();
 
-    return data.map((item: any) => ({
+    return data.map((item: { display_name: string }) => ({
       label: item.display_name,
       value: item.display_name,
     }));
@@ -52,7 +52,6 @@ const fetchNominatimSuggestions = async (query: string, language?: string): Prom
 /**
  * Fetch address suggestions from Google Places using the SDK
  */
-
 const fetchGooglePlacesSuggestions = (query: string): Promise<AddressSuggestion[]> => {
   if (!query || query.trim().length < 3) {
     return Promise.resolve([]);

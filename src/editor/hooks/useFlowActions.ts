@@ -22,7 +22,7 @@ const useFlowActions = () => {
    * @param data - Partial data to merge into the node's existing data.
    */
   const updateNodeData = useCallback(
-    <T extends Record<string, any>>(id: string, data: Partial<T>) => {
+    <T extends Record<string, unknown>>(id: string, data: Partial<T>) => {
       setNodes((nds) =>
         nds.map((node) => {
           if (node.id === id) {
@@ -87,7 +87,7 @@ const useFlowActions = () => {
    * @param data - Partial data to merge into the selected node's existing data.
    */
   const updateSelectedNodeData = useCallback(
-    <T extends Record<string, any>>(data: Partial<T>) => {
+    <T extends Record<string, unknown>>(data: Partial<T>) => {
       const currentSelectedNode = getNodes().find((node) => node.selected);
       if (!currentSelectedNode) {
         return;

@@ -12,14 +12,16 @@ import it from "@/shared/locales/it.json";
 import pt from "@/shared/locales/pt.json";
 import type { Translatable } from "@/shared/types/translate";
 
-export type TranslationDict = Record<string, any>;
+export type TranslationDict = {
+  [key: string]: string | TranslationDict;
+};
 
 /**
  * Helper type to extract all dot-notation paths from a nested object
  */
-type DotNotationKeys<T, Prefix extends string = ""> = T extends Record<string, any>
+type DotNotationKeys<T, Prefix extends string = ""> = T extends Record<string, unknown>
   ? {
-      [K in keyof T & string]: T[K] extends Record<string, any> ? DotNotationKeys<T[K], `${Prefix}${K}.`> : `${Prefix}${K}`;
+      [K in keyof T & string]: T[K] extends Record<string, unknown> ? DotNotationKeys<T[K], `${Prefix}${K}.`> : `${Prefix}${K}`;
     }[keyof T & string]
   : never;
 

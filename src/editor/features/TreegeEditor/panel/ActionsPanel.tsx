@@ -74,7 +74,8 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
             description: t("editor.actionsPanel.invalidJsonDesc"),
           });
         }
-      } catch (_error) {
+      } catch (error) {
+        console.warn(error);
         toast.error(t("editor.actionsPanel.parseError"), {
           description: t("editor.actionsPanel.parseErrorDesc"),
         });

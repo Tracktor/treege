@@ -1,11 +1,11 @@
 import { useForm } from "@tanstack/react-form";
 import { ChevronsUpDown, Plus, X } from "lucide-react";
-import { useId, useState } from "react";
+import { useState } from "react";
 import HttpConfigForm from "@/editor/features/TreegeEditor/forms/HttpConfigForm";
 import ComboboxPattern from "@/editor/features/TreegeEditor/inputs/ComboboxPattern";
 import SelectInputType from "@/editor/features/TreegeEditor/inputs/SelectInputType";
 import SelectLanguage from "@/editor/features/TreegeEditor/inputs/SelectLanguage";
-import { useAvailableParentFields } from "@/editor/hooks/useAvailableParentFields";
+import useAvailableParentFields from "@/editor/hooks/useAvailableParentFields";
 import useFlowActions from "@/editor/hooks/useFlowActions";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
 import useTranslate from "@/editor/hooks/useTranslate";
@@ -20,7 +20,6 @@ import { Language } from "@/shared/types/languages";
 import { InputNodeData } from "@/shared/types/node";
 
 const InputNodeForm = () => {
-  const nodeFormId = useId();
   const [selectedLanguage, setSelectedLanguage] = useState<Language>("en");
   const { selectedNode } = useNodesSelection<InputNodeData>();
   const { updateSelectedNodeData } = useFlowActions();
@@ -56,7 +55,6 @@ const InputNodeForm = () => {
 
   return (
     <form
-      id={`${nodeFormId}-input-node-form`}
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -195,12 +193,8 @@ const InputNodeForm = () => {
             name="multiple"
             children={(field) => (
               <div className="flex items-center space-x-2">
-                <Switch
-                  id={`${nodeFormId}-file-multiple`}
-                  checked={field.state.value}
-                  onCheckedChange={(newValue) => field.handleChange(newValue)}
-                />
-                <Label htmlFor={`${nodeFormId}-file-multiple`}>{t("editor.inputNodeForm.multipleFiles")}</Label>
+                <Switch id={field.name} checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
+                <Label htmlFor={field.name}>{t("editor.inputNodeForm.multipleFiles")}</Label>
               </div>
             )}
           />
@@ -289,12 +283,8 @@ const InputNodeForm = () => {
                   name="multiple"
                   children={(field) => (
                     <div className="flex items-center space-x-2">
-                      <Switch
-                        id={`${nodeFormId}-multiple`}
-                        checked={field.state.value}
-                        onCheckedChange={(newValue) => field.handleChange(newValue)}
-                      />
-                      <Label htmlFor={`${nodeFormId}-multiple`}>{t("editor.inputNodeForm.multipleSelection")}</Label>
+                      <Switch id={field.name} checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
+                      <Label htmlFor={field.name}>{t("editor.inputNodeForm.multipleSelection")}</Label>
                     </div>
                   )}
                 />
@@ -320,12 +310,8 @@ const InputNodeForm = () => {
               children={(field) => (
                 <FormItem>
                   <div className="flex items-center space-x-2">
-                    <Switch
-                      id={`${nodeFormId}-required`}
-                      checked={field.state.value}
-                      onCheckedChange={(newValue) => field.handleChange(newValue)}
-                    />
-                    <Label htmlFor={`${nodeFormId}-required`}>{t("editor.inputNodeForm.required")}</Label>
+                    <Switch id={field.name} checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
+                    <Label htmlFor={field.name}>{t("editor.inputNodeForm.required")}</Label>
                   </div>
                 </FormItem>
               )}
@@ -383,14 +369,14 @@ const InputNodeForm = () => {
               {(defaultValueField) => (
                 <>
                   <FormItem>
-                    <Label htmlFor="defaultValueType">{t("editor.inputNodeForm.defaultValueType")}</Label>
+                    <Label htmlFor={defaultValueField.name}>{t("editor.inputNodeForm.defaultValueType")}</Label>
                     <Select
                       value={defaultValueField.state.value?.type || "none"}
                       onValueChange={(value: "none" | "static" | "reference") => {
                         defaultValueField.handleChange(value === "none" ? null : { type: value });
                       }}
                     >
-                      <SelectTrigger id={`${nodeFormId}-defaultValueType`}>
+                      <SelectTrigger id={defaultValueField.name}>
                         <SelectValue placeholder={t("editor.inputNodeForm.selectType")} />
                       </SelectTrigger>
                       <SelectContent>
@@ -410,9 +396,9 @@ const InputNodeForm = () => {
                         if ((inputType === "select" || inputType === "checkbox") && selectedNode?.data?.multiple) {
                           return (
                             <FormItem>
-                              <Label htmlFor={`${nodeFormId}-staticValue`}>{t("editor.inputNodeForm.defaultValuesCommaSeparated")}</Label>
+                              <Label htmlFor={field.name}>{t("editor.inputNodeForm.defaultValuesCommaSeparated")}</Label>
                               <Input
-                                id={`${nodeFormId}-staticValue`}
+                                id={field.name}
                                 placeholder={t("editor.inputNodeForm.defaultValuesPlaceholder")}
                                 value={Array.isArray(field.state.value) ? field.state.value.join(", ") : ""}
                                 onChange={({ target }) => {
@@ -433,11 +419,11 @@ const InputNodeForm = () => {
                             <FormItem>
                               <div className="flex items-center space-x-2">
                                 <Switch
-                                  id={`${nodeFormId}-staticValue`}
+                                  id={field.name}
                                   checked={!!field.state.value}
                                   onCheckedChange={(value: boolean) => field.handleChange(value)}
                                 />
-                                <Label htmlFor={`${nodeFormId}-staticValue`}>{t("editor.inputNodeForm.defaultChecked")}</Label>
+                                <Label htmlFor={field.name}>{t("editor.inputNodeForm.defaultChecked")}</Label>
                               </div>
                             </FormItem>
                           );
@@ -446,9 +432,9 @@ const InputNodeForm = () => {
                         // Default - show text input
                         return (
                           <FormItem>
-                            <Label htmlFor={`${nodeFormId}-staticValue`}>{t("editor.inputNodeForm.staticValue")}</Label>
+                            <Label htmlFor={field.name}>{t("editor.inputNodeForm.staticValue")}</Label>
                             <Input
-                              id={`${nodeFormId}-staticValue`}
+                              id={field.name}
                               placeholder={t("editor.inputNodeForm.staticValuePlaceholder")}
                               value={typeof field.state.value === "string" ? field.state.value : ""}
                               onChange={({ target }) => field.handleChange(target.value || "")}
@@ -464,14 +450,14 @@ const InputNodeForm = () => {
                       <Field name="defaultValue.referenceField">
                         {(field) => (
                           <FormItem>
-                            <Label htmlFor="referenceField">{t("editor.inputNodeForm.referenceField")}</Label>
+                            <Label htmlFor={field.name}>{t("editor.inputNodeForm.referenceField")}</Label>
                             <Select
                               value={field.state.value || ""}
                               onValueChange={(value) => {
                                 field.handleChange(value);
                               }}
                             >
-                              <SelectTrigger id={`${nodeFormId}-referenceField`}>
+                              <SelectTrigger id={field.name}>
                                 <SelectValue placeholder={t("editor.inputNodeForm.selectReferenceField")} />
                               </SelectTrigger>
                               <SelectContent>
@@ -498,7 +484,7 @@ const InputNodeForm = () => {
                       <Field name="defaultValue.transformFunction">
                         {(field) => (
                           <FormItem>
-                            <Label htmlFor="transformFunction">{t("editor.inputNodeForm.transformType")}</Label>
+                            <Label htmlFor={field.name}>{t("editor.inputNodeForm.transformType")}</Label>
                             <Select
                               value={field.state.value || "none"}
                               onValueChange={(value: "none" | "toString" | "toNumber" | "toBoolean" | "toArray" | "toObject") => {
@@ -516,7 +502,7 @@ const InputNodeForm = () => {
                                 }
                               }}
                             >
-                              <SelectTrigger id={`${nodeFormId}-transformFunction`}>
+                              <SelectTrigger id={field.name}>
                                 <SelectValue placeholder={t("editor.inputNodeForm.selectTransformation")} />
                               </SelectTrigger>
                               <SelectContent>

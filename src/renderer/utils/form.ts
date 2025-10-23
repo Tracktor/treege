@@ -41,7 +41,7 @@ export const checkFormFieldHasValue = (fieldName: string | undefined, formValues
  * returns { firstName: 'Alice', lastName: 'Bob' }
  */
 export const convertFormValuesToNamedFormat = (formValues: FormValues, nodes: Node<InputNodeData>[]): Record<string, any> => {
-  const exported: Record<string, any> = {};
+  const exported: Record<string, unknown> = {};
 
   nodes.forEach((node) => {
     const nodeId = node.id;

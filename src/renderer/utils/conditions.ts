@@ -10,7 +10,7 @@ import { isInputNode } from "@/shared/utils/nodeTypeGuards";
  * Normalize values for comparison
  * Handles string/number conversion and edge cases
  */
-const normalizeValue = (value: any): string | number | boolean | null => {
+const normalizeValue = (value: unknown): string | number | boolean | null => {
   if (value === null || value === undefined) {
     return null;
   }
@@ -35,7 +35,7 @@ const normalizeValue = (value: any): string | number | boolean | null => {
 /**
  * Compare two values using the specified operator
  */
-const compareValues = (fieldVal: any, condVal: any, operator: Operator): boolean => {
+const compareValues = (fieldVal: unknown, condVal: unknown, operator: Operator): boolean => {
   const normalizedFieldVal = normalizeValue(fieldVal);
   const normalizedCondVal = normalizeValue(condVal);
 

@@ -1,7 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import { Plus, Variable, X } from "lucide-react";
-import { useId } from "react";
-import { useAvailableParentFields } from "@/editor/hooks/useAvailableParentFields";
+import useAvailableParentFields from "@/editor/hooks/useAvailableParentFields";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
 import useTranslate from "@/editor/hooks/useTranslate";
 import { Button } from "@/shared/components/ui/button";
@@ -22,7 +21,6 @@ interface HttpConfigFormProps {
 }
 
 const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
-  const configFromId = useId();
   const { selectedNode } = useNodesSelection<InputNodeData>();
   const t = useTranslate();
   const availableParentFields = useAvailableParentFields(selectedNode?.id);
@@ -54,7 +52,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
   });
 
   return (
-    <div id={`${configFromId}-http-config-form`}>
+    <div>
       <div className="grid gap-6">
         <Field
           name="url"
@@ -333,12 +331,8 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
             name="fetchOnMount"
             children={(field) => (
               <div className="flex items-center space-x-2">
-                <Switch
-                  id={`${configFromId}-fetchOnMount`}
-                  checked={field.state.value}
-                  onCheckedChange={(newValue) => field.handleChange(newValue)}
-                />
-                <Label htmlFor={`${configFromId}-fetchOnMount`}>{t("editor.httpConfigForm.fetchOnMount")}</Label>
+                <Switch id={field.name} checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
+                <Label htmlFor={field.name}>{t("editor.httpConfigForm.fetchOnMount")}</Label>
               </div>
             )}
           />
@@ -347,12 +341,8 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
             name="showLoading"
             children={(field) => (
               <div className="flex items-center space-x-2">
-                <Switch
-                  id={`${configFromId}-showLoading`}
-                  checked={field.state.value}
-                  onCheckedChange={(newValue) => field.handleChange(newValue)}
-                />
-                <Label htmlFor={`${configFromId}-showLoading`}>{t("editor.httpConfigForm.showLoadingState")}</Label>
+                <Switch id={field.name} checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
+                <Label htmlFor={field.name}>{t("editor.httpConfigForm.showLoadingState")}</Label>
               </div>
             )}
           />

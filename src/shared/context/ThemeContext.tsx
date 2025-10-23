@@ -33,6 +33,7 @@ export const ThemeProvider = ({
     if (controlledTheme) {
       return controlledTheme;
     }
+
     // Otherwise, use localStorage or default
     if (typeof window !== "undefined") {
       return (localStorage.getItem(storageKey) as Theme) || defaultTheme;

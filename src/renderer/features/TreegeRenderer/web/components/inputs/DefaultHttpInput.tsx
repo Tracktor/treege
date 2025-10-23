@@ -143,7 +143,7 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
   // Fetch on mount if configured
   useEffect(() => {
     if (httpConfig?.fetchOnMount) {
-      fetchData();
+      void fetchData();
     }
   }, [httpConfig?.fetchOnMount, fetchData]);
 
@@ -154,7 +154,7 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
     }
 
     const timer = setTimeout(() => {
-      fetchData(searchQuery);
+      void fetchData(searchQuery);
     }, 300);
 
     return () => clearTimeout(timer);

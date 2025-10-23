@@ -1,5 +1,5 @@
 import { useForm } from "@tanstack/react-form";
-import { useId, useState } from "react";
+import { useState } from "react";
 import SelectLanguage from "@/editor/features/TreegeEditor/inputs/SelectLanguage";
 import useFlowActions from "@/editor/hooks/useFlowActions";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
@@ -11,7 +11,6 @@ import { Language } from "@/shared/types/languages";
 import { FlowNodeData } from "@/shared/types/node";
 
 const FlowNodeForm = () => {
-  const flowNodeFormId = useId();
   const [selectedLanguage, setSelectedLanguage] = useState<Language>("en");
   const { updateSelectedNodeData } = useFlowActions();
   const { selectedNode } = useNodesSelection<FlowNodeData>();
@@ -35,7 +34,6 @@ const FlowNodeForm = () => {
 
   return (
     <form
-      id={`${flowNodeFormId}-flow-node-form`}
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();

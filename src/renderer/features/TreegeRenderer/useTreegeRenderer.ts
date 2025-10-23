@@ -87,7 +87,7 @@ export const useTreegeRenderer = (flows: Flow | Flow[] | null | undefined, initi
   /**
    * Set field value and clear error for that field
    */
-  const setFieldValue = useCallback((fieldName: string, value: any) => {
+  const setFieldValue = useCallback((fieldName: string, value: unknown) => {
     setFormValues((prev) => ({
       ...prev,
       [fieldName]: value,

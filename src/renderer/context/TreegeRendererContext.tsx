@@ -9,7 +9,7 @@ export interface TreegeRendererContextValue {
   formValues: FormValues;
   googleApiKey?: string;
   language: string;
-  setFieldValue: (fieldName: string, value: any) => void;
+  setFieldValue: (fieldName: string, value: unknown) => void;
 }
 
 export interface TreegeRendererProviderProps extends PropsWithChildren {
@@ -39,6 +39,7 @@ export const useTreegeRendererContext = () => {
     if (!baseContext.flows) {
       return [];
     }
+
     return mergeFlows(baseContext.flows).edges;
   }, [baseContext.flows]);
 
