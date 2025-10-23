@@ -64,7 +64,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
           name="url"
           children={(field) => (
             <FormItem>
-              <Label htmlFor={field.name}>API URL</Label>
+              <Label htmlFor={field.name}>{t("editor.httpConfigForm.apiUrl")}</Label>
               <div className="flex gap-2">
                 <Input
                   id={field.name}
@@ -72,7 +72,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={({ target }) => field.handleChange(target.value)}
-                  placeholder="https://api.example.com/data"
+                  placeholder={t("editor.httpConfigForm.apiUrlPlaceholder")}
                   className="flex-1"
                 />
                 <DropdownMenu>
@@ -104,7 +104,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <FormDescription>Use template variables like {"{{fieldId}}"} to reference other fields</FormDescription>
+              <FormDescription>{t("editor.httpConfigForm.apiUrlDesc")}</FormDescription>
             </FormItem>
           )}
         />
@@ -113,20 +113,20 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
           name="method"
           children={(field) => (
             <FormItem>
-              <Label htmlFor={field.name}>HTTP Method</Label>
+              <Label htmlFor={field.name}>{t("editor.httpConfigForm.httpMethod")}</Label>
               <Select
                 value={field.state.value}
                 onValueChange={(newValue: "GET" | "POST" | "PUT" | "DELETE" | "PATCH") => field.handleChange(newValue)}
               >
                 <SelectTrigger id={field.name}>
-                  <SelectValue placeholder="Select method" />
+                  <SelectValue placeholder={t("editor.httpConfigForm.selectMethod")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="GET">GET</SelectItem>
-                  <SelectItem value="POST">POST</SelectItem>
-                  <SelectItem value="PUT">PUT</SelectItem>
-                  <SelectItem value="DELETE">DELETE</SelectItem>
-                  <SelectItem value="PATCH">PATCH</SelectItem>
+                  <SelectItem value="GET">{t("editor.httpConfigForm.methodGet")}</SelectItem>
+                  <SelectItem value="POST">{t("editor.httpConfigForm.methodPost")}</SelectItem>
+                  <SelectItem value="PUT">{t("editor.httpConfigForm.methodPut")}</SelectItem>
+                  <SelectItem value="DELETE">{t("editor.httpConfigForm.methodDelete")}</SelectItem>
+                  <SelectItem value="PATCH">{t("editor.httpConfigForm.methodPatch")}</SelectItem>
                 </SelectContent>
               </Select>
             </FormItem>
@@ -134,7 +134,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
         />
 
         <div className="space-y-4">
-          <h4 className="text-sm font-semibold">Headers</h4>
+          <h4 className="text-sm font-semibold">{t("editor.httpConfigForm.headers")}</h4>
           <Field name="headers" mode="array">
             {(field) => (
               <div className="space-y-2">
@@ -146,7 +146,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                       <Field name={`headers[${index}].key`}>
                         {(subField) => (
                           <Input
-                            placeholder="Header name"
+                            placeholder={t("editor.httpConfigForm.headerName")}
                             value={subField.state.value || ""}
                             onChange={({ target }) => subField.handleChange(target.value)}
                           />
@@ -156,7 +156,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                       <Field name={`headers[${index}].value`}>
                         {(subField) => (
                           <Input
-                            placeholder="Header value"
+                            placeholder={t("editor.httpConfigForm.headerValue")}
                             value={subField.state.value || ""}
                             onChange={({ target }) => subField.handleChange(target.value)}
                           />
@@ -186,7 +186,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                   }}
                 >
                   <Plus className="h-4 w-4 mr-2" />
-                  Add header
+                  {t("editor.httpConfigForm.addHeader")}
                 </Button>
               </div>
             )}
@@ -200,12 +200,12 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                 {(field) => (
                   <FormItem>
                     <div className="flex items-center justify-between mb-2">
-                      <Label htmlFor={field.name}>Request Body (JSON)</Label>
+                      <Label htmlFor={field.name}>{t("editor.httpConfigForm.requestBody")}</Label>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button type="button" variant="ghost" size="sm">
                             <Variable className="h-4 w-4 mr-2" />
-                            Insert variable
+                            {t("editor.httpConfigForm.insertVariable")}
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -239,10 +239,10 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={({ target }) => field.handleChange(target.value)}
-                      placeholder='{"key": "value"}'
+                      placeholder={t("editor.httpConfigForm.requestBodyPlaceholder")}
                       rows={4}
                     />
-                    <FormDescription>Use template variables like ${"{fieldId}"} to reference other fields</FormDescription>
+                    <FormDescription>{t("editor.httpConfigForm.requestBodyDesc")}</FormDescription>
                   </FormItem>
                 )}
               </Field>
@@ -251,43 +251,43 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
         </Field>
 
         <div className="space-y-4">
-          <h4 className="text-sm font-semibold">Response Configuration</h4>
+          <h4 className="text-sm font-semibold">{t("editor.httpConfigForm.responseConfiguration")}</h4>
 
           <Field
             name="responsePath"
             children={(field) => (
               <FormItem>
-                <Label htmlFor={field.name}>Response Path</Label>
+                <Label htmlFor={field.name}>{t("editor.httpConfigForm.responsePath")}</Label>
                 <Input
                   id={field.name}
                   name={field.name}
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={({ target }) => field.handleChange(target.value)}
-                  placeholder="data.users or results[0]"
+                  placeholder={t("editor.httpConfigForm.responsePathPlaceholder")}
                 />
-                <FormDescription>Extract data from response using dot notation or array indexing</FormDescription>
+                <FormDescription>{t("editor.httpConfigForm.responsePathDesc")}</FormDescription>
               </FormItem>
             )}
           />
 
           <div className="space-y-4">
-            <h5 className="text-sm font-medium">Map to Options</h5>
+            <h5 className="text-sm font-medium">{t("editor.httpConfigForm.mapToOptions")}</h5>
 
             <Field
               name="responseMapping.valueField"
               children={(field) => (
                 <FormItem>
-                  <Label htmlFor={field.name}>Value Field</Label>
+                  <Label htmlFor={field.name}>{t("editor.httpConfigForm.valueField")}</Label>
                   <Input
                     id={field.name}
                     name={field.name}
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={({ target }) => field.handleChange(target.value)}
-                    placeholder="id"
+                    placeholder={t("editor.httpConfigForm.valueFieldPlaceholder")}
                   />
-                  <FormDescription>Field to use as option value (e.g., id)</FormDescription>
+                  <FormDescription>{t("editor.httpConfigForm.valueFieldDesc")}</FormDescription>
                 </FormItem>
               )}
             />
@@ -296,16 +296,16 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
               name="responseMapping.labelField"
               children={(field) => (
                 <FormItem>
-                  <Label htmlFor={field.name}>Label Field</Label>
+                  <Label htmlFor={field.name}>{t("editor.httpConfigForm.labelField")}</Label>
                   <Input
                     id={field.name}
                     name={field.name}
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={({ target }) => field.handleChange(target.value)}
-                    placeholder="name"
+                    placeholder={t("editor.httpConfigForm.labelFieldPlaceholder")}
                   />
-                  <FormDescription>Field to use as option label (e.g., name)</FormDescription>
+                  <FormDescription>{t("editor.httpConfigForm.labelFieldDesc")}</FormDescription>
                 </FormItem>
               )}
             />
@@ -315,30 +315,30 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
             name="searchParam"
             children={(field) => (
               <FormItem>
-                <Label htmlFor={field.name}>Search Parameter (optional)</Label>
+                <Label htmlFor={field.name}>{t("editor.httpConfigForm.searchParameter")}</Label>
                 <Input
                   id={field.name}
                   name={field.name}
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={({ target }) => field.handleChange(target.value)}
-                  placeholder="q, search, query..."
+                  placeholder={t("editor.httpConfigForm.searchParameterPlaceholder")}
                 />
-                <FormDescription>If set, enables combobox with search that adds this param to API calls (e.g., ?q=Paris)</FormDescription>
+                <FormDescription>{t("editor.httpConfigForm.searchParameterDesc")}</FormDescription>
               </FormItem>
             )}
           />
         </div>
 
         <div className="space-y-4">
-          <h4 className="text-sm font-semibold">Behavior</h4>
+          <h4 className="text-sm font-semibold">{t("editor.httpConfigForm.behavior")}</h4>
 
           <Field
             name="fetchOnMount"
             children={(field) => (
               <div className="flex items-center space-x-2">
                 <Switch id="fetchOnMount" checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
-                <Label htmlFor="fetchOnMount">Fetch on mount</Label>
+                <Label htmlFor="fetchOnMount">{t("editor.httpConfigForm.fetchOnMount")}</Label>
               </div>
             )}
           />
@@ -348,7 +348,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
             children={(field) => (
               <div className="flex items-center space-x-2">
                 <Switch id="showLoading" checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
-                <Label htmlFor="showLoading">Show loading state</Label>
+                <Label htmlFor="showLoading">{t("editor.httpConfigForm.showLoadingState")}</Label>
               </div>
             )}
           />

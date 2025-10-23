@@ -3,6 +3,7 @@ import { useState } from "react";
 import SelectLanguage from "@/editor/features/TreegeEditor/inputs/SelectLanguage";
 import useFlowActions from "@/editor/hooks/useFlowActions";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
+import useTranslate from "@/editor/hooks/useTranslate";
 import { FormDescription, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
@@ -13,6 +14,7 @@ const FlowNodeForm = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<Language>("en");
   const { updateSelectedNodeData } = useFlowActions();
   const { selectedNode } = useNodesSelection<FlowNodeData>();
+  const t = useTranslate();
 
   const { Field } = useForm({
     defaultValues: {
@@ -44,7 +46,7 @@ const FlowNodeForm = () => {
             name="label"
             children={(field) => (
               <FormItem className="flex-1">
-                <Label htmlFor={field.name}>Label</Label>
+                <Label htmlFor={field.name}>{t("editor.flowNodeForm.label")}</Label>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -67,7 +69,7 @@ const FlowNodeForm = () => {
           name="targetId"
           children={(field) => (
             <FormItem>
-              <Label htmlFor={field.name}>Target id</Label>
+              <Label htmlFor={field.name}>{t("editor.flowNodeForm.targetId")} (Flow ID)</Label>
               <Input
                 id={field.name}
                 name={field.name}
