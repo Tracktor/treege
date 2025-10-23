@@ -232,7 +232,7 @@ export const getFlowRenderState = (
 };
 
 /**
- * Flatten flows by recursively replacing FlowNodes with their target flow's nodes
+ * Merge multiple flows into a single flow by recursively replacing FlowNodes with their target flow's nodes
  *
  * This function takes a flow or an array of flows where the first is the main flow, then:
  * 1. Replaces each FlowNode with the nodes from its target flow
@@ -241,19 +241,13 @@ export const getFlowRenderState = (
  * 4. Connects the last nodes of sub-flows to the nodes that followed the FlowNode
  *
  * @param flows - A single Flow or an array of flows where the first is the main flow, others are sub-flows (can be null/undefined)
- * @returns An object containing the flattened nodes, edges, and normalized flows array
+ * @returns A single merged Flow containing all nodes and edges
  */
-export const flattenFlows = (
-  flows?: Flow | Flow[] | null,
-): {
-  nodes: Node<TreegeNodeData>[];
-  edges: Edge[];
-  flows: Flow[];
-} => {
+export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
   if (!flows) {
     return {
       edges: [],
-      flows: [],
+      id: "empty",
       nodes: [],
     };
   }
@@ -265,20 +259,16 @@ export const flattenFlows = (
   if (flowArray.length === 0) {
     return {
       edges: [],
-      flows: [],
+      id: "empty",
       nodes: [],
     };
   }
 
   const mainFlow = flowArray[0];
 
-  // If only one flow, no need to flatten - just return it as is
+  // If only one flow, no need to merge - just return it as is
   if (flowArray.length === 1) {
-    return {
-      edges: mainFlow.edges,
-      flows: flowArray,
-      nodes: mainFlow.nodes,
-    };
+    return mainFlow;
   }
 
   const mergedNodes: Node<TreegeNodeData>[] = [];
@@ -392,7 +382,7 @@ export const flattenFlows = (
 
   return {
     edges: updatedEdges,
-    flows: flowArray,
+    id: mainFlow.id,
     nodes: mergedNodes,
   };
 };

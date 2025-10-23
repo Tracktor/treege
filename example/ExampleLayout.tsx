@@ -94,9 +94,7 @@ const RendererPanel = ({
           <h3 className="font-semibold mb-2">Current values:</h3>
           <pre className="text-xs p-2 rounded overflow-auto">{JSON.stringify(formValues, null, 2)}</pre>
         </div>
-        {hasNodes && flow ? (
-          <></>
-        ) : (
+        {hasNodes && flow ? null : (
           <div className="flex items-center justify-center h-full text-gray-400">
             <div className="text-center">
               <svg className="mx-auto h-12 w-12 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

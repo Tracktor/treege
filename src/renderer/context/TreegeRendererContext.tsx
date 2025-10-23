@@ -1,12 +1,10 @@
-import { Edge, Node } from "@xyflow/react";
-import { createContext, PropsWithChildren, useContext } from "react";
+import { createContext, PropsWithChildren, useContext, useMemo } from "react";
 import { FormValues } from "@/renderer/types/renderer";
-import { Flow, TreegeNodeData } from "@/shared/types/node";
+import { mergeFlows } from "@/renderer/utils/flow";
+import { Flow } from "@/shared/types/node";
 
 export interface TreegeRendererContextValue {
-  flows?: Flow | Flow[] | null;
-  edges: Edge[];
-  nodes: Node<TreegeNodeData>[];
+  flows?: Flow | null;
   formErrors: Record<string, string>;
   formValues: FormValues;
   googleApiKey?: string;
@@ -27,16 +25,23 @@ export const TreegeRendererProvider = ({ children, value }: TreegeRendererProvid
 export const useTreegeRendererContext = () => {
   const context = useContext(TreegeRendererContext);
 
-  return (
-    context ?? {
-      edges: [],
-      flows: [],
-      formErrors: {},
-      formValues: {},
-      googleApiKey: undefined,
-      language: "",
-      nodes: [],
-      setFieldValue: () => {},
-    }
-  );
+  const baseContext = context ?? {
+    flows: null,
+    formErrors: {},
+    formValues: {},
+    googleApiKey: undefined,
+    language: "",
+    setFieldValue: () => {},
+  };
+
+  // Compute edges from flows for convenience (cached with useMemo)
+  const edges = useMemo(() => {
+    if (!baseContext.flows) return [];
+    return mergeFlows(baseContext.flows).edges;
+  }, [baseContext.flows]);
+
+  return {
+    ...baseContext,
+    edges,
+  };
 };

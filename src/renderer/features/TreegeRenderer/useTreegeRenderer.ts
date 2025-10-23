@@ -1,11 +1,11 @@
-import { Edge, Node } from "@xyflow/react";
+import { Node } from "@xyflow/react";
 import { useCallback, useMemo, useState } from "react";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { FormValues } from "@/renderer/types/renderer";
-import { getFlowRenderState } from "@/renderer/utils/flow";
+import { getFlowRenderState, mergeFlows } from "@/renderer/utils/flow";
 import { isFieldEmpty } from "@/renderer/utils/form";
-import { ConditionalEdgeData } from "@/shared/types/edge";
-import { TreegeNodeData } from "@/shared/types/node";
+import { getInputNodes } from "@/renderer/utils/node";
+import { Flow, TreegeNodeData } from "@/shared/types/node";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
 
 /**
@@ -31,18 +31,16 @@ import { isInputNode } from "@/shared/utils/nodeTypeGuards";
 /**
  * Custom hook for TreegeRenderer - Pure state logic only
  *
- * @param nodes - All nodes from the editor
- * @param edges - All edges from the editor
+ * @param flows - Flow or array of flows (can be null/undefined)
  * @param initialValues - Initial form values (will be merged with node defaults)
  * @param language - Preferred language for translations (defaults to 'en')
  * @returns Pure state and computed values (no side effects)
  */
-export const useTreegeRenderer = (
-  nodes: Node<TreegeNodeData>[],
-  edges: Edge<ConditionalEdgeData>[],
-  initialValues: FormValues = {},
-  language: string = "en",
-) => {
+export const useTreegeRenderer = (flows: Flow | Flow[] | null | undefined, initialValues: FormValues = {}, language: string = "en") => {
+  // Merge flows once and extract nodes/edges
+  const mergedFlow = useMemo(() => mergeFlows(flows), [flows]);
+  const { nodes, edges } = mergedFlow;
+  const inputNodes = useMemo(() => getInputNodes(nodes), [nodes]);
   const t = useTranslate(language);
 
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
@@ -185,6 +183,8 @@ export const useTreegeRenderer = (
     canSubmit: endOfPathReached,
     formErrors,
     formValues,
+    inputNodes,
+    mergedFlow,
     missingRequiredFields,
     setFieldValue,
     setFormErrors,

@@ -9,9 +9,8 @@ import DefaultSubmitButton from "@/renderer/features/TreegeRenderer/web/componen
 import DefaultSubmitButtonWrapper from "@/renderer/features/TreegeRenderer/web/components/DefaultSubmitButtonWrapper";
 import { defaultUI } from "@/renderer/features/TreegeRenderer/web/components/DefaultUI";
 import { TreegeRendererProps } from "@/renderer/types/renderer";
-import { flattenFlows } from "@/renderer/utils/flow";
 import { convertFormValuesToNamedFormat } from "@/renderer/utils/form";
-import { getFieldNameFromNodeId, getInputNodes } from "@/renderer/utils/node";
+import { getFieldNameFromNodeId } from "@/renderer/utils/node";
 import { NODE_TYPE } from "@/shared/constants/node";
 import { ThemeProvider } from "@/shared/context/ThemeContext";
 import { TreegeNodeData, UINodeData } from "@/shared/types/node";
@@ -29,10 +28,19 @@ const TreegeRenderer = ({
   validationMode = "onSubmit",
   theme = "dark",
 }: TreegeRendererProps) => {
-  const { nodes, edges, flows: flowsArray } = useMemo(() => flattenFlows(flows), [flows]);
-
-  const { canSubmit, formErrors, formValues, missingRequiredFields, visibleNodes, visibleRootNodes, setFieldValue, validateForm, t } =
-    useTreegeRenderer(nodes, edges, initialValues, language);
+  const {
+    canSubmit,
+    mergedFlow,
+    formErrors,
+    formValues,
+    inputNodes,
+    missingRequiredFields,
+    visibleNodes,
+    visibleRootNodes,
+    setFieldValue,
+    validateForm,
+    t,
+  } = useTreegeRenderer(flows, initialValues, language);
 
   // Components with fallbacks
   const FormWrapper = components.form || DefaultFormWrapper;
@@ -41,8 +49,7 @@ const TreegeRenderer = ({
   // Refs to avoid re-creating effects
   const onChangeRef = useRef(onChange);
   const validateRef = useRef(validate);
-  // Memoize input nodes and exported values for callbacks
-  const inputNodes = useMemo(() => getInputNodes(nodes), [nodes]);
+  // Memoize exported values for callbacks
   const exportedValues = useMemo(() => convertFormValuesToNamedFormat(formValues, inputNodes), [formValues, inputNodes]);
 
   /**
@@ -180,13 +187,11 @@ const TreegeRenderer = ({
     <ThemeProvider theme={theme} storageKey="treege-renderer-theme">
       <TreegeRendererProvider
         value={{
-          edges,
-          flows: flowsArray,
+          flows: mergedFlow,
           formErrors,
           formValues,
           googleApiKey,
           language,
-          nodes,
           setFieldValue,
         }}
       >
