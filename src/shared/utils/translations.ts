@@ -12,7 +12,9 @@ import it from "@/shared/locales/it.json";
 import pt from "@/shared/locales/pt.json";
 import type { Translatable } from "@/shared/types/translate";
 
-export type TranslationDict = Record<string, any>;
+export type TranslationDict = {
+  [key: string]: string | TranslationDict;
+};
 
 /**
  * Helper type to extract all dot-notation paths from a nested object
