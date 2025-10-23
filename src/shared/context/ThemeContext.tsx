@@ -24,7 +24,7 @@ const ThemeContext = createContext<ThemeProviderState>(initialState);
 export const ThemeProvider = ({
   children,
   defaultTheme = "system",
-  storageKey = "vite-ui-theme",
+  storageKey = "treege-theme",
   theme: controlledTheme,
   ...props
 }: ThemeProviderProps) => {

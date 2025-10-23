@@ -4,7 +4,7 @@ import { FormValues } from "@/renderer/types/renderer";
 import { Flow, TreegeNodeData } from "@/shared/types/node";
 
 export interface TreegeRendererContextValue {
-  flows: Flow[];
+  flows?: Flow | Flow[] | null;
   edges: Edge[];
   nodes: Node<TreegeNodeData>[];
   formErrors: Record<string, string>;

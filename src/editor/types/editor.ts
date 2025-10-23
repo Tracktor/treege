@@ -6,7 +6,7 @@ export interface TreegeEditorProps {
    * Default flow structure containing combined nodes and edges.
    * Note: Individual defaultNodes/defaultEdges props take precedence over this.
    */
-  flow?: Flow;
+  flow?: Flow | null;
   /**
    * Default nodes to initialize the nodes in the flow.
    */

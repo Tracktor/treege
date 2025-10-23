@@ -240,21 +240,45 @@ export const getFlowRenderState = (
  * 3. Redirects edges that point to FlowNodes to the first node of the target flow
  * 4. Connects the last nodes of sub-flows to the nodes that followed the FlowNode
  *
- * @param flows - A single Flow or an array of flows where the first is the main flow, others are sub-flows
+ * @param flows - A single Flow or an array of flows where the first is the main flow, others are sub-flows (can be null/undefined)
  * @returns An object containing the flattened nodes, edges, and normalized flows array
  */
-export const flattenFlows = (flows: Flow | Flow[]): { nodes: Node<TreegeNodeData>[]; edges: Edge[]; flows: Flow[] } => {
-  // Normalize to array
-  const flowArray = Array.isArray(flows) ? flows : [flows];
-  const mainFlow = flowArray[0];
-
-  if (!mainFlow) {
-    return { edges: [], flows: flowArray, nodes: [] };
+export const flattenFlows = (
+  flows?: Flow | Flow[] | null,
+): {
+  nodes: Node<TreegeNodeData>[];
+  edges: Edge[];
+  flows: Flow[];
+} => {
+  if (!flows) {
+    return {
+      edges: [],
+      flows: [],
+      nodes: [],
+    };
   }
+
+  // Normalize to array and filter out null/undefined values
+  const flowArray = Array.isArray(flows) ? flows : [flows];
+
+  // Early return if no flows or empty array
+  if (flowArray.length === 0) {
+    return {
+      edges: [],
+      flows: [],
+      nodes: [],
+    };
+  }
+
+  const mainFlow = flowArray[0];
 
   // If only one flow, no need to flatten - just return it as is
   if (flowArray.length === 1) {
-    return { edges: mainFlow.edges, flows: flowArray, nodes: mainFlow.nodes };
+    return {
+      edges: mainFlow.edges,
+      flows: flowArray,
+      nodes: mainFlow.nodes,
+    };
   }
 
   const mergedNodes: Node<TreegeNodeData>[] = [];

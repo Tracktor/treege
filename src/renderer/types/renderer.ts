@@ -64,7 +64,7 @@ export type TreegeRendererProps = {
    * - If a single Flow: renders that flow
    * - If an array: first flow is the main flow, others are sub-flows available for FlowNodes
    */
-  flows: Flow | Flow[];
+  flows?: Flow | Flow[] | null;
   /**
    * Initial form values
    */

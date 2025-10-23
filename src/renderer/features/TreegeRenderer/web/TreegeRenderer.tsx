@@ -177,7 +177,7 @@ const TreegeRenderer = ({
   }, [formErrors, inputNodes]);
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme} storageKey="treege-renderer-theme">
       <TreegeRendererProvider
         value={{
           edges,
