@@ -52,13 +52,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
   });
 
   return (
-    <form
-      id="http-config-form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-    >
+    <div id="http-config-form">
       <div className="grid gap-6">
         <Field
           name="url"
@@ -354,7 +348,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
           />
         </div>
       </div>
-    </form>
+    </div>
   );
 };
 
