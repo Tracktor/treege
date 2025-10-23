@@ -24,7 +24,7 @@ const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
 
     return (
       <FormItem className="mb-4">
-        <Label className="block text-sm font-medium mb-2">
+        <Label className="mb-2 block font-medium text-sm">
           {t(node.data.label) || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
@@ -37,7 +37,7 @@ const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
                 onCheckedChange={(checked) => handleCheckboxChange(String(opt.value), checked as boolean)}
                 disabled={opt.disabled}
               />
-              <Label htmlFor={`${name}-${opt.value}`} className="text-sm font-normal cursor-pointer">
+              <Label htmlFor={`${name}-${opt.value}`} className="cursor-pointer font-normal text-sm">
                 {t(opt.label)}
               </Label>
             </div>
@@ -55,7 +55,7 @@ const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
       <div className="flex items-center gap-3">
         <Checkbox id={name} checked={value} onCheckedChange={(checked) => setFieldValue(fieldId, checked)} />
         <div className="grid gap-2">
-          <Label htmlFor={name} className="text-sm font-medium cursor-pointer">
+          <Label htmlFor={name} className="cursor-pointer font-medium text-sm">
             {t(node.data.label) || node.data.name}
             {node.data.required && <span className="text-red-500">*</span>}
           </Label>

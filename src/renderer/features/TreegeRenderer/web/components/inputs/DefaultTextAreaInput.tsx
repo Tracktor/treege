@@ -25,7 +25,7 @@ const DefaultTextAreaInput = ({ node }: InputRenderProps) => {
         value={value ?? ""}
         onChange={(e) => setFieldValue(fieldId, e.target.value)}
         placeholder={t(node.data.placeholder)}
-        className="w-full px-3 py-2 border rounded-md"
+        className="w-full rounded-md border px-3 py-2"
         rows={4}
       />
       {error && <FormError>{error}</FormError>}

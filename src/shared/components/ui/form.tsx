@@ -6,11 +6,11 @@ function FormItem({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function FormDescription({ className, ...props }: React.ComponentProps<"p">) {
-  return <p data-slot="form-description" className={cn("text-xs text-muted-foreground", className)} {...props} />;
+  return <p data-slot="form-description" className={cn("text-muted-foreground text-xs", className)} {...props} />;
 }
 
 function FormError({ className, ...props }: React.ComponentProps<"p">) {
-  return <p data-slot="form-error" className={cn("text-xs text-destructive", className)} {...props} />;
+  return <p data-slot="form-error" className={cn("text-destructive text-xs", className)} {...props} />;
 }
 
 export { FormError, FormItem, FormDescription };

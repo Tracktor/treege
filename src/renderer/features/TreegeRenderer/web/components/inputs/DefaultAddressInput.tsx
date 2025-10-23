@@ -17,7 +17,9 @@ type AddressSuggestion = {
  * Fetch address suggestions from Nominatim (OpenStreetMap)
  */
 const fetchNominatimSuggestions = async (query: string, language?: string): Promise<AddressSuggestion[]> => {
-  if (!query || query.trim().length < 3) return [];
+  if (!query || query.trim().length < 3) {
+    return [];
+  }
 
   try {
     const response = await fetch(
@@ -31,7 +33,9 @@ const fetchNominatimSuggestions = async (query: string, language?: string): Prom
       },
     );
 
-    if (!response.ok) return [];
+    if (!response.ok) {
+      return [];
+    }
 
     const data = await response.json();
 
@@ -48,8 +52,11 @@ const fetchNominatimSuggestions = async (query: string, language?: string): Prom
 /**
  * Fetch address suggestions from Google Places using the SDK
  */
-const fetchGooglePlacesSuggestions = async (query: string): Promise<AddressSuggestion[]> => {
-  if (!query || query.trim().length < 3) return [];
+
+const fetchGooglePlacesSuggestions = (query: string): Promise<AddressSuggestion[]> => {
+  if (!query || query.trim().length < 3) {
+    return Promise.resolve([]);
+  }
 
   return new Promise((resolve) => {
     if (!window.google?.maps?.places) {
@@ -142,15 +149,17 @@ const DefaultAddressInput = ({ node }: InputRenderProps) => {
             value={value}
             onChange={(e) => handleInputChange(e.target.value)}
             onFocus={() => {
-              if (suggestions.length > 0) setPopoverOpen(true);
+              if (suggestions.length > 0) {
+                setPopoverOpen(true);
+              }
             }}
             placeholder={t(node.data.placeholder) || t("renderer.defaultAddressInput.enterAddress")}
             className="pr-10"
             autoComplete="off"
           />
-          <MapPin className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+          <MapPin className="-translate-y-1/2 pointer-events-none absolute top-1/2 right-3 h-4 w-4 text-muted-foreground" />
           {popoverOpen && (
-            <div className="absolute z-50 w-full mt-1 bg-popover border rounded-md shadow-md">
+            <div className="absolute z-50 mt-1 w-full rounded-md border bg-popover shadow-md">
               <Command>
                 <CommandList>
                   <CommandEmpty>{t("renderer.defaultAddressInput.noAddressesFound")}</CommandEmpty>

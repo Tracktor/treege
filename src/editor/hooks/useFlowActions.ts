@@ -72,7 +72,9 @@ const useFlowActions = () => {
   const updateSelectedNodeType = useCallback(
     (type: string) => {
       const currentSelectedNode = getNodes().find((node) => node.selected);
-      if (!currentSelectedNode) return;
+      if (!currentSelectedNode) {
+        return;
+      }
 
       updateNodeType(currentSelectedNode.id, type);
     },
@@ -87,7 +89,9 @@ const useFlowActions = () => {
   const updateSelectedNodeData = useCallback(
     <T extends Record<string, any>>(data: Partial<T>) => {
       const currentSelectedNode = getNodes().find((node) => node.selected);
-      if (!currentSelectedNode) return;
+      if (!currentSelectedNode) {
+        return;
+      }
 
       updateNodeData(currentSelectedNode.id, data);
     },

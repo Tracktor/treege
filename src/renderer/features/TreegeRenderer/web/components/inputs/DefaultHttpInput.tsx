@@ -18,15 +18,19 @@ type HttpResponse = Record<string, unknown> | unknown[];
  * Extracts a value from an object using a path like "data.users" or "results[0].name"
  */
 const getValueByPath = (obj: HttpResponse, path: string): unknown => {
-  if (!path) return obj;
+  if (!path) {
+    return obj;
+  }
 
   const parts = path.split(".");
 
   return parts.reduce<unknown>((current, part) => {
-    if (current === null || current === undefined) return undefined;
+    if (current === null || current === undefined) {
+      return undefined;
+    }
 
     // Handle array indexing like "results[0]"
-    const arrayMatch = part.match(/^(\w+)\[(\d+)\]$/);
+    const arrayMatch = part.match(/^(\w+)\[(\d+)]$/);
     if (arrayMatch) {
       const [, key, index] = arrayMatch;
       const intermediate = (current as Record<string, unknown>)[key];
@@ -145,7 +149,9 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
 
   // Debounced search for combobox
   useEffect(() => {
-    if (!(httpConfig?.searchParam && searchQuery)) return undefined;
+    if (!(httpConfig?.searchParam && searchQuery)) {
+      return undefined;
+    }
 
     const timer = setTimeout(() => {
       fetchData(searchQuery);
@@ -200,9 +206,9 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
                     </div>
                   )}
                   {!loading && fetchError && (
-                    <div className="p-4 text-sm text-destructive">
+                    <div className="p-4 text-destructive text-sm">
                       <div>{fetchError}</div>
-                      <button type="button" onClick={() => fetchData(searchQuery)} className="text-primary hover:underline mt-2 block">
+                      <button type="button" onClick={() => fetchData(searchQuery)} className="mt-2 block text-primary hover:underline">
                         Retry
                       </button>
                     </div>
@@ -247,7 +253,7 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
             {t(node.data.label) || node.data.name}
             {node.data.required && <span className="text-red-500">*</span>}
           </Label>
-          <div className="text-sm text-muted-foreground py-2">
+          <div className="py-2 text-muted-foreground text-sm">
             No data available. Configure &#34;Fetch on mount&#34; or add a search parameter.
           </div>
           {error && <FormError>{error}</FormError>}

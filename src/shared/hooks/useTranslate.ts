@@ -28,7 +28,9 @@ export const useTranslate = (language: string) => {
 
   return useMemo(
     () => (key?: Translatable | TranslationKey | string) => {
-      if (!key) return "";
+      if (!key) {
+        return "";
+      }
 
       // If it's a Translatable object (dynamic translation from nodes)
       if (typeof key === "object") {

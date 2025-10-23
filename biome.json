@@ -2,7 +2,14 @@
   "extends": ["@tracktor/biome-config-react"],
   "linter": {
     "rules": {
+      "complexity": {
+        "noImportantStyles": "off"
+      },
+      "correctness": {
+        "noNestedComponentDefinitions": "off"
+      },
       "suspicious": {
+        "noExplicitAny": "off",
         "noUnknownAtRules": "off"
       }
     }

@@ -1,6 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import { ChevronsUpDown, Plus, X } from "lucide-react";
-import { useState } from "react";
+import { useId, useState } from "react";
 import HttpConfigForm from "@/editor/features/TreegeEditor/forms/HttpConfigForm";
 import ComboboxPattern from "@/editor/features/TreegeEditor/inputs/ComboboxPattern";
 import SelectInputType from "@/editor/features/TreegeEditor/inputs/SelectInputType";
@@ -20,6 +20,7 @@ import { Language } from "@/shared/types/languages";
 import { InputNodeData } from "@/shared/types/node";
 
 const InputNodeForm = () => {
+  const nodeFormId = useId();
   const [selectedLanguage, setSelectedLanguage] = useState<Language>("en");
   const { selectedNode } = useNodesSelection<InputNodeData>();
   const { updateSelectedNodeData } = useFlowActions();
@@ -48,21 +49,21 @@ const InputNodeForm = () => {
       },
       onChangeDebounceMs: 150,
     },
-    onSubmit: async ({ value }) => {
+    onSubmit: ({ value }) => {
       updateSelectedNodeData(value);
     },
   });
 
   return (
     <form
-      id="input-node-form"
+      id={`${nodeFormId}-input-node-form`}
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();
       }}
     >
       <div className="grid gap-6">
-        <div className="flex gap-2 items-end">
+        <div className="flex items-end gap-2">
           <Field
             name="label"
             children={(field) => (
@@ -112,7 +113,7 @@ const InputNodeForm = () => {
         />
 
         {selectedNode?.data?.type !== "file" && (
-          <div className="flex gap-2 items-end">
+          <div className="flex items-end gap-2">
             <Field
               name="placeholder"
               children={(field) => (
@@ -137,7 +138,7 @@ const InputNodeForm = () => {
           </div>
         )}
 
-        <div className="flex gap-2 items-end">
+        <div className="flex items-end gap-2">
           <Field
             name="helperText"
             children={(field) => (
@@ -165,7 +166,7 @@ const InputNodeForm = () => {
           <Collapsible defaultOpen className="flex w-full max-w-[350px] flex-col gap-2">
             <CollapsibleTrigger asChild>
               <div className="flex items-center justify-between gap-4">
-                <h4 className="text-sm font-semibold">{t("editor.inputNodeForm.httpConfiguration")}</h4>
+                <h4 className="font-semibold text-sm">{t("editor.inputNodeForm.httpConfiguration")}</h4>
                 <Button variant="ghost" size="icon" className="size-8">
                   <ChevronsUpDown />
                   <span className="sr-only">{t("common.toggle")}</span>
@@ -194,8 +195,12 @@ const InputNodeForm = () => {
             name="multiple"
             children={(field) => (
               <div className="flex items-center space-x-2">
-                <Switch id="file-multiple" checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
-                <Label htmlFor="file-multiple">{t("editor.inputNodeForm.multipleFiles")}</Label>
+                <Switch
+                  id={`${nodeFormId}-file-multiple`}
+                  checked={field.state.value}
+                  onCheckedChange={(newValue) => field.handleChange(newValue)}
+                />
+                <Label htmlFor={`${nodeFormId}-file-multiple`}>{t("editor.inputNodeForm.multipleFiles")}</Label>
               </div>
             )}
           />
@@ -205,7 +210,7 @@ const InputNodeForm = () => {
           <Collapsible defaultOpen className="flex w-full max-w-[350px] flex-col gap-2">
             <CollapsibleTrigger asChild>
               <div className="flex items-center justify-between gap-4">
-                <h4 className="text-sm font-semibold">{t("editor.inputNodeForm.options")}</h4>
+                <h4 className="font-semibold text-sm">{t("editor.inputNodeForm.options")}</h4>
                 <Button variant="ghost" size="icon" className="size-8">
                   <ChevronsUpDown />
                   <span className="sr-only">{t("common.toggle")}</span>
@@ -221,7 +226,7 @@ const InputNodeForm = () => {
                       const key = `options[${index}]`;
 
                       return (
-                        <div key={key} className="flex gap-2 items-start">
+                        <div key={key} className="flex items-start gap-2">
                           <Field name={`options[${index}].label`}>
                             {(subField) => (
                               <Input
@@ -284,8 +289,12 @@ const InputNodeForm = () => {
                   name="multiple"
                   children={(field) => (
                     <div className="flex items-center space-x-2">
-                      <Switch id="multiple" checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
-                      <Label htmlFor="multiple">{t("editor.inputNodeForm.multipleSelection")}</Label>
+                      <Switch
+                        id={`${nodeFormId}-multiple`}
+                        checked={field.state.value}
+                        onCheckedChange={(newValue) => field.handleChange(newValue)}
+                      />
+                      <Label htmlFor={`${nodeFormId}-multiple`}>{t("editor.inputNodeForm.multipleSelection")}</Label>
                     </div>
                   )}
                 />
@@ -297,7 +306,7 @@ const InputNodeForm = () => {
         <Collapsible className="flex w-full max-w-[350px] flex-col gap-2">
           <CollapsibleTrigger asChild>
             <div className="flex items-center justify-between gap-4">
-              <h4 className="text-sm font-semibold">{t("editor.inputNodeForm.validation")}</h4>
+              <h4 className="font-semibold text-sm">{t("editor.inputNodeForm.validation")}</h4>
               <Button variant="ghost" size="icon" className="size-8">
                 <ChevronsUpDown />
                 <span className="sr-only">{t("common.toggle")}</span>
@@ -311,8 +320,12 @@ const InputNodeForm = () => {
               children={(field) => (
                 <FormItem>
                   <div className="flex items-center space-x-2">
-                    <Switch id="required" checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
-                    <Label htmlFor="required">{t("editor.inputNodeForm.required")}</Label>
+                    <Switch
+                      id={`${nodeFormId}-required`}
+                      checked={field.state.value}
+                      onCheckedChange={(newValue) => field.handleChange(newValue)}
+                    />
+                    <Label htmlFor={`${nodeFormId}-required`}>{t("editor.inputNodeForm.required")}</Label>
                   </div>
                 </FormItem>
               )}
@@ -328,7 +341,7 @@ const InputNodeForm = () => {
               )}
             />
 
-            <div className="flex gap-2 items-end">
+            <div className="flex items-end gap-2">
               <Field
                 name="errorMessage"
                 children={(field) => (
@@ -357,7 +370,7 @@ const InputNodeForm = () => {
         <Collapsible className="flex w-full max-w-[350px] flex-col gap-2">
           <CollapsibleTrigger asChild>
             <div className="flex items-center justify-between gap-4">
-              <h4 className="text-sm font-semibold">{t("editor.inputNodeForm.advancedConfiguration")}</h4>
+              <h4 className="font-semibold text-sm">{t("editor.inputNodeForm.advancedConfiguration")}</h4>
               <Button variant="ghost" size="icon" className="size-8">
                 <ChevronsUpDown />
                 <span className="sr-only">{t("common.toggle")}</span>
@@ -377,7 +390,7 @@ const InputNodeForm = () => {
                         defaultValueField.handleChange(value === "none" ? null : { type: value });
                       }}
                     >
-                      <SelectTrigger id="defaultValueType">
+                      <SelectTrigger id={`${nodeFormId}-defaultValueType`}>
                         <SelectValue placeholder={t("editor.inputNodeForm.selectType")} />
                       </SelectTrigger>
                       <SelectContent>
@@ -397,9 +410,9 @@ const InputNodeForm = () => {
                         if ((inputType === "select" || inputType === "checkbox") && selectedNode?.data?.multiple) {
                           return (
                             <FormItem>
-                              <Label htmlFor="staticValue">{t("editor.inputNodeForm.defaultValuesCommaSeparated")}</Label>
+                              <Label htmlFor={`${nodeFormId}-staticValue`}>{t("editor.inputNodeForm.defaultValuesCommaSeparated")}</Label>
                               <Input
-                                id="staticValue"
+                                id={`${nodeFormId}-staticValue`}
                                 placeholder={t("editor.inputNodeForm.defaultValuesPlaceholder")}
                                 value={Array.isArray(field.state.value) ? field.state.value.join(", ") : ""}
                                 onChange={({ target }) => {
@@ -420,11 +433,11 @@ const InputNodeForm = () => {
                             <FormItem>
                               <div className="flex items-center space-x-2">
                                 <Switch
-                                  id="staticValue"
+                                  id={`${nodeFormId}-staticValue`}
                                   checked={!!field.state.value}
                                   onCheckedChange={(value: boolean) => field.handleChange(value)}
                                 />
-                                <Label htmlFor="staticValue">{t("editor.inputNodeForm.defaultChecked")}</Label>
+                                <Label htmlFor={`${nodeFormId}-staticValue`}>{t("editor.inputNodeForm.defaultChecked")}</Label>
                               </div>
                             </FormItem>
                           );
@@ -433,9 +446,9 @@ const InputNodeForm = () => {
                         // Default - show text input
                         return (
                           <FormItem>
-                            <Label htmlFor="staticValue">{t("editor.inputNodeForm.staticValue")}</Label>
+                            <Label htmlFor={`${nodeFormId}-staticValue`}>{t("editor.inputNodeForm.staticValue")}</Label>
                             <Input
-                              id="staticValue"
+                              id={`${nodeFormId}-staticValue`}
                               placeholder={t("editor.inputNodeForm.staticValuePlaceholder")}
                               value={typeof field.state.value === "string" ? field.state.value : ""}
                               onChange={({ target }) => field.handleChange(target.value || "")}
@@ -458,7 +471,7 @@ const InputNodeForm = () => {
                                 field.handleChange(value);
                               }}
                             >
-                              <SelectTrigger id="referenceField">
+                              <SelectTrigger id={`${nodeFormId}-referenceField`}>
                                 <SelectValue placeholder={t("editor.inputNodeForm.selectReferenceField")} />
                               </SelectTrigger>
                               <SelectContent>
@@ -503,7 +516,7 @@ const InputNodeForm = () => {
                                 }
                               }}
                             >
-                              <SelectTrigger id="transformFunction">
+                              <SelectTrigger id={`${nodeFormId}-transformFunction`}>
                                 <SelectValue placeholder={t("editor.inputNodeForm.selectTransformation")} />
                               </SelectTrigger>
                               <SelectContent>
@@ -527,7 +540,7 @@ const InputNodeForm = () => {
                               <Label>{t("editor.inputNodeForm.objectMapping")}</Label>
                               <div className="space-y-2">
                                 {mappingField.state.value?.map((_, index) => (
-                                  <div key={`mapping-${index}`} className="flex gap-2 items-center">
+                                  <div key={`mapping-${index}`} className="flex items-center gap-2">
                                     <Field name={`defaultValue.objectMapping[${index}].sourceKey`}>
                                       {(sourceField) => (
                                         <Input
@@ -574,7 +587,7 @@ const InputNodeForm = () => {
                                     handleSubmit().then();
                                   }}
                                 >
-                                  <Plus className="h-4 w-4 mr-2" />
+                                  <Plus className="mr-2 h-4 w-4" />
                                   {t("editor.inputNodeForm.addMapping")}
                                 </Button>
                               </div>

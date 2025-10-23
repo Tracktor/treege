@@ -18,7 +18,7 @@ const InputNode = ({ data, isConnectable, type, parentId }: InputNodeProps) => {
       <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
 
       {/* Label */}
-      <div className="text-2xl text-nowrap text-ellipsis overflow-hidden max-w-full mb-1">{label || data?.name}</div>
+      <div className="mb-1 max-w-full overflow-hidden text-ellipsis text-nowrap text-2xl">{label || data?.name}</div>
 
       {/* Input type */}
       <div className="flex gap-1">

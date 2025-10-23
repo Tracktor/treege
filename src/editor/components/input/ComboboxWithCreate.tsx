@@ -103,7 +103,7 @@ const ComboboxWithCreate = ({
             {/* Clear option - appears at the end if there's a selection */}
             {allowClear && hasSelection && (
               <CommandGroup>
-                <CommandItem value="__clear__" onSelect={handleClear} className="text-muted-foreground mt-1">
+                <CommandItem value="__clear__" onSelect={handleClear} className="mt-1 text-muted-foreground">
                   <X className="mr-2 h-4 w-4" />
                   {clearLabel}
                 </CommandItem>

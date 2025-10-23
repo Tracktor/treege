@@ -1,5 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import { Plus, Variable, X } from "lucide-react";
+import { useId } from "react";
 import { useAvailableParentFields } from "@/editor/hooks/useAvailableParentFields";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
 import useTranslate from "@/editor/hooks/useTranslate";
@@ -21,6 +22,7 @@ interface HttpConfigFormProps {
 }
 
 const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
+  const configFromId = useId();
   const { selectedNode } = useNodesSelection<InputNodeData>();
   const t = useTranslate();
   const availableParentFields = useAvailableParentFields(selectedNode?.id);
@@ -46,13 +48,13 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
       },
       onChangeDebounceMs: 150,
     },
-    onSubmit: async ({ value: formValue }) => {
+    onSubmit: ({ value: formValue }) => {
       onChange(formValue);
     },
   });
 
   return (
-    <div id="http-config-form">
+    <div id={`${configFromId}-http-config-form`}>
       <div className="grid gap-6">
         <Field
           name="url"
@@ -90,7 +92,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                         >
                           <div className="flex flex-col">
                             <span className="font-medium">{availField.label}</span>
-                            <span className="text-xs text-muted-foreground">{`{{${availField.nodeId}}}`}</span>
+                            <span className="text-muted-foreground text-xs">{`{{${availField.nodeId}}}`}</span>
                           </div>
                         </DropdownMenuItem>
                       ))
@@ -128,7 +130,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
         />
 
         <div className="space-y-4">
-          <h4 className="text-sm font-semibold">{t("editor.httpConfigForm.headers")}</h4>
+          <h4 className="font-semibold text-sm">{t("editor.httpConfigForm.headers")}</h4>
           <Field name="headers" mode="array">
             {(field) => (
               <div className="space-y-2">
@@ -136,7 +138,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                   const key = `headers[${index}]`;
 
                   return (
-                    <div key={key} className="flex gap-2 items-start">
+                    <div key={key} className="flex items-start gap-2">
                       <Field name={`headers[${index}].key`}>
                         {(subField) => (
                           <Input
@@ -179,7 +181,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                     field.pushValue({ key: "", value: "" });
                   }}
                 >
-                  <Plus className="h-4 w-4 mr-2" />
+                  <Plus className="mr-2 h-4 w-4" />
                   {t("editor.httpConfigForm.addHeader")}
                 </Button>
               </div>
@@ -193,12 +195,12 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
               <Field name="body">
                 {(field) => (
                   <FormItem>
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="mb-2 flex items-center justify-between">
                       <Label htmlFor={field.name}>{t("editor.httpConfigForm.requestBody")}</Label>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button type="button" variant="ghost" size="sm">
-                            <Variable className="h-4 w-4 mr-2" />
+                            <Variable className="mr-2 h-4 w-4" />
                             {t("editor.httpConfigForm.insertVariable")}
                           </Button>
                         </DropdownMenuTrigger>
@@ -219,7 +221,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                               >
                                 <div className="flex flex-col">
                                   <span className="font-medium">{availField.label}</span>
-                                  <span className="text-xs text-muted-foreground">{`\${${availField.name || availField.nodeId}}`}</span>
+                                  <span className="text-muted-foreground text-xs">{`\${${availField.name || availField.nodeId}}`}</span>
                                 </div>
                               </DropdownMenuItem>
                             ))
@@ -245,7 +247,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
         </Field>
 
         <div className="space-y-4">
-          <h4 className="text-sm font-semibold">{t("editor.httpConfigForm.responseConfiguration")}</h4>
+          <h4 className="font-semibold text-sm">{t("editor.httpConfigForm.responseConfiguration")}</h4>
 
           <Field
             name="responsePath"
@@ -266,7 +268,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
           />
 
           <div className="space-y-4">
-            <h5 className="text-sm font-medium">{t("editor.httpConfigForm.mapToOptions")}</h5>
+            <h5 className="font-medium text-sm">{t("editor.httpConfigForm.mapToOptions")}</h5>
 
             <Field
               name="responseMapping.valueField"
@@ -325,14 +327,18 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
         </div>
 
         <div className="space-y-4">
-          <h4 className="text-sm font-semibold">{t("editor.httpConfigForm.behavior")}</h4>
+          <h4 className="font-semibold text-sm">{t("editor.httpConfigForm.behavior")}</h4>
 
           <Field
             name="fetchOnMount"
             children={(field) => (
               <div className="flex items-center space-x-2">
-                <Switch id="fetchOnMount" checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
-                <Label htmlFor="fetchOnMount">{t("editor.httpConfigForm.fetchOnMount")}</Label>
+                <Switch
+                  id={`${configFromId}-fetchOnMount`}
+                  checked={field.state.value}
+                  onCheckedChange={(newValue) => field.handleChange(newValue)}
+                />
+                <Label htmlFor={`${configFromId}-fetchOnMount`}>{t("editor.httpConfigForm.fetchOnMount")}</Label>
               </div>
             )}
           />
@@ -341,8 +347,12 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
             name="showLoading"
             children={(field) => (
               <div className="flex items-center space-x-2">
-                <Switch id="showLoading" checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
-                <Label htmlFor="showLoading">{t("editor.httpConfigForm.showLoadingState")}</Label>
+                <Switch
+                  id={`${configFromId}-showLoading`}
+                  checked={field.state.value}
+                  onCheckedChange={(newValue) => field.handleChange(newValue)}
+                />
+                <Label htmlFor={`${configFromId}-showLoading`}>{t("editor.httpConfigForm.showLoadingState")}</Label>
               </div>
             )}
           />

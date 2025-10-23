@@ -16,7 +16,7 @@ const DefaultSwitchInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4 flex items-center justify-between">
       <div>
-        <Label htmlFor={name} className="block text-sm font-medium">
+        <Label htmlFor={name} className="block font-medium text-sm">
           {t(node.data.label) || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>

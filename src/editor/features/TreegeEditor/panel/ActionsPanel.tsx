@@ -74,7 +74,7 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
             description: t("editor.actionsPanel.invalidJsonDesc"),
           });
         }
-      } catch (error) {
+      } catch (_error) {
         toast.error(t("editor.actionsPanel.parseError"), {
           description: t("editor.actionsPanel.parseErrorDesc"),
         });
@@ -154,10 +154,10 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
         <DropdownMenuContent align="start">
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col gap-1">
-              <span className="text-xs text-muted-foreground">Treege ID</span>
+              <span className="text-muted-foreground text-xs">Treege ID</span>
               <button
                 onClick={handleCopyId}
-                className="flex items-center gap-2 font-mono text-muted-foreground hover:text-primary transition-colors"
+                className="flex items-center gap-2 font-mono text-muted-foreground transition-colors hover:text-primary"
                 type="button"
               >
                 <Copy className="h-3 w-3" />

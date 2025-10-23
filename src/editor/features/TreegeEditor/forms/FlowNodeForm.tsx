@@ -1,5 +1,5 @@
 import { useForm } from "@tanstack/react-form";
-import { useState } from "react";
+import { useId, useState } from "react";
 import SelectLanguage from "@/editor/features/TreegeEditor/inputs/SelectLanguage";
 import useFlowActions from "@/editor/hooks/useFlowActions";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
@@ -11,6 +11,7 @@ import { Language } from "@/shared/types/languages";
 import { FlowNodeData } from "@/shared/types/node";
 
 const FlowNodeForm = () => {
+  const flowNodeFormId = useId();
   const [selectedLanguage, setSelectedLanguage] = useState<Language>("en");
   const { updateSelectedNodeData } = useFlowActions();
   const { selectedNode } = useNodesSelection<FlowNodeData>();
@@ -27,21 +28,21 @@ const FlowNodeForm = () => {
       },
       onChangeDebounceMs: 150,
     },
-    onSubmit: async ({ value }) => {
+    onSubmit: ({ value }) => {
       updateSelectedNodeData(value);
     },
   });
 
   return (
     <form
-      id="flow-node-form"
+      id={`${flowNodeFormId}-flow-node-form`}
       onSubmit={(e) => {
         e.preventDefault();
         e.stopPropagation();
       }}
     >
       <div className="grid gap-6">
-        <div className="flex gap-2 items-end">
+        <div className="flex items-end gap-2">
           <Field
             name="label"
             children={(field) => (

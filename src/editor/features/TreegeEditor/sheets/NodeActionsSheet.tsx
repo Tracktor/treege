@@ -24,12 +24,12 @@ const NodeActionsSheet = () => {
       <SheetContent>
         <SheetHeader>
           <SheetTitle>
-            Edit node <span className="text-xs text-muted-foreground font-light">{selectedNode?.id}</span>
+            Edit node <span className="font-light text-muted-foreground text-xs">{selectedNode?.id}</span>
           </SheetTitle>
           <SheetDescription>{label || "\u00A0"}</SheetDescription>
         </SheetHeader>
 
-        <ScrollArea className="flex flex-col flex-1 min-h-0 px-4 py-6">
+        <ScrollArea className="flex min-h-0 flex-1 flex-col px-4 py-6">
           <div className="space-y-6">
             <SelectNodeType />
             <SelectNodeGroup />

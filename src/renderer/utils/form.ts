@@ -9,8 +9,12 @@ import { InputNodeData } from "@/shared/types/node";
  * @returns True if the value is empty (undefined, null, empty string, or empty array)
  */
 export const isFieldEmpty = (value: any): boolean => {
-  if (value === undefined || value === null) return true;
-  if (typeof value === "string" && value.trim() === "") return true;
+  if (value === undefined || value === null) {
+    return true;
+  }
+  if (typeof value === "string" && value.trim() === "") {
+    return true;
+  }
   return Array.isArray(value) && value.length === 0;
 };
 
@@ -23,7 +27,9 @@ export const isFieldEmpty = (value: any): boolean => {
  * @returns True if the field has been filled (any value except undefined/null), false otherwise
  */
 export const checkFormFieldHasValue = (fieldName: string | undefined, formValues: FormValues): boolean => {
-  if (!fieldName) return false;
+  if (!fieldName) {
+    return false;
+  }
   const value = formValues[fieldName];
   return value !== undefined && value !== null;
 };

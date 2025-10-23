@@ -51,10 +51,14 @@ export const useTreegeRenderer = (flows: Flow | Flow[] | null | undefined, initi
       if (isInputNode(node)) {
         const fieldName = node.id;
 
-        if (defaultValues[fieldName] !== undefined) return;
+        if (defaultValues[fieldName] !== undefined) {
+          return;
+        }
 
         const { defaultValue } = node.data;
-        if (!defaultValue) return;
+        if (!defaultValue) {
+          return;
+        }
 
         // Handle static default value
         if (defaultValue.type === "static" && defaultValue.staticValue !== undefined) {
@@ -164,7 +168,9 @@ export const useTreegeRenderer = (flows: Flow | Flow[] | null | undefined, initi
     const missing: string[] = [];
 
     visibleNodes.forEach((node) => {
-      if (!isInputNode(node)) return;
+      if (!isInputNode(node)) {
+        return;
+      }
 
       const fieldName = node.id;
       const value = formValues[fieldName];

@@ -36,7 +36,9 @@ export const useTreegeRendererContext = () => {
 
   // Compute edges from flows for convenience (cached with useMemo)
   const edges = useMemo(() => {
-    if (!baseContext.flows) return [];
+    if (!baseContext.flows) {
+      return [];
+    }
     return mergeFlows(baseContext.flows).edges;
   }, [baseContext.flows]);
 

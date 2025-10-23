@@ -1,7 +1,7 @@
 import { useReactFlow } from "@xyflow/react";
 import { PlusCircle } from "lucide-react";
 import { nanoid } from "nanoid";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { toast } from "sonner";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
 import useTranslate from "@/editor/hooks/useTranslate";
@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { isGroupNode } from "@/shared/utils/nodeTypeGuards";
 
 const SelectNodeGroup = () => {
+  const inputId = useId();
   const [newGroupLabel, setNewGroupLabel] = useState("");
   const [popoverOpen, setPopoverOpen] = useState(false);
   const { selectedNode, groupNodes } = useNodesSelection();
@@ -26,13 +27,15 @@ const SelectNodeGroup = () => {
   }
 
   const handleGroupChange = (parentId: string) => {
-    if (!selectedNode) return;
+    if (!selectedNode) {
+      return;
+    }
 
     setNodes((nds) => {
       if (parentId === "none") {
         return nds.map((node) => {
           if (node.id === selectedNode.id) {
-            const { parentId: parentIdDeleted, extent, ...rest } = node;
+            const { ...rest } = node;
             return rest;
           }
           return node;
@@ -40,7 +43,9 @@ const SelectNodeGroup = () => {
       }
 
       const groupNode = nds.find((n) => n.id === parentId);
-      if (!groupNode) return nds;
+      if (!groupNode) {
+        return nds;
+      }
 
       return nds.map((node) => {
         if (node.id === selectedNode.id) {
@@ -154,12 +159,12 @@ const SelectNodeGroup = () => {
             <div className="space-y-4">
               <div className="space-y-2">
                 <h4 className="font-medium leading-none">New group</h4>
-                <p className="text-sm text-muted-foreground">The group will be created around the selected node.</p>
+                <p className="text-muted-foreground text-sm">The group will be created around the selected node.</p>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="group-label">Group name</Label>
+                <Label htmlFor={`${inputId}-group-label`}>Group name</Label>
                 <Input
-                  id="group-label"
+                  id={`${inputId}-group-label`}
                   value={newGroupLabel}
                   onChange={(e) => setNewGroupLabel(e.target.value)}
                   placeholder="Ex: Step 1 - Personal info"
@@ -171,7 +176,7 @@ const SelectNodeGroup = () => {
                   }}
                 />
               </div>
-              <div className="flex gap-2 justify-end">
+              <div className="flex justify-end gap-2">
                 <Button variant="outline" size="sm" onClick={() => setPopoverOpen(false)}>
                   Cancel
                 </Button>
