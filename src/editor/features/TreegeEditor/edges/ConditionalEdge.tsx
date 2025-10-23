@@ -1,7 +1,7 @@
 import { useForm } from "@tanstack/react-form";
 import { BaseEdge, Edge, EdgeLabelRenderer, EdgeProps, getBezierPath, useReactFlow } from "@xyflow/react";
 import { Plus, Waypoints, X } from "lucide-react";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useId, useState } from "react";
 import useAvailableParentFields from "@/editor/hooks/useAvailableParentFields";
 import useTranslate from "@/editor/hooks/useTranslate";
 import { Button } from "@/shared/components/ui/button";
@@ -33,6 +33,7 @@ const ConditionalEdge = ({
   style,
   data,
 }: ConditionalEdgeProps) => {
+  const conditionEdgeId = useId();
   const [edgePath, labelX, labelY] = getBezierPath({
     sourcePosition,
     sourceX,
@@ -88,23 +89,23 @@ const ConditionalEdge = ({
       return data.label;
     }
 
-    const conditions = data.conditions!;
-    if (conditions.length === 1) {
+    const conditions = data.conditions;
+    if (conditions?.length === 1) {
       const field = availableParentFields.find((f) => f.nodeId === conditions[0].field)?.label || conditions[0].field;
       return `${field} ${conditions[0].operator} ${conditions[0].value}`;
     }
 
-    const andCount = conditions.filter((c) => c.logicalOperator === LOGICAL_OPERATOR.AND).length;
-    const orCount = conditions.filter((c) => c.logicalOperator === LOGICAL_OPERATOR.OR).length;
+    const andCount = conditions?.filter((c) => c.logicalOperator === LOGICAL_OPERATOR.AND).length || 0;
+    const orCount = conditions?.filter((c) => c.logicalOperator === LOGICAL_OPERATOR.OR).length || 0;
 
     if (andCount > 0 && orCount === 0) {
-      return `${conditions.length} ${t("editor.conditionalEdge.conditionsAnd")}`;
+      return `${conditions?.length} ${t("editor.conditionalEdge.conditionsAnd")}`;
     }
     if (orCount > 0 && andCount === 0) {
-      return `${conditions.length} ${t("editor.conditionalEdge.conditionsOr")}`;
+      return `${conditions?.length} ${t("editor.conditionalEdge.conditionsOr")}`;
     }
 
-    return `${conditions.length} ${t("editor.conditionalEdge.conditionsMixed")}`;
+    return `${conditions?.length} ${t("editor.conditionalEdge.conditionsMixed")}`;
   };
 
   const getEdgeStrokeColor = () => {
@@ -167,9 +168,9 @@ const ConditionalEdge = ({
                       <Field name="label">
                         {(field) => (
                           <FormItem>
-                            <Label htmlFor="label">{t("editor.conditionalEdge.labelOptional")}</Label>
+                            <Label htmlFor={`${conditionEdgeId}-label`}>{t("editor.conditionalEdge.labelOptional")}</Label>
                             <Input
-                              id="label"
+                              id={`${conditionEdgeId}-label`}
                               placeholder={t("editor.conditionalEdge.labelPlaceholder")}
                               value={field.state.value}
                               onChange={(e) => field.handleChange(e.target.value)}
@@ -184,12 +185,12 @@ const ConditionalEdge = ({
                           <FormItem>
                             <div className="flex items-center gap-3 rounded-lg border bg-muted/20 p-3">
                               <Checkbox
-                                id="isFallback"
+                                id={`${conditionEdgeId}-isFallback`}
                                 checked={field.state.value}
                                 onCheckedChange={(checked) => field.handleChange(checked as boolean)}
                               />
                               <div className="flex flex-col gap-1">
-                                <Label htmlFor="isFallback" className="cursor-pointer font-medium">
+                                <Label htmlFor={`${conditionEdgeId}-isFallback`} className="cursor-pointer font-medium">
                                   {t("editor.conditionalEdge.fallbackPath")}
                                 </Label>
                                 <FormDescription className="text-xs">{t("editor.conditionalEdge.fallbackPathDesc")}</FormDescription>
