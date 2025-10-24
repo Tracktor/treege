@@ -1,5 +1,6 @@
 import { Node } from "@xyflow/react";
 import { FormEvent, ReactNode, useCallback, useEffect, useMemo, useRef } from "react";
+import { useTreegeConfig } from "@/renderer/context/TreegeConfigContext";
 import { TreegeRendererProvider } from "@/renderer/context/TreegeRendererContext";
 import { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
 import DefaultFormWrapper from "@/renderer/features/TreegeRenderer/web/components/DefaultFormWrapper";
@@ -17,17 +18,39 @@ import { TreegeNodeData, UINodeData } from "@/shared/types/node";
 import { isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
 
 const TreegeRenderer = ({
+  components: componentsProp,
   flows,
-  validate,
-  onSubmit,
-  onChange,
-  googleApiKey,
+  googleApiKey: googleApiKeyProp,
   initialValues = {},
-  components = {},
-  language = "en",
-  validationMode = "onSubmit",
-  theme = "dark",
+  language: languageProp,
+  onChange,
+  onSubmit,
+  theme: themeProp,
+  validate,
+  validationMode: validationModeProp,
 }: TreegeRendererProps) => {
+  // Get global config from provider (if any)
+  const config = useTreegeConfig();
+
+  // Merge props with global config (props take precedence)
+  const googleApiKey = googleApiKeyProp ?? config?.googleApiKey;
+  const language = languageProp ?? config?.language ?? "en";
+  const theme = themeProp ?? config?.theme ?? "dark";
+  const validationMode = validationModeProp ?? config?.validationMode ?? "onSubmit";
+
+  // Merge components: global components as base, prop components override
+  const components = useMemo(
+    () => ({
+      form: componentsProp?.form ?? config?.components?.form,
+      group: componentsProp?.group ?? config?.components?.group,
+      inputs: { ...config?.components?.inputs, ...componentsProp?.inputs },
+      submitButton: componentsProp?.submitButton ?? config?.components?.submitButton,
+      submitButtonWrapper: componentsProp?.submitButtonWrapper ?? config?.components?.submitButtonWrapper,
+      ui: { ...config?.components?.ui, ...componentsProp?.ui },
+    }),
+    [config?.components, componentsProp],
+  );
+
   const {
     canSubmit,
     mergedFlow,

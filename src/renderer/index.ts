@@ -1,3 +1,4 @@
+export { TreegeConfigProvider, useTreegeConfig } from "@/renderer/context/TreegeConfigContext";
 export { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
 export * from "@/renderer/features/TreegeRenderer/web/components/DefaultFormWrapper";
 export * from "@/renderer/features/TreegeRenderer/web/components/DefaultGroup";
@@ -6,6 +7,7 @@ export * from "@/renderer/features/TreegeRenderer/web/components/DefaultSubmitBu
 export * from "@/renderer/features/TreegeRenderer/web/components/DefaultUI";
 export * from "@/renderer/features/TreegeRenderer/web/TreegeRenderer";
 export { default as TreegeRenderer } from "@/renderer/features/TreegeRenderer/web/TreegeRenderer";
+export type { TreegeRendererConfig } from "@/renderer/types/renderer";
 export * from "@/renderer/types/renderer";
 export * from "@/renderer/utils/conditions";
 export * from "@/renderer/utils/flow";

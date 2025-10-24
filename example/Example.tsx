@@ -87,11 +87,11 @@ const RendererPanel = ({
           <>
             <TreegeRenderer
               flows={flow}
+              language={language}
               theme={theme}
+              validationMode="onSubmit"
               onSubmit={handleSubmit}
               onChange={setFormValues}
-              validationMode="onSubmit"
-              language={language}
             />
             <div className="mt-8 p-4 border rounded-lg">
               <h3 className="font-semibold mb-2">Current values:</h3>

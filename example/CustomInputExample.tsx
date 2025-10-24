@@ -130,7 +130,7 @@ export const WrongExample = () => {
       components={{
         inputs: {
           // ❌ Don't do this - function is recreated on every render
-          text: (props) => {
+          text: (props: InputRenderProps) => {
             const stringValue = typeof props.value === "string" ? props.value : "";
             return <input value={stringValue} onChange={(e) => props.setValue(e.target.value)} />;
           },

@@ -107,9 +107,44 @@ export type TreegeRendererComponents = {
 };
 
 /**
+ * Configuration options that can be set globally via TreegeConfigProvider
+ * or locally via TreegeRenderer config prop
+ */
+export type TreegeRendererConfig = {
+  /**
+   * Custom component renderers
+   */
+  components?: TreegeRendererComponents;
+  /**
+   * Google Maps API key for address autocomplete
+   * If not provided, falls back to free Nominatim (OpenStreetMap)
+   */
+  googleApiKey?: string;
+  /**
+   * Current language for translations
+   * @default "en"
+   */
+  language?: string;
+  /**
+   * Theme for the renderer
+   * @default "dark"
+   */
+  theme?: "dark" | "light";
+  /**
+   * Validation mode
+   * @default "onSubmit"
+   */
+  validationMode?: "onChange" | "onSubmit";
+};
+
+/**
  * Props for the TreegeRenderer component
  */
 export type TreegeRendererProps = {
+  /**
+   * Custom component renderers
+   */
+  components?: TreegeRendererComponents;
   /**
    * Flow or array of flows
    * - If a single Flow: renders that flow
@@ -117,41 +152,37 @@ export type TreegeRendererProps = {
    */
   flows?: Flow | Flow[] | null;
   /**
+   * Google Maps API key for address autocomplete
+   * If not provided, falls back to free Nominatim (OpenStreetMap)
+   */
+  googleApiKey?: string;
+  /**
    * Initial form values
    */
   initialValues?: FormValues;
-  /**
-   * Callback when form is submitted
-   */
-  onSubmit?: (values: FormValues) => void;
-  /**
-   * Callback when form values change
-   */
-  onChange?: (values: FormValues) => void;
-  /**
-   * Custom component renderers
-   */
-  components?: TreegeRendererComponents;
   /**
    * Current language for translations
    */
   language?: string;
   /**
-   * Validation mode
+   * Callback when form values change
    */
-  validationMode?: "onChange" | "onSubmit";
+  onChange?: (values: FormValues) => void;
   /**
-   * Custom validation function
+   * Callback when form is submitted
    */
-  validate?: (values: FormValues, nodes: Node<TreegeNodeData>[]) => Record<string, string>;
+  onSubmit?: (values: FormValues) => void;
   /**
    * Theme for the renderer
    * @default "dark"
    */
   theme?: "dark" | "light";
   /**
-   * Google Maps API key for address autocomplete
-   * If not provided, falls back to free Nominatim (OpenStreetMap)
+   * Custom validation function
    */
-  googleApiKey?: string;
+  validate?: (values: FormValues, nodes: Node<TreegeNodeData>[]) => Record<string, string>;
+  /**
+   * Validation mode
+   */
+  validationMode?: "onChange" | "onSubmit";
 };
