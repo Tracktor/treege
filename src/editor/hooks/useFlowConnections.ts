@@ -157,8 +157,8 @@ const useFlowConnections = () => {
 
             // If only one child left, set the edge to be "default"
             if (siblingCount === 1) {
-              // Only remove conditions, preserve other custom data
-              const { conditions, ...rest } = edge.data ?? {};
+              // Remove conditions and isFallback, preserve other custom data
+              const { conditions: _dropConditions, isFallback: _dropFallback, ...rest } = edge.data ?? {};
               const cleaned = rest && Object.keys(rest).length > 0 ? rest : undefined;
               return { ...edge, data: cleaned, type: "default" };
             }
