@@ -195,10 +195,6 @@ export const getFlowRenderState = (
       return;
     }
 
-    if (outgoingEdges.length > 0 && edgesToFollow.length === 0) {
-      hasUnexploredPaths = true;
-    }
-
     edgesToFollow.forEach((edge) => {
       traverse(edge.target);
     });
