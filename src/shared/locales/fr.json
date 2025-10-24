@@ -155,10 +155,8 @@
       "transformType": "Type de transformation",
       "validation": "Validation"
     },
-    "jsonNodeForm": {
-      "json": "JSON",
-      "jsonPlaceholder": "Veuillez entrer du JSON.",
-      "label": "Libellé"
+    "selectInputType": {
+      "type:": "Type"
     },
     "selectNodeGroup": {
       "createNewGroup": "Créer un nouveau groupe",
@@ -170,7 +168,7 @@
       "groupName": "Nom du groupe",
       "groupNamePlaceholder": "Ex : Étape 1 - Informations personnelles",
       "newGroup": "Nouveau groupe",
-      "newGroupDesc": "Le groupe sera créé autour du nœud sélectionné.",
+      "newGroupDescription": "Le groupe sera créé autour du nœud sélectionné.",
       "noGroup": "Aucun groupe"
     },
     "selectNodeType": {

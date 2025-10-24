@@ -155,10 +155,8 @@
       "transformType": "نوع التحويل",
       "validation": "التحقق"
     },
-    "jsonNodeForm": {
-      "json": "JSON",
-      "jsonPlaceholder": "الرجاء إدخال JSON.",
-      "label": "التسمية"
+    "selectInputType": {
+      "type": "النوع"
     },
     "selectNodeGroup": {
       "createNewGroup": "إنشاء مجموعة جديدة",
@@ -170,7 +168,7 @@
       "groupName": "اسم المجموعة",
       "groupNamePlaceholder": "مثال: الخطوة 1 - معلومات شخصية",
       "newGroup": "مجموعة جديدة",
-      "newGroupDesc": "سيتم إنشاء المجموعة حول العقدة المحددة.",
+      "newGroupDescription": "سيتم إنشاء المجموعة حول العقدة المحددة.",
       "noGroup": "بدون مجموعة"
     },
     "selectNodeType": {

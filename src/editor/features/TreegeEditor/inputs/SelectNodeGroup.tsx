@@ -157,13 +157,12 @@ const SelectNodeGroup = () => {
           <PopoverContent className="w-80" align="end">
             <div className="space-y-4">
               <div className="space-y-2">
-                <h4 className="font-medium leading-none">New group</h4>
-                <p className="text-sm text-muted-foreground">The group will be created around the selected node.</p>
+                <h4 className="font-medium leading-none">{t("editor.selectNodeGroup.newGroup")}</h4>
+                <p className="text-muted-foreground text-sm">{t("editor.selectNodeGroup.newGroupDescription")}</p>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="group-label">Group name</Label>
+                <Label htmlFor="group-label">{t("editor.selectNodeGroup.groupName")}</Label>
                 <Input
-                  id="group-label"
                   value={newGroupLabel}
                   onChange={(e) => setNewGroupLabel(e.target.value)}
                   placeholder="Ex: Step 1 - Personal info"
@@ -175,7 +174,7 @@ const SelectNodeGroup = () => {
                   }}
                 />
               </div>
-              <div className="flex gap-2 justify-end">
+              <div className="flex justify-end gap-2">
                 <Button variant="outline" size="sm" onClick={() => setPopoverOpen(false)}>
                   Cancel
                 </Button>
