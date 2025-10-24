@@ -14,7 +14,7 @@ const defaultPatterns: ComboboxOption[] = Object.entries(PATTERN).map(([key, val
 
 const ComboboxPattern = ({ value, onValueChange }: ComboboxPatternProps) => {
   const allOptions = useMemo(() => {
-    if (value && !defaultPatterns.some((opt) => opt.value === value)) {
+    if (value && !defaultPatterns.some((option) => option.value === value)) {
       return [
         ...defaultPatterns,
         {

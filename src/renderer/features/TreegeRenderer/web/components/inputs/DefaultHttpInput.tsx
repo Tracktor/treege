@@ -163,7 +163,7 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
 
   // If responseMapping is configured
   if (httpConfig?.responseMapping) {
-    const selectedOption = options.find((opt) => opt.value === value);
+    const selectedOption = options.find((option) => option.value === value);
 
     // Render as Combobox if searchParam is configured
     if (httpConfig.searchParam) {
@@ -218,17 +218,17 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
                     <>
                       <CommandEmpty>No results found.</CommandEmpty>
                       <CommandGroup>
-                        {options.map((opt) => (
+                        {options.map((option) => (
                           <CommandItem
-                            key={opt.value}
-                            value={opt.value}
+                            key={option.value}
+                            value={option.value}
                             onSelect={() => {
-                              setFieldValue(fieldId, opt.value);
+                              setFieldValue(fieldId, option.value);
                               setComboboxOpen(false);
                             }}
                           >
-                            <Check className={cn("mr-2 h-4 w-4", value === opt.value ? "opacity-100" : "opacity-0")} />
-                            {opt.label}
+                            <Check className={cn("mr-2 h-4 w-4", value === option.value ? "opacity-100" : "opacity-0")} />
+                            {option.label}
                           </CommandItem>
                         ))}
                       </CommandGroup>
@@ -276,9 +276,9 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {options.map((opt, index) => (
-                <SelectItem key={opt.value + index} value={opt.value}>
-                  {opt.label}
+              {options.map((option, index) => (
+                <SelectItem key={option.value + index} value={option.value}>
+                  {option.label}
                 </SelectItem>
               ))}
             </SelectGroup>

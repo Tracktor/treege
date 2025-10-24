@@ -21,11 +21,11 @@ const DefaultRadioInput = ({ node }: InputRenderProps) => {
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <RadioGroup value={normalizedValue} onValueChange={(val) => setFieldValue(fieldId, val)}>
-        {node.data.options?.map((opt, index) => (
-          <div key={opt.value + index} className="flex items-center space-x-2">
-            <RadioGroupItem value={String(opt.value)} id={`${name}-${opt.value}`} disabled={opt.disabled} />
-            <Label htmlFor={`${name}-${opt.value}`} className="cursor-pointer font-normal text-sm">
-              {t(opt.label)}
+        {node.data.options?.map((option, index) => (
+          <div key={option.value + index} className="flex items-center space-x-2">
+            <RadioGroupItem value={String(option.value)} id={`${name}-${option.value}`} disabled={option.disabled} />
+            <Label htmlFor={`${name}-${option.value}`} className="cursor-pointer font-normal text-sm">
+              {t(option.label) ? t(option.label) : option.value}
             </Label>
           </div>
         ))}

@@ -29,16 +29,16 @@ const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
         <div className="space-y-2">
-          {node.data.options.map((opt, index) => (
-            <div key={opt.value + index} className="flex items-center gap-3">
+          {node.data.options.map((option, index) => (
+            <div key={option.value + index} className="flex items-center gap-3">
               <Checkbox
-                id={`${name}-${opt.value}`}
-                checked={selectedValues.includes(String(opt.value))}
-                onCheckedChange={(checked) => handleCheckboxChange(String(opt.value), checked as boolean)}
-                disabled={opt.disabled}
+                id={`${name}-${option.value}`}
+                checked={selectedValues.includes(String(option.value))}
+                onCheckedChange={(checked) => handleCheckboxChange(String(option.value), checked as boolean)}
+                disabled={option.disabled}
               />
-              <Label htmlFor={`${name}-${opt.value}`} className="cursor-pointer font-normal text-sm">
-                {t(opt.label)}
+              <Label htmlFor={`${name}-${option.value}`} className="cursor-pointer font-normal text-sm">
+                {t(option.label) ? t(option.label) : option.value}
               </Label>
             </div>
           ))}

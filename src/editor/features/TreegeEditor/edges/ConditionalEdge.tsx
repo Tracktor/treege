@@ -206,9 +206,7 @@ const ConditionalEdge = ({
 
                           return (
                             <div className="space-y-3">
-                              <Label className={isFallback ? "text-muted-foreground" : ""}>
-                                {t("editor.conditionalEdge.conditions")}
-                              </Label>
+                              <Label className={isFallback ? "text-muted-foreground" : ""}>{t("editor.conditionalEdge.conditions")}</Label>
 
                               <div className="space-y-2">
                                 {conditionsField.state.value?.map((_, index) => (
