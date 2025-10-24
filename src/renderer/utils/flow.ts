@@ -57,8 +57,8 @@ const determineEdgesToFollow = (
 ): { edgesToFollow: Edge<ConditionalEdgeData>[]; waitingForInput: boolean } => {
   const edgesToFollow: Edge<ConditionalEdgeData>[] = [];
 
-  // 1. Always follow edges without conditions
-  const unconditional = edges.filter((e) => !e.data?.conditions || e.data.conditions.length === 0);
+  // 1. Always follow edges without conditions (excluding fallbacks)
+  const unconditional = edges.filter((e) => (!e.data?.conditions || e.data.conditions.length === 0) && !e.data?.isFallback);
   edgesToFollow.push(...unconditional);
 
   // 2. Handle edges with conditions (excluding fallbacks)
