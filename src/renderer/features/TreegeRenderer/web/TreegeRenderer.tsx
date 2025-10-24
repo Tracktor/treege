@@ -21,35 +21,32 @@ const TreegeRenderer = ({
   components: componentsProp,
   flows,
   googleApiKey: googleApiKeyProp,
-  initialValues = {},
   language: languageProp,
   onChange,
   onSubmit,
   theme: themeProp,
   validate,
   validationMode: validationModeProp,
+  initialValues = {},
 }: TreegeRendererProps) => {
   // Get global config from provider (if any)
-  const config = useTreegeConfig();
+  const globalConfig = useTreegeConfig();
 
   // Merge props with global config (props take precedence)
-  const googleApiKey = googleApiKeyProp ?? config?.googleApiKey;
-  const language = languageProp ?? config?.language ?? "en";
-  const theme = themeProp ?? config?.theme ?? "dark";
-  const validationMode = validationModeProp ?? config?.validationMode ?? "onSubmit";
-
-  // Merge components: global components as base, prop components override
-  const components = useMemo(
-    () => ({
-      form: componentsProp?.form ?? config?.components?.form,
-      group: componentsProp?.group ?? config?.components?.group,
-      inputs: { ...config?.components?.inputs, ...componentsProp?.inputs },
-      submitButton: componentsProp?.submitButton ?? config?.components?.submitButton,
-      submitButtonWrapper: componentsProp?.submitButtonWrapper ?? config?.components?.submitButtonWrapper,
-      ui: { ...config?.components?.ui, ...componentsProp?.ui },
-    }),
-    [config?.components, componentsProp],
-  );
+  const { components, googleApiKey, language, theme, validationMode } = {
+    components: {
+      form: componentsProp?.form ?? globalConfig?.components?.form,
+      group: componentsProp?.group ?? globalConfig?.components?.group,
+      inputs: { ...globalConfig?.components?.inputs, ...componentsProp?.inputs },
+      submitButton: componentsProp?.submitButton ?? globalConfig?.components?.submitButton,
+      submitButtonWrapper: componentsProp?.submitButtonWrapper ?? globalConfig?.components?.submitButtonWrapper,
+      ui: { ...globalConfig?.components?.ui, ...componentsProp?.ui },
+    },
+    googleApiKey: googleApiKeyProp ?? globalConfig?.googleApiKey,
+    language: languageProp ?? globalConfig?.language ?? "en",
+    theme: themeProp ?? globalConfig?.theme ?? "dark",
+    validationMode: validationModeProp ?? globalConfig?.validationMode ?? "onSubmit",
+  };
 
   const {
     canSubmit,
