@@ -201,144 +201,156 @@ const ConditionalEdge = ({
                       </Field>
 
                       <Field name="conditions" mode="array">
-                        {(conditionsField) => (
-                          <div className="space-y-3">
-                            <Label>{t("editor.conditionalEdge.conditions")}</Label>
+                        {(conditionsField) => {
+                          const isFallback = conditionsField.form.getFieldValue("isFallback");
 
-                            <div className="space-y-2">
-                              {conditionsField.state.value?.map((_, index) => (
-                                <div key={`condition-${index}`} className="space-y-2">
-                                  <div className="space-y-2 rounded-lg border bg-muted/30 p-3">
-                                    <Field name={`conditions[${index}].field`}>
-                                      {(fieldField) => (
-                                        <FormItem>
-                                          <Label htmlFor={`field-${index}`}>{t("editor.conditionalEdge.field")}</Label>
-                                          <Select
-                                            value={fieldField.state.value || ""}
-                                            onValueChange={(value: string) => fieldField.handleChange(value)}
-                                          >
-                                            <SelectTrigger id={`field-${index}`} className="w-full">
-                                              <SelectValue placeholder={t("editor.conditionalEdge.selectField")} />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                              {availableParentFields.length === 0 ? (
-                                                <SelectItem value="none" disabled>
-                                                  {t("editor.conditionalEdge.noFieldsAvailable")}
-                                                </SelectItem>
-                                              ) : (
-                                                availableParentFields.map((field) => (
-                                                  <SelectItem key={field.nodeId} value={field.nodeId}>
-                                                    {field.label} ({field.type})
-                                                  </SelectItem>
-                                                ))
-                                              )}
-                                            </SelectContent>
-                                          </Select>
-                                        </FormItem>
-                                      )}
-                                    </Field>
+                          return (
+                            <div className="space-y-3">
+                              <Label className={isFallback ? "text-muted-foreground" : ""}>
+                                {t("editor.conditionalEdge.conditions")}
+                              </Label>
 
-                                    <div className="flex gap-2">
-                                      <Field name={`conditions[${index}].operator`}>
-                                        {(operatorField) => (
+                              <div className="space-y-2">
+                                {conditionsField.state.value?.map((_, index) => (
+                                  <div key={`condition-${index}`} className="space-y-2">
+                                    <div className="space-y-2 rounded-lg border bg-muted/30 p-3">
+                                      <Field name={`conditions[${index}].field`}>
+                                        {(fieldField) => (
                                           <FormItem>
-                                            <Label htmlFor={`operator-${index}`}>{t("editor.conditionalEdge.operator")}</Label>
+                                            <Label htmlFor={`field-${index}`}>{t("editor.conditionalEdge.field")}</Label>
                                             <Select
-                                              value={operatorField.state.value || "==="}
-                                              onValueChange={(value: Operator) => operatorField.handleChange(value)}
+                                              disabled={isFallback}
+                                              value={fieldField.state.value || ""}
+                                              onValueChange={(value: string) => fieldField.handleChange(value)}
                                             >
-                                              <SelectTrigger id={`operator-${index}`}>
-                                                <SelectValue />
+                                              <SelectTrigger id={`field-${index}`} className="w-full">
+                                                <SelectValue placeholder={t("editor.conditionalEdge.selectField")} />
                                               </SelectTrigger>
                                               <SelectContent>
-                                                <SelectItem value="===">=</SelectItem>
-                                                <SelectItem value="!==">≠</SelectItem>
-                                                <SelectItem value=">">&gt;</SelectItem>
-                                                <SelectItem value="<">&lt;</SelectItem>
-                                                <SelectItem value=">=">&gt;=</SelectItem>
-                                                <SelectItem value="<=">&lt;=</SelectItem>
+                                                {availableParentFields.length === 0 ? (
+                                                  <SelectItem value="none" disabled>
+                                                    {t("editor.conditionalEdge.noFieldsAvailable")}
+                                                  </SelectItem>
+                                                ) : (
+                                                  availableParentFields.map((field) => (
+                                                    <SelectItem key={field.nodeId} value={field.nodeId}>
+                                                      {field.label} ({field.type})
+                                                    </SelectItem>
+                                                  ))
+                                                )}
                                               </SelectContent>
                                             </Select>
                                           </FormItem>
                                         )}
                                       </Field>
 
-                                      <Field name={`conditions[${index}].value`}>
-                                        {(valueField) => (
-                                          <FormItem className="w-full">
-                                            <Label htmlFor={`value-${index}`}>{t("editor.conditionalEdge.value")}</Label>
-                                            <Input
-                                              id={`value-${index}`}
-                                              placeholder={t("editor.conditionalEdge.valuePlaceholder")}
-                                              value={valueField.state.value || ""}
-                                              onChange={(e) => valueField.handleChange(e.target.value)}
-                                            />
-                                          </FormItem>
-                                        )}
-                                      </Field>
+                                      <div className="flex gap-2">
+                                        <Field name={`conditions[${index}].operator`}>
+                                          {(operatorField) => (
+                                            <FormItem>
+                                              <Label htmlFor={`operator-${index}`}>{t("editor.conditionalEdge.operator")}</Label>
+                                              <Select
+                                                disabled={isFallback}
+                                                value={operatorField.state.value || "==="}
+                                                onValueChange={(value: Operator) => operatorField.handleChange(value)}
+                                              >
+                                                <SelectTrigger id={`operator-${index}`}>
+                                                  <SelectValue />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                  <SelectItem value="===">=</SelectItem>
+                                                  <SelectItem value="!==">≠</SelectItem>
+                                                  <SelectItem value=">">&gt;</SelectItem>
+                                                  <SelectItem value="<">&lt;</SelectItem>
+                                                  <SelectItem value=">=">&gt;=</SelectItem>
+                                                  <SelectItem value="<=">&lt;=</SelectItem>
+                                                </SelectContent>
+                                              </Select>
+                                            </FormItem>
+                                          )}
+                                        </Field>
+
+                                        <Field name={`conditions[${index}].value`}>
+                                          {(valueField) => (
+                                            <FormItem className="w-full">
+                                              <Label htmlFor={`value-${index}`}>{t("editor.conditionalEdge.value")}</Label>
+                                              <Input
+                                                disabled={isFallback}
+                                                id={`value-${index}`}
+                                                placeholder={t("editor.conditionalEdge.valuePlaceholder")}
+                                                value={valueField.state.value || ""}
+                                                onChange={(e) => valueField.handleChange(e.target.value)}
+                                              />
+                                            </FormItem>
+                                          )}
+                                        </Field>
+                                      </div>
+
+                                      {conditionsField.state.value && conditionsField.state.value.length > 1 && (
+                                        <Button
+                                          disabled={isFallback}
+                                          type="button"
+                                          variant="ghost"
+                                          size="sm"
+                                          className="w-full"
+                                          onClick={() => {
+                                            conditionsField.removeValue(index);
+                                            handleSubmit().then();
+                                          }}
+                                        >
+                                          <X className="mr-1 h-4 w-4" />
+                                          {t("editor.conditionalEdge.removeCondition")}
+                                        </Button>
+                                      )}
                                     </div>
 
-                                    {conditionsField.state.value && conditionsField.state.value.length > 1 && (
-                                      <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="sm"
-                                        className="w-full"
-                                        onClick={() => {
-                                          conditionsField.removeValue(index);
-                                          handleSubmit().then();
-                                        }}
-                                      >
-                                        <X className="mr-1 h-4 w-4" />
-                                        {t("editor.conditionalEdge.removeCondition")}
-                                      </Button>
+                                    {conditionsField.state.value && index < conditionsField.state.value.length - 1 && (
+                                      <Field name={`conditions[${index}].logicalOperator`}>
+                                        {(logicalField) => (
+                                          <div className="flex justify-center">
+                                            <Select
+                                              disabled={isFallback}
+                                              value={logicalField.state.value || LOGICAL_OPERATOR.AND}
+                                              onValueChange={(value: LogicalOperator) => logicalField.handleChange(value)}
+                                            >
+                                              <SelectTrigger className="h-9 w-32 font-semibold">
+                                                <SelectValue />
+                                              </SelectTrigger>
+                                              <SelectContent>
+                                                <SelectItem value={LOGICAL_OPERATOR.AND}>AND</SelectItem>
+                                                <SelectItem value={LOGICAL_OPERATOR.OR}>OR</SelectItem>
+                                              </SelectContent>
+                                            </Select>
+                                          </div>
+                                        )}
+                                      </Field>
                                     )}
                                   </div>
+                                ))}
 
-                                  {conditionsField.state.value && index < conditionsField.state.value.length - 1 && (
-                                    <Field name={`conditions[${index}].logicalOperator`}>
-                                      {(logicalField) => (
-                                        <div className="flex justify-center">
-                                          <Select
-                                            value={logicalField.state.value || LOGICAL_OPERATOR.AND}
-                                            onValueChange={(value: LogicalOperator) => logicalField.handleChange(value)}
-                                          >
-                                            <SelectTrigger className="h-9 w-32 font-semibold">
-                                              <SelectValue />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                              <SelectItem value={LOGICAL_OPERATOR.AND}>AND</SelectItem>
-                                              <SelectItem value={LOGICAL_OPERATOR.OR}>OR</SelectItem>
-                                            </SelectContent>
-                                          </Select>
-                                        </div>
-                                      )}
-                                    </Field>
-                                  )}
-                                </div>
-                              ))}
-
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                className="w-full"
-                                onClick={() => {
-                                  conditionsField.pushValue({
-                                    field: source,
-                                    logicalOperator: LOGICAL_OPERATOR.AND,
-                                    operator: "===",
-                                    value: "",
-                                  });
-                                  handleSubmit().then();
-                                }}
-                              >
-                                <Plus className="mr-2 h-4 w-4" />
-                                {t("editor.conditionalEdge.addCondition")}
-                              </Button>
+                                <Button
+                                  disabled={isFallback}
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  className="w-full"
+                                  onClick={() => {
+                                    conditionsField.pushValue({
+                                      field: source,
+                                      logicalOperator: LOGICAL_OPERATOR.AND,
+                                      operator: "===",
+                                      value: "",
+                                    });
+                                    handleSubmit().then();
+                                  }}
+                                >
+                                  <Plus className="mr-2 h-4 w-4" />
+                                  {t("editor.conditionalEdge.addCondition")}
+                                </Button>
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          );
+                        }}
                       </Field>
                     </div>
 
