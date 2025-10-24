@@ -289,6 +289,7 @@ export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
   const mergedEdges: Edge[] = [...mainFlow.edges];
   const processedFlowIds = new Set<string>([mainFlow.id]);
   const flowNodeReplacements = new Map<string, string>(); // Map FlowNode ID -> first node ID of target flow
+  const flowNodeTargets = new Map<string, string>(); // Map FlowNode ID -> target flow id
 
   const processNodes = (nodes: Node<TreegeNodeData>[]): Node<TreegeNodeData>[] => {
     const result: Node<TreegeNodeData>[] = [];
@@ -308,6 +309,9 @@ export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
             if (firstRootNode) {
               flowNodeReplacements.set(node.id, firstRootNode.id);
             }
+
+            // Track specific target flow for this FlowNode instance
+            flowNodeTargets.set(node.id, targetFlowId);
 
             // Inline sub-flow nodes only once per unique flow id
             if (!processedFlowIds.has(targetFlowId)) {
@@ -364,22 +368,23 @@ export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
     .filter((edge): edge is Edge => edge !== null);
 
   // For each FlowNode, find the last nodes of its sub-flow and connect them to the nodes that followed the FlowNode
-  flowNodeReplacements.forEach((firstNodeId, flowNodeId) => {
+  flowNodeReplacements.forEach((_firstNodeId, flowNodeId) => {
     const subFlowEdges = edgesFromFlowNodes.get(flowNodeId);
 
     if (subFlowEdges && subFlowEdges.length > 0) {
       // Find all "terminal" nodes of the sub-flow (nodes that have no outgoing edges within the sub-flow)
       const subFlowNodeIds = new Set<string>();
-      flowArray.forEach((flow) => {
-        const hasFirstNode = flow.nodes.some((n) => n.id === firstNodeId);
-        if (!hasFirstNode) {
-          return;
-        }
 
-        flow.nodes.forEach((n) => {
-          subFlowNodeIds.add(n.id);
-        });
-      });
+      // Use the tracked target flow id instead of searching by firstNodeId
+      const targetFlowId = flowNodeTargets.get(flowNodeId);
+      if (targetFlowId) {
+        const targetFlow = flowArray.find((flow) => flow.id === targetFlowId);
+        if (targetFlow) {
+          targetFlow.nodes.forEach((n) => {
+            subFlowNodeIds.add(n.id);
+          });
+        }
+      }
 
       const nodesWithOutgoingEdges = new Set<string>();
       updatedEdges.forEach((edge) => {
