@@ -246,15 +246,55 @@ export const getFlowRenderState = (
 };
 
 /**
+ * Detect the main flow from an array of flows
+ * The main flow is the one that references other flows but is not referenced by any flow in the array
+ *
+ * @param flows - Array of flows to analyze
+ * @returns The main flow, or the first flow if no clear main flow is found
+ */
+const detectMainFlow = (flows: Flow[]): Flow => {
+  if (flows.length === 1) {
+    return flows[0];
+  }
+
+  // Build a set of all flow IDs in the array
+  const flowIds = new Set(flows.map((f) => f.id));
+
+  // Build a set of flow IDs that are referenced by FlowNodes
+  const referencedFlowIds = new Set<string>();
+
+  flows.forEach((flow) => {
+    flow.nodes.forEach((node) => {
+      if (isFlowNode(node)) {
+        const flowData = node.data as FlowNodeData;
+        if (flowData.targetId && flowIds.has(flowData.targetId)) {
+          referencedFlowIds.add(flowData.targetId);
+        }
+      }
+    });
+  });
+
+  // The main flow is the one that is NOT referenced by any other flow in the array
+  const mainFlow = flows.find((flow) => !referencedFlowIds.has(flow.id));
+
+  // Fallback to first flow if no clear main flow is found
+  return mainFlow || flows[0];
+};
+
+/**
  * Merge multiple flows into a single flow by recursively replacing FlowNodes with their target flow's nodes
  *
- * This function takes a flow or an array of flows where the first is the main flow, then:
+ * This function takes a flow or an array of flows, automatically detects the main flow, then:
  * 1. Replaces each FlowNode with the nodes from its target flow
  * 2. Preserves the order of nodes by inserting sub-flow nodes at the FlowNode position
  * 3. Redirects edges that point to FlowNodes to the first node of the target flow
  * 4. Connects the last nodes of sub-flows to the nodes that followed the FlowNode
  *
- * @param flows - A single Flow or an array of flows where the first is the main flow, others are sub-flows (can be null/undefined)
+ * Main flow detection:
+ * - The main flow is automatically identified as the one that references other flows but is not referenced itself
+ * - This allows flows to be passed in any order without breaking the merge logic
+ *
+ * @param flows - A single Flow or an array of flows (can be null/undefined)
  * @returns A single merged Flow containing all nodes and edges
  */
 export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
@@ -278,7 +318,8 @@ export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
     };
   }
 
-  const mainFlow = flowArray[0];
+  // Automatically detect the main flow based on dependencies
+  const mainFlow = detectMainFlow(flowArray);
 
   // If only one flow, no need to merge - just return it as is
   if (flowArray.length === 1) {
