@@ -4,7 +4,7 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 
-const DefaultSwitchInput = ({ node, value, setValue, error }: InputRenderProps) => {
+const DefaultSwitchInput = ({ node, value, setValue, error }: InputRenderProps<"switch">) => {
   const t = useTranslate();
   const name = node.data.name || node.id;
 

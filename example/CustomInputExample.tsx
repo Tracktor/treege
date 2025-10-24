@@ -13,6 +13,8 @@ import { Flow } from "@/shared/types/node";
 // ✅ Example 1: Simple custom text input (recommended approach)
 // Define your component OUTSIDE the render function to avoid re-creation and focus loss
 const CustomTextInput = ({ node, value, setValue, error }: InputRenderProps) => {
+  const stringValue = typeof value === "string" ? value : "";
+
   return (
     <div className="mb-4">
       <label className="block text-sm font-medium mb-1">
@@ -21,7 +23,7 @@ const CustomTextInput = ({ node, value, setValue, error }: InputRenderProps) => 
       </label>
       <input
         type="text"
-        value={value ?? ""}
+        value={stringValue}
         onChange={(e) => setValue(e.target.value)}
         placeholder={typeof node.data.placeholder === "string" ? node.data.placeholder : node.data.placeholder?.en}
         className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -39,9 +41,11 @@ const CustomTextInput = ({ node, value, setValue, error }: InputRenderProps) => 
 // ✅ Example 2: Custom number input with validation
 const CustomNumberInput = ({ node, value, setValue, error }: InputRenderProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const numValue = e.target.value === "" ? "" : Number(e.target.value);
+    const numValue = e.target.value === "" ? null : Number(e.target.value);
     setValue(numValue);
   };
+
+  const numberValue = typeof value === "number" ? value : "";
 
   return (
     <div className="mb-4">
@@ -51,7 +55,7 @@ const CustomNumberInput = ({ node, value, setValue, error }: InputRenderProps) =
       </label>
       <input
         type="number"
-        value={value ?? ""}
+        value={numberValue}
         onChange={handleChange}
         className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
@@ -62,6 +66,14 @@ const CustomNumberInput = ({ node, value, setValue, error }: InputRenderProps) =
 
 // ✅ Example 3: Custom select input with styling
 const CustomSelectInput = ({ node, value, setValue, error }: InputRenderProps) => {
+  // Extract string value from union type
+  let selectValue = "";
+  if (typeof value === "string") {
+    selectValue = value;
+  } else if (Array.isArray(value) && value.length > 0 && typeof value[0] === "string") {
+    selectValue = value[0];
+  }
+
   return (
     <div className="mb-4">
       <label className="block text-sm font-medium mb-1">
@@ -69,7 +81,7 @@ const CustomSelectInput = ({ node, value, setValue, error }: InputRenderProps) =
         {node.data.required && <span className="text-red-500 ml-1">*</span>}
       </label>
       <select
-        value={value ?? ""}
+        value={selectValue}
         onChange={(e) => setValue(e.target.value)}
         className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
@@ -118,7 +130,8 @@ export const WrongExample = () => {
         inputs: {
           // ❌ Don't do this - function is recreated on every render
           text: (props) => {
-            return <input value={props.value} onChange={(e) => props.setValue(e.target.value)} />;
+            const stringValue = typeof props.value === "string" ? props.value : "";
+            return <input value={stringValue} onChange={(e) => props.setValue(e.target.value)} />;
           },
         },
       }}

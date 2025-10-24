@@ -4,7 +4,7 @@ import { Checkbox } from "@/shared/components/ui/checkbox";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Label } from "@/shared/components/ui/label";
 
-const DefaultCheckboxInput = ({ node, value, setValue, error }: InputRenderProps) => {
+const DefaultCheckboxInput = ({ node, value, setValue, error }: InputRenderProps<"checkbox">) => {
   const t = useTranslate();
   const name = node.data.name || node.id;
 
@@ -48,7 +48,11 @@ const DefaultCheckboxInput = ({ node, value, setValue, error }: InputRenderProps
   return (
     <FormItem className="mb-4">
       <div className="flex items-center gap-3">
-        <Checkbox id={name} checked={value} onCheckedChange={(checked) => setValue(checked)} />
+        <Checkbox
+          id={name}
+          checked={typeof value === "boolean" ? value : false}
+          onCheckedChange={(checked) => setValue(checked as boolean)}
+        />
         <div className="grid gap-2">
           <Label htmlFor={name} className="cursor-pointer font-medium text-sm">
             {t(node.data.label) || node.data.name}

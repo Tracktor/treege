@@ -3,25 +3,62 @@ import { FormEvent, ReactNode } from "react";
 import { Flow, InputNodeData, InputType, TreegeNodeData, UINodeData, UIType } from "@/shared/types/node";
 
 /**
+ * Type mapping for input values based on input type
+ */
+export type InputValueTypeMap = {
+  address: string;
+  autocomplete: string;
+  checkbox: boolean | string[];
+  date: string;
+  daterange: [string, string] | [string | undefined, string | undefined] | null; // [startDate, endDate]
+  file: File | File[] | null;
+  hidden: string;
+  http: string | string[];
+  number: number | null;
+  password: string;
+  radio: string;
+  select: string | string[];
+  switch: boolean;
+  text: string;
+  textarea: string;
+  time: string; // HH:mm format
+  timerange: [string, string] | [string | undefined, string | undefined] | null; // [startTime, endTime]
+};
+
+/**
  * Form values stored during rendering
  */
 export type FormValues = Record<string, any>;
 
 /**
- * Props for input components
+ * Union of all possible input value types
+ */
+export type InputValue =
+  | string
+  | number
+  | boolean
+  | string[]
+  | File
+  | File[]
+  | [string, string]
+  | [string | undefined, string | undefined]
+  | null;
+
+/**
+ * Props for input components with dynamic value typing
  * All form state is provided via props for easier custom component implementation
  */
-export type InputRenderProps = {
+export type InputRenderProps<T extends InputType = InputType> = {
   node: Node<InputNodeData>;
   /**
-   * Current value of the input field
+   * Current value of the input field (typed based on input type when T is specified)
    */
-  value: any;
+  value: InputValueTypeMap[T];
   /**
    * Function to update the input value
-   * @param value
+   * @param value - The new value (typed based on input type when T is specified)
    */
-  setValue: (value: any) => void;
+  setValue: (value: InputValueTypeMap[T]) => void;
   /**
    * Validation error message for this field (if any)
    */

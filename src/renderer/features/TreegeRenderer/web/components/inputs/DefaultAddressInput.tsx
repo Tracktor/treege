@@ -82,7 +82,7 @@ const fetchGooglePlacesSuggestions = (query: string): Promise<AddressSuggestion[
   });
 };
 
-const DefaultAddressInput = ({ node, value, setValue, error }: InputRenderProps) => {
+const DefaultAddressInput = ({ node, value, setValue, error }: InputRenderProps<"address">) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
   const [popoverOpen, setPopoverOpen] = useState(false);

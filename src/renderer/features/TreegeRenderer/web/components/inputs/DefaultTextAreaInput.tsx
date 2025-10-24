@@ -4,7 +4,7 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Label } from "@/shared/components/ui/label";
 import { Textarea } from "@/shared/components/ui/textarea";
 
-const DefaultTextAreaInput = ({ node, value, setValue, error }: InputRenderProps) => {
+const DefaultTextAreaInput = ({ node, value, setValue, error }: InputRenderProps<"textarea">) => {
   const t = useTranslate();
   const name = node.data.name || node.id;
 

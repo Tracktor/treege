@@ -4,7 +4,7 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Label } from "@/shared/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 
-const DefaultSelectInput = ({ node, value, setValue, error }: InputRenderProps) => {
+const DefaultSelectInput = ({ node, value, setValue, error }: InputRenderProps<"select">) => {
   const t = useTranslate();
   const name = node.data.name || node.id;
   const normalizedValue = value === null ? "" : String(value);

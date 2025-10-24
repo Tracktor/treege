@@ -52,7 +52,7 @@ const getValueByPath = (obj: HttpResponse, path: string): unknown => {
 const replaceTemplateVars = (template: string, formValues: Record<string, unknown>): string =>
   template.replace(/{{(\w+)}}/g, (_, key) => String(formValues[key] || ""));
 
-const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps) => {
+const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps<"http">) => {
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [options, setOptions] = useState<Array<{ value: string; label: string }>>([]);
@@ -124,8 +124,8 @@ const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps) =>
 
           setOptions(mappedOptions);
         } else {
-          // Store the raw data as the field value
-          setValue(extractedData);
+          // Store the raw data as the field value (converting to string)
+          setValue(typeof extractedData === "string" ? extractedData : JSON.stringify(extractedData));
         }
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : "Failed to fetch data";
@@ -160,7 +160,8 @@ const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps) =>
 
   // If responseMapping is configured
   if (httpConfig?.responseMapping) {
-    const selectedOption = options.find((option) => option.value === value);
+    const normalizedValue = Array.isArray(value) ? value[0] : value;
+    const selectedOption = options.find((option) => option.value === normalizedValue);
 
     // Render as Combobox if searchParam is configured
     if (httpConfig.searchParam) {
@@ -266,7 +267,7 @@ const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps) =>
           {t(node.data.label) || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
-        <Select value={value || ""} onValueChange={(val) => setValue(val)} disabled={isLoading}>
+        <Select value={Array.isArray(value) ? value[0] || "" : value || ""} onValueChange={(val) => setValue(val)} disabled={isLoading}>
           <SelectTrigger>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             <SelectValue placeholder={t(node.data.placeholder) || "Select an option"} />

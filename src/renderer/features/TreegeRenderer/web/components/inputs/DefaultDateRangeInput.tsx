@@ -8,7 +8,7 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Label } from "@/shared/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 
-const DefaultDateRangeInput = ({ node, value, setValue, error }: InputRenderProps) => {
+const DefaultDateRangeInput = ({ node, value, setValue, error }: InputRenderProps<"daterange">) => {
   const t = useTranslate();
   const [openStart, setOpenStart] = useState(false);
   const [openEnd, setOpenEnd] = useState(false);

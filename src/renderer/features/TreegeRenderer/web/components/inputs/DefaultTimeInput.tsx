@@ -4,7 +4,7 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 
-const DefaultTimeInput = ({ node, value, setValue, error }: InputRenderProps) => {
+const DefaultTimeInput = ({ node, value, setValue, error }: InputRenderProps<"time">) => {
   const t = useTranslate();
   const name = node.data.name || node.id;
 

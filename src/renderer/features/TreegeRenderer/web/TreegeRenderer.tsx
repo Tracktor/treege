@@ -8,7 +8,7 @@ import { defaultInputRenderers } from "@/renderer/features/TreegeRenderer/web/co
 import DefaultSubmitButton from "@/renderer/features/TreegeRenderer/web/components/DefaultSubmitButton";
 import DefaultSubmitButtonWrapper from "@/renderer/features/TreegeRenderer/web/components/DefaultSubmitButtonWrapper";
 import { defaultUI } from "@/renderer/features/TreegeRenderer/web/components/DefaultUI";
-import { TreegeRendererProps } from "@/renderer/types/renderer";
+import { InputRenderProps, InputValue, TreegeRendererProps } from "@/renderer/types/renderer";
 import { convertFormValuesToNamedFormat } from "@/renderer/utils/form";
 import { getFieldNameFromNodeId } from "@/renderer/utils/node";
 import { NODE_TYPE } from "@/shared/constants/node";
@@ -103,11 +103,11 @@ const TreegeRenderer = ({
           const inputType = inputData.type || "text";
           const CustomRenderer = components.inputs?.[inputType];
           const DefaultRenderer = defaultInputRenderers[inputType as keyof typeof defaultInputRenderers];
-          const Renderer = CustomRenderer || DefaultRenderer;
+          const Renderer = (CustomRenderer || DefaultRenderer) as (props: InputRenderProps) => ReactNode;
           const fieldId = node.id;
           const value = formValues[fieldId];
           const error = formErrors[fieldId];
-          const setValue = (newValue: any) => setFieldValue(fieldId, newValue);
+          const setValue = (newValue: InputValue) => setFieldValue(fieldId, newValue);
 
           return <Renderer key={node.id} node={node} value={value} setValue={setValue} error={error} />;
         }

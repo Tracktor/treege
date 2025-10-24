@@ -5,14 +5,14 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 
-const DefaultFileInput = ({ node, setValue, error }: InputRenderProps) => {
+const DefaultFileInput = ({ node, setValue, error }: InputRenderProps<"file">) => {
   const t = useTranslate();
   const name = node.data.name || node.id;
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (!files) {
-      setValue(undefined);
+      setValue(null);
       return;
     }
 

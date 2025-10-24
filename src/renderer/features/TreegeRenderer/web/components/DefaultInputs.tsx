@@ -1,9 +1,10 @@
 // Import all input components from the inputs/ directory
+
+import { ReactNode } from "react";
 import DefaultAddressInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultAddressInput";
 import DefaultCheckboxInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultCheckboxInput";
 import DefaultDateInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultDateInput";
 import DefaultDateRangeInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultDateRangeInput";
-import DefaultEmailInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultEmailInput";
 import DefaultFileInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultFileInput";
 import DefaultHiddenInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultHiddenInput";
 import DefaultHttpInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultHttpInput";
@@ -16,6 +17,8 @@ import DefaultTextAreaInput from "@/renderer/features/TreegeRenderer/web/compone
 import DefaultTextInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultTextInput";
 import DefaultTimeInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultTimeInput";
 import DefaultTimeRangeInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultTimeRangeInput";
+import { InputRenderProps } from "@/renderer/types/renderer";
+import { InputType } from "@/shared/types/node";
 
 // Re-export all components
 export {
@@ -23,7 +26,6 @@ export {
   DefaultCheckboxInput,
   DefaultDateInput,
   DefaultDateRangeInput,
-  DefaultEmailInput,
   DefaultFileInput,
   DefaultHiddenInput,
   DefaultHttpInput,
@@ -40,21 +42,21 @@ export {
 
 // Default input renderers mapping
 export const defaultInputRenderers = {
-  address: DefaultAddressInput,
-  autocomplete: DefaultTextInput,
-  checkbox: DefaultCheckboxInput,
-  date: DefaultDateInput,
-  daterange: DefaultDateRangeInput,
-  file: DefaultFileInput,
-  hidden: DefaultHiddenInput,
-  http: DefaultHttpInput,
-  number: DefaultNumberInput,
-  password: DefaultPasswordInput,
-  radio: DefaultRadioInput,
-  select: DefaultSelectInput,
-  switch: DefaultSwitchInput,
-  text: DefaultTextInput,
-  textarea: DefaultTextAreaInput,
-  time: DefaultTimeInput,
-  timerange: DefaultTimeRangeInput,
+  address: DefaultAddressInput as (props: InputRenderProps) => ReactNode,
+  autocomplete: DefaultTextInput as (props: InputRenderProps) => ReactNode,
+  checkbox: DefaultCheckboxInput as (props: InputRenderProps) => ReactNode,
+  date: DefaultDateInput as (props: InputRenderProps) => ReactNode,
+  daterange: DefaultDateRangeInput as (props: InputRenderProps) => ReactNode,
+  file: DefaultFileInput as (props: InputRenderProps) => ReactNode,
+  hidden: DefaultHiddenInput as (props: InputRenderProps) => ReactNode,
+  http: DefaultHttpInput as (props: InputRenderProps) => ReactNode,
+  number: DefaultNumberInput as (props: InputRenderProps) => ReactNode,
+  password: DefaultPasswordInput as (props: InputRenderProps) => ReactNode,
+  radio: DefaultRadioInput as (props: InputRenderProps) => ReactNode,
+  select: DefaultSelectInput as (props: InputRenderProps) => ReactNode,
+  switch: DefaultSwitchInput as (props: InputRenderProps) => ReactNode,
+  text: DefaultTextInput as (props: InputRenderProps) => ReactNode,
+  textarea: DefaultTextAreaInput as (props: InputRenderProps) => ReactNode,
+  time: DefaultTimeInput as (props: InputRenderProps) => ReactNode,
+  timerange: DefaultTimeRangeInput as (props: InputRenderProps) => ReactNode,
 };

@@ -8,7 +8,7 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Label } from "@/shared/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 
-const DefaultDateInput = ({ node, value, setValue, error }: InputRenderProps) => {
+const DefaultDateInput = ({ node, value, setValue, error }: InputRenderProps<"date">) => {
   const t = useTranslate();
   const name = node.data.name || node.id;
   const [open, setOpen] = useState(false);
@@ -35,7 +35,7 @@ const DefaultDateInput = ({ node, value, setValue, error }: InputRenderProps) =>
             selected={dateValue}
             captionLayout="dropdown"
             onSelect={(date) => {
-              setValue(date ? date.toISOString() : undefined);
+              setValue(date ? date.toISOString() : "");
               setOpen(false);
             }}
           />

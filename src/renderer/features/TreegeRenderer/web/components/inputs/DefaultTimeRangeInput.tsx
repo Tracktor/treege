@@ -4,7 +4,7 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 
-const DefaultTimeRangeInput = ({ node, value, setValue, error }: InputRenderProps) => {
+const DefaultTimeRangeInput = ({ node, value, setValue, error }: InputRenderProps<"timerange">) => {
   const t = useTranslate();
 
   // Parse range value as array [startTime, endTime]
