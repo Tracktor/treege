@@ -176,6 +176,11 @@ const useFlowConnections = () => {
    */
   const isValidConnection = useCallback(
     (connection: { source: string; target: string }) => {
+      // Prevent self-loops
+      if (connection.source === connection.target) {
+        return false;
+      }
+
       const sourceNode = getNode(connection.source);
 
       if (!sourceNode) {
