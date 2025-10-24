@@ -18,34 +18,34 @@ import { TreegeNodeData, UINodeData } from "@/shared/types/node";
 import { isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
 
 const TreegeRenderer = ({
-  components: componentsProp,
+  components,
   flows,
-  googleApiKey: googleApiKeyProp,
-  language: languageProp,
+  googleApiKey,
+  initialValues = {},
+  language,
   onChange,
   onSubmit,
-  theme: themeProp,
+  theme,
   validate,
-  validationMode: validationModeProp,
-  initialValues = {},
+  validationMode,
 }: TreegeRendererProps) => {
   // Get global config from provider (if any)
   const globalConfig = useTreegeConfig();
 
   // Merge props with global config (props take precedence)
-  const { components, googleApiKey, language, theme, validationMode } = {
+  const config = {
     components: {
-      form: componentsProp?.form ?? globalConfig?.components?.form,
-      group: componentsProp?.group ?? globalConfig?.components?.group,
-      inputs: { ...globalConfig?.components?.inputs, ...componentsProp?.inputs },
-      submitButton: componentsProp?.submitButton ?? globalConfig?.components?.submitButton,
-      submitButtonWrapper: componentsProp?.submitButtonWrapper ?? globalConfig?.components?.submitButtonWrapper,
-      ui: { ...globalConfig?.components?.ui, ...componentsProp?.ui },
+      form: components?.form ?? globalConfig?.components?.form,
+      group: components?.group ?? globalConfig?.components?.group,
+      inputs: { ...globalConfig?.components?.inputs, ...components?.inputs },
+      submitButton: components?.submitButton ?? globalConfig?.components?.submitButton,
+      submitButtonWrapper: components?.submitButtonWrapper ?? globalConfig?.components?.submitButtonWrapper,
+      ui: { ...globalConfig?.components?.ui, ...components?.ui },
     },
-    googleApiKey: googleApiKeyProp ?? globalConfig?.googleApiKey,
-    language: languageProp ?? globalConfig?.language ?? "en",
-    theme: themeProp ?? globalConfig?.theme ?? "dark",
-    validationMode: validationModeProp ?? globalConfig?.validationMode ?? "onSubmit",
+    googleApiKey: googleApiKey ?? globalConfig?.googleApiKey,
+    language: language ?? globalConfig?.language ?? "en",
+    theme: theme ?? globalConfig?.theme ?? "dark",
+    validationMode: validationMode ?? globalConfig?.validationMode ?? "onSubmit",
   };
 
   const {
@@ -60,12 +60,12 @@ const TreegeRenderer = ({
     setFieldValue,
     validateForm,
     t,
-  } = useTreegeRenderer(flows, initialValues, language);
+  } = useTreegeRenderer(flows, initialValues, config.language);
 
   // Components with fallbacks
-  const FormWrapper = components.form || DefaultFormWrapper;
-  const SubmitButton = components.submitButton || DefaultSubmitButton;
-  const SubmitButtonWrapper = components.submitButtonWrapper || DefaultSubmitButtonWrapper;
+  const FormWrapper = config.components.form || DefaultFormWrapper;
+  const SubmitButton = config.components.submitButton || DefaultSubmitButton;
+  const SubmitButtonWrapper = config.components.submitButtonWrapper || DefaultSubmitButtonWrapper;
   // Refs to avoid re-creating effects
   const onChangeRef = useRef(onChange);
   const validateRef = useRef(validate);
@@ -121,7 +121,7 @@ const TreegeRenderer = ({
 
           const inputData = node.data;
           const inputType = inputData.type || "text";
-          const CustomRenderer = components.inputs?.[inputType];
+          const CustomRenderer = config.components.inputs?.[inputType];
           const DefaultRenderer = defaultInputRenderers[inputType as keyof typeof defaultInputRenderers];
           const Renderer = (CustomRenderer || DefaultRenderer) as (props: InputRenderProps) => ReactNode;
           const fieldId = node.id;
@@ -137,7 +137,7 @@ const TreegeRenderer = ({
             return null;
           }
 
-          const GroupComponent = components.group || DefaultGroup;
+          const GroupComponent = config.components.group || DefaultGroup;
           // Filter children - visibleNodes maintains flow order from getFlowRenderState
           const childNodes = visibleNodes.filter((child) => child.parentId === node.id);
 
@@ -155,7 +155,7 @@ const TreegeRenderer = ({
 
           const uiData = node.data as UINodeData;
           const uiType = uiData.type || "title";
-          const CustomRenderer = components.ui?.[uiType];
+          const CustomRenderer = config.components.ui?.[uiType];
           const DefaultRenderer = defaultUI[uiType as keyof typeof defaultUI];
           const Renderer = CustomRenderer || DefaultRenderer;
 
@@ -173,7 +173,7 @@ const TreegeRenderer = ({
           return null;
       }
     },
-    [components, visibleNodes, formValues, formErrors, setFieldValue],
+    [config.components, visibleNodes, formValues, formErrors, setFieldValue],
   );
 
   // ============================================
@@ -205,20 +205,20 @@ const TreegeRenderer = ({
    * Run validation on form values change if validationMode is "onChange" or "onBlur"
    */
   useEffect(() => {
-    if (validationMode === "onChange") {
+    if (config.validationMode === "onChange") {
       validateForm(validateRef.current);
     }
-  }, [validationMode, validateForm]);
+  }, [config.validationMode, validateForm]);
 
   return (
-    <ThemeProvider theme={theme} storageKey="treege-renderer-theme">
+    <ThemeProvider theme={config.theme} storageKey="treege-renderer-theme">
       <TreegeRendererProvider
         value={{
           flows: mergedFlow,
           formErrors,
           formValues,
-          googleApiKey,
-          language,
+          googleApiKey: config.googleApiKey,
+          language: config.language,
           setFieldValue,
         }}
       >
