@@ -13,7 +13,7 @@ const SelectInputType = ({ value, onValueChange }: SelectInputTypeProps) => {
 
   return (
     <SelectGroup>
-      <SelectLabel>{t("editor.selectInputType.type")}</SelectLabel>
+      <SelectLabel>{t("editor.selectInputType.type:")}</SelectLabel>
       <Select value={value} onValueChange={onValueChange}>
         <SelectTrigger className="w-full capitalize">
           <SelectValue placeholder="" />

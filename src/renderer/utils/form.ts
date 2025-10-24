@@ -8,7 +8,7 @@ import { InputNodeData } from "@/shared/types/node";
  * @param value - The field value to check
  * @returns True if the value is empty (undefined, null, empty string, or empty array)
  */
-export const isFieldEmpty = (value: any): boolean => {
+export const isFieldEmpty = (value: unknown): boolean => {
   if (value === undefined || value === null) {
     return true;
   }
@@ -40,7 +40,7 @@ export const checkFormFieldHasValue = (fieldName: string | undefined, formValues
  * example: convertFormValuesToNamedFormat({ id1: 'Alice', id2: 'Bob' }, [ { id: 'id1', data: { name: 'firstName' } }, { id: 'id2', data: { name: 'lastName' } } ])
  * returns { firstName: 'Alice', lastName: 'Bob' }
  */
-export const convertFormValuesToNamedFormat = (formValues: FormValues, nodes: Node<InputNodeData>[]): Record<string, any> => {
+export const convertFormValuesToNamedFormat = (formValues: FormValues, nodes: Node<InputNodeData>[]): Record<string, unknown> => {
   const exported: Record<string, unknown> = {};
 
   nodes.forEach((node) => {
