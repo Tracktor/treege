@@ -1,6 +1,5 @@
 import { ChevronDownIcon } from "lucide-react";
 import { useState } from "react";
-import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
 import { Button } from "@/shared/components/ui/button";
@@ -9,12 +8,8 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Label } from "@/shared/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 
-const DefaultDateRangeInput = ({ node }: InputRenderProps) => {
-  const { formValues, setFieldValue, formErrors } = useTreegeRendererContext();
+const DefaultDateRangeInput = ({ node, value, setValue, error }: InputRenderProps) => {
   const t = useTranslate();
-  const fieldId = node.id;
-  const value = formValues[fieldId];
-  const error = formErrors[fieldId];
   const [openStart, setOpenStart] = useState(false);
   const [openEnd, setOpenEnd] = useState(false);
 
@@ -24,12 +19,12 @@ const DefaultDateRangeInput = ({ node }: InputRenderProps) => {
   const endDate = dateRange[1] ? new Date(dateRange[1]) : undefined;
 
   const handleStartDateSelect = (date: Date | undefined) => {
-    setFieldValue(fieldId, [date ? date.toISOString() : undefined, dateRange[1]]);
+    setValue([date ? date.toISOString() : undefined, dateRange[1]]);
     setOpenStart(false);
   };
 
   const handleEndDateSelect = (date: Date | undefined) => {
-    setFieldValue(fieldId, [dateRange[0], date ? date.toISOString() : undefined]);
+    setValue([dateRange[0], date ? date.toISOString() : undefined]);
     setOpenEnd(false);
   };
 

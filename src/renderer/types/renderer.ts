@@ -8,10 +8,24 @@ import { Flow, InputNodeData, InputType, TreegeNodeData, UINodeData, UIType } fr
 export type FormValues = Record<string, any>;
 
 /**
- * Props for input components (use useTreegeContext for form state)
+ * Props for input components
+ * All form state is provided via props for easier custom component implementation
  */
 export type InputRenderProps = {
   node: Node<InputNodeData>;
+  /**
+   * Current value of the input field
+   */
+  value: any;
+  /**
+   * Function to update the input value
+   * @param value
+   */
+  setValue: (value: any) => void;
+  /**
+   * Validation error message for this field (if any)
+   */
+  error?: string;
 };
 
 export type UiRenderProps = {

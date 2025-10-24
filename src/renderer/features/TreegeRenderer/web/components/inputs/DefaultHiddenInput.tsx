@@ -1,12 +1,8 @@
-import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import { InputRenderProps } from "@/renderer/types/renderer";
 import { Input } from "@/shared/components/ui/input";
 
-const DefaultHiddenInput = ({ node }: InputRenderProps) => {
-  const { formValues } = useTreegeRendererContext();
-  const fieldId = node.id;
-  const value = formValues[fieldId];
-  const name = node.data.name || fieldId;
+const DefaultHiddenInput = ({ node, value }: InputRenderProps) => {
+  const name = node.data.name || node.id;
   return <Input type="hidden" name={name} value={value ?? ""} />;
 };
 

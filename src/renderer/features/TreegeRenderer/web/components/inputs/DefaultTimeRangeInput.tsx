@@ -1,16 +1,11 @@
-import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 
-const DefaultTimeRangeInput = ({ node }: InputRenderProps) => {
-  const { formValues, setFieldValue, formErrors } = useTreegeRendererContext();
+const DefaultTimeRangeInput = ({ node, value, setValue, error }: InputRenderProps) => {
   const t = useTranslate();
-  const fieldId = node.id;
-  const value = formValues[fieldId];
-  const error = formErrors[fieldId];
 
   // Parse range value as array [startTime, endTime]
   const timeRange = Array.isArray(value) ? value : [];
@@ -18,11 +13,11 @@ const DefaultTimeRangeInput = ({ node }: InputRenderProps) => {
   const endTime = timeRange[1] || "";
 
   const handleStartTimeChange = (newValue: string) => {
-    setFieldValue(fieldId, [newValue, endTime]);
+    setValue([newValue, endTime]);
   };
 
   const handleEndTimeChange = (newValue: string) => {
-    setFieldValue(fieldId, [startTime, newValue]);
+    setValue([startTime, newValue]);
   };
 
   return (
@@ -35,7 +30,7 @@ const DefaultTimeRangeInput = ({ node }: InputRenderProps) => {
         <Input
           aria-label={`${t(node.data.label) || node.data.name} - ${t("renderer.defaultInputs.startTime")}`}
           aria-invalid={!!error}
-          aria-describedby={error ? `${fieldId}-error` : undefined}
+          aria-describedby={error ? `${node.id}-error` : undefined}
           type="time"
           value={startTime}
           onChange={(e) => handleStartTimeChange(e.target.value)}
@@ -45,7 +40,7 @@ const DefaultTimeRangeInput = ({ node }: InputRenderProps) => {
         <Input
           aria-label={`${t(node.data.label) || node.data.name} - ${t("renderer.defaultInputs.endTime")}`}
           aria-invalid={!!error}
-          aria-describedby={error ? `${fieldId}-error` : undefined}
+          aria-describedby={error ? `${node.id}-error` : undefined}
           type="time"
           value={endTime}
           onChange={(e) => handleEndTimeChange(e.target.value)}

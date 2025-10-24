@@ -82,24 +82,21 @@ const fetchGooglePlacesSuggestions = (query: string): Promise<AddressSuggestion[
   });
 };
 
-const DefaultAddressInput = ({ node }: InputRenderProps) => {
+const DefaultAddressInput = ({ node, value, setValue, error }: InputRenderProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
   const [popoverOpen, setPopoverOpen] = useState(false);
-  const { formValues, setFieldValue, formErrors, googleApiKey, language } = useTreegeRendererContext();
+  const { googleApiKey, language } = useTreegeRendererContext();
   const t = useTranslate();
-  const fieldId = node.id;
-  const value = formValues[fieldId] || "";
-  const error = formErrors[fieldId];
-  const name = node.data.name || fieldId;
+  const name = node.data.name || node.id;
 
   const handleSelectSuggestion = useCallback(
     (suggestion: AddressSuggestion) => {
-      setFieldValue(fieldId, suggestion.value);
+      setValue(suggestion.value);
       setSearchQuery(suggestion.value);
       setPopoverOpen(false);
     },
-    [fieldId, setFieldValue],
+    [setValue],
   );
 
   // Fetch suggestions with debounce
@@ -122,14 +119,14 @@ const DefaultAddressInput = ({ node }: InputRenderProps) => {
 
   const handleInputChange = useCallback(
     (newValue: string) => {
-      setFieldValue(fieldId, newValue);
+      setValue(newValue);
       setSearchQuery(newValue);
 
       if (newValue.length >= 3) {
         setPopoverOpen(true);
       }
     },
-    [fieldId, setFieldValue],
+    [setValue],
   );
 
   return (
@@ -145,7 +142,7 @@ const DefaultAddressInput = ({ node }: InputRenderProps) => {
             type="text"
             id={name}
             name={name}
-            value={value}
+            value={value || ""}
             onChange={(e) => handleInputChange(e.target.value)}
             onFocus={() => {
               if (suggestions.length > 0) {

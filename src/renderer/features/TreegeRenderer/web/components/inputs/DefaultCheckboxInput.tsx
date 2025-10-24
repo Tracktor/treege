@@ -1,17 +1,12 @@
-import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
 import { Checkbox } from "@/shared/components/ui/checkbox";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Label } from "@/shared/components/ui/label";
 
-const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
-  const { formValues, setFieldValue, formErrors } = useTreegeRendererContext();
+const DefaultCheckboxInput = ({ node, value, setValue, error }: InputRenderProps) => {
   const t = useTranslate();
-  const fieldId = node.id;
-  const value = formValues[fieldId];
-  const error = formErrors[fieldId];
-  const name = node.data.name || fieldId;
+  const name = node.data.name || node.id;
 
   // If there are options, render a checkbox group (multiple checkboxes)
   if (node.data.options && node.data.options.length > 0) {
@@ -19,7 +14,7 @@ const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
 
     const handleCheckboxChange = (optionValue: string, checked: boolean) => {
       const newValues = checked ? [...selectedValues, optionValue] : selectedValues.filter((v) => v !== optionValue);
-      setFieldValue(fieldId, newValues);
+      setValue(newValues);
     };
 
     return (
@@ -53,7 +48,7 @@ const DefaultCheckboxInput = ({ node }: InputRenderProps) => {
   return (
     <FormItem className="mb-4">
       <div className="flex items-center gap-3">
-        <Checkbox id={name} checked={value} onCheckedChange={(checked) => setFieldValue(fieldId, checked)} />
+        <Checkbox id={name} checked={value} onCheckedChange={(checked) => setValue(checked)} />
         <div className="grid gap-2">
           <Label htmlFor={name} className="cursor-pointer font-medium text-sm">
             {t(node.data.label) || node.data.name}

@@ -104,8 +104,12 @@ const TreegeRenderer = ({
           const CustomRenderer = components.inputs?.[inputType];
           const DefaultRenderer = defaultInputRenderers[inputType as keyof typeof defaultInputRenderers];
           const Renderer = CustomRenderer || DefaultRenderer;
+          const fieldId = node.id;
+          const value = formValues[fieldId];
+          const error = formErrors[fieldId];
+          const setValue = (newValue: any) => setFieldValue(fieldId, newValue);
 
-          return <Renderer key={node.id} node={node} />;
+          return <Renderer key={node.id} node={node} value={value} setValue={setValue} error={error} />;
         }
 
         case NODE_TYPE.group: {
@@ -149,7 +153,7 @@ const TreegeRenderer = ({
           return null;
       }
     },
-    [components, visibleNodes],
+    [components, visibleNodes, formValues, formErrors, setFieldValue],
   );
 
   // ============================================

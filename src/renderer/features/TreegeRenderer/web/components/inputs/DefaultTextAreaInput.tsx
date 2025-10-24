@@ -1,17 +1,12 @@
-import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Label } from "@/shared/components/ui/label";
 import { Textarea } from "@/shared/components/ui/textarea";
 
-const DefaultTextAreaInput = ({ node }: InputRenderProps) => {
-  const { formValues, setFieldValue, formErrors } = useTreegeRendererContext();
+const DefaultTextAreaInput = ({ node, value, setValue, error }: InputRenderProps) => {
   const t = useTranslate();
-  const fieldId = node.id;
-  const value = formValues[fieldId];
-  const error = formErrors[fieldId];
-  const name = node.data.name || fieldId;
+  const name = node.data.name || node.id;
 
   return (
     <FormItem className="mb-4">
@@ -23,7 +18,7 @@ const DefaultTextAreaInput = ({ node }: InputRenderProps) => {
         id={name}
         name={name}
         value={value ?? ""}
-        onChange={(e) => setFieldValue(fieldId, e.target.value)}
+        onChange={(e) => setValue(e.target.value)}
         placeholder={t(node.data.placeholder)}
         className="w-full rounded-md border px-3 py-2"
         rows={4}

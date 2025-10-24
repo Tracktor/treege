@@ -1,17 +1,12 @@
-import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 
-const DefaultPasswordInput = ({ node }: InputRenderProps) => {
-  const { formValues, setFieldValue, formErrors } = useTreegeRendererContext();
+const DefaultPasswordInput = ({ node, value, setValue, error }: InputRenderProps) => {
   const t = useTranslate();
-  const fieldId = node.id;
-  const value = formValues[fieldId];
-  const error = formErrors[fieldId];
-  const name = node.data.name || fieldId;
+  const name = node.data.name || node.id;
 
   return (
     <FormItem className="mb-4">
@@ -24,7 +19,7 @@ const DefaultPasswordInput = ({ node }: InputRenderProps) => {
         id={name}
         name={name}
         value={value ?? ""}
-        onChange={(e) => setFieldValue(fieldId, e.target.value)}
+        onChange={(e) => setValue(e.target.value)}
         placeholder={t(node.data.placeholder)}
       />
       {error && <FormError>{error}</FormError>}

@@ -52,19 +52,16 @@ const getValueByPath = (obj: HttpResponse, path: string): unknown => {
 const replaceTemplateVars = (template: string, formValues: Record<string, unknown>): string =>
   template.replace(/{{(\w+)}}/g, (_, key) => String(formValues[key] || ""));
 
-const DefaultHttpInput = ({ node }: InputRenderProps) => {
+const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps) => {
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [options, setOptions] = useState<Array<{ value: string; label: string }>>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [comboboxOpen, setComboboxOpen] = useState(false);
-  const { formValues, setFieldValue, formErrors } = useTreegeRendererContext();
+  const { formValues } = useTreegeRendererContext();
   const t = useTranslate();
   const { httpConfig } = node.data;
-  const fieldId = node.id;
-  const value = formValues[fieldId];
-  const error = formErrors[fieldId];
-  const name = node.data.name || fieldId;
+  const name = node.data.name || node.id;
 
   const fetchData = useCallback(
     async (search?: string) => {
@@ -128,7 +125,7 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
           setOptions(mappedOptions);
         } else {
           // Store the raw data as the field value
-          setFieldValue(fieldId, extractedData);
+          setValue(extractedData);
         }
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : "Failed to fetch data";
@@ -138,7 +135,7 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
         setLoading(false);
       }
     },
-    [httpConfig, formValues, fieldId, setFieldValue],
+    [httpConfig, formValues, setValue],
   );
 
   // Fetch on mount if configured
@@ -223,7 +220,7 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
                             key={option.value}
                             value={option.value}
                             onSelect={() => {
-                              setFieldValue(fieldId, option.value);
+                              setValue(option.value);
                               setComboboxOpen(false);
                             }}
                           >
@@ -269,7 +266,7 @@ const DefaultHttpInput = ({ node }: InputRenderProps) => {
           {t(node.data.label) || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
-        <Select value={value || ""} onValueChange={(val) => setFieldValue(fieldId, val)} disabled={isLoading}>
+        <Select value={value || ""} onValueChange={(val) => setValue(val)} disabled={isLoading}>
           <SelectTrigger>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             <SelectValue placeholder={t(node.data.placeholder) || "Select an option"} />
