@@ -30,7 +30,8 @@ const getValueByPath = (obj: HttpResponse, path: string): unknown => {
     }
 
     // Handle array indexing like "results[0]"
-    const arrayMatch = part.match(/^(\w+)\[(\d+)\]$/);
+    const arrayMatch = part.match(/^(\w+)\[(\d+)]$/);
+
     if (arrayMatch) {
       const [, key, index] = arrayMatch;
       const intermediate = (current as Record<string, unknown>)[key];
