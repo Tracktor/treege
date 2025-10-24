@@ -64,40 +64,48 @@ const determineEdgesToFollow = (
   // 2. Handle edges with conditions (excluding fallbacks)
   const conditional = edges.filter((e) => e.data?.conditions?.length && !e.data?.isFallback);
 
-  if (conditional.length > 0) {
-    // Check if all required fields are filled
-    const allFieldsFilled = conditional.every((edge) => {
-      if (!edge.data?.conditions) {
-        return false;
+  // No conditional edges: allow pure fallback navigation if present
+  if (conditional.length === 0) {
+    const fallbackOnly = edges.filter((e) => e.data?.isFallback);
+    if (fallbackOnly.length > 0 && edgesToFollow.length === 0) {
+      edgesToFollow.push(...fallbackOnly);
+    }
+    return { edgesToFollow, waitingForInput: false };
+  }
+
+  // Check if all required fields are filled
+  const allFieldsFilled = conditional.every((edge) => {
+    if (!edge.data?.conditions) {
+      return false;
+    }
+
+    return edge.data.conditions.every((cond) => {
+      if (!cond.field) {
+        return true;
       }
 
-      return edge.data.conditions.every((cond) => {
-        if (!cond.field) {
-          return true;
-        }
-
-        const fieldNode = nodeMap.get(cond.field);
-        const fieldName = isInputNode(fieldNode) ? fieldNode.id : cond.field;
-        return checkFormFieldHasValue(fieldName, formValues);
-      });
+      const fieldNode = nodeMap.get(cond.field);
+      const fieldName = isInputNode(fieldNode) ? fieldNode.id : cond.field;
+      return checkFormFieldHasValue(fieldName, formValues);
     });
+  });
 
-    // If fields not filled, defer conditional edges; still follow any unconditional edges
-    if (!allFieldsFilled) {
-      return { edgesToFollow, waitingForInput: edgesToFollow.length === 0 };
-    }
-
-    // Evaluate conditions and follow matching edges
-    const matching = conditional.filter((e) => evaluateConditions(e.data?.conditions, formValues, nodeMap));
-
-    if (matching.length > 0) {
-      edgesToFollow.push(...matching);
-    } else {
-      // No match - follow fallback edges if any
-      const fallback = edges.filter((e) => e.data?.isFallback);
-      edgesToFollow.push(...fallback);
-    }
+  // If fields not filled, defer conditional edges; still follow any unconditional edges
+  if (!allFieldsFilled) {
+    return { edgesToFollow, waitingForInput: edgesToFollow.length === 0 };
   }
+
+  // Evaluate conditions and follow matching edges
+  const matching = conditional.filter((e) => evaluateConditions(e.data?.conditions, formValues, nodeMap));
+
+  if (matching.length > 0) {
+    edgesToFollow.push(...matching);
+    return { edgesToFollow, waitingForInput: false };
+  }
+
+  // No match - follow fallback edges if any
+  const fallback = edges.filter((e) => e.data?.isFallback);
+  edgesToFollow.push(...fallback);
 
   return { edgesToFollow, waitingForInput: false };
 };
@@ -378,7 +386,7 @@ export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
 
   // Find edges that have FlowNodes as source or target
   // We need to connect the last node of the sub-flow to the node that follows the FlowNode
-  const edgesFromFlowNodes = new Map<string, Edge[]>(); // FlowNode ID -> edges where FlowNode is source
+  const edgesFromFlowNodes = new Map<string, Edge[]>(); // FlowNode ID -> edges where FlowNode is a source
 
   mergedEdges.forEach((edge) => {
     if (flowNodeReplacements.has(edge.source)) {
