@@ -372,36 +372,29 @@ export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
     const subFlowEdges = edgesFromFlowNodes.get(flowNodeId);
 
     if (subFlowEdges && subFlowEdges.length > 0) {
-      // Find all "terminal" nodes of the sub-flow (nodes that have no outgoing edges within the sub-flow)
-      const subFlowNodeIds = new Set<string>();
-
-      // Use the tracked target flow id instead of searching by firstNodeId
       const targetFlowId = flowNodeTargets.get(flowNodeId);
-      if (targetFlowId) {
-        const targetFlow = flowArray.find((flow) => flow.id === targetFlowId);
-        if (targetFlow) {
-          targetFlow.nodes.forEach((n) => {
-            subFlowNodeIds.add(n.id);
-          });
-        }
+      const targetFlow = targetFlowId ? flowArray.find((f) => f.id === targetFlowId) : undefined;
+      if (!targetFlow) {
+        return;
       }
-
-      const nodesWithOutgoingEdges = new Set<string>();
+      const subFlowNodeIds = new Set<string>(targetFlow.nodes.map((n) => n.id));
+      const nodesWithOutgoingEdgesInternal = new Set<string>();
       updatedEdges.forEach((edge) => {
-        if (subFlowNodeIds.has(edge.source)) {
-          nodesWithOutgoingEdges.add(edge.source);
+        if (subFlowNodeIds.has(edge.source) && subFlowNodeIds.has(edge.target)) {
+          nodesWithOutgoingEdgesInternal.add(edge.source);
         }
       });
-
-      const terminalNodes = Array.from(subFlowNodeIds).filter((nodeId) => !nodesWithOutgoingEdges.has(nodeId));
-
-      // Connect terminal nodes to the targets of the original FlowNode edges
+      const terminalNodes = Array.from(subFlowNodeIds).filter((id) => !nodesWithOutgoingEdgesInternal.has(id));
       terminalNodes.forEach((terminalNodeId) => {
         subFlowEdges.forEach((originalEdge) => {
+          const mappedTarget = flowNodeReplacements.get(originalEdge.target) ?? originalEdge.target;
+          const newEdgeIdBase = originalEdge.id ?? `${flowNodeId}__${originalEdge.target}`;
+          const newEdgeId = `${terminalNodeId}__${newEdgeIdBase}`;
           updatedEdges.push({
             ...originalEdge,
-            id: `${terminalNodeId}-${originalEdge.target}`,
+            id: newEdgeId,
             source: terminalNodeId,
+            target: mappedTarget,
           });
         });
       });
