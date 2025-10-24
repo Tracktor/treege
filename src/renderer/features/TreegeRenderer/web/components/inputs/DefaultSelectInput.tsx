@@ -26,11 +26,13 @@ const DefaultSelectInput = ({ node }: InputRenderProps) => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {node.data.options?.map((opt, index) => (
-              <SelectItem key={`${opt.value}-${index}`} value={String(opt.value)} disabled={opt.disabled}>
-                {t(opt.label)}
-              </SelectItem>
-            ))}
+            {node.data.options?.map((option, index) => {
+              return (
+                <SelectItem key={`${option.value}-${index}`} value={String(option.value)} disabled={option.disabled}>
+                  {t(option.label) ? t(option.label) : option.value}
+                </SelectItem>
+              );
+            })}
           </SelectGroup>
         </SelectContent>
       </Select>
