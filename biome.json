@@ -1,10 +1,9 @@
 {
-  "extends": ["@tracktor/biome-config-react"],
-  "linter": {
-    "rules": {
-      "suspicious": {
-        "noUnknownAtRules": "off"
-      }
+  "css": {
+    "parser": {
+      "cssModules": false,
+      "tailwindDirectives": true
     }
-  }
+  },
+  "extends": ["@tracktor/biome-config-react"]
 }
