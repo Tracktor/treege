@@ -9,6 +9,7 @@ import type { InputRenderProps } from "@/renderer/types/renderer";
 import { TreegeRenderer } from "@/renderer";
 import flows from "~/example/json/treege.json";
 import { Flow } from "@/shared/types/node";
+import { ChangeEvent } from "react";
 
 // ✅ Example 1: Simple custom text input (recommended approach)
 // Define your component OUTSIDE the render function to avoid re-creation and focus loss
@@ -40,7 +41,7 @@ const CustomTextInput = ({ node, value, setValue, error }: InputRenderProps) => 
 
 // ✅ Example 2: Custom number input with validation
 const CustomNumberInput = ({ node, value, setValue, error }: InputRenderProps) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const numValue = e.target.value === "" ? null : Number(e.target.value);
     setValue(numValue);
   };
