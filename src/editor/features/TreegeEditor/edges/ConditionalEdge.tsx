@@ -89,6 +89,7 @@ const ConditionalEdge = ({
     }
 
     const conditions = data.conditions!;
+
     if (conditions.length === 1) {
       const field = availableParentFields.find((f) => f.nodeId === conditions[0].field)?.label || conditions[0].field;
       return `${field} ${conditions[0].operator} ${conditions[0].value}`;
@@ -167,9 +168,9 @@ const ConditionalEdge = ({
                       <Field name="label">
                         {(field) => (
                           <FormItem>
-                            <Label htmlFor="label">{t("editor.conditionalEdge.labelOptional")}</Label>
+                            <Label htmlFor={field.name}>{t("editor.conditionalEdge.labelOptional")}</Label>
                             <Input
-                              id="label"
+                              id={field.name}
                               placeholder={t("editor.conditionalEdge.labelPlaceholder")}
                               value={field.state.value}
                               onChange={(e) => field.handleChange(e.target.value)}
@@ -184,12 +185,12 @@ const ConditionalEdge = ({
                           <FormItem>
                             <div className="flex items-center gap-3 rounded-lg border bg-muted/20 p-3">
                               <Checkbox
-                                id="isFallback"
+                                id={field.name}
                                 checked={field.state.value}
                                 onCheckedChange={(checked) => field.handleChange(checked as boolean)}
                               />
                               <div className="flex flex-col gap-1">
-                                <Label htmlFor="isFallback" className="cursor-pointer font-medium">
+                                <Label htmlFor={field.name} className="cursor-pointer font-medium">
                                   {t("editor.conditionalEdge.fallbackPath")}
                                 </Label>
                                 <FormDescription className="text-xs">{t("editor.conditionalEdge.fallbackPathDesc")}</FormDescription>
