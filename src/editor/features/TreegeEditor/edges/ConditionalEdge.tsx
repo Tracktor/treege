@@ -21,7 +21,6 @@ export type ConditionalEdgeProps = EdgeProps<ConditionalEdgeType>;
 
 const ConditionalEdge = ({
   id,
-  source,
   target,
   sourceX,
   sourceY,
@@ -50,7 +49,7 @@ const ConditionalEdge = ({
 
   const { handleSubmit, reset, Field } = useForm({
     defaultValues: {
-      conditions: data?.conditions || [{ field: source, operator: "===", value: "" }],
+      conditions: data?.conditions || [{ field: availableParentFields[0]?.nodeId ?? "", operator: "===", value: "" }],
       isFallback: !!data?.isFallback,
       label: data?.label || "",
     },
@@ -334,7 +333,7 @@ const ConditionalEdge = ({
                                   className="w-full"
                                   onClick={() => {
                                     conditionsField.pushValue({
-                                      field: source,
+                                      field: availableParentFields[0]?.nodeId ?? "",
                                       logicalOperator: LOGICAL_OPERATOR.AND,
                                       operator: "===",
                                       value: "",
