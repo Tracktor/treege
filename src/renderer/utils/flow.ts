@@ -355,13 +355,13 @@ export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
   // Replace edges that target FlowNodes with edges that target the first node of the sub-flow
   const updatedEdges = mergedEdges
     .map((edge) => {
-      if (flowNodeReplacements.has(edge.target)) {
-        // Edges pointing TO FlowNode should point to first node of sub-flow
-        return { ...edge, target: flowNodeReplacements.get(edge.target) };
+      const mappedSource = flowNodeReplacements.get(edge.source);
+      const mappedTarget = flowNodeReplacements.get(edge.target);
+      if (mappedSource) {
+        return null; // will be recreated from terminal nodes
       }
-      if (flowNodeReplacements.has(edge.source)) {
-        // Edges FROM FlowNode should be removed (we'll recreate them from last node)
-        return null;
+      if (mappedTarget) {
+        return { ...edge, target: mappedTarget };
       }
       return edge;
     })
