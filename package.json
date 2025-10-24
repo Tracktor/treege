@@ -5,8 +5,8 @@
   "version": "3.0.0",
   "type": "module",
   "types": "./dist/main.d.ts",
-  "main": "./dist/main.umd.cjs",
   "module": "./dist/main.js",
+  "sideEffects": false,
   "files": [
     "dist"
   ],

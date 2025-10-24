@@ -21,13 +21,6 @@ const config = () =>
       },
       rollupOptions: {
         external: [...Object.keys(dependencies ?? {}).filter((dep) => dep !== "nanoid"), ...Object.keys(peerDependencies ?? {})],
-        output: {
-          globals: {
-            "@xyflow/react": "ReactFlow",
-            react: "React",
-            "react-dom": "ReactDOM",
-          },
-        },
       },
     },
     plugins: [
