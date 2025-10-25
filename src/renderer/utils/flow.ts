@@ -1,3 +1,16 @@
+/**
+ * Flow Renderer - Core Logic
+ *
+ * This module contains the two main functions for the renderer:
+ * 1. mergeFlows: Preprocesses multiple flows by replacing FlowNodes with their target flows
+ * 2. getFlowRenderState: Determines which nodes should be visible based on form values and edge conditions
+ *
+ * Architecture:
+ * - mergeFlows runs once at mount to create a single flat graph
+ * - getFlowRenderState runs on every form value change to compute visibility
+ * - Both functions are highly optimized for performance (O(1) lookups, minimal iterations)
+ */
+
 import { Edge, Node } from "@xyflow/react";
 import { FormValues } from "@/renderer/types/renderer";
 import { evaluateConditions } from "@/renderer/utils/conditions";
@@ -9,23 +22,35 @@ import { isFlowNode, isInputNode } from "@/shared/utils/nodeTypeGuards";
 /**
  * Result from computing the flow render state
  * Contains everything needed to render the form and determine its state
+ *
+ * This is the output of getFlowRenderState and represents which nodes should be visible
+ * based on the current form values and conditional logic.
  */
 export interface FlowRenderState {
   /**
    * Whether the end of the flow path has been reached (no more unexplored paths)
    * This does NOT mean the form is valid - just that we've traversed as far as possible
+   *
+   * Use case: Determines if the submit button should be enabled (endOfPathReached + valid form)
    */
   endOfPathReached: boolean;
   /**
    * Set of all visible node IDs for quick lookup
+   *
+   * Use case: O(1) check if a node is visible (includes parent groups)
    */
   visibleNodeIds: Set<string>;
   /**
    * All visible nodes (for validation, includes children of groups)
+   *
+   * Use case: Running validation on all visible input nodes
    */
   visibleNodes: Node<TreegeNodeData>[];
   /**
    * Visible nodes at root level (to render at top-level, ordered by flow)
+   *
+   * Use case: Rendering the form - only these nodes need to be rendered at the root
+   * (their children will be rendered by group components)
    */
   visibleRootNodes: Node<TreegeNodeData>[];
 }
@@ -36,9 +61,9 @@ export interface FlowRenderState {
 const buildEdgeMap = (edges: Edge<ConditionalEdgeData>[]): Map<string, Edge<ConditionalEdgeData>[]> => {
   const map = new Map<string, Edge<ConditionalEdgeData>[]>();
   edges.forEach((edge) => {
-    const list = map.get(edge.source);
-    if (list) {
-      list.push(edge);
+    const existing = map.get(edge.source);
+    if (existing) {
+      existing.push(edge);
     } else {
       map.set(edge.source, [edge]);
     }
@@ -48,54 +73,64 @@ const buildEdgeMap = (edges: Edge<ConditionalEdgeData>[]): Map<string, Edge<Cond
 
 /**
  * Determine which edges to follow from a node
- * Core progressive rendering logic - simple and direct
+ * Core progressive rendering logic - categorizes edges and applies flow rules
  */
 const determineEdgesToFollow = (
   edges: Edge<ConditionalEdgeData>[],
   formValues: FormValues,
   nodeMap: Map<string, Node<TreegeNodeData>>,
 ): { edgesToFollow: Edge<ConditionalEdgeData>[]; waitingForInput: boolean } => {
-  const edgesToFollow: Edge<ConditionalEdgeData>[] = [];
+  // Categorize edges once for efficiency
+  const unconditional: Edge<ConditionalEdgeData>[] = [];
+  const conditional: Edge<ConditionalEdgeData>[] = [];
+  const fallback: Edge<ConditionalEdgeData>[] = [];
 
-  // 1. Always follow edges without conditions (excluding fallbacks)
-  const unconditional = edges.filter((e) => (!e.data?.conditions || e.data.conditions.length === 0) && !e.data?.isFallback);
-  edgesToFollow.push(...unconditional);
+  edges.forEach((edge) => {
+    const isFallback = edge.data?.isFallback;
+    const hasConditions = edge.data?.conditions?.length;
 
-  // 2. Handle edges with conditions (excluding fallbacks)
-  const conditional = edges.filter((e) => e.data?.conditions?.length && !e.data?.isFallback);
+    if (isFallback) {
+      fallback.push(edge);
+    } else if (hasConditions) {
+      conditional.push(edge);
+    } else {
+      unconditional.push(edge);
+    }
+  });
 
-  // No conditional edges: allow pure fallback navigation if present
+  // 1. Always follow unconditional edges
+  const edgesToFollow = [...unconditional];
+
+  // 2. No conditional edges: allow pure fallback navigation if present
   if (conditional.length === 0) {
-    const fallbackOnly = edges.filter((e) => e.data?.isFallback);
-    if (fallbackOnly.length > 0 && edgesToFollow.length === 0) {
-      edgesToFollow.push(...fallbackOnly);
+    if (fallback.length > 0 && edgesToFollow.length === 0) {
+      edgesToFollow.push(...fallback);
     }
     return { edgesToFollow, waitingForInput: false };
   }
 
-  // Check if all required fields are filled
+  // 3. Check if all required fields are filled
   const allFieldsFilled = conditional.every((edge) => {
-    if (!edge.data?.conditions) {
+    const conditions = edge.data?.conditions;
+    if (!conditions) {
       return false;
     }
-
-    return edge.data.conditions.every((cond) => {
+    return conditions.every((cond) => {
       if (!cond.field) {
         return true;
       }
-
       const fieldNode = nodeMap.get(cond.field);
       const fieldName = isInputNode(fieldNode) ? fieldNode.id : cond.field;
       return checkFormFieldHasValue(fieldName, formValues);
     });
   });
 
-  // If fields not filled, defer conditional edges; still follow any unconditional edges
+  // 4. If fields not filled, wait for input (unless we have unconditional edges to follow)
   if (!allFieldsFilled) {
     return { edgesToFollow, waitingForInput: edgesToFollow.length === 0 };
   }
 
-  // Evaluate conditions and follow matching edges
+  // 5. Evaluate conditions and follow matching edges
   const matching = conditional.filter((e) => evaluateConditions(e.data?.conditions, formValues, nodeMap));
 
   if (matching.length > 0) {
@@ -103,8 +138,7 @@ const determineEdgesToFollow = (
     return { edgesToFollow, waitingForInput: false };
   }
 
-  // No match - follow fallback edges if any
-  const fallback = edges.filter((e) => e.data?.isFallback);
+  // 6. No match - follow fallback edges if any
   edgesToFollow.push(...fallback);
 
   return { edgesToFollow, waitingForInput: false };
@@ -123,6 +157,37 @@ export const isStartNode = (nodeId: string, edges: Edge[]): boolean => !edges.so
 export const findStartNode = (nodes: Node<TreegeNodeData>[], edges: Edge[]): Node<TreegeNodeData> | undefined => {
   const nodesWithoutIncoming = nodes.filter((node) => isStartNode(node.id, edges));
   return nodesWithoutIncoming.find(isInputNode) || nodesWithoutIncoming[0];
+};
+
+/**
+ * Add parent groups to visible node IDs and assign them order indices
+ * Mutates visibleNodeIds and orderIndex for efficiency
+ */
+const addParentGroupsToVisibleNodes = (
+  orderedNodeIds: Set<string>,
+  visibleNodeIds: Set<string>,
+  orderIndex: Map<string, number>,
+  nodeMap: Map<string, Node<TreegeNodeData>>,
+): void => {
+  orderedNodeIds.forEach((nodeId) => {
+    const node = nodeMap.get(nodeId);
+    if (!node) {
+      return;
+    }
+
+    let { parentId } = node;
+    while (parentId) {
+      visibleNodeIds.add(parentId);
+      // If this parent group doesn't have an order yet, use this child's order
+      if (!orderIndex.has(parentId)) {
+        const childOrder = orderIndex.get(nodeId);
+        if (childOrder !== undefined) {
+          orderIndex.set(parentId, childOrder);
+        }
+      }
+      parentId = nodeMap.get(parentId)?.parentId;
+    }
+  });
 };
 
 /**
@@ -154,9 +219,8 @@ export const getFlowRenderState = (
   edges: Edge<ConditionalEdgeData>[],
   formValues: FormValues,
 ): FlowRenderState => {
-  // Find the start node (node without incoming edges)
+  // Early return for empty flow
   const startNode = findStartNode(nodes, edges);
-
   if (!startNode) {
     return {
       endOfPathReached: true,
@@ -166,11 +230,11 @@ export const getFlowRenderState = (
     };
   }
 
-  // Build lookup maps access during traversal
+  // Build lookup maps for O(1) access during traversal
   const nodeMap = new Map(nodes.map((n) => [n.id, n]));
   const edgeMap = buildEdgeMap(edges);
 
-  // Nodes discovered during recursive traversal (ordered by flow)
+  // State for recursive traversal
   const orderedNodes: Node<TreegeNodeData>[] = [];
   const orderedNodeIds = new Set<string>();
   const visited = new Set<string>();
@@ -185,14 +249,12 @@ export const getFlowRenderState = (
     }
 
     visited.add(nodeId);
-    orderedNodeIds.add(nodeId);
-
     const node = nodeMap.get(nodeId);
-
     if (!node) {
       return;
     }
 
+    orderedNodeIds.add(nodeId);
     orderedNodes.push(node);
 
     const outgoingEdges = edgeMap.get(nodeId) || [];
@@ -210,32 +272,12 @@ export const getFlowRenderState = (
 
   traverse(startNode.id);
 
-  // Add parent groups to visible nodes if a child is visible
-  const visibleNodeIds = new Set(orderedNodeIds);
-  const idToNode = new Map(nodes.map((n) => [n.id, n]));
-
   // Create order index from flow traversal to maintain correct order
   const orderIndex = new Map(orderedNodes.map((n, i) => [n.id, i]));
 
-  // Assign group nodes the index of their first child in the flow
-  nodes.forEach((node) => {
-    if (!orderedNodeIds.has(node.id)) {
-      return;
-    }
-
-    let { parentId } = node;
-    while (parentId) {
-      visibleNodeIds.add(parentId);
-      // If this parent group doesn't have an order yet, use this child's order
-      if (!orderIndex.has(parentId)) {
-        const childOrder = orderIndex.get(node.id);
-        if (childOrder !== undefined) {
-          orderIndex.set(parentId, childOrder);
-        }
-      }
-      parentId = idToNode.get(parentId)?.parentId;
-    }
-  });
+  // Add parent groups to visible nodes and assign them order indices
+  const visibleNodeIds = new Set(orderedNodeIds);
+  addParentGroupsToVisibleNodes(orderedNodeIds, visibleNodeIds, orderIndex, nodeMap);
 
   // Sort all visible nodes by flow order (important for group children)
   const visibleNodes = nodes
@@ -265,28 +307,36 @@ const detectMainFlow = (flows: Flow[]): Flow => {
     return flows[0];
   }
 
-  // Build a set of all flow IDs in the array
-  const flowIds = new Set(flows.map((f) => f.id));
-
   // Build a set of flow IDs that are referenced by FlowNodes
+  const flowIds = new Set(flows.map((f) => f.id));
   const referencedFlowIds = new Set<string>();
 
   flows.forEach((flow) => {
     flow.nodes.forEach((node) => {
       if (isFlowNode(node)) {
-        const flowData = node.data as FlowNodeData;
-        if (flowData.targetId && flowIds.has(flowData.targetId)) {
-          referencedFlowIds.add(flowData.targetId);
+        const targetId = (node.data as FlowNodeData).targetId;
+        if (targetId && flowIds.has(targetId)) {
+          referencedFlowIds.add(targetId);
         }
       }
     });
   });
 
-  // The main flow is the one that is NOT referenced by any other flow in the array
-  const mainFlow = flows.find((flow) => !referencedFlowIds.has(flow.id));
+  // The main flow is the one that is NOT referenced by any other flow
+  return flows.find((flow) => !referencedFlowIds.has(flow.id)) || flows[0];
+};
 
-  // Fallback to first flow if no clear main flow is found
-  return mainFlow || flows[0];
+/**
+ * Find terminal nodes (nodes without outgoing edges within the sub-flow)
+ */
+const findTerminalNodes = (subFlowNodeIds: Set<string>, edges: Edge[]): string[] => {
+  const nodesWithOutgoingEdges = new Set<string>();
+  edges.forEach((edge) => {
+    if (subFlowNodeIds.has(edge.source) && subFlowNodeIds.has(edge.target)) {
+      nodesWithOutgoingEdges.add(edge.source);
+    }
+  });
+  return Array.from(subFlowNodeIds).filter((id) => !nodesWithOutgoingEdges.has(id));
 };
 
 /**
@@ -306,76 +356,73 @@ const detectMainFlow = (flows: Flow[]): Flow => {
  * @returns A single merged Flow containing all nodes and edges
  */
 export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
+  // Early return for null/undefined
   if (!flows) {
-    return {
-      edges: [],
-      id: "empty",
-      nodes: [],
-    };
+    return { edges: [], id: "empty", nodes: [] };
   }
 
-  // Normalize to array and filter out null/undefined values
+  // Normalize to array
   const flowArray = Array.isArray(flows) ? flows : [flows];
-
-  // Early return if no flows or empty array
   if (flowArray.length === 0) {
-    return {
-      edges: [],
-      id: "empty",
-      nodes: [],
-    };
+    return { edges: [], id: "empty", nodes: [] };
   }
 
-  // Automatically detect the main flow based on dependencies
+  // Detect the main flow
   const mainFlow = detectMainFlow(flowArray);
 
-  // If only one flow, no need to merge - just return it as is
+  // If only one flow, no merge needed
   if (flowArray.length === 1) {
     return mainFlow;
   }
 
+  // Build flow lookup map for O(1) access
+  const flowMap = new Map(flowArray.map((f) => [f.id, f]));
+
+  // Tracking data for merge process
   const mergedNodes: Node<TreegeNodeData>[] = [];
   const mergedEdges: Edge[] = [...mainFlow.edges];
   const processedFlowIds = new Set<string>([mainFlow.id]);
-  const flowNodeReplacements = new Map<string, string>(); // Map FlowNode ID -> first node ID of target flow
-  const flowNodeTargets = new Map<string, string>(); // Map FlowNode ID -> target flow id
+  const flowNodeReplacements = new Map<string, string>(); // FlowNode ID -> first node ID of target flow
+  const flowNodeTargets = new Map<string, string>(); // FlowNode ID -> target flow ID
+  const edgesFromFlowNodes = new Map<string, Edge[]>(); // FlowNode ID -> edges where FlowNode is source
 
+  /**
+   * Process nodes recursively, replacing FlowNodes with their target flow's nodes
+   */
   const processNodes = (nodes: Node<TreegeNodeData>[]): Node<TreegeNodeData>[] => {
     const result: Node<TreegeNodeData>[] = [];
 
     nodes.forEach((node) => {
-      if (isFlowNode(node)) {
-        const flowData = node.data as FlowNodeData;
-        const targetFlowId = flowData.targetId;
-
-        if (targetFlowId) {
-          const targetFlow = flowArray.find((flow) => flow.id === targetFlowId);
-
-          if (targetFlow) {
-            // Always map this FlowNode to the first root node of the target flow
-            // (even if we've already processed this target flow)
-            const firstRootNode = targetFlow.nodes.find((n) => !n.parentId);
-            if (firstRootNode) {
-              flowNodeReplacements.set(node.id, firstRootNode.id);
-            }
-
-            // Track specific target flow for this FlowNode instance
-            flowNodeTargets.set(node.id, targetFlowId);
-
-            // Inline sub-flow nodes only once per unique flow id
-            if (!processedFlowIds.has(targetFlowId)) {
-              processedFlowIds.add(targetFlowId);
-              mergedEdges.push(...targetFlow.edges);
-              const processedSubFlowNodes = processNodes(targetFlow.nodes);
-              result.push(...processedSubFlowNodes);
-            }
-          } else {
-            console.warn(`Flow with id "${targetFlowId}" not found`);
-          }
-        }
-      } else {
-        // Add non-flow nodes to result
+      if (!isFlowNode(node)) {
         result.push(node);
+        return;
+      }
+
+      const targetFlowId = (node.data as FlowNodeData).targetId;
+      if (!targetFlowId) {
+        return;
+      }
+
+      const targetFlow = flowMap.get(targetFlowId);
+      if (!targetFlow) {
+        console.warn(`Flow with id "${targetFlowId}" not found`);
+        return;
+      }
+
+      // Map FlowNode to the first root node of the target flow
+      const firstRootNode = targetFlow.nodes.find((n) => !n.parentId);
+      if (firstRootNode) {
+        flowNodeReplacements.set(node.id, firstRootNode.id);
+      }
+
+      // Track target flow for this FlowNode instance
+      flowNodeTargets.set(node.id, targetFlowId);
+
+      // Inline sub-flow nodes only once per unique flow ID
+      if (!processedFlowIds.has(targetFlowId)) {
+        processedFlowIds.add(targetFlowId);
+        mergedEdges.push(...targetFlow.edges);
+        result.push(...processNodes(targetFlow.nodes));
       }
     });
 
@@ -384,70 +431,57 @@ export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
 
   mergedNodes.push(...processNodes(mainFlow.nodes));
 
-  // Find edges that have FlowNodes as source or target
-  // We need to connect the last node of the sub-flow to the node that follows the FlowNode
-  const edgesFromFlowNodes = new Map<string, Edge[]>(); // FlowNode ID -> edges where FlowNode is a source
-
+  // Build map of edges from FlowNodes
   mergedEdges.forEach((edge) => {
     if (flowNodeReplacements.has(edge.source)) {
-      if (!edgesFromFlowNodes.has(edge.source)) {
-        edgesFromFlowNodes.set(edge.source, []);
-      }
-
-      const list = edgesFromFlowNodes.get(edge.source);
-      if (list) {
-        list.push(edge);
+      const existing = edgesFromFlowNodes.get(edge.source);
+      if (existing) {
+        existing.push(edge);
+      } else {
+        edgesFromFlowNodes.set(edge.source, [edge]);
       }
     }
   });
 
-  // Replace edges that target FlowNodes with edges that target the first node of the sub-flow
+  // Replace edges: remove FlowNode sources, redirect FlowNode targets
   const updatedEdges = mergedEdges
     .map((edge) => {
-      const mappedSource = flowNodeReplacements.get(edge.source);
+      if (flowNodeReplacements.has(edge.source)) {
+        return null; // Will be recreated from terminal nodes
+      }
       const mappedTarget = flowNodeReplacements.get(edge.target);
-      if (mappedSource) {
-        return null; // will be recreated from terminal nodes
-      }
-      if (mappedTarget) {
-        return { ...edge, target: mappedTarget };
-      }
-      return edge;
+      return mappedTarget ? { ...edge, target: mappedTarget } : edge;
     })
     .filter((edge): edge is Edge => edge !== null);
 
-  // For each FlowNode, find the last nodes of its sub-flow and connect them to the nodes that followed the FlowNode
+  // Connect terminal nodes of sub-flows to nodes that followed the FlowNode
   flowNodeReplacements.forEach((_firstNodeId, flowNodeId) => {
     const subFlowEdges = edgesFromFlowNodes.get(flowNodeId);
+    if (!subFlowEdges?.length) {
+      return;
+    }
 
-    if (subFlowEdges && subFlowEdges.length > 0) {
-      const targetFlowId = flowNodeTargets.get(flowNodeId);
-      const targetFlow = targetFlowId ? flowArray.find((f) => f.id === targetFlowId) : undefined;
-      if (!targetFlow) {
-        return;
-      }
-      const subFlowNodeIds = new Set<string>(targetFlow.nodes.map((n) => n.id));
-      const nodesWithOutgoingEdgesInternal = new Set<string>();
-      updatedEdges.forEach((edge) => {
-        if (subFlowNodeIds.has(edge.source) && subFlowNodeIds.has(edge.target)) {
-          nodesWithOutgoingEdgesInternal.add(edge.source);
-        }
-      });
-      const terminalNodes = Array.from(subFlowNodeIds).filter((id) => !nodesWithOutgoingEdgesInternal.has(id));
-      terminalNodes.forEach((terminalNodeId) => {
-        subFlowEdges.forEach((originalEdge) => {
-          const mappedTarget = flowNodeReplacements.get(originalEdge.target) ?? originalEdge.target;
-          const newEdgeIdBase = originalEdge.id ?? `${flowNodeId}__${originalEdge.target}`;
-          const newEdgeId = `${terminalNodeId}__${newEdgeIdBase}`;
-          updatedEdges.push({
-            ...originalEdge,
-            id: newEdgeId,
-            source: terminalNodeId,
-            target: mappedTarget,
-          });
+    const targetFlowId = flowNodeTargets.get(flowNodeId);
+    const targetFlow = targetFlowId ? flowMap.get(targetFlowId) : undefined;
+    if (!targetFlow) {
+      return;
+    }
+
+    const subFlowNodeIds = new Set(targetFlow.nodes.map((n) => n.id));
+    const terminalNodes = findTerminalNodes(subFlowNodeIds, updatedEdges);
+
+    terminalNodes.forEach((terminalNodeId) => {
+      subFlowEdges.forEach((originalEdge) => {
+        const mappedTarget = flowNodeReplacements.get(originalEdge.target) ?? originalEdge.target;
+        const newEdgeIdBase = originalEdge.id ?? `${flowNodeId}__${originalEdge.target}`;
+        updatedEdges.push({
+          ...originalEdge,
+          id: `${terminalNodeId}__${newEdgeIdBase}`,
+          source: terminalNodeId,
+          target: mappedTarget,
         });
       });
-    }
+    });
   });
 
   return {
