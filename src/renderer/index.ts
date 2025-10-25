@@ -10,6 +10,7 @@ export { default as TreegeRenderer } from "@/renderer/features/TreegeRenderer/we
 export type { TreegeRendererConfig } from "@/renderer/types/renderer";
 export * from "@/renderer/types/renderer";
 export * from "@/renderer/utils/conditions";
+export * from "@/renderer/utils/file";
 export * from "@/renderer/utils/flow";
 export * from "@/renderer/utils/form";
 export { ThemeProvider, useTheme } from "@/shared/context/ThemeContext";

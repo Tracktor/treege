@@ -1,5 +1,6 @@
 import { Node } from "@xyflow/react";
 import { FormEvent, ReactNode } from "react";
+import { SerializableFile } from "@/renderer/utils/file";
 import { Flow, InputNodeData, InputType, TreegeNodeData, UINodeData, UIType } from "@/shared/types/node";
 
 /**
@@ -11,7 +12,7 @@ export type InputValueTypeMap = {
   checkbox: boolean | string[];
   date: string;
   daterange: [string, string] | [string | undefined, string | undefined] | null; // [startDate, endDate]
-  file: File | File[] | null;
+  file: SerializableFile | SerializableFile[] | null;
   hidden: string;
   http: string | string[];
   number: number | null;
@@ -38,8 +39,8 @@ export type InputValue =
   | number
   | boolean
   | string[]
-  | File
-  | File[]
+  | SerializableFile
+  | SerializableFile[]
   | [string, string]
   | [string | undefined, string | undefined]
   | null;

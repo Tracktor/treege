@@ -1,6 +1,7 @@
 import { ChangeEvent } from "react";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
+import { filesToSerializable, fileToSerializable } from "@/renderer/utils/file";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
@@ -9,19 +10,23 @@ const DefaultFileInput = ({ node, setValue, error }: InputRenderProps<"file">) =
   const t = useTranslate();
   const name = node.data.name || node.id;
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
-    if (!files) {
+
+    if (!files || files.length === 0) {
       setValue(null);
       return;
     }
 
-    // If multiple files are allowed, store as array, otherwise store single file
+    // Convert File objects to serializable format
     if (node.data.multiple) {
-      setValue(Array.from(files));
-    } else {
-      setValue(files[0]);
+      const serializableFiles = await filesToSerializable(Array.from(files));
+      setValue(serializableFiles);
+      return;
     }
+
+    const serializableFile = await fileToSerializable(files[0]);
+    setValue(serializableFile);
   };
 
   return (

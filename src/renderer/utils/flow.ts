@@ -231,7 +231,7 @@ export const getFlowRenderState = (
   }
 
   // Build lookup maps for O(1) access during traversal
-  const nodeMap = new Map(nodes.map((n) => [n.id, n]));
+  const nodeMap = new Map(nodes.map((node) => [node.id, node]));
   const edgeMap = buildEdgeMap(edges);
 
   // State for recursive traversal
@@ -273,7 +273,7 @@ export const getFlowRenderState = (
   traverse(startNode.id);
 
   // Create order index from flow traversal to maintain correct order
-  const orderIndex = new Map(orderedNodes.map((n, i) => [n.id, i]));
+  const orderIndex = new Map(orderedNodes.map((node, i) => [node.id, i]));
 
   // Add parent groups to visible nodes and assign them order indices
   const visibleNodeIds = new Set(orderedNodeIds);
@@ -308,7 +308,7 @@ const detectMainFlow = (flows: Flow[]): Flow => {
   }
 
   // Build a set of flow IDs that are referenced by FlowNodes
-  const flowIds = new Set(flows.map((f) => f.id));
+  const flowIds = new Set(flows.map((flow) => flow.id));
   const referencedFlowIds = new Set<string>();
 
   flows.forEach((flow) => {
@@ -376,7 +376,7 @@ export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
   }
 
   // Build flow lookup map for O(1) access
-  const flowMap = new Map(flowArray.map((f) => [f.id, f]));
+  const flowMap = new Map(flowArray.map((flow) => [flow.id, flow]));
 
   // Tracking data for merge process
   const mergedNodes: Node<TreegeNodeData>[] = [];
@@ -467,7 +467,7 @@ export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
       return;
     }
 
-    const subFlowNodeIds = new Set(targetFlow.nodes.map((n) => n.id));
+    const subFlowNodeIds = new Set(targetFlow.nodes.map((node) => node.id));
     const terminalNodes = findTerminalNodes(subFlowNodeIds, updatedEdges);
 
     terminalNodes.forEach((terminalNodeId) => {
