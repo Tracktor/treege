@@ -207,6 +207,7 @@
       "endTime": "وقت الانتهاء",
       "required": "*",
       "selectDate": "اختر التاريخ",
+      "selectDateRange": "اختر نطاق التاريخ",
       "startDate": "تاريخ البدء",
       "startTime": "وقت البدء"
     },

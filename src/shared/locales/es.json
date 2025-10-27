@@ -207,6 +207,7 @@
       "endTime": "Hora de fin",
       "required": "*",
       "selectDate": "Seleccionar fecha",
+      "selectDateRange": "Seleccionar rango de fechas",
       "startDate": "Fecha de inicio",
       "startTime": "Hora de inicio"
     },

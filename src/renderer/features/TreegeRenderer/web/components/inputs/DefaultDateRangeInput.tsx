@@ -29,7 +29,7 @@ const DefaultDateRangeInput = ({ node, value, setValue, error }: InputRenderProp
     if (startDate) {
       return startDate.toLocaleDateString();
     }
-    return "Select date range";
+    return t("renderer.defaultInputs.selectDateRange");
   };
 
   return (

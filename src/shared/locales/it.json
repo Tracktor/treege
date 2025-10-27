@@ -207,6 +207,7 @@
       "endTime": "Ora di fine",
       "required": "*",
       "selectDate": "Seleziona data",
+      "selectDateRange": "Seleziona intervallo di date",
       "startDate": "Data di inizio",
       "startTime": "Ora di inizio"
     },

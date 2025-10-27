@@ -207,6 +207,7 @@
       "endTime": "End time",
       "required": "*",
       "selectDate": "Select date",
+      "selectDateRange": "Select date range",
       "startDate": "Start date",
       "startTime": "Start time"
     },
