@@ -11,7 +11,7 @@ const DefaultRadioInput = ({ node, value, setValue, error }: InputRenderProps<"r
 
   return (
     <FormItem className="mb-4">
-      <Label className="mb-2 block font-medium text-sm">
+      <Label className="mb-1">
         {t(node.data.label) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>

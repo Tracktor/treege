@@ -19,7 +19,7 @@ const DefaultCheckboxInput = ({ node, value, setValue, error }: InputRenderProps
 
     return (
       <FormItem className="mb-4">
-        <Label className="mb-2 block font-medium text-sm">
+        <Label className="mb-1">
           {t(node.data.label) || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
@@ -53,7 +53,7 @@ const DefaultCheckboxInput = ({ node, value, setValue, error }: InputRenderProps
           checked={typeof value === "boolean" ? value : false}
           onCheckedChange={(checked) => setValue(Boolean(checked))}
         />
-        <div className="grid gap-2">
+        <div>
           <Label htmlFor={name} className="cursor-pointer font-medium text-sm">
             {t(node.data.label) || node.data.name}
             {node.data.required && <span className="text-red-500">*</span>}
