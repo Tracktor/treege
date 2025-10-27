@@ -138,14 +138,18 @@ const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps<"ht
     [httpConfig, formValues, setValue],
   );
 
-  // Fetch on mount if configured
+  /**
+   * Fetch on mount if configured
+   */
   useEffect(() => {
     if (httpConfig?.fetchOnMount) {
       void fetchData();
     }
   }, [httpConfig?.fetchOnMount, fetchData]);
 
-  // Debounced search for combobox
+  /**
+   * Debounced search for combobox
+   */
   useEffect(() => {
     if (!(httpConfig?.searchParam && searchQuery)) {
       return undefined;
