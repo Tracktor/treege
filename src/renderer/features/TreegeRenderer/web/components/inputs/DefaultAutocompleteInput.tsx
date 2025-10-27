@@ -13,18 +13,28 @@ const DefaultAutocompleteInput = ({ node, value, setValue, error }: InputRenderP
   const t = useTranslate();
   const [open, setOpen] = useState(false);
   const name = node.data.name || node.id;
+  const triggerId = `${name}-trigger`;
+  const errorId = `${name}-error`;
   const options = node.data.options || [];
   const selectedOption = options.find((option) => option.value === value);
 
   return (
     <FormItem className="mb-4">
-      <Label htmlFor={name}>
+      <Label htmlFor={triggerId}>
         {t(node.data.label) || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between font-normal">
+          <Button
+            id={triggerId}
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            aria-invalid={Boolean(error) || undefined}
+            aria-describedby={error ? errorId : undefined}
+            className="w-full justify-between font-normal"
+          >
             {value
               ? selectedOption?.label
                 ? t(selectedOption.label)
@@ -58,7 +68,7 @@ const DefaultAutocompleteInput = ({ node, value, setValue, error }: InputRenderP
           </Command>
         </PopoverContent>
       </Popover>
-      {error && <FormError>{error}</FormError>}
+      {error && <FormError id={errorId}>{error}</FormError>}
       {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
     </FormItem>
   );
