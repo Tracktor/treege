@@ -62,6 +62,7 @@ const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps<"ht
   const t = useTranslate();
   const { httpConfig } = node.data;
   const name = node.data.name || node.id;
+  const hasFetchedOnMount = useRef(false);
 
   const fetchData = useCallback(
     async (search?: string) => {
@@ -139,21 +140,14 @@ const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps<"ht
   );
 
   /**
-   * Store fetchData in a ref to avoid dependency issues
-   */
-  const fetchDataRef = useRef(fetchData);
-  useEffect(() => {
-    fetchDataRef.current = fetchData;
-  }, [fetchData]);
-
-  /**
-   * Fetch on mount if configured
+   * Fetch on mount if configured (only once)
    */
   useEffect(() => {
-    if (httpConfig?.fetchOnMount) {
-      fetchDataRef.current();
+    if (httpConfig?.fetchOnMount && !hasFetchedOnMount.current) {
+      hasFetchedOnMount.current = true;
+      void fetchData();
     }
-  }, [httpConfig?.fetchOnMount]);
+  }, [httpConfig?.fetchOnMount, fetchData]);
 
   /**
    * Debounced search for combobox
@@ -164,11 +158,11 @@ const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps<"ht
     }
 
     const timer = setTimeout(() => {
-      void fetchDataRef.current(searchQuery);
+      void fetchData(searchQuery);
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchQuery, httpConfig?.searchParam]);
+  }, [searchQuery, httpConfig?.searchParam, fetchData]);
 
   // If responseMapping is configured
   if (httpConfig?.responseMapping) {
