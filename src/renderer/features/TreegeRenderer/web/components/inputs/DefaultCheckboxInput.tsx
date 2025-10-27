@@ -29,7 +29,7 @@ const DefaultCheckboxInput = ({ node, value, setValue, error }: InputRenderProps
               <Checkbox
                 id={`${name}-${option.value}`}
                 checked={selectedValues.includes(String(option.value))}
-                onCheckedChange={(checked) => handleCheckboxChange(String(option.value), checked as boolean)}
+                onCheckedChange={(checked) => handleCheckboxChange(String(option.value), Boolean(checked))}
                 disabled={option.disabled}
               />
               <Label htmlFor={`${name}-${option.value}`} className="cursor-pointer font-normal text-sm">
@@ -51,7 +51,7 @@ const DefaultCheckboxInput = ({ node, value, setValue, error }: InputRenderProps
         <Checkbox
           id={name}
           checked={typeof value === "boolean" ? value : false}
-          onCheckedChange={(checked) => setValue(checked as boolean)}
+          onCheckedChange={(checked) => setValue(Boolean(checked))}
         />
         <div className="grid gap-2">
           <Label htmlFor={name} className="cursor-pointer font-medium text-sm">
