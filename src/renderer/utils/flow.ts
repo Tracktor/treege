@@ -176,7 +176,12 @@ const addParentGroupsToVisibleNodes = (
     }
 
     let { parentId } = node;
+    const seen = new Set<string>();
     while (parentId) {
+      if (seen.has(parentId)) {
+        break; // cycle guard
+      }
+      seen.add(parentId);
       visibleNodeIds.add(parentId);
       // If this parent group doesn't have an order yet, use this child's order
       if (!orderIndex.has(parentId)) {
