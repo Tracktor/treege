@@ -34,7 +34,7 @@ const RendererPanel = ({
   language,
   setLanguage,
 }: {
-  flow: Flow | null;
+  flow?: Flow | null;
   theme: "light" | "dark";
   setTheme: (t: "light" | "dark") => void;
   language: Language;
@@ -135,7 +135,7 @@ const Layout = ({ flow }: { flow?: Flow }) => {
         <EditorPanel onSave={handleSave} flow={flow} theme={theme} language={language} />
       </div>
       <div className="w-4/12">
-        <RendererPanel flow={savedFlow} theme={theme} setTheme={setTheme} language={language} setLanguage={setLanguage} />
+        <RendererPanel flow={savedFlow || flow} theme={theme} setTheme={setTheme} language={language} setLanguage={setLanguage} />
       </div>
     </div>
   );

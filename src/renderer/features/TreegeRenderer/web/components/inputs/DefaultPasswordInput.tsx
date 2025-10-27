@@ -21,6 +21,7 @@ const DefaultPasswordInput = ({ node, value, setValue, error }: InputRenderProps
         value={value ?? ""}
         onChange={(e) => setValue(e.target.value)}
         placeholder={t(node.data.placeholder)}
+        autoComplete="new-password"
       />
       {error && <FormError>{error}</FormError>}
       {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
