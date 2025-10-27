@@ -339,6 +339,7 @@ const expandFlowNodeIds = (
   flowMap: Map<string, Flow>,
   flowNodeReplacements: Map<string, string>,
   flowNodeTargets: Map<string, string>,
+  visitedFlowIds: Set<string> = new Set<string>(),
 ): Set<string> => {
   const expanded = new Set<string>();
 
@@ -348,8 +349,15 @@ const expandFlowNodeIds = (
       const targetFlowId = flowNodeTargets.get(nodeId);
       const targetFlow = targetFlowId ? flowMap.get(targetFlowId) : undefined;
       if (targetFlow) {
+        if (targetFlowId && visitedFlowIds.has(targetFlowId)) {
+          // cycle detected; skip re-expansion
+          continue;
+        }
+        if (targetFlowId) {
+          visitedFlowIds.add(targetFlowId);
+        }
         const targetNodeIds = new Set(targetFlow.nodes.map((n) => n.id));
-        const expandedTarget = expandFlowNodeIds(targetNodeIds, flowMap, flowNodeReplacements, flowNodeTargets);
+        const expandedTarget = expandFlowNodeIds(targetNodeIds, flowMap, flowNodeReplacements, flowNodeTargets, visitedFlowIds);
         for (const id of expandedTarget) {
           expanded.add(id);
         }
@@ -506,7 +514,13 @@ export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
 
     // Expand FlowNodes recursively to get only real node IDs (excluding nested FlowNodes)
     const subFlowNodeIds = new Set(targetFlow.nodes.map((node) => node.id));
-    const expandedNodeIds = expandFlowNodeIds(subFlowNodeIds, flowMap, flowNodeReplacements, flowNodeTargets);
+    const expandedNodeIds = expandFlowNodeIds(
+      subFlowNodeIds,
+      flowMap,
+      flowNodeReplacements,
+      flowNodeTargets,
+      new Set<string>(targetFlowId ? [targetFlowId] : []),
+    );
     const terminalNodes = findTerminalNodes(expandedNodeIds, updatedEdges);
 
     terminalNodes.forEach((terminalNodeId) => {
