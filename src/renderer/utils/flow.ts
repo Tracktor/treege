@@ -456,10 +456,13 @@ export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
 
       // Map FlowNode to the first root node of the target flow
       const firstRootNode = targetFlow.nodes.find((n) => !n.parentId);
-      if (firstRootNode) {
-        flowNodeReplacements.set(node.id, firstRootNode.id);
+      if (!firstRootNode) {
+        console.warn(`Flow "${targetFlowId}" has no root node; preserving FlowNode "${node.id}"`);
+        // Keep the FlowNode in the merged graph to avoid dangling edges
+        result.push(node);
+        return;
       }
-
+      flowNodeReplacements.set(node.id, firstRootNode.id);
       // Track target flow for this FlowNode instance
       flowNodeTargets.set(node.id, targetFlowId);
 
