@@ -21,7 +21,7 @@ const DefaultTimeInput = ({ node, value, setValue, error }: InputRenderProps<"ti
         value={value ?? ""}
         onChange={(e) => setValue(e.target.value)}
         placeholder={t(node.data.placeholder)}
-        className="bg-background"
+        className="bg-background [color-scheme:light] dark:[color-scheme:dark]"
       />
       {error && <FormError>{error}</FormError>}
       {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
