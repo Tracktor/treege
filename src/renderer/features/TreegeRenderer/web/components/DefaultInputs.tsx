@@ -1,5 +1,3 @@
-// Import all input components from the inputs/ directory
-
 import { ReactNode } from "react";
 import DefaultAddressInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultAddressInput";
 import DefaultCheckboxInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultCheckboxInput";
