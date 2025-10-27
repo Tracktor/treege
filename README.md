@@ -60,14 +60,6 @@ yarn add treege
 bun add treege
 ```
 
-### Peer Dependencies
-
-Treege requires the following peer dependencies:
-
-```bash
-npm install react react-dom tailwindcss
-```
-
 ## Quick Start
 
 ### Using the Editor
@@ -90,8 +82,6 @@ function App() {
     <TreegeEditor
       flow={flow}
       onSave={handleSave}
-      language="en"
-      theme="dark"
     />
   );
 }
@@ -118,8 +108,6 @@ function App() {
     <TreegeRenderer
       flows={flow}
       onSubmit={handleSubmit}
-      language="en"
-      theme="dark"
     />
   );
 }
@@ -334,9 +322,6 @@ Control when validation occurs:
 
 // Validate on every change
 <TreegeRenderer validationMode="onChange" />
-
-// Validate on field blur
-<TreegeRenderer validationMode="onBlur" />
 ```
 
 ## Examples
@@ -344,8 +329,8 @@ Control when validation occurs:
 Check out the `/example` directory for complete examples:
 
 ```bash
-# Run the example app
-yarn example
+  # Run the example app
+  bun example
 ```
 
 ## API Reference
