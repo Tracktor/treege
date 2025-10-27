@@ -18,7 +18,6 @@ import DefaultTextInput from "@/renderer/features/TreegeRenderer/web/components/
 import DefaultTimeInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultTimeInput";
 import DefaultTimeRangeInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultTimeRangeInput";
 import { InputRenderProps } from "@/renderer/types/renderer";
-import { InputType } from "@/shared/types/node";
 
 // Re-export all components
 export {
