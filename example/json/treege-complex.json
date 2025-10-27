@@ -142,6 +142,18 @@
               "en": "Option 1"
             },
             "value": "option-1"
+          },
+          {
+            "label": {
+              "en": "Option 2"
+            },
+            "value": "option-2"
+          },
+          {
+            "label": {
+              "en": "Option 3"
+            },
+            "value": "option-3"
           }
         ],
         "pattern": "",
@@ -190,6 +202,12 @@
               "en": "Option 2"
             },
             "value": "option-2"
+          },
+          {
+            "label": {
+              "en": "Option 3"
+            },
+            "value": "option-3"
           }
         ],
         "pattern": "",

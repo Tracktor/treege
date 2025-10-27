@@ -186,6 +186,11 @@
       "enterAddress": "Enter an address...",
       "noAddressesFound": "No addresses found."
     },
+    "defaultAutocompleteInput": {
+      "noResults": "No results found.",
+      "search": "Search...",
+      "selectOption": "Select an option"
+    },
     "defaultHttpInput": {
       "fetchFailed": "Failed to fetch data",
       "httpError": "HTTP {status}: {statusText}",

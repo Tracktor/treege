@@ -186,6 +186,11 @@
       "enterAddress": "Digite um endereço...",
       "noAddressesFound": "Nenhum endereço encontrado."
     },
+    "defaultAutocompleteInput": {
+      "noResults": "Nenhum resultado encontrado.",
+      "search": "Pesquisar...",
+      "selectOption": "Selecione uma opção"
+    },
     "defaultHttpInput": {
       "fetchFailed": "Falha ao buscar dados",
       "httpError": "HTTP {status}: {statusText}",

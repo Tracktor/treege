@@ -25,15 +25,19 @@ const DefaultAutocompleteInput = ({ node, value, setValue, error }: InputRenderP
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="outline" role="combobox" aria-expanded={open} className="w-full justify-between font-normal">
-            {value ? (selectedOption?.label ? t(selectedOption.label) : value) : t(node.data.placeholder) || "Select option..."}
+            {value
+              ? selectedOption?.label
+                ? t(selectedOption.label)
+                : value
+              : t(node.data.placeholder) || t("renderer.defaultAutocompleteInput.selectOption")}
             <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0" align="start">
           <Command>
-            <CommandInput placeholder={t(node.data.placeholder) || "Search..."} />
+            <CommandInput placeholder={t(node.data.placeholder) || t("renderer.defaultAutocompleteInput.search")} />
             <CommandList>
-              <CommandEmpty>No option found.</CommandEmpty>
+              <CommandEmpty>{t("renderer.defaultAutocompleteInput.noResults")}</CommandEmpty>
               <CommandGroup>
                 {options.map((option) => (
                   <CommandItem
