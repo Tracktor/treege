@@ -327,6 +327,38 @@ const detectMainFlow = (flows: Flow[]): Flow => {
 };
 
 /**
+ * Recursively expand FlowNodes to get all actual node IDs (excluding FlowNodes)
+ */
+const expandFlowNodeIds = (
+  nodeIds: Set<string>,
+  flowMap: Map<string, Flow>,
+  flowNodeReplacements: Map<string, string>,
+  flowNodeTargets: Map<string, string>,
+): Set<string> => {
+  const expanded = new Set<string>();
+
+  for (const nodeId of nodeIds) {
+    // If this is a FlowNode that was replaced, expand its target flow recursively
+    if (flowNodeReplacements.has(nodeId)) {
+      const targetFlowId = flowNodeTargets.get(nodeId);
+      const targetFlow = targetFlowId ? flowMap.get(targetFlowId) : undefined;
+      if (targetFlow) {
+        const targetNodeIds = new Set(targetFlow.nodes.map((n) => n.id));
+        const expandedTarget = expandFlowNodeIds(targetNodeIds, flowMap, flowNodeReplacements, flowNodeTargets);
+        for (const id of expandedTarget) {
+          expanded.add(id);
+        }
+      }
+    } else {
+      // This is a real node, not a FlowNode
+      expanded.add(nodeId);
+    }
+  }
+
+  return expanded;
+};
+
+/**
  * Find terminal nodes (nodes without outgoing edges within the sub-flow)
  */
 const findTerminalNodes = (subFlowNodeIds: Set<string>, edges: Edge[]): string[] => {
@@ -467,8 +499,10 @@ export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
       return;
     }
 
+    // Expand FlowNodes recursively to get only real node IDs (excluding nested FlowNodes)
     const subFlowNodeIds = new Set(targetFlow.nodes.map((node) => node.id));
-    const terminalNodes = findTerminalNodes(subFlowNodeIds, updatedEdges);
+    const expandedNodeIds = expandFlowNodeIds(subFlowNodeIds, flowMap, flowNodeReplacements, flowNodeTargets);
+    const terminalNodes = findTerminalNodes(expandedNodeIds, updatedEdges);
 
     terminalNodes.forEach((terminalNodeId) => {
       subFlowEdges.forEach((originalEdge) => {

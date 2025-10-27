@@ -135,7 +135,8 @@
         "pattern": "",
         "placeholder": {
           "en": ""
-        }
+        },
+        "required": true
       },
       "id": "hIdTqYFPbkOnPqusSeNbz",
       "position": {
@@ -560,7 +561,8 @@
         "pattern": "",
         "placeholder": {
           "en": ""
-        }
+        },
+        "required": true
       },
       "id": "C8XIJ7ZLuJkqHfq1jzuRW",
       "position": {

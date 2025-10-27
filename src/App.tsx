@@ -13,8 +13,8 @@ const App = () => {
     return <CustomInputExample />;
   }
 
-  if (pathname === "/example-complex") {
-    return <Example complex />;
+  if (pathname === "/example-all-inputs") {
+    return <Example all />;
   }
 
   if (pathname === "/example") {

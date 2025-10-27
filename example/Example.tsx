@@ -7,7 +7,7 @@ import { Switch } from "@/shared/components/ui/switch";
 import { Language, LANGUAGES } from "@/shared/constants/languages";
 import { Flow } from "@/shared/types/node";
 import flows from "~/example/json/treege.json";
-import flowsComplex from "~/example/json/treege-complex.json";
+import flowsComplex from "~/example/json/treege-all-inputs.json";
 
 const EditorPanel = ({
   flow,
@@ -142,12 +142,12 @@ const Layout = ({ flow }: { flow?: Flow }) => {
 };
 
 
-const Example = ({ demo, complex } : { demo?: boolean; complex?: boolean }) => {
+const Example = ({ demo, all } : { demo?: boolean; all?: boolean }) => {
   if(demo){
     return <Layout flow={flows as Flow} />
   }
 
-  if(complex){
+  if(all){
     return <Layout flow={flowsComplex as Flow} />
   }
 
