@@ -205,6 +205,9 @@
       "startDate": "Date de début",
       "startTime": "Heure de début"
     },
+    "defaultSelectInput": {
+      "selectOption": "Sélectionner une option"
+    },
     "defaultSubmitButton": {
       "requiredFieldsMissing": "Champs requis manquants",
       "submit": "Envoyer"

@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 const DefaultSelectInput = ({ node, value, setValue, error }: InputRenderProps<"select">) => {
   const t = useTranslate();
   const name = node.data.name || node.id;
-  const normalizedValue = value === null ? "" : String(value);
+  const normalizedValue = value ? String(value) : "";
 
   return (
     <FormItem className="mb-4">
@@ -16,8 +16,8 @@ const DefaultSelectInput = ({ node, value, setValue, error }: InputRenderProps<"
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Select value={normalizedValue} onValueChange={(val) => setValue(val)}>
-        <SelectTrigger id={name}>
-          <SelectValue placeholder={t(node.data.placeholder) || ""} />
+        <SelectTrigger id={name} className="w-full">
+          <SelectValue placeholder={t(node.data.placeholder) || t("renderer.defaultSelectInput.selectOption")} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>

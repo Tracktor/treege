@@ -267,10 +267,10 @@ const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps<"ht
           {t(node.data.label) || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
-        <Select value={Array.isArray(value) ? value[0] || "" : value || ""} onValueChange={(val) => setValue(val)} disabled={isLoading}>
-          <SelectTrigger>
+        <Select value={Array.isArray(value) ? (value[0] ?? "") : (value ?? "")} onValueChange={(val) => setValue(val)} disabled={isLoading}>
+          <SelectTrigger id={name} className="w-full">
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            <SelectValue placeholder={t(node.data.placeholder) || "Select an option"} />
+            <SelectValue placeholder={t(node.data.placeholder) || t("renderer.defaultHttpInput.selectOption")} />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>

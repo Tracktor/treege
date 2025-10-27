@@ -205,6 +205,9 @@
       "startDate": "تاريخ البدء",
       "startTime": "وقت البدء"
     },
+    "defaultSelectInput": {
+      "selectOption": "اختر خياراً"
+    },
     "defaultSubmitButton": {
       "requiredFieldsMissing": "حقول مطلوبة مفقودة:",
       "submit": "إرسال"

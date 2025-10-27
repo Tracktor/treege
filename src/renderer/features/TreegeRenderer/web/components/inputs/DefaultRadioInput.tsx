@@ -7,7 +7,7 @@ import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 const DefaultRadioInput = ({ node, value, setValue, error }: InputRenderProps<"radio">) => {
   const t = useTranslate();
   const name = node.data.name || node.id;
-  const normalizedValue = value === null ? "" : String(value);
+  const normalizedValue = value ? String(value) : "";
 
   return (
     <FormItem className="mb-4">
