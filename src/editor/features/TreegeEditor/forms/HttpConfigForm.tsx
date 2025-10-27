@@ -28,7 +28,8 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
   const { handleSubmit, Field } = useForm({
     defaultValues: {
       body: value?.body || "",
-      fetchOnMount: value?.fetchOnMount,
+      // fetchOnMount should be true by default if there's no searchParam
+      fetchOnMount: value?.fetchOnMount ?? !value?.searchParam,
       headers: value?.headers || [],
       method: value?.method || "GET",
       responseMapping: value?.responseMapping || {
@@ -327,15 +328,35 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
         <div className="space-y-4">
           <h4 className="font-semibold text-sm">{t("editor.httpConfigForm.behavior")}</h4>
 
-          <Field
-            name="fetchOnMount"
-            children={(field) => (
-              <div className="flex items-center space-x-2">
-                <Switch id={field.name} checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
-                <Label htmlFor={field.name}>{t("editor.httpConfigForm.fetchOnMount")}</Label>
-              </div>
+          <Field name="searchParam">
+            {(searchParamField) => (
+              <Field name="fetchOnMount">
+                {(field) => {
+                  const hasSearchParam = Boolean(searchParamField.state.value?.trim());
+                  const isChecked = hasSearchParam ? field.state.value : true;
+
+                  // Auto-set fetchOnMount to true when searchParam is empty
+                  if (!hasSearchParam && field.state.value !== true) {
+                    field.handleChange(true);
+                  }
+
+                  return (
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id={field.name}
+                        checked={isChecked}
+                        disabled={!hasSearchParam}
+                        onCheckedChange={(newValue) => field.handleChange(newValue)}
+                      />
+                      <Label htmlFor={field.name} className={hasSearchParam ? "" : "text-muted-foreground"}>
+                        {t("editor.httpConfigForm.fetchOnMount")}
+                      </Label>
+                    </div>
+                  );
+                }}
+              </Field>
             )}
-          />
+          </Field>
 
           <Field
             name="showLoading"
