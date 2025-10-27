@@ -1,5 +1,5 @@
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
@@ -66,7 +66,7 @@ const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps<"ht
   const fetchData = useCallback(
     async (search?: string) => {
       if (!httpConfig?.url) {
-        setFetchError("No URL configured");
+        setFetchError(t("renderer.defaultHttpInput.noUrlConfigured"));
         return;
       }
 
@@ -128,24 +128,32 @@ const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps<"ht
           setValue(typeof extractedData === "string" ? extractedData : JSON.stringify(extractedData));
         }
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : "Failed to fetch data";
+        const errorMessage = err instanceof Error ? err.message : t("renderer.defaultHttpInput.fetchFailed");
         setFetchError(errorMessage);
         console.error("HTTP Input fetch error:", err);
       } finally {
         setLoading(false);
       }
     },
-    [httpConfig, formValues, setValue],
+    [httpConfig, formValues, setValue, t],
   );
+
+  /**
+   * Store fetchData in a ref to avoid dependency issues
+   */
+  const fetchDataRef = useRef(fetchData);
+  useEffect(() => {
+    fetchDataRef.current = fetchData;
+  }, [fetchData]);
 
   /**
    * Fetch on mount if configured
    */
   useEffect(() => {
     if (httpConfig?.fetchOnMount) {
-      void fetchData();
+      fetchDataRef.current();
     }
-  }, [httpConfig?.fetchOnMount, fetchData]);
+  }, [httpConfig?.fetchOnMount]);
 
   /**
    * Debounced search for combobox
@@ -156,11 +164,11 @@ const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps<"ht
     }
 
     const timer = setTimeout(() => {
-      void fetchData(searchQuery);
+      void fetchDataRef.current(searchQuery);
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchQuery, httpConfig?.searchParam, fetchData]);
+  }, [searchQuery, httpConfig?.searchParam]);
 
   // If responseMapping is configured
   if (httpConfig?.responseMapping) {
