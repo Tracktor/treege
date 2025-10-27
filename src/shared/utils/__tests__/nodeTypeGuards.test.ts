@@ -1,7 +1,7 @@
 import { Node } from "@xyflow/react";
 import { describe, expect, it } from "vitest";
 import type { FlowNodeData, GroupNodeData, InputNodeData, TreegeNode, UINodeData } from "@/shared/types/node";
-import { isFlowNode, isGroupNode, isInputNode, isUINode } from "./nodeTypeGuards";
+import { isFlowNode, isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
 
 describe("Node Type Guards", () => {
   describe("isInputNode", () => {

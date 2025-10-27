@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getStaticTranslations, getTranslatedText } from "./translations";
+import { getStaticTranslations, getTranslatedText } from "@/shared/utils/translations";
 
 describe("Translation Utilities", () => {
   describe("getTranslatedText", () => {
