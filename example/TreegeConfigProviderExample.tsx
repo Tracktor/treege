@@ -10,9 +10,7 @@ import flows from "~/example/json/treege.json";
 import { Flow } from "@/shared/types/node";
 
 // Define your custom components once
-const CustomTextInput = ({ node, value, setValue, error }: InputRenderProps) => {
-  const stringValue = typeof value === "string" ? value : "";
-
+const CustomTextInput = ({ node, value, setValue, error }: InputRenderProps<"text">) => {
   return (
     <div className="mb-4">
       <label className="block text-sm font-medium mb-1">
@@ -21,7 +19,7 @@ const CustomTextInput = ({ node, value, setValue, error }: InputRenderProps) => 
       </label>
       <input
         type="text"
-        value={stringValue}
+        value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder={typeof node.data.placeholder === "string" ? node.data.placeholder : node.data.placeholder?.en}
         className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500  bg-blue-300"

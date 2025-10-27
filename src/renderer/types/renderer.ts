@@ -78,13 +78,22 @@ export type NodeRenderProps = {
 };
 
 /**
+ * Type-safe input renderers mapping
+ * Each input type gets its own properly typed InputRenderProps
+ */
+export type InputRenderers = {
+  [K in InputType]?: (props: InputRenderProps<K>) => ReactNode;
+};
+
+/**
  * Custom renderer components
  */
 export type TreegeRendererComponents = {
   /**
    * Custom input renderers by input type
+   * Each renderer receives properly typed value and setValue based on the input type
    */
-  inputs?: Partial<Record<InputType, (props: InputRenderProps) => ReactNode>>;
+  inputs?: InputRenderers;
   /**
    * Custom UI node renderers by UI type
    */

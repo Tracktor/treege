@@ -13,9 +13,8 @@ import { ChangeEvent } from "react";
 
 // ✅ Example 1: Simple custom text input (recommended approach)
 // Define your component OUTSIDE the render function to avoid re-creation and focus loss
-const CustomTextInput = ({ node, value, setValue, error }: InputRenderProps) => {
-  const stringValue = typeof value === "string" ? value : "";
-
+// Notice how value and setValue are now properly typed as string!
+const CustomTextInput = ({ node, value, setValue, error }: InputRenderProps<"text">) => {
   return (
     <div className="mb-4">
       <label className="block text-sm font-medium mb-1">
@@ -24,8 +23,8 @@ const CustomTextInput = ({ node, value, setValue, error }: InputRenderProps) => 
       </label>
       <input
         type="text"
-        value={stringValue}
-        onChange={(e) => setValue(e.target.value)}
+        value={value} // ✅ TypeScript knows this is a string
+        onChange={(e) => setValue(e.target.value)} // ✅ TypeScript knows setValue accepts a string
         placeholder={typeof node.data.placeholder === "string" ? node.data.placeholder : node.data.placeholder?.en}
         className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
@@ -40,13 +39,12 @@ const CustomTextInput = ({ node, value, setValue, error }: InputRenderProps) => 
 };
 
 // ✅ Example 2: Custom number input with validation
-const CustomNumberInput = ({ node, value, setValue, error }: InputRenderProps) => {
+// Notice how value is properly typed as number | null
+const CustomNumberInput = ({ node, value, setValue, error }: InputRenderProps<"number">) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const numValue = e.target.value === "" ? null : Number(e.target.value);
-    setValue(numValue);
+    setValue(numValue); // ✅ TypeScript knows setValue accepts number | null
   };
-
-  const numberValue = typeof value === "number" ? value : "";
 
   return (
     <div className="mb-4">
@@ -56,7 +54,7 @@ const CustomNumberInput = ({ node, value, setValue, error }: InputRenderProps) =
       </label>
       <input
         type="number"
-        value={numberValue}
+        value={value ?? ""} // ✅ TypeScript knows value is number | null
         onChange={handleChange}
         className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
@@ -66,14 +64,10 @@ const CustomNumberInput = ({ node, value, setValue, error }: InputRenderProps) =
 };
 
 // ✅ Example 3: Custom select input with styling
-const CustomSelectInput = ({ node, value, setValue, error }: InputRenderProps) => {
+// Notice how value is properly typed as string | string[]
+const CustomSelectInput = ({ node, value, setValue, error }: InputRenderProps<"select">) => {
   // Extract string value from union type
-  let selectValue = "";
-  if (typeof value === "string") {
-    selectValue = value;
-  } else if (Array.isArray(value) && value.length > 0 && typeof value[0] === "string") {
-    selectValue = value[0];
-  }
+  const selectValue = Array.isArray(value) ? value[0] ?? "" : value;
 
   return (
     <div className="mb-4">
@@ -130,9 +124,8 @@ export const WrongExample = () => {
       components={{
         inputs: {
           // ❌ Don't do this - function is recreated on every render
-          text: (props: InputRenderProps) => {
-            const stringValue = typeof props.value === "string" ? props.value : "";
-            return <input value={stringValue} onChange={(e) => props.setValue(e.target.value)} />;
+          text: (props: InputRenderProps<"text">) => {
+            return <input value={props.value} onChange={(e) => props.setValue(e.target.value)} />;
           },
         },
       }}
