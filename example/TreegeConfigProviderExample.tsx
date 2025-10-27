@@ -14,23 +14,34 @@ const CustomTextInput = ({ node, value, setValue, error }: InputRenderProps) => 
   const stringValue = typeof value === "string" ? value : "";
 
   return (
-    <div className="custom-input-wrapper">
-      <label>
+    <div className="mb-4">
+      <label className="block text-sm font-medium mb-1">
         {typeof node.data.label === "string" ? node.data.label : node.data.label?.en}
-        {node.data.required && <span className="required">*</span>}
+        {node.data.required && <span className="text-red-500 ml-1">*</span>}
       </label>
-      <input type="text" value={stringValue} onChange={(e) => setValue(e.target.value)} className="custom-input" />
-      {error && <span className="error">{error}</span>}
+      <input
+        type="text"
+        value={stringValue}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder={typeof node.data.placeholder === "string" ? node.data.placeholder : node.data.placeholder?.en}
+        className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500  bg-blue-300"
+      />
+      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      {node.data.helperText && !error && (
+        <p className="text-gray-500 text-sm mt-1">
+          {typeof node.data.helperText === "string" ? node.data.helperText : node.data.helperText?.en}
+        </p>
+      )}
     </div>
   );
 };
 
 // Configure once at the app level
-const AppWithGlobalConfig = () => {
+const TreegeConfigProviderExample = () => {
   return (
     <TreegeConfigProvider
       googleApiKey="YOUR_GOOGLE_API_KEY_HERE"
-      theme="dark"
+      theme="light"
       language="en"
       components={{
         inputs: {
@@ -39,7 +50,7 @@ const AppWithGlobalConfig = () => {
       }}
     >
       <div className="app">
-        <h1>My App with Global Treege Config</h1>
+        <h1 className={"text-center mb-10"}>My App with Treege Config Provider</h1>
 
         {/* This renderer inherits all config from provider */}
         <TreegeRenderer flows={flows as Flow} onSubmit={(values) => console.log("Form 1:", values)} />
@@ -50,7 +61,7 @@ const AppWithGlobalConfig = () => {
         {/* This renderer overrides the theme (props take precedence) */}
         <TreegeRenderer
           flows={flows as Flow}
-          theme="light" // Overrides the global "dark" theme
+
           onSubmit={(values) => console.log("Form 3:", values)}
         />
       </div>
@@ -58,41 +69,4 @@ const AppWithGlobalConfig = () => {
   );
 };
 
-// ✅ Benefits:
-// 1. Set googleApiKey once instead of passing it to every TreegeRenderer
-// 2. Define custom components once and reuse them everywhere
-// 3. Consistent theme/language across your app
-// 4. Individual renderers can still override specific settings
-
-// ❌ Without Provider (still works):
-const AppWithoutProvider = () => {
-  return (
-    <div className="app">
-      {/* Have to repeat props for every instance */}
-      <TreegeRenderer
-        flows={flows as Flow}
-        googleApiKey="YOUR_GOOGLE_API_KEY_HERE"
-        components={{
-          inputs: {
-            text: CustomTextInput,
-          },
-        }}
-        onSubmit={(values) => console.log(values)}
-      />
-
-      <TreegeRenderer
-        flows={flows as Flow}
-        googleApiKey="YOUR_GOOGLE_API_KEY_HERE" // Repeated!
-        components={{
-          inputs: {
-            text: CustomTextInput, // Repeated!
-          },
-        }}
-        onSubmit={(values) => console.log(values)}
-      />
-    </div>
-  );
-};
-
-export default AppWithGlobalConfig;
-export { AppWithoutProvider };
+export default TreegeConfigProviderExample;
