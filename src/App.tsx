@@ -4,27 +4,22 @@ import TreegeConfigProviderExample from "~/example/TreegeConfigProviderExample";
 
 const App = () => {
   const { pathname } = window.location;
-  const isExample = pathname.includes("/example");
-  const isExampleComplex = pathname.includes("/example-complex");
-  const isCustomInputExample = pathname.includes("/example-custom-input");
-  const isTreegeConfigProviderExample = pathname.includes("/example-treege-config-provider");
 
-  if (isTreegeConfigProviderExample) {
+  if (pathname === "/example-treege-config-provider") {
     return <TreegeConfigProviderExample />;
   }
 
-  if (isCustomInputExample) {
+  if (pathname === "/example-custom-input") {
     return <CustomInputExample />;
   }
 
-  if (isExample) {
-    return <Example demo />;
-  }
-
-  if (isExampleComplex) {
+  if (pathname === "/example-complex") {
     return <Example complex />;
   }
 
+  if (pathname === "/example") {
+    return <Example demo />;
+  }
   return <Example />;
 };
 
