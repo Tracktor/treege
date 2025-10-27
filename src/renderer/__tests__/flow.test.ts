@@ -303,7 +303,7 @@ describe("Flow Validation", () => {
               pattern: "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
               placeholder: { en: "Enter your email" },
               required: true,
-              type: "email",
+              type: "text",
             },
             id: "input-1",
             position: { x: 0, y: 0 },
