@@ -97,7 +97,19 @@ import type { Flow, FormValues } from "treege";
 
 function App() {
   const flow: Flow = {
-    // Your decision tree definition
+    id: "flow-1",
+    nodes: [
+      {
+        id: "start",
+        type: "input",
+        data: {
+          name: "username",
+          label: "Enter your username",
+          required: true
+        }
+      }
+    ],
+    edges: []
   };
 
   const handleSubmit = (values: FormValues) => {
