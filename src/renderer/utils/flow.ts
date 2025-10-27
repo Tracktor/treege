@@ -384,7 +384,7 @@ export const mergeFlows = (flows?: Flow | Flow[] | null): Flow => {
   const processedFlowIds = new Set<string>([mainFlow.id]);
   const flowNodeReplacements = new Map<string, string>(); // FlowNode ID -> first node ID of target flow
   const flowNodeTargets = new Map<string, string>(); // FlowNode ID -> target flow ID
-  const edgesFromFlowNodes = new Map<string, Edge[]>(); // FlowNode ID -> edges where FlowNode is source
+  const edgesFromFlowNodes = new Map<string, Edge[]>(); // FlowNode ID -> edges where FlowNode is "source"
 
   /**
    * Process nodes recursively, replacing FlowNodes with their target flow's nodes
