@@ -1,4 +1,5 @@
 import DefaultAddressInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultAddressInput";
+import DefaultAutocompleteInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultAutocompleteInput";
 import DefaultCheckboxInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultCheckboxInput";
 import DefaultDateInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultDateInput";
 import DefaultDateRangeInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultDateRangeInput";
@@ -14,11 +15,12 @@ import DefaultTextAreaInput from "@/renderer/features/TreegeRenderer/web/compone
 import DefaultTextInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultTextInput";
 import DefaultTimeInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultTimeInput";
 import DefaultTimeRangeInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultTimeRangeInput";
-import { InputRenderers, InputRenderProps } from "@/renderer/types/renderer";
+import { InputRenderers } from "@/renderer/types/renderer";
 
 // Re-export all components
 export {
   DefaultAddressInput,
+  DefaultAutocompleteInput,
   DefaultCheckboxInput,
   DefaultDateInput,
   DefaultDateRangeInput,
@@ -34,12 +36,6 @@ export {
   DefaultTextInput,
   DefaultTimeInput,
   DefaultTimeRangeInput,
-};
-
-// Wrapper for autocomplete to reuse text input with proper typing
-const DefaultAutocompleteInput = (props: InputRenderProps<"autocomplete">) => {
-  // Cast is safe because autocomplete and text have the same value type (string)
-  return DefaultTextInput(props as unknown as InputRenderProps<"text">);
 };
 
 // Default input renderers mapping with proper typing
