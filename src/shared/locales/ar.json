@@ -1,0 +1,226 @@
+{
+  "common": {
+    "cancel": "إلغاء",
+    "clear": "مسح",
+    "close": "إغلاق",
+    "create": "إنشاء",
+    "retry": "إعادة المحاولة",
+    "save": "حفظ",
+    "submit": "إرسال",
+    "toggle": "تبديل"
+  },
+  "editor": {
+    "actionsPanel": {
+      "addNode": "إضافة عقدة",
+      "clear": "مسح التدفق",
+      "clearSuccess": "تم مسح التدفق!",
+      "clearSuccessDesc": "تم إزالة جميع العقد والحواف.",
+      "copyFailed": "فشل نسخ معرف التدفق",
+      "downloadSuccess": "تم التنزيل بنجاح.",
+      "downloadSuccessDesc": "تم تصدير التدفق بنجاح.",
+      "exportJson": "تصدير JSON",
+      "idCopied": "تم نسخ معرف التدفق!",
+      "importJson": "استيراد JSON",
+      "importSuccess": "تم الاستيراد بنجاح!",
+      "importSuccessDesc": "تم استيراد التدفق بنجاح.",
+      "invalidJson": "ملف JSON غير صالح.",
+      "invalidJsonDesc": "يجب أن يحتوي الملف على مصفوفات من العقد والحواف.",
+      "parseError": "خطأ في تحليل ملف JSON.",
+      "parseErrorDesc": "حاول إصلاح الملف واستيراده مرة أخرى."
+    },
+    "comboboxPattern": {
+      "custom": "مخصص: {value}",
+      "search": "البحث عن أنماط...",
+      "selectOrCreate": "اختر أو أنشئ نمطاً",
+      "usePattern": "استخدم النمط: {query}"
+    },
+    "comboboxWithCreate": {
+      "clearSelection": "مسح التحديد",
+      "noResults": "لم يتم العثور على نتائج"
+    },
+    "conditionalEdge": {
+      "addCondition": "إضافة شرط",
+      "and": "و",
+      "condition": "شرط",
+      "conditions": "الشروط",
+      "conditionsAnd": "شروط (و)",
+      "conditionsMixed": "شروط (مختلطة)",
+      "conditionsOr": "شروط (أو)",
+      "displayConditions": "عرض الشروط",
+      "displayConditionsDesc": "سيتم عرض هذا الحقل إذا تم استيفاء الشروط التالية.",
+      "fallback": "افتراضي",
+      "fallbackPath": "المسار الافتراضي / الاحتياطي",
+      "fallbackPathDesc": "سيتم اتباع هذا المسار عندما لا تتطابق أي شروط أخرى",
+      "field": "حقل",
+      "labelDesc": "تسمية مخصصة لزر الشرط",
+      "labelOptional": "التسمية (اختياري)",
+      "labelPlaceholder": "مثال: إذا كان مؤهلاً",
+      "noFieldsAvailable": "لا توجد حقول متاحة",
+      "operator": "عامل التشغيل",
+      "or": "أو",
+      "removeCondition": "إزالة الشرط",
+      "selectField": "اختر حقلاً",
+      "value": "قيمة",
+      "valuePlaceholder": "مثال: 18"
+    },
+    "flowNodeForm": {
+      "label": "التسمية",
+      "targetId": "معرف الوجهة",
+      "targetIdDesc": "المعرف الفريد للتدفق المستهدف."
+    },
+    "groupNodeForm": {
+      "label": "التسمية"
+    },
+    "httpConfigForm": {
+      "addHeader": "إضافة رأس",
+      "apiUrl": "رابط API",
+      "apiUrlDesc": "استخدم متغيرات القالب مثل {{fieldId}} للإشارة إلى الحقول الأخرى",
+      "apiUrlPlaceholder": "https://api.example.com/data",
+      "behavior": "السلوك",
+      "fetchOnMount": "جلب عند التحميل",
+      "headerName": "اسم الرأس",
+      "headers": "رؤوس",
+      "headerValue": "قيمة الرأس",
+      "httpMethod": "طريقة HTTP",
+      "insertVariable": "إدراج متغير",
+      "labelField": "حقل التسمية",
+      "labelFieldDesc": "الحقل المستخدم كتسمية خيار (مثال: الاسم)",
+      "labelFieldPlaceholder": "الاسم",
+      "mapToOptions": "تعيين إلى الخيارات",
+      "methodDelete": "DELETE",
+      "methodGet": "GET",
+      "methodPatch": "PATCH",
+      "methodPost": "POST",
+      "methodPut": "PUT",
+      "noFieldsAvailable": "لا توجد حقول متاحة",
+      "requestBody": "جسم الطلب (JSON)",
+      "requestBodyDesc": "استخدم متغيرات القالب مثل ${fieldId} للإشارة إلى الحقول الأخرى",
+      "requestBodyPlaceholder": "{\"مفتاح\": \"قيمة\"}",
+      "responseConfiguration": "تكوين الاستجابة",
+      "responsePath": "مسار الاستجابة",
+      "responsePathDesc": "استخراج البيانات من الاستجابة باستخدام نقطة التدوين أو فهرسة المصفوفة",
+      "responsePathPlaceholder": "data.users أو results[0]",
+      "searchParameter": "معامل البحث (اختياري)",
+      "searchParameterDesc": "إذا تم تعيينه، يتم تمكين مربع بحث يضيف هذا المعامل إلى استدعاءات API (مثال: ?q=باريس)",
+      "searchParameterPlaceholder": "q، بحث، استعلام...",
+      "selectMethod": "اختر الطريقة",
+      "showLoadingState": "إظهار حالة التحميل",
+      "valueField": "حقل القيمة",
+      "valueFieldDesc": "الحقل المستخدم كقيمة خيار (مثال: id)",
+      "valueFieldPlaceholder": "id"
+    },
+    "inputNodeForm": {
+      "addInputFieldsBeforeReference": "أضف حقول إدخال قبل هذه العقدة للإشارة إليها",
+      "addMapping": "إضافة تعيين",
+      "addOption": "+ إضافة خيار",
+      "advancedConfiguration": "تكوين متقدم",
+      "defaultChecked": "محدد افتراضياً",
+      "defaultValuesCommaSeparated": "القيم الافتراضية (مفصولة بفواصل)",
+      "defaultValuesPlaceholder": "قيمة1، قيمة2، قيمة3",
+      "defaultValueType": "نوع القيمة الافتراضية",
+      "defaultValueTypeNone": "لا شيء",
+      "defaultValueTypeReference": "حقل مرجعي",
+      "defaultValueTypeStatic": "قيمة ثابتة",
+      "errorMessage": "رسالة خطأ",
+      "helperText": "نص مساعد",
+      "httpConfiguration": "تكوين HTTP",
+      "label": "التسمية",
+      "multipleFiles": "ملفات متعددة",
+      "multipleSelection": "اختيار متعدد",
+      "name": "الاسم",
+      "noParentFieldsAvailable": "لا توجد حقول أصلية متاحة",
+      "objectMapping": "تعيين الكائن",
+      "objectMappingDesc": "تعيين خصائص الكائن المصدر إلى بنية جديدة",
+      "optionLabel": "التسمية",
+      "options": "خيارات",
+      "optionValue": "القيمة",
+      "pattern": "نمط",
+      "placeholder": "نص توضيحي",
+      "referenceField": "حقل مرجعي",
+      "required": "مطلوب",
+      "selectReferenceField": "اختر حقلاً",
+      "selectTransformation": "اختر التحويل",
+      "selectType": "اختر النوع",
+      "sourceKey": "مفتاح المصدر",
+      "staticValue": "قيمة ثابتة",
+      "staticValuePlaceholder": "أدخل القيمة الافتراضية",
+      "targetKey": "مفتاح الوجهة",
+      "transformArray": "تحويل إلى مصفوفة",
+      "transformBoolean": "تحويل إلى منطقي",
+      "transformDesc": "تحويل القيمة المرجعية لتتطابق مع نوع هذا الحقل",
+      "transformMapToObject": "تعيين إلى كائن",
+      "transformNone": "بدون تحويل",
+      "transformNumber": "تحويل إلى رقم",
+      "transformString": "تحويل إلى نص",
+      "transformType": "نوع التحويل",
+      "validation": "التحقق"
+    },
+    "selectInputType": {
+      "type": "النوع"
+    },
+    "selectNodeGroup": {
+      "createNewGroup": "إنشاء مجموعة جديدة",
+      "group": "مجموعة",
+      "groupAlreadyExists": "هذه المجموعة موجودة بالفعل",
+      "groupAlreadyExistsDesc": "استخدم المحدد لإضافة العقدة إلى مجموعة موجودة.",
+      "groupCreated": "تم إنشاء المجموعة",
+      "groupCreatedDesc": "تم إنشاء المجموعة \"{groupName}\" بنجاح.",
+      "groupName": "اسم المجموعة",
+      "groupNamePlaceholder": "مثال: الخطوة 1 - معلومات شخصية",
+      "newGroup": "مجموعة جديدة",
+      "newGroupDescription": "سيتم إنشاء المجموعة حول العقدة المحددة.",
+      "noGroup": "بدون مجموعة"
+    },
+    "selectNodeType": {
+      "nodeType": "نوع العقدة"
+    },
+    "uiNodeForm": {
+      "label": "التسمية",
+      "type": "النوع",
+      "typeDivider": "فاصل",
+      "typeTitle": "عنوان"
+    }
+  },
+  "renderer": {
+    "defaultAddressInput": {
+      "enterAddress": "أدخل عنواناً...",
+      "noAddressesFound": "لم يتم العثور على عناوين."
+    },
+    "defaultAutocompleteInput": {
+      "noResults": "لم يتم العثور على نتائج.",
+      "search": "بحث...",
+      "selectOption": "اختر خياراً"
+    },
+    "defaultHttpInput": {
+      "fetchFailed": "فشل في جلب البيانات",
+      "httpError": "HTTP {status}: {statusText}",
+      "noDataAvailable": "لا توجد بيانات متاحة. قم بتكوين \"جلب عند التحميل\" أو أضف معامل بحث.",
+      "noResults": "لم يتم العثور على نتائج.",
+      "noUrlConfigured": "لم يتم تكوين رابط",
+      "retry": "إعادة المحاولة",
+      "search": "بحث...",
+      "searching": "جاري البحث...",
+      "selectOption": "اختر خياراً"
+    },
+    "defaultInputs": {
+      "endDate": "تاريخ الانتهاء",
+      "endTime": "وقت الانتهاء",
+      "required": "*",
+      "selectDate": "اختر التاريخ",
+      "selectDateRange": "اختر نطاق التاريخ",
+      "startDate": "تاريخ البدء",
+      "startTime": "وقت البدء"
+    },
+    "defaultSelectInput": {
+      "selectOption": "اختر خياراً"
+    },
+    "defaultSubmitButton": {
+      "requiredFieldsMissing": "حقول مطلوبة مفقودة:",
+      "submit": "إرسال"
+    }
+  },
+  "validation": {
+    "invalidFormat": "تنسيق غير صالح",
+    "required": "هذا الحقل مطلوب"
+  }
+}

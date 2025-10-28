@@ -1,0 +1,226 @@
+{
+  "common": {
+    "cancel": "Annuler",
+    "clear": "Effacer",
+    "close": "Fermer",
+    "create": "Créer",
+    "retry": "Réessayer",
+    "save": "Enregistrer",
+    "submit": "Soumettre",
+    "toggle": "Basculer"
+  },
+  "editor": {
+    "actionsPanel": {
+      "addNode": "Ajouter un nœud",
+      "clear": "Supprimer",
+      "clearSuccess": "Flux vidé !",
+      "clearSuccessDesc": "Tous les nœuds et arêtes ont été supprimés.",
+      "copyFailed": "Échec de la copie de l'ID du flux",
+      "downloadSuccess": "Téléchargement réussi.",
+      "downloadSuccessDesc": "Le flux a été exporté avec succès.",
+      "exportJson": "Exporter JSON",
+      "idCopied": "ID du flux copié !",
+      "importJson": "Importer JSON",
+      "importSuccess": "Importation réussie !",
+      "importSuccessDesc": "Le flux a été importé avec succès.",
+      "invalidJson": "Fichier JSON invalide.",
+      "invalidJsonDesc": "Le fichier doit contenir des tableaux de nœuds et d'arêtes.",
+      "parseError": "Erreur d'analyse du fichier JSON.",
+      "parseErrorDesc": "Essayez de corriger le fichier et de l'importer à nouveau."
+    },
+    "comboboxPattern": {
+      "custom": "Personnalisé : {value}",
+      "search": "Rechercher des motifs...",
+      "selectOrCreate": "Sélectionner ou créer un motif",
+      "usePattern": "Utiliser le motif : {query}"
+    },
+    "comboboxWithCreate": {
+      "clearSelection": "Effacer la sélection",
+      "noResults": "Aucun résultat trouvé"
+    },
+    "conditionalEdge": {
+      "addCondition": "Ajouter une condition",
+      "and": "ET",
+      "condition": "Condition",
+      "conditions": "Conditions",
+      "conditionsAnd": "conditions (ET)",
+      "conditionsMixed": "conditions (mixtes)",
+      "conditionsOr": "conditions (OU)",
+      "displayConditions": "Afficher les conditions",
+      "displayConditionsDesc": "Ce champ sera affiché si les conditions suivantes sont remplies.",
+      "fallback": "Par défaut",
+      "fallbackPath": "Chemin par défaut / de secours",
+      "fallbackPathDesc": "Ce chemin sera suivi lorsqu'aucune autre condition ne correspond",
+      "field": "Champ",
+      "labelDesc": "Libellé personnalisé pour le bouton de condition",
+      "labelOptional": "Libellé (optionnel)",
+      "labelPlaceholder": "Ex : Si éligible",
+      "noFieldsAvailable": "Aucun champ disponible",
+      "operator": "Opérateur",
+      "or": "OU",
+      "removeCondition": "Supprimer la condition",
+      "selectField": "Sélectionner un champ",
+      "value": "Valeur",
+      "valuePlaceholder": "Ex : 18"
+    },
+    "flowNodeForm": {
+      "label": "Libellé",
+      "targetId": "ID cible",
+      "targetIdDesc": "Identifiant unique du flux cible."
+    },
+    "groupNodeForm": {
+      "label": "Libellé"
+    },
+    "httpConfigForm": {
+      "addHeader": "Ajouter un en-tête",
+      "apiUrl": "URL de l'API",
+      "apiUrlDesc": "Utilisez des variables de modèle comme {{fieldId}} pour référencer d'autres champs",
+      "apiUrlPlaceholder": "https://api.exemple.com/data",
+      "behavior": "Comportement",
+      "fetchOnMount": "Charger au montage",
+      "headerName": "Nom de l'en-tête",
+      "headers": "En-têtes",
+      "headerValue": "Valeur de l'en-tête",
+      "httpMethod": "Méthode HTTP",
+      "insertVariable": "Insérer une variable",
+      "labelField": "Champ de libellé",
+      "labelFieldDesc": "Champ à utiliser comme libellé d'option (ex : nom)",
+      "labelFieldPlaceholder": "nom",
+      "mapToOptions": "Mapper vers les options",
+      "methodDelete": "DELETE",
+      "methodGet": "GET",
+      "methodPatch": "PATCH",
+      "methodPost": "POST",
+      "methodPut": "PUT",
+      "noFieldsAvailable": "Aucun champ disponible",
+      "requestBody": "Corps de la requête (JSON)",
+      "requestBodyDesc": "Utilisez des variables de modèle comme ${fieldId} pour référencer d'autres champs",
+      "requestBodyPlaceholder": "{\"clé\": \"valeur\"}",
+      "responseConfiguration": "Configuration de la réponse",
+      "responsePath": "Chemin de la réponse",
+      "responsePathDesc": "Extraire les données de la réponse en utilisant la notation par points ou l'indexation de tableau",
+      "responsePathPlaceholder": "data.users ou results[0]",
+      "searchParameter": "Paramètre de recherche (optionnel)",
+      "searchParameterDesc": "Si défini, active une zone de recherche qui ajoute ce paramètre aux appels API (ex : ?q=Paris)",
+      "searchParameterPlaceholder": "q, recherche, requête...",
+      "selectMethod": "Sélectionner une méthode",
+      "showLoadingState": "Afficher l'état de chargement",
+      "valueField": "Champ de valeur",
+      "valueFieldDesc": "Champ à utiliser comme valeur d'option (ex : id)",
+      "valueFieldPlaceholder": "id"
+    },
+    "inputNodeForm": {
+      "addInputFieldsBeforeReference": "Ajoutez des champs de saisie avant ce nœud pour les référencer",
+      "addMapping": "Ajouter un mappage",
+      "addOption": "+ Ajouter une option",
+      "advancedConfiguration": "Configuration avancée",
+      "defaultChecked": "Coché par défaut",
+      "defaultValuesCommaSeparated": "Valeurs par défaut (séparées par des virgules)",
+      "defaultValuesPlaceholder": "valeur1, valeur2, valeur3",
+      "defaultValueType": "Type de valeur par défaut",
+      "defaultValueTypeNone": "Aucun",
+      "defaultValueTypeReference": "Champ de référence",
+      "defaultValueTypeStatic": "Valeur statique",
+      "errorMessage": "Message d'erreur",
+      "helperText": "Texte d'aide",
+      "httpConfiguration": "Configuration HTTP",
+      "label": "Libellé",
+      "multipleFiles": "Fichiers multiples",
+      "multipleSelection": "Sélection multiple",
+      "name": "Nom",
+      "noParentFieldsAvailable": "Aucun champ parent disponible",
+      "objectMapping": "Mappage d'objet",
+      "objectMappingDesc": "Mapper les propriétés de l'objet source vers une nouvelle structure",
+      "optionLabel": "Libellé",
+      "options": "Options",
+      "optionValue": "Valeur",
+      "pattern": "Motif",
+      "placeholder": "Texte indicatif",
+      "referenceField": "Champ de référence",
+      "required": "Requis",
+      "selectReferenceField": "Sélectionner un champ",
+      "selectTransformation": "Sélectionner une transformation",
+      "selectType": "Sélectionner un type",
+      "sourceKey": "Clé source",
+      "staticValue": "Valeur statique",
+      "staticValuePlaceholder": "Entrer une valeur par défaut",
+      "targetKey": "Clé cible",
+      "transformArray": "Convertir en tableau",
+      "transformBoolean": "Convertir en booléen",
+      "transformDesc": "Transformer la valeur référencée pour correspondre au type de ce champ",
+      "transformMapToObject": "Mapper vers un objet",
+      "transformNone": "Aucune transformation",
+      "transformNumber": "Convertir en nombre",
+      "transformString": "Convertir en chaîne",
+      "transformType": "Type de transformation",
+      "validation": "Validation"
+    },
+    "selectInputType": {
+      "type": "Type"
+    },
+    "selectNodeGroup": {
+      "createNewGroup": "Créer un nouveau groupe",
+      "group": "Groupe",
+      "groupAlreadyExists": "Ce groupe existe déjà",
+      "groupAlreadyExistsDesc": "Utilisez le sélecteur pour ajouter le nœud à un groupe existant.",
+      "groupCreated": "Groupe créé",
+      "groupCreatedDesc": "Le groupe \"{groupName}\" a été créé avec succès.",
+      "groupName": "Nom du groupe",
+      "groupNamePlaceholder": "Ex : Étape 1 - Informations personnelles",
+      "newGroup": "Nouveau groupe",
+      "newGroupDescription": "Le groupe sera créé autour du nœud sélectionné.",
+      "noGroup": "Aucun groupe"
+    },
+    "selectNodeType": {
+      "nodeType": "Type de nœud"
+    },
+    "uiNodeForm": {
+      "label": "Libellé",
+      "type": "Type",
+      "typeDivider": "Séparateur",
+      "typeTitle": "Titre"
+    }
+  },
+  "renderer": {
+    "defaultAddressInput": {
+      "enterAddress": "Entrez une adresse...",
+      "noAddressesFound": "Aucune adresse trouvée."
+    },
+    "defaultAutocompleteInput": {
+      "noResults": "Aucun résultat trouvé.",
+      "search": "Recherche...",
+      "selectOption": "Sélectionner une option"
+    },
+    "defaultHttpInput": {
+      "fetchFailed": "Échec de la récupération des données",
+      "httpError": "HTTP {status} : {statusText}",
+      "noDataAvailable": "Aucune donnée disponible. Configurez \"Charger au montage\" ou ajoutez un paramètre de recherche.",
+      "noResults": "Aucun résultat trouvé.",
+      "noUrlConfigured": "Aucune URL configurée",
+      "retry": "Réessayer",
+      "search": "Recherche...",
+      "searching": "Recherche...",
+      "selectOption": "Sélectionner une option"
+    },
+    "defaultInputs": {
+      "endDate": "Date de fin",
+      "endTime": "Heure de fin",
+      "required": "*",
+      "selectDate": "Sélectionner une date",
+      "selectDateRange": "Sélectionner une plage de dates",
+      "startDate": "Date de début",
+      "startTime": "Heure de début"
+    },
+    "defaultSelectInput": {
+      "selectOption": "Sélectionner une option"
+    },
+    "defaultSubmitButton": {
+      "requiredFieldsMissing": "Champs requis manquants",
+      "submit": "Envoyer"
+    }
+  },
+  "validation": {
+    "invalidFormat": "Format invalide",
+    "required": "Ce champ est requis"
+  }
+}

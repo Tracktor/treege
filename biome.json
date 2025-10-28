@@ -1,0 +1,9 @@
+{
+  "css": {
+    "parser": {
+      "cssModules": false,
+      "tailwindDirectives": true
+    }
+  },
+  "extends": ["@tracktor/biome-config-react"]
+}

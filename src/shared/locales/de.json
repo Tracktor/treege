@@ -1,0 +1,226 @@
+{
+  "common": {
+    "cancel": "Abbrechen",
+    "clear": "Löschen",
+    "close": "Schließen",
+    "create": "Erstellen",
+    "retry": "Erneut versuchen",
+    "save": "Speichern",
+    "submit": "Senden",
+    "toggle": "Umschalten"
+  },
+  "editor": {
+    "actionsPanel": {
+      "addNode": "Knoten hinzufügen",
+      "clear": "Löschen",
+      "clearSuccess": "Fluss geleert!",
+      "clearSuccessDesc": "Alle Knoten und Kanten wurden entfernt.",
+      "copyFailed": "Kopieren der Flow‑ID fehlgeschlagen",
+      "downloadSuccess": "Download erfolgreich.",
+      "downloadSuccessDesc": "Der Ablauf wurde erfolgreich exportiert.",
+      "exportJson": "JSON exportieren",
+      "idCopied": "Flow‑ID kopiert!",
+      "importJson": "JSON importieren",
+      "importSuccess": "Import erfolgreich!",
+      "importSuccessDesc": "Der Ablauf wurde erfolgreich importiert.",
+      "invalidJson": "Ungültige JSON-Datei.",
+      "invalidJsonDesc": "Die Datei muss Knoten- und Kanten-Arrays enthalten.",
+      "parseError": "Fehler beim Parsen der JSON-Datei.",
+      "parseErrorDesc": "Versuchen Sie, die Datei zu korrigieren und erneut zu importieren."
+    },
+    "comboboxPattern": {
+      "custom": "Benutzerdefiniert: {value}",
+      "search": "Muster suchen...",
+      "selectOrCreate": "Muster auswählen oder erstellen",
+      "usePattern": "Muster verwenden: {query}"
+    },
+    "comboboxWithCreate": {
+      "clearSelection": "Auswahl löschen",
+      "noResults": "Keine Ergebnisse gefunden"
+    },
+    "conditionalEdge": {
+      "addCondition": "Bedingung hinzufügen",
+      "and": "UND",
+      "condition": "Bedingung",
+      "conditions": "Bedingungen",
+      "conditionsAnd": "Bedingungen (UND)",
+      "conditionsMixed": "Bedingungen (gemischt)",
+      "conditionsOr": "Bedingungen (ODER)",
+      "displayConditions": "Bedingungen anzeigen",
+      "displayConditionsDesc": "Dieses Feld wird angezeigt, wenn die folgenden Bedingungen erfüllt sind.",
+      "fallback": "Standard",
+      "fallbackPath": "Standard- / Fallback-Pfad",
+      "fallbackPathDesc": "Dieser Pfad wird befolgt, wenn keine andere Bedingung zutrifft",
+      "field": "Feld",
+      "labelDesc": "Benutzerdefinierte Bezeichnung für die Bedingungsschaltfläche",
+      "labelOptional": "Bezeichnung (optional)",
+      "labelPlaceholder": "z.B.: Wenn berechtigt",
+      "noFieldsAvailable": "Keine Felder verfügbar",
+      "operator": "Operator",
+      "or": "ODER",
+      "removeCondition": "Bedingung entfernen",
+      "selectField": "Feld auswählen",
+      "value": "Wert",
+      "valuePlaceholder": "z.B.: 18"
+    },
+    "flowNodeForm": {
+      "label": "Bezeichnung",
+      "targetId": "Ziel-ID",
+      "targetIdDesc": "Eindeutige Kennung des Zielablaufs."
+    },
+    "groupNodeForm": {
+      "label": "Bezeichnung"
+    },
+    "httpConfigForm": {
+      "addHeader": "Header hinzufügen",
+      "apiUrl": "API-URL",
+      "apiUrlDesc": "Verwenden Sie Vorlagenvariablen wie {{fieldId}}, um andere Felder zu referenzieren",
+      "apiUrlPlaceholder": "https://api.beispiel.com/data",
+      "behavior": "Verhalten",
+      "fetchOnMount": "Beim Laden abrufen",
+      "headerName": "Header-Name",
+      "headers": "Header",
+      "headerValue": "Header-Wert",
+      "httpMethod": "HTTP-Methode",
+      "insertVariable": "Variable einfügen",
+      "labelField": "Bezeichnungsfeld",
+      "labelFieldDesc": "Feld, das als Optionsbezeichnung verwendet werden soll (z.B. name)",
+      "labelFieldPlaceholder": "name",
+      "mapToOptions": "Auf Optionen abbilden",
+      "methodDelete": "DELETE",
+      "methodGet": "GET",
+      "methodPatch": "PATCH",
+      "methodPost": "POST",
+      "methodPut": "PUT",
+      "noFieldsAvailable": "Keine Felder verfügbar",
+      "requestBody": "Anfrage-Body (JSON)",
+      "requestBodyDesc": "Verwenden Sie Vorlagenvariablen wie ${fieldId}, um andere Felder zu referenzieren",
+      "requestBodyPlaceholder": "{\"schlüssel\": \"wert\"}",
+      "responseConfiguration": "Antwort-Konfiguration",
+      "responsePath": "Antwortpfad",
+      "responsePathDesc": "Daten aus der Antwort mit Punktnotation oder Array-Indizierung extrahieren",
+      "responsePathPlaceholder": "data.users oder results[0]",
+      "searchParameter": "Suchparameter (optional)",
+      "searchParameterDesc": "Wenn festgelegt, aktiviert eine Suchbox, die diesen Parameter zu API-Aufrufen hinzufügt (z.B. ?q=Paris)",
+      "searchParameterPlaceholder": "q, suche, abfrage...",
+      "selectMethod": "Methode auswählen",
+      "showLoadingState": "Ladezustand anzeigen",
+      "valueField": "Wertfeld",
+      "valueFieldDesc": "Feld, das als Optionswert verwendet werden soll (z.B. id)",
+      "valueFieldPlaceholder": "id"
+    },
+    "inputNodeForm": {
+      "addInputFieldsBeforeReference": "Fügen Sie Eingabefelder vor diesem Knoten hinzu, um sie zu referenzieren",
+      "addMapping": "Zuordnung hinzufügen",
+      "addOption": "+ Option hinzufügen",
+      "advancedConfiguration": "Erweiterte Konfiguration",
+      "defaultChecked": "Standardmäßig aktiviert",
+      "defaultValuesCommaSeparated": "Standardwerte (durch Kommas getrennt)",
+      "defaultValuesPlaceholder": "wert1, wert2, wert3",
+      "defaultValueType": "Standardwerttyp",
+      "defaultValueTypeNone": "Keiner",
+      "defaultValueTypeReference": "Referenzfeld",
+      "defaultValueTypeStatic": "Statischer Wert",
+      "errorMessage": "Fehlermeldung",
+      "helperText": "Hilfetext",
+      "httpConfiguration": "HTTP-Konfiguration",
+      "label": "Bezeichnung",
+      "multipleFiles": "Mehrere Dateien",
+      "multipleSelection": "Mehrfachauswahl",
+      "name": "Name",
+      "noParentFieldsAvailable": "Keine übergeordneten Felder verfügbar",
+      "objectMapping": "Objektzuordnung",
+      "objectMappingDesc": "Eigenschaften des Quellobjekts auf eine neue Struktur abbilden",
+      "optionLabel": "Bezeichnung",
+      "options": "Optionen",
+      "optionValue": "Wert",
+      "pattern": "Muster",
+      "placeholder": "Platzhalter",
+      "referenceField": "Referenzfeld",
+      "required": "Erforderlich",
+      "selectReferenceField": "Feld auswählen",
+      "selectTransformation": "Transformation auswählen",
+      "selectType": "Typ auswählen",
+      "sourceKey": "Quellschlüssel",
+      "staticValue": "Statischer Wert",
+      "staticValuePlaceholder": "Standardwert eingeben",
+      "targetKey": "Zielschlüssel",
+      "transformArray": "In Array konvertieren",
+      "transformBoolean": "In Boolean konvertieren",
+      "transformDesc": "Den referenzierten Wert transformieren, um dem Typ dieses Feldes zu entsprechen",
+      "transformMapToObject": "Auf Objekt abbilden",
+      "transformNone": "Keine Transformation",
+      "transformNumber": "In Zahl konvertieren",
+      "transformString": "In String konvertieren",
+      "transformType": "Transformationstyp",
+      "validation": "Validierung"
+    },
+    "selectInputType": {
+      "type": "Typ"
+    },
+    "selectNodeGroup": {
+      "createNewGroup": "Neue Gruppe erstellen",
+      "group": "Gruppe",
+      "groupAlreadyExists": "Diese Gruppe existiert bereits",
+      "groupAlreadyExistsDesc": "Verwenden Sie den Selektor, um den Knoten zu einer vorhandenen Gruppe hinzuzufügen.",
+      "groupCreated": "Gruppe erstellt",
+      "groupCreatedDesc": "Die Gruppe \"{groupName}\" wurde erfolgreich erstellt.",
+      "groupName": "Gruppenname",
+      "groupNamePlaceholder": "z.B.: Schritt 1 - Persönliche Informationen",
+      "newGroup": "Neue Gruppe",
+      "newGroupDescription": "Die Gruppe wird um den ausgewählten Knoten herum erstellt.",
+      "noGroup": "Keine Gruppe"
+    },
+    "selectNodeType": {
+      "nodeType": "Knotentyp"
+    },
+    "uiNodeForm": {
+      "label": "Bezeichnung",
+      "type": "Typ",
+      "typeDivider": "Trennlinie",
+      "typeTitle": "Titel"
+    }
+  },
+  "renderer": {
+    "defaultAddressInput": {
+      "enterAddress": "Geben Sie eine Adresse ein...",
+      "noAddressesFound": "Keine Adressen gefunden."
+    },
+    "defaultAutocompleteInput": {
+      "noResults": "Keine Ergebnisse gefunden.",
+      "search": "Suchen...",
+      "selectOption": "Option auswählen"
+    },
+    "defaultHttpInput": {
+      "fetchFailed": "Fehler beim Abrufen der Daten",
+      "httpError": "HTTP {status}: {statusText}",
+      "noDataAvailable": "Keine Daten verfügbar. Konfigurieren Sie \"Beim Laden abrufen\" oder fügen Sie einen Suchparameter hinzu.",
+      "noResults": "Keine Ergebnisse gefunden.",
+      "noUrlConfigured": "Keine URL konfiguriert",
+      "retry": "Erneut versuchen",
+      "search": "Suchen...",
+      "searching": "Suche läuft...",
+      "selectOption": "Option auswählen"
+    },
+    "defaultInputs": {
+      "endDate": "Enddatum",
+      "endTime": "Endzeit",
+      "required": "*",
+      "selectDate": "Datum auswählen",
+      "selectDateRange": "Datumsbereich auswählen",
+      "startDate": "Startdatum",
+      "startTime": "Startzeit"
+    },
+    "defaultSelectInput": {
+      "selectOption": "Option auswählen"
+    },
+    "defaultSubmitButton": {
+      "requiredFieldsMissing": "Erforderliche Felder fehlen",
+      "submit": "Senden"
+    }
+  },
+  "validation": {
+    "invalidFormat": "Ungültiges Format",
+    "required": "Dieses Feld ist erforderlich"
+  }
+}

@@ -19,15 +19,11 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react-jsx",
     "noUnusedParameters": true,
-    "types": [
-      "vitest/globals"
-    ],
     "paths": {
       "@/*": [
-        "src/*"
+        "./src/*"
       ],
       "~/*": [
         "./*"
