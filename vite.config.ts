@@ -21,6 +21,9 @@ const config = () =>
       },
       rollupOptions: {
         external: [...Object.keys(dependencies ?? {}).filter((dep) => dep !== "nanoid"), ...Object.keys(peerDependencies ?? {})],
+        output: {
+          banner: '"use client";',
+        },
       },
     },
     plugins: [
