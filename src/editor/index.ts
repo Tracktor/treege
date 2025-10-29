@@ -1,3 +1,4 @@
+import "@xyflow/react/dist/style.css";
 import "@/editor/styles/style.css";
 
 export * from "@/editor/features/TreegeEditor/TreegeEditor";
