@@ -349,27 +349,27 @@ Check out the `/example` directory for complete examples:
 
 ### TreegeEditor Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `flow` | `Flow \| null` | `null` | Initial decision tree |
-| `onSave` | `(flow: Flow) => void` | - | Callback when tree is saved |
-| `language` | `string` | `"en"` | UI language |
-| `theme` | `"light" \| "dark"` | `"dark"` | Editor theme |
+| Prop       | Type                   | Default  | Description                 |
+|------------|------------------------|----------|-----------------------------|
+| `flow`     | `Flow \| null`         | `null`   | Initial decision tree       |
+| `onSave`   | `(flow: Flow) => void` | -        | Callback when tree is saved |
+| `language` | `string`               | `"en"`   | UI language                 |
+| `theme`    | `"light" \| "dark"`    | `"dark"` | Editor theme                |
 
 ### TreegeRenderer Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `flows` | `Flow \| null` | - | Decision tree to render |
-| `onSubmit` | `(values: FormValues) => void` | - | Form submission handler |
-| `onChange` | `(values: FormValues) => void` | - | Form change handler |
-| `validate` | `(values, nodes) => Record<string, string>` | - | Custom validation function |
-| `initialValues` | `FormValues` | `{}` | Initial form values |
-| `components` | `RendererComponents` | - | Custom component overrides |
-| `language` | `string` | `"en"` | UI language |
-| `validationMode` | `"onSubmit" \| "onChange" \| "onBlur"` | `"onSubmit"` | When to validate |
-| `theme` | `"light" \| "dark"` | `"dark"` | Renderer theme |
-| `googleApiKey` | `string` | - | API key for address input |
+| Prop             | Type                                        | Default      | Description                |
+|------------------|---------------------------------------------|--------------|----------------------------|
+| `flows`          | `Flow \| null`                              | -            | Decision tree to render    |
+| `onSubmit`       | `(values: FormValues) => void`              | -            | Form submission handler    |
+| `onChange`       | `(values: FormValues) => void`              | -            | Form change handler        |
+| `validate`       | `(values, nodes) => Record<string, string>` | -            | Custom validation function |
+| `initialValues`  | `FormValues`                                | `{}`         | Initial form values        |
+| `components`     | `RendererComponents`                        | -            | Custom component overrides |
+| `language`       | `string`                                    | `"en"`       | UI language                |
+| `validationMode` | `"onSubmit" \| "onChange"`                  | `"onSubmit"` | When to validate           |
+| `theme`          | `"light" \| "dark"`                         | `"dark"`     | Renderer theme             |
+| `googleApiKey`   | `string`                                    | -            | API key for address input  |
 
 ## Development
 
