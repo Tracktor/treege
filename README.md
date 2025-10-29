@@ -8,10 +8,11 @@
   [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
 
   <p>
+    <a href="https://treege.io/">🌐 Website</a> •
+    <a href="https://treege.io/playground/">🎮 Playground</a> •
     <a href="#features">Features</a> •
     <a href="#installation">Installation</a> •
     <a href="#quick-start">Quick Start</a> •
-    <a href="#documentation">Documentation</a> •
     <a href="#examples">Examples</a>
   </p>
 </div>
