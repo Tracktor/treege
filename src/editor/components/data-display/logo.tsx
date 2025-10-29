@@ -6,7 +6,7 @@ interface LogoProps {
 }
 
 const Logo = ({ theme = "dark" }: LogoProps) => (
-  <div className="fixed left-5 top-5 z-50 select-none">
+  <div className="absolute left-5 top-5 z-50 select-none">
     <img
       src={theme === "dark" ? LogoWhite : LogoBlack}
       alt="Treege"
