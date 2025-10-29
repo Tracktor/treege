@@ -3,12 +3,14 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
+import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 import { dependencies, name, peerDependencies } from "./package.json";
 
 // https://vitejs.dev/config/
 const config = () =>
   defineConfig({
     build: {
+      cssCodeSplit: false,
       lib: {
         entry: {
           editor: resolve(__dirname, "src/editor/index.ts"),
@@ -23,6 +25,7 @@ const config = () =>
         external: [...Object.keys(dependencies ?? {}).filter((dep) => dep !== "nanoid"), ...Object.keys(peerDependencies ?? {})],
         output: {
           banner: '"use client";',
+          assetFileNames: "style.css",
         },
       },
     },
@@ -41,6 +44,12 @@ const config = () =>
       }),
       react(),
       tailwindcss(),
+      cssInjectedByJsPlugin({
+        jsAssetsFilterFunction: (outputChunk) => {
+          // Inject CSS into TreegeEditor chunk (not entry files)
+          return outputChunk.fileName.includes("TreegeEditor");
+        },
+      }),
     ],
     resolve: {
       alias: [
