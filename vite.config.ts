@@ -23,10 +23,6 @@ const config = () =>
       },
       rollupOptions: {
         external: [...Object.keys(dependencies ?? {}).filter((dep) => dep !== "nanoid"), ...Object.keys(peerDependencies ?? {})],
-        output: {
-          banner: '"use client";',
-          assetFileNames: "style.css",
-        },
       },
     },
     plugins: [
@@ -46,7 +42,6 @@ const config = () =>
       tailwindcss(),
       cssInjectedByJsPlugin({
         jsAssetsFilterFunction: (outputChunk) => {
-          // Inject CSS into TreegeEditor chunk (not entry files)
           return outputChunk.fileName.includes("TreegeEditor");
         },
       }),
