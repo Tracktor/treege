@@ -1,8 +1,3 @@
-"use client";
-
-import "@xyflow/react/dist/style.css";
-import "@/editor/styles/style.css";
-
 import { Background, BackgroundVariant, Controls, MiniMap, ReactFlow, ReactFlowProvider } from "@xyflow/react";
 import Logo from "@/editor/components/data-display/logo";
 import { edgeTypes } from "@/editor/constants/edgeTypes";
@@ -14,6 +9,8 @@ import useFlowConnections from "@/editor/hooks/useFlowConnections";
 import { TreegeEditorProps } from "@/editor/types/editor";
 import { Toaster } from "@/shared/components/ui/sonner";
 import { ThemeProvider } from "@/shared/context/ThemeContext";
+
+import "@/editor/styles/style.css";
 
 const Flow = ({ edges, nodes, flow, onExportJson, onSave, theme }: TreegeEditorProps) => {
   const { onConnect, onConnectEnd, onEdgesDelete, isValidConnection } = useFlowConnections();
