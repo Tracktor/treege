@@ -19,10 +19,6 @@ button {
   width: 100vw;
 }
 
-.react-flow__panel > a {
-  @apply hidden;
-}
-
 /* Default node */
 div.react-flow__node {
   border: 0 !important;
