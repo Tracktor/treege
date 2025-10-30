@@ -27,17 +27,23 @@ Treege is a modern React library for creating and rendering interactive decision
 
 ### Visual Editor (`treege/editor`)
 - **Node-based Interface**: Drag-and-drop editor powered by ReactFlow
-- **5 Node Types**: Flow, Group, Input, JSON, and UI nodes
-- **Conditional Edges**: Advanced logic with AND/OR operators
-- **Multi-language Support**: Built-in translation system
+- **4 Node Types**: Flow, Group, Input, and UI nodes
+- **Conditional Edges**: Advanced logic with AND/OR operators (`===`, `!==`, `>`, `<`, `>=`, `<=`)
+- **Multi-language Support**: Built-in translation system for all labels
 - **Type-safe**: Full TypeScript support
+- **Mini-map & Controls**: Navigation tools for complex trees
+- **Theme Support**: Dark/light mode with customizable backgrounds
 
 ### Runtime Renderer (`treege/renderer`)
-- **Form Generation**: Automatically render forms from decision trees
-- **Validation**: Built-in required and pattern validation
-- **Conditional Logic**: Dynamic field visibility based on user input
-- **Customizable**: Override default components with your own
+- **Production Ready**: Full-featured form generation and validation system
+- **16 Input Types**: text, number, select, checkbox, radio, date, daterange, time, timerange, file, address, http, textarea, password, switch, autocomplete, and hidden
+- **HTTP Integration**: Built-in API integration with response mapping and search functionality
+- **Advanced Validation**: Required fields, pattern matching, custom validation functions
+- **Conditional Logic**: Dynamic field visibility based on user input and conditional edges
+- **Web & Native**: Both web (React) and React Native renderer implementations
+- **Fully Customizable**: Override any component (FormWrapper, Group, Inputs, SubmitButton, UI elements)
 - **Theme Support**: Dark/light mode out of the box
+- **Google API Integration**: Address autocomplete support
 
 ### Developer Experience
 - **Modular**: Import only what you need (editor, renderer, or both)
@@ -200,7 +206,7 @@ Form input with validation, patterns, and conditional logic.
 }
 ```
 
-Supported input types: `text`, `email`, `password`, `number`, `textarea`, `select`, `radio`, `checkbox`, `switch`, `date`, `dateRange`, `time`, `timeRange`, `file`, `address`, `http`
+Supported input types: `text`, `number`, `textarea`, `password`, `select`, `radio`, `checkbox`, `switch`, `autocomplete`, `date`, `daterange`, `time`, `timerange`, `file`, `address`, `http`, `hidden`
 
 ### Group Node
 Container for organizing multiple nodes together.
@@ -214,30 +220,22 @@ Container for organizing multiple nodes together.
 }
 ```
 
-### JSON Node
-Store and manage JSON data within the tree.
-
-```tsx
-{
-  type: "json",
-  data: {
-    json: { key: "value" }
-  }
-}
-```
-
 ### UI Node
-Display-only elements (titles, descriptions, separators).
+Display-only elements for visual organization and content display.
 
 ```tsx
 {
   type: "ui",
   data: {
-    type: "title",
+    type: "title", // or "divider"
     label: "Welcome to the form"
   }
 }
 ```
+
+Supported UI types:
+- `title` - Display headings and titles
+- `divider` - Visual separator between sections
 
 ## Conditional Edges
 
@@ -335,6 +333,78 @@ Control when validation occurs:
 
 // Validate on every change
 <TreegeRenderer validationMode="onChange" />
+```
+
+### HTTP Input Integration
+
+Use the HTTP input type to fetch and map data from APIs:
+
+```tsx
+{
+  type: "input",
+  data: {
+    type: "http",
+    name: "country",
+    label: "Select your country",
+    httpConfig: {
+      method: "GET",
+      url: "https://api.example.com/countries",
+      responsePath: "$.data.countries", // JSONPath to extract data
+      mapping: {
+        label: "name",
+        value: "code"
+      },
+      searchParam: "query", // Enable search functionality
+      fetchOnMount: true
+    }
+  }
+}
+```
+
+### Global Configuration
+
+Configure the renderer globally using the TreegeConfigProvider:
+
+```tsx
+import { TreegeConfigProvider } from "treege/renderer";
+
+function App() {
+  return (
+    <TreegeConfigProvider
+      config={{
+        language: "fr",
+        googleApiKey: "your-google-api-key",
+        components: {
+          // Your custom components
+        }
+      }}
+    >
+      <TreegeRenderer flows={flow} />
+    </TreegeConfigProvider>
+  );
+}
+```
+
+### Programmatic Control
+
+Use the `useTreegeRenderer` hook for programmatic control:
+
+```tsx
+import { useTreegeRenderer } from "treege/renderer";
+
+function CustomForm() {
+  const { values, setFieldValue, submit, reset } = useTreegeRenderer();
+
+  return (
+    <div>
+      <button onClick={() => setFieldValue("email", "test@example.com")}>
+        Prefill Email
+      </button>
+      <button onClick={submit}>Submit</button>
+      <button onClick={reset}>Reset</button>
+    </div>
+  );
+}
 ```
 
 ## Examples
