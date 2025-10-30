@@ -6,8 +6,7 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 
-const DefaultFileInput = ({ node, setValue, error }: InputRenderProps<"file">) => {
-  const t = useTranslate();
+const DefaultFileInput = ({ node, setValue, error, label, placeholder, helperText }: InputRenderProps<"file">) => {
   const name = node.data.name || node.id;
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -32,19 +31,12 @@ const DefaultFileInput = ({ node, setValue, error }: InputRenderProps<"file">) =
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {t(node.data.label) || node.data.name}
+        {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
-      <Input
-        type="file"
-        id={name}
-        name={name}
-        onChange={handleFileChange}
-        multiple={node.data.multiple}
-        placeholder={t(node.data.placeholder)}
-      />
+      <Input type="file" id={name} name={name} onChange={handleFileChange} multiple={node.data.multiple} placeholder={placeholder} />
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
+      {helperText && !error && <FormDescription>{helperText}</FormDescription>}
     </FormItem>
   );
 };

@@ -67,6 +67,18 @@ export type InputRenderProps<T extends InputType = InputType> = {
    * Validation error message for this field (if any)
    */
   error?: string;
+  /**
+   * Translated label (already processed with current language)
+   */
+  label: string;
+  /**
+   * Translated placeholder (already processed with current language)
+   */
+  placeholder: string;
+  /**
+   * Translated helper text (already processed with current language)
+   */
+  helperText: string;
 };
 
 export type UiRenderProps = {

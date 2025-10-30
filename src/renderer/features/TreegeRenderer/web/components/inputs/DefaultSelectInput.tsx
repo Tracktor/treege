@@ -4,7 +4,7 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Label } from "@/shared/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 
-const DefaultSelectInput = ({ node, value, setValue, error }: InputRenderProps<"select">) => {
+const DefaultSelectInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"select">) => {
   const t = useTranslate();
   const name = node.data.name || node.id;
   const normalizedValue = value ? String(value) : "";
@@ -12,12 +12,12 @@ const DefaultSelectInput = ({ node, value, setValue, error }: InputRenderProps<"
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {t(node.data.label) || node.data.name}
+        {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Select value={normalizedValue} onValueChange={(val) => setValue(val)}>
         <SelectTrigger id={name} className="w-full">
-          <SelectValue placeholder={t(node.data.placeholder) || t("renderer.defaultSelectInput.selectOption")} />
+          <SelectValue placeholder={placeholder || t("renderer.defaultSelectInput.selectOption")} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
@@ -32,7 +32,7 @@ const DefaultSelectInput = ({ node, value, setValue, error }: InputRenderProps<"
         </SelectContent>
       </Select>
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
+      {helperText && !error && <FormDescription>{helperText}</FormDescription>}
     </FormItem>
   );
 };

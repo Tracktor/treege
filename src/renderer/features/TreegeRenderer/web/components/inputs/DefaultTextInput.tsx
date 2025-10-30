@@ -1,29 +1,20 @@
-import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 
-const DefaultTextInput = ({ node, value, setValue, error }: InputRenderProps<"text">) => {
-  const t = useTranslate();
+const DefaultTextInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"text">) => {
   const name = node.data.name || node.id;
 
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {t(node.data.label) || node.data.name}
+        {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
-      <Input
-        type="text"
-        id={name}
-        name={name}
-        value={value ?? ""}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder={t(node.data.placeholder)}
-      />
+      <Input type="text" id={name} name={name} value={value ?? ""} onChange={(e) => setValue(e.target.value)} placeholder={placeholder} />
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
+      {helperText && !error && <FormDescription>{helperText}</FormDescription>}
     </FormItem>
   );
 };

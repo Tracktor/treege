@@ -4,7 +4,7 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Label } from "@/shared/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 
-const DefaultRadioInput = ({ node, value, setValue, error }: InputRenderProps<"radio">) => {
+const DefaultRadioInput = ({ node, value, setValue, error, label, helperText }: InputRenderProps<"radio">) => {
   const t = useTranslate();
   const name = node.data.name || node.id;
   const normalizedValue = value ? String(value) : "";
@@ -12,7 +12,7 @@ const DefaultRadioInput = ({ node, value, setValue, error }: InputRenderProps<"r
   return (
     <FormItem className="mb-4">
       <Label className="mb-1">
-        {t(node.data.label) || node.data.name}
+        {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <RadioGroup value={normalizedValue} onValueChange={(val) => setValue(val)}>
@@ -26,7 +26,7 @@ const DefaultRadioInput = ({ node, value, setValue, error }: InputRenderProps<"r
         ))}
       </RadioGroup>
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
+      {helperText && !error && <FormDescription>{helperText}</FormDescription>}
     </FormItem>
   );
 };

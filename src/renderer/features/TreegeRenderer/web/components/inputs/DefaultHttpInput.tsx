@@ -52,7 +52,7 @@ const getValueByPath = (obj: HttpResponse, path: string): unknown => {
 const replaceTemplateVars = (template: string, formValues: Record<string, unknown>): string =>
   template.replace(/{{(\w+)}}/g, (_, key) => String(formValues[key] || ""));
 
-const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps<"http">) => {
+const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"http">) => {
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [options, setOptions] = useState<Array<{ value: string; label: string }>>([]);
@@ -175,16 +175,16 @@ const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps<"ht
       const buttonContent = isLoading ? (
         <div className="flex items-center gap-2">
           <Loader2 className="h-4 w-4 animate-spin" />
-          <span className="text-muted-foreground">{selectedOption?.label || t(node.data.placeholder) || "Search..."}</span>
+          <span className="text-muted-foreground">{selectedOption?.label || placeholder || "Search..."}</span>
         </div>
       ) : (
-        selectedOption?.label || t(node.data.placeholder) || "Search..."
+        selectedOption?.label || placeholder || "Search..."
       );
 
       return (
         <FormItem className="mb-4">
           <Label>
-            {t(node.data.label) || node.data.name}
+            {label || node.data.name}
             {node.data.required && <span className="text-red-500">*</span>}
           </Label>
           <Popover open={comboboxOpen} onOpenChange={setComboboxOpen}>
@@ -243,7 +243,7 @@ const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps<"ht
             </PopoverContent>
           </Popover>
           {error && <FormError>{error}</FormError>}
-          {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
+          {helperText && !error && <FormDescription>{helperText}</FormDescription>}
         </FormItem>
       );
     }
@@ -255,14 +255,14 @@ const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps<"ht
       return (
         <FormItem className="mb-4">
           <Label htmlFor={name}>
-            {t(node.data.label) || node.data.name}
+            {label || node.data.name}
             {node.data.required && <span className="text-red-500">*</span>}
           </Label>
           <div className="py-2 text-muted-foreground text-sm">
             No data available. Configure &#34;Fetch on mount&#34; or add a search parameter.
           </div>
           {error && <FormError>{error}</FormError>}
-          {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
+          {helperText && !error && <FormDescription>{helperText}</FormDescription>}
         </FormItem>
       );
     }
@@ -270,13 +270,13 @@ const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps<"ht
     return (
       <FormItem className="mb-4">
         <Label htmlFor={name}>
-          {t(node.data.label) || node.data.name}
+          {label || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
         <Select value={Array.isArray(value) ? (value[0] ?? "") : (value ?? "")} onValueChange={(val) => setValue(val)} disabled={isLoading}>
           <SelectTrigger id={name} className="w-full">
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            <SelectValue placeholder={t(node.data.placeholder) || t("renderer.defaultHttpInput.selectOption")} />
+            <SelectValue placeholder={placeholder || t("renderer.defaultHttpInput.selectOption")} />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
@@ -289,7 +289,7 @@ const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps<"ht
           </SelectContent>
         </Select>
         {error && <FormError>{error}</FormError>}
-        {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
+        {helperText && !error && <FormDescription>{helperText}</FormDescription>}
       </FormItem>
     );
   }
@@ -298,12 +298,12 @@ const DefaultHttpInput = ({ node, value, setValue, error }: InputRenderProps<"ht
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {t(node.data.label) || node.data.name}
+        {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input type="text" id={name} name={name} value={typeof value === "string" ? value : JSON.stringify(value)} readOnly disabled />
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
+      {helperText && !error && <FormDescription>{helperText}</FormDescription>}
     </FormItem>
   );
 };

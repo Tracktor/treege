@@ -82,7 +82,7 @@ const fetchGooglePlacesSuggestions = (query: string): Promise<AddressSuggestion[
   });
 };
 
-const DefaultAddressInput = ({ node, value, setValue, error }: InputRenderProps<"address">) => {
+const DefaultAddressInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"address">) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
   const [popoverOpen, setPopoverOpen] = useState(false);
@@ -134,7 +134,7 @@ const DefaultAddressInput = ({ node, value, setValue, error }: InputRenderProps<
       {googleApiKey && <script async src={`https://maps.googleapis.com/maps/api/js?key=${googleApiKey}&libraries=places`} />}
       <FormItem className="mb-4">
         <Label htmlFor={name}>
-          {t(node.data.label) || node.data.name}
+          {label || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
         <div className="relative">
@@ -149,7 +149,7 @@ const DefaultAddressInput = ({ node, value, setValue, error }: InputRenderProps<
                 setPopoverOpen(true);
               }
             }}
-            placeholder={t(node.data.placeholder) || t("renderer.defaultAddressInput.enterAddress")}
+            placeholder={placeholder || t("renderer.defaultAddressInput.enterAddress")}
             className="pr-10"
             autoComplete="off"
           />
@@ -178,7 +178,7 @@ const DefaultAddressInput = ({ node, value, setValue, error }: InputRenderProps<
           )}
         </div>
         {error && <FormError>{error}</FormError>}
-        {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
+        {helperText && !error && <FormDescription>{helperText}</FormDescription>}
       </FormItem>
     </>
   );

@@ -16,6 +16,7 @@ import { NODE_TYPE } from "@/shared/constants/node";
 import { ThemeProvider } from "@/shared/context/ThemeContext";
 import { TreegeNodeData, UINodeData } from "@/shared/types/node";
 import { isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
+import { getTranslatedText } from "@/shared/utils/translations";
 
 const TreegeRenderer = ({
   components,
@@ -128,8 +129,22 @@ const TreegeRenderer = ({
           const value = formValues[fieldId];
           const error = formErrors[fieldId];
           const setValue = (newValue: InputValue) => setFieldValue(fieldId, newValue);
+          const label = getTranslatedText(inputData.label, config.language);
+          const placeholder = getTranslatedText(inputData.placeholder, config.language);
+          const helperText = getTranslatedText(inputData.helperText, config.language);
 
-          return <Renderer key={node.id} node={node} value={value} setValue={setValue} error={error} />;
+          return (
+            <Renderer
+              key={node.id}
+              node={node}
+              value={value}
+              setValue={setValue}
+              error={error}
+              label={label}
+              placeholder={placeholder}
+              helperText={helperText}
+            />
+          );
         }
 
         case NODE_TYPE.group: {
@@ -173,7 +188,7 @@ const TreegeRenderer = ({
           return null;
       }
     },
-    [config.components, visibleNodes, formValues, formErrors, setFieldValue],
+    [config.components, config.language, visibleNodes, formValues, formErrors, setFieldValue],
   );
 
   // ============================================

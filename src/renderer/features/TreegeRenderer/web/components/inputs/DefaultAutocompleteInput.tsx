@@ -9,7 +9,7 @@ import { Label } from "@/shared/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 import { cn } from "@/shared/lib/utils";
 
-const DefaultAutocompleteInput = ({ node, value, setValue, error }: InputRenderProps<"autocomplete">) => {
+const DefaultAutocompleteInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"autocomplete">) => {
   const t = useTranslate();
   const [open, setOpen] = useState(false);
   const name = node.data.name || node.id;
@@ -21,7 +21,7 @@ const DefaultAutocompleteInput = ({ node, value, setValue, error }: InputRenderP
   return (
     <FormItem className="mb-4">
       <Label htmlFor={triggerId}>
-        {t(node.data.label) || node.data.name}
+        {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Popover open={open} onOpenChange={setOpen}>
@@ -39,13 +39,13 @@ const DefaultAutocompleteInput = ({ node, value, setValue, error }: InputRenderP
               ? selectedOption?.label
                 ? t(selectedOption.label)
                 : value
-              : t(node.data.placeholder) || t("renderer.defaultAutocompleteInput.selectOption")}
+              : placeholder || t("renderer.defaultAutocompleteInput.selectOption")}
             <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0" align="start">
           <Command>
-            <CommandInput placeholder={t(node.data.placeholder) || t("renderer.defaultAutocompleteInput.search")} />
+            <CommandInput placeholder={placeholder || t("renderer.defaultAutocompleteInput.search")} />
             <CommandList>
               <CommandEmpty>{t("renderer.defaultAutocompleteInput.noResults")}</CommandEmpty>
               <CommandGroup>
@@ -69,7 +69,7 @@ const DefaultAutocompleteInput = ({ node, value, setValue, error }: InputRenderP
         </PopoverContent>
       </Popover>
       {error && <FormError id={errorId}>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
+      {helperText && !error && <FormDescription>{helperText}</FormDescription>}
     </FormItem>
   );
 };

@@ -14,24 +14,25 @@ import { ChangeEvent } from "react";
 // ✅ Example 1: Simple custom text input (recommended approach)
 // Define your component OUTSIDE the render function to avoid re-creation and focus loss
 // Notice how value and setValue are now properly typed as string!
-const CustomTextInput = ({ node, value, setValue, error }: InputRenderProps<"text">) => {
+// Also notice how label, placeholder, and helperText are already translated!
+const CustomTextInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"text">) => {
   return (
     <div className="mb-4">
       <label className="block text-sm font-medium mb-1">
-        {typeof node.data.label === "string" ? node.data.label : node.data.label?.en}
+        {label} {/* ✅ Already translated based on current language! */}
         {node.data.required && <span className="text-red-500 ml-1">*</span>}
       </label>
       <input
         type="text"
         value={value} // ✅ TypeScript knows this is a string
         onChange={(e) => setValue(e.target.value)} // ✅ TypeScript knows setValue accepts a string
-        placeholder={typeof node.data.placeholder === "string" ? node.data.placeholder : node.data.placeholder?.en}
+        placeholder={placeholder} // ✅ Already translated!
         className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-      {node.data.helperText && !error && (
+      {helperText && !error && (
         <p className="text-gray-500 text-sm mt-1">
-          {typeof node.data.helperText === "string" ? node.data.helperText : node.data.helperText?.en}
+          {helperText} {/* ✅ Already translated! */}
         </p>
       )}
     </div>
@@ -40,7 +41,7 @@ const CustomTextInput = ({ node, value, setValue, error }: InputRenderProps<"tex
 
 // ✅ Example 2: Custom number input with validation
 // Notice how value is properly typed as number | null
-const CustomNumberInput = ({ node, value, setValue, error }: InputRenderProps<"number">) => {
+const CustomNumberInput = ({ node, value, setValue, error, label }: InputRenderProps<"number">) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const numValue = e.target.value === "" ? null : Number(e.target.value);
     setValue(numValue); // ✅ TypeScript knows setValue accepts number | null
@@ -49,7 +50,7 @@ const CustomNumberInput = ({ node, value, setValue, error }: InputRenderProps<"n
   return (
     <div className="mb-4">
       <label className="block text-sm font-medium mb-1">
-        {typeof node.data.label === "string" ? node.data.label : node.data.label?.en}
+        {label} {/* ✅ Already translated! */}
         {node.data.required && <span className="text-red-500 ml-1">*</span>}
       </label>
       <input
@@ -65,14 +66,15 @@ const CustomNumberInput = ({ node, value, setValue, error }: InputRenderProps<"n
 
 // ✅ Example 3: Custom select input with styling
 // Notice how value is properly typed as string | string[]
-const CustomSelectInput = ({ node, value, setValue, error }: InputRenderProps<"select">) => {
+// Note: option labels still need manual translation as they're not in InputRenderProps
+const CustomSelectInput = ({ node, value, setValue, error, label }: InputRenderProps<"select">) => {
   // Extract string value from union type
   const selectValue = Array.isArray(value) ? value[0] ?? "" : value;
 
   return (
     <div className="mb-4">
       <label className="block text-sm font-medium mb-1">
-        {typeof node.data.label === "string" ? node.data.label : node.data.label?.en}
+        {label} {/* ✅ Already translated! */}
         {node.data.required && <span className="text-red-500 ml-1">*</span>}
       </label>
       <select
@@ -83,6 +85,7 @@ const CustomSelectInput = ({ node, value, setValue, error }: InputRenderProps<"s
         <option value="">-- Select --</option>
         {node.data.options?.map((option) => (
           <option key={option.value} value={option.value}>
+            {/* Note: Options still need manual translation */}
             {typeof option.label === "string" ? option.label : option.label?.en}
           </option>
         ))}

@@ -8,7 +8,7 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Label } from "@/shared/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 
-const DefaultDateInput = ({ node, value, setValue, error }: InputRenderProps<"date">) => {
+const DefaultDateInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"date">) => {
   const t = useTranslate();
   const name = node.data.name || node.id;
   const [open, setOpen] = useState(false);
@@ -19,13 +19,13 @@ const DefaultDateInput = ({ node, value, setValue, error }: InputRenderProps<"da
   return (
     <FormItem className="mb-4">
       <Label htmlFor={name}>
-        {t(node.data.label) || node.data.name}
+        {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="outline" id={name} className="w-full justify-between font-normal">
-            {dateValue ? dateValue.toLocaleDateString() : t(node.data.placeholder) || t("renderer.defaultInputs.selectDate")}
+            {dateValue ? dateValue.toLocaleDateString() : placeholder || t("renderer.defaultInputs.selectDate")}
             <ChevronDownIcon className="size-4" />
           </Button>
         </PopoverTrigger>
@@ -42,7 +42,7 @@ const DefaultDateInput = ({ node, value, setValue, error }: InputRenderProps<"da
         </PopoverContent>
       </Popover>
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
+      {helperText && !error && <FormDescription>{helperText}</FormDescription>}
     </FormItem>
   );
 };

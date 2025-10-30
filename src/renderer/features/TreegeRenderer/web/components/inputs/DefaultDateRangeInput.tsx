@@ -9,7 +9,7 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Label } from "@/shared/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 
-const DefaultDateRangeInput = ({ node, value, setValue, error }: InputRenderProps<"daterange">) => {
+const DefaultDateRangeInput = ({ node, value, setValue, error, label, helperText }: InputRenderProps<"daterange">) => {
   const t = useTranslate();
   const [open, setOpen] = useState(false);
 
@@ -35,7 +35,7 @@ const DefaultDateRangeInput = ({ node, value, setValue, error }: InputRenderProp
   return (
     <FormItem className="mb-4">
       <Label>
-        {t(node.data.label) || node.data.name}
+        {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Popover open={open} onOpenChange={setOpen}>
@@ -56,7 +56,7 @@ const DefaultDateRangeInput = ({ node, value, setValue, error }: InputRenderProp
         </PopoverContent>
       </Popover>
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
+      {helperText && !error && <FormDescription>{helperText}</FormDescription>}
     </FormItem>
   );
 };

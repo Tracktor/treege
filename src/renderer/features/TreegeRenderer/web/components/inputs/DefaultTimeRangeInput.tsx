@@ -4,7 +4,7 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 
-const DefaultTimeRangeInput = ({ node, value, setValue, error }: InputRenderProps<"timerange">) => {
+const DefaultTimeRangeInput = ({ node, value, setValue, error, label, helperText }: InputRenderProps<"timerange">) => {
   const t = useTranslate();
 
   // Parse range value as array [startTime, endTime]
@@ -23,12 +23,12 @@ const DefaultTimeRangeInput = ({ node, value, setValue, error }: InputRenderProp
   return (
     <FormItem className="mb-4">
       <Label>
-        {t(node.data.label) || node.data.name}
+        {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <div className="flex gap-2">
         <Input
-          aria-label={`${t(node.data.label) || node.data.name} - ${t("renderer.defaultInputs.startTime")}`}
+          aria-label={`${label || node.data.name} - ${t("renderer.defaultInputs.startTime")}`}
           aria-invalid={!!error}
           aria-describedby={error ? `${node.id}-error` : undefined}
           type="time"
@@ -38,7 +38,7 @@ const DefaultTimeRangeInput = ({ node, value, setValue, error }: InputRenderProp
           className="flex-1 bg-background [color-scheme:light] dark:[color-scheme:dark]"
         />
         <Input
-          aria-label={`${t(node.data.label) || node.data.name} - ${t("renderer.defaultInputs.endTime")}`}
+          aria-label={`${label || node.data.name} - ${t("renderer.defaultInputs.endTime")}`}
           aria-invalid={!!error}
           aria-describedby={error ? `${node.id}-error` : undefined}
           type="time"
@@ -49,7 +49,7 @@ const DefaultTimeRangeInput = ({ node, value, setValue, error }: InputRenderProp
         />
       </div>
       {error && <FormError>{error}</FormError>}
-      {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
+      {helperText && !error && <FormDescription>{helperText}</FormDescription>}
     </FormItem>
   );
 };

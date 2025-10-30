@@ -4,7 +4,7 @@ import { Checkbox } from "@/shared/components/ui/checkbox";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Label } from "@/shared/components/ui/label";
 
-const DefaultCheckboxInput = ({ node, value, setValue, error }: InputRenderProps<"checkbox">) => {
+const DefaultCheckboxInput = ({ node, value, setValue, error, label, helperText }: InputRenderProps<"checkbox">) => {
   const t = useTranslate();
   const name = node.data.name || node.id;
 
@@ -20,7 +20,7 @@ const DefaultCheckboxInput = ({ node, value, setValue, error }: InputRenderProps
     return (
       <FormItem className="mb-4">
         <Label className="mb-1">
-          {t(node.data.label) || node.data.name}
+          {label || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
         <div className="space-y-2">
@@ -39,7 +39,7 @@ const DefaultCheckboxInput = ({ node, value, setValue, error }: InputRenderProps
           ))}
         </div>
         {error && <FormError>{error}</FormError>}
-        {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
+        {helperText && !error && <FormDescription>{helperText}</FormDescription>}
       </FormItem>
     );
   }
@@ -55,10 +55,10 @@ const DefaultCheckboxInput = ({ node, value, setValue, error }: InputRenderProps
         />
         <div>
           <Label htmlFor={name} className="cursor-pointer font-medium text-sm">
-            {t(node.data.label) || node.data.name}
+            {label || node.data.name}
             {node.data.required && <span className="text-red-500">*</span>}
           </Label>
-          {node.data.helperText && !error && <FormDescription>{t(node.data.helperText)}</FormDescription>}
+          {helperText && !error && <FormDescription>{helperText}</FormDescription>}
         </div>
       </div>
       {error && <FormError>{error}</FormError>}
