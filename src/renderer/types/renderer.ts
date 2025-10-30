@@ -50,6 +50,9 @@ export type InputValue =
  * All form state is provided via props for easier custom component implementation
  */
 export type InputRenderProps<T extends InputType = InputType> = {
+  /**
+   * The node data for this input field
+   */
   node: Node<InputNodeData>;
   /**
    * Current value of the input field (typed based on input type when T is specified)
