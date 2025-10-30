@@ -70,15 +70,15 @@ export type InputRenderProps<T extends InputType = InputType> = {
   /**
    * Translated label (already processed with current language)
    */
-  label: string;
+  label?: string;
   /**
    * Translated placeholder (already processed with current language)
    */
-  placeholder: string;
+  placeholder?: string;
   /**
    * Translated helper text (already processed with current language)
    */
-  helperText: string;
+  helperText?: string;
 };
 
 export type UiRenderProps = {
