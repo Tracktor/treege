@@ -11,7 +11,7 @@ import { TreegeEditorProps } from "@/editor/types/editor";
 import { Toaster } from "@/shared/components/ui/sonner";
 import { ThemeProvider } from "@/shared/context/ThemeContext";
 
-const Flow = ({ edges, nodes, flow, onExportJson, onSave, theme }: TreegeEditorProps) => {
+const Flow = ({ flow, onExportJson, onSave, theme }: TreegeEditorProps) => {
   const { onConnect, onConnectEnd, onEdgesDelete, isValidConnection } = useFlowConnections();
 
   return (
@@ -21,8 +21,8 @@ const Flow = ({ edges, nodes, flow, onExportJson, onSave, theme }: TreegeEditorP
       selectNodesOnDrag={false}
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
-      defaultEdges={edges || flow?.edges || []}
-      defaultNodes={nodes || flow?.nodes || []}
+      defaultEdges={flow?.edges || []}
+      defaultNodes={flow?.nodes || []}
       onConnect={onConnect}
       onConnectEnd={onConnectEnd}
       onEdgesDelete={onEdgesDelete}
@@ -38,12 +38,12 @@ const Flow = ({ edges, nodes, flow, onExportJson, onSave, theme }: TreegeEditorP
   );
 };
 
-const TreegeEditor = ({ edges, nodes, flow, onExportJson, onSave, theme = "dark", language = "en" }: TreegeEditorProps) => (
+const TreegeEditor = ({ flow, onExportJson, onSave, theme = "dark", language = "en" }: TreegeEditorProps) => (
   <ThemeProvider defaultTheme={theme} storageKey="treege-editor-theme" theme={theme}>
     <TreegeEditorProvider value={{ flowId: flow?.id, language }}>
       <Toaster position="bottom-center" />
       <ReactFlowProvider>
-        <Flow edges={edges} nodes={nodes} onExportJson={onExportJson} onSave={onSave} flow={flow} theme={theme} />
+        <Flow onExportJson={onExportJson} onSave={onSave} flow={flow} theme={theme} />
       </ReactFlowProvider>
     </TreegeEditorProvider>
   </ThemeProvider>

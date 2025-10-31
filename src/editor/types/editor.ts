@@ -8,14 +8,6 @@ export interface TreegeEditorProps {
    */
   flow?: Flow | null;
   /**
-   * Default nodes to initialize the nodes in the flow.
-   */
-  nodes?: Node[];
-  /**
-   * Default edges to initialize the edges in the flow.
-   */
-  edges?: Edge[];
-  /**
    * Callback function triggered when exporting JSON data.
    */
   onExportJson?: () => { nodes: Node[]; edges: Edge[] } | undefined;
