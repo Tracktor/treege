@@ -2,6 +2,7 @@ import { Edge, Node } from "@xyflow/react";
 import { Loader2, WandSparkles } from "lucide-react";
 import { KeyboardEvent, useState } from "react";
 import { toast } from "sonner";
+import useTranslate from "@/editor/hooks/useTranslate";
 import { AIConfig } from "@/editor/types/ai";
 import { generateTreeWithAI } from "@/editor/utils/aiTreeGenerator";
 import { Button } from "@/shared/components/ui/button";
@@ -31,16 +32,17 @@ export const AIGeneratorDialog = ({ aiConfig, onGenerate }: AIGeneratorDialogPro
   const [open, setOpen] = useState(false);
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
+  const t = useTranslate();
 
   const handleGenerate = async () => {
     if (!prompt.trim()) {
-      toast.error("Please enter a description");
+      toast.error(t("editor.aiGenerator.enterDescription"));
       return;
     }
 
     if (!aiConfig?.apiKey) {
-      toast.error("AI configuration missing", {
-        description: "Please configure your AI API key in TreegeEditorProvider",
+      toast.error(t("editor.aiGenerator.missingApiKey"), {
+        description: t("editor.aiGenerator.missingApiKeyDesc"),
       });
       return;
     }
@@ -58,8 +60,10 @@ export const AIGeneratorDialog = ({ aiConfig, onGenerate }: AIGeneratorDialogPro
         nodes: result.nodes,
       });
 
-      toast.success("Tree generated successfully!", {
-        description: `Created ${result.nodes.length} nodes and ${result.edges.length} edges`,
+      toast.success(t("editor.aiGenerator.successTitle"), {
+        description: t("editor.aiGenerator.successDescription")
+          .replace("{nodes}", String(result.nodes.length))
+          .replace("{edges}", String(result.edges.length)),
       });
 
       // Reset and close
@@ -67,8 +71,8 @@ export const AIGeneratorDialog = ({ aiConfig, onGenerate }: AIGeneratorDialogPro
       setOpen(false);
     } catch (error) {
       console.error("AI generation error:", error);
-      toast.error("Failed to generate tree", {
-        description: error instanceof Error ? error.message : "Unknown error occurred",
+      toast.error(t("editor.aiGenerator.failedToGenerate"), {
+        description: error instanceof Error ? error.message : t("editor.aiGenerator.unknownError"),
       });
     } finally {
       setLoading(false);
@@ -92,17 +96,17 @@ export const AIGeneratorDialog = ({ aiConfig, onGenerate }: AIGeneratorDialogPro
       </DialogTrigger>
       <DialogContent className="sm:max-w-[550px]">
         <DialogHeader>
-          <DialogTitle>Generate Flow with AI</DialogTitle>
-          <DialogDescription>Describe the form or decision tree you want to create, and AI will generate it for you.</DialogDescription>
+          <DialogTitle>{t("editor.aiGenerator.title")}</DialogTitle>
+          <DialogDescription>{t("editor.aiGenerator.titleDescription")}</DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 py-4">
           <div className="grid gap-2">
             <label htmlFor="ai-prompt" className="font-medium text-sm">
-              Description
+              {t("editor.aiGenerator.description")}
             </label>
             <Textarea
-              placeholder="Example: Create a contact form with name, email, phone number, and message fields"
+              placeholder={t("editor.aiGenerator.descriptionPlaceholder")}
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -111,16 +115,16 @@ export const AIGeneratorDialog = ({ aiConfig, onGenerate }: AIGeneratorDialogPro
               className="resize-none"
             />
             <p className="text-muted-foreground text-xs">
-              Press <kbd className="rounded bg-muted px-1 py-0.5 font-mono text-xs">⌘ Enter</kbd> or{" "}
-              <kbd className="rounded bg-muted px-1 py-0.5 font-mono text-xs">Ctrl Enter</kbd> to generate
+              {t("editor.aiGenerator.keyboardShortcut").replace("{cmdEnter}", "⌘ Enter").replace("{ctrlEnter}", "Ctrl Enter")}
             </p>
           </div>
 
           {!aiConfig?.apiKey && (
             <div className="rounded-md bg-muted p-3 text-sm">
-              <p className="font-medium">AI not configured</p>
+              <p className="font-medium">{t("editor.aiGenerator.aiNotConfigured")}</p>
               <p className="mt-1 text-muted-foreground text-xs">
-                Add <code className="rounded bg-background px-1 py-0.5">aiConfig</code> prop to TreegeEditorProvider
+                {t("editor.aiGenerator.aiNotConfiguredDesc").replace("{code}", "")}{" "}
+                <code className="rounded bg-background px-1 py-0.5">aiConfig</code>
               </p>
             </div>
           )}
@@ -128,18 +132,18 @@ export const AIGeneratorDialog = ({ aiConfig, onGenerate }: AIGeneratorDialogPro
 
         <DialogFooter>
           <Button variant="outline" onClick={() => setOpen(false)} disabled={loading}>
-            Cancel
+            {t("editor.aiGenerator.cancel")}
           </Button>
           <Button onClick={handleGenerate} disabled={loading || !prompt.trim() || !aiConfig?.apiKey}>
             {loading ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                Generating...
+                {t("editor.aiGenerator.generating")}
               </>
             ) : (
               <>
                 <WandSparkles className="h-4 w-4" />
-                Generate
+                {t("editor.aiGenerator.generate")}
               </>
             )}
           </Button>

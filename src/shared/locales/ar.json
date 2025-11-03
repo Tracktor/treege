@@ -28,6 +28,25 @@
       "parseError": "خطأ في تحليل ملف JSON.",
       "parseErrorDesc": "حاول إصلاح الملف واستيراده مرة أخرى."
     },
+    "aiGenerator": {
+      "aiNotConfigured": "الذكاء الاصطناعي غير مُهيأ",
+      "aiNotConfiguredDesc": "أضف خاصية {code} إلى TreegeEditorProvider",
+      "cancel": "إلغاء",
+      "description": "الوصف",
+      "descriptionPlaceholder": "مثال: إنشاء نموذج اتصال مع الاسم والبريد الإلكتروني ورقم الهاتف والرسالة",
+      "enterDescription": "الرجاء إدخال وصف",
+      "failedToGenerate": "فشل في إنشاء الشجرة",
+      "generate": "إنشاء",
+      "generating": "جارٍ الإنشاء...",
+      "keyboardShortcut": "اضغط {cmdEnter} أو {ctrlEnter} للإنشاء",
+      "missingApiKey": "تكوين الذكاء الاصطناعي مفقود",
+      "missingApiKeyDesc": "الرجاء تكوين مفتاح API الخاص بالذكاء الاصطناعي في TreegeEditorProvider",
+      "successDescription": "تم إنشاء {nodes} عقدة و {edges} حافة",
+      "successTitle": "تم إنشاء الشجرة بنجاح!",
+      "title": "إنشاء تدفق باستخدام الذكاء الاصطناعي",
+      "titleDescription": "صف النموذج أو شجرة القرار التي تريد إنشاءها، وسيقوم الذكاء الاصطناعي بإنشائها لك.",
+      "unknownError": "حدث خطأ غير معروف"
+    },
     "comboboxPattern": {
       "custom": "مخصص: {value}",
       "search": "البحث عن أنماط...",

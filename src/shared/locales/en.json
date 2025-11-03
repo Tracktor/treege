@@ -28,6 +28,25 @@
       "parseError": "Error parsing JSON file.",
       "parseErrorDesc": "Try to fix the file and import it again."
     },
+    "aiGenerator": {
+      "aiNotConfigured": "AI not configured",
+      "aiNotConfiguredDesc": "Add {code} prop to TreegeEditorProvider",
+      "cancel": "Cancel",
+      "description": "Description",
+      "descriptionPlaceholder": "Example: Create a contact form with name, email, phone number, and message fields",
+      "enterDescription": "Please enter a description",
+      "failedToGenerate": "Failed to generate tree",
+      "generate": "Generate",
+      "generating": "Generating...",
+      "keyboardShortcut": "Press {cmdEnter} or {ctrlEnter} to generate",
+      "missingApiKey": "AI configuration missing",
+      "missingApiKeyDesc": "Please configure your AI API key in TreegeEditorProvider",
+      "successDescription": "Created {nodes} nodes and {edges} edges",
+      "successTitle": "Tree generated successfully!",
+      "title": "Generate Flow with AI",
+      "titleDescription": "Describe the form or decision tree you want to create, and AI will generate it for you.",
+      "unknownError": "Unknown error occurred"
+    },
     "comboboxPattern": {
       "custom": "Custom: {value}",
       "search": "Search patterns...",

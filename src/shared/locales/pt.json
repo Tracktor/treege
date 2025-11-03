@@ -28,6 +28,25 @@
       "parseError": "Erro ao analisar o arquivo JSON.",
       "parseErrorDesc": "Tente corrigir o arquivo e importá-lo novamente."
     },
+    "aiGenerator": {
+      "aiNotConfigured": "IA não configurada",
+      "aiNotConfiguredDesc": "Adicione a prop {code} ao TreegeEditorProvider",
+      "cancel": "Cancelar",
+      "description": "Descrição",
+      "descriptionPlaceholder": "Exemplo: Criar um formulário de contato com nome, email, telefone e mensagem",
+      "enterDescription": "Por favor insira uma descrição",
+      "failedToGenerate": "Falha ao gerar árvore",
+      "generate": "Gerar",
+      "generating": "Gerando...",
+      "keyboardShortcut": "Pressione {cmdEnter} ou {ctrlEnter} para gerar",
+      "missingApiKey": "Configuração de IA ausente",
+      "missingApiKeyDesc": "Por favor configure sua chave API de IA no TreegeEditorProvider",
+      "successDescription": "{nodes} nós e {edges} arestas criados",
+      "successTitle": "Árvore gerada com sucesso!",
+      "title": "Gerar fluxo com IA",
+      "titleDescription": "Descreva o formulário ou árvore de decisão que deseja criar, e a IA irá gerá-lo para você.",
+      "unknownError": "Erro desconhecido"
+    },
     "comboboxPattern": {
       "custom": "Personalizado: {value}",
       "search": "Pesquisar padrões...",
