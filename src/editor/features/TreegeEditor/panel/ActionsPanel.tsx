@@ -47,6 +47,7 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
         ...defaultNode,
         id: nanoid(),
         position,
+        selected: true,
       },
     ]);
   };
