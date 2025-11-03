@@ -46,7 +46,7 @@ function App() {
 
 ### 3. Use the AI Generator
 
-1. Click the **sparkle icon** (✨) button next to "Add Node"
+1. Click the **wand sparkles icon** (🪄) button next to "Add Node"
 2. Describe what you want to create
 3. Click "Generate" or press `Cmd/Ctrl + Enter`
 
@@ -238,7 +238,28 @@ For production apps, proxy AI requests through your backend:
 />
 ```
 
-Then modify `src/editor/services/aiTreeGenerator.ts` to call your backend instead of AI providers directly.
+Then modify `src/editor/utils/aiTreeGenerator.ts` to call your backend instead of AI providers directly.
+
+## Multi-Language Support
+
+The AI Generator dialog is fully translated and supports 7 languages:
+
+- 🇬🇧 English (en)
+- 🇫🇷 French (fr)
+- 🇩🇪 German (de)
+- 🇪🇸 Spanish (es)
+- 🇮🇹 Italian (it)
+- 🇵🇹 Portuguese (pt)
+- 🇸🇦 Arabic (ar)
+
+The dialog automatically uses the same language as your `TreegeEditor`:
+
+```tsx
+<TreegeEditor
+  language="fr" // Dialog will be in French
+  aiConfig={{ provider: "gemini", apiKey: "..." }}
+/>
+```
 
 ## TypeScript Support
 
@@ -250,7 +271,7 @@ import { AIConfig, AIProvider } from "treege/editor";
 const config: AIConfig = {
   provider: "gemini", // Autocompleted!
   apiKey: process.env.AI_KEY!,
-  model: "gemini-1.5-flash", // Type-safe model names
+  model: "gemini-2.5-flash", // Type-safe model names
   temperature: 0.7,
 };
 ```
@@ -259,7 +280,7 @@ const config: AIConfig = {
 
 ### Button is Disabled
 
-The sparkle button is disabled when:
+The wand sparkles button is disabled when:
 - No `aiConfig` is provided
 - `apiKey` is empty or undefined
 
@@ -281,7 +302,7 @@ The sparkle button is disabled when:
 
 ### Custom System Prompts
 
-To customize how the AI generates trees, edit `src/editor/services/aiTreeGenerator.ts`:
+To customize how the AI generates trees, edit `src/editor/utils/aiTreeGenerator.ts`:
 
 ```typescript
 const SYSTEM_PROMPT = `Your custom instructions here...`;
@@ -292,7 +313,7 @@ const SYSTEM_PROMPT = `Your custom instructions here...`;
 To add a new AI provider:
 
 1. Add to `AIProvider` type in `src/editor/types/ai.ts`
-2. Add generation function in `src/editor/services/aiTreeGenerator.ts`
+2. Add generation function in `src/editor/utils/aiTreeGenerator.ts`
 3. Add to switch statement in `generateTreeWithAI`
 
 ## Contributing
