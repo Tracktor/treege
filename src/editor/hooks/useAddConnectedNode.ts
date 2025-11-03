@@ -21,10 +21,12 @@ const useAddConnectedNode = () => {
       }
 
       // Calculate position for the new node (below the source node)
-      const nodeHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--node-height"), 10);
-      const nodeWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--node-width"), 10);
-      const verticalSpacing = 100; // Space between nodes
-      const horizontalOffset = 50; // Horizontal offset when nodes overlap
+      const rawNodeHeight = getComputedStyle(document.documentElement).getPropertyValue("--node-height");
+      const rawNodeWidth = getComputedStyle(document.documentElement).getPropertyValue("--node-width");
+      const nodeHeight = parseFloat(rawNodeHeight) || 100;
+      const nodeWidth = parseFloat(rawNodeWidth) || 100;
+      const verticalSpacing = 100;
+      const horizontalOffset = 50;
       const newNodeId = nanoid();
 
       // Base position below the source node
@@ -34,18 +36,16 @@ const useAddConnectedNode = () => {
       // Check if there are already nodes at this position and offset horizontally
       const allNodes = getNodes();
       const positionTolerance = 20; // Tolerance for position comparison
-      let offsetMultiplier = 0;
 
-      // Count how many nodes are already at similar positions
-      const nodesAtSamePosition = allNodes.filter((node) => {
-        const sameY = Math.abs(node.position.y - newY) < positionTolerance;
-        const nearX = Math.abs(node.position.x - (sourceNode.position.x + offsetMultiplier * horizontalOffset)) < nodeWidth + 20;
-        return sameY && nearX;
-      });
+      // Find nodes at the same Y (within tolerance)
+      const nodesAtSameY = allNodes.filter((node) => Math.abs(node.position.y - newY) < positionTolerance);
 
-      // Apply horizontal offset based on how many nodes are already there
-      offsetMultiplier = nodesAtSamePosition.length;
-      newX = sourceNode.position.x + offsetMultiplier * horizontalOffset;
+      // If there are nodes at the same Y, place the new node to the right of the rightmost one
+      if (nodesAtSameY.length > 0) {
+        const rightmostNode = nodesAtSameY.reduce((max, node) => (node.position.x > max.position.x ? node : max), nodesAtSameY[0]);
+        // Add nodeWidth to ensure no overlap, plus horizontalOffset spacing
+        newX = rightmostNode.position.x + nodeWidth + horizontalOffset;
+      }
 
       const newNode = {
         ...defaultNode,
