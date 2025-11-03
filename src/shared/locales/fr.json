@@ -11,7 +11,7 @@
   },
   "editor": {
     "actionsPanel": {
-      "addNode": "Ajouter un nœud",
+      "addNode": "Ajouter un élément",
       "clear": "Supprimer",
       "clearSuccess": "Flux vidé !",
       "clearSuccessDesc": "Tous les nœuds et arêtes ont été supprimés.",

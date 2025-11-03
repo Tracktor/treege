@@ -11,7 +11,7 @@
   },
   "editor": {
     "actionsPanel": {
-      "addNode": "Adicionar nó",
+      "addNode": "Adicionar elemento",
       "clear": "Limpar",
       "clearSuccess": "Fluxo limpo!",
       "clearSuccessDesc": "Todos os nós e arestas foram removidos.",

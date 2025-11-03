@@ -11,7 +11,7 @@
   },
   "editor": {
     "actionsPanel": {
-      "addNode": "Agregar nodo",
+      "addNode": "Agregar elemento",
       "clear": "Limpiar",
       "clearSuccess": "¡Flujo limpiado!",
       "clearSuccessDesc": "Todos los nodos y aristas han sido eliminados.",

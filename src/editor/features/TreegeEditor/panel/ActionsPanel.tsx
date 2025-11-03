@@ -148,11 +148,11 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
 
   return (
     <Panel position="top-right" className="flex gap-2">
+      <AIGeneratorDialog aiConfig={aiConfig} onGenerate={handleAIGenerate} />
+
       <Button variant="outline" size="sm" onClick={handleAddNode}>
         <Plus /> {t("editor.actionsPanel.addNode")}
       </Button>
-
-      <AIGeneratorDialog aiConfig={aiConfig} onGenerate={handleAIGenerate} />
 
       <Button variant="outline" size="sm" onClick={handleSave}>
         <Save /> {t("common.save")}

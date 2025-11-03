@@ -11,7 +11,7 @@
   },
   "editor": {
     "actionsPanel": {
-      "addNode": "Add Node",
+      "addNode": "Add Element",
       "clear": "Clear",
       "clearSuccess": "Flow cleared!",
       "clearSuccessDesc": "All nodes and edges have been removed.",

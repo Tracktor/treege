@@ -11,7 +11,7 @@
   },
   "editor": {
     "actionsPanel": {
-      "addNode": "إضافة عقدة",
+      "addNode": "إضافة عنصر",
       "clear": "مسح التدفق",
       "clearSuccess": "تم مسح التدفق!",
       "clearSuccessDesc": "تم إزالة جميع العقد والحواف.",

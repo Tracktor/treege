@@ -11,7 +11,7 @@
   },
   "editor": {
     "actionsPanel": {
-      "addNode": "Knoten hinzufügen",
+      "addNode": "Element hinzufügen",
       "clear": "Löschen",
       "clearSuccess": "Fluss geleert!",
       "clearSuccessDesc": "Alle Knoten und Kanten wurden entfernt.",

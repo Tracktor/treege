@@ -11,7 +11,7 @@
   },
   "editor": {
     "actionsPanel": {
-      "addNode": "Aggiungi nodo",
+      "addNode": "Aggiungi elemento",
       "clear": "Pulisci",
       "clearSuccess": "Flusso pulito!",
       "clearSuccessDesc": "Tutti i nodi e gli archi sono stati rimossi.",
