@@ -31,6 +31,7 @@
     "aiGenerator": {
       "aiNotConfigured": "الذكاء الاصطناعي غير مُهيأ",
       "aiNotConfiguredDesc": "أضف خاصية {code} إلى TreegeEditorProvider",
+      "buttonLabel": "إنشاء باستخدام الذكاء الاصطناعي",
       "cancel": "إلغاء",
       "description": "الوصف",
       "descriptionPlaceholder": "مثال: إنشاء نموذج اتصال مع الاسم والبريد الإلكتروني ورقم الهاتف والرسالة",

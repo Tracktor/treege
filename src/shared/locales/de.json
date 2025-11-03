@@ -31,6 +31,7 @@
     "aiGenerator": {
       "aiNotConfigured": "KI nicht konfiguriert",
       "aiNotConfiguredDesc": "Fügen Sie {code} Prop zu TreegeEditorProvider hinzu",
+      "buttonLabel": "Mit KI generieren",
       "cancel": "Abbrechen",
       "description": "Beschreibung",
       "descriptionPlaceholder": "Beispiel: Erstellen Sie ein Kontaktformular mit Name, E-Mail, Telefonnummer und Nachricht",

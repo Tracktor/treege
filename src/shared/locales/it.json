@@ -31,6 +31,7 @@
     "aiGenerator": {
       "aiNotConfigured": "IA non configurata",
       "aiNotConfiguredDesc": "Aggiungi la prop {code} a TreegeEditorProvider",
+      "buttonLabel": "Genera con IA",
       "cancel": "Annulla",
       "description": "Descrizione",
       "descriptionPlaceholder": "Esempio: Crea un modulo di contatto con nome, email, telefono e messaggio",
