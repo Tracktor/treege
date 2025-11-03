@@ -19,13 +19,28 @@ const EditorPanel = ({
   onSave: (data: Flow) => void;
   theme: "light" | "dark";
   language: Language;
-}) => (
-  <div className="h-full flex flex-col">
-    <div className="flex-1">
-      <TreegeEditor onSave={onSave} flow={flow} theme={theme} language={language} />
+}) => {
+  const apiKey = import.meta.env?.VITE_AI_API_KEY || "";
+
+  return (
+    <div className="h-full flex flex-col">
+      <div className="flex-1">
+        <TreegeEditor
+          onSave={onSave}
+          flow={flow}
+          theme={theme}
+          language={language}
+          aiConfig={{
+            provider: "gemini",
+            apiKey,
+            // model: "gemini-1.5-flash-latest", // Optional - uses default if not specified
+            temperature: 0.7,
+          }}
+        />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const RendererPanel = ({
   flow,

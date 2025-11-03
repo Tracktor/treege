@@ -1,9 +1,24 @@
 import { createContext, PropsWithChildren, useContext, useMemo, useState } from "react";
+import { AIConfig } from "@/editor/types/ai";
 
 export interface TreegeEditorContextValue {
+  /**
+   * Current language
+   */
   language: string;
+  /**
+   * Current flow ID
+   */
   flowId?: string;
+  /**
+   * Function to set the current flow ID
+   * @param flow
+   */
   setFlowId?: (flow?: string) => void;
+  /**
+   * AI configuration for tree generation
+   */
+  aiConfig?: AIConfig;
 }
 
 export interface TreegeEditorProviderProps extends PropsWithChildren {

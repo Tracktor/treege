@@ -5,6 +5,7 @@ import { ChangeEvent, useRef } from "react";
 import { toast } from "sonner";
 import { defaultNode } from "@/editor/constants/defaultNode";
 import { useTreegeEditorContext } from "@/editor/context/TreegeEditorContext";
+import { AIGeneratorDialog } from "@/editor/features/TreegeEditor/panel/AIGeneratorDialog";
 import useTranslate from "@/editor/hooks/useTranslate";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -26,7 +27,7 @@ export interface ActionsPanelProps {
 const uniqueId = nanoid();
 
 const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
-  const { flowId, setFlowId } = useTreegeEditorContext();
+  const { flowId, setFlowId, aiConfig } = useTreegeEditorContext();
   const { setNodes, setEdges, addNodes, screenToFlowPosition } = useReactFlow();
   const id = flowId || uniqueId;
   const nodes = useNodes();
@@ -140,11 +141,20 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
     });
   };
 
+  const handleAIGenerate = (data: { edges: unknown[]; nodes: unknown[] }) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setNodes(data.nodes as any[]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setEdges(data.edges as any[]);
+  };
+
   return (
     <Panel position="top-right" className="flex gap-2">
       <Button variant="outline" size="sm" onClick={handleAddNode}>
         <Plus /> {t("editor.actionsPanel.addNode")}
       </Button>
+
+      <AIGeneratorDialog aiConfig={aiConfig} onGenerate={handleAIGenerate} />
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
