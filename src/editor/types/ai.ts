@@ -1,3 +1,5 @@
+import { Edge, Node } from "@xyflow/react";
+
 /**
  * AI Provider types for tree generation
  */
@@ -50,11 +52,11 @@ export interface AIGenerationResponse {
   /**
    * Generated nodes
    */
-  nodes: unknown[];
+  nodes: Node[];
   /**
    * Generated edges
    */
-  edges: unknown[];
+  edges: Edge[];
   /**
    * Optional explanation or metadata
    */

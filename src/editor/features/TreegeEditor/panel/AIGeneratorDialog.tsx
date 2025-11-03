@@ -1,3 +1,4 @@
+import { Edge, Node } from "@xyflow/react";
 import { Loader2, WandSparkles } from "lucide-react";
 import { KeyboardEvent, useState } from "react";
 import { toast } from "sonner";
@@ -23,7 +24,7 @@ export interface AIGeneratorDialogProps {
   /**
    * Callback when tree is generated
    */
-  onGenerate: (data: { edges: unknown[]; nodes: unknown[] }) => void;
+  onGenerate: (data: { edges: Edge[]; nodes: Node[] }) => void;
 }
 
 export const AIGeneratorDialog = ({ aiConfig, onGenerate }: AIGeneratorDialogProps) => {

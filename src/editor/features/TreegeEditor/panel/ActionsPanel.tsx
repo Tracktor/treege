@@ -1,4 +1,4 @@
-import { Panel, useEdges, useNodes, useReactFlow } from "@xyflow/react";
+import { type Edge, type Node, Panel, useEdges, useNodes, useReactFlow } from "@xyflow/react";
 import { ArrowRightFromLine, Copy, Download, EllipsisVertical, Plus, Save, Trash2 } from "lucide-react";
 import { nanoid } from "nanoid";
 import { ChangeEvent, useRef } from "react";
@@ -141,11 +141,9 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
     });
   };
 
-  const handleAIGenerate = (data: { edges: unknown[]; nodes: unknown[] }) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setNodes(data.nodes as any[]);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setEdges(data.edges as any[]);
+  const handleAIGenerate = (data: { edges: Edge[]; nodes: Node[] }) => {
+    setNodes(data.nodes);
+    setEdges(data.edges);
   };
 
   return (
