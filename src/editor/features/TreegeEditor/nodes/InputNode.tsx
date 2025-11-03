@@ -1,5 +1,5 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
-import { RectangleEllipsis, Type } from "lucide-react";
+import { Plus, RectangleEllipsis, Type } from "lucide-react";
 import NodeWrapper from "@/editor/features/TreegeEditor/nodes/layout/NodeWrapper";
 import useBottomHandleClick from "@/editor/features/TreegeEditor/nodes/useBottomHandleClick";
 import useTranslate from "@/editor/hooks/useTranslate";
@@ -17,7 +17,7 @@ const InputNode = ({ data, isConnectable, type, parentId, id }: InputNodeProps) 
   return (
     <NodeWrapper inGroup={!!parentId}>
       {/* Top handle */}
-      <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
+      <Handle type="target" position={Position.Top} isConnectable={isConnectable} isConnectableStart={false} />
 
       {/* Label */}
       <div className="mb-1 max-w-full overflow-hidden text-ellipsis text-nowrap text-2xl">{label || data?.name}</div>
@@ -40,7 +40,15 @@ const InputNode = ({ data, isConnectable, type, parentId, id }: InputNodeProps) 
       </div>
 
       {/* Bot handle */}
-      <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} onClick={handleBottomHandleClick} />
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        isConnectable={isConnectable}
+        onClick={handleBottomHandleClick}
+        className="hover:!bg-primary/80 flex cursor-pointer items-center justify-center rounded-sm transition-colors"
+      >
+        <Plus className="h-4 w-4 text-primary-foreground" />
+      </Handle>
     </NodeWrapper>
   );
 };

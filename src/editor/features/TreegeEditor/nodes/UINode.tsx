@@ -1,5 +1,5 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
-import { LucidePencilRuler, Type } from "lucide-react";
+import { LucidePencilRuler, Plus, Type } from "lucide-react";
 import NodeWrapper from "@/editor/features/TreegeEditor/nodes/layout/NodeWrapper";
 import useBottomHandleClick from "@/editor/features/TreegeEditor/nodes/useBottomHandleClick";
 import useTranslate from "@/editor/hooks/useTranslate";
@@ -40,7 +40,15 @@ const UINode = ({ data, isConnectable, type, parentId, id }: UINodeProps) => {
       </div>
 
       {/* Bot handle */}
-      <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} onClick={handleBottomHandleClick} />
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        isConnectable={isConnectable}
+        onClick={handleBottomHandleClick}
+        className="!bg-primary hover:!bg-primary/80 !w-6 !h-6 flex items-center justify-center cursor-pointer transition-colors"
+      >
+        <Plus className="w-4 h-4 text-primary-foreground" />
+      </Handle>
     </NodeWrapper>
   );
 };
