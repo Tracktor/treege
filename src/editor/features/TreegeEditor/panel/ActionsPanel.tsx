@@ -1,7 +1,7 @@
 import { type Edge, type Node, Panel, useEdges, useNodes, useReactFlow } from "@xyflow/react";
 import { ArrowRightFromLine, Copy, Download, EllipsisVertical, Plus, Save, Trash2 } from "lucide-react";
 import { nanoid } from "nanoid";
-import { ChangeEvent, useRef } from "react";
+import { ChangeEvent, useCallback, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { defaultNode } from "@/editor/constants/defaultNode";
 import { useTreegeEditorContext } from "@/editor/context/TreegeEditorContext";
@@ -114,13 +114,13 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
     onExportJson?.(data);
   };
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     if (!flowId) {
       setFlowId?.(id);
     }
 
     onSave?.({ edges, id, nodes });
-  };
+  }, [edges, flowId, id, nodes, onSave, setFlowId]);
 
   const handleCopyId = async () => {
     try {
@@ -145,6 +145,25 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
     setNodes(data.nodes);
     setEdges(data.edges);
   };
+
+  /**
+   * Handle keyboard shortcut for saving (Ctrl+S or Cmd+S)
+   */
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Check if Ctrl+S (Windows/Linux) or Cmd+S (Mac) is pressed
+      if ((event.ctrlKey || event.metaKey) && event.key === "s") {
+        event.preventDefault(); // Prevent browser's default save dialog
+        handleSave();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleSave]);
 
   return (
     <Panel position="top-right" className="flex gap-2">
