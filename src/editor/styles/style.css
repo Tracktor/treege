@@ -83,9 +83,8 @@ div.react-flow__node-group:hover .react-flow__resize-control,
 
 /* Handle */
 div.react-flow__handle {
-  width: 15px;
-  height: 15px;
   background-color: var(--muted-foreground);
+  @apply rounded-sm hover:bg-primary/80 w-6 h-6 flex items-center justify-center cursor-pointer transition-colors;
 }
 
 /* Edge */

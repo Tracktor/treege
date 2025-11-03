@@ -11,7 +11,7 @@
   },
   "editor": {
     "actionsPanel": {
-      "addNode": "Aggiungi nodo",
+      "addNode": "Aggiungi elemento",
       "clear": "Pulisci",
       "clearSuccess": "Flusso pulito!",
       "clearSuccessDesc": "Tutti i nodi e gli archi sono stati rimossi.",
@@ -27,6 +27,26 @@
       "invalidJsonDesc": "Il file deve contenere array di nodi e archi.",
       "parseError": "Errore nell'analisi del file JSON.",
       "parseErrorDesc": "Prova a correggere il file e importarlo di nuovo."
+    },
+    "aiGenerator": {
+      "aiNotConfigured": "IA non configurata",
+      "aiNotConfiguredDesc": "Aggiungi la prop {code} a TreegeEditorProvider",
+      "buttonLabel": "Genera con IA",
+      "cancel": "Annulla",
+      "description": "Descrizione",
+      "descriptionPlaceholder": "Esempio: Crea un modulo di contatto con nome, email, telefono e messaggio",
+      "enterDescription": "Inserisci una descrizione",
+      "failedToGenerate": "Errore nella generazione dell'albero",
+      "generate": "Genera",
+      "generating": "Generazione...",
+      "keyboardShortcut": "Premi {cmdEnter} o {ctrlEnter} per generare",
+      "missingApiKey": "Configurazione IA mancante",
+      "missingApiKeyDesc": "Configura la tua chiave API IA in TreegeEditorProvider",
+      "successDescription": "{nodes} nodi e {edges} archi creati",
+      "successTitle": "Albero generato con successo!",
+      "title": "Genera flusso con IA",
+      "titleDescription": "Descrivi il modulo o l'albero decisionale che vuoi creare, e l'IA lo genererà per te.",
+      "unknownError": "Errore sconosciuto"
     },
     "comboboxPattern": {
       "custom": "Personalizzato: {value}",

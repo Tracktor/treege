@@ -11,7 +11,7 @@
   },
   "editor": {
     "actionsPanel": {
-      "addNode": "Agregar nodo",
+      "addNode": "Agregar elemento",
       "clear": "Limpiar",
       "clearSuccess": "¡Flujo limpiado!",
       "clearSuccessDesc": "Todos los nodos y aristas han sido eliminados.",
@@ -27,6 +27,26 @@
       "invalidJsonDesc": "El archivo debe contener matrices de nodos y aristas.",
       "parseError": "Error al analizar el archivo JSON.",
       "parseErrorDesc": "Intenta corregir el archivo e importarlo nuevamente."
+    },
+    "aiGenerator": {
+      "aiNotConfigured": "IA no configurada",
+      "aiNotConfiguredDesc": "Agregue la prop {code} a TreegeEditorProvider",
+      "buttonLabel": "Generar con IA",
+      "cancel": "Cancelar",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Ejemplo: Crear un formulario de contacto con nombre, correo electrónico, teléfono y mensaje",
+      "enterDescription": "Por favor ingrese una descripción",
+      "failedToGenerate": "Error al generar el árbol",
+      "generate": "Generar",
+      "generating": "Generando...",
+      "keyboardShortcut": "Presione {cmdEnter} o {ctrlEnter} para generar",
+      "missingApiKey": "Falta configuración de IA",
+      "missingApiKeyDesc": "Por favor configure su clave API de IA en TreegeEditorProvider",
+      "successDescription": "{nodes} nodos y {edges} aristas creados",
+      "successTitle": "¡Árbol generado exitosamente!",
+      "title": "Generar flujo con IA",
+      "titleDescription": "Describa el formulario o árbol de decisión que desea crear, y la IA lo generará por usted.",
+      "unknownError": "Error desconocido"
     },
     "comboboxPattern": {
       "custom": "Personalizado: {value}",

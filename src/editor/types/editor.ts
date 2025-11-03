@@ -1,4 +1,5 @@
 import { Edge, Node } from "@xyflow/react";
+import { AIConfig } from "@/editor/types/ai";
 import { Flow } from "@/shared/types/node";
 
 export interface TreegeEditorProps {
@@ -24,4 +25,8 @@ export interface TreegeEditorProps {
    * Language for the editor interface.
    */
   language?: string;
+  /**
+   * AI configuration for tree generation
+   */
+  aiConfig?: AIConfig;
 }

@@ -61,6 +61,31 @@ const InputNodeForm = () => {
       }}
     >
       <div className="grid gap-6">
+        <Field
+          name="name"
+          children={(field) => (
+            <FormItem>
+              <Label htmlFor={field.name}>{t("editor.inputNodeForm.name")}</Label>
+              <Input
+                id={field.name}
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={({ target }) => field.handleChange(target.value)}
+              />
+            </FormItem>
+          )}
+        />
+
+        <Field
+          name="type"
+          children={(field) => (
+            <FormItem>
+              <SelectInputType value={field.state.value} onValueChange={(newValue) => field.handleChange(newValue)} />
+            </FormItem>
+          )}
+        />
+
         <div className="flex items-end gap-2">
           <Field
             name="label"
@@ -84,31 +109,6 @@ const InputNodeForm = () => {
           />
           <SelectLanguage value={selectedLanguage} onValueChange={setSelectedLanguage} />
         </div>
-
-        <Field
-          name="type"
-          children={(field) => (
-            <FormItem>
-              <SelectInputType value={field.state.value} onValueChange={(newValue) => field.handleChange(newValue)} />
-            </FormItem>
-          )}
-        />
-
-        <Field
-          name="name"
-          children={(field) => (
-            <FormItem>
-              <Label htmlFor={field.name}>{t("editor.inputNodeForm.name")}</Label>
-              <Input
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={({ target }) => field.handleChange(target.value)}
-              />
-            </FormItem>
-          )}
-        />
 
         {selectedNode?.data?.type !== "file" && (
           <div className="flex items-end gap-2">

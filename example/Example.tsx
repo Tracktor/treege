@@ -19,13 +19,25 @@ const EditorPanel = ({
   onSave: (data: Flow) => void;
   theme: "light" | "dark";
   language: Language;
-}) => (
-  <div className="h-full flex flex-col">
-    <div className="flex-1">
-      <TreegeEditor onSave={onSave} flow={flow} theme={theme} language={language} />
+}) => {
+  const apiKey = import.meta.env?.VITE_AI_API_KEY || "";
+
+  return (
+    <div className="h-full flex flex-col">
+      <div className="flex-1">
+        <TreegeEditor
+          onSave={onSave}
+          flow={flow}
+          theme={theme}
+          language={language}
+          aiConfig={{
+            apiKey,
+          }}
+        />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const RendererPanel = ({
   flow,

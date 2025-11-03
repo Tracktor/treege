@@ -1,6 +1,7 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
-import { LucidePencilRuler, Type } from "lucide-react";
+import { LucidePencilRuler, Plus, Type } from "lucide-react";
 import NodeWrapper from "@/editor/features/TreegeEditor/nodes/layout/NodeWrapper";
+import useBottomHandleClick from "@/editor/features/TreegeEditor/nodes/useBottomHandleClick";
 import useTranslate from "@/editor/hooks/useTranslate";
 import { Badge } from "@/shared/components/ui/badge";
 import { UINodeData } from "@/shared/types/node";
@@ -8,9 +9,10 @@ import { UINodeData } from "@/shared/types/node";
 export type UINodeType = Node<UINodeData, "ui">;
 export type UINodeProps = NodeProps<UINodeType>;
 
-const UINode = ({ data, isConnectable, type, parentId }: UINodeProps) => {
+const UINode = ({ data, isConnectable, type, parentId, id }: UINodeProps) => {
   const translate = useTranslate();
   const label = translate(data?.label);
+  const handleBottomHandleClick = useBottomHandleClick(id);
 
   return (
     <NodeWrapper inGroup={!!parentId}>
@@ -38,7 +40,15 @@ const UINode = ({ data, isConnectable, type, parentId }: UINodeProps) => {
       </div>
 
       {/* Bot handle */}
-      <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} />
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        isConnectable={isConnectable}
+        onClick={handleBottomHandleClick}
+        className="!bg-primary hover:!bg-primary/80 !w-6 !h-6 flex items-center justify-center cursor-pointer transition-colors"
+      >
+        <Plus className="w-4 h-4 text-primary-foreground" />
+      </Handle>
     </NodeWrapper>
   );
 };

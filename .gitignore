@@ -29,6 +29,7 @@ dist-ssr
 .env.production.local
 
 # local env files
+.env
 .env*.local
 
 # typescript

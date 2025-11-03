@@ -32,10 +32,10 @@ const useAvailableParentFields = (currentNodeId?: string) => {
       })
       .map((node) => {
         const data = node.data as InputNodeData;
-        const label = (typeof data.label === "object" ? data.label.en : data.label) || `Node ${node.id.slice(0, 8)}`;
+        const label = typeof data.label === "object" ? data.label.en : data.label;
 
         return {
-          label: data.name ? `${label} (${data.name})` : label,
+          label: label || data.name || node.id,
           name: data.name,
           nodeId: node.id,
           type: data.type || "text",

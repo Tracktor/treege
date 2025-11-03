@@ -11,7 +11,7 @@
   },
   "editor": {
     "actionsPanel": {
-      "addNode": "Knoten hinzufügen",
+      "addNode": "Element hinzufügen",
       "clear": "Löschen",
       "clearSuccess": "Fluss geleert!",
       "clearSuccessDesc": "Alle Knoten und Kanten wurden entfernt.",
@@ -27,6 +27,26 @@
       "invalidJsonDesc": "Die Datei muss Knoten- und Kanten-Arrays enthalten.",
       "parseError": "Fehler beim Parsen der JSON-Datei.",
       "parseErrorDesc": "Versuchen Sie, die Datei zu korrigieren und erneut zu importieren."
+    },
+    "aiGenerator": {
+      "aiNotConfigured": "KI nicht konfiguriert",
+      "aiNotConfiguredDesc": "Fügen Sie {code} Prop zu TreegeEditorProvider hinzu",
+      "buttonLabel": "Mit KI generieren",
+      "cancel": "Abbrechen",
+      "description": "Beschreibung",
+      "descriptionPlaceholder": "Beispiel: Erstellen Sie ein Kontaktformular mit Name, E-Mail, Telefonnummer und Nachricht",
+      "enterDescription": "Bitte geben Sie eine Beschreibung ein",
+      "failedToGenerate": "Fehler beim Generieren des Baums",
+      "generate": "Generieren",
+      "generating": "Wird generiert...",
+      "keyboardShortcut": "Drücken Sie {cmdEnter} oder {ctrlEnter} zum Generieren",
+      "missingApiKey": "KI-Konfiguration fehlt",
+      "missingApiKeyDesc": "Bitte konfigurieren Sie Ihren KI-API-Schlüssel in TreegeEditorProvider",
+      "successDescription": "{nodes} Knoten und {edges} Kanten erstellt",
+      "successTitle": "Baum erfolgreich generiert!",
+      "title": "Flow mit KI generieren",
+      "titleDescription": "Beschreiben Sie das Formular oder den Entscheidungsbaum, den Sie erstellen möchten, und die KI wird ihn für Sie generieren.",
+      "unknownError": "Unbekannter Fehler aufgetreten"
     },
     "comboboxPattern": {
       "custom": "Benutzerdefiniert: {value}",

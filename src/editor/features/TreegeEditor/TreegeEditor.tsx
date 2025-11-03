@@ -38,9 +38,9 @@ const Flow = ({ flow, onExportJson, onSave, theme }: TreegeEditorProps) => {
   );
 };
 
-const TreegeEditor = ({ flow, onExportJson, onSave, theme = "dark", language = "en" }: TreegeEditorProps) => (
+const TreegeEditor = ({ flow, onExportJson, onSave, theme = "dark", language = "en", aiConfig }: TreegeEditorProps) => (
   <ThemeProvider defaultTheme={theme} storageKey="treege-editor-theme" theme={theme}>
-    <TreegeEditorProvider value={{ flowId: flow?.id, language }}>
+    <TreegeEditorProvider value={{ aiConfig, flowId: flow?.id, language }}>
       <Toaster position="bottom-center" />
       <ReactFlowProvider>
         <Flow onExportJson={onExportJson} onSave={onSave} flow={flow} theme={theme} />

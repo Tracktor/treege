@@ -1,10 +1,11 @@
-import { Panel, useEdges, useNodes, useReactFlow } from "@xyflow/react";
+import { type Edge, type Node, Panel, useEdges, useNodes, useReactFlow } from "@xyflow/react";
 import { ArrowRightFromLine, Copy, Download, EllipsisVertical, Plus, Save, Trash2 } from "lucide-react";
 import { nanoid } from "nanoid";
-import { ChangeEvent, useRef } from "react";
+import { ChangeEvent, useCallback, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { defaultNode } from "@/editor/constants/defaultNode";
 import { useTreegeEditorContext } from "@/editor/context/TreegeEditorContext";
+import { AIGeneratorDialog } from "@/editor/features/TreegeEditor/panel/AIGeneratorDialog";
 import useTranslate from "@/editor/hooks/useTranslate";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -26,7 +27,7 @@ export interface ActionsPanelProps {
 const uniqueId = nanoid();
 
 const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
-  const { flowId, setFlowId } = useTreegeEditorContext();
+  const { flowId, setFlowId, aiConfig } = useTreegeEditorContext();
   const { setNodes, setEdges, addNodes, screenToFlowPosition } = useReactFlow();
   const id = flowId || uniqueId;
   const nodes = useNodes();
@@ -46,6 +47,7 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
         ...defaultNode,
         id: nanoid(),
         position,
+        selected: true,
       },
     ]);
   };
@@ -113,13 +115,13 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
     onExportJson?.(data);
   };
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     if (!flowId) {
       setFlowId?.(id);
     }
 
     onSave?.({ edges, id, nodes });
-  };
+  }, [edges, flowId, id, nodes, onSave, setFlowId]);
 
   const handleCopyId = async () => {
     try {
@@ -140,10 +142,40 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
     });
   };
 
+  const handleAIGenerate = (data: { edges: Edge[]; nodes: Node[] }) => {
+    setNodes(data.nodes);
+    setEdges(data.edges);
+  };
+
+  /**
+   * Handle keyboard shortcut for saving (Ctrl+S or Cmd+S)
+   */
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Check if Ctrl+S (Windows/Linux) or Cmd+S (Mac) is pressed
+      if ((event.ctrlKey || event.metaKey) && event.key === "s") {
+        event.preventDefault(); // Prevent browser's default save dialog
+        handleSave();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleSave]);
+
   return (
     <Panel position="top-right" className="flex gap-2">
+      <AIGeneratorDialog aiConfig={aiConfig} onGenerate={handleAIGenerate} />
+
       <Button variant="outline" size="sm" onClick={handleAddNode}>
         <Plus /> {t("editor.actionsPanel.addNode")}
+      </Button>
+
+      <Button variant="outline" size="sm" onClick={handleSave}>
+        <Save /> {t("common.save")}
       </Button>
 
       <DropdownMenu>
@@ -175,14 +207,6 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleExport}>
               <ArrowRightFromLine /> {t("editor.actionsPanel.exportJson")}
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-
-          <DropdownMenuSeparator />
-
-          <DropdownMenuGroup>
-            <DropdownMenuItem onClick={handleSave}>
-              <Save /> {t("common.save")}
             </DropdownMenuItem>
           </DropdownMenuGroup>
 
