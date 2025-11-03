@@ -1,6 +1,7 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { RectangleEllipsis, Type } from "lucide-react";
 import NodeWrapper from "@/editor/features/TreegeEditor/nodes/layout/NodeWrapper";
+import useBottomHandleClick from "@/editor/features/TreegeEditor/nodes/useBottomHandleClick";
 import useTranslate from "@/editor/hooks/useTranslate";
 import { Badge } from "@/shared/components/ui/badge";
 import { InputNodeData } from "@/shared/types/node";
@@ -8,9 +9,10 @@ import { InputNodeData } from "@/shared/types/node";
 export type InputNodeType = Node<InputNodeData, "input">;
 export type InputNodeProps = NodeProps<InputNodeType>;
 
-const InputNode = ({ data, isConnectable, type, parentId }: InputNodeProps) => {
+const InputNode = ({ data, isConnectable, type, parentId, id }: InputNodeProps) => {
   const translate = useTranslate();
   const label = translate(data?.label);
+  const handleBottomHandleClick = useBottomHandleClick(id);
 
   return (
     <NodeWrapper inGroup={!!parentId}>
@@ -38,7 +40,7 @@ const InputNode = ({ data, isConnectable, type, parentId }: InputNodeProps) => {
       </div>
 
       {/* Bot handle */}
-      <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} />
+      <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} onClick={handleBottomHandleClick} />
     </NodeWrapper>
   );
 };

@@ -1,6 +1,7 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { Network } from "lucide-react";
 import NodeWrapper from "@/editor/features/TreegeEditor/nodes/layout/NodeWrapper";
+import useBottomHandleClick from "@/editor/features/TreegeEditor/nodes/useBottomHandleClick";
 import useTranslate from "@/editor/hooks/useTranslate";
 import { Badge } from "@/shared/components/ui/badge";
 import { FlowNodeData } from "@/shared/types/node";
@@ -8,9 +9,10 @@ import { FlowNodeData } from "@/shared/types/node";
 export type FlowNodeType = Node<FlowNodeData, "flow">;
 export type FlowNodeProps = NodeProps<FlowNodeType>;
 
-const FlowNode = ({ data, isConnectable, type, parentId }: FlowNodeProps) => {
+const FlowNode = ({ data, isConnectable, type, parentId, id }: FlowNodeProps) => {
   const translate = useTranslate();
   const label = translate(data?.label);
+  const handleBottomHandleClick = useBottomHandleClick(id);
 
   return (
     <NodeWrapper inGroup={!!parentId}>
@@ -27,7 +29,7 @@ const FlowNode = ({ data, isConnectable, type, parentId }: FlowNodeProps) => {
       </Badge>
 
       {/* Bot handle */}
-      <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} />
+      <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} onClick={handleBottomHandleClick} />
     </NodeWrapper>
   );
 };
