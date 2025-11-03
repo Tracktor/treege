@@ -238,7 +238,7 @@ For production apps, proxy AI requests through your backend:
 />
 ```
 
-Then modify `src/editor/utils/aiTreeGenerator.ts` to call your backend instead of AI providers directly.
+Then modify `src/editor/utils/aiFlowGenerator.ts` to call your backend instead of AI providers directly.
 
 ## Multi-Language Support
 
@@ -302,7 +302,7 @@ The wand sparkles button is disabled when:
 
 ### Custom System Prompts
 
-To customize how the AI generates trees, edit `src/editor/utils/aiTreeGenerator.ts`:
+To customize how the AI generates flows, edit `src/editor/utils/aiFlowGenerator.ts`:
 
 ```typescript
 const SYSTEM_PROMPT = `Your custom instructions here...`;
@@ -313,8 +313,8 @@ const SYSTEM_PROMPT = `Your custom instructions here...`;
 To add a new AI provider:
 
 1. Add to `AIProvider` type in `src/editor/types/ai.ts`
-2. Add generation function in `src/editor/utils/aiTreeGenerator.ts`
-3. Add to switch statement in `generateTreeWithAI`
+2. Add generation function in `src/editor/utils/aiFlowGenerator.ts`
+3. Add to switch statement in `generateFlowWithAI`
 
 ## Contributing
 

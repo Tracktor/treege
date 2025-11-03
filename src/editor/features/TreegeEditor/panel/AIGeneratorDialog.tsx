@@ -4,7 +4,7 @@ import { KeyboardEvent, useState } from "react";
 import { toast } from "sonner";
 import useTranslate from "@/editor/hooks/useTranslate";
 import { AIConfig } from "@/editor/types/ai";
-import { generateTreeWithAI } from "@/editor/utils/aiTreeGenerator";
+import { generateFlowWithAI } from "@/editor/utils/aiFlowGenerator";
 import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
@@ -50,7 +50,7 @@ export const AIGeneratorDialog = ({ aiConfig, onGenerate }: AIGeneratorDialogPro
     setLoading(true);
 
     try {
-      const result = await generateTreeWithAI({
+      const result = await generateFlowWithAI({
         config: aiConfig,
         prompt: prompt.trim(),
       });

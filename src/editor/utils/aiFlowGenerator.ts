@@ -417,9 +417,9 @@ async function generateWithClaude(request: AIGenerationRequest): Promise<AIGener
 }
 
 /**
- * Main function to generate tree using AI
+ * Main function to generate flow using AI
  */
-export function generateTreeWithAI(request: AIGenerationRequest): Promise<AIGenerationResponse> {
+export function generateFlowWithAI(request: AIGenerationRequest): Promise<AIGenerationResponse> {
   switch (request.config.provider) {
     case "gemini":
       return generateWithGemini(request);
