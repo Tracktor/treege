@@ -99,7 +99,7 @@ Create an event registration form with:
 
 ```typescript
 interface AIConfig {
-  provider: "gemini" | "openai" | "deepseek" | "claude";
+  provider?: "gemini" | "openai" | "deepseek" | "claude";
   apiKey: string;
   model?: string; // Optional model override
   temperature?: number; // 0-1, controls randomness (default: 0.7)

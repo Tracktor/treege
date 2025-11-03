@@ -31,10 +31,7 @@ const EditorPanel = ({
           theme={theme}
           language={language}
           aiConfig={{
-            provider: "gemini",
             apiKey,
-            // model: "gemini-1.5-flash-latest", // Optional - uses default if not specified
-            temperature: 0.7,
           }}
         />
       </div>

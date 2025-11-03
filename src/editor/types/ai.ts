@@ -11,8 +11,9 @@ export type AIProvider = "gemini" | "openai" | "deepseek" | "claude";
 export interface AIConfig {
   /**
    * The AI provider to use
+   * @default "gemini"
    */
-  provider: AIProvider;
+  provider?: AIProvider;
   /**
    * API key for the selected provider
    */

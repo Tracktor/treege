@@ -33,6 +33,12 @@ export const TreegeEditorProvider = ({ children, value }: TreegeEditorProviderPr
   const valueMemo = useMemo(
     () => ({
       ...value,
+      ...(value?.aiConfig && {
+        aiConfig: {
+          ...value.aiConfig,
+          provider: value?.aiConfig.provider ?? "gemini",
+        },
+      }),
       flowId,
       setFlowId,
     }),
