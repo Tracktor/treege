@@ -276,7 +276,7 @@ async function generateWithGemini(request: AIGenerationRequest): Promise<AIGener
           },
         ],
         generationConfig: {
-          response_mime_type: "application/json",
+          responseMimeType: "application/json",
           temperature,
         },
       }),
