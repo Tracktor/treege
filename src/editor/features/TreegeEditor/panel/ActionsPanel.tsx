@@ -154,6 +154,10 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
 
       <AIGeneratorDialog aiConfig={aiConfig} onGenerate={handleAIGenerate} />
 
+      <Button variant="outline" size="sm" onClick={handleSave}>
+        <Save /> {t("common.save")}
+      </Button>
+
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm">
@@ -183,14 +187,6 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleExport}>
               <ArrowRightFromLine /> {t("editor.actionsPanel.exportJson")}
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-
-          <DropdownMenuSeparator />
-
-          <DropdownMenuGroup>
-            <DropdownMenuItem onClick={handleSave}>
-              <Save /> {t("common.save")}
             </DropdownMenuItem>
           </DropdownMenuGroup>
 
