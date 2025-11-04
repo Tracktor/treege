@@ -16,7 +16,7 @@ const useFlowConnections = () => {
    * Used by both onConnectEnd (drag) and onAddFromHandle (click "+")
    */
   const createNodeAndConnect = useCallback(
-    (sourceNode: Node, clientX: number, clientY: number) => {
+    (sourceNode: Node, position: { x: number; y: number }, shouldSelectNode = false) => {
       const sourceId = sourceNode.id;
       const edges = getEdges();
       const existingEdgesFromSource = edges.filter((edge) => edge.source === sourceId);
@@ -33,10 +33,7 @@ const useFlowConnections = () => {
         ...defaultNode,
         id: nodeId,
         origin: [0.5, 0.0],
-        position: screenToFlowPosition({
-          x: clientX,
-          y: clientY,
-        }),
+        position,
         selected: true,
       };
 
@@ -89,11 +86,13 @@ const useFlowConnections = () => {
         return edgesSnapshot.concat(newEdge);
       });
 
-      // Deselect all nodes and edges, then select the new node
-      setNodes((nodes) => nodes.map((n) => ({ ...n, selected: n.id === nodeId })));
-      setEdges((edges) => edges.map((edge) => ({ ...edge, selected: false })));
+      // Deselect all nodes and edges, then select the new node (only if requested)
+      if (shouldSelectNode) {
+        setNodes((nodes) => nodes.map((n) => ({ ...n, selected: n.id === nodeId })));
+        setEdges((edges) => edges.map((edge) => ({ ...edge, selected: false })));
+      }
     },
-    [getEdges, screenToFlowPosition, setNodes, setEdges],
+    [getEdges, setNodes, setEdges],
   );
 
   /**
@@ -167,19 +166,8 @@ const useFlowConnections = () => {
         newX = rightmostNode.position.x + nodeWidth + horizontalOffset;
       }
 
-      // Convert the calculated flow position to screen coordinates
-      const viewport = document.querySelector(".react-flow__viewport");
-      if (!viewport) {
-        return;
-      }
-
-      const transform = window.getComputedStyle(viewport).transform;
-      const matrix = new DOMMatrix(transform);
-      const clientX = newX * matrix.a + matrix.e;
-      const clientY = newY * matrix.d + matrix.f;
-
-      // Use the shared function to create node and connect
-      createNodeAndConnect(sourceNode, clientX, clientY);
+      // Use the shared function to create node and connect, with selection enabled
+      createNodeAndConnect(sourceNode, { x: newX, y: newY }, true);
     },
     [getNode, getNodes, createNodeAndConnect],
   );
@@ -197,11 +185,14 @@ const useFlowConnections = () => {
           return; // no valid start node, abort
         }
 
+        // Convert screen coordinates to flow position
+        const position = screenToFlowPosition({ x: clientX, y: clientY });
+
         // Use the shared function to create node and connect
-        createNodeAndConnect(sourceNode, clientX, clientY);
+        createNodeAndConnect(sourceNode, position);
       }
     },
-    [createNodeAndConnect],
+    [createNodeAndConnect, screenToFlowPosition],
   );
 
   /**
