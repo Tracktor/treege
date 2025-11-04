@@ -4,10 +4,8 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 
-const DefaultTimeRangeInput = ({ node, value, setValue, error, label, helperText }: InputRenderProps<"timerange">) => {
+const DefaultTimeRangeInput = ({ node, value, setValue, error, label, helperText, id, name }: InputRenderProps<"timerange">) => {
   const t = useTranslate();
-
-  // Parse range value as array [startTime, endTime]
   const timeRange = Array.isArray(value) ? value : [];
   const startTime = timeRange[0] || "";
   const endTime = timeRange[1] || "";
@@ -22,12 +20,14 @@ const DefaultTimeRangeInput = ({ node, value, setValue, error, label, helperText
 
   return (
     <FormItem className="mb-4">
-      <Label>
+      <Label htmlFor={`${id}-start`}>
         {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <div className="flex gap-2">
         <Input
+          id={`${id}-start`}
+          name={`${name}-start`}
           aria-label={`${label || node.data.name} - ${t("renderer.defaultInputs.startTime")}`}
           aria-invalid={!!error}
           aria-describedby={error ? `${node.id}-error` : undefined}
@@ -38,6 +38,8 @@ const DefaultTimeRangeInput = ({ node, value, setValue, error, label, helperText
           className="flex-1 bg-background [color-scheme:light] dark:[color-scheme:dark]"
         />
         <Input
+          id={`${id}-end`}
+          name={`${name}-end`}
           aria-label={`${label || node.data.name} - ${t("renderer.defaultInputs.endTime")}`}
           aria-invalid={!!error}
           aria-describedby={error ? `${node.id}-error` : undefined}
