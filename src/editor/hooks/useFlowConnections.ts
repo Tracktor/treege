@@ -188,9 +188,7 @@ const useFlowConnections = () => {
         // If the source node is in a group, convert to parent-relative coordinates
         const parentNode = sourceNode.parentId ? getNode(sourceNode.parentId) : undefined;
         const parentPosition = parentNode?.position ?? { x: 0, y: 0 };
-        const position = parentNode
-          ? { x: flowPosition.x - parentPosition.x, y: flowPosition.y - parentPosition.y }
-          : flowPosition;
+        const position = parentNode ? { x: flowPosition.x - parentPosition.x, y: flowPosition.y - parentPosition.y } : flowPosition;
 
         // Use the shared function to create node and connect
         createNodeAndConnect(sourceNode, position);
