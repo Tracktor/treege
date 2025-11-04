@@ -7,7 +7,7 @@ import { defaultNode } from "@/editor/constants/defaultNode";
  * Custom hook to add a new node connected to a source node
  */
 const useAddConnectedNode = () => {
-  const { addNodes, addEdges, getNode, getNodes } = useReactFlow();
+  const { addNodes, addEdges, getNode, getNodes, setNodes, setEdges } = useReactFlow();
 
   /**
    * Adds a new node below the source node and creates an edge connecting them
@@ -64,11 +64,15 @@ const useAddConnectedNode = () => {
         type: "default",
       };
 
+      // Deselect all nodes and edges before adding the new node
+      setNodes((nodes) => nodes.map((node) => ({ ...node, selected: false })));
+      setEdges((edges) => edges.map((edge) => ({ ...edge, selected: false })));
+
       // Add the new node and edge
       addNodes([newNode]);
       addEdges([newEdge]);
     },
-    [addEdges, addNodes, getNode, getNodes],
+    [addEdges, addNodes, getNode, getNodes, setNodes, setEdges],
   );
 
   return { addConnectedNode };
