@@ -12,14 +12,44 @@ const useFlowConnections = () => {
   const { setNodes, setEdges, screenToFlowPosition, getNode, getNodes, getEdges } = useReactFlow();
 
   /**
-   * Creates a new edge and converts to conditional if needed
-   * This is the shared logic used by both onConnectEnd (drag) and manual node creation (click "+")
+   * Internal function to create a new node and connect it
+   * Used by both onConnectEnd (drag) and onAddFromHandle (click "+")
    */
-  const createEdgeWithConditionalLogic = useCallback(
-    (sourceId: string, targetId: string) => {
-      const sourceNode = getNode(sourceId);
-      const isSourceInputNode = sourceNode && isInputNode(sourceNode);
+  const createNodeAndConnect = useCallback(
+    (sourceNode: Node, clientX: number, clientY: number) => {
+      const sourceId = sourceNode.id;
+      const edges = getEdges();
+      const existingEdgesFromSource = edges.filter((edge) => edge.source === sourceId);
+      const isSourceInputNode = isInputNode(sourceNode);
 
+      // Block creation if source already has children and is NOT an input node
+      if (existingEdgesFromSource.length > 0 && !isSourceInputNode) {
+        return;
+      }
+
+      const nodeId = nanoid();
+
+      const newNode: Node = {
+        ...defaultNode,
+        id: nodeId,
+        origin: [0.5, 0.0],
+        position: screenToFlowPosition({
+          x: clientX,
+          y: clientY,
+        }),
+        selected: true,
+      };
+
+      // If the source node is part of a group, set the new node to be part of the same group
+      if (sourceNode?.parentId) {
+        newNode.parentId = sourceNode.parentId;
+        newNode.extent = "parent";
+      }
+
+      // Add the new node first
+      setNodes((node) => node.concat(newNode));
+
+      // Create a new edge with conditional logic if needed
       setEdges((edgesSnapshot) => {
         const childrenEdges = edgesSnapshot.filter((edge) => edge.source === sourceId);
         const willHaveSiblings = childrenEdges.length > 0;
@@ -33,7 +63,7 @@ const useFlowConnections = () => {
               : undefined,
           id: nanoid(),
           source: sourceId,
-          target: targetId,
+          target: nodeId,
           type: willHaveSiblings && isSourceInputNode ? "conditional" : "default",
         };
 
@@ -58,8 +88,12 @@ const useFlowConnections = () => {
 
         return edgesSnapshot.concat(newEdge);
       });
+
+      // Deselect all nodes and edges, then select the new node
+      setNodes((nodes) => nodes.map((n) => ({ ...n, selected: n.id === nodeId })));
+      setEdges((edges) => edges.map((edge) => ({ ...edge, selected: false })));
     },
-    [setEdges, getNode],
+    [getEdges, screenToFlowPosition, setNodes, setEdges],
   );
 
   /**
@@ -108,17 +142,6 @@ const useFlowConnections = () => {
         return;
       }
 
-      const edges = getEdges();
-      const existingEdgesFromSource = edges.filter((edge) => edge.source === sourceNodeId);
-      const isSourceInputNode = sourceNode && isInputNode(sourceNode);
-
-      // Block creation if source already has children and is NOT an input node
-      if (existingEdgesFromSource.length > 0 && !isSourceInputNode) {
-        return;
-      }
-
-      const nodeId = nanoid();
-
       // Calculate position for the new node (below the source node)
       const rawNodeHeight = getComputedStyle(document.documentElement).getPropertyValue("--node-height");
       const rawNodeWidth = getComputedStyle(document.documentElement).getPropertyValue("--node-width");
@@ -144,30 +167,21 @@ const useFlowConnections = () => {
         newX = rightmostNode.position.x + nodeWidth + horizontalOffset;
       }
 
-      const newNode: Node = {
-        ...defaultNode,
-        id: nodeId,
-        position: {
-          x: newX,
-          y: newY,
-        },
-        selected: true,
-      };
-
-      // If the source node is part of a group, set the new node to be part of the same group
-      if (sourceNode?.parentId) {
-        newNode.parentId = sourceNode.parentId;
-        newNode.extent = "parent";
+      // Convert the calculated flow position to screen coordinates
+      const viewport = document.querySelector(".react-flow__viewport");
+      if (!viewport) {
+        return;
       }
 
-      // Deselect all nodes and edges, then add the new node
-      setNodes((nodes) => [...nodes.map((node) => ({ ...node, selected: false })), newNode]);
-      setEdges((edges) => edges.map((edge) => ({ ...edge, selected: false })));
+      const transform = window.getComputedStyle(viewport).transform;
+      const matrix = new DOMMatrix(transform);
+      const clientX = newX * matrix.a + matrix.e;
+      const clientY = newY * matrix.d + matrix.f;
 
-      // Create the edge with conditional logic
-      createEdgeWithConditionalLogic(sourceNodeId, nodeId);
+      // Use the shared function to create node and connect
+      createNodeAndConnect(sourceNode, clientX, clientY);
     },
-    [getNode, getEdges, getNodes, setNodes, setEdges, createEdgeWithConditionalLogic],
+    [getNode, getNodes, createNodeAndConnect],
   );
 
   /**
@@ -183,41 +197,11 @@ const useFlowConnections = () => {
           return; // no valid start node, abort
         }
 
-        const sourceId = sourceNode.id;
-        const edges = getEdges();
-        const existingEdgesFromSource = edges.filter((edge) => edge.source === sourceId);
-        const isSourceInputNode = sourceNode && isInputNode(sourceNode);
-
-        // Block creation if source already has children and is NOT an input node
-        if (existingEdgesFromSource.length > 0 && !isSourceInputNode) {
-          return;
-        }
-
-        const nodeId = nanoid();
-
-        const newNode: Node = {
-          ...defaultNode,
-          id: nodeId,
-          origin: [0.5, 0.0],
-          position: screenToFlowPosition({
-            x: clientX,
-            y: clientY,
-          }),
-        };
-
-        // If the source node is part of a group, set the new node to be part of the same group
-        if (sourceNode?.parentId) {
-          newNode.parentId = sourceNode.parentId;
-          newNode.extent = "parent";
-        }
-
-        setNodes((node) => node.concat(newNode));
-
-        // Create a new edge from the source node to the newly created node using shared logic
-        createEdgeWithConditionalLogic(sourceId, nodeId);
+        // Use the shared function to create node and connect
+        createNodeAndConnect(sourceNode, clientX, clientY);
       }
     },
-    [screenToFlowPosition, setNodes, getEdges, createEdgeWithConditionalLogic],
+    [createNodeAndConnect],
   );
 
   /**
@@ -283,7 +267,6 @@ const useFlowConnections = () => {
   );
 
   return {
-    createEdgeWithConditionalLogic,
     isValidConnection,
     onAddFromHandle,
     onConnect,
