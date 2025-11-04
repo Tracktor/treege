@@ -147,27 +147,21 @@ const useFlowConnections = () => {
       const nodeHeight = parseFloat(rawNodeHeight) || 100;
       const nodeWidth = parseFloat(rawNodeWidth) || 100;
 
-      // Base position below the source node
-      let newX = sourceNode.position.x;
+      // Calculate position for the new node
       const newY = sourceNode.position.y + nodeHeight + VERTICAL_NODE_SPACING;
 
-      // Check if there are already sibling nodes (same parent) to offset horizontally
+      // Find existing siblings (nodes that share the same parent/source)
       const allNodes = getNodes();
       const allEdges = getEdges();
+      const existingSiblings = allNodes.filter((node) => allEdges.some((edge) => edge.source === sourceNodeId && edge.target === node.id));
 
-      // Find existing siblings (nodes that share the same parent/source)
-      const existingSiblings = allNodes.filter((node) =>
-        allEdges.some((edge) => edge.source === sourceNodeId && edge.target === node.id)
-      );
-
-      // If there are existing siblings, place the new node to the right of the rightmost one
-      if (existingSiblings.length > 0) {
-        const rightmostSibling = existingSiblings.reduce(
-          (max, node) => (node.position.x > max.position.x ? node : max),
-          existingSiblings[0]
-        );
-        newX = rightmostSibling.position.x + nodeWidth + HORIZONTAL_NODE_OFFSET;
-      }
+      // Calculate X position: if siblings exist, place to the right of the rightmost one
+      const newX =
+        existingSiblings.length > 0
+          ? existingSiblings.reduce((max, node) => (node.position.x > max.position.x ? node : max), existingSiblings[0]).position.x +
+            nodeWidth +
+            HORIZONTAL_NODE_OFFSET
+          : sourceNode.position.x;
 
       // Use the shared function to create node and connect, with selection enabled
       createNodeAndConnect(sourceNode, { x: newX, y: newY }, true);
