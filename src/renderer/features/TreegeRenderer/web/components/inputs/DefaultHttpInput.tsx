@@ -394,6 +394,28 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
           : 'No data available. Configure "Fetch on mount" or add a search parameter.'
         : undefined;
 
+    const selectElement = (
+      <Select
+        value={Array.isArray(value) ? (value[0] ?? "") : (value ?? "")}
+        onValueChange={(val) => setValue(val)}
+        disabled={isLoading || options.length === 0}
+      >
+        <SelectTrigger id={name} className="w-full">
+          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          <SelectValue placeholder={placeholder || t("renderer.defaultHttpInput.selectOption")} />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {options.map((option, index) => (
+              <SelectItem key={option.value + index} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    );
+
     return (
       <FormItem className="mb-4">
         <Label htmlFor={name}>
@@ -404,27 +426,7 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="w-full">
-                  <Select
-                    value={Array.isArray(value) ? (value[0] ?? "") : (value ?? "")}
-                    onValueChange={(val) => setValue(val)}
-                    disabled={isLoading || options.length === 0}
-                  >
-                    <SelectTrigger id={name} className="w-full">
-                      {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                      <SelectValue placeholder={placeholder || t("renderer.defaultHttpInput.selectOption")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        {options.map((option, index) => (
-                          <SelectItem key={option.value + index} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
+                <div className="w-full">{selectElement}</div>
               </TooltipTrigger>
               <TooltipContent>
                 <p>{tooltipMessage}</p>
@@ -432,25 +434,7 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
             </Tooltip>
           </TooltipProvider>
         ) : (
-          <Select
-            value={Array.isArray(value) ? (value[0] ?? "") : (value ?? "")}
-            onValueChange={(val) => setValue(val)}
-            disabled={isLoading || options.length === 0}
-          >
-            <SelectTrigger id={name} className="w-full">
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              <SelectValue placeholder={placeholder || t("renderer.defaultHttpInput.selectOption")} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {options.map((option, index) => (
-                  <SelectItem key={option.value + index} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          selectElement
         )}
         {error && <FormError>{error}</FormError>}
         {helperText && !error && <FormDescription>{helperText}</FormDescription>}
