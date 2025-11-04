@@ -21,6 +21,11 @@ const normalizeValue = (value: unknown): string | number | boolean | null => {
     return value;
   }
   if (typeof value === "string") {
+    // Treat empty strings as null to prevent incorrect numeric comparisons
+    // (Number("") returns 0, which would incorrectly pass numeric conditions)
+    if (value === "") {
+      return null;
+    }
     return value;
   }
 
