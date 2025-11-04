@@ -90,11 +90,11 @@ const TreegeRenderer = ({
       // Focus the first input field with an error
       const firstErrorNodeId = Object.keys(errors)[0];
 
+      console.log(firstErrorNodeId);
+
       if (firstErrorNodeId) {
         // Use id attribute for reliable focus (always present and unique)
-        const input = document.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
-          `[id="${firstErrorNodeId}"]`, // TODO use getElementById when SSR is not a concern
-        );
+        const input = document.getElementById(firstErrorNodeId);
         input?.focus();
       }
     },
