@@ -2,7 +2,7 @@ import { addEdge, Node, OnConnect, OnConnectEnd, OnEdgesDelete, useReactFlow } f
 import { nanoid } from "nanoid";
 import { useCallback } from "react";
 import { DEFAULT_NODE } from "@/editor/constants/defaultNode";
-import { HORIZONTAL_NODE_OFFSET, POSITION_TOLERANCE, VERTICAL_NODE_SPACING } from "@/editor/constants/nodeSpacing";
+import { HORIZONTAL_NODE_OFFSET, VERTICAL_NODE_SPACING } from "@/editor/constants/nodeSpacing";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
 
 /**
@@ -33,7 +33,6 @@ const useFlowConnections = () => {
       const newNode: Node = {
         ...DEFAULT_NODE,
         id: nodeId,
-        origin: [0.5, 0.0],
         position,
         selected: true,
       };
@@ -152,23 +151,28 @@ const useFlowConnections = () => {
       let newX = sourceNode.position.x;
       const newY = sourceNode.position.y + nodeHeight + VERTICAL_NODE_SPACING;
 
-      // Check if there are already nodes at this position and offset horizontally
+      // Check if there are already sibling nodes (same parent) to offset horizontally
       const allNodes = getNodes();
-      const positionTolerance = POSITION_TOLERANCE;
+      const allEdges = getEdges();
 
-      // Find nodes at the same Y (within tolerance)
-      const nodesAtSameY = allNodes.filter((node) => Math.abs(node.position.y - newY) < positionTolerance);
+      // Find existing siblings (nodes that share the same parent/source)
+      const existingSiblings = allNodes.filter((node) =>
+        allEdges.some((edge) => edge.source === sourceNodeId && edge.target === node.id)
+      );
 
-      // If there are nodes at the same Y, place the new node to the right of the rightmost one
-      if (nodesAtSameY.length > 0) {
-        const rightmostNode = nodesAtSameY.reduce((max, node) => (node.position.x > max.position.x ? node : max), nodesAtSameY[0]);
-        newX = rightmostNode.position.x + nodeWidth + HORIZONTAL_NODE_OFFSET;
+      // If there are existing siblings, place the new node to the right of the rightmost one
+      if (existingSiblings.length > 0) {
+        const rightmostSibling = existingSiblings.reduce(
+          (max, node) => (node.position.x > max.position.x ? node : max),
+          existingSiblings[0]
+        );
+        newX = rightmostSibling.position.x + nodeWidth + HORIZONTAL_NODE_OFFSET;
       }
 
       // Use the shared function to create node and connect, with selection enabled
       createNodeAndConnect(sourceNode, { x: newX, y: newY }, true);
     },
-    [getNode, getNodes, createNodeAndConnect],
+    [getNode, getNodes, getEdges, createNodeAndConnect],
   );
 
   /**
