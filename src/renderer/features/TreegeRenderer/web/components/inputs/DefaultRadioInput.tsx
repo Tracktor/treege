@@ -4,18 +4,18 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Label } from "@/shared/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 
-const DefaultRadioInput = ({ node, value, setValue, error, label, helperText }: InputRenderProps<"radio">) => {
+const DefaultRadioInput = ({ node, value, setValue, error, label, helperText, id }: InputRenderProps<"radio">) => {
   const t = useTranslate();
   const name = node.data.name || node.id;
   const normalizedValue = value ? String(value) : "";
 
   return (
     <FormItem className="mb-4">
-      <Label className="mb-1">
+      <Label className="mb-1" htmlFor={id}>
         {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
-      <RadioGroup value={normalizedValue} onValueChange={(val) => setValue(val)}>
+      <RadioGroup value={normalizedValue} onValueChange={(val) => setValue(val)} id={id}>
         {node.data.options?.map((option, index) => (
           <div key={option.value + index} className="flex items-center space-x-2">
             <RadioGroupItem value={String(option.value)} id={`${name}-${option.value}`} disabled={option.disabled} />

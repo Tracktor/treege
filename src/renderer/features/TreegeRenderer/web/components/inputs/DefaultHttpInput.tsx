@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
-import { getInputAttributes } from "@/renderer/utils/node";
 import { Button } from "@/shared/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/shared/components/ui/command";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
@@ -80,7 +79,7 @@ const replaceTemplateVars = (template: string, formValues: Record<string, unknow
     return encode ? encodeURIComponent(value) : value;
   });
 
-const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"http">) => {
+const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, helperText, id, name }: InputRenderProps<"http">) => {
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [options, setOptions] = useState<Array<{ value: string; label: string }>>([]);
@@ -89,7 +88,6 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
   const { formValues } = useTreegeRendererContext();
   const t = useTranslate();
   const { httpConfig } = node.data;
-  const inputAttributes = getInputAttributes(node);
   const hasFetchedOnMount = useRef(false);
   const lastFetchedTemplateValues = useRef<string>("");
 
@@ -420,8 +418,9 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
         value={Array.isArray(value) ? (value[0] ?? "") : (value ?? "")}
         onValueChange={(val) => setValue(val)}
         disabled={isLoading || options.length === 0}
+        name={name}
       >
-        <SelectTrigger id={inputAttributes.id} className="w-full">
+        <SelectTrigger id={id} name={name} className="w-full">
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           <SelectValue placeholder={placeholder || t("renderer.defaultHttpInput.selectOption")} />
         </SelectTrigger>
@@ -439,7 +438,7 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
 
     return (
       <FormItem className="mb-4">
-        <Label htmlFor={inputAttributes.id}>
+        <Label htmlFor={id}>
           {label || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
@@ -466,11 +465,11 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
   // If no responseMapping, render the value as text (hidden or display-only)
   return (
     <FormItem className="mb-4">
-      <Label htmlFor={inputAttributes.id}>
+      <Label htmlFor={id}>
         {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
-      <Input type="text" {...inputAttributes} value={typeof value === "string" ? value : JSON.stringify(value)} readOnly disabled />
+      <Input type="text" name={name} id={id} value={typeof value === "string" ? value : JSON.stringify(value)} readOnly disabled />
       {error && <FormError>{error}</FormError>}
       {helperText && !error && <FormDescription>{helperText}</FormDescription>}
     </FormItem>

@@ -1,20 +1,18 @@
 import { InputRenderProps } from "@/renderer/types/renderer";
-import { getInputAttributes } from "@/renderer/utils/node";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Label } from "@/shared/components/ui/label";
 import { Textarea } from "@/shared/components/ui/textarea";
 
-const DefaultTextAreaInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"textarea">) => {
-  const inputAttributes = getInputAttributes(node);
-
+const DefaultTextAreaInput = ({ node, value, setValue, error, label, placeholder, helperText, name, id }: InputRenderProps<"textarea">) => {
   return (
     <FormItem className="mb-4">
-      <Label htmlFor={inputAttributes.id}>
+      <Label htmlFor={id}>
         {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Textarea
-        {...inputAttributes}
+        id={id}
+        name={name}
         value={value ?? ""}
         onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder}

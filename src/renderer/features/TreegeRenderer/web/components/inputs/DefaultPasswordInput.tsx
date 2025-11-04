@@ -1,21 +1,19 @@
 import { InputRenderProps } from "@/renderer/types/renderer";
-import { getInputAttributes } from "@/renderer/utils/node";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 
-const DefaultPasswordInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"password">) => {
-  const inputAttributes = getInputAttributes(node);
-
+const DefaultPasswordInput = ({ node, value, setValue, error, label, placeholder, helperText, name, id }: InputRenderProps<"password">) => {
   return (
     <FormItem className="mb-4">
-      <Label htmlFor={inputAttributes.id}>
+      <Label htmlFor={id}>
         {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
+        id={id}
+        name={name}
         type="password"
-        {...inputAttributes}
         value={value ?? ""}
         onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder}

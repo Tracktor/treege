@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
-import { getInputAttributes } from "@/renderer/utils/node";
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/shared/components/ui/command";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
@@ -83,13 +82,12 @@ const fetchGooglePlacesSuggestions = (query: string): Promise<AddressSuggestion[
   });
 };
 
-const DefaultAddressInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"address">) => {
+const DefaultAddressInput = ({ node, value, setValue, error, label, placeholder, helperText, id, name }: InputRenderProps<"address">) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
   const [popoverOpen, setPopoverOpen] = useState(false);
   const { googleApiKey, language } = useTreegeRendererContext();
   const t = useTranslate();
-  const inputAttributes = getInputAttributes(node);
 
   const handleSelectSuggestion = useCallback(
     (suggestion: AddressSuggestion) => {
@@ -134,14 +132,15 @@ const DefaultAddressInput = ({ node, value, setValue, error, label, placeholder,
     <>
       {googleApiKey && <script async src={`https://maps.googleapis.com/maps/api/js?key=${googleApiKey}&libraries=places`} />}
       <FormItem className="mb-4">
-        <Label htmlFor={inputAttributes.id}>
+        <Label htmlFor={id}>
           {label || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
         <div className="relative">
           <Input
             type="text"
-            {...inputAttributes}
+            id={id}
+            name={name}
             value={value || ""}
             onChange={(e) => handleInputChange(e.target.value)}
             onFocus={() => {

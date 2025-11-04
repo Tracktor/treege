@@ -1,10 +1,8 @@
 import { InputRenderProps } from "@/renderer/types/renderer";
-import { getInputAttributes } from "@/renderer/utils/node";
 import { Input } from "@/shared/components/ui/input";
 
-const DefaultHiddenInput = ({ node, value }: InputRenderProps<"hidden">) => {
-  const inputAttributes = getInputAttributes(node);
-  return <Input type="hidden" {...inputAttributes} value={value ?? ""} />;
+const DefaultHiddenInput = ({ value, name, id }: InputRenderProps<"hidden">) => {
+  return <Input type="hidden" id={id} name={name} value={value ?? ""} />;
 };
 
 export default DefaultHiddenInput;
