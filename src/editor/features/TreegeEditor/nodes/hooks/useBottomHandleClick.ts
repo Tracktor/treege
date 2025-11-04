@@ -1,5 +1,5 @@
 import { MouseEvent, useCallback } from "react";
-import useAddConnectedNode from "@/editor/hooks/useAddConnectedNode";
+import useFlowConnections from "@/editor/hooks/useFlowConnections";
 
 /**
  * Custom hook to handle clicks on bottom handles of nodes
@@ -7,7 +7,7 @@ import useAddConnectedNode from "@/editor/hooks/useAddConnectedNode";
  * @returns Click handler for the bottom handle
  */
 const useBottomHandleClick = (nodeId: string) => {
-  const { addConnectedNode } = useAddConnectedNode();
+  const { onAddFromHandle } = useFlowConnections();
 
   return useCallback(
     (event: MouseEvent) => {
@@ -15,9 +15,9 @@ const useBottomHandleClick = (nodeId: string) => {
       if (event.defaultPrevented) {
         return;
       }
-      addConnectedNode(nodeId);
+      onAddFromHandle(nodeId);
     },
-    [addConnectedNode, nodeId],
+    [onAddFromHandle, nodeId],
   );
 };
 
