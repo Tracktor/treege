@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
+import { getInputAttributes } from "@/renderer/utils/node";
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/shared/components/ui/command";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
@@ -88,7 +89,7 @@ const DefaultAddressInput = ({ node, value, setValue, error, label, placeholder,
   const [popoverOpen, setPopoverOpen] = useState(false);
   const { googleApiKey, language } = useTreegeRendererContext();
   const t = useTranslate();
-  const name = node.data.name || node.id;
+  const inputAttributes = getInputAttributes(node);
 
   const handleSelectSuggestion = useCallback(
     (suggestion: AddressSuggestion) => {
@@ -133,15 +134,14 @@ const DefaultAddressInput = ({ node, value, setValue, error, label, placeholder,
     <>
       {googleApiKey && <script async src={`https://maps.googleapis.com/maps/api/js?key=${googleApiKey}&libraries=places`} />}
       <FormItem className="mb-4">
-        <Label htmlFor={name}>
+        <Label htmlFor={inputAttributes.id}>
           {label || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
         <div className="relative">
           <Input
             type="text"
-            id={name}
-            name={name}
+            {...inputAttributes}
             value={value || ""}
             onChange={(e) => handleInputChange(e.target.value)}
             onFocus={() => {

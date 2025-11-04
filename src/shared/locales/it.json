@@ -148,6 +148,7 @@
       "multipleFiles": "File multipli",
       "multipleSelection": "Selezione multipla",
       "name": "Nome",
+      "nameDescription": "Nome campo personalizzato opzionale per l'esportazione del modulo. Se vuoto, l'etichetta verrà utilizzata come chiave.",
       "noParentFieldsAvailable": "Nessun campo genitore disponibile",
       "objectMapping": "Mappatura oggetto",
       "objectMappingDesc": "Mappa le proprietà dell'oggetto sorgente su una nuova struttura",

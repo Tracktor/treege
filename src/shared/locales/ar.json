@@ -148,6 +148,7 @@
       "multipleFiles": "ملفات متعددة",
       "multipleSelection": "اختيار متعدد",
       "name": "الاسم",
+      "nameDescription": "اسم حقل مخصص اختياري لتصدير النموذج. إذا كان فارغاً، سيتم استخدام التسمية كمفتاح.",
       "noParentFieldsAvailable": "لا توجد حقول أصلية متاحة",
       "objectMapping": "تعيين الكائن",
       "objectMappingDesc": "تعيين خصائص الكائن المصدر إلى بنية جديدة",

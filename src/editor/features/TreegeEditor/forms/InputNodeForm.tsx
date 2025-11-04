@@ -61,6 +61,15 @@ const InputNodeForm = () => {
       }}
     >
       <div className="grid gap-6">
+        <Field
+          name="type"
+          children={(field) => (
+            <FormItem>
+              <SelectInputType value={field.state.value} onValueChange={(newValue) => field.handleChange(newValue)} />
+            </FormItem>
+          )}
+        />
+
         <div className="flex items-end gap-2">
           <Field
             name="label"
@@ -135,31 +144,6 @@ const InputNodeForm = () => {
           />
           <SelectLanguage value={selectedLanguage} onValueChange={setSelectedLanguage} />
         </div>
-
-        <Field
-          name="name"
-          children={(field) => (
-            <FormItem>
-              <Label htmlFor={field.name}>{t("editor.inputNodeForm.name")}</Label>
-              <Input
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={({ target }) => field.handleChange(target.value)}
-              />
-            </FormItem>
-          )}
-        />
-
-        <Field
-          name="type"
-          children={(field) => (
-            <FormItem>
-              <SelectInputType value={field.state.value} onValueChange={(newValue) => field.handleChange(newValue)} />
-            </FormItem>
-          )}
-        />
 
         {selectedNode?.data?.type === "http" && (
           <Collapsible defaultOpen className="flex w-full max-w-[350px] flex-col gap-2">
@@ -366,6 +350,23 @@ const InputNodeForm = () => {
           </CollapsibleTrigger>
 
           <CollapsibleContent className="flex flex-col gap-6">
+            <Field
+              name="name"
+              children={(field) => (
+                <FormItem>
+                  <Label htmlFor={field.name}>{t("editor.inputNodeForm.name")}</Label>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={({ target }) => field.handleChange(target.value)}
+                  />
+                  <FormDescription>{t("editor.inputNodeForm.nameDescription")}</FormDescription>
+                </FormItem>
+              )}
+            />
+
             <Field name="defaultValue">
               {(defaultValueField) => (
                 <>

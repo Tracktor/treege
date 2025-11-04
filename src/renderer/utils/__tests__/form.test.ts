@@ -167,7 +167,27 @@ describe("Form Utils", () => {
         });
       });
 
-      it("should use node ID as fallback when name is missing", () => {
+      it("should use label when name is missing", () => {
+        const formValues: FormValues = {
+          "node-1": "value",
+        };
+        const nodes: Node<InputNodeData>[] = [
+          {
+            data: { label: { en: "First Name" }, type: "text" },
+            id: "node-1",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        const result = convertFormValuesToNamedFormat(formValues, nodes);
+
+        expect(result).toEqual({
+          "First Name": "value",
+        });
+      });
+
+      it("should use node ID as fallback when name and label are missing", () => {
         const formValues: FormValues = {
           "node-1": "value",
         };
@@ -184,6 +204,46 @@ describe("Form Utils", () => {
 
         expect(result).toEqual({
           "node-1": "value",
+        });
+      });
+
+      it("should prioritize name over label", () => {
+        const formValues: FormValues = {
+          "node-1": "value",
+        };
+        const nodes: Node<InputNodeData>[] = [
+          {
+            data: { label: { en: "First Name" }, name: "firstName", type: "text" },
+            id: "node-1",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        const result = convertFormValuesToNamedFormat(formValues, nodes);
+
+        expect(result).toEqual({
+          firstName: "value",
+        });
+      });
+
+      it("should use first available language when en label is missing", () => {
+        const formValues: FormValues = {
+          "node-1": "value",
+        };
+        const nodes: Node<InputNodeData>[] = [
+          {
+            data: { label: { fr: "Prénom" }, type: "text" },
+            id: "node-1",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        const result = convertFormValuesToNamedFormat(formValues, nodes);
+
+        expect(result).toEqual({
+          Prénom: "value",
         });
       });
 

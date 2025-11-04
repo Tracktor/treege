@@ -147,14 +147,44 @@ describe("Node Utils", () => {
       });
     });
 
-    describe("Fallback to Node ID", () => {
-      it("should return node ID when name is not specified", () => {
+    describe("Priority Logic", () => {
+      it("should use label when name is not specified", () => {
+        const nodesWithLabel: Node<InputNodeData>[] = [
+          {
+            data: { label: { en: "First Name" }, type: "text" },
+            id: "node-label",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        const fieldName = getFieldNameFromNodeId("node-label", nodesWithLabel);
+
+        expect(fieldName).toBe("First Name");
+      });
+
+      it("should prioritize name over label", () => {
+        const nodesWithBoth: Node<InputNodeData>[] = [
+          {
+            data: { label: { en: "First Name" }, name: "firstName", type: "text" },
+            id: "node-both",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        const fieldName = getFieldNameFromNodeId("node-both", nodesWithBoth);
+
+        expect(fieldName).toBe("firstName");
+      });
+
+      it("should return node ID when name and label are not specified", () => {
         const fieldName = getFieldNameFromNodeId("node-3", nodes);
 
         expect(fieldName).toBe("node-3");
       });
 
-      it("should return node ID when name is empty string", () => {
+      it("should return node ID when name is empty string and no label", () => {
         const nodesWithEmpty: Node<InputNodeData>[] = [
           {
             data: { name: "", type: "text" },
@@ -167,6 +197,21 @@ describe("Node Utils", () => {
         const fieldName = getFieldNameFromNodeId("node-empty", nodesWithEmpty);
 
         expect(fieldName).toBe("node-empty");
+      });
+
+      it("should use first available language when en label is missing", () => {
+        const nodesWithFr: Node<InputNodeData>[] = [
+          {
+            data: { label: { fr: "Prénom" }, type: "text" },
+            id: "node-fr",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        const fieldName = getFieldNameFromNodeId("node-fr", nodesWithFr);
+
+        expect(fieldName).toBe("Prénom");
       });
     });
 

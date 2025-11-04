@@ -59,6 +59,15 @@ export type InputRenderProps<T extends InputType = InputType> = {
    */
   value: InputValueTypeMap[T];
   /**
+   * Unique field ID (nodeId)
+   */
+  id: string;
+  /**
+   * Field name (resolved using priority: name > label > nodeId)
+   * Use this for the name and id attributes of the input element
+   */
+  name: string;
+  /**
    * Function to update the input value
    * @param value - The new value (typed based on input type when T is specified)
    */

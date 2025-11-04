@@ -11,7 +11,7 @@ import DefaultSubmitButtonWrapper from "@/renderer/features/TreegeRenderer/web/c
 import { defaultUI } from "@/renderer/features/TreegeRenderer/web/components/DefaultUI";
 import { InputRenderProps, InputValue, TreegeRendererProps } from "@/renderer/types/renderer";
 import { convertFormValuesToNamedFormat } from "@/renderer/utils/form";
-import { getFieldNameFromNodeId } from "@/renderer/utils/node";
+import { resolveNodeKey } from "@/renderer/utils/node";
 import { NODE_TYPE } from "@/shared/constants/node";
 import { ThemeProvider } from "@/shared/context/ThemeContext";
 import { TreegeNodeData, UINodeData } from "@/shared/types/node";
@@ -91,16 +91,14 @@ const TreegeRenderer = ({
       const firstErrorNodeId = Object.keys(errors)[0];
 
       if (firstErrorNodeId) {
-        const fieldName = getFieldNameFromNodeId(firstErrorNodeId, inputNodes);
-
-        if (fieldName) {
-          // Try to find the input by name attribute
-          const input = document.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(`[name="${fieldName}"]`);
-          input?.focus();
-        }
+        // Use id attribute for reliable focus (always present and unique)
+        const input = document.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
+          `[id="${firstErrorNodeId}"]`, // TODO use getElementById when SSR is not a concern
+        );
+        input?.focus();
       }
     },
-    [validateForm, onSubmit, exportedValues, inputNodes],
+    [validateForm, onSubmit, exportedValues],
   );
 
   // ============================================
@@ -132,17 +130,20 @@ const TreegeRenderer = ({
           const label = getTranslatedText(inputData.label, config.language);
           const placeholder = getTranslatedText(inputData.placeholder, config.language);
           const helperText = getTranslatedText(inputData.helperText, config.language);
+          const name = resolveNodeKey(node);
 
           return (
             <Renderer
               key={node.id}
+              id={node.id}
               node={node}
               value={value}
-              setValue={setValue}
               error={error}
               label={label}
               placeholder={placeholder}
               helperText={helperText}
+              name={name}
+              setValue={setValue}
             />
           );
         }
