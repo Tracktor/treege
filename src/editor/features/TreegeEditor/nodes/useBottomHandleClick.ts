@@ -9,7 +9,7 @@ import useAddConnectedNode from "@/editor/hooks/useAddConnectedNode";
 const useBottomHandleClick = (nodeId: string) => {
   const { addConnectedNode } = useAddConnectedNode();
 
-  const handleBottomHandleClick = useCallback(
+  return useCallback(
     (event: MouseEvent) => {
       // Only trigger on direct click, not on drag
       if (event.defaultPrevented) {
@@ -19,8 +19,6 @@ const useBottomHandleClick = (nodeId: string) => {
     },
     [addConnectedNode, nodeId],
   );
-
-  return handleBottomHandleClick;
 };
 
 export default useBottomHandleClick;
