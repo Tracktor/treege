@@ -10,6 +10,7 @@ import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/shared/components/ui/tooltip";
 import { cn } from "@/shared/lib/utils";
 
 type HttpResponse = Record<string, unknown> | unknown[];
@@ -93,13 +94,6 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
   const formValuesRef = useRef(formValues);
   const setValueRef = useRef(setValue);
 
-  // Update refs on every render
-  useEffect(() => {
-    httpConfigRef.current = httpConfig;
-    formValuesRef.current = formValues;
-    setValueRef.current = setValue;
-  });
-
   /**
    * Extract template variables from URL (memoized)
    */
@@ -139,86 +133,98 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
     return areTemplateVarsFilled(httpConfig.url, formValues);
   }, [httpConfig?.url, hasTemplateVars, formValues]);
 
-  const fetchData = useCallback(async (search?: string) => {
-    const currentHttpConfig = httpConfigRef.current;
-    const currentFormValues = formValuesRef.current;
-    const currentSetValue = setValueRef.current;
+  const fetchData = useCallback(
+    async (search?: string) => {
+      const currentHttpConfig = httpConfigRef.current;
+      const currentFormValues = formValuesRef.current;
+      const currentSetValue = setValueRef.current;
 
-    if (!currentHttpConfig?.url) {
-      setFetchError(t("renderer.defaultHttpInput.noUrlConfigured"));
-      return;
-    }
-
-    // Check if we can fetch (all template vars filled)
-    if (currentHttpConfig.url && !areTemplateVarsFilled(currentHttpConfig.url, currentFormValues)) {
-      return;
-    }
-
-    setLoading(true);
-    setFetchError(null);
-
-    try {
-      // Replace template variables in URL and add search param if configured
-      const baseUrl = replaceTemplateVars(currentHttpConfig.url, currentFormValues);
-      const url =
-        currentHttpConfig.searchParam && search
-          ? `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}${currentHttpConfig.searchParam}=${encodeURIComponent(search)}`
-          : baseUrl;
-
-      // Replace template variables in headers
-      const headers: Record<string, string> = {};
-      currentHttpConfig.headers?.forEach((header) => {
-        headers[header.key] = replaceTemplateVars(header.value, currentFormValues);
-      });
-
-      // Replace template variables in body (for POST/PUT/PATCH methods)
-      const body =
-        currentHttpConfig.body && ["POST", "PUT", "PATCH"].includes(currentHttpConfig.method || "")
-          ? replaceTemplateVars(currentHttpConfig.body, currentFormValues)
-          : undefined;
-
-      const response = await fetch(url, {
-        body: body || undefined,
-        headers: {
-          "Content-Type": "application/json",
-          ...headers,
-        },
-        method: currentHttpConfig.method || "GET",
-      });
-
-      if (!response.ok) {
-        setFetchError(`HTTP ${response.status}: ${response.statusText}`);
-        setLoading(false);
+      if (!currentHttpConfig?.url) {
+        setFetchError(t("renderer.defaultHttpInput.noUrlConfigured"));
         return;
       }
 
-      const data: HttpResponse = await response.json();
-
-      // Extract data using responsePath
-      const extractedData = currentHttpConfig.responsePath ? getValueByPath(data, currentHttpConfig.responsePath) : data;
-
-      // If responseMapping is configured, map the data to options
-      if (currentHttpConfig.responseMapping && Array.isArray(extractedData)) {
-        const { valueField = "value", labelField = "label" } = currentHttpConfig.responseMapping;
-
-        const mappedOptions = extractedData.map((item) => ({
-          label: String(getValueByPath(item as HttpResponse, labelField) || ""),
-          value: String(getValueByPath(item as HttpResponse, valueField) || ""),
-        }));
-
-        setOptions(mappedOptions);
-      } else {
-        // Store the raw data as the field value (converting to string)
-        currentSetValue(typeof extractedData === "string" ? extractedData : JSON.stringify(extractedData));
+      // Check if we can fetch (all template vars filled)
+      if (currentHttpConfig.url && !areTemplateVarsFilled(currentHttpConfig.url, currentFormValues)) {
+        return;
       }
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : t("renderer.defaultHttpInput.fetchFailed");
-      setFetchError(errorMessage);
-      console.error("HTTP Input fetch error:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, [t]);
+
+      setLoading(true);
+      setFetchError(null);
+
+      try {
+        // Replace template variables in URL and add search param if configured
+        const baseUrl = replaceTemplateVars(currentHttpConfig.url, currentFormValues);
+        const url =
+          currentHttpConfig.searchParam && search
+            ? `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}${currentHttpConfig.searchParam}=${encodeURIComponent(search)}`
+            : baseUrl;
+
+        // Replace template variables in headers
+        const headers: Record<string, string> = {};
+        currentHttpConfig.headers?.forEach((header) => {
+          headers[header.key] = replaceTemplateVars(header.value, currentFormValues);
+        });
+
+        // Replace template variables in body (for POST/PUT/PATCH methods)
+        const body =
+          currentHttpConfig.body && ["POST", "PUT", "PATCH"].includes(currentHttpConfig.method || "")
+            ? replaceTemplateVars(currentHttpConfig.body, currentFormValues)
+            : undefined;
+
+        const response = await fetch(url, {
+          body: body || undefined,
+          headers: {
+            "Content-Type": "application/json",
+            ...headers,
+          },
+          method: currentHttpConfig.method || "GET",
+        });
+
+        if (!response.ok) {
+          setFetchError(`HTTP ${response.status}: ${response.statusText}`);
+          setLoading(false);
+          return;
+        }
+
+        const data: HttpResponse = await response.json();
+
+        // Extract data using responsePath
+        const extractedData = currentHttpConfig.responsePath ? getValueByPath(data, currentHttpConfig.responsePath) : data;
+
+        // If responseMapping is configured, map the data to options
+        if (currentHttpConfig.responseMapping && Array.isArray(extractedData)) {
+          const { valueField = "value", labelField = "label" } = currentHttpConfig.responseMapping;
+
+          const mappedOptions = extractedData.map((item) => ({
+            label: String(getValueByPath(item as HttpResponse, labelField) || ""),
+            value: String(getValueByPath(item as HttpResponse, valueField) || ""),
+          }));
+
+          setOptions(mappedOptions);
+        } else {
+          // Store the raw data as the field value (converting to string)
+          currentSetValue(typeof extractedData === "string" ? extractedData : JSON.stringify(extractedData));
+        }
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : t("renderer.defaultHttpInput.fetchFailed");
+        setFetchError(errorMessage);
+        console.error("HTTP Input fetch error:", err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [t],
+  );
+
+  /**
+   * Update refs
+   */
+  useEffect(() => {
+    httpConfigRef.current = httpConfig;
+    formValuesRef.current = formValues;
+    setValueRef.current = setValue;
+  }, [httpConfig, formValues, setValue]);
 
   /**
    * Effect 1: Fetch on mount if fetchOnMount is true AND all variables are filled
@@ -372,30 +378,18 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
     // Render as Select (no search)
     const isLoading = loading && httpConfig?.showLoading;
 
-    if (options.length === 0 && !isLoading) {
-      // Check if we're waiting for template variables
-      const emptyVars = templateVars.filter((varName) => {
-        const value = formValues[varName];
-        return value === undefined || value === null || value === "";
-      });
+    // Build tooltip message for disabled state
+    const emptyVars = templateVars.filter((varName) => {
+      const value = formValues[varName];
+      return value === undefined || value === null || value === "";
+    });
 
-      const message =
-        emptyVars.length > 0
+    const tooltipMessage =
+      options.length === 0 && !isLoading
+        ? emptyVars.length > 0
           ? `Waiting for required fields: ${emptyVars.join(", ")}`
-          : "No data available. Configure \"Fetch on mount\" or add a search parameter.";
-
-      return (
-        <FormItem className="mb-4">
-          <Label htmlFor={name}>
-            {label || node.data.name}
-            {node.data.required && <span className="text-red-500">*</span>}
-          </Label>
-          <div className="py-2 text-muted-foreground text-sm">{message}</div>
-          {error && <FormError>{error}</FormError>}
-          {helperText && !error && <FormDescription>{helperText}</FormDescription>}
-        </FormItem>
-      );
-    }
+          : 'No data available. Configure "Fetch on mount" or add a search parameter.'
+        : undefined;
 
     return (
       <FormItem className="mb-4">
@@ -403,21 +397,58 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
           {label || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
-        <Select value={Array.isArray(value) ? (value[0] ?? "") : (value ?? "")} onValueChange={(val) => setValue(val)} disabled={isLoading}>
-          <SelectTrigger id={name} className="w-full">
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            <SelectValue placeholder={placeholder || t("renderer.defaultHttpInput.selectOption")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {options.map((option, index) => (
-                <SelectItem key={option.value + index} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        {tooltipMessage ? (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="w-full">
+                  <Select
+                    value={Array.isArray(value) ? (value[0] ?? "") : (value ?? "")}
+                    onValueChange={(val) => setValue(val)}
+                    disabled={isLoading || options.length === 0}
+                  >
+                    <SelectTrigger id={name} className="w-full">
+                      {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                      <SelectValue placeholder={placeholder || t("renderer.defaultHttpInput.selectOption")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {options.map((option, index) => (
+                          <SelectItem key={option.value + index} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{tooltipMessage}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ) : (
+          <Select
+            value={Array.isArray(value) ? (value[0] ?? "") : (value ?? "")}
+            onValueChange={(val) => setValue(val)}
+            disabled={isLoading || options.length === 0}
+          >
+            <SelectTrigger id={name} className="w-full">
+              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              <SelectValue placeholder={placeholder || t("renderer.defaultHttpInput.selectOption")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {options.map((option, index) => (
+                  <SelectItem key={option.value + index} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        )}
         {error && <FormError>{error}</FormError>}
         {helperText && !error && <FormDescription>{helperText}</FormDescription>}
       </FormItem>
