@@ -228,19 +228,22 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
 
   /**
    * Effect 1: Fetch on mount if fetchOnMount is true AND all variables are filled
+   * Only runs once at initial mount
    */
   useEffect(() => {
-    // Only fetch once on mount
+    // Mark that we've processed the initial mount
     if (hasFetchedOnMount.current) {
       return;
     }
+    hasFetchedOnMount.current = true;
 
+    // Only fetch if conditions are met
     if (httpConfig?.fetchOnMount && canFetch) {
       void fetchData();
       lastFetchedTemplateValues.current = templateVarValuesKey;
-      hasFetchedOnMount.current = true;
     }
-  }, [httpConfig?.fetchOnMount, canFetch, fetchData, templateVarValuesKey]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount
 
   /**
    * Effect 2: Watch template variables and refetch when they change (debounced)
