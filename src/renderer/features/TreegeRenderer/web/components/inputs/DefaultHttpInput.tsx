@@ -1,5 +1,5 @@
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
@@ -46,11 +46,34 @@ const getValueByPath = (obj: HttpResponse, path: string): unknown => {
 };
 
 /**
+ * Extracts variable names from a template string
+ * Example: "https://api.com/users/{{userId}}/posts/{{postId}}" -> ["userId", "postId"]
+ * Supports alphanumeric characters, underscores, and hyphens in variable names
+ */
+const extractTemplateVars = (template: string): string[] => {
+  const matches = template.matchAll(/{{([\w-]+)}}/g);
+  return Array.from(matches, (match) => match[1]);
+};
+
+/**
+ * Checks if all template variables in a string have non-empty values
+ * Returns true if all variables are filled, false otherwise
+ */
+const areTemplateVarsFilled = (template: string, formValues: Record<string, unknown>): boolean => {
+  const vars = extractTemplateVars(template);
+  return vars.every((varName) => {
+    const value = formValues[varName];
+    return value !== undefined && value !== null && value !== "";
+  });
+};
+
+/**
  * Replaces template variables in a string with values from formValues
  * Example: "https://api.com/users/{{userId}}" -> "https://api.com/users/123"
+ * Supports alphanumeric characters, underscores, and hyphens in variable names
  */
 const replaceTemplateVars = (template: string, formValues: Record<string, unknown>): string =>
-  template.replace(/{{(\w+)}}/g, (_, key) => String(formValues[key] || ""));
+  template.replace(/{{([\w-]+)}}/g, (_, key) => String(formValues[key] || ""));
 
 const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"http">) => {
   const [loading, setLoading] = useState(false);
@@ -63,94 +86,192 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
   const { httpConfig } = node.data;
   const name = node.data.name || node.id;
   const hasFetchedOnMount = useRef(false);
+  const lastFetchedTemplateValues = useRef<string>("");
 
-  const fetchData = useCallback(
-    async (search?: string) => {
-      if (!httpConfig?.url) {
-        setFetchError(t("renderer.defaultHttpInput.noUrlConfigured"));
+  // Refs to store latest values without triggering re-renders
+  const httpConfigRef = useRef(httpConfig);
+  const formValuesRef = useRef(formValues);
+  const setValueRef = useRef(setValue);
+
+  // Update refs on every render
+  useEffect(() => {
+    httpConfigRef.current = httpConfig;
+    formValuesRef.current = formValues;
+    setValueRef.current = setValue;
+  });
+
+  /**
+   * Extract template variables from URL (memoized)
+   */
+  const templateVars = useMemo(() => {
+    if (!httpConfig?.url) {
+      return [];
+    }
+    return extractTemplateVars(httpConfig.url);
+  }, [httpConfig?.url]);
+
+  /**
+   * Check if URL has template variables
+   */
+  const hasTemplateVars = templateVars.length > 0;
+
+  /**
+   * Get current values of template variables (for dependency tracking)
+   * Returns a stable string key that only changes when the actual template variable values change
+   */
+  const templateVarValuesKey = useMemo(() => {
+    return templateVars.map((varName) => `${varName}:${String(formValues[varName] ?? "")}`).join("|");
+  }, [templateVars, formValues]);
+
+  /**
+   * Check if we can make a fetch request
+   * Returns true only if URL exists and all template variables are filled
+   */
+  const canFetch = useMemo(() => {
+    if (!httpConfig?.url) {
+      return false;
+    }
+    // If no template vars, we can always fetch
+    if (!hasTemplateVars) {
+      return true;
+    }
+    // If has template vars, check they're all filled
+    return areTemplateVarsFilled(httpConfig.url, formValues);
+  }, [httpConfig?.url, hasTemplateVars, formValues]);
+
+  const fetchData = useCallback(async (search?: string) => {
+    const currentHttpConfig = httpConfigRef.current;
+    const currentFormValues = formValuesRef.current;
+    const currentSetValue = setValueRef.current;
+
+    if (!currentHttpConfig?.url) {
+      setFetchError(t("renderer.defaultHttpInput.noUrlConfigured"));
+      return;
+    }
+
+    // Check if we can fetch (all template vars filled)
+    if (currentHttpConfig.url && !areTemplateVarsFilled(currentHttpConfig.url, currentFormValues)) {
+      return;
+    }
+
+    setLoading(true);
+    setFetchError(null);
+
+    try {
+      // Replace template variables in URL and add search param if configured
+      const baseUrl = replaceTemplateVars(currentHttpConfig.url, currentFormValues);
+      const url =
+        currentHttpConfig.searchParam && search
+          ? `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}${currentHttpConfig.searchParam}=${encodeURIComponent(search)}`
+          : baseUrl;
+
+      // Replace template variables in headers
+      const headers: Record<string, string> = {};
+      currentHttpConfig.headers?.forEach((header) => {
+        headers[header.key] = replaceTemplateVars(header.value, currentFormValues);
+      });
+
+      // Replace template variables in body (for POST/PUT/PATCH methods)
+      const body =
+        currentHttpConfig.body && ["POST", "PUT", "PATCH"].includes(currentHttpConfig.method || "")
+          ? replaceTemplateVars(currentHttpConfig.body, currentFormValues)
+          : undefined;
+
+      const response = await fetch(url, {
+        body: body || undefined,
+        headers: {
+          "Content-Type": "application/json",
+          ...headers,
+        },
+        method: currentHttpConfig.method || "GET",
+      });
+
+      if (!response.ok) {
+        setFetchError(`HTTP ${response.status}: ${response.statusText}`);
+        setLoading(false);
         return;
       }
 
-      setLoading(true);
-      setFetchError(null);
+      const data: HttpResponse = await response.json();
 
-      try {
-        // Replace template variables in URL and add search param if configured
-        const baseUrl = replaceTemplateVars(httpConfig.url, formValues);
-        const url =
-          httpConfig.searchParam && search
-            ? `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}${httpConfig.searchParam}=${encodeURIComponent(search)}`
-            : baseUrl;
+      // Extract data using responsePath
+      const extractedData = currentHttpConfig.responsePath ? getValueByPath(data, currentHttpConfig.responsePath) : data;
 
-        // Replace template variables in headers
-        const headers: Record<string, string> = {};
-        httpConfig.headers?.forEach((header) => {
-          headers[header.key] = replaceTemplateVars(header.value, formValues);
-        });
+      // If responseMapping is configured, map the data to options
+      if (currentHttpConfig.responseMapping && Array.isArray(extractedData)) {
+        const { valueField = "value", labelField = "label" } = currentHttpConfig.responseMapping;
 
-        // Replace template variables in body (for POST/PUT/PATCH methods)
-        const body =
-          httpConfig.body && ["POST", "PUT", "PATCH"].includes(httpConfig.method || "")
-            ? replaceTemplateVars(httpConfig.body, formValues)
-            : undefined;
+        const mappedOptions = extractedData.map((item) => ({
+          label: String(getValueByPath(item as HttpResponse, labelField) || ""),
+          value: String(getValueByPath(item as HttpResponse, valueField) || ""),
+        }));
 
-        const response = await fetch(url, {
-          body: body || undefined,
-          headers: {
-            "Content-Type": "application/json",
-            ...headers,
-          },
-          method: httpConfig.method || "GET",
-        });
-
-        if (!response.ok) {
-          setFetchError(`HTTP ${response.status}: ${response.statusText}`);
-          setLoading(false);
-          return;
-        }
-
-        const data: HttpResponse = await response.json();
-
-        // Extract data using responsePath
-        const extractedData = httpConfig.responsePath ? getValueByPath(data, httpConfig.responsePath) : data;
-
-        // If responseMapping is configured, map the data to options
-        if (httpConfig.responseMapping && Array.isArray(extractedData)) {
-          const { valueField = "value", labelField = "label" } = httpConfig.responseMapping;
-
-          const mappedOptions = extractedData.map((item) => ({
-            label: String(getValueByPath(item as HttpResponse, labelField) || ""),
-            value: String(getValueByPath(item as HttpResponse, valueField) || ""),
-          }));
-
-          setOptions(mappedOptions);
-        } else {
-          // Store the raw data as the field value (converting to string)
-          setValue(typeof extractedData === "string" ? extractedData : JSON.stringify(extractedData));
-        }
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : t("renderer.defaultHttpInput.fetchFailed");
-        setFetchError(errorMessage);
-        console.error("HTTP Input fetch error:", err);
-      } finally {
-        setLoading(false);
+        setOptions(mappedOptions);
+      } else {
+        // Store the raw data as the field value (converting to string)
+        currentSetValue(typeof extractedData === "string" ? extractedData : JSON.stringify(extractedData));
       }
-    },
-    [httpConfig, formValues, setValue, t],
-  );
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : t("renderer.defaultHttpInput.fetchFailed");
+      setFetchError(errorMessage);
+      console.error("HTTP Input fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [t]);
 
   /**
-   * Fetch on mount if configured (only once)
+   * Effect 1: Fetch on mount if fetchOnMount is true AND all variables are filled
    */
   useEffect(() => {
-    if (httpConfig?.fetchOnMount && !hasFetchedOnMount.current) {
-      hasFetchedOnMount.current = true;
-      void fetchData();
+    // Only fetch once on mount
+    if (hasFetchedOnMount.current) {
+      return;
     }
-  }, [httpConfig?.fetchOnMount, fetchData]);
+
+    if (httpConfig?.fetchOnMount && canFetch) {
+      void fetchData();
+      lastFetchedTemplateValues.current = templateVarValuesKey;
+      hasFetchedOnMount.current = true;
+    }
+  }, [httpConfig?.fetchOnMount, canFetch, fetchData, templateVarValuesKey]);
 
   /**
-   * Debounced search for combobox
+   * Effect 2: Watch template variables and refetch when they change (debounced)
+   * Only runs AFTER initial mount if there are template variables
+   */
+  useEffect(() => {
+    // Skip if we haven't done the initial mount fetch yet
+    if (!hasFetchedOnMount.current) {
+      return;
+    }
+
+    // Only watch if URL has template variables
+    if (!hasTemplateVars) {
+      return;
+    }
+
+    // Skip if template values haven't changed
+    if (lastFetchedTemplateValues.current === templateVarValuesKey) {
+      return;
+    }
+
+    // Skip if can't fetch yet
+    if (!canFetch) {
+      return;
+    }
+
+    // Debounce to avoid multiple calls when user is typing
+    const timer = setTimeout(() => {
+      void fetchData();
+      lastFetchedTemplateValues.current = templateVarValuesKey;
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [templateVarValuesKey, hasTemplateVars, canFetch, fetchData]);
+
+  /**
+   * Effect 3: Debounced search for combobox
    */
   useEffect(() => {
     if (!(httpConfig?.searchParam && searchQuery)) {
@@ -252,15 +373,24 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
     const isLoading = loading && httpConfig?.showLoading;
 
     if (options.length === 0 && !isLoading) {
+      // Check if we're waiting for template variables
+      const emptyVars = templateVars.filter((varName) => {
+        const value = formValues[varName];
+        return value === undefined || value === null || value === "";
+      });
+
+      const message =
+        emptyVars.length > 0
+          ? `Waiting for required fields: ${emptyVars.join(", ")}`
+          : "No data available. Configure \"Fetch on mount\" or add a search parameter.";
+
       return (
         <FormItem className="mb-4">
           <Label htmlFor={name}>
             {label || node.data.name}
             {node.data.required && <span className="text-red-500">*</span>}
           </Label>
-          <div className="py-2 text-muted-foreground text-sm">
-            No data available. Configure &#34;Fetch on mount&#34; or add a search parameter.
-          </div>
+          <div className="py-2 text-muted-foreground text-sm">{message}</div>
           {error && <FormError>{error}</FormError>}
           {helperText && !error && <FormDescription>{helperText}</FormDescription>}
         </FormItem>
