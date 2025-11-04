@@ -163,6 +163,7 @@ const SelectNodeGroup = () => {
               <div className="space-y-2">
                 <Label htmlFor="group-label">{t("editor.selectNodeGroup.groupName")}</Label>
                 <Input
+                  autoFocus
                   value={newGroupLabel}
                   onChange={(e) => setNewGroupLabel(e.target.value)}
                   placeholder="Ex: Step 1 - Personal info"
