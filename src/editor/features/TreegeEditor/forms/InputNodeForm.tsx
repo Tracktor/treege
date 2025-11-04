@@ -67,6 +67,7 @@ const InputNodeForm = () => {
             <FormItem>
               <Label htmlFor={field.name}>{t("editor.inputNodeForm.name")}</Label>
               <Input
+                autoFocus
                 id={field.name}
                 name={field.name}
                 value={field.state.value}
