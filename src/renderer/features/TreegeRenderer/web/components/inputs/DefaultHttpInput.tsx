@@ -237,6 +237,7 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
     if (hasFetchedOnMount.current) {
       return;
     }
+
     hasFetchedOnMount.current = true;
 
     // Check conditions using refs to get current values
@@ -245,8 +246,7 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
     const currentFetchData = fetchDataRef.current;
 
     // Only fetch if conditions are met
-    const canFetchNow =
-      currentHttpConfig?.url && areTemplateVarsFilled(currentHttpConfig.url, currentFormValues);
+    const canFetchNow = currentHttpConfig?.url && areTemplateVarsFilled(currentHttpConfig.url, currentFormValues);
 
     if (currentHttpConfig?.fetchOnMount && canFetchNow && currentFetchData) {
       void currentFetchData();
@@ -281,7 +281,7 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
       return;
     }
 
-    // Skip if can't fetch yet
+    // Skip if we can't fetch yet
     if (!canFetch) {
       return;
     }
