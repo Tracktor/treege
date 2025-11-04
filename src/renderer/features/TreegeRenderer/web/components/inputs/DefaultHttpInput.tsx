@@ -93,6 +93,7 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
   const httpConfigRef = useRef(httpConfig);
   const formValuesRef = useRef(formValues);
   const setValueRef = useRef(setValue);
+  const fetchDataRef = useRef<((search?: string) => Promise<void>) | null>(null);
 
   /**
    * Extract template variables from URL (memoized)
@@ -224,7 +225,8 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
     httpConfigRef.current = httpConfig;
     formValuesRef.current = formValues;
     setValueRef.current = setValue;
-  }, [httpConfig, formValues, setValue]);
+    fetchDataRef.current = fetchData;
+  }, [httpConfig, formValues, setValue, fetchData]);
 
   /**
    * Effect 1: Fetch on mount if fetchOnMount is true AND all variables are filled
@@ -237,10 +239,24 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
     }
     hasFetchedOnMount.current = true;
 
+    // Check conditions using refs to get current values
+    const currentHttpConfig = httpConfigRef.current;
+    const currentFormValues = formValuesRef.current;
+    const currentFetchData = fetchDataRef.current;
+
     // Only fetch if conditions are met
-    if (httpConfig?.fetchOnMount && canFetch) {
-      void fetchData();
-      lastFetchedTemplateValues.current = templateVarValuesKey;
+    const canFetchNow =
+      currentHttpConfig?.url && areTemplateVarsFilled(currentHttpConfig.url, currentFormValues);
+
+    if (currentHttpConfig?.fetchOnMount && canFetchNow && currentFetchData) {
+      void currentFetchData();
+      // Store the current template values
+      if (currentHttpConfig.url) {
+        const currentTemplateVars = extractTemplateVars(currentHttpConfig.url);
+        lastFetchedTemplateValues.current = currentTemplateVars
+          .map((varName) => `${varName}:${String(currentFormValues[varName] ?? "")}`)
+          .join("|");
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Only run once on mount
