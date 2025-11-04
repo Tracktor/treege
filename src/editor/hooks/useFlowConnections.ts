@@ -34,7 +34,7 @@ const useFlowConnections = () => {
         ...DEFAULT_NODE,
         id: nodeId,
         position,
-        selected: true,
+        selected: shouldSelectNode,
       };
 
       // If the source node is part of a group, set the new node to be part of the same group

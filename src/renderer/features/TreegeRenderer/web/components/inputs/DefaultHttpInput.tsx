@@ -73,8 +73,11 @@ const areTemplateVarsFilled = (template: string, formValues: Record<string, unkn
  * Example: "https://api.com/users/{{userId}}" -> "https://api.com/users/123"
  * Supports alphanumeric characters, underscores, and hyphens in variable names
  */
-const replaceTemplateVars = (template: string, formValues: Record<string, unknown>): string =>
-  template.replace(/{{([\w-]+)}}/g, (_, key) => String(formValues[key] || ""));
+const replaceTemplateVars = (template: string, formValues: Record<string, unknown>, encode = false): string =>
+  template.replace(/{{([\w-]+)}}/g, (_, key) => {
+    const value = String(formValues[key] || "");
+    return encode ? encodeURIComponent(value) : value;
+  });
 
 const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"http">) => {
   const [loading, setLoading] = useState(false);
@@ -155,7 +158,8 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
 
       try {
         // Replace template variables in URL and add search param if configured
-        const baseUrl = replaceTemplateVars(currentHttpConfig.url, currentFormValues);
+        const baseUrl = replaceTemplateVars(currentHttpConfig.url, currentFormValues, true);
+
         const url =
           currentHttpConfig.searchParam && search
             ? `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}${currentHttpConfig.searchParam}=${encodeURIComponent(search)}`
