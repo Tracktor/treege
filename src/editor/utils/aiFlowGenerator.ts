@@ -91,10 +91,11 @@ EDGE STRUCTURE:
 LAYOUT GUIDELINES:
 - Position nodes in a vertical flow (top to bottom)
 - Start at position { x: 0, y: 0 }
-- Space nodes vertically by 180-200 pixels (consistent spacing)
-- For horizontal spacing, use ~350 pixels
+- Space nodes vertically by exactly 250 pixels between each position (node height 150px + 100px spacing)
+- For horizontal spacing, use 350 pixels
 - Create logical flow from top to bottom
 - IMPORTANT: Keep consistent vertical spacing to avoid overlap
+- Each node position Y should increment by 250: first at y:0, second at y:250, third at y:500, etc.
 
 EXAMPLES:
 
@@ -111,7 +112,7 @@ Response:
     {
       "id": "name-1",
       "type": "input",
-      "position": { "x": 0, "y": 180 },
+      "position": { "x": 0, "y": 250 },
       "data": {
         "label": "Name",
         "name": "name",
@@ -123,7 +124,7 @@ Response:
     {
       "id": "email-1",
       "type": "input",
-      "position": { "x": 0, "y": 360 },
+      "position": { "x": 0, "y": 500 },
       "data": {
         "label": "Email",
         "name": "email",
@@ -135,7 +136,7 @@ Response:
     {
       "id": "message-1",
       "type": "input",
-      "position": { "x": 0, "y": 540 },
+      "position": { "x": 0, "y": 750 },
       "data": {
         "label": "Message",
         "name": "message",
@@ -165,7 +166,7 @@ Response:
     {
       "id": "age-1",
       "type": "input",
-      "position": { "x": 0, "y": 180 },
+      "position": { "x": 0, "y": 250 },
       "data": {
         "label": "Age",
         "name": "age",
@@ -177,7 +178,7 @@ Response:
     {
       "id": "address-1",
       "type": "input",
-      "position": { "x": 0, "y": 360 },
+      "position": { "x": 0, "y": 500 },
       "data": {
         "label": "Address",
         "name": "address",
@@ -189,7 +190,7 @@ Response:
     {
       "id": "country-1",
       "type": "input",
-      "position": { "x": 0, "y": 540 },
+      "position": { "x": 0, "y": 750 },
       "data": {
         "label": "Country",
         "name": "country",

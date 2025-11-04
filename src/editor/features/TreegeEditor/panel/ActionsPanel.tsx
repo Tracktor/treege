@@ -3,7 +3,7 @@ import { ArrowRightFromLine, Copy, Download, EllipsisVertical, Plus, Save, Trash
 import { nanoid } from "nanoid";
 import { ChangeEvent, useCallback, useEffect, useRef } from "react";
 import { toast } from "sonner";
-import { defaultNode } from "@/editor/constants/defaultNode";
+import { DEFAULT_NODE } from "@/editor/constants/defaultNode";
 import { useTreegeEditorContext } from "@/editor/context/TreegeEditorContext";
 import { AIGeneratorDialog } from "@/editor/features/TreegeEditor/panel/AIGeneratorDialog";
 import useTranslate from "@/editor/hooks/useTranslate";
@@ -44,7 +44,7 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
 
     addNodes([
       {
-        ...defaultNode,
+        ...DEFAULT_NODE,
         id: nanoid(),
         position,
         selected: true,

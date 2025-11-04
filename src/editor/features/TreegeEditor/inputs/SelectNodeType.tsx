@@ -1,4 +1,4 @@
-import { nodeTypes } from "@/editor/constants/nodeTypes";
+import { NODE_TYPES } from "@/editor/constants/nodeTypes";
 import useFlowActions from "@/editor/hooks/useFlowActions";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
 import useTranslate from "@/editor/hooks/useTranslate";
@@ -21,7 +21,7 @@ const SelectNodeType = () => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {Object.keys(nodeTypes)
+            {Object.keys(NODE_TYPES)
               .filter((type) => (isGroup ? type === "group" : type !== "group"))
               .map((type) => (
                 <SelectItem key={type} value={type}>

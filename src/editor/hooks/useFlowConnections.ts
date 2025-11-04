@@ -1,7 +1,8 @@
 import { addEdge, Node, OnConnect, OnConnectEnd, OnEdgesDelete, useReactFlow } from "@xyflow/react";
 import { nanoid } from "nanoid";
 import { useCallback } from "react";
-import { defaultNode } from "@/editor/constants/defaultNode";
+import { DEFAULT_NODE } from "@/editor/constants/defaultNode";
+import { HORIZONTAL_NODE_OFFSET, POSITION_TOLERANCE, VERTICAL_NODE_SPACING } from "@/editor/constants/nodeSpacing";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
 
 /**
@@ -30,7 +31,7 @@ const useFlowConnections = () => {
       const nodeId = nanoid();
 
       const newNode: Node = {
-        ...defaultNode,
+        ...DEFAULT_NODE,
         id: nodeId,
         origin: [0.5, 0.0],
         position,
@@ -146,16 +147,14 @@ const useFlowConnections = () => {
       const rawNodeWidth = getComputedStyle(document.documentElement).getPropertyValue("--node-width");
       const nodeHeight = parseFloat(rawNodeHeight) || 100;
       const nodeWidth = parseFloat(rawNodeWidth) || 100;
-      const verticalSpacing = 100;
-      const horizontalOffset = 50;
 
       // Base position below the source node
       let newX = sourceNode.position.x;
-      const newY = sourceNode.position.y + nodeHeight + verticalSpacing;
+      const newY = sourceNode.position.y + nodeHeight + VERTICAL_NODE_SPACING;
 
       // Check if there are already nodes at this position and offset horizontally
       const allNodes = getNodes();
-      const positionTolerance = 20;
+      const positionTolerance = POSITION_TOLERANCE;
 
       // Find nodes at the same Y (within tolerance)
       const nodesAtSameY = allNodes.filter((node) => Math.abs(node.position.y - newY) < positionTolerance);
@@ -163,7 +162,7 @@ const useFlowConnections = () => {
       // If there are nodes at the same Y, place the new node to the right of the rightmost one
       if (nodesAtSameY.length > 0) {
         const rightmostNode = nodesAtSameY.reduce((max, node) => (node.position.x > max.position.x ? node : max), nodesAtSameY[0]);
-        newX = rightmostNode.position.x + nodeWidth + horizontalOffset;
+        newX = rightmostNode.position.x + nodeWidth + HORIZONTAL_NODE_OFFSET;
       }
 
       // Use the shared function to create node and connect, with selection enabled
