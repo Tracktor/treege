@@ -23,7 +23,7 @@ const FlowNode = ({ data, isConnectable, type, parentId, id }: FlowNodeProps) =>
       <div className="mb-1 max-w-full overflow-hidden text-ellipsis text-nowrap text-2xl">{label}</div>
 
       {/* Type */}
-      <Badge variant="destructive">
+      <Badge variant="destructive" className="capitalize">
         <Network />
         {type}
       </Badge>

@@ -32,7 +32,7 @@ const UINode = ({ data, isConnectable, type, parentId, id }: UINodeProps) => {
         </Badge>
 
         {data?.type && (
-          <Badge variant="outline">
+          <Badge variant="outline" className="capitalize">
             <Type />
             {data.type}
           </Badge>
@@ -45,9 +45,9 @@ const UINode = ({ data, isConnectable, type, parentId, id }: UINodeProps) => {
         position={Position.Bottom}
         isConnectable={isConnectable}
         onClick={handleBottomHandleClick}
-        className="!bg-primary hover:!bg-primary/80 !w-6 !h-6 flex items-center justify-center cursor-pointer transition-colors"
+        className="!bg-primary hover:!bg-primary/80 !w-6 !h-6 flex cursor-pointer items-center justify-center transition-colors"
       >
-        <Plus className="w-4 h-4 text-primary-foreground" />
+        <Plus className="h-4 w-4 text-primary-foreground" />
       </Handle>
     </NodeWrapper>
   );

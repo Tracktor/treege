@@ -1,5 +1,5 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
-import { Plus, RectangleEllipsis, Type } from "lucide-react";
+import { Plus, Type } from "lucide-react";
 import useBottomHandleClick from "@/editor/features/TreegeEditor/nodes/hooks/useBottomHandleClick";
 import NodeWrapper from "@/editor/features/TreegeEditor/nodes/layout/NodeWrapper";
 import useTranslate from "@/editor/hooks/useTranslate";
@@ -9,7 +9,7 @@ import { InputNodeData } from "@/shared/types/node";
 export type InputNodeType = Node<InputNodeData, "input">;
 export type InputNodeProps = NodeProps<InputNodeType>;
 
-const InputNode = ({ data, isConnectable, type, parentId, id }: InputNodeProps) => {
+const InputNode = ({ data, isConnectable, parentId, id }: InputNodeProps) => {
   const translate = useTranslate();
   const label = translate(data?.label);
   const handleBottomHandleClick = useBottomHandleClick(id);
@@ -24,15 +24,8 @@ const InputNode = ({ data, isConnectable, type, parentId, id }: InputNodeProps) 
 
       {/* Input type */}
       <div className="flex gap-1">
-        {type && (
-          <Badge variant="secondary" className="bg-blue-500 text-white dark:bg-blue-600">
-            <RectangleEllipsis />
-            {type}
-          </Badge>
-        )}
-
         {data?.type && (
-          <Badge variant="outline">
+          <Badge variant="secondary" className="bg-blue-500 text-white capitalize dark:bg-blue-600">
             <Type />
             {data.type}
           </Badge>
