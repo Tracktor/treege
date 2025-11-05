@@ -155,7 +155,7 @@ const SelectNodeGroup = () => {
               <PlusCircle className="h-4 w-4" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-80" align="end">
+          <PopoverContent className="w-80" align="end" disablePortal>
             <div className="space-y-4">
               <div className="space-y-2">
                 <h4 className="font-medium leading-none">{t("editor.selectNodeGroup.newGroup")}</h4>
