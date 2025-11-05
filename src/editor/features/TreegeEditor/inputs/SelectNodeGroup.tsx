@@ -1,7 +1,7 @@
 import { useReactFlow } from "@xyflow/react";
 import { PlusCircle } from "lucide-react";
 import { nanoid } from "nanoid";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { toast } from "sonner";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
 import useTranslate from "@/editor/hooks/useTranslate";
@@ -20,6 +20,7 @@ const SelectNodeGroup = () => {
   const currentParentId = selectedNode?.parentId || "none";
   const isGroup = isGroupNode(selectedNode);
   const t = useTranslate();
+  const groupId = useId();
 
   if (isGroup) {
     return null;
@@ -161,9 +162,10 @@ const SelectNodeGroup = () => {
                 <p className="text-muted-foreground text-sm">{t("editor.selectNodeGroup.newGroupDescription")}</p>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="group-label">{t("editor.selectNodeGroup.groupName")}</Label>
+                <Label htmlFor={groupId}>{t("editor.selectNodeGroup.groupName")}</Label>
                 <Input
                   autoFocus
+                  id={groupId}
                   value={newGroupLabel}
                   onChange={(e) => setNewGroupLabel(e.target.value)}
                   placeholder="Ex: Step 1 - Personal info"
