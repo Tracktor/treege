@@ -98,8 +98,23 @@ const useFlowActions = () => {
     [getNodes, updateNodeData],
   );
 
+  /**
+   * Deletes the currently selected node and its connected edges.
+   * If no node is selected, the function does nothing.
+   */
+  const deleteSelectedNode = useCallback(() => {
+    const currentSelectedNode = getNodes().find((node) => node.selected);
+    if (!currentSelectedNode) {
+      return;
+    }
+
+    setNodes((nds) => nds.filter((node) => node.id !== currentSelectedNode.id));
+    setEdges((eds) => eds.filter((edge) => edge.source !== currentSelectedNode.id && edge.target !== currentSelectedNode.id));
+  }, [getNodes, setNodes, setEdges]);
+
   return {
     clearSelection,
+    deleteSelectedNode,
     updateNodeData,
     updateNodeType,
     updateSelectedNodeData,

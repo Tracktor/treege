@@ -4,6 +4,7 @@
     "clear": "Löschen",
     "close": "Schließen",
     "create": "Erstellen",
+    "delete": "Löschen",
     "retry": "Erneut versuchen",
     "save": "Speichern",
     "submit": "Senden",
@@ -175,6 +176,12 @@
       "transformString": "In String konvertieren",
       "transformType": "Transformationstyp",
       "validation": "Validierung"
+    },
+    "nodeActionsSheet": {
+      "deleteNode": "Knoten löschen",
+      "deleteNodeConfirm": "Sind Sie sicher, dass Sie diesen Knoten löschen möchten?",
+      "deleteNodeSuccess": "Knoten erfolgreich gelöscht",
+      "editNode": "Knoten bearbeiten"
     },
     "selectInputType": {
       "type": "Typ"

@@ -4,6 +4,7 @@
     "clear": "Clear",
     "close": "Close",
     "create": "Create",
+    "delete": "Delete",
     "retry": "Retry",
     "save": "Save",
     "submit": "Submit",
@@ -175,6 +176,12 @@
       "transformString": "Convert to String",
       "transformType": "Transform Type",
       "validation": "Validation"
+    },
+    "nodeActionsSheet": {
+      "deleteNode": "Delete node",
+      "deleteNodeConfirm": "Are you sure you want to delete this node?",
+      "deleteNodeSuccess": "Node deleted successfully",
+      "editNode": "Edit node"
     },
     "selectInputType": {
       "type": "Type"

@@ -4,6 +4,7 @@
     "clear": "Limpiar",
     "close": "Cerrar",
     "create": "Crear",
+    "delete": "Eliminar",
     "retry": "Reintentar",
     "save": "Guardar",
     "submit": "Enviar",
@@ -175,6 +176,12 @@
       "transformString": "Convertir a texto",
       "transformType": "Tipo de transformación",
       "validation": "Validación"
+    },
+    "nodeActionsSheet": {
+      "deleteNode": "Eliminar nodo",
+      "deleteNodeConfirm": "¿Estás seguro de que quieres eliminar este nodo?",
+      "deleteNodeSuccess": "Nodo eliminado exitosamente",
+      "editNode": "Editar nodo"
     },
     "selectInputType": {
       "type": "Tipo"

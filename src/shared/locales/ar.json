@@ -4,6 +4,7 @@
     "clear": "مسح",
     "close": "إغلاق",
     "create": "إنشاء",
+    "delete": "حذف",
     "retry": "إعادة المحاولة",
     "save": "حفظ",
     "submit": "إرسال",
@@ -175,6 +176,12 @@
       "transformString": "تحويل إلى نص",
       "transformType": "نوع التحويل",
       "validation": "التحقق"
+    },
+    "nodeActionsSheet": {
+      "deleteNode": "حذف العقدة",
+      "deleteNodeConfirm": "هل أنت متأكد من أنك تريد حذف هذه العقدة؟",
+      "deleteNodeSuccess": "تم حذف العقدة بنجاح",
+      "editNode": "تعديل العقدة"
     },
     "selectInputType": {
       "type": "النوع"

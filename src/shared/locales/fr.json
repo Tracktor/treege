@@ -4,6 +4,7 @@
     "clear": "Effacer",
     "close": "Fermer",
     "create": "Créer",
+    "delete": "Supprimer",
     "retry": "Réessayer",
     "save": "Enregistrer",
     "submit": "Soumettre",
@@ -175,6 +176,12 @@
       "transformString": "Convertir en chaîne",
       "transformType": "Type de transformation",
       "validation": "Validation"
+    },
+    "nodeActionsSheet": {
+      "deleteNode": "Supprimer le nœud",
+      "deleteNodeConfirm": "Êtes-vous sûr de vouloir supprimer ce nœud ?",
+      "deleteNodeSuccess": "Nœud supprimé avec succès",
+      "editNode": "Modifier le nœud"
     },
     "selectInputType": {
       "type": "Type"
