@@ -307,7 +307,7 @@ const InputNodeForm = () => {
               children={(field) => (
                 <FormItem>
                   <Label htmlFor={field.name}>{t("editor.inputNodeForm.pattern")}</Label>
-                  <ComboboxPattern value={field.state.value} onValueChange={field.handleChange} />
+                  <ComboboxPattern id={field.name} value={field.state.value} onValueChange={field.handleChange} />
                 </FormItem>
               )}
             />

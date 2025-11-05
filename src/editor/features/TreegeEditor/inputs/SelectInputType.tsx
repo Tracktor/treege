@@ -1,3 +1,4 @@
+import { useId } from "react";
 import useTranslate from "@/editor/hooks/useTranslate";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { INPUT_TYPE } from "@/shared/constants/inputType";
@@ -10,12 +11,13 @@ export interface SelectInputTypeProps {
 
 const SelectInputType = ({ value, onValueChange }: SelectInputTypeProps) => {
   const t = useTranslate();
+  const id = useId();
 
   return (
     <SelectGroup>
-      <SelectLabel>{t("editor.selectInputType.type")}</SelectLabel>
+      <SelectLabel htmlFor={id}>{t("editor.selectInputType.type")}</SelectLabel>
       <Select value={value} onValueChange={onValueChange}>
-        <SelectTrigger className="w-full capitalize">
+        <SelectTrigger id={id} className="w-full capitalize">
           <SelectValue placeholder="" />
         </SelectTrigger>
         <SelectContent>
