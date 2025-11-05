@@ -49,12 +49,13 @@ const DefaultCheckboxInput = ({ node, value, setValue, error, label, helperText,
     <FormItem className="mb-4">
       <div className="flex items-center gap-3">
         <Checkbox
-          id={name}
+          id={id}
+          name={name}
           checked={typeof value === "boolean" ? value : false}
           onCheckedChange={(checked) => setValue(Boolean(checked))}
         />
         <div>
-          <Label htmlFor={name} className="cursor-pointer font-medium text-sm">
+          <Label htmlFor={id} className="cursor-pointer font-medium text-sm">
             {label || node.data.name}
             {node.data.required && <span className="text-red-500">*</span>}
           </Label>
