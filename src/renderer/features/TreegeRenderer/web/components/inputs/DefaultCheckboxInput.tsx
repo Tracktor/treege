@@ -18,7 +18,7 @@ const DefaultCheckboxInput = ({ node, value, setValue, error, label, helperText,
 
     return (
       <FormItem className="mb-4">
-        <Label className="mb-1" htmlFor={id}>
+        <Label className="mb-1" htmlFor={`${id}-${node.data.options[0].value}`}>
           {label || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
