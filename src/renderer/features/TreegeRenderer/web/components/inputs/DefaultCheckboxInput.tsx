@@ -32,7 +32,7 @@ const DefaultCheckboxInput = ({ node, value, setValue, error, label, helperText,
                 onCheckedChange={(checked) => handleCheckboxChange(String(option.value), Boolean(checked))}
                 disabled={option.disabled}
               />
-              <Label htmlFor={`${name}-${option.value}`} className="cursor-pointer font-normal text-sm">
+              <Label htmlFor={`${id}-${option.value}`} className="cursor-pointer font-normal text-sm">
                 {t(option.label) ? t(option.label) : option.value}
               </Label>
             </div>
