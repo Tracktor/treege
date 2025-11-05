@@ -3,9 +3,10 @@ import { cn } from "@/shared/lib/utils";
 
 interface NodeWrapperProps extends PropsWithChildren {
   inGroup: boolean;
+  isSubmit?: boolean;
 }
 
-const NodeWrapper = ({ children, inGroup }: NodeWrapperProps) => (
-  <div className={cn("react-flow__node__wrapper", inGroup ? "in-group" : "")}>{children}</div>
+const NodeWrapper = ({ children, inGroup, isSubmit }: NodeWrapperProps) => (
+  <div className={cn("react-flow__node__wrapper", inGroup && "in-group", isSubmit && "submit-type")}>{children}</div>
 );
 export default NodeWrapper;

@@ -15,7 +15,7 @@ const InputNode = ({ data, isConnectable, parentId, id }: InputNodeProps) => {
   const handleBottomHandleClick = useBottomHandleClick(id);
 
   return (
-    <NodeWrapper inGroup={!!parentId}>
+    <NodeWrapper inGroup={!!parentId} isSubmit={data?.type === "submit"}>
       {/* Top handle */}
       <Handle type="target" position={Position.Top} isConnectable={isConnectable} isConnectableStart={false} />
 
@@ -25,7 +25,7 @@ const InputNode = ({ data, isConnectable, parentId, id }: InputNodeProps) => {
       {/* Input type */}
       <div className="flex gap-1">
         {data?.type && (
-          <Badge variant="secondary" className="bg-blue-500 text-white capitalize dark:bg-blue-600">
+          <Badge variant="blue" className="capitalize">
             <Type />
             {data.type}
           </Badge>
