@@ -4,9 +4,8 @@ import { Checkbox } from "@/shared/components/ui/checkbox";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
 import { Label } from "@/shared/components/ui/label";
 
-const DefaultCheckboxInput = ({ node, value, setValue, error, label, helperText }: InputRenderProps<"checkbox">) => {
+const DefaultCheckboxInput = ({ node, value, setValue, error, label, helperText, id, name }: InputRenderProps<"checkbox">) => {
   const t = useTranslate();
-  const name = node.data.name || node.id;
 
   // If there are options, render a checkbox group (multiple checkboxes)
   if (node.data.options && node.data.options.length > 0) {
@@ -19,7 +18,7 @@ const DefaultCheckboxInput = ({ node, value, setValue, error, label, helperText 
 
     return (
       <FormItem className="mb-4">
-        <Label className="mb-1">
+        <Label className="mb-1" htmlFor={id}>
           {label || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
@@ -27,12 +26,13 @@ const DefaultCheckboxInput = ({ node, value, setValue, error, label, helperText 
           {node.data.options.map((option, index) => (
             <div key={option.value + index} className="flex items-center gap-3">
               <Checkbox
-                id={`${name}-${option.value}`}
+                id={`${id}-${option.value}`}
+                name={name}
                 checked={selectedValues.includes(String(option.value))}
                 onCheckedChange={(checked) => handleCheckboxChange(String(option.value), Boolean(checked))}
                 disabled={option.disabled}
               />
-              <Label htmlFor={`${name}-${option.value}`} className="cursor-pointer font-normal text-sm">
+              <Label htmlFor={`${id}-${option.value}`} className="cursor-pointer font-normal text-sm">
                 {t(option.label) ? t(option.label) : option.value}
               </Label>
             </div>
@@ -49,12 +49,13 @@ const DefaultCheckboxInput = ({ node, value, setValue, error, label, helperText 
     <FormItem className="mb-4">
       <div className="flex items-center gap-3">
         <Checkbox
-          id={name}
+          id={id}
+          name={name}
           checked={typeof value === "boolean" ? value : false}
           onCheckedChange={(checked) => setValue(Boolean(checked))}
         />
         <div>
-          <Label htmlFor={name} className="cursor-pointer font-medium text-sm">
+          <Label htmlFor={id} className="cursor-pointer font-medium text-sm">
             {label || node.data.name}
             {node.data.required && <span className="text-red-500">*</span>}
           </Label>

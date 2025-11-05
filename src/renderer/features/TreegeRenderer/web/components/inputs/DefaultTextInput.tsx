@@ -3,16 +3,14 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 
-const DefaultTextInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"text">) => {
-  const name = node.data.name || node.id;
-
+const DefaultTextInput = ({ node, value, setValue, error, label, placeholder, helperText, name, id }: InputRenderProps<"text">) => {
   return (
     <FormItem className="mb-4">
-      <Label htmlFor={name}>
+      <Label htmlFor={id}>
         {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
-      <Input type="text" id={name} name={name} value={value ?? ""} onChange={(e) => setValue(e.target.value)} placeholder={placeholder} />
+      <Input type="text" id={id} name={name} value={value ?? ""} onChange={(e) => setValue(e.target.value)} placeholder={placeholder} />
       {error && <FormError>{error}</FormError>}
       {helperText && !error && <FormDescription>{helperText}</FormDescription>}
     </FormItem>

@@ -3,19 +3,17 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 
-const DefaultPasswordInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"password">) => {
-  const name = node.data.name || node.id;
-
+const DefaultPasswordInput = ({ node, value, setValue, error, label, placeholder, helperText, name, id }: InputRenderProps<"password">) => {
   return (
     <FormItem className="mb-4">
-      <Label htmlFor={name}>
+      <Label htmlFor={id}>
         {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
-        type="password"
-        id={name}
+        id={id}
         name={name}
+        type="password"
         value={value ?? ""}
         onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder}

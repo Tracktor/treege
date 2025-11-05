@@ -9,11 +9,9 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Label } from "@/shared/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 
-const DefaultDateRangeInput = ({ node, value, setValue, error, label, helperText }: InputRenderProps<"daterange">) => {
-  const t = useTranslate();
+const DefaultDateRangeInput = ({ node, value, setValue, error, label, helperText, id }: InputRenderProps<"daterange">) => {
   const [open, setOpen] = useState(false);
-
-  // Parse range value as array [startDate, endDate]
+  const t = useTranslate();
   const dateRange = Array.isArray(value) ? value : [];
   const startDate = dateRange[0] ? new Date(dateRange[0]) : undefined;
   const endDate = dateRange[1] ? new Date(dateRange[1]) : undefined;
@@ -34,13 +32,13 @@ const DefaultDateRangeInput = ({ node, value, setValue, error, label, helperText
 
   return (
     <FormItem className="mb-4">
-      <Label>
+      <Label htmlFor={id}>
         {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="w-full justify-between font-normal">
+          <Button id={id} variant="outline" className="w-full justify-between font-normal">
             {formatDateRange()}
             <ChevronDownIcon className="size-4" />
           </Button>

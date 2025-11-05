@@ -3,18 +3,16 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 
-const DefaultTimeInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"time">) => {
-  const name = node.data.name || node.id;
-
+const DefaultTimeInput = ({ node, value, setValue, error, label, placeholder, helperText, name, id }: InputRenderProps<"time">) => {
   return (
     <FormItem className="mb-4">
-      <Label htmlFor={name}>
+      <Label htmlFor={id}>
         {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Input
         type="time"
-        id={name}
+        id={id}
         name={name}
         value={value ?? ""}
         onChange={(e) => setValue(e.target.value)}

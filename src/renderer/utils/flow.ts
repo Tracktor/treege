@@ -125,8 +125,11 @@ const determineEdgesToFollow = (
     });
   });
 
-  // 4. If fields not filled, wait for input (unless we have unconditional edges to follow)
+  // 4. If fields not filled, follow fallback edges (no conditional edge can be true without values)
   if (!allFieldsFilled) {
+    if (fallback.length > 0) {
+      edgesToFollow.push(...fallback);
+    }
     return { edgesToFollow, waitingForInput: edgesToFollow.length === 0 };
   }
 

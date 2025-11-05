@@ -1,5 +1,5 @@
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
@@ -10,6 +10,7 @@ import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/shared/components/ui/tooltip";
 import { cn } from "@/shared/lib/utils";
 
 type HttpResponse = Record<string, unknown> | unknown[];
@@ -46,13 +47,39 @@ const getValueByPath = (obj: HttpResponse, path: string): unknown => {
 };
 
 /**
+ * Extracts variable names from a template string
+ * Example: "https://api.com/users/{{userId}}/posts/{{postId}}" -> ["userId", "postId"]
+ * Supports alphanumeric characters, underscores, and hyphens in variable names
+ */
+const extractTemplateVars = (template: string): string[] => {
+  const matches = template.matchAll(/{{([\w-]+)}}/g);
+  return Array.from(matches, (match) => match[1]);
+};
+
+/**
+ * Checks if all template variables in a string have non-empty values
+ * Returns true if all variables are filled, false otherwise
+ */
+const areTemplateVarsFilled = (template: string, formValues: Record<string, unknown>): boolean => {
+  const vars = extractTemplateVars(template);
+  return vars.every((varName) => {
+    const value = formValues[varName];
+    return value !== undefined && value !== null && value !== "";
+  });
+};
+
+/**
  * Replaces template variables in a string with values from formValues
  * Example: "https://api.com/users/{{userId}}" -> "https://api.com/users/123"
+ * Supports alphanumeric characters, underscores, and hyphens in variable names
  */
-const replaceTemplateVars = (template: string, formValues: Record<string, unknown>): string =>
-  template.replace(/{{(\w+)}}/g, (_, key) => String(formValues[key] || ""));
+const replaceTemplateVars = (template: string, formValues: Record<string, unknown>, encode = false): string =>
+  template.replace(/{{([\w-]+)}}/g, (_, key) => {
+    const value = String(formValues[key] || "");
+    return encode ? encodeURIComponent(value) : value;
+  });
 
-const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"http">) => {
+const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, helperText, id, name }: InputRenderProps<"http">) => {
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [options, setOptions] = useState<Array<{ value: string; label: string }>>([]);
@@ -61,13 +88,67 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
   const { formValues } = useTreegeRendererContext();
   const t = useTranslate();
   const { httpConfig } = node.data;
-  const name = node.data.name || node.id;
   const hasFetchedOnMount = useRef(false);
+  const lastFetchedTemplateValues = useRef<string>("");
+
+  // Refs to store latest values without triggering re-renders
+  const httpConfigRef = useRef(httpConfig);
+  const formValuesRef = useRef(formValues);
+  const setValueRef = useRef(setValue);
+  const fetchDataRef = useRef<((search?: string) => Promise<void>) | null>(null);
+
+  /**
+   * Extract template variables from URL (memoized)
+   */
+  const templateVars = useMemo(() => {
+    if (!httpConfig?.url) {
+      return [];
+    }
+    return extractTemplateVars(httpConfig.url);
+  }, [httpConfig?.url]);
+
+  /**
+   * Check if URL has template variables
+   */
+  const hasTemplateVars = templateVars.length > 0;
+
+  /**
+   * Get current values of template variables (for dependency tracking)
+   * Returns a stable string key that only changes when the actual template variable values change
+   */
+  const templateVarValuesKey = useMemo(() => {
+    return templateVars.map((varName) => `${varName}:${String(formValues[varName] ?? "")}`).join("|");
+  }, [templateVars, formValues]);
+
+  /**
+   * Check if we can make a fetch request
+   * Returns true only if URL exists and all template variables are filled
+   */
+  const canFetch = useMemo(() => {
+    if (!httpConfig?.url) {
+      return false;
+    }
+    // If no template vars, we can always fetch
+    if (!hasTemplateVars) {
+      return true;
+    }
+    // If has template vars, check they're all filled
+    return areTemplateVarsFilled(httpConfig.url, formValues);
+  }, [httpConfig?.url, hasTemplateVars, formValues]);
 
   const fetchData = useCallback(
     async (search?: string) => {
-      if (!httpConfig?.url) {
+      const currentHttpConfig = httpConfigRef.current;
+      const currentFormValues = formValuesRef.current;
+      const currentSetValue = setValueRef.current;
+
+      if (!currentHttpConfig?.url) {
         setFetchError(t("renderer.defaultHttpInput.noUrlConfigured"));
+        return;
+      }
+
+      // Check if we can fetch (all template vars filled)
+      if (currentHttpConfig.url && !areTemplateVarsFilled(currentHttpConfig.url, currentFormValues)) {
         return;
       }
 
@@ -76,22 +157,23 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
 
       try {
         // Replace template variables in URL and add search param if configured
-        const baseUrl = replaceTemplateVars(httpConfig.url, formValues);
+        const baseUrl = replaceTemplateVars(currentHttpConfig.url, currentFormValues, true);
+
         const url =
-          httpConfig.searchParam && search
-            ? `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}${httpConfig.searchParam}=${encodeURIComponent(search)}`
+          currentHttpConfig.searchParam && search
+            ? `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}${currentHttpConfig.searchParam}=${encodeURIComponent(search)}`
             : baseUrl;
 
         // Replace template variables in headers
         const headers: Record<string, string> = {};
-        httpConfig.headers?.forEach((header) => {
-          headers[header.key] = replaceTemplateVars(header.value, formValues);
+        currentHttpConfig.headers?.forEach((header) => {
+          headers[header.key] = replaceTemplateVars(header.value, currentFormValues);
         });
 
         // Replace template variables in body (for POST/PUT/PATCH methods)
         const body =
-          httpConfig.body && ["POST", "PUT", "PATCH"].includes(httpConfig.method || "")
-            ? replaceTemplateVars(httpConfig.body, formValues)
+          currentHttpConfig.body && ["POST", "PUT", "PATCH"].includes(currentHttpConfig.method || "")
+            ? replaceTemplateVars(currentHttpConfig.body, currentFormValues)
             : undefined;
 
         const response = await fetch(url, {
@@ -100,7 +182,7 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
             "Content-Type": "application/json",
             ...headers,
           },
-          method: httpConfig.method || "GET",
+          method: currentHttpConfig.method || "GET",
         });
 
         if (!response.ok) {
@@ -112,11 +194,11 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
         const data: HttpResponse = await response.json();
 
         // Extract data using responsePath
-        const extractedData = httpConfig.responsePath ? getValueByPath(data, httpConfig.responsePath) : data;
+        const extractedData = currentHttpConfig.responsePath ? getValueByPath(data, currentHttpConfig.responsePath) : data;
 
         // If responseMapping is configured, map the data to options
-        if (httpConfig.responseMapping && Array.isArray(extractedData)) {
-          const { valueField = "value", labelField = "label" } = httpConfig.responseMapping;
+        if (currentHttpConfig.responseMapping && Array.isArray(extractedData)) {
+          const { valueField = "value", labelField = "label" } = currentHttpConfig.responseMapping;
 
           const mappedOptions = extractedData.map((item) => ({
             label: String(getValueByPath(item as HttpResponse, labelField) || ""),
@@ -126,7 +208,7 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
           setOptions(mappedOptions);
         } else {
           // Store the raw data as the field value (converting to string)
-          setValue(typeof extractedData === "string" ? extractedData : JSON.stringify(extractedData));
+          currentSetValue(typeof extractedData === "string" ? extractedData : JSON.stringify(extractedData));
         }
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : t("renderer.defaultHttpInput.fetchFailed");
@@ -136,21 +218,88 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
         setLoading(false);
       }
     },
-    [httpConfig, formValues, setValue, t],
+    [t],
   );
 
   /**
-   * Fetch on mount if configured (only once)
+   * Update refs
    */
   useEffect(() => {
-    if (httpConfig?.fetchOnMount && !hasFetchedOnMount.current) {
-      hasFetchedOnMount.current = true;
-      void fetchData();
-    }
-  }, [httpConfig?.fetchOnMount, fetchData]);
+    httpConfigRef.current = httpConfig;
+    formValuesRef.current = formValues;
+    setValueRef.current = setValue;
+    fetchDataRef.current = fetchData;
+  }, [httpConfig, formValues, setValue, fetchData]);
 
   /**
-   * Debounced search for combobox
+   * Effect 1: Fetch on mount if fetchOnMount is true AND all variables are filled
+   * Only runs once at initial mount
+   */
+  useEffect(() => {
+    // Mark that we've processed the initial mount
+    if (hasFetchedOnMount.current) {
+      return;
+    }
+
+    hasFetchedOnMount.current = true;
+
+    // Check conditions using refs to get current values
+    const currentHttpConfig = httpConfigRef.current;
+    const currentFormValues = formValuesRef.current;
+    const currentFetchData = fetchDataRef.current;
+
+    // Only fetch if conditions are met
+    const canFetchNow = currentHttpConfig?.url && areTemplateVarsFilled(currentHttpConfig.url, currentFormValues);
+
+    if (currentHttpConfig?.fetchOnMount && canFetchNow && currentFetchData) {
+      void currentFetchData();
+      // Store the current template values
+      if (currentHttpConfig.url) {
+        const currentTemplateVars = extractTemplateVars(currentHttpConfig.url);
+        lastFetchedTemplateValues.current = currentTemplateVars
+          .map((varName) => `${varName}:${String(currentFormValues[varName] ?? "")}`)
+          .join("|");
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount
+
+  /**
+   * Effect 2: Watch template variables and refetch when they change (debounced)
+   * Only runs AFTER initial mount if there are template variables
+   */
+  useEffect(() => {
+    // Skip if we haven't done the initial mount fetch yet
+    if (!hasFetchedOnMount.current) {
+      return;
+    }
+
+    // Only watch if URL has template variables
+    if (!hasTemplateVars) {
+      return;
+    }
+
+    // Skip if template values haven't changed
+    if (lastFetchedTemplateValues.current === templateVarValuesKey) {
+      return;
+    }
+
+    // Skip if we can't fetch yet
+    if (!canFetch) {
+      return;
+    }
+
+    // Debounce to avoid multiple calls when user is typing
+    const timer = setTimeout(() => {
+      void fetchData();
+      lastFetchedTemplateValues.current = templateVarValuesKey;
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [templateVarValuesKey, hasTemplateVars, canFetch, fetchData]);
+
+  /**
+   * Effect 3: Debounced search for combobox
    */
   useEffect(() => {
     if (!(httpConfig?.searchParam && searchQuery)) {
@@ -251,43 +400,62 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
     // Render as Select (no search)
     const isLoading = loading && httpConfig?.showLoading;
 
-    if (options.length === 0 && !isLoading) {
-      return (
-        <FormItem className="mb-4">
-          <Label htmlFor={name}>
-            {label || node.data.name}
-            {node.data.required && <span className="text-red-500">*</span>}
-          </Label>
-          <div className="py-2 text-muted-foreground text-sm">
-            No data available. Configure &#34;Fetch on mount&#34; or add a search parameter.
-          </div>
-          {error && <FormError>{error}</FormError>}
-          {helperText && !error && <FormDescription>{helperText}</FormDescription>}
-        </FormItem>
-      );
-    }
+    // Build tooltip message for disabled state
+    const emptyVars = templateVars.filter((varName) => {
+      const value = formValues[varName];
+      return value === undefined || value === null || value === "";
+    });
+
+    const tooltipMessage =
+      options.length === 0 && !isLoading
+        ? emptyVars.length > 0
+          ? `Waiting for required fields: ${emptyVars.join(", ")}`
+          : 'No data available. Configure "Fetch on mount" or add a search parameter.'
+        : undefined;
+
+    const selectElement = (
+      <Select
+        value={Array.isArray(value) ? (value[0] ?? "") : (value ?? "")}
+        onValueChange={(val) => setValue(val)}
+        disabled={isLoading || options.length === 0}
+        name={name}
+      >
+        <SelectTrigger id={id} name={name} className="w-full">
+          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          <SelectValue placeholder={placeholder || t("renderer.defaultHttpInput.selectOption")} />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {options.map((option, index) => (
+              <SelectItem key={option.value + index} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    );
 
     return (
       <FormItem className="mb-4">
-        <Label htmlFor={name}>
+        <Label htmlFor={id}>
           {label || node.data.name}
           {node.data.required && <span className="text-red-500">*</span>}
         </Label>
-        <Select value={Array.isArray(value) ? (value[0] ?? "") : (value ?? "")} onValueChange={(val) => setValue(val)} disabled={isLoading}>
-          <SelectTrigger id={name} className="w-full">
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            <SelectValue placeholder={placeholder || t("renderer.defaultHttpInput.selectOption")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {options.map((option, index) => (
-                <SelectItem key={option.value + index} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        {tooltipMessage ? (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="w-full">{selectElement}</div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{tooltipMessage}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ) : (
+          selectElement
+        )}
         {error && <FormError>{error}</FormError>}
         {helperText && !error && <FormDescription>{helperText}</FormDescription>}
       </FormItem>
@@ -297,11 +465,11 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
   // If no responseMapping, render the value as text (hidden or display-only)
   return (
     <FormItem className="mb-4">
-      <Label htmlFor={name}>
+      <Label htmlFor={id}>
         {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
-      <Input type="text" id={name} name={name} value={typeof value === "string" ? value : JSON.stringify(value)} readOnly disabled />
+      <Input type="text" name={name} id={id} value={typeof value === "string" ? value : JSON.stringify(value)} readOnly disabled />
       {error && <FormError>{error}</FormError>}
       {helperText && !error && <FormDescription>{helperText}</FormDescription>}
     </FormItem>

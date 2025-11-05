@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 
-export const defaultNode = {
+export const DEFAULT_NODE = {
   data: {
     type: "text",
   },

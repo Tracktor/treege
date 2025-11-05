@@ -9,12 +9,20 @@ import { Label } from "@/shared/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
 import { cn } from "@/shared/lib/utils";
 
-const DefaultAutocompleteInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"autocomplete">) => {
+const DefaultAutocompleteInput = ({
+  node,
+  value,
+  setValue,
+  error,
+  label,
+  placeholder,
+  helperText,
+  id,
+}: InputRenderProps<"autocomplete">) => {
   const t = useTranslate();
   const [open, setOpen] = useState(false);
-  const name = node.data.name || node.id;
-  const triggerId = `${name}-trigger`;
-  const errorId = `${name}-error`;
+  const triggerId = `${id}-trigger`;
+  const errorId = `${id}-error`;
   const options = node.data.options || [];
   const selectedOption = options.find((option) => option.value === value);
 

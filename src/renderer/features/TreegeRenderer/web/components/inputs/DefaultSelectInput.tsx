@@ -4,19 +4,18 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Label } from "@/shared/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 
-const DefaultSelectInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"select">) => {
+const DefaultSelectInput = ({ node, value, setValue, error, label, placeholder, helperText, name, id }: InputRenderProps<"select">) => {
   const t = useTranslate();
-  const name = node.data.name || node.id;
   const normalizedValue = value ? String(value) : "";
 
   return (
     <FormItem className="mb-4">
-      <Label htmlFor={name}>
+      <Label htmlFor={id}>
         {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
-      <Select value={normalizedValue} onValueChange={(val) => setValue(val)}>
-        <SelectTrigger id={name} className="w-full">
+      <Select name={name} value={normalizedValue} onValueChange={(val) => setValue(val)}>
+        <SelectTrigger id={id} name={name} className="w-full">
           <SelectValue placeholder={placeholder || t("renderer.defaultSelectInput.selectOption")} />
         </SelectTrigger>
         <SelectContent>

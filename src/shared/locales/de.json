@@ -148,6 +148,7 @@
       "multipleFiles": "Mehrere Dateien",
       "multipleSelection": "Mehrfachauswahl",
       "name": "Name",
+      "nameDescription": "Optionaler benutzerdefinierter Feldname für den Formularexport. Falls leer, wird die Bezeichnung als Schlüssel verwendet.",
       "noParentFieldsAvailable": "Keine übergeordneten Felder verfügbar",
       "objectMapping": "Objektzuordnung",
       "objectMappingDesc": "Eigenschaften des Quellobjekts auf eine neue Struktur abbilden",

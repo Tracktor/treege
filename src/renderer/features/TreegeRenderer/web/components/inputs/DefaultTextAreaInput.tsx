@@ -3,17 +3,15 @@ import { FormDescription, FormError, FormItem } from "@/shared/components/ui/for
 import { Label } from "@/shared/components/ui/label";
 import { Textarea } from "@/shared/components/ui/textarea";
 
-const DefaultTextAreaInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"textarea">) => {
-  const name = node.data.name || node.id;
-
+const DefaultTextAreaInput = ({ node, value, setValue, error, label, placeholder, helperText, name, id }: InputRenderProps<"textarea">) => {
   return (
     <FormItem className="mb-4">
-      <Label htmlFor={name}>
+      <Label htmlFor={id}>
         {label || node.data.name}
         {node.data.required && <span className="text-red-500">*</span>}
       </Label>
       <Textarea
-        id={name}
+        id={id}
         name={name}
         value={value ?? ""}
         onChange={(e) => setValue(e.target.value)}

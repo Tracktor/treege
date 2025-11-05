@@ -1,5 +1,6 @@
 import { Node } from "@xyflow/react";
 import { FormValues } from "@/renderer/types/renderer";
+import { resolveNodeKey } from "@/renderer/utils/node";
 import { InputNodeData } from "@/shared/types/node";
 
 /**
@@ -37,18 +38,19 @@ export const checkFormFieldHasValue = (fieldName: string | undefined, formValues
 /**
  * Convert internal form values (keyed by nodeId) to external format (keyed by name)
  * When multiple nodes share the same name, later values overwrite earlier ones
- * example: convertFormValuesToNamedFormat({ id1: 'Alice', id2: 'Bob' }, [ { id: 'id1', data: { name: 'firstName' } }, { id: 'id2', data: { name: 'lastName' } } ])
- * returns { firstName: 'Alice', lastName: 'Bob' }
+ * Priority for key naming: name > label (en) > nodeId
+ * example: convertFormValuesToNamedFormat({ id1: 'Alice', id2: 'Bob' }, [ { id: 'id1', data: { name: 'firstName' } }, { id: 'id2', data: { label: { en: 'Last Name' } } } ])
+ * returns { firstName: 'Alice', 'Last Name': 'Bob' }
  */
 export const convertFormValuesToNamedFormat = (formValues: FormValues, nodes: Node<InputNodeData>[]): Record<string, unknown> => {
   const exported: Record<string, unknown> = {};
 
   nodes.forEach((node) => {
     const nodeId = node.id;
-    const name = node.data.name || nodeId;
+    const key = resolveNodeKey(node);
 
     if (formValues[nodeId] !== undefined) {
-      exported[name] = formValues[nodeId];
+      exported[key] = formValues[nodeId];
     }
   });
 

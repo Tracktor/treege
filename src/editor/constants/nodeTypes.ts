@@ -4,7 +4,7 @@ import InputNode from "@/editor/features/TreegeEditor/nodes/InputNode";
 import UINode from "@/editor/features/TreegeEditor/nodes/UINode";
 import { NODE_TYPE } from "@/shared/constants/node";
 
-export const nodeTypes = {
+export const NODE_TYPES = {
   [NODE_TYPE.flow]: FlowNode,
   [NODE_TYPE.group]: GroupNode,
   [NODE_TYPE.input]: InputNode,

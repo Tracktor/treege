@@ -148,6 +148,7 @@
       "multipleFiles": "Arquivos múltiplos",
       "multipleSelection": "Seleção múltipla",
       "name": "Nome",
+      "nameDescription": "Nome de campo personalizado opcional para exportação de formulário. Se vazio, o rótulo será usado como chave.",
       "noParentFieldsAvailable": "Nenhum campo pai disponível",
       "objectMapping": "Mapeamento de objeto",
       "objectMappingDesc": "Mapear as propriedades do objeto de origem para uma nova estrutura",

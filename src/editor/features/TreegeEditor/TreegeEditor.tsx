@@ -1,8 +1,8 @@
 import "@/editor/styles/style.css";
 import { Background, BackgroundVariant, Controls, MiniMap, ReactFlow, ReactFlowProvider } from "@xyflow/react";
 import Logo from "@/editor/components/data-display/logo";
-import { edgeTypes } from "@/editor/constants/edgeTypes";
-import { nodeTypes } from "@/editor/constants/nodeTypes";
+import { EDGE_TYPES } from "@/editor/constants/edgeTypes";
+import { NODE_TYPES } from "@/editor/constants/nodeTypes";
 import { TreegeEditorProvider } from "@/editor/context/TreegeEditorContext";
 import ActionsPanel from "@/editor/features/TreegeEditor/panel/ActionsPanel";
 import NodeActionsSheet from "@/editor/features/TreegeEditor/sheets/NodeActionsSheet";
@@ -19,8 +19,8 @@ const Flow = ({ flow, onExportJson, onSave, theme }: TreegeEditorProps) => {
       fitView
       colorMode={theme}
       selectNodesOnDrag={false}
-      nodeTypes={nodeTypes}
-      edgeTypes={edgeTypes}
+      nodeTypes={NODE_TYPES}
+      edgeTypes={EDGE_TYPES}
       defaultEdges={flow?.edges || []}
       defaultNodes={flow?.nodes || []}
       onConnect={onConnect}

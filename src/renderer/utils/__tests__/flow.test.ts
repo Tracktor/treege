@@ -257,6 +257,66 @@ describe("Flow Utils", () => {
         expect(state.visibleNodeIds.has("node-3")).toBe(true);
       });
 
+      it("should follow fallback edge when field is empty", () => {
+        const nodes: Node<TreegeNodeData>[] = [
+          {
+            data: { name: "age", type: "text" } as InputNodeData,
+            id: "node-1",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+          {
+            data: { name: "young", type: "text" } as InputNodeData,
+            id: "node-2",
+            position: { x: 100, y: 0 },
+            type: "input",
+          },
+          {
+            data: { name: "fallback", type: "text" } as InputNodeData,
+            id: "node-3",
+            position: { x: 100, y: 100 },
+            type: "input",
+          },
+        ];
+        const edges: Edge<ConditionalEdgeData>[] = [
+          {
+            data: { conditions: [{ field: "node-1", operator: "<", value: "10" }] },
+            id: "e1",
+            source: "node-1",
+            target: "node-2",
+            type: "conditional",
+          },
+          {
+            data: { isFallback: true },
+            id: "e2",
+            source: "node-1",
+            target: "node-3",
+            type: "conditional",
+          },
+        ];
+
+        // When field is empty (not filled yet), should show fallback
+        const stateEmpty = getFlowRenderState(nodes, edges, {});
+
+        expect(stateEmpty.visibleNodeIds.has("node-1")).toBe(true);
+        expect(stateEmpty.visibleNodeIds.has("node-2")).toBe(false);
+        expect(stateEmpty.visibleNodeIds.has("node-3")).toBe(true);
+
+        // When field has a value that matches condition, should show conditional target
+        const stateMatch = getFlowRenderState(nodes, edges, { "node-1": "5" });
+
+        expect(stateMatch.visibleNodeIds.has("node-1")).toBe(true);
+        expect(stateMatch.visibleNodeIds.has("node-2")).toBe(true);
+        expect(stateMatch.visibleNodeIds.has("node-3")).toBe(false);
+
+        // When field has a value that doesn't match, should show fallback
+        const stateNoMatch = getFlowRenderState(nodes, edges, { "node-1": "20" });
+
+        expect(stateNoMatch.visibleNodeIds.has("node-1")).toBe(true);
+        expect(stateNoMatch.visibleNodeIds.has("node-2")).toBe(false);
+        expect(stateNoMatch.visibleNodeIds.has("node-3")).toBe(true);
+      });
+
       it("should handle AND conditions", () => {
         const nodes: Node<TreegeNodeData>[] = [
           {

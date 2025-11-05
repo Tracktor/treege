@@ -263,6 +263,31 @@ describe("Conditions Utils", () => {
 
         expect(evaluateCondition(condition, formValues)).toBe(true);
       });
+
+      it("should not treat empty string as 0 in numeric comparisons", () => {
+        const condition: EdgeCondition = { field: "age", operator: "<", value: "10" };
+        const formValues: FormValues = { age: "" };
+
+        // Empty string should be treated as null, not as 0
+        // So numeric comparison should return false
+        expect(evaluateCondition(condition, formValues)).toBe(false);
+      });
+
+      it("should handle empty string with === operator", () => {
+        const condition: EdgeCondition = { field: "value", operator: "===", value: "" };
+        const formValues: FormValues = { value: "" };
+
+        // Empty string equality should work
+        expect(evaluateCondition(condition, formValues)).toBe(true);
+      });
+
+      it("should handle non-empty string vs empty string with === operator", () => {
+        const condition: EdgeCondition = { field: "value", operator: "===", value: "" };
+        const formValues: FormValues = { value: "3" };
+
+        // Non-empty string should not equal empty string
+        expect(evaluateCondition(condition, formValues)).toBe(false);
+      });
     });
   });
 

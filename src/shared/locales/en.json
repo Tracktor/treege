@@ -148,6 +148,7 @@
       "multipleFiles": "Multiple files",
       "multipleSelection": "Multiple selection",
       "name": "Name",
+      "nameDescription": "Optional custom field name for form export. If empty, the label will be used as the key.",
       "noParentFieldsAvailable": "No parent fields available",
       "objectMapping": "Object Mapping",
       "objectMappingDesc": "Map properties from the source object to a new structure",

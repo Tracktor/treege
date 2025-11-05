@@ -62,22 +62,6 @@ const InputNodeForm = () => {
     >
       <div className="grid gap-6">
         <Field
-          name="name"
-          children={(field) => (
-            <FormItem>
-              <Label htmlFor={field.name}>{t("editor.inputNodeForm.name")}</Label>
-              <Input
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={({ target }) => field.handleChange(target.value)}
-              />
-            </FormItem>
-          )}
-        />
-
-        <Field
           name="type"
           children={(field) => (
             <FormItem>
@@ -93,6 +77,7 @@ const InputNodeForm = () => {
               <FormItem className="flex-1">
                 <Label htmlFor={field.name}>{t("editor.inputNodeForm.label")}</Label>
                 <Input
+                  autoFocus
                   id={field.name}
                   name={field.name}
                   value={field.state.value?.[selectedLanguage] || ""}
@@ -365,6 +350,23 @@ const InputNodeForm = () => {
           </CollapsibleTrigger>
 
           <CollapsibleContent className="flex flex-col gap-6">
+            <Field
+              name="name"
+              children={(field) => (
+                <FormItem>
+                  <Label htmlFor={field.name}>{t("editor.inputNodeForm.name")}</Label>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={({ target }) => field.handleChange(target.value)}
+                  />
+                  <FormDescription>{t("editor.inputNodeForm.nameDescription")}</FormDescription>
+                </FormItem>
+              )}
+            />
+
             <Field name="defaultValue">
               {(defaultValueField) => (
                 <>

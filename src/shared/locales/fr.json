@@ -148,6 +148,7 @@
       "multipleFiles": "Fichiers multiples",
       "multipleSelection": "Sélection multiple",
       "name": "Nom",
+      "nameDescription": "Nom de champ personnalisé optionnel pour l'export du formulaire. Si vide, le libellé sera utilisé comme clé.",
       "noParentFieldsAvailable": "Aucun champ parent disponible",
       "objectMapping": "Mappage d'objet",
       "objectMappingDesc": "Mapper les propriétés de l'objet source vers une nouvelle structure",
