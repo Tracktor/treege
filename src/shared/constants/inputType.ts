@@ -11,6 +11,7 @@ export const INPUT_TYPE = {
   password: "password",
   radio: "radio",
   select: "select",
+  submit: "submit",
   switch: "switch",
   text: "text",
   textarea: "textarea",

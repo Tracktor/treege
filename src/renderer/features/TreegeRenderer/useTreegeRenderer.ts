@@ -185,8 +185,13 @@ export const useTreegeRenderer = (flows: Flow | Flow[] | null | undefined, initi
     return missing;
   }, [visibleNodes, formValues, t]);
 
+  /**
+   * Check if there's a submit input node in the visible nodes
+   */
+  const hasSubmitInput = useMemo(() => visibleNodes.some((node) => isInputNode(node) && node.data.type === "submit"), [visibleNodes]);
+
   return {
-    canSubmit: endOfPathReached && nodes.length > 0,
+    canSubmit: !hasSubmitInput && endOfPathReached && nodes.length > 0,
     formErrors,
     formValues,
     inputNodes,

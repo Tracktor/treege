@@ -1,3 +1,4 @@
+import DefaultSubmitButton from "@/renderer/features/TreegeRenderer/web/components/DefaultSubmitButton";
 import DefaultAddressInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultAddressInput";
 import DefaultAutocompleteInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultAutocompleteInput";
 import DefaultCheckboxInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultCheckboxInput";
@@ -52,6 +53,7 @@ export const defaultInputRenderers: InputRenderers = {
   password: DefaultPasswordInput,
   radio: DefaultRadioInput,
   select: DefaultSelectInput,
+  submit: DefaultSubmitButton,
   switch: DefaultSwitchInput,
   text: DefaultTextInput,
   textarea: DefaultTextAreaInput,

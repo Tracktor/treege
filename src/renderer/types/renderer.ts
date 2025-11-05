@@ -19,6 +19,7 @@ export type InputValueTypeMap = {
   password: string;
   radio: string;
   select: string | string[];
+  submit: undefined;
   switch: boolean;
   text: string;
   textarea: string;
@@ -43,7 +44,8 @@ export type InputValue =
   | SerializableFile[]
   | [string, string]
   | [string | undefined, string | undefined]
-  | null;
+  | null
+  | undefined;
 
 /**
  * Props for input components with dynamic value typing
