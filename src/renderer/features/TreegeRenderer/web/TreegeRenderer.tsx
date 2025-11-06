@@ -246,6 +246,7 @@ const TreegeRenderer = ({
             </SubmitButtonWrapper>
           )}
         </FormWrapper>
+        <p className="py-2 text-muted-foreground text-xs italic">Powered by Treege</p>
       </TreegeRendererProvider>
     </ThemeProvider>
   );
