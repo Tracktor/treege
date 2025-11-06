@@ -115,8 +115,15 @@ const TreegeRenderer = ({
           }
         });
 
+        // If result is null, it means the submit config is incomplete (no URL)
+        // Fall back to the default submit behavior
+        if (result === null) {
+          onSubmit?.(exportedValues);
+          return;
+        }
+
         // If submission failed, return early
-        if (result && !result.success) {
+        if (!result.success) {
           return;
         }
       } else if (onSubmit) {
