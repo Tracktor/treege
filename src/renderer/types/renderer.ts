@@ -32,6 +32,10 @@ export type InputValueTypeMap = {
  */
 export type FormValues = Record<string, any>;
 
+export type Meta = {
+  httpResponse?: unknown;
+};
+
 /**
  * Union of all possible input value types
  */
@@ -206,8 +210,10 @@ export type TreegeRendererProps = {
   onChange?: (values: FormValues) => void;
   /**
    * Callback when form is submitted
+   * @param values - Form values (keyed by field name or node ID)
+   * @param meta - Optional metadata about the submission (e.g., HTTP response data)
    */
-  onSubmit?: (values: FormValues) => void;
+  onSubmit?: (values: FormValues, meta?: Meta) => void;
   /**
    * Theme for the renderer
    * @default "dark"

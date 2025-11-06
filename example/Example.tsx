@@ -1,7 +1,7 @@
 import { MoonStar, Sun } from "lucide-react";
 import { useState } from "react";
 import TreegeEditor from "@/editor/features/TreegeEditor/TreegeEditor";
-import { FormValues, TreegeRenderer } from "@/renderer";
+import { FormValues, Meta, TreegeRenderer } from "@/renderer";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { Switch } from "@/shared/components/ui/switch";
 import { Language, LANGUAGES } from "@/shared/constants/languages";
@@ -55,10 +55,18 @@ const RendererPanel = ({
   const [formValues, setFormValues] = useState<FormValues>({});
   const hasNodes = flow && flow.nodes.length > 0;
 
-  const handleSubmit = (values: Record<string, any>) => {
+  const handleSubmit = (values: FormValues, meta?: Meta) => {
     console.log("Form submitted:", values);
-    // eslint-disable-next-line no-alert
-    alert(`Form submitted!\n\n${JSON.stringify(values, null, 2)}`);
+
+    if (meta) {
+      console.log("Meta:", meta);
+    }
+
+    // Alert form values as JSON and meta
+    alert(JSON.stringify({
+      formValues,
+      meta,
+    }, null, 2));
   };
 
   return (

@@ -185,7 +185,7 @@ const InputNodeForm = () => {
 
         {/* Submit config */}
         {isSubmitType && (
-          <Collapsible defaultOpen className="flex w-full max-w-[350px] flex-col gap-2">
+          <Collapsible className="flex w-full max-w-[350px] flex-col gap-2">
             <CollapsibleTrigger asChild>
               <div className="flex items-center justify-between gap-4">
                 <h4 className="font-semibold text-sm">{t("editor.inputNodeForm.submitConfiguration")}</h4>
