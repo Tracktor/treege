@@ -203,15 +203,10 @@ const getNestedValue = (obj: unknown, path: string): unknown => {
     return undefined;
   }
 
-  const parts = path.split(".");
-  let current: any = obj;
-
-  for (const part of parts) {
-    if (current === null || current === undefined) {
+  return path.split(".").reduce<unknown>((current, part) => {
+    if (current === null || current === undefined || typeof current !== "object") {
       return undefined;
     }
-    current = current[part];
-  }
-
-  return current;
+    return (current as Record<string, unknown>)[part];
+  }, obj);
 };
