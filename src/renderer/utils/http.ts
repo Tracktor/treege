@@ -148,17 +148,15 @@ export const replaceTemplateVariables = (template: string | undefined, values: F
     return "";
   }
 
-  let result = template;
-
   // Replace {{fieldId}} format (for URLs)
-  result = result.replace(/\{\{([\w-]+)\}\}/g, (_, fieldId) => {
+  const withCurlyBraces = template.replace(/\{\{([\w-]+)}}/g, (_, fieldId) => {
     const value = values[fieldId.trim()];
     const stringValue = value !== undefined && value !== null ? String(value) : "";
     return encode ? encodeURIComponent(stringValue) : stringValue;
   });
 
   // Replace ${fieldId} format (for request bodies)
-  result = result.replace(/\$\{([\w-]+)\}/g, (_, fieldId) => {
+  return withCurlyBraces.replace(/\$\{([\w-]+)}/g, (_, fieldId) => {
     const value = values[fieldId.trim()];
     if (value === undefined || value === null) {
       return "";
@@ -170,8 +168,6 @@ export const replaceTemplateVariables = (template: string | undefined, values: F
     // For numbers, booleans, etc., convert to string
     return String(value);
   });
-
-  return result;
 };
 
 /**
@@ -188,15 +184,11 @@ export const replaceResponseVariables = (template: string | undefined, responseD
     return "";
   }
 
-  let result = template;
-
   // Replace {{response.field}} format
-  result = result.replace(/\{\{response\.([\w.-]+)\}\}/g, (_, path) => {
+  return template.replace(/\{\{response\.([\w.-]+)}}/g, (_, path) => {
     const value = getNestedValue(responseData, path.trim());
     return value !== undefined && value !== null ? String(value) : "";
   });
-
-  return result;
 };
 
 /**

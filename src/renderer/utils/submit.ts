@@ -83,14 +83,12 @@ export const submitFormData = async (config: SubmitConfig, formValues: FormValue
   }
 
   // Generate redirect URL if configured
-  let redirectUrl: string | undefined;
-  if (config.redirectUrl) {
-    redirectUrl = replaceResponseVariables(config.redirectUrl, result.data);
-    // Validate that the redirect URL is not empty after replacement
-    if (redirectUrl && redirectUrl.trim() === "") {
-      redirectUrl = undefined;
-    }
-  }
+  const redirectUrl = config.redirectUrl
+    ? (() => {
+        const replaced = replaceResponseVariables(config.redirectUrl, result.data);
+        return replaced && replaced.trim() !== "" ? replaced : undefined;
+      })()
+    : undefined;
 
   return {
     data: result.data,
