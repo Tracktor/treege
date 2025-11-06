@@ -125,6 +125,8 @@
       "searchParameterDesc": "Si défini, active une zone de recherche qui ajoute ce paramètre aux appels API (ex : ?q=Paris)",
       "searchParameterPlaceholder": "q, recherche, requête...",
       "selectMethod": "Sélectionner une méthode",
+      "sendFormData": "Envoyer toutes les données du formulaire",
+      "sendFormDataDesc": "Envoyer automatiquement toutes les valeurs du formulaire en tant que corps JSON",
       "showLoadingState": "Afficher l'état de chargement",
       "valueField": "Champ de valeur",
       "valueFieldDesc": "Champ à utiliser comme valeur d'option (ex : id)",

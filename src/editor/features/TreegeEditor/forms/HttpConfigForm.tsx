@@ -43,7 +43,6 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
     } as HttpConfig,
     listeners: {
       onChange: ({ formApi }) => {
-        console.log(formApi.state);
         formApi.handleSubmit().then();
       },
       onChangeDebounceMs: 150,

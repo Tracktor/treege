@@ -125,6 +125,8 @@
       "searchParameterDesc": "Wenn festgelegt, aktiviert eine Suchbox, die diesen Parameter zu API-Aufrufen hinzufügt (z.B. ?q=Paris)",
       "searchParameterPlaceholder": "q, suche, abfrage...",
       "selectMethod": "Methode auswählen",
+      "sendFormData": "Alle Formulardaten senden",
+      "sendFormDataDesc": "Alle Formularwerte automatisch als JSON-Body senden",
       "showLoadingState": "Ladezustand anzeigen",
       "valueField": "Wertfeld",
       "valueFieldDesc": "Feld, das als Optionswert verwendet werden soll (z.B. id)",

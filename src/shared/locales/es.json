@@ -125,6 +125,8 @@
       "searchParameterDesc": "Si se configura, habilita un cuadro de búsqueda que agrega este parámetro a las llamadas API (ej: ?q=París)",
       "searchParameterPlaceholder": "q, buscar, consulta...",
       "selectMethod": "Seleccionar método",
+      "sendFormData": "Enviar todos los datos del formulario",
+      "sendFormDataDesc": "Enviar automáticamente todos los valores del formulario como cuerpo JSON",
       "showLoadingState": "Mostrar estado de carga",
       "valueField": "Campo de valor",
       "valueFieldDesc": "Campo a usar como valor de opción (ej: id)",

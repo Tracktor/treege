@@ -125,6 +125,8 @@
       "searchParameterDesc": "Se impostato, abilita una casella di ricerca che aggiunge questo parametro alle chiamate API (es: ?q=Parigi)",
       "searchParameterPlaceholder": "q, ricerca, query...",
       "selectMethod": "Seleziona metodo",
+      "sendFormData": "Invia tutti i dati del modulo",
+      "sendFormDataDesc": "Invia automaticamente tutti i valori del modulo come corpo JSON",
       "showLoadingState": "Mostra stato di caricamento",
       "valueField": "Campo valore",
       "valueFieldDesc": "Campo da usare come valore dell'opzione (es: id)",

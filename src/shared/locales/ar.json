@@ -125,6 +125,8 @@
       "searchParameterDesc": "إذا تم تعيينه، يتم تمكين مربع بحث يضيف هذا المعامل إلى استدعاءات API (مثال: ?q=باريس)",
       "searchParameterPlaceholder": "q، بحث، استعلام...",
       "selectMethod": "اختر الطريقة",
+      "sendFormData": "إرسال جميع بيانات النموذج",
+      "sendFormDataDesc": "إرسال جميع قيم النموذج تلقائياً كمحتوى JSON",
       "showLoadingState": "إظهار حالة التحميل",
       "valueField": "حقل القيمة",
       "valueFieldDesc": "الحقل المستخدم كقيمة خيار (مثال: id)",
