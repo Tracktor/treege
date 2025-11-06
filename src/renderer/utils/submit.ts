@@ -62,8 +62,12 @@ export const submitFormData = async (config: SubmitConfig, formValues: FormValue
     value: replaceTemplateVariables(header.value, formValues),
   }));
 
-  // Prepare body with template replacement (smart JSON mode)
-  const body = config.body ? replaceTemplateVariables(config.body, formValues, { json: true }) : undefined;
+  // Prepare body: use all form data if sendFormData is true, otherwise use custom body
+  const body = config.sendFormData
+    ? JSON.stringify(formValues)
+    : config.body
+      ? replaceTemplateVariables(config.body, formValues, { json: true })
+      : undefined;
 
   // Make the HTTP request using shared utility
   const result = await makeHttpRequest({

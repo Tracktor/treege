@@ -77,6 +77,10 @@ export type HttpConfig = {
    */
   body?: string;
   /**
+   * If true, automatically sends all form data as JSON body (overrides custom body)
+   */
+  sendFormData?: boolean;
+  /**
    * JSONPath or key to extract from the response
    * Examples: "data.users", "results[0].name"
    */

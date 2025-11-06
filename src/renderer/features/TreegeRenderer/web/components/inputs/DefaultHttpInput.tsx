@@ -170,11 +170,14 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
           headers[header.key] = replaceTemplateVars(header.value, currentFormValues);
         });
 
-        // Replace template variables in body (for POST/PUT/PATCH methods)
-        const body =
-          currentHttpConfig.body && ["POST", "PUT", "PATCH"].includes(currentHttpConfig.method || "")
-            ? replaceTemplateVars(currentHttpConfig.body, currentFormValues)
-            : undefined;
+        // Prepare body: use all form data if sendFormData is true, otherwise use custom body
+        const body = ["POST", "PUT", "PATCH"].includes(currentHttpConfig.method || "")
+          ? currentHttpConfig.sendFormData
+            ? JSON.stringify(currentFormValues)
+            : currentHttpConfig.body
+              ? replaceTemplateVars(currentHttpConfig.body, currentFormValues)
+              : undefined
+          : undefined;
 
         const response = await fetch(url, {
           body: body || undefined,

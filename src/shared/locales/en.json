@@ -125,6 +125,8 @@
       "searchParameterDesc": "If set, enables combobox with search that adds this param to API calls (e.g., ?q=Paris)",
       "searchParameterPlaceholder": "q, search, query...",
       "selectMethod": "Select method",
+      "sendFormData": "Send all form data",
+      "sendFormDataDesc": "Automatically send all form values as JSON body",
       "showLoadingState": "Show loading state",
       "valueField": "Value Field",
       "valueFieldDesc": "Field to use as option value (e.g., id)",
