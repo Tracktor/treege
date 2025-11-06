@@ -46,8 +46,8 @@ export const submitFormData = async (config: SubmitConfig, formValues: FormValue
     };
   }
 
-  // Replace template variables in URL
-  const url = replaceTemplateVariables(config.url, formValues);
+  // Replace template variables in URL (with encoding)
+  const url = replaceTemplateVariables(config.url, formValues, { encode: true });
 
   if (!url || url.trim() === "") {
     return {
@@ -62,8 +62,8 @@ export const submitFormData = async (config: SubmitConfig, formValues: FormValue
     value: replaceTemplateVariables(header.value, formValues),
   }));
 
-  // Prepare body with template replacement
-  const body = config.body ? replaceTemplateVariables(config.body, formValues) : undefined;
+  // Prepare body with template replacement (smart JSON mode)
+  const body = config.body ? replaceTemplateVariables(config.body, formValues, { json: true }) : undefined;
 
   // Make the HTTP request using shared utility
   const result = await makeHttpRequest({

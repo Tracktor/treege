@@ -134,38 +134,73 @@ export const makeHttpRequest = async (options: HttpRequestOptions): Promise<Http
 /**
  * Replace template variables in a string with actual values from form data
  *
- * Supports two formats:
- * - {{fieldId}} - for URLs (with optional URL encoding)
- * - ${fieldId} or ${fieldName} - for request bodies (with JSON escaping)
+ * Uses {{fieldId}} syntax for all replacements (URLs, JSON bodies, etc.)
+ *
+ * Smart JSON handling:
+ * - Strings: automatically wrapped in quotes and escaped
+ * - Numbers/Booleans: converted to JSON-safe format
+ * - Arrays/Objects: JSON.stringify
  *
  * @param template - The template string containing variables
  * @param values - Form values to substitute
- * @param encode - Whether to URL-encode the replaced values (for URLs)
+ * @param options - Replacement options
+ * @param options.encode - Whether to URL-encode the replaced values (for URLs)
+ * @param options.json - Whether to use smart JSON handling (for request bodies)
  * @returns The string with variables replaced
+ *
+ * @example
+ * // For URLs (with encoding)
+ * replaceTemplateVariables("https://api.com/users/{{userId}}", { userId: "john doe" }, { encode: true })
+ * // => "https://api.com/users/john%20doe"
+ *
+ * // For JSON bodies (smart handling)
+ * replaceTemplateVariables('{"name": {{userName}}}', { userName: "John" }, { json: true })
+ * // => '{"name": "John"}'
+ *
+ * replaceTemplateVariables('{"age": {{userAge}}}', { userAge: 25 }, { json: true })
+ * // => '{"age": 25}'
  */
-export const replaceTemplateVariables = (template: string | undefined, values: FormValues, encode = false): string => {
+export const replaceTemplateVariables = (
+  template: string | undefined,
+  values: FormValues,
+  options: { encode?: boolean; json?: boolean } = {},
+): string => {
   if (!template) {
     return "";
   }
 
-  // Replace {{fieldId}} format (for URLs)
-  const withCurlyBraces = template.replace(/\{\{([\w-]+)}}/g, (_, fieldId) => {
-    const value = values[fieldId.trim()];
-    const stringValue = value !== undefined && value !== null ? String(value) : "";
-    return encode ? encodeURIComponent(stringValue) : stringValue;
-  });
+  const { encode = false, json = false } = options;
 
-  // Replace ${fieldId} format (for request bodies)
-  return withCurlyBraces.replace(/\$\{([\w-]+)}/g, (_, fieldId) => {
+  return template.replace(/\{\{([\w-]+)}}/g, (_, fieldId) => {
     const value = values[fieldId.trim()];
+
+    // Handle undefined/null
     if (value === undefined || value === null) {
-      return "";
+      return json ? "null" : "";
     }
-    // If the value is a string, wrap it in quotes for JSON and escape quotes
-    if (typeof value === "string") {
-      return `"${value.replace(/"/g, '\\"')}"`;
+
+    // URL encoding mode
+    if (encode) {
+      return encodeURIComponent(String(value));
     }
-    // For numbers, booleans, etc., convert to string
+
+    // JSON smart mode
+    if (json) {
+      // String: wrap in quotes and escape
+      if (typeof value === "string") {
+        return `"${value.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
+      }
+      // Number or boolean: direct conversion
+      if (typeof value === "number" || typeof value === "boolean") {
+        return String(value);
+      }
+      // Array or object: JSON.stringify
+      if (typeof value === "object") {
+        return JSON.stringify(value);
+      }
+    }
+
+    // Default: simple string conversion
     return String(value);
   });
 };

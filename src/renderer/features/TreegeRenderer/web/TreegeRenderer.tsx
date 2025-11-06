@@ -265,29 +265,6 @@ const TreegeRenderer = ({
           {/* Node */}
           {visibleRootNodes.map((node) => renderNode(node))}
 
-          {/* Submit message (success/error) */}
-          {submitMessage && (
-            <div
-              className={`mb-4 rounded-md p-4 ${
-                submitMessage.type === "success"
-                  ? "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-300"
-                  : "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-300"
-              }`}
-              role="alert"
-            >
-              <div className="flex items-center justify-between">
-                <p className="font-medium text-sm">{submitMessage.message}</p>
-                <button
-                  type="button"
-                  onClick={clearSubmitMessage}
-                  className="ml-4 font-medium text-sm underline hover:no-underline focus:outline-none"
-                >
-                  {t("common.close")}
-                </button>
-              </div>
-            </div>
-          )}
-
           {/* Submit */}
           {canSubmit && (
             <SubmitButtonWrapper missingFields={missingRequiredFields}>
@@ -295,7 +272,32 @@ const TreegeRenderer = ({
             </SubmitButtonWrapper>
           )}
         </FormWrapper>
+
+        {/* Powered by Treege */}
         <p className="py-2 text-muted-foreground text-xs">Powered by Treege</p>
+
+        {/* Submit message (success/error) */}
+        {submitMessage && (
+          <div
+            className={`my-4 rounded-md p-4 ${
+              submitMessage.type === "success"
+                ? "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-300"
+                : "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-300"
+            }`}
+            role="alert"
+          >
+            <div className="flex items-center justify-between">
+              <p className="font-medium text-sm">{submitMessage.message}</p>
+              <button
+                type="button"
+                onClick={clearSubmitMessage}
+                className="ml-4 font-medium text-sm underline hover:no-underline focus:outline-none"
+              >
+                {t("common.close")}
+              </button>
+            </div>
+          </div>
+        )}
       </TreegeRendererProvider>
     </ThemeProvider>
   );

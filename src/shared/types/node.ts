@@ -123,7 +123,8 @@ export type SubmitConfig = {
    */
   headers?: HttpHeader[];
   /**
-   * Request body (for POST/PUT/PATCH methods, supports template variables like ${fieldId})
+   * Request body (for POST/PUT/PATCH methods, supports template variables like {{fieldId}})
+   * Strings are automatically quoted, use: {"name": {{userName}}}
    */
   body?: string;
   /**

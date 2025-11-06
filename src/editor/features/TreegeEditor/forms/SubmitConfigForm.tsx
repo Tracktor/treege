@@ -209,8 +209,7 @@ const SubmitConfigForm = ({ value, onChange }: SubmitConfigFormProps) => {
                               <DropdownMenuItem
                                 key={availField.nodeId}
                                 onClick={() => {
-                                  const variableId = availField.name || availField.nodeId;
-                                  const variable = `\${${variableId}}`;
+                                  const variable = `{{${availField.nodeId}}}`;
                                   const currentValue = field.state.value || "";
                                   field.handleChange(currentValue + variable);
                                   handleSubmit().then();
@@ -218,7 +217,7 @@ const SubmitConfigForm = ({ value, onChange }: SubmitConfigFormProps) => {
                               >
                                 <div className="flex flex-col">
                                   <span className="font-medium">{availField.label}</span>
-                                  <span className="text-muted-foreground text-xs">{`\${${availField.name || availField.nodeId}}`}</span>
+                                  <span className="text-muted-foreground text-xs">{`{{${availField.nodeId}}}`}</span>
                                 </div>
                               </DropdownMenuItem>
                             ))
