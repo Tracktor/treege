@@ -118,6 +118,26 @@ export const applyReferenceTransformation = (
 };
 
 /**
+ * Compare two values for equality, handling objects and arrays by deep comparison
+ * @param a - First value to compare
+ * @param b - Second value to compare
+ * @returns True if values are equal (including deep equality for objects/arrays)
+ */
+const areValuesEqual = (a: unknown, b: unknown): boolean => {
+  if (Object.is(a, b)) {
+    return true;
+  }
+  if (!(a && b) || typeof a !== "object" || typeof b !== "object") {
+    return false;
+  }
+  try {
+    return JSON.stringify(a) === JSON.stringify(b);
+  } catch {
+    return false;
+  }
+};
+
+/**
  * Calculate updated values for fields with reference defaults
  * @param inputNodes - Array of input nodes
  * @param formValues - Current form values
@@ -158,12 +178,14 @@ export const calculateReferenceFieldUpdates = (
     // If the current field value doesn't match the previous transformed value,
     // it means the user has manually changed it, so we should NOT update it
     const currentFieldValue = formValues[fieldName];
-    const wasManuallyEdited = currentFieldValue !== prevTransformedValue;
+    const matchesPrevious = areValuesEqual(currentFieldValue, prevTransformedValue);
+    const matchesTransformed = areValuesEqual(currentFieldValue, transformedValue);
+    const wasManuallyEdited = !matchesPrevious;
 
     // Only update if:
     // 1. The field was not manually edited
     // 2. The new transformed value is different from the current value
-    if (!wasManuallyEdited && currentFieldValue !== transformedValue) {
+    if (!(wasManuallyEdited || matchesTransformed)) {
       updatedValues[fieldName] = transformedValue;
     }
   });
