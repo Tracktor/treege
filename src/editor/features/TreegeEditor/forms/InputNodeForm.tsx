@@ -63,6 +63,7 @@ const InputNodeForm = () => {
         e.stopPropagation();
       }}
     >
+      {/* Type */}
       <div className="grid gap-6">
         <Field
           name="type"
@@ -73,6 +74,7 @@ const InputNodeForm = () => {
           )}
         />
 
+        {/* Label */}
         <div className="flex items-end gap-2">
           <Field
             name="label"
@@ -98,6 +100,7 @@ const InputNodeForm = () => {
           <SelectLanguage value={selectedLanguage} onValueChange={setSelectedLanguage} />
         </div>
 
+        {/* Placeholder */}
         {!isSubmitType && selectedNode?.data?.type !== "file" && (
           <div className="flex items-end gap-2">
             <Field
@@ -124,6 +127,7 @@ const InputNodeForm = () => {
           </div>
         )}
 
+        {/* Helper text */}
         {!isSubmitType && (
           <div className="flex items-end gap-2">
             <Field
@@ -150,6 +154,7 @@ const InputNodeForm = () => {
           </div>
         )}
 
+        {/* HTTP config */}
         {selectedNode?.data?.type === "http" && (
           <Collapsible defaultOpen className="flex w-full max-w-[350px] flex-col gap-2">
             <CollapsibleTrigger asChild>
@@ -178,6 +183,7 @@ const InputNodeForm = () => {
           </Collapsible>
         )}
 
+        {/* Submit config */}
         {isSubmitType && (
           <Collapsible defaultOpen className="flex w-full max-w-[350px] flex-col gap-2">
             <CollapsibleTrigger asChild>
@@ -206,6 +212,7 @@ const InputNodeForm = () => {
           </Collapsible>
         )}
 
+        {/* Multiple */}
         {selectedNode?.data?.type === "file" && (
           <Field
             name="multiple"
@@ -218,6 +225,7 @@ const InputNodeForm = () => {
           />
         )}
 
+        {/* Options */}
         {needsOptions && (
           <Collapsible defaultOpen className="flex w-full max-w-[350px] flex-col gap-2">
             <CollapsibleTrigger asChild>
@@ -311,6 +319,7 @@ const InputNodeForm = () => {
           </Collapsible>
         )}
 
+        {/* Validation */}
         {!isSubmitType && (
           <Collapsible className="flex w-full max-w-[350px] flex-col gap-2">
             <CollapsibleTrigger asChild>
@@ -373,6 +382,7 @@ const InputNodeForm = () => {
           </Collapsible>
         )}
 
+        {/* Advanced confi */}
         {!isSubmitType && (
           <Collapsible className="flex w-full max-w-[350px] flex-col gap-2">
             <CollapsibleTrigger asChild>
