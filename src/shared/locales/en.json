@@ -230,6 +230,8 @@
       "requestBodyDesc": "Use {{fieldId}} to reference form fields. Strings are automatically quoted.",
       "requestBodyPlaceholder": "{\"name\": {{userName}}, \"email\": {{userEmail}}}",
       "selectMethod": "Select method",
+      "sendFormData": "Send all form data",
+      "sendFormDataDesc": "Automatically send all form values as JSON body",
       "showLoadingState": "Show loading state",
       "successMessage": "Success Message",
       "successMessageDesc": "Message displayed when submission succeeds",

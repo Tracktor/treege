@@ -128,6 +128,10 @@ export type SubmitConfig = {
    */
   body?: string;
   /**
+   * If true, automatically sends all form data as JSON body (overrides custom body)
+   */
+  sendFormData?: boolean;
+  /**
    * URL to redirect to after successful submission (supports template variables from response)
    */
   redirectUrl?: string;

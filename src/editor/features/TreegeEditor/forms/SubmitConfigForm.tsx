@@ -263,7 +263,7 @@ const SubmitConfigForm = ({ value, onChange }: SubmitConfigFormProps) => {
             )}
           />
 
-          <div className="flex items-end gap-2">
+          <div className="flex items-center gap-2">
             <Field
               name="successMessage"
               children={(field) => (
@@ -289,7 +289,7 @@ const SubmitConfigForm = ({ value, onChange }: SubmitConfigFormProps) => {
             <SelectLanguage value={selectedLanguage} onValueChange={setSelectedLanguage} />
           </div>
 
-          <div className="flex items-end gap-2">
+          <div className="flex items-center gap-2">
             <Field
               name="errorMessage"
               children={(field) => (
