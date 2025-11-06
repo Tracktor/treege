@@ -69,6 +69,7 @@ const TreegeRenderer = ({
     visibleNodes,
     formValues,
     config.language,
+    inputNodes,
   );
 
   // Components with fallbacks
@@ -257,6 +258,7 @@ const TreegeRenderer = ({
           formErrors,
           formValues,
           googleApiKey: config.googleApiKey,
+          inputNodes,
           language: config.language,
           setFieldValue,
         }}

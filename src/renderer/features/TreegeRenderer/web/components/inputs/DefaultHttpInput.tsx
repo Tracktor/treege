@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
+import { convertFormValuesToNamedFormat } from "@/renderer/utils/form";
 import { Button } from "@/shared/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/shared/components/ui/command";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
@@ -85,7 +86,7 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
   const [options, setOptions] = useState<Array<{ value: string; label: string }>>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [comboboxOpen, setComboboxOpen] = useState(false);
-  const { formValues } = useTreegeRendererContext();
+  const { formValues, inputNodes } = useTreegeRendererContext();
   const t = useTranslate();
   const { httpConfig } = node.data;
   const hasFetchedOnMount = useRef(false);
@@ -94,6 +95,7 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
   // Refs to store latest values without triggering re-renders
   const httpConfigRef = useRef(httpConfig);
   const formValuesRef = useRef(formValues);
+  const inputNodesRef = useRef(inputNodes);
   const setValueRef = useRef(setValue);
   const fetchDataRef = useRef<((search?: string) => Promise<void>) | null>(null);
 
@@ -173,7 +175,7 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
         // Prepare body: use all form data if sendFormData is true, otherwise use custom body
         const body = ["POST", "PUT", "PATCH"].includes(currentHttpConfig.method || "")
           ? currentHttpConfig.sendFormData
-            ? JSON.stringify(currentFormValues)
+            ? JSON.stringify(convertFormValuesToNamedFormat(currentFormValues, inputNodesRef.current))
             : currentHttpConfig.body
               ? replaceTemplateVars(currentHttpConfig.body, currentFormValues)
               : undefined
@@ -230,9 +232,10 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
   useEffect(() => {
     httpConfigRef.current = httpConfig;
     formValuesRef.current = formValues;
+    inputNodesRef.current = inputNodes;
     setValueRef.current = setValue;
     fetchDataRef.current = fetchData;
-  }, [httpConfig, formValues, setValue, fetchData]);
+  }, [httpConfig, formValues, inputNodes, setValue, fetchData]);
 
   /**
    * Effect 1: Fetch on mount if fetchOnMount is true AND all variables are filled

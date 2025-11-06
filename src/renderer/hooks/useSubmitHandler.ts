@@ -1,7 +1,7 @@
 import { Node } from "@xyflow/react";
 import { useCallback, useMemo, useState } from "react";
 import { FormValues } from "@/renderer/types/renderer";
-import { performRedirect, SubmitResult, submitFormData } from "@/renderer/utils/submit";
+import { redirect, SubmitResult, submitFormData } from "@/renderer/utils/submit";
 import { InputNodeData, TreegeNodeData } from "@/shared/types/node";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
 import { getTranslatedText } from "@/shared/utils/translations";
@@ -19,9 +19,15 @@ import { getTranslatedText } from "@/shared/utils/translations";
  * @param visibleNodes - Currently visible nodes in the form
  * @param formValues - Current form values
  * @param language - Current language for translations
+ * @param inputNodes - All input nodes for form data conversion
  * @returns Submit handler state and functions
  */
-export const useSubmitHandler = (visibleNodes: Node<TreegeNodeData>[], formValues: FormValues, language: string) => {
+export const useSubmitHandler = (
+  visibleNodes: Node<TreegeNodeData>[],
+  formValues: FormValues,
+  language: string,
+  inputNodes: Node<InputNodeData>[],
+) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
@@ -63,7 +69,7 @@ export const useSubmitHandler = (visibleNodes: Node<TreegeNodeData>[], formValue
 
       try {
         // Perform the HTTP submission
-        const result = await submitFormData(config, formValues);
+        const result = await submitFormData(config, formValues, inputNodes);
 
         if (result.success) {
           // Show success message if configured
@@ -77,13 +83,10 @@ export const useSubmitHandler = (visibleNodes: Node<TreegeNodeData>[], formValue
             onSuccess(result.data);
           }
 
-          // Perform redirect if configured
+          // Redirect if configured
           if (result.redirectUrl) {
-            // Small delay to show success message before redirect
             const redirectUrl = result.redirectUrl;
-            setTimeout(() => {
-              performRedirect(redirectUrl);
-            }, 1000);
+            setTimeout(() => redirect(redirectUrl), 1000);
           }
         } else {
           // Show error message
@@ -106,7 +109,7 @@ export const useSubmitHandler = (visibleNodes: Node<TreegeNodeData>[], formValue
         setIsSubmitting(false);
       }
     },
-    [submitButtonNode, formValues, language],
+    [submitButtonNode, formValues, language, inputNodes],
   );
 
   /**

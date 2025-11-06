@@ -1,6 +1,8 @@
+import { Node } from "@xyflow/react";
 import { FormValues } from "@/renderer/types/renderer";
+import { convertFormValuesToNamedFormat } from "@/renderer/utils/form";
 import { makeHttpRequest, replaceResponseVariables, replaceTemplateVariables } from "@/renderer/utils/http";
-import { SubmitConfig } from "@/shared/types/node";
+import { InputNodeData, SubmitConfig } from "@/shared/types/node";
 
 /**
  * Result of a form submission
@@ -35,9 +37,14 @@ export interface SubmitResult {
  *
  * @param config - Submit configuration from the submit button node
  * @param formValues - Current form values
+ * @param inputNodes - All input nodes (required when sendFormData is true)
  * @returns Promise with submission result
  */
-export const submitFormData = async (config: SubmitConfig, formValues: FormValues): Promise<SubmitResult> => {
+export const submitFormData = async (
+  config: SubmitConfig,
+  formValues: FormValues,
+  inputNodes: Node<InputNodeData>[],
+): Promise<SubmitResult> => {
   // Validate configuration
   if (!config.url || config.url.trim() === "") {
     return {
@@ -64,7 +71,7 @@ export const submitFormData = async (config: SubmitConfig, formValues: FormValue
 
   // Prepare body: use all form data if sendFormData is true, otherwise use custom body
   const body = config.sendFormData
-    ? JSON.stringify(formValues)
+    ? JSON.stringify(convertFormValuesToNamedFormat(formValues, inputNodes))
     : config.body
       ? replaceTemplateVariables(config.body, formValues, { json: true })
       : undefined;
@@ -108,7 +115,7 @@ export const submitFormData = async (config: SubmitConfig, formValues: FormValue
  *
  * @param url - The URL to redirect to
  */
-export const performRedirect = (url: string): void => {
+export const redirect = (url: string): void => {
   if (!url) {
     return;
   }
