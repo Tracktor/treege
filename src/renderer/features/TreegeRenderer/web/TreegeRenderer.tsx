@@ -90,8 +90,6 @@ const TreegeRenderer = ({
       // Focus the first input field with an error
       const firstErrorNodeId = Object.keys(errors)[0];
 
-      console.log(firstErrorNodeId);
-
       if (firstErrorNodeId) {
         // Use id attribute for reliable focus (always present and unique)
         const input = document.getElementById(firstErrorNodeId);
@@ -246,7 +244,7 @@ const TreegeRenderer = ({
             </SubmitButtonWrapper>
           )}
         </FormWrapper>
-        <p className="py-2 text-muted-foreground text-xs italic">Powered by Treege</p>
+        <p className="py-2 text-muted-foreground text-xs">Powered by Treege</p>
       </TreegeRendererProvider>
     </ThemeProvider>
   );

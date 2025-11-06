@@ -109,6 +109,41 @@ export type HttpConfig = {
   showLoading?: boolean;
 };
 
+export type SubmitConfig = {
+  /**
+   * The HTTP method to use for form submission
+   */
+  method?: "POST" | "PUT" | "PATCH" | "DELETE";
+  /**
+   * The API URL to call on submit (supports template variables like {{fieldId}})
+   */
+  url?: string;
+  /**
+   * Custom headers for the HTTP request
+   */
+  headers?: HttpHeader[];
+  /**
+   * Request body (for POST/PUT/PATCH methods, supports template variables like ${fieldId})
+   */
+  body?: string;
+  /**
+   * URL to redirect to after successful submission (supports template variables from response)
+   */
+  redirectUrl?: string;
+  /**
+   * Success message to display after successful submission (translatable)
+   */
+  successMessage?: Translatable;
+  /**
+   * Error message to display if submission fails (translatable)
+   */
+  errorMessage?: Translatable;
+  /**
+   * Whether to show a loading state while submitting
+   */
+  showLoading?: boolean;
+};
+
 export type InputNodeData = BaseNodeData & {
   /**
    * The name of the input field, used for identification and form submission
@@ -163,6 +198,10 @@ export type InputNodeData = BaseNodeData & {
    * HTTP configuration for the input field (used with type="http")
    */
   httpConfig?: HttpConfig;
+  /**
+   * Submit configuration for the input field (used with type="submit")
+   */
+  submitConfig?: SubmitConfig;
 };
 
 export type UINodeData = BaseNodeData & {
