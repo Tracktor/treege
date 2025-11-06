@@ -259,10 +259,10 @@ const TreegeRenderer = ({
   useEffect(() => {
     const updatedValues = calculateReferenceFieldUpdates(inputNodes, formValues, prevFormValuesRef.current);
 
-    console.log(updatedValues);
-
-    // Batch update all reference fields at once to avoid multiple re-renders
-    setMultipleFieldValues(updatedValues);
+    // Only update if there are changes to avoid unnecessary function calls
+    if (Object.keys(updatedValues).length > 0) {
+      setMultipleFieldValues(updatedValues);
+    }
 
     // Update previous values ref
     prevFormValuesRef.current = formValues;
