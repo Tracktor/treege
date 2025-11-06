@@ -29,7 +29,7 @@ const SubmitConfigForm = ({ value, onChange }: SubmitConfigFormProps) => {
   const t = useTranslate();
   const availableParentFields = useAvailableParentFields(selectedNode?.id);
 
-  const { handleSubmit, Field } = useForm({
+  const { handleSubmit, Field, Subscribe } = useForm({
     defaultValues: {
       body: value?.body || "",
       errorMessage: value?.errorMessage || { en: "" },
@@ -187,9 +187,9 @@ const SubmitConfigForm = ({ value, onChange }: SubmitConfigFormProps) => {
           </Field>
         </div>
 
-        <Field name="method">
-          {(methodField) =>
-            METHODS_NEEDING_BODY.includes(methodField.state.value || "") && (
+        <Subscribe selector={(state) => state.values.method}>
+          {(method) =>
+            METHODS_NEEDING_BODY.includes(method || "") && (
               <div className="space-y-4">
                 <Field name="sendFormData">
                   {(field) => (
@@ -200,67 +200,67 @@ const SubmitConfigForm = ({ value, onChange }: SubmitConfigFormProps) => {
                   )}
                 </Field>
 
-                <Field name="body">
-                  {(field) => {
-                    const sendFormData = field.form.getFieldValue("sendFormData");
+                <Subscribe selector={(state) => state.values.sendFormData}>
+                  {(sendFormData) => (
+                    <Field name="body">
+                      {(field) => (
+                        <FormItem>
+                          <div className="mb-2 flex items-center justify-between">
+                            <Label htmlFor={field.name}>{t("editor.submitConfigForm.requestBody")}</Label>
 
-                    return (
-                      <FormItem>
-                        <div className="mb-2 flex items-center justify-between">
-                          <Label htmlFor={field.name}>{t("editor.submitConfigForm.requestBody")}</Label>
-
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button type="button" variant="ghost" size="sm" disabled={sendFormData}>
-                                <Variable className="mr-2 h-4 w-4" />
-                                {t("editor.submitConfigForm.insertVariable")}
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              {availableParentFields.length === 0 ? (
-                                <DropdownMenuItem disabled>{t("editor.submitConfigForm.noFieldsAvailable")}</DropdownMenuItem>
-                              ) : (
-                                availableParentFields.map((availField) => (
-                                  <DropdownMenuItem
-                                    key={availField.nodeId}
-                                    onClick={() => {
-                                      const variable = `{{${availField.nodeId}}}`;
-                                      const currentValue = field.state.value || "";
-                                      field.handleChange(currentValue + variable);
-                                      handleSubmit().then();
-                                    }}
-                                  >
-                                    <div className="flex flex-col">
-                                      <span className="font-medium">{availField.label}</span>
-                                      <span className="text-muted-foreground text-xs">{`{{${availField.nodeId}}}`}</span>
-                                    </div>
-                                  </DropdownMenuItem>
-                                ))
-                              )}
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                        <Textarea
-                          id={field.name}
-                          name={field.name}
-                          value={field.state.value}
-                          onBlur={field.handleBlur}
-                          onChange={({ target }) => field.handleChange(target.value)}
-                          placeholder={t("editor.submitConfigForm.requestBodyPlaceholder")}
-                          rows={4}
-                          disabled={sendFormData}
-                        />
-                        <FormDescription>
-                          {sendFormData ? t("editor.submitConfigForm.sendFormDataDesc") : t("editor.submitConfigForm.requestBodyDesc")}
-                        </FormDescription>
-                      </FormItem>
-                    );
-                  }}
-                </Field>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button type="button" variant="ghost" size="sm" disabled={sendFormData}>
+                                  <Variable className="mr-2 h-4 w-4" />
+                                  {t("editor.submitConfigForm.insertVariable")}
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                {availableParentFields.length === 0 ? (
+                                  <DropdownMenuItem disabled>{t("editor.submitConfigForm.noFieldsAvailable")}</DropdownMenuItem>
+                                ) : (
+                                  availableParentFields.map((availField) => (
+                                    <DropdownMenuItem
+                                      key={availField.nodeId}
+                                      onClick={() => {
+                                        const variable = `{{${availField.nodeId}}}`;
+                                        const currentValue = field.state.value || "";
+                                        field.handleChange(currentValue + variable);
+                                        handleSubmit().then();
+                                      }}
+                                    >
+                                      <div className="flex flex-col">
+                                        <span className="font-medium">{availField.label}</span>
+                                        <span className="text-muted-foreground text-xs">{`{{${availField.nodeId}}}`}</span>
+                                      </div>
+                                    </DropdownMenuItem>
+                                  ))
+                                )}
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
+                          <Textarea
+                            id={field.name}
+                            name={field.name}
+                            value={field.state.value}
+                            onBlur={field.handleBlur}
+                            onChange={({ target }) => field.handleChange(target.value)}
+                            placeholder={t("editor.submitConfigForm.requestBodyPlaceholder")}
+                            rows={4}
+                            disabled={sendFormData}
+                          />
+                          <FormDescription>
+                            {sendFormData ? t("editor.submitConfigForm.sendFormDataDesc") : t("editor.submitConfigForm.requestBodyDesc")}
+                          </FormDescription>
+                        </FormItem>
+                      )}
+                    </Field>
+                  )}
+                </Subscribe>
               </div>
             )
           }
-        </Field>
+        </Subscribe>
 
         <div className="space-y-4">
           <h4 className="font-semibold text-sm">{t("editor.submitConfigForm.postSubmission")}</h4>
