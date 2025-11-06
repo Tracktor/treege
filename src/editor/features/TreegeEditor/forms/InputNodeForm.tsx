@@ -382,7 +382,7 @@ const InputNodeForm = () => {
           </Collapsible>
         )}
 
-        {/* Advanced confi */}
+        {/* Advanced config */}
         {!isSubmitType && (
           <Collapsible className="flex w-full max-w-[350px] flex-col gap-2">
             <CollapsibleTrigger asChild>

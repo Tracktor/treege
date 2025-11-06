@@ -36,7 +36,7 @@ const SubmitConfigForm = ({ value, onChange }: SubmitConfigFormProps) => {
       headers: value?.headers || [],
       method: value?.method || "POST",
       redirectUrl: value?.redirectUrl || "",
-      sendFormData: value?.sendFormData || false,
+      sendFormData: value?.sendFormData,
       showLoading: value?.showLoading !== false,
       successMessage: value?.successMessage || { en: "" },
       url: value?.url || "",
@@ -211,38 +211,37 @@ const SubmitConfigForm = ({ value, onChange }: SubmitConfigFormProps) => {
                         <FormItem>
                           <div className="mb-2 flex items-center justify-between">
                             <Label htmlFor={field.name}>{t("editor.submitConfigForm.requestBody")}</Label>
-                            {!sendFormDataField.state.value && (
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button type="button" variant="ghost" size="sm">
-                                    <Variable className="mr-2 h-4 w-4" />
-                                    {t("editor.submitConfigForm.insertVariable")}
-                                  </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                  {availableParentFields.length === 0 ? (
-                                    <DropdownMenuItem disabled>{t("editor.submitConfigForm.noFieldsAvailable")}</DropdownMenuItem>
-                                  ) : (
-                                    availableParentFields.map((availField) => (
-                                      <DropdownMenuItem
-                                        key={availField.nodeId}
-                                        onClick={() => {
-                                          const variable = `{{${availField.nodeId}}}`;
-                                          const currentValue = field.state.value || "";
-                                          field.handleChange(currentValue + variable);
-                                          handleSubmit().then();
-                                        }}
-                                      >
-                                        <div className="flex flex-col">
-                                          <span className="font-medium">{availField.label}</span>
-                                          <span className="text-muted-foreground text-xs">{`{{${availField.nodeId}}}`}</span>
-                                        </div>
-                                      </DropdownMenuItem>
-                                    ))
-                                  )}
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            )}
+
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button type="button" variant="ghost" size="sm" disabled={sendFormDataField.state.value}>
+                                  <Variable className="mr-2 h-4 w-4" />
+                                  {t("editor.submitConfigForm.insertVariable")}
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                {availableParentFields.length === 0 ? (
+                                  <DropdownMenuItem disabled>{t("editor.submitConfigForm.noFieldsAvailable")}</DropdownMenuItem>
+                                ) : (
+                                  availableParentFields.map((availField) => (
+                                    <DropdownMenuItem
+                                      key={availField.nodeId}
+                                      onClick={() => {
+                                        const variable = `{{${availField.nodeId}}}`;
+                                        const currentValue = field.state.value || "";
+                                        field.handleChange(currentValue + variable);
+                                        handleSubmit().then();
+                                      }}
+                                    >
+                                      <div className="flex flex-col">
+                                        <span className="font-medium">{availField.label}</span>
+                                        <span className="text-muted-foreground text-xs">{`{{${availField.nodeId}}}`}</span>
+                                      </div>
+                                    </DropdownMenuItem>
+                                  ))
+                                )}
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </div>
                           <Textarea
                             id={field.name}
