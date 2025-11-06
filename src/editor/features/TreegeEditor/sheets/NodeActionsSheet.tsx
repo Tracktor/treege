@@ -39,7 +39,7 @@ const NodeActionsSheet = () => {
 
   return (
     <Sheet open={hasSelectedNodes} onOpenChange={clearSelection}>
-      <SheetContent className="flex flex-col">
+      <SheetContent className="flex flex-col gap-0">
         <SheetHeader>
           <SheetTitle>
             {translate("editor.nodeActionsSheet.editNode")}{" "}
@@ -48,8 +48,8 @@ const NodeActionsSheet = () => {
           <SheetDescription>{label || "\u00A0"}</SheetDescription>
         </SheetHeader>
 
-        <ScrollArea className="flex min-h-0 flex-1 flex-col px-4 py-6">
-          <div className="space-y-6">
+        <ScrollArea className="flex min-h-0 flex-1 flex-col px-4">
+          <div className="space-y-6 py-4">
             <SelectNodeType />
             <SelectNodeGroup />
 
