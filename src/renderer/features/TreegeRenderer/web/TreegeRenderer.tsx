@@ -9,6 +9,7 @@ import { defaultInputRenderers } from "@/renderer/features/TreegeRenderer/web/co
 import DefaultSubmitButton from "@/renderer/features/TreegeRenderer/web/components/DefaultSubmitButton";
 import DefaultSubmitButtonWrapper from "@/renderer/features/TreegeRenderer/web/components/DefaultSubmitButtonWrapper";
 import { defaultUI } from "@/renderer/features/TreegeRenderer/web/components/DefaultUI";
+import { useSubmitHandler } from "@/renderer/hooks/useSubmitHandler";
 import { InputRenderProps, InputValue, TreegeRendererProps } from "@/renderer/types/renderer";
 import { convertFormValuesToNamedFormat } from "@/renderer/utils/form";
 import { resolveNodeKey } from "@/renderer/utils/node";
@@ -63,6 +64,13 @@ const TreegeRenderer = ({
     t,
   } = useTreegeRenderer(flows, initialValues, config.language);
 
+  // Submit handler for submit button with configuration
+  const { handleSubmitWithConfig, hasSubmitConfig, isSubmitting, submitMessage, clearSubmitMessage } = useSubmitHandler(
+    visibleNodes,
+    formValues,
+    config.language,
+  );
+
   // Components with fallbacks
   const FormWrapper = config.components.form || DefaultFormWrapper;
   const SubmitButton = config.components.submitButton || DefaultSubmitButton;
@@ -77,26 +85,43 @@ const TreegeRenderer = ({
    * Handle form submission
    */
   const handleSubmit = useCallback(
-    (e: FormEvent) => {
+    async (e: FormEvent) => {
       e.preventDefault();
 
+      // Validate the form
       const { isValid, errors } = validateForm(validateRef.current);
 
-      if (isValid && onSubmit) {
-        onSubmit(exportedValues);
+      if (!isValid) {
+        // Focus the first input field with an error
+        const firstErrorNodeId = Object.keys(errors)[0];
+
+        if (firstErrorNodeId) {
+          // Use id attribute for reliable focus (always present and unique)
+          const input = document.getElementById(firstErrorNodeId);
+          input?.focus();
+        }
         return;
       }
 
-      // Focus the first input field with an error
-      const firstErrorNodeId = Object.keys(errors)[0];
+      // If there's a submit button with configuration, use it
+      if (hasSubmitConfig) {
+        const result = await handleSubmitWithConfig((httpResponse) => {
+          // Call onSubmit callback with form values and HTTP response as second parameter
+          if (onSubmit) {
+            onSubmit(exportedValues, { httpResponse });
+          }
+        });
 
-      if (firstErrorNodeId) {
-        // Use id attribute for reliable focus (always present and unique)
-        const input = document.getElementById(firstErrorNodeId);
-        input?.focus();
+        // If submission failed, return early
+        if (result && !result.success) {
+          return;
+        }
+      } else if (onSubmit) {
+        // Default behavior: call onSubmit directly
+        onSubmit(exportedValues);
       }
     },
-    [validateForm, onSubmit, exportedValues],
+    [validateForm, hasSubmitConfig, handleSubmitWithConfig, onSubmit, exportedValues],
   );
 
   // ============================================
@@ -237,10 +262,36 @@ const TreegeRenderer = ({
         }}
       >
         <FormWrapper onSubmit={handleSubmit}>
+          {/* Node */}
           {visibleRootNodes.map((node) => renderNode(node))}
+
+          {/* Submit message (success/error) */}
+          {submitMessage && (
+            <div
+              className={`mb-4 rounded-md p-4 ${
+                submitMessage.type === "success"
+                  ? "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-300"
+                  : "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-300"
+              }`}
+              role="alert"
+            >
+              <div className="flex items-center justify-between">
+                <p className="font-medium text-sm">{submitMessage.message}</p>
+                <button
+                  type="button"
+                  onClick={clearSubmitMessage}
+                  className="ml-4 font-medium text-sm underline hover:no-underline focus:outline-none"
+                >
+                  {t("common.close")}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Submit */}
           {canSubmit && (
             <SubmitButtonWrapper missingFields={missingRequiredFields}>
-              <SubmitButton label={t("renderer.defaultSubmitButton.submit")} />
+              <SubmitButton label={t("renderer.defaultSubmitButton.submit")} disabled={isSubmitting} />
             </SubmitButtonWrapper>
           )}
         </FormWrapper>
