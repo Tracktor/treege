@@ -36,7 +36,7 @@ const SubmitConfigForm = ({ value, onChange }: SubmitConfigFormProps) => {
       headers: value?.headers || [],
       method: value?.method || "POST",
       redirectUrl: value?.redirectUrl || "",
-      sendFormData: value?.sendFormData,
+      sendFormData: !!value?.sendFormData,
       showLoading: value?.showLoading !== false,
       successMessage: value?.successMessage || { en: "" },
       url: value?.url || "",

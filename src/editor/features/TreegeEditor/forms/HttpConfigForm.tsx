@@ -38,12 +38,13 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
       },
       responsePath: value?.responsePath || "",
       searchParam: value?.searchParam || "",
-      sendFormData: value?.sendFormData || false,
+      sendFormData: !!value?.sendFormData,
       showLoading: value?.showLoading !== false,
       url: value?.url || "",
     } as HttpConfig,
     listeners: {
       onChange: ({ formApi }) => {
+        console.log(formApi.state);
         formApi.handleSubmit().then();
       },
       onChangeDebounceMs: 150,
