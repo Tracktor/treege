@@ -11,7 +11,7 @@ import DefaultSubmitButtonWrapper from "@/renderer/features/TreegeRenderer/web/c
 import { defaultUI } from "@/renderer/features/TreegeRenderer/web/components/DefaultUI";
 import { useSubmitHandler } from "@/renderer/hooks/useSubmitHandler";
 import { InputRenderProps, InputValue, TreegeRendererProps } from "@/renderer/types/renderer";
-import { convertFormValuesToNamedFormat } from "@/renderer/utils/form";
+import { calculateReferenceFieldUpdates, convertFormValuesToNamedFormat } from "@/renderer/utils/form";
 import { resolveNodeKey } from "@/renderer/utils/node";
 import { NODE_TYPE } from "@/shared/constants/node";
 import { ThemeProvider } from "@/shared/context/ThemeContext";
@@ -57,9 +57,11 @@ const TreegeRenderer = ({
     formValues,
     inputNodes,
     missingRequiredFields,
+    prevFormValuesRef,
     visibleNodes,
     visibleRootNodes,
     setFieldValue,
+    setMultipleFieldValues,
     validateForm,
     t,
   } = useTreegeRenderer(flows, initialValues, config.language);
@@ -249,6 +251,19 @@ const TreegeRenderer = ({
       validateForm(validateRef.current);
     }
   }, [config.validationMode, validateForm]);
+
+  /**
+   * Sync reference fields when their source changes (one-way binding)
+   */
+  useEffect(() => {
+    const updatedValues = calculateReferenceFieldUpdates(inputNodes, formValues, prevFormValuesRef.current);
+
+    // Batch update all reference fields at once to avoid multiple re-renders
+    setMultipleFieldValues(updatedValues);
+
+    // Update previous values ref
+    prevFormValuesRef.current = formValues;
+  }, [formValues, inputNodes, setMultipleFieldValues]);
 
   return (
     <ThemeProvider theme={config.theme} storageKey="treege-renderer-theme">

@@ -56,3 +56,98 @@ export const convertFormValuesToNamedFormat = (formValues: FormValues, nodes: No
 
   return exported;
 };
+
+/**
+ * Apply transformation to a reference field value
+ * @param value - The source value to transform
+ * @param transformFunction - The transformation function to apply
+ * @param objectMapping - Optional mapping for toObject transformation
+ * @returns The transformed value
+ */
+export const applyReferenceTransformation = (
+  value: unknown,
+  transformFunction: "toString" | "toNumber" | "toBoolean" | "toArray" | "toObject" | null | undefined,
+  objectMapping?: Array<{ sourceKey: string; targetKey: string }>,
+): unknown => {
+  if (!transformFunction) {
+    return value;
+  }
+
+  switch (transformFunction) {
+    case "toString":
+      return String(value);
+    case "toNumber":
+      return Number(value);
+    case "toBoolean":
+      return Boolean(value);
+    case "toArray":
+      return Array.isArray(value) ? value : [value];
+    case "toObject":
+      if (objectMapping && Array.isArray(objectMapping)) {
+        const result: Record<string, unknown> = {};
+        objectMapping.forEach((mapping) => {
+          if (mapping.sourceKey && mapping.targetKey && typeof value === "object" && value !== null) {
+            result[mapping.targetKey] = (value as Record<string, unknown>)[mapping.sourceKey];
+          }
+        });
+        return result;
+      }
+      return value;
+    default:
+      return value;
+  }
+};
+
+/**
+ * Calculate updated values for fields with reference defaults
+ * @param inputNodes - Array of input nodes
+ * @param formValues - Current form values
+ * @param prevFormValues - Previous form values (for change detection)
+ * @returns Object containing fields that need to be updated
+ */
+export const calculateReferenceFieldUpdates = (
+  inputNodes: Node<InputNodeData>[],
+  formValues: FormValues,
+  prevFormValues: FormValues,
+): FormValues => {
+  const updatedValues: FormValues = {};
+
+  inputNodes.forEach((node) => {
+    const { defaultValue } = node.data;
+
+    if (!defaultValue || defaultValue.type !== "reference" || !defaultValue.referenceField) {
+      return;
+    }
+
+    const fieldName = node.id;
+    const { referenceField, transformFunction, objectMapping } = defaultValue;
+    const refValue = formValues[referenceField];
+    const prevRefValue = prevFormValues[referenceField];
+
+    // Skip if reference value hasn't changed or is undefined/null
+    if (refValue === prevRefValue || refValue === undefined || refValue === null) {
+      return;
+    }
+
+    // Calculate what the transformed value should be
+    const transformedValue = applyReferenceTransformation(refValue, transformFunction, objectMapping);
+
+    // Calculate what the previous transformed value was
+    const prevTransformedValue = applyReferenceTransformation(prevRefValue, transformFunction, objectMapping);
+
+    // Check if user has manually edited this field:
+    // If the current field value doesn't match the previous transformed value,
+    // it means the user has manually changed it, so we should NOT update it
+    const currentFieldValue = formValues[fieldName];
+    const wasManuallyEdited = currentFieldValue !== prevTransformedValue;
+
+    // Only update if:
+    // 1. The field was not manually edited
+    // 2. The new transformed value is different from the current value
+    if (!wasManuallyEdited && currentFieldValue !== transformedValue) {
+      updatedValues[fieldName] = transformedValue;
+    }
+  });
+
+  return updatedValues;
+};
