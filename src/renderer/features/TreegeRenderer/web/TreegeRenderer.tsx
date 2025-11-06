@@ -254,16 +254,19 @@ const TreegeRenderer = ({
 
   /**
    * Sync reference fields when their source changes (one-way binding)
+   * Note: prevFormValuesRef is intentionally not in deps (refs don't trigger re-renders)
    */
   useEffect(() => {
     const updatedValues = calculateReferenceFieldUpdates(inputNodes, formValues, prevFormValuesRef.current);
+
+    console.log(updatedValues);
 
     // Batch update all reference fields at once to avoid multiple re-renders
     setMultipleFieldValues(updatedValues);
 
     // Update previous values ref
     prevFormValuesRef.current = formValues;
-  }, [formValues, inputNodes, setMultipleFieldValues]);
+  }, [formValues, inputNodes, setMultipleFieldValues, prevFormValuesRef]);
 
   return (
     <ThemeProvider theme={config.theme} storageKey="treege-renderer-theme">

@@ -84,9 +84,13 @@ export const applyReferenceTransformation = (
       return Array.isArray(value) ? value : [value];
     case "toObject":
       if (objectMapping && Array.isArray(objectMapping)) {
+        // Return original value if it's not an object
+        if (typeof value !== "object" || value === null) {
+          return value;
+        }
         const result: Record<string, unknown> = {};
         objectMapping.forEach((mapping) => {
-          if (mapping.sourceKey && mapping.targetKey && typeof value === "object" && value !== null) {
+          if (mapping.sourceKey && mapping.targetKey) {
             result[mapping.targetKey] = (value as Record<string, unknown>)[mapping.sourceKey];
           }
         });
