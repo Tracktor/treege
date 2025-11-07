@@ -1,5 +1,6 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { LucidePencilRuler, Plus, Type } from "lucide-react";
+import { memo } from "react";
 import useBottomHandleClick from "@/editor/features/TreegeEditor/nodes/hooks/useBottomHandleClick";
 import NodeWrapper from "@/editor/features/TreegeEditor/nodes/layout/NodeWrapper";
 import useTranslate from "@/editor/hooks/useTranslate";
@@ -53,4 +54,4 @@ const UINode = ({ data, isConnectable, type, parentId, id }: UINodeProps) => {
   );
 };
 
-export default UINode;
+export default memo(UINode);

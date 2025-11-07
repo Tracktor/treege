@@ -1,5 +1,6 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { Plus, Type } from "lucide-react";
+import { memo } from "react";
 import useBottomHandleClick from "@/editor/features/TreegeEditor/nodes/hooks/useBottomHandleClick";
 import NodeWrapper from "@/editor/features/TreegeEditor/nodes/layout/NodeWrapper";
 import useTranslate from "@/editor/hooks/useTranslate";
@@ -46,4 +47,4 @@ const InputNode = ({ data, isConnectable, parentId, id }: InputNodeProps) => {
   );
 };
 
-export default InputNode;
+export default memo(InputNode);

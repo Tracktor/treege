@@ -118,6 +118,32 @@ path.react-flow__edge-path {
   stroke: var(--muted-foreground);
 }
 
+/* Edge label */
+.button-edge__label {
+  position: absolute;
+  pointer-events: all;
+  transform-origin: center;
+}
+
+/* Button edge */
+.button-edge__button {
+  width: 30px;
+  height: 30px;
+  border: 5px solid var(--xy-minimap-background-color-default);
+  background-color: var(--color-ring);
+  color: var(--primary);
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 12px;
+  padding-top: 0;
+}
+
+/* Button edge hover*/
+.button-edge__button:hover {
+  background-color: var(--destructive);
+  color: #ffffff;
+}
+
 /* Json editor */
 .w-tc-editor {
   @apply bg-input/30 dark:bg-input/30 rounded-md border border-input;
