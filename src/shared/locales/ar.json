@@ -115,7 +115,7 @@
       "methodPut": "PUT",
       "noFieldsAvailable": "لا توجد حقول متاحة",
       "requestBody": "جسم الطلب (JSON)",
-      "requestBodyDesc": "استخدم متغيرات القالب مثل ${fieldId} للإشارة إلى الحقول الأخرى",
+      "requestBodyDesc": "استخدم {{fieldId}} للإشارة إلى حقول أخرى. يتم وضع النصوص بين علامات الاقتباس تلقائياً.",
       "requestBodyPlaceholder": "{\"مفتاح\": \"قيمة\"}",
       "responseConfiguration": "تكوين الاستجابة",
       "responsePath": "مسار الاستجابة",

@@ -115,7 +115,7 @@
       "methodPut": "PUT",
       "noFieldsAvailable": "Aucun champ disponible",
       "requestBody": "Corps de la requête (JSON)",
-      "requestBodyDesc": "Utilisez des variables de modèle comme ${fieldId} pour référencer d'autres champs",
+      "requestBodyDesc": "Utilisez {{fieldId}} pour référencer d'autres champs. Les chaînes sont automatiquement entourées de guillemets.",
       "requestBodyPlaceholder": "{\"clé\": \"valeur\"}",
       "responseConfiguration": "Configuration de la réponse",
       "responsePath": "Chemin de la réponse",

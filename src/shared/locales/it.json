@@ -115,7 +115,7 @@
       "methodPut": "PUT",
       "noFieldsAvailable": "Nessun campo disponibile",
       "requestBody": "Corpo della richiesta (JSON)",
-      "requestBodyDesc": "Usa variabili template come ${fieldId} per riferire altri campi",
+      "requestBodyDesc": "Usa {{fieldId}} per riferire altri campi. Le stringhe vengono automaticamente racchiuse tra virgolette.",
       "requestBodyPlaceholder": "{\"chiave\": \"valore\"}",
       "responseConfiguration": "Configurazione della risposta",
       "responsePath": "Percorso della risposta",

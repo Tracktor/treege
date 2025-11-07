@@ -115,7 +115,7 @@
       "methodPut": "PUT",
       "noFieldsAvailable": "Keine Felder verfügbar",
       "requestBody": "Anfrage-Body (JSON)",
-      "requestBodyDesc": "Verwenden Sie Vorlagenvariablen wie ${fieldId}, um andere Felder zu referenzieren",
+      "requestBodyDesc": "Verwenden Sie {{fieldId}}, um andere Felder zu referenzieren. Zeichenketten werden automatisch in Anführungszeichen gesetzt.",
       "requestBodyPlaceholder": "{\"schlüssel\": \"wert\"}",
       "responseConfiguration": "Antwort-Konfiguration",
       "responsePath": "Antwortpfad",

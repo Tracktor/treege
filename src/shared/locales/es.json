@@ -115,7 +115,7 @@
       "methodPut": "PUT",
       "noFieldsAvailable": "No hay campos disponibles",
       "requestBody": "Cuerpo de la solicitud (JSON)",
-      "requestBodyDesc": "Use variables de plantilla como ${fieldId} para referenciar otros campos",
+      "requestBodyDesc": "Use {{fieldId}} para referenciar otros campos. Las cadenas se entrecomillan automáticamente.",
       "requestBodyPlaceholder": "{\"clave\": \"valor\"}",
       "responseConfiguration": "Configuración de respuesta",
       "responsePath": "Ruta de respuesta",

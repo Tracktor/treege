@@ -115,7 +115,7 @@
       "methodPut": "PUT",
       "noFieldsAvailable": "Nenhum campo disponível",
       "requestBody": "Corpo da requisição (JSON)",
-      "requestBodyDesc": "Use variáveis de modelo como ${fieldId} para referenciar outros campos",
+      "requestBodyDesc": "Use {{fieldId}} para referenciar outros campos. Strings são automaticamente colocadas entre aspas.",
       "requestBodyPlaceholder": "{\"chave\": \"valor\"}",
       "responseConfiguration": "Configuração da resposta",
       "responsePath": "Caminho da resposta",
