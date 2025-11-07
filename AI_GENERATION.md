@@ -36,7 +36,7 @@ function App() {
         provider: "gemini", // or "openai", "deepseek", "claude"
         apiKey: "your-api-key-here",
         model: "gemini-2.5-flash", // optional, uses default if not specified
-        temperature: 0.7 // optional, default is 0.7
+        temperature: 0.3 // optional, default is 0.7
       }}
       onSave={(flow) => console.log(flow)}
     />

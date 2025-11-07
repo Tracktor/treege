@@ -783,7 +783,7 @@ describe("Form Utils", () => {
       // because they are compared by reference. This test covers the basic transformation
       // but doesn't test manual edit detection for objects (which is a known limitation).
       it("should apply toObject transformation (basic case)", () => {
-        const nodes: Node<InputNodeData>[] = [
+        const _nodes: Node<InputNodeData>[] = [
           {
             data: {
               defaultValue: {

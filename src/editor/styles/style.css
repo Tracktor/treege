@@ -24,7 +24,7 @@ button {
 
 /* Default node */
 div.react-flow__node {
-  border: 0 !important;
+  border: 0;
 }
 
 /* Neon node */
@@ -33,7 +33,7 @@ div.react-flow__node__wrapper {
   width: 270px;
   height: 150px;
   border-radius: 40px;
-  border: 3px solid transparent !important;
+  border: 3px solid transparent;
   box-shadow:
     0 0 20px 6px oklch(from var(--treege-color-primary) l c h / 10%),
     0 0 20px oklch(from var(--treege-color-tertiary) l c h / 10%);
@@ -91,7 +91,7 @@ div.react-flow__node-group,
 div.react-flow__node-group.selected {
   background: oklch(from var(--color-chart-2) l c h / 5%);
   box-shadow: none;
-  border: 3px dashed var(--color-chart-2) !important;
+  border: 3px dashed var(--color-chart-2);
 }
 
 /* Group node  resize */
