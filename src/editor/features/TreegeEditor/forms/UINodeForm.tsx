@@ -19,7 +19,7 @@ const UINodeForm = () => {
   const { Field } = useForm({
     defaultValues: {
       label: selectedNode?.data?.label || { en: "" },
-      type: selectedNode?.data?.type,
+      type: selectedNode?.data?.type || "",
     } as UINodeData,
     listeners: {
       onChange: ({ formApi }) => {
@@ -68,9 +68,9 @@ const UINodeForm = () => {
           name="type"
           children={(field) => (
             <SelectGroup>
-              <SelectLabel>Type</SelectLabel>
+              <SelectLabel htmlFor={field.name}>Type</SelectLabel>
               <Select value={field.state.value} onValueChange={(newValue: UIType) => field.handleChange(newValue)}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger id={field.name} className="w-full">
                   <SelectValue placeholder="" />
                 </SelectTrigger>
                 <SelectContent>

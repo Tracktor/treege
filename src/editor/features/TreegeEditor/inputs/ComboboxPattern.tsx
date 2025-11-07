@@ -5,6 +5,7 @@ import { PATTERN } from "@/shared/constants/pattern";
 interface ComboboxPatternProps {
   value?: string | null;
   onValueChange?: (newValue: string) => void;
+  id?: string;
 }
 
 const defaultPatterns: ComboboxOption[] = Object.entries(PATTERN).map(([key, val]) => ({
@@ -12,7 +13,7 @@ const defaultPatterns: ComboboxOption[] = Object.entries(PATTERN).map(([key, val
   value: val,
 }));
 
-const ComboboxPattern = ({ value, onValueChange }: ComboboxPatternProps) => {
+const ComboboxPattern = ({ id, value, onValueChange }: ComboboxPatternProps) => {
   const allOptions = useMemo(() => {
     if (value && !defaultPatterns.some((option) => option.value === value)) {
       return [
@@ -28,6 +29,7 @@ const ComboboxPattern = ({ value, onValueChange }: ComboboxPatternProps) => {
 
   return (
     <ComboboxWithCreate
+      id={id}
       options={allOptions}
       value={value}
       onValueChange={onValueChange}

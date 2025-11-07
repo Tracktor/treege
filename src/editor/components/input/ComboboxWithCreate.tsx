@@ -15,6 +15,7 @@ export type ComboboxOption = {
  */
 const ComboboxWithCreate = ({
   options,
+  id,
   value,
   onValueChange,
   placeholder = "Select...",
@@ -26,6 +27,7 @@ const ComboboxWithCreate = ({
   allowClear = true,
   allowCreate = true,
 }: {
+  id?: string;
   options: ComboboxOption[];
   value?: string | null;
   onValueChange?: (newValue: string) => void;
@@ -82,7 +84,7 @@ const ComboboxWithCreate = ({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild id={id}>
         <Button
           type="button"
           variant="outline"

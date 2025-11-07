@@ -1,7 +1,13 @@
 import { Node } from "@xyflow/react";
 import { describe, expect, it } from "vitest";
 import { FormValues } from "@/renderer/types/renderer";
-import { checkFormFieldHasValue, convertFormValuesToNamedFormat, isFieldEmpty } from "@/renderer/utils/form";
+import {
+  applyReferenceTransformation,
+  calculateReferenceFieldUpdates,
+  checkFormFieldHasValue,
+  convertFormValuesToNamedFormat,
+  isFieldEmpty,
+} from "@/renderer/utils/form";
 import { InputNodeData } from "@/shared/types/node";
 
 describe("Form Utils", () => {
@@ -451,6 +457,523 @@ describe("Form Utils", () => {
       it("should return empty object when both are empty", () => {
         const result = convertFormValuesToNamedFormat({}, []);
 
+        expect(result).toEqual({});
+      });
+    });
+  });
+
+  describe("applyReferenceTransformation", () => {
+    describe("No Transformation", () => {
+      it("should return original value when transformFunction is null", () => {
+        expect(applyReferenceTransformation("test", null)).toBe("test");
+      });
+
+      it("should return original value when transformFunction is undefined", () => {
+        expect(applyReferenceTransformation("test", undefined)).toBe("test");
+      });
+    });
+
+    describe("toString Transformation", () => {
+      it("should convert number to string", () => {
+        expect(applyReferenceTransformation(42, "toString")).toBe("42");
+      });
+
+      it("should convert boolean to string", () => {
+        expect(applyReferenceTransformation(true, "toString")).toBe("true");
+      });
+
+      it("should keep string as string", () => {
+        expect(applyReferenceTransformation("test", "toString")).toBe("test");
+      });
+
+      it("should convert object to string", () => {
+        expect(applyReferenceTransformation({ a: 1 }, "toString")).toBe("[object Object]");
+      });
+    });
+
+    describe("toNumber Transformation", () => {
+      it("should convert string to number", () => {
+        expect(applyReferenceTransformation("42", "toNumber")).toBe(42);
+      });
+
+      it("should convert boolean to number", () => {
+        expect(applyReferenceTransformation(true, "toNumber")).toBe(1);
+        expect(applyReferenceTransformation(false, "toNumber")).toBe(0);
+      });
+
+      it("should keep number as number", () => {
+        expect(applyReferenceTransformation(42, "toNumber")).toBe(42);
+      });
+
+      it("should convert invalid string to NaN", () => {
+        expect(applyReferenceTransformation("invalid", "toNumber")).toBeNaN();
+      });
+    });
+
+    describe("toBoolean Transformation", () => {
+      it("should convert truthy values to true", () => {
+        expect(applyReferenceTransformation("text", "toBoolean")).toBe(true);
+        expect(applyReferenceTransformation(1, "toBoolean")).toBe(true);
+        expect(applyReferenceTransformation({}, "toBoolean")).toBe(true);
+      });
+
+      it("should convert falsy values to false", () => {
+        expect(applyReferenceTransformation("", "toBoolean")).toBe(false);
+        expect(applyReferenceTransformation(0, "toBoolean")).toBe(false);
+        expect(applyReferenceTransformation(null, "toBoolean")).toBe(false);
+        expect(applyReferenceTransformation(undefined, "toBoolean")).toBe(false);
+      });
+    });
+
+    describe("toArray Transformation", () => {
+      it("should wrap non-array in array", () => {
+        expect(applyReferenceTransformation("test", "toArray")).toEqual(["test"]);
+        expect(applyReferenceTransformation(42, "toArray")).toEqual([42]);
+      });
+
+      it("should keep array as array", () => {
+        expect(applyReferenceTransformation([1, 2, 3], "toArray")).toEqual([1, 2, 3]);
+      });
+    });
+
+    describe("toObject Transformation", () => {
+      it("should transform object with mapping", () => {
+        const source = { firstName: "John", lastName: "Doe" };
+        const mapping = [
+          { sourceKey: "firstName", targetKey: "name" },
+          { sourceKey: "lastName", targetKey: "surname" },
+        ];
+
+        const result = applyReferenceTransformation(source, "toObject", mapping);
+
+        expect(result).toEqual({ name: "John", surname: "Doe" });
+      });
+
+      it("should return original value when no mapping provided", () => {
+        const source = { a: 1 };
+        expect(applyReferenceTransformation(source, "toObject")).toEqual({ a: 1 });
+      });
+
+      it("should handle missing source keys gracefully", () => {
+        const source = { a: 1 };
+        const mapping = [{ sourceKey: "missing", targetKey: "result" }];
+
+        const result = applyReferenceTransformation(source, "toObject", mapping);
+
+        expect(result).toEqual({ result: undefined });
+      });
+
+      it("should return original value when source is not an object", () => {
+        const mapping = [{ sourceKey: "a", targetKey: "b" }];
+        expect(applyReferenceTransformation("string", "toObject", mapping)).toBe("string");
+        expect(applyReferenceTransformation(null, "toObject", mapping)).toBe(null);
+      });
+    });
+  });
+
+  describe("calculateReferenceFieldUpdates", () => {
+    describe("Basic Reference Update", () => {
+      it("should update field when reference value changes", () => {
+        const nodes: Node<InputNodeData>[] = [
+          {
+            data: {
+              defaultValue: {
+                referenceField: "source",
+                type: "reference",
+              },
+              type: "text",
+            },
+            id: "target",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        const prevFormValues: FormValues = { source: "old" };
+        const formValues: FormValues = { source: "new", target: "old" };
+
+        const result = calculateReferenceFieldUpdates(nodes, formValues, prevFormValues);
+
+        expect(result).toEqual({ target: "new" });
+      });
+
+      it("should not update when reference value hasn't changed", () => {
+        const nodes: Node<InputNodeData>[] = [
+          {
+            data: {
+              defaultValue: {
+                referenceField: "source",
+                type: "reference",
+              },
+              type: "text",
+            },
+            id: "target",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        const prevFormValues: FormValues = { source: "same" };
+        const formValues: FormValues = { source: "same", target: "old" };
+
+        const result = calculateReferenceFieldUpdates(nodes, formValues, prevFormValues);
+
+        expect(result).toEqual({});
+      });
+
+      it("should not update when reference value is undefined", () => {
+        const nodes: Node<InputNodeData>[] = [
+          {
+            data: {
+              defaultValue: {
+                referenceField: "source",
+                type: "reference",
+              },
+              type: "text",
+            },
+            id: "target",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        const prevFormValues: FormValues = {};
+        const formValues: FormValues = { target: "value" };
+
+        const result = calculateReferenceFieldUpdates(nodes, formValues, prevFormValues);
+
+        expect(result).toEqual({});
+      });
+
+      it("should not update when reference value is null", () => {
+        const nodes: Node<InputNodeData>[] = [
+          {
+            data: {
+              defaultValue: {
+                referenceField: "source",
+                type: "reference",
+              },
+              type: "text",
+            },
+            id: "target",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        const prevFormValues: FormValues = { source: "old" };
+        const formValues: FormValues = { source: null, target: "value" };
+
+        const result = calculateReferenceFieldUpdates(nodes, formValues, prevFormValues);
+
+        expect(result).toEqual({});
+      });
+    });
+
+    describe("Manual Edit Detection", () => {
+      it("should detect manual edit and skip update", () => {
+        const nodes: Node<InputNodeData>[] = [
+          {
+            data: {
+              defaultValue: {
+                referenceField: "source",
+                type: "reference",
+              },
+              type: "text",
+            },
+            id: "target",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        // User changed source from "old" to "new"
+        // But target was manually changed to "custom" (not "old")
+        const prevFormValues: FormValues = { source: "old", target: "old" };
+        const formValues: FormValues = { source: "new", target: "custom" };
+
+        const result = calculateReferenceFieldUpdates(nodes, formValues, prevFormValues);
+
+        // Should not update because target was manually edited
+        expect(result).toEqual({});
+      });
+
+      it("should update when field matches previous transformed value", () => {
+        const nodes: Node<InputNodeData>[] = [
+          {
+            data: {
+              defaultValue: {
+                referenceField: "source",
+                type: "reference",
+              },
+              type: "text",
+            },
+            id: "target",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        // Target still has the auto-filled value from previous source
+        const prevFormValues: FormValues = { source: "old" };
+        const formValues: FormValues = { source: "new", target: "old" };
+
+        const result = calculateReferenceFieldUpdates(nodes, formValues, prevFormValues);
+
+        // Should update because target wasn't manually edited
+        expect(result).toEqual({ target: "new" });
+      });
+    });
+
+    describe("With Transformations", () => {
+      it("should apply toString transformation", () => {
+        const nodes: Node<InputNodeData>[] = [
+          {
+            data: {
+              defaultValue: {
+                referenceField: "source",
+                transformFunction: "toString",
+                type: "reference",
+              },
+              type: "text",
+            },
+            id: "target",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        const prevFormValues: FormValues = { source: 10 };
+        const formValues: FormValues = { source: 42, target: "10" };
+
+        const result = calculateReferenceFieldUpdates(nodes, formValues, prevFormValues);
+
+        expect(result).toEqual({ target: "42" });
+      });
+
+      it("should detect manual edit with transformation", () => {
+        const nodes: Node<InputNodeData>[] = [
+          {
+            data: {
+              defaultValue: {
+                referenceField: "source",
+                transformFunction: "toString",
+                type: "reference",
+              },
+              type: "text",
+            },
+            id: "target",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        // Previous source was 10 (transformed to "10")
+        // But target was manually changed to "custom"
+        const prevFormValues: FormValues = { source: 10 };
+        const formValues: FormValues = { source: 42, target: "custom" };
+
+        const result = calculateReferenceFieldUpdates(nodes, formValues, prevFormValues);
+
+        // Should not update because target was manually edited
+        expect(result).toEqual({});
+      });
+
+      // Note: toObject transformation with manual edit detection is complex for objects
+      // because they are compared by reference. This test covers the basic transformation
+      // but doesn't test manual edit detection for objects (which is a known limitation).
+      it("should apply toObject transformation (basic case)", () => {
+        const nodes: Node<InputNodeData>[] = [
+          {
+            data: {
+              defaultValue: {
+                objectMapping: [{ sourceKey: "firstName", targetKey: "name" }],
+                referenceField: "source",
+                transformFunction: "toObject",
+                type: "reference",
+              },
+              type: "text",
+            },
+            id: "target",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        // Test basic transformation without edit detection complexity
+        const nodes2: Node<InputNodeData>[] = [
+          {
+            data: {
+              defaultValue: {
+                objectMapping: [{ sourceKey: "a", targetKey: "b" }],
+                referenceField: "source",
+                transformFunction: "toObject",
+                type: "reference",
+              },
+              type: "text",
+            },
+            id: "target",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        const prevFormValues2: FormValues = {};
+        const formValues2: FormValues = {
+          source: { a: 1 },
+        };
+
+        const result2 = calculateReferenceFieldUpdates(nodes2, formValues2, prevFormValues2);
+
+        // Should successfully transform the object
+        expect(result2).toEqual({ target: { b: 1 } });
+      });
+    });
+
+    describe("Multiple Fields", () => {
+      it("should update multiple reference fields", () => {
+        const nodes: Node<InputNodeData>[] = [
+          {
+            data: {
+              defaultValue: {
+                referenceField: "source",
+                type: "reference",
+              },
+              type: "text",
+            },
+            id: "target1",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+          {
+            data: {
+              defaultValue: {
+                referenceField: "source",
+                transformFunction: "toString",
+                type: "reference",
+              },
+              type: "text",
+            },
+            id: "target2",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        const prevFormValues: FormValues = { source: 10 };
+        const formValues: FormValues = { source: 42, target1: 10, target2: "10" };
+
+        const result = calculateReferenceFieldUpdates(nodes, formValues, prevFormValues);
+
+        expect(result).toEqual({ target1: 42, target2: "42" });
+      });
+
+      it("should only update fields that weren't manually edited", () => {
+        const nodes: Node<InputNodeData>[] = [
+          {
+            data: {
+              defaultValue: {
+                referenceField: "source",
+                type: "reference",
+              },
+              type: "text",
+            },
+            id: "target1",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+          {
+            data: {
+              defaultValue: {
+                referenceField: "source",
+                type: "reference",
+              },
+              type: "text",
+            },
+            id: "target2",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        const prevFormValues: FormValues = { source: "old" };
+        const formValues: FormValues = {
+          source: "new",
+          target1: "old", // Not manually edited
+          target2: "custom", // Manually edited
+        };
+
+        const result = calculateReferenceFieldUpdates(nodes, formValues, prevFormValues);
+
+        // Only target1 should be updated
+        expect(result).toEqual({ target1: "new" });
+      });
+    });
+
+    describe("Edge Cases", () => {
+      it("should return empty object when no nodes have reference defaults", () => {
+        const nodes: Node<InputNodeData>[] = [
+          {
+            data: { type: "text" },
+            id: "field",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        const prevFormValues: FormValues = {};
+        const formValues: FormValues = { field: "value" };
+
+        const result = calculateReferenceFieldUpdates(nodes, formValues, prevFormValues);
+
+        expect(result).toEqual({});
+      });
+
+      it("should skip nodes without referenceField", () => {
+        const nodes: Node<InputNodeData>[] = [
+          {
+            data: {
+              defaultValue: {
+                type: "static",
+              },
+              type: "text",
+            },
+            id: "field",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        const prevFormValues: FormValues = {};
+        const formValues: FormValues = { field: "value" };
+
+        const result = calculateReferenceFieldUpdates(nodes, formValues, prevFormValues);
+
+        expect(result).toEqual({});
+      });
+
+      it("should not update when new value equals current value", () => {
+        const nodes: Node<InputNodeData>[] = [
+          {
+            data: {
+              defaultValue: {
+                referenceField: "source",
+                type: "reference",
+              },
+              type: "text",
+            },
+            id: "target",
+            position: { x: 0, y: 0 },
+            type: "input",
+          },
+        ];
+
+        const prevFormValues: FormValues = { source: "old" };
+        const formValues: FormValues = { source: "new", target: "new" };
+
+        const result = calculateReferenceFieldUpdates(nodes, formValues, prevFormValues);
+
+        // No update needed since target already has the correct value
         expect(result).toEqual({});
       });
     });

@@ -4,6 +4,7 @@
     "clear": "Clear",
     "close": "Close",
     "create": "Create",
+    "delete": "Delete",
     "retry": "Retry",
     "save": "Save",
     "submit": "Submit",
@@ -94,7 +95,7 @@
     "httpConfigForm": {
       "addHeader": "Add header",
       "apiUrl": "API URL",
-      "apiUrlDesc": "Use template variables like {{fieldId}} to reference other fields",
+      "apiUrlDesc": "Use template variables like {{fieldId}} to reference form fields",
       "apiUrlPlaceholder": "https://api.example.com/data",
       "behavior": "Behavior",
       "fetchOnMount": "Fetch on mount",
@@ -114,8 +115,8 @@
       "methodPut": "PUT",
       "noFieldsAvailable": "No fields available",
       "requestBody": "Request Body (JSON)",
-      "requestBodyDesc": "Use template variables like ${fieldId} to reference other fields",
-      "requestBodyPlaceholder": "{\"key\": \"value\"}",
+      "requestBodyDesc": "Use {{fieldId}} to reference form fields. Ensure proper JSON formatting including quotes around string values.",
+      "requestBodyPlaceholder": "{\"name\": \"{{userName}}\", \"age\": {{userAge}}}",
       "responseConfiguration": "Response Configuration",
       "responsePath": "Response Path",
       "responsePathDesc": "Extract data from response using dot notation or array indexing",
@@ -124,6 +125,8 @@
       "searchParameterDesc": "If set, enables combobox with search that adds this param to API calls (e.g., ?q=Paris)",
       "searchParameterPlaceholder": "q, search, query...",
       "selectMethod": "Select method",
+      "sendFormData": "Send all form data",
+      "sendFormDataDesc": "Automatically send all form values as JSON body",
       "showLoadingState": "Show loading state",
       "valueField": "Value Field",
       "valueFieldDesc": "Field to use as option value (e.g., id)",
@@ -165,6 +168,7 @@
       "sourceKey": "Source key",
       "staticValue": "Static Value",
       "staticValuePlaceholder": "Enter default value",
+      "submitConfiguration": "Submit Configuration",
       "targetKey": "Target key",
       "transformArray": "Convert to Array",
       "transformBoolean": "Convert to Boolean",
@@ -175,6 +179,12 @@
       "transformString": "Convert to String",
       "transformType": "Transform Type",
       "validation": "Validation"
+    },
+    "nodeActionsSheet": {
+      "deleteNode": "Delete node",
+      "deleteNodeConfirm": "Are you sure you want to delete this node?",
+      "deleteNodeSuccess": "Node deleted successfully",
+      "editNode": "Edit node"
     },
     "selectInputType": {
       "type": "Type"
@@ -194,6 +204,40 @@
     },
     "selectNodeType": {
       "nodeType": "Node Type"
+    },
+    "submitConfigForm": {
+      "addHeader": "Add header",
+      "apiUrl": "API URL",
+      "apiUrlDesc": "Use {{fieldId}} to reference form fields",
+      "apiUrlPlaceholder": "https://api.example.com/submit",
+      "behavior": "Behavior",
+      "errorMessage": "Error Message",
+      "errorMessageDesc": "Message displayed when submission fails",
+      "errorMessagePlaceholder": "An error occurred. Please try again.",
+      "headerName": "Header name",
+      "headers": "Headers",
+      "headerValue": "Header value",
+      "httpMethod": "HTTP Method",
+      "insertVariable": "Insert variable",
+      "methodDelete": "DELETE",
+      "methodPatch": "PATCH",
+      "methodPost": "POST",
+      "methodPut": "PUT",
+      "noFieldsAvailable": "No fields available",
+      "postSubmission": "Post Submission",
+      "redirectUrl": "Redirect URL",
+      "redirectUrlDesc": "URL to redirect to after successful submission",
+      "redirectUrlPlaceholder": "/success or https://example.com/thank-you",
+      "requestBody": "Request Body (JSON)",
+      "requestBodyDesc": "Use {{fieldId}} to reference form fields. Ensure proper JSON formatting including quotes around string values.",
+      "requestBodyPlaceholder": "{\"name\": \"{{userName}}\", \"email\": \"{{userEmail}}\"}",
+      "selectMethod": "Select method",
+      "sendFormData": "Send all form data",
+      "sendFormDataDesc": "Automatically send all form values as JSON body",
+      "showLoadingState": "Show loading state",
+      "successMessage": "Success Message",
+      "successMessageDesc": "Message displayed when submission succeeds",
+      "successMessagePlaceholder": "Form submitted successfully!"
     },
     "uiNodeForm": {
       "label": "Label",
@@ -221,7 +265,8 @@
       "retry": "Retry",
       "search": "Search...",
       "searching": "Search...",
-      "selectOption": "Select an option"
+      "selectOption": "Select an option",
+      "waitingForRequiredFields": "Waiting for required fields"
     },
     "defaultInputs": {
       "endDate": "End date",

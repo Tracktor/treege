@@ -20,7 +20,8 @@ const SelectNodeGroup = () => {
   const currentParentId = selectedNode?.parentId || "none";
   const isGroup = isGroupNode(selectedNode);
   const t = useTranslate();
-  const groupId = useId();
+  const selectGroupId = useId();
+  const inputGroupId = useId();
 
   if (isGroup) {
     return null;
@@ -131,10 +132,10 @@ const SelectNodeGroup = () => {
 
   return (
     <div className="space-y-2">
-      <Label>{t("editor.selectNodeGroup.group")}</Label>
+      <Label htmlFor={selectGroupId}>{t("editor.selectNodeGroup.group")}</Label>
       <div className="flex gap-2">
         <Select value={currentParentId} onValueChange={handleGroupChange}>
-          <SelectTrigger className="flex-1">
+          <SelectTrigger id={selectGroupId} className="flex-1">
             <SelectValue placeholder={t("editor.selectNodeGroup.noGroup")} />
           </SelectTrigger>
           <SelectContent>
@@ -162,10 +163,10 @@ const SelectNodeGroup = () => {
                 <p className="text-muted-foreground text-sm">{t("editor.selectNodeGroup.newGroupDescription")}</p>
               </div>
               <div className="space-y-2">
-                <Label htmlFor={groupId}>{t("editor.selectNodeGroup.groupName")}</Label>
+                <Label htmlFor={inputGroupId}>{t("editor.selectNodeGroup.groupName")}</Label>
                 <Input
                   autoFocus
-                  id={groupId}
+                  id={inputGroupId}
                   value={newGroupLabel}
                   onChange={(e) => setNewGroupLabel(e.target.value)}
                   placeholder="Ex: Step 1 - Personal info"

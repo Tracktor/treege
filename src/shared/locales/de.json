@@ -4,6 +4,7 @@
     "clear": "Löschen",
     "close": "Schließen",
     "create": "Erstellen",
+    "delete": "Löschen",
     "retry": "Erneut versuchen",
     "save": "Speichern",
     "submit": "Senden",
@@ -114,8 +115,8 @@
       "methodPut": "PUT",
       "noFieldsAvailable": "Keine Felder verfügbar",
       "requestBody": "Anfrage-Body (JSON)",
-      "requestBodyDesc": "Verwenden Sie Vorlagenvariablen wie ${fieldId}, um andere Felder zu referenzieren",
-      "requestBodyPlaceholder": "{\"schlüssel\": \"wert\"}",
+      "requestBodyDesc": "Verwenden Sie {{fieldId}}, um andere Felder zu referenzieren. Stellen Sie sicher, dass die JSON-Formatierung korrekt ist, einschließlich Anführungszeichen um Zeichenkettenwerte.",
+      "requestBodyPlaceholder": "{\"name\": \"{{benutzername}}\", \"alter\": {{benutzeralter}}}",
       "responseConfiguration": "Antwort-Konfiguration",
       "responsePath": "Antwortpfad",
       "responsePathDesc": "Daten aus der Antwort mit Punktnotation oder Array-Indizierung extrahieren",
@@ -124,6 +125,8 @@
       "searchParameterDesc": "Wenn festgelegt, aktiviert eine Suchbox, die diesen Parameter zu API-Aufrufen hinzufügt (z.B. ?q=Paris)",
       "searchParameterPlaceholder": "q, suche, abfrage...",
       "selectMethod": "Methode auswählen",
+      "sendFormData": "Alle Formulardaten senden",
+      "sendFormDataDesc": "Alle Formularwerte automatisch als JSON-Body senden",
       "showLoadingState": "Ladezustand anzeigen",
       "valueField": "Wertfeld",
       "valueFieldDesc": "Feld, das als Optionswert verwendet werden soll (z.B. id)",
@@ -165,6 +168,7 @@
       "sourceKey": "Quellschlüssel",
       "staticValue": "Statischer Wert",
       "staticValuePlaceholder": "Standardwert eingeben",
+      "submitConfiguration": "Übermittlungskonfiguration",
       "targetKey": "Zielschlüssel",
       "transformArray": "In Array konvertieren",
       "transformBoolean": "In Boolean konvertieren",
@@ -175,6 +179,12 @@
       "transformString": "In String konvertieren",
       "transformType": "Transformationstyp",
       "validation": "Validierung"
+    },
+    "nodeActionsSheet": {
+      "deleteNode": "Knoten löschen",
+      "deleteNodeConfirm": "Sind Sie sicher, dass Sie diesen Knoten löschen möchten?",
+      "deleteNodeSuccess": "Knoten erfolgreich gelöscht",
+      "editNode": "Knoten bearbeiten"
     },
     "selectInputType": {
       "type": "Typ"
@@ -194,6 +204,40 @@
     },
     "selectNodeType": {
       "nodeType": "Knotentyp"
+    },
+    "submitConfigForm": {
+      "addHeader": "Header hinzufügen",
+      "apiUrl": "API-URL",
+      "apiUrlDesc": "Verwenden Sie {{fieldId}}, um andere Felder zu referenzieren",
+      "apiUrlPlaceholder": "https://api.beispiel.de/submit",
+      "behavior": "Verhalten",
+      "errorMessage": "Fehlermeldung",
+      "errorMessageDesc": "Nachricht, die bei fehlgeschlagener Übermittlung angezeigt wird",
+      "errorMessagePlaceholder": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+      "headerName": "Header-Name",
+      "headers": "Header",
+      "headerValue": "Header-Wert",
+      "httpMethod": "HTTP-Methode",
+      "insertVariable": "Variable einfügen",
+      "methodDelete": "DELETE",
+      "methodPatch": "PATCH",
+      "methodPost": "POST",
+      "methodPut": "PUT",
+      "noFieldsAvailable": "Keine Felder verfügbar",
+      "postSubmission": "Nach dem Absenden",
+      "redirectUrl": "Weiterleitungs-URL",
+      "redirectUrlDesc": "URL, zu der nach erfolgreicher Übermittlung weitergeleitet wird",
+      "redirectUrlPlaceholder": "/success oder https://beispiel.de/danke",
+      "requestBody": "Anfragekörper (JSON)",
+      "requestBodyDesc": "Verwenden Sie {{fieldId}}, um andere Felder zu referenzieren. Stellen Sie sicher, dass die JSON-Formatierung korrekt ist, einschließlich Anführungszeichen um Zeichenkettenwerte.",
+      "requestBodyPlaceholder": "{\"name\": \"{{benutzername}}\", \"email\": \"{{benutzeremail}}\"}",
+      "selectMethod": "Methode auswählen",
+      "sendFormData": "Alle Formulardaten senden",
+      "sendFormDataDesc": "Alle Formularwerte automatisch als JSON-Body senden",
+      "showLoadingState": "Ladezustand anzeigen",
+      "successMessage": "Erfolgsmeldung",
+      "successMessageDesc": "Nachricht, die bei erfolgreicher Übermittlung angezeigt wird",
+      "successMessagePlaceholder": "Formular erfolgreich übermittelt!"
     },
     "uiNodeForm": {
       "label": "Bezeichnung",
@@ -221,7 +265,8 @@
       "retry": "Erneut versuchen",
       "search": "Suchen...",
       "searching": "Suche läuft...",
-      "selectOption": "Option auswählen"
+      "selectOption": "Option auswählen",
+      "waitingForRequiredFields": "Warten auf erforderliche Felder"
     },
     "defaultInputs": {
       "endDate": "Enddatum",

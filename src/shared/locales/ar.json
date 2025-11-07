@@ -4,6 +4,7 @@
     "clear": "مسح",
     "close": "إغلاق",
     "create": "إنشاء",
+    "delete": "حذف",
     "retry": "إعادة المحاولة",
     "save": "حفظ",
     "submit": "إرسال",
@@ -114,8 +115,8 @@
       "methodPut": "PUT",
       "noFieldsAvailable": "لا توجد حقول متاحة",
       "requestBody": "جسم الطلب (JSON)",
-      "requestBodyDesc": "استخدم متغيرات القالب مثل ${fieldId} للإشارة إلى الحقول الأخرى",
-      "requestBodyPlaceholder": "{\"مفتاح\": \"قيمة\"}",
+      "requestBodyDesc": "استخدم {{fieldId}} للإشارة إلى حقول أخرى. تأكد من تنسيق JSON الصحيح بما في ذلك علامات الاقتباس حول القيم النصية.",
+      "requestBodyPlaceholder": "{\"name\": \"{{userName}}\", \"age\": {{userAge}}}",
       "responseConfiguration": "تكوين الاستجابة",
       "responsePath": "مسار الاستجابة",
       "responsePathDesc": "استخراج البيانات من الاستجابة باستخدام نقطة التدوين أو فهرسة المصفوفة",
@@ -124,6 +125,8 @@
       "searchParameterDesc": "إذا تم تعيينه، يتم تمكين مربع بحث يضيف هذا المعامل إلى استدعاءات API (مثال: ?q=باريس)",
       "searchParameterPlaceholder": "q، بحث، استعلام...",
       "selectMethod": "اختر الطريقة",
+      "sendFormData": "إرسال جميع بيانات النموذج",
+      "sendFormDataDesc": "إرسال جميع قيم النموذج تلقائياً كمحتوى JSON",
       "showLoadingState": "إظهار حالة التحميل",
       "valueField": "حقل القيمة",
       "valueFieldDesc": "الحقل المستخدم كقيمة خيار (مثال: id)",
@@ -165,6 +168,7 @@
       "sourceKey": "مفتاح المصدر",
       "staticValue": "قيمة ثابتة",
       "staticValuePlaceholder": "أدخل القيمة الافتراضية",
+      "submitConfiguration": "إعداد الإرسال",
       "targetKey": "مفتاح الوجهة",
       "transformArray": "تحويل إلى مصفوفة",
       "transformBoolean": "تحويل إلى منطقي",
@@ -175,6 +179,12 @@
       "transformString": "تحويل إلى نص",
       "transformType": "نوع التحويل",
       "validation": "التحقق"
+    },
+    "nodeActionsSheet": {
+      "deleteNode": "حذف العقدة",
+      "deleteNodeConfirm": "هل أنت متأكد من أنك تريد حذف هذه العقدة؟",
+      "deleteNodeSuccess": "تم حذف العقدة بنجاح",
+      "editNode": "تعديل العقدة"
     },
     "selectInputType": {
       "type": "النوع"
@@ -194,6 +204,40 @@
     },
     "selectNodeType": {
       "nodeType": "نوع العقدة"
+    },
+    "submitConfigForm": {
+      "addHeader": "إضافة رأس",
+      "apiUrl": "رابط API",
+      "apiUrlDesc": "استخدم {{fieldId}} للإشارة إلى حقول أخرى",
+      "apiUrlPlaceholder": "https://api.example.com/submit",
+      "behavior": "السلوك",
+      "errorMessage": "رسالة الخطأ",
+      "errorMessageDesc": "الرسالة المعروضة عند فشل الإرسال",
+      "errorMessagePlaceholder": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+      "headerName": "اسم الرأس",
+      "headers": "الرؤوس",
+      "headerValue": "قيمة الرأس",
+      "httpMethod": "طريقة HTTP",
+      "insertVariable": "إدراج متغير",
+      "methodDelete": "DELETE",
+      "methodPatch": "PATCH",
+      "methodPost": "POST",
+      "methodPut": "PUT",
+      "noFieldsAvailable": "لا توجد حقول متاحة",
+      "postSubmission": "بعد الإرسال",
+      "redirectUrl": "رابط إعادة التوجيه",
+      "redirectUrlDesc": "الرابط الذي سيتم التوجيه إليه بعد نجاح الإرسال",
+      "redirectUrlPlaceholder": "/success أو https://example.com/thank-you",
+      "requestBody": "محتوى الطلب (JSON)",
+      "requestBodyDesc": "استخدم {{fieldId}} للإشارة إلى حقول أخرى. تأكد من تنسيق JSON الصحيح بما في ذلك علامات الاقتباس حول القيم النصية.",
+      "requestBodyPlaceholder": "{\"name\": \"{{userName}}\", \"email\": \"{{userEmail}}\"}",
+      "selectMethod": "اختر الطريقة",
+      "sendFormData": "إرسال جميع بيانات النموذج",
+      "sendFormDataDesc": "إرسال جميع قيم النموذج تلقائياً كمحتوى JSON",
+      "showLoadingState": "إظهار حالة التحميل",
+      "successMessage": "رسالة النجاح",
+      "successMessageDesc": "الرسالة المعروضة عند نجاح الإرسال",
+      "successMessagePlaceholder": "تم إرسال النموذج بنجاح!"
     },
     "uiNodeForm": {
       "label": "التسمية",
@@ -221,7 +265,8 @@
       "retry": "إعادة المحاولة",
       "search": "بحث...",
       "searching": "جاري البحث...",
-      "selectOption": "اختر خياراً"
+      "selectOption": "اختر خياراً",
+      "waitingForRequiredFields": "في انتظار الحقول المطلوبة"
     },
     "defaultInputs": {
       "endDate": "تاريخ الانتهاء",

@@ -19,6 +19,7 @@ export type InputValueTypeMap = {
   password: string;
   radio: string;
   select: string | string[];
+  submit: undefined;
   switch: boolean;
   text: string;
   textarea: string;
@@ -30,6 +31,10 @@ export type InputValueTypeMap = {
  * Form values stored during rendering
  */
 export type FormValues = Record<string, any>;
+
+export type Meta = {
+  httpResponse?: unknown;
+};
 
 /**
  * Union of all possible input value types
@@ -43,7 +48,8 @@ export type InputValue =
   | SerializableFile[]
   | [string, string]
   | [string | undefined, string | undefined]
-  | null;
+  | null
+  | undefined;
 
 /**
  * Props for input components with dynamic value typing
@@ -88,6 +94,14 @@ export type InputRenderProps<T extends InputType = InputType> = {
    * Translated helper text (already processed with current language)
    */
   helperText?: string;
+  /**
+   * Missing required fields on form submit (for submit inputs)
+   */
+  missingRequiredFields?: string[];
+  /**
+   * Whether the form is currently being submitted (for submit inputs)
+   */
+  isSubmitting?: boolean;
 };
 
 export type UiRenderProps = {
@@ -204,8 +218,10 @@ export type TreegeRendererProps = {
   onChange?: (values: FormValues) => void;
   /**
    * Callback when form is submitted
+   * @param values - Form values (keyed by field name or node ID)
+   * @param meta - Optional metadata about the submission (e.g., HTTP response data)
    */
-  onSubmit?: (values: FormValues) => void;
+  onSubmit?: (values: FormValues, meta?: Meta) => void;
   /**
    * Theme for the renderer
    * @default "dark"

@@ -77,6 +77,10 @@ export type HttpConfig = {
    */
   body?: string;
   /**
+   * If true, automatically sends all form data as JSON body (overrides custom body)
+   */
+  sendFormData?: boolean;
+  /**
    * JSONPath or key to extract from the response
    * Examples: "data.users", "results[0].name"
    */
@@ -105,6 +109,46 @@ export type HttpConfig = {
   fetchOnMount?: boolean;
   /**
    * Whether to show a loading state while fetching
+   */
+  showLoading?: boolean;
+};
+
+export type SubmitConfig = {
+  /**
+   * The HTTP method to use for form submission
+   */
+  method?: "POST" | "PUT" | "PATCH" | "DELETE";
+  /**
+   * The API URL to call on submit (supports template variables like {{fieldId}})
+   */
+  url?: string;
+  /**
+   * Custom headers for the HTTP request
+   */
+  headers?: HttpHeader[];
+  /**
+   * Request body (for POST/PUT/PATCH methods, supports template variables like {{fieldId}})
+   * Strings are automatically quoted, use: {"name": {{userName}}}
+   */
+  body?: string;
+  /**
+   * If true, automatically sends all form data as JSON body (overrides custom body)
+   */
+  sendFormData?: boolean;
+  /**
+   * URL to redirect to after successful submission (supports template variables from response)
+   */
+  redirectUrl?: string;
+  /**
+   * Success message to display after successful submission (translatable)
+   */
+  successMessage?: Translatable;
+  /**
+   * Error message to display if submission fails (translatable)
+   */
+  errorMessage?: Translatable;
+  /**
+   * Whether to show a loading state while submitting
    */
   showLoading?: boolean;
 };
@@ -163,6 +207,10 @@ export type InputNodeData = BaseNodeData & {
    * HTTP configuration for the input field (used with type="http")
    */
   httpConfig?: HttpConfig;
+  /**
+   * Submit configuration for the input field (used with type="submit")
+   */
+  submitConfig?: SubmitConfig;
 };
 
 export type UINodeData = BaseNodeData & {

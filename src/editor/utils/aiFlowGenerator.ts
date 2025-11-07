@@ -12,6 +12,8 @@ IMPORTANT RULES:
 4. Every edge must have: id (string), source (string), target (string)
 5. For regex patterns: ALWAYS use double backslashes (\\\\) for special characters (\\\\s, \\\\d, etc.)
 6. AVOID using "pattern" field unless specifically requested - prefer using simple validation
+7. For submit buttons, use type "input" with data.type "submit", NOT type "flow"
+8. For conditional logic, use conditional edges with proper operators (===, !==, >, <, >=, <=)
 
 NODE TYPES:
 - "input": Form input fields (text, number, select, checkbox, etc.)
@@ -23,7 +25,7 @@ INPUT NODE TYPES (data.type):
 - "text", "number", "textarea", "password"
 - "select", "radio", "checkbox", "switch"
 - "autocomplete", "date", "daterange", "time", "timerange"
-- "file", "address", "http", "hidden"
+- "file", "address", "http", "hidden", "submit"
 
 INPUT NODE DATA STRUCTURE:
 {
@@ -85,8 +87,30 @@ EDGE STRUCTURE:
   "id": "edge-id",
   "source": "source-node-id",
   "target": "target-node-id",
-  "type": "default" // or "conditional" for advanced flows
+  "type": "default" // or "conditional" for conditional logic
 }
+
+CONDITIONAL EDGE STRUCTURE:
+{
+  "id": "edge-id",
+  "source": "source-node-id",
+  "target": "target-node-id",
+  "type": "conditional",
+  "data": {
+    "label": "If condition is true", // optional label for the edge
+    "conditions": [
+      {
+        "field": "field-node-id", // ID of the field to check
+        "operator": ">=", // operators: ===, !==, >, <, >=, <=
+        "value": "18" // value to compare (as string)
+      }
+    ],
+    "operator": "AND" // optional: "AND" or "OR" for multiple conditions (default: AND)
+  }
+}
+
+IMPORTANT: For conditional edges, the value must ALWAYS be a string, even for numbers.
+Example: For "age >= 18", use "value": "18" (not value: 18)
 
 LAYOUT GUIDELINES:
 - Position nodes in a vertical flow (top to bottom)
@@ -204,12 +228,130 @@ Response:
           { "value": "de", "label": "Germany" }
         ]
       }
+    },
+    {
+      "id": "submit-1",
+      "type": "input",
+      "position": { "x": 0, "y": 1000 },
+      "data": {
+        "label": "Submit",
+        "type": "submit"
+      }
     }
   ],
   "edges": [
     { "id": "e1", "source": "title-1", "target": "age-1" },
     { "id": "e2", "source": "age-1", "target": "address-1" },
-    { "id": "e3", "source": "address-1", "target": "country-1" }
+    { "id": "e3", "source": "address-1", "target": "country-1" },
+    { "id": "e4", "source": "country-1", "target": "submit-1" }
+  ]
+}
+
+User: "Create a form with name, age, and show different questions based on age (movie for 18+, color for under 18)"
+Response:
+{
+  "nodes": [
+    {
+      "id": "title-1",
+      "type": "ui",
+      "position": { "x": 0, "y": 0 },
+      "data": { "label": "Survey Form", "type": "title" }
+    },
+    {
+      "id": "name-1",
+      "type": "input",
+      "position": { "x": 0, "y": 250 },
+      "data": {
+        "label": "Name",
+        "name": "name",
+        "type": "text",
+        "required": true,
+        "placeholder": "Enter your name"
+      }
+    },
+    {
+      "id": "age-1",
+      "type": "input",
+      "position": { "x": 0, "y": 500 },
+      "data": {
+        "label": "Age",
+        "name": "age",
+        "type": "number",
+        "required": true,
+        "placeholder": "Enter your age"
+      }
+    },
+    {
+      "id": "movie-1",
+      "type": "input",
+      "position": { "x": -350, "y": 750 },
+      "data": {
+        "label": "Favorite Movie",
+        "name": "favoriteMovie",
+        "type": "text",
+        "required": true,
+        "helperText": "For adults 18 and over"
+      }
+    },
+    {
+      "id": "color-1",
+      "type": "input",
+      "position": { "x": 350, "y": 750 },
+      "data": {
+        "label": "Favorite Color",
+        "name": "favoriteColor",
+        "type": "text",
+        "required": true,
+        "helperText": "For those under 18"
+      }
+    },
+    {
+      "id": "submit-1",
+      "type": "input",
+      "position": { "x": 0, "y": 1000 },
+      "data": {
+        "label": "Submit",
+        "type": "submit"
+      }
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "title-1", "target": "name-1" },
+    { "id": "e2", "source": "name-1", "target": "age-1" },
+    {
+      "id": "e3",
+      "source": "age-1",
+      "target": "movie-1",
+      "type": "conditional",
+      "data": {
+        "label": "If 18 or older",
+        "conditions": [
+          {
+            "field": "age-1",
+            "operator": ">=",
+            "value": "18"
+          }
+        ]
+      }
+    },
+    {
+      "id": "e4",
+      "source": "age-1",
+      "target": "color-1",
+      "type": "conditional",
+      "data": {
+        "label": "If under 18",
+        "conditions": [
+          {
+            "field": "age-1",
+            "operator": "<",
+            "value": "18"
+          }
+        ]
+      }
+    },
+    { "id": "e5", "source": "movie-1", "target": "submit-1" },
+    { "id": "e6", "source": "color-1", "target": "submit-1" }
   ]
 }
 
@@ -218,6 +360,9 @@ Remember:
 - No markdown code blocks
 - No explanations outside the JSON
 - Follow the exact structure shown above
+- For submit buttons, ALWAYS use type "input" with data.type "submit"
+- For conditional edges, ALWAYS specify the value as a string and use proper operators (>=, <, ===, etc.)
+- Never leave condition values empty - always provide the comparison value
 `;
 
 /**
@@ -229,6 +374,13 @@ const DEFAULT_MODELS = {
   gemini: "gemini-2.5-flash",
   openai: "gpt-4o-mini",
 } as const;
+
+/**
+ * Default temperature for AI generation
+ * Lower temperature (0.3) provides more deterministic and precise responses,
+ * which is ideal for structured JSON generation
+ */
+const DEFAULT_TEMPERATURE = 0.3;
 
 /**
  * Clean and parse JSON response from AI
@@ -261,7 +413,7 @@ function safeJsonParse(text: string): AIGenerationResponse {
  */
 async function generateWithGemini(request: AIGenerationRequest): Promise<AIGenerationResponse> {
   const model = request.config.model || DEFAULT_MODELS.gemini;
-  const temperature = request.config.temperature ?? 0.7;
+  const temperature = request.config.temperature ?? DEFAULT_TEMPERATURE;
 
   const response = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${request.config.apiKey}`,
@@ -306,7 +458,7 @@ async function generateWithGemini(request: AIGenerationRequest): Promise<AIGener
  */
 async function generateWithOpenAI(request: AIGenerationRequest): Promise<AIGenerationResponse> {
   const model = request.config.model || DEFAULT_MODELS.openai;
-  const temperature = request.config.temperature ?? 0.7;
+  const temperature = request.config.temperature ?? DEFAULT_TEMPERATURE;
 
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     body: JSON.stringify({
@@ -345,7 +497,7 @@ async function generateWithOpenAI(request: AIGenerationRequest): Promise<AIGener
  */
 async function generateWithDeepSeek(request: AIGenerationRequest): Promise<AIGenerationResponse> {
   const model = request.config.model || DEFAULT_MODELS.deepseek;
-  const temperature = request.config.temperature ?? 0.7;
+  const temperature = request.config.temperature ?? DEFAULT_TEMPERATURE;
 
   const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
     body: JSON.stringify({
@@ -384,7 +536,7 @@ async function generateWithDeepSeek(request: AIGenerationRequest): Promise<AIGen
  */
 async function generateWithClaude(request: AIGenerationRequest): Promise<AIGenerationResponse> {
   const model = request.config.model || DEFAULT_MODELS.claude;
-  const temperature = request.config.temperature ?? 0.7;
+  const temperature = request.config.temperature ?? DEFAULT_TEMPERATURE;
 
   const response = await fetch("https://api.anthropic.com/v1/messages", {
     body: JSON.stringify({

@@ -1,5 +1,6 @@
 import { Node, NodeProps, NodeResizer } from "@xyflow/react";
 import { Boxes } from "lucide-react";
+import { memo } from "react";
 import useTranslate from "@/editor/hooks/useTranslate";
 import { Badge } from "@/shared/components/ui/badge";
 import { GroupNodeData } from "@/shared/types/node";
@@ -24,4 +25,4 @@ const GroupNode = ({ data }: GroupNodeProps) => {
   );
 };
 
-export default GroupNode;
+export default memo(GroupNode);

@@ -1,5 +1,6 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { Network, Plus } from "lucide-react";
+import { memo } from "react";
 import useBottomHandleClick from "@/editor/features/TreegeEditor/nodes/hooks/useBottomHandleClick";
 import NodeWrapper from "@/editor/features/TreegeEditor/nodes/layout/NodeWrapper";
 import useTranslate from "@/editor/hooks/useTranslate";
@@ -23,7 +24,7 @@ const FlowNode = ({ data, isConnectable, type, parentId, id }: FlowNodeProps) =>
       <div className="mb-1 max-w-full overflow-hidden text-ellipsis text-nowrap text-2xl">{label}</div>
 
       {/* Type */}
-      <Badge variant="destructive">
+      <Badge variant="destructive" className="capitalize">
         <Network />
         {type}
       </Badge>
@@ -42,4 +43,4 @@ const FlowNode = ({ data, isConnectable, type, parentId, id }: FlowNodeProps) =>
   );
 };
 
-export default FlowNode;
+export default memo(FlowNode);

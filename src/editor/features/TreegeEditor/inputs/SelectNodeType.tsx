@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { NODE_TYPES } from "@/editor/constants/nodeTypes";
 import useFlowActions from "@/editor/hooks/useFlowActions";
 import useNodesSelection from "@/editor/hooks/useNodesSelection";
@@ -11,12 +12,13 @@ const SelectNodeType = () => {
   const value = selectedNode?.type || "";
   const isGroup = isGroupNode(selectedNode);
   const t = useTranslate();
+  const id = useId();
 
   return (
     <SelectGroup>
-      <SelectLabel>{t("editor.selectNodeType.nodeType")}</SelectLabel>
+      <SelectLabel htmlFor={id}>{t("editor.selectNodeType.nodeType")}</SelectLabel>
       <Select value={value} onValueChange={(newValue) => updateSelectedNodeType(newValue)} disabled={isGroup}>
-        <SelectTrigger className="w-full">
+        <SelectTrigger className="w-full" id={id}>
           <SelectValue placeholder={t("editor.selectNodeType.nodeType")} />
         </SelectTrigger>
         <SelectContent>

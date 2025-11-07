@@ -9,8 +9,9 @@ import { defaultInputRenderers } from "@/renderer/features/TreegeRenderer/web/co
 import DefaultSubmitButton from "@/renderer/features/TreegeRenderer/web/components/DefaultSubmitButton";
 import DefaultSubmitButtonWrapper from "@/renderer/features/TreegeRenderer/web/components/DefaultSubmitButtonWrapper";
 import { defaultUI } from "@/renderer/features/TreegeRenderer/web/components/DefaultUI";
+import { useSubmitHandler } from "@/renderer/hooks/useSubmitHandler";
 import { InputRenderProps, InputValue, TreegeRendererProps } from "@/renderer/types/renderer";
-import { convertFormValuesToNamedFormat } from "@/renderer/utils/form";
+import { calculateReferenceFieldUpdates, convertFormValuesToNamedFormat } from "@/renderer/utils/form";
 import { resolveNodeKey } from "@/renderer/utils/node";
 import { NODE_TYPE } from "@/shared/constants/node";
 import { ThemeProvider } from "@/shared/context/ThemeContext";
@@ -56,12 +57,22 @@ const TreegeRenderer = ({
     formValues,
     inputNodes,
     missingRequiredFields,
+    prevFormValuesRef,
     visibleNodes,
     visibleRootNodes,
     setFieldValue,
+    setMultipleFieldValues,
     validateForm,
     t,
   } = useTreegeRenderer(flows, initialValues, config.language);
+
+  // Submit handler for submit button with configuration
+  const { handleSubmitWithConfig, hasSubmitConfig, isSubmitting, submitMessage, clearSubmitMessage } = useSubmitHandler(
+    visibleNodes,
+    formValues,
+    config.language,
+    inputNodes,
+  );
 
   // Components with fallbacks
   const FormWrapper = config.components.form || DefaultFormWrapper;
@@ -77,28 +88,50 @@ const TreegeRenderer = ({
    * Handle form submission
    */
   const handleSubmit = useCallback(
-    (e: FormEvent) => {
+    async (e: FormEvent) => {
       e.preventDefault();
 
+      // Validate the form
       const { isValid, errors } = validateForm(validateRef.current);
 
-      if (isValid && onSubmit) {
-        onSubmit(exportedValues);
+      if (!isValid) {
+        // Focus the first input field with an error
+        const firstErrorNodeId = Object.keys(errors)[0];
+
+        if (firstErrorNodeId) {
+          // Use id attribute for reliable focus (always present and unique)
+          const input = document.getElementById(firstErrorNodeId);
+          input?.focus();
+        }
         return;
       }
 
-      // Focus the first input field with an error
-      const firstErrorNodeId = Object.keys(errors)[0];
+      // If there's a submit button with configuration, use it
+      if (hasSubmitConfig) {
+        const result = await handleSubmitWithConfig((httpResponse) => {
+          // Call onSubmit callback with form values and HTTP response as second parameter
+          if (onSubmit) {
+            onSubmit(exportedValues, { httpResponse });
+          }
+        });
 
-      console.log(firstErrorNodeId);
+        // If result is null, it means the submit config is incomplete (no URL)
+        // Fall back to the default submit behavior
+        if (result === null) {
+          onSubmit?.(exportedValues);
+          return;
+        }
 
-      if (firstErrorNodeId) {
-        // Use id attribute for reliable focus (always present and unique)
-        const input = document.getElementById(firstErrorNodeId);
-        input?.focus();
+        // If submission failed, return early
+        if (!result.success) {
+          return;
+        }
+      } else if (onSubmit) {
+        // Default behavior: call onSubmit directly
+        onSubmit(exportedValues);
       }
     },
-    [validateForm, onSubmit, exportedValues],
+    [validateForm, hasSubmitConfig, handleSubmitWithConfig, onSubmit, exportedValues],
   );
 
   // ============================================
@@ -144,6 +177,7 @@ const TreegeRenderer = ({
               helperText={helperText}
               name={name}
               setValue={setValue}
+              missingRequiredFields={missingRequiredFields}
             />
           );
         }
@@ -189,7 +223,7 @@ const TreegeRenderer = ({
           return null;
       }
     },
-    [config.components, config.language, visibleNodes, formValues, formErrors, setFieldValue],
+    [config.components, config.language, visibleNodes, formValues, formErrors, setFieldValue, missingRequiredFields],
   );
 
   // ============================================
@@ -226,6 +260,22 @@ const TreegeRenderer = ({
     }
   }, [config.validationMode, validateForm]);
 
+  /**
+   * Sync reference fields when their source changes (one-way binding)
+   * Note: prevFormValuesRef is intentionally not in deps (refs don't trigger re-renders)
+   */
+  useEffect(() => {
+    const updatedValues = calculateReferenceFieldUpdates(inputNodes, formValues, prevFormValuesRef.current);
+
+    // Only update if there are changes to avoid unnecessary function calls
+    if (Object.keys(updatedValues).length > 0) {
+      setMultipleFieldValues(updatedValues);
+    }
+
+    // Update previous values ref
+    prevFormValuesRef.current = formValues;
+  }, [formValues, inputNodes, setMultipleFieldValues, prevFormValuesRef]);
+
   return (
     <ThemeProvider theme={config.theme} storageKey="treege-renderer-theme">
       <TreegeRendererProvider
@@ -234,18 +284,48 @@ const TreegeRenderer = ({
           formErrors,
           formValues,
           googleApiKey: config.googleApiKey,
+          inputNodes,
           language: config.language,
           setFieldValue,
         }}
       >
         <FormWrapper onSubmit={handleSubmit}>
+          {/* Node */}
           {visibleRootNodes.map((node) => renderNode(node))}
+
+          {/* Submit */}
           {canSubmit && (
             <SubmitButtonWrapper missingFields={missingRequiredFields}>
-              <SubmitButton label={t("renderer.defaultSubmitButton.submit")} />
+              <SubmitButton label={t("renderer.defaultSubmitButton.submit")} disabled={isSubmitting} />
             </SubmitButtonWrapper>
           )}
         </FormWrapper>
+
+        {/* Powered by Treege */}
+        <p className="py-2 text-muted-foreground text-xs">Powered by Treege</p>
+
+        {/* Submit message (success/error) */}
+        {submitMessage && (
+          <div
+            className={`my-4 rounded-md p-4 ${
+              submitMessage.type === "success"
+                ? "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-300"
+                : "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-300"
+            }`}
+            role="alert"
+          >
+            <div className="flex items-center justify-between">
+              <p className="font-medium text-sm">{submitMessage.message}</p>
+              <button
+                type="button"
+                onClick={clearSubmitMessage}
+                className="ml-4 font-medium text-sm underline hover:no-underline focus:outline-none"
+              >
+                {t("common.close")}
+              </button>
+            </div>
+          </div>
+        )}
       </TreegeRendererProvider>
     </ThemeProvider>
   );

@@ -4,6 +4,7 @@
     "clear": "Limpiar",
     "close": "Cerrar",
     "create": "Crear",
+    "delete": "Eliminar",
     "retry": "Reintentar",
     "save": "Guardar",
     "submit": "Enviar",
@@ -114,8 +115,8 @@
       "methodPut": "PUT",
       "noFieldsAvailable": "No hay campos disponibles",
       "requestBody": "Cuerpo de la solicitud (JSON)",
-      "requestBodyDesc": "Use variables de plantilla como ${fieldId} para referenciar otros campos",
-      "requestBodyPlaceholder": "{\"clave\": \"valor\"}",
+      "requestBodyDesc": "Use {{fieldId}} para referenciar otros campos. Asegúrese de un formato JSON adecuado, incluyendo comillas alrededor de los valores de cadena.",
+      "requestBodyPlaceholder": "{\"nombre\": \"{{nombreUsuario}}\", \"edad\": {{edadUsuario}}}",
       "responseConfiguration": "Configuración de respuesta",
       "responsePath": "Ruta de respuesta",
       "responsePathDesc": "Extraer datos de la respuesta usando notación de puntos o indexación de matriz",
@@ -124,6 +125,8 @@
       "searchParameterDesc": "Si se configura, habilita un cuadro de búsqueda que agrega este parámetro a las llamadas API (ej: ?q=París)",
       "searchParameterPlaceholder": "q, buscar, consulta...",
       "selectMethod": "Seleccionar método",
+      "sendFormData": "Enviar todos los datos del formulario",
+      "sendFormDataDesc": "Enviar automáticamente todos los valores del formulario como cuerpo JSON",
       "showLoadingState": "Mostrar estado de carga",
       "valueField": "Campo de valor",
       "valueFieldDesc": "Campo a usar como valor de opción (ej: id)",
@@ -165,6 +168,7 @@
       "sourceKey": "Clave de origen",
       "staticValue": "Valor estático",
       "staticValuePlaceholder": "Ingrese el valor predeterminado",
+      "submitConfiguration": "Configuración de envío",
       "targetKey": "Clave de destino",
       "transformArray": "Convertir a matriz",
       "transformBoolean": "Convertir a booleano",
@@ -175,6 +179,12 @@
       "transformString": "Convertir a texto",
       "transformType": "Tipo de transformación",
       "validation": "Validación"
+    },
+    "nodeActionsSheet": {
+      "deleteNode": "Eliminar nodo",
+      "deleteNodeConfirm": "¿Estás seguro de que quieres eliminar este nodo?",
+      "deleteNodeSuccess": "Nodo eliminado exitosamente",
+      "editNode": "Editar nodo"
     },
     "selectInputType": {
       "type": "Tipo"
@@ -194,6 +204,40 @@
     },
     "selectNodeType": {
       "nodeType": "Tipo de nodo"
+    },
+    "submitConfigForm": {
+      "addHeader": "Agregar encabezado",
+      "apiUrl": "URL de la API",
+      "apiUrlDesc": "Use {{fieldId}} para referenciar otros campos",
+      "apiUrlPlaceholder": "https://api.ejemplo.com/submit",
+      "behavior": "Comportamiento",
+      "errorMessage": "Mensaje de error",
+      "errorMessageDesc": "Mensaje mostrado cuando falla el envío",
+      "errorMessagePlaceholder": "Ocurrió un error. Por favor, intente nuevamente.",
+      "headerName": "Nombre del encabezado",
+      "headers": "Encabezados",
+      "headerValue": "Valor del encabezado",
+      "httpMethod": "Método HTTP",
+      "insertVariable": "Insertar variable",
+      "methodDelete": "DELETE",
+      "methodPatch": "PATCH",
+      "methodPost": "POST",
+      "methodPut": "PUT",
+      "noFieldsAvailable": "No hay campos disponibles",
+      "postSubmission": "Después del envío",
+      "redirectUrl": "URL de redirección",
+      "redirectUrlDesc": "URL a la que redirigir después de un envío exitoso",
+      "redirectUrlPlaceholder": "/success o https://ejemplo.com/gracias",
+      "requestBody": "Cuerpo de la solicitud (JSON)",
+      "requestBodyDesc": "Use {{fieldId}} para referenciar otros campos. Asegúrese de un formato JSON adecuado, incluyendo comillas alrededor de los valores de cadena.",
+      "requestBodyPlaceholder": "{\"nombre\": \"{{nombreUsuario}}\", \"email\": \"{{emailUsuario}}\"}",
+      "selectMethod": "Seleccionar método",
+      "sendFormData": "Enviar todos los datos del formulario",
+      "sendFormDataDesc": "Enviar automáticamente todos los valores del formulario como cuerpo JSON",
+      "showLoadingState": "Mostrar estado de carga",
+      "successMessage": "Mensaje de éxito",
+      "successMessageDesc": "Mensaje mostrado cuando el envío es exitoso",
+      "successMessagePlaceholder": "¡Formulario enviado exitosamente!"
     },
     "uiNodeForm": {
       "label": "Etiqueta",
@@ -221,7 +265,8 @@
       "retry": "Reintentar",
       "search": "Buscar...",
       "searching": "Buscando...",
-      "selectOption": "Seleccionar una opción"
+      "selectOption": "Seleccionar una opción",
+      "waitingForRequiredFields": "Esperando campos requeridos"
     },
     "defaultInputs": {
       "endDate": "Fecha de fin",

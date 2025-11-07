@@ -1,5 +1,5 @@
 import { Node } from "@xyflow/react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { FormValues } from "@/renderer/types/renderer";
 import { getFlowRenderState, mergeFlows } from "@/renderer/utils/flow";
@@ -37,12 +37,12 @@ import { isInputNode } from "@/shared/utils/nodeTypeGuards";
  * @returns Pure state and computed values (no side effects)
  */
 export const useTreegeRenderer = (flows: Flow | Flow[] | null | undefined, initialValues: FormValues = {}, language: string = "en") => {
-  // Merge flows once and extract nodes/edges
   const mergedFlow = useMemo(() => mergeFlows(flows), [flows]);
   const { nodes, edges } = mergedFlow;
   const inputNodes = useMemo(() => getInputNodes(nodes), [nodes]);
   const t = useTranslate(language);
-
+  const prevFormValuesRef = useRef<FormValues>({});
+  // Form state
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [formValues, setFormValues] = useState<FormValues>(() => {
     const defaultValues: FormValues = { ...initialValues };
@@ -97,6 +97,30 @@ export const useTreegeRenderer = (flows: Flow | Flow[] | null | undefined, initi
     setFormErrors((prev) => {
       const newErrors = { ...prev };
       delete newErrors[fieldName];
+      return newErrors;
+    });
+  }, []);
+
+  /**
+   * Batch update multiple field values at once (for performance)
+   * Use this when updating multiple fields to avoid multiple re-renders
+   */
+  const setMultipleFieldValues = useCallback((updates: FormValues) => {
+    if (Object.keys(updates).length === 0) {
+      return;
+    }
+
+    setFormValues((prev) => ({
+      ...prev,
+      ...updates,
+    }));
+
+    // Clear errors for updated fields
+    setFormErrors((prev) => {
+      const newErrors = { ...prev };
+      Object.keys(updates).forEach((fieldName) => {
+        delete newErrors[fieldName];
+      });
       return newErrors;
     });
   }, []);
@@ -185,15 +209,22 @@ export const useTreegeRenderer = (flows: Flow | Flow[] | null | undefined, initi
     return missing;
   }, [visibleNodes, formValues, t]);
 
+  /**
+   * Check if there's a submit input node in the visible nodes
+   */
+  const hasSubmitInput = useMemo(() => visibleNodes.some((node) => isInputNode(node) && node.data.type === "submit"), [visibleNodes]);
+
   return {
-    canSubmit: endOfPathReached && nodes.length > 0,
+    canSubmit: !hasSubmitInput && endOfPathReached && nodes.length > 0,
     formErrors,
     formValues,
     inputNodes,
     mergedFlow,
     missingRequiredFields,
+    prevFormValuesRef,
     setFieldValue,
     setFormErrors,
+    setMultipleFieldValues,
     t,
     validateForm,
     visibleNodes,
