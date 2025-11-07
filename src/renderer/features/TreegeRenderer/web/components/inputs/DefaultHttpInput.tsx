@@ -193,7 +193,7 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
         });
 
         if (!response.ok) {
-          setFetchError(`HTTP ${response.status}: ${response.statusText}`);
+          setFetchError(`HTTP Error ${response.status}: ${response.statusText}`);
           setLoading(false);
           return;
         }
@@ -424,9 +424,11 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
 
     const tooltipMessage =
       options.length === 0 && !isLoading
-        ? emptyVars.length > 0
-          ? `${t("renderer.defaultHttpInput.waitingForRequiredFields")}: ${emptyVarNames.join(", ")}`
-          : t("renderer.defaultHttpInput.noDataAvailable")
+        ? fetchError
+          ? fetchError
+          : emptyVars.length > 0
+            ? `${t("renderer.defaultHttpInput.waitingForRequiredFields")}: ${emptyVarNames.join(", ")}`
+            : t("renderer.defaultHttpInput.noDataAvailable")
         : undefined;
 
     const selectElement = (

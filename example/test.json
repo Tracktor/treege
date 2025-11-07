@@ -1,0 +1,88 @@
+{
+  "edges": [
+    {
+      "id": "EWMCg7NhEb-f0s2AaeVPb",
+      "source": "qOznIQ9qKU-vQIfpJUl_U",
+      "target": "nGZhj43k1-xPmxQhZYANV",
+      "type": "default"
+    }
+  ],
+  "id": "V5hbmrHDw9uq-XroJx4hk",
+  "nodes": [
+    {
+      "data": {
+        "type": "text",
+        "errorMessage": {
+          "en": ""
+        },
+        "helperText": {
+          "en": ""
+        },
+        "label": {
+          "en": "How are you ?"
+        },
+        "name": "",
+        "options": [],
+        "pattern": "",
+        "placeholder": {
+          "en": ""
+        }
+      },
+      "id": "qOznIQ9qKU-vQIfpJUl_U",
+      "position": {
+        "x": 573,
+        "y": 474
+      },
+      "type": "input",
+      "measured": {
+        "width": 272,
+        "height": 152
+      }
+    },
+    {
+      "data": {
+        "type": "http",
+        "errorMessage": {
+          "en": ""
+        },
+        "helperText": {
+          "en": ""
+        },
+        "httpConfig": {
+          "body": "{\"toto\": \"{{qOznIQ9qKU-vQIfpJUl_U}}\" }",
+          "fetchOnMount": true,
+          "headers": [],
+          "method": "POST",
+          "responseMapping": {
+            "labelField": "",
+            "valueField": ""
+          },
+          "responsePath": "",
+          "searchParam": "",
+          "sendFormData": false,
+          "showLoading": true,
+          "url": "http://jsonplaceholder.typicode.com/users"
+        },
+        "label": {
+          "en": "Test"
+        },
+        "name": "",
+        "options": [],
+        "pattern": "",
+        "placeholder": {
+          "en": ""
+        }
+      },
+      "id": "nGZhj43k1-xPmxQhZYANV",
+      "position": {
+        "x": 573,
+        "y": 724
+      },
+      "type": "input",
+      "measured": {
+        "width": 272,
+        "height": 152
+      }
+    }
+  ]
+}

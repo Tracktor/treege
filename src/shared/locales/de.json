@@ -264,11 +264,11 @@
       "selectOption": "Option auswählen"
     },
     "defaultHttpInput": {
-      "fetchFailed": "Fehler beim Abrufen der Daten",
-      "httpError": "HTTP {status}: {statusText}",
+      "fetchFailed": "Fehler beim Abrufen der Daten. Bitte überprüfen Sie Ihre Netzwerkverbindung.",
+      "httpError": "HTTP-Fehler {status}: {statusText}",
       "noDataAvailable": "Keine Daten verfügbar. Konfigurieren Sie \"Beim Laden abrufen\" oder fügen Sie einen Suchparameter hinzu.",
       "noResults": "Keine Ergebnisse gefunden.",
-      "noUrlConfigured": "Keine URL konfiguriert",
+      "noUrlConfigured": "Keine URL konfiguriert. Bitte fügen Sie eine URL in der HTTP-Konfiguration hinzu.",
       "retry": "Erneut versuchen",
       "search": "Suchen...",
       "searching": "Suche läuft...",

@@ -264,11 +264,11 @@
       "selectOption": "Selecione uma opção"
     },
     "defaultHttpInput": {
-      "fetchFailed": "Falha ao buscar dados",
-      "httpError": "HTTP {status}: {statusText}",
+      "fetchFailed": "Falha ao buscar dados. Por favor, verifique sua conexão de rede.",
+      "httpError": "Erro HTTP {status}: {statusText}",
       "noDataAvailable": "Nenhum dado disponível. Configure \"Buscar na montagem\" ou adicione um parâmetro de pesquisa.",
       "noResults": "Nenhum resultado encontrado.",
-      "noUrlConfigured": "Nenhuma URL configurada",
+      "noUrlConfigured": "Nenhuma URL configurada. Por favor, adicione uma URL na configuração HTTP.",
       "retry": "Tentar novamente",
       "search": "Pesquisar...",
       "searching": "Pesquisando...",
