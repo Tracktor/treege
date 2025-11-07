@@ -144,6 +144,7 @@
       "defaultValueTypeNone": "Ninguno",
       "defaultValueTypeReference": "Campo de referencia",
       "defaultValueTypeStatic": "Valor estático",
+      "disablePast": "Desactivar fechas pasadas",
       "errorMessage": "Mensaje de error",
       "helperText": "Texto de ayuda",
       "httpConfiguration": "Configuración HTTP",

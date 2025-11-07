@@ -32,6 +32,7 @@ const InputNodeForm = () => {
   const { handleSubmit, Field } = useForm({
     defaultValues: {
       defaultValue: selectedNode?.data?.defaultValue,
+      disablePast: selectedNode?.data?.disablePast,
       errorMessage: selectedNode?.data?.errorMessage || { en: "" },
       helperText: selectedNode?.data?.helperText || { en: "" },
       httpConfig: selectedNode?.data?.httpConfig,
@@ -344,6 +345,20 @@ const InputNodeForm = () => {
                   </FormItem>
                 )}
               />
+
+              {(selectedNode?.data?.type === "date" || selectedNode?.data?.type === "daterange") && (
+                <Field
+                  name="disablePast"
+                  children={(field) => (
+                    <FormItem>
+                      <div className="flex items-center space-x-2">
+                        <Switch id={field.name} checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
+                        <Label htmlFor={field.name}>{t("editor.inputNodeForm.disablePast")}</Label>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              )}
 
               <Field
                 name="pattern"

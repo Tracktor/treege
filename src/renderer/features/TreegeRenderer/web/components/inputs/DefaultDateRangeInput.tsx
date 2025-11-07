@@ -30,6 +30,16 @@ const DefaultDateRangeInput = ({ node, value, setValue, error, label, helperText
     return t("renderer.defaultInputs.selectDateRange");
   };
 
+  // Function to disable past dates if disablePast is enabled
+  const isDateDisabled = (date: Date) => {
+    if (node.data.disablePast) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return date < today;
+    }
+    return false;
+  };
+
   return (
     <FormItem className="mb-4">
       <Label htmlFor={id}>
@@ -48,6 +58,7 @@ const DefaultDateRangeInput = ({ node, value, setValue, error, label, helperText
             mode="range"
             selected={{ from: startDate, to: endDate }}
             captionLayout="dropdown"
+            disabled={isDateDisabled}
             onSelect={handleDateRangeSelect}
             numberOfMonths={2}
           />

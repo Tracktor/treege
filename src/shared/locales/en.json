@@ -144,6 +144,7 @@
       "defaultValueTypeNone": "None",
       "defaultValueTypeReference": "Reference Field",
       "defaultValueTypeStatic": "Static Value",
+      "disablePast": "Disable past dates",
       "errorMessage": "Error message",
       "helperText": "Helper text",
       "httpConfiguration": "HTTP Configuration",

@@ -144,6 +144,7 @@
       "defaultValueTypeNone": "Keiner",
       "defaultValueTypeReference": "Referenzfeld",
       "defaultValueTypeStatic": "Statischer Wert",
+      "disablePast": "Vergangene Daten deaktivieren",
       "errorMessage": "Fehlermeldung",
       "helperText": "Hilfetext",
       "httpConfiguration": "HTTP-Konfiguration",

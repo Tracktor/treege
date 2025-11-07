@@ -144,6 +144,7 @@
       "defaultValueTypeNone": "لا شيء",
       "defaultValueTypeReference": "حقل مرجعي",
       "defaultValueTypeStatic": "قيمة ثابتة",
+      "disablePast": "تعطيل التواريخ الماضية",
       "errorMessage": "رسالة خطأ",
       "helperText": "نص مساعد",
       "httpConfiguration": "تكوين HTTP",
