@@ -4,6 +4,7 @@ import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererConte
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
 import { convertFormValuesToNamedFormat } from "@/renderer/utils/form";
+import { getFieldNameFromNodeId } from "@/renderer/utils/node";
 import { Button } from "@/shared/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/shared/components/ui/command";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
@@ -330,10 +331,10 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
       const buttonContent = isLoading ? (
         <div className="flex items-center gap-2">
           <Loader2 className="h-4 w-4 animate-spin" />
-          <span className="text-muted-foreground">{selectedOption?.label || placeholder || "Search..."}</span>
+          <span className="text-muted-foreground">{selectedOption?.label || placeholder || t("renderer.defaultHttpInput.search")}</span>
         </div>
       ) : (
-        selectedOption?.label || placeholder || "Search..."
+        selectedOption?.label || placeholder || t("renderer.defaultHttpInput.search")
       );
 
       return (
@@ -352,7 +353,7 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
             <PopoverContent className="w-[300px] p-0" align="start">
               <Command shouldFilter={false}>
                 <CommandInput
-                  placeholder="Search..."
+                  placeholder={t("renderer.defaultHttpInput.search")}
                   value={searchQuery}
                   onValueChange={(searchValue) => {
                     setSearchQuery(searchValue);
@@ -369,13 +370,13 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
                     <div className="p-4 text-destructive text-sm">
                       <div>{fetchError}</div>
                       <button type="button" onClick={() => fetchData(searchQuery)} className="mt-2 block text-primary hover:underline">
-                        Retry
+                        {t("renderer.defaultHttpInput.retry")}
                       </button>
                     </div>
                   )}
                   {!(loading || fetchError) && (
                     <>
-                      <CommandEmpty>No results found.</CommandEmpty>
+                      <CommandEmpty>{t("renderer.defaultHttpInput.noResults")}</CommandEmpty>
                       <CommandGroup>
                         {options.map((option) => (
                           <CommandItem
@@ -412,11 +413,14 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
       return value === undefined || value === null || value === "";
     });
 
+    // Map empty var IDs to human-readable names
+    const emptyVarNames = emptyVars.map((varName) => getFieldNameFromNodeId(varName, inputNodes) || varName);
+
     const tooltipMessage =
       options.length === 0 && !isLoading
         ? emptyVars.length > 0
-          ? `Waiting for required fields: ${emptyVars.join(", ")}`
-          : 'No data available. Configure "Fetch on mount" or add a search parameter.'
+          ? `${t("renderer.defaultHttpInput.waitingForRequiredFields")}: ${emptyVarNames.join(", ")}`
+          : t("renderer.defaultHttpInput.noDataAvailable")
         : undefined;
 
     const selectElement = (

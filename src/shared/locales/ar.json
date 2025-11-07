@@ -265,7 +265,8 @@
       "retry": "إعادة المحاولة",
       "search": "بحث...",
       "searching": "جاري البحث...",
-      "selectOption": "اختر خياراً"
+      "selectOption": "اختر خياراً",
+      "waitingForRequiredFields": "في انتظار الحقول المطلوبة"
     },
     "defaultInputs": {
       "endDate": "تاريخ الانتهاء",

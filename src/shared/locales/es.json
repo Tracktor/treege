@@ -265,7 +265,8 @@
       "retry": "Reintentar",
       "search": "Buscar...",
       "searching": "Buscando...",
-      "selectOption": "Seleccionar una opción"
+      "selectOption": "Seleccionar una opción",
+      "waitingForRequiredFields": "Esperando campos requeridos"
     },
     "defaultInputs": {
       "endDate": "Fecha de fin",
