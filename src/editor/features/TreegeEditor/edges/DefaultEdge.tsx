@@ -27,7 +27,7 @@ const DefaultEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition, t
               transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
             }}
           >
-            <button type="button" className="button-edge__button" onClick={onEdgeClick}>
+            <button type="button" className="button-edge__button" onClick={onEdgeClick} aria-label="Remove edge">
               ×
             </button>
           </div>
