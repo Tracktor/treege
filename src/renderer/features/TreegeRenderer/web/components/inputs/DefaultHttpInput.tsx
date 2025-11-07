@@ -5,6 +5,7 @@ import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
 import { convertFormValuesToNamedFormat } from "@/renderer/utils/form";
 import { getFieldNameFromNodeId } from "@/renderer/utils/node";
+import { sanitizeHttpResponse } from "@/renderer/utils/sanitize";
 import { Button } from "@/shared/components/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/shared/components/ui/command";
 import { FormDescription, FormError, FormItem } from "@/shared/components/ui/form";
@@ -135,7 +136,7 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
     if (!hasTemplateVars) {
       return true;
     }
-    // If has template vars, check they're all filled
+    // If, has template vars, check they're all filled
     return areTemplateVarsFilled(httpConfig.url, formValues);
   }, [httpConfig?.url, hasTemplateVars, formValues]);
 
@@ -199,8 +200,13 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
 
         const data: HttpResponse = await response.json();
 
+        // Sanitize the response data to prevent XSS attacks (plainTextOnly: true by default)
+        const sanitizedData = sanitizeHttpResponse(data) as HttpResponse;
+
         // Extract data using responsePath
-        const extractedData = currentHttpConfig.responsePath ? getValueByPath(data, currentHttpConfig.responsePath) : data;
+        const extractedData = currentHttpConfig.responsePath
+          ? getValueByPath(sanitizedData, currentHttpConfig.responsePath)
+          : sanitizedData;
 
         // If responseMapping is configured, map the data to options
         if (currentHttpConfig.responseMapping && Array.isArray(extractedData)) {

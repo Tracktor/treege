@@ -13,6 +13,7 @@ import { useSubmitHandler } from "@/renderer/hooks/useSubmitHandler";
 import { InputRenderProps, InputValue, TreegeRendererProps } from "@/renderer/types/renderer";
 import { calculateReferenceFieldUpdates, convertFormValuesToNamedFormat } from "@/renderer/utils/form";
 import { resolveNodeKey } from "@/renderer/utils/node";
+import { sanitize } from "@/renderer/utils/sanitize";
 import { NODE_TYPE } from "@/shared/constants/node";
 import { ThemeProvider } from "@/shared/context/ThemeContext";
 import { TreegeNodeData, UINodeData } from "@/shared/types/node";
@@ -23,13 +24,13 @@ const TreegeRenderer = ({
   components,
   flows,
   googleApiKey,
-  initialValues = {},
   language,
   onChange,
   onSubmit,
   theme,
   validate,
   validationMode,
+  initialValues = {},
 }: TreegeRendererProps) => {
   // Get global config from provider (if any)
   const globalConfig = useTreegeConfig();
@@ -156,14 +157,18 @@ const TreegeRenderer = ({
           const CustomRenderer = config.components.inputs?.[inputType];
           const DefaultRenderer = defaultInputRenderers[inputType as keyof typeof defaultInputRenderers];
           const Renderer = (CustomRenderer || DefaultRenderer) as (props: InputRenderProps) => ReactNode;
+          const setValue = (newValue: InputValue) => setFieldValue(fieldId, newValue);
           const fieldId = node.id;
           const value = formValues[fieldId];
           const error = formErrors[fieldId];
-          const setValue = (newValue: InputValue) => setFieldValue(fieldId, newValue);
           const label = getTranslatedText(inputData.label, config.language);
           const placeholder = getTranslatedText(inputData.placeholder, config.language);
           const helperText = getTranslatedText(inputData.helperText, config.language);
           const name = resolveNodeKey(node);
+          // Sanitize all user-controlled text to prevent XSS attacks (plainTextOnly: true by default)
+          const safeLabel = sanitize(label);
+          const safePlaceholder = sanitize(placeholder);
+          const safeHelperText = sanitize(helperText);
 
           return (
             <Renderer
@@ -172,9 +177,9 @@ const TreegeRenderer = ({
               node={node}
               value={value}
               error={error}
-              label={label}
-              placeholder={placeholder}
-              helperText={helperText}
+              label={safeLabel}
+              placeholder={safePlaceholder}
+              helperText={safeHelperText}
               name={name}
               setValue={setValue}
               missingRequiredFields={missingRequiredFields}

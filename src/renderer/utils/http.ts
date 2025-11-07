@@ -1,4 +1,5 @@
 import { FormValues } from "@/renderer/types/renderer";
+import { sanitize } from "@/renderer/utils/sanitize";
 import { HttpHeader } from "@/shared/types/node";
 
 /**
@@ -179,29 +180,32 @@ export const replaceTemplateVariables = (
       return json ? "null" : "";
     }
 
+    // Sanitize string values to prevent injection attacks (plainTextOnly: true by default)
+    const sanitizedValue = typeof value === "string" ? sanitize(value) : value;
+
     // URL encoding mode
     if (encode) {
-      return encodeURIComponent(String(value));
+      return encodeURIComponent(String(sanitizedValue));
     }
 
     // JSON smart mode
     if (json) {
       // String: wrap in quotes and escape
-      if (typeof value === "string") {
-        return `"${value.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
+      if (typeof sanitizedValue === "string") {
+        return `"${sanitizedValue.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
       }
       // Number or boolean: direct conversion
-      if (typeof value === "number" || typeof value === "boolean") {
-        return String(value);
+      if (typeof sanitizedValue === "number" || typeof sanitizedValue === "boolean") {
+        return String(sanitizedValue);
       }
       // Array or object: JSON.stringify
-      if (typeof value === "object") {
-        return JSON.stringify(value);
+      if (typeof sanitizedValue === "object") {
+        return JSON.stringify(sanitizedValue);
       }
     }
 
     // Default: simple string conversion
-    return String(value);
+    return String(sanitizedValue);
   });
 };
 
