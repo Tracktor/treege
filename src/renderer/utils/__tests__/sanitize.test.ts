@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { sanitize, sanitizeHttpResponse } from "@/renderer/utils/sanitize";
 
 describe("sanitize", () => {
@@ -287,13 +287,103 @@ describe("sanitizeHttpResponse", () => {
       expect(sanitizeHttpResponse(undefined)).toBeUndefined();
     });
 
-    it("should handle circular references", () => {
-      const obj: Record<string, unknown> = { name: "Test" };
+    it("should handle circular references gracefully", () => {
+      const obj: Record<string, unknown> = { name: "Test<script>xss</script>" };
       obj.self = obj; // Circular reference
 
-      // sanitizeHttpResponse will hit max call stack with circular refs
-      // This is expected behavior - we test that it throws predictably
-      expect(() => sanitizeHttpResponse(obj)).toThrow();
+      // With the new implementation, circular references are handled gracefully
+      const result = sanitizeHttpResponse(obj) as Record<string, unknown>;
+      expect(result.name).toBe("Test");
+      expect(result.self).toBe("[Circular Reference]");
+    });
+
+    it("should handle multiple circular references", () => {
+      const obj1: Record<string, unknown> = { name: "Object1" };
+      const obj2: Record<string, unknown> = { name: "Object2" };
+      obj1.ref = obj2;
+      obj2.ref = obj1; // Circular reference between obj1 and obj2
+
+      const result = sanitizeHttpResponse(obj1) as Record<string, unknown>;
+      expect(result.name).toBe("Object1");
+      expect(result.ref).toHaveProperty("name", "Object2");
+      expect((result.ref as Record<string, unknown>).ref).toBe("[Circular Reference]");
+    });
+
+    it("should handle circular references in arrays", () => {
+      const obj: Record<string, unknown> = { name: "Test" };
+      const arr = [obj, { nested: obj }];
+      obj.arr = arr;
+
+      const result = sanitizeHttpResponse(obj) as Record<string, unknown>;
+      expect(result.name).toBe("Test");
+      expect(Array.isArray(result.arr)).toBe(true);
+      // The array should contain the object and a nested reference
+      const resultArr = result.arr as unknown[];
+      expect(resultArr[0]).toBe("[Circular Reference]");
+    });
+  });
+
+  describe("Deep nesting protection", () => {
+    it("should handle deeply nested objects (within limit)", () => {
+      // Create a deeply nested object (50 levels)
+      let nested: Record<string, unknown> = { value: "deep<script>xss</script>" };
+      for (let i = 0; i < 49; i++) {
+        nested = { child: nested };
+      }
+
+      const result = sanitizeHttpResponse(nested);
+      // Should successfully sanitize all levels
+      let current = result as Record<string, unknown>;
+      for (let i = 0; i < 49; i++) {
+        expect(current).toHaveProperty("child");
+        current = current.child as Record<string, unknown>;
+      }
+      expect(current.value).toBe("deep");
+    });
+
+    it("should stop at maximum depth to prevent DoS", () => {
+      // Create an object nested beyond MAX_DEPTH (100)
+      let nested: Record<string, unknown> = { value: "too deep<script>xss</script>" };
+      for (let i = 0; i < 150; i++) {
+        nested = { child: nested };
+      }
+
+      // Mock console.warn to verify warning is logged
+      const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+      const result = sanitizeHttpResponse(nested);
+
+      // Should have logged a warning about max depth
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("Maximum depth"));
+
+      warnSpy.mockRestore();
+
+      // Result should still be valid (not throw)
+      expect(result).toBeDefined();
+    });
+
+    it("should handle deeply nested arrays", () => {
+      // Create deeply nested arrays
+      let nested: unknown[] = ["value<script>xss</script>"];
+      for (let i = 0; i < 50; i++) {
+        nested = [nested];
+      }
+
+      const result = sanitizeHttpResponse(nested);
+      // Should successfully sanitize
+      expect(result).toBeDefined();
+      expect(Array.isArray(result)).toBe(true);
+    });
+
+    it("should handle mixed deep nesting (objects and arrays)", () => {
+      // Create mixed nested structure
+      let nested: unknown = { value: "test<script>xss</script>" };
+      for (let i = 0; i < 50; i++) {
+        nested = i % 2 === 0 ? { child: nested } : [nested];
+      }
+
+      const result = sanitizeHttpResponse(nested);
+      expect(result).toBeDefined();
     });
   });
 

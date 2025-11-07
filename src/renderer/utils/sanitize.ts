@@ -100,13 +100,25 @@ export const sanitize = (input: string | undefined | null, options: SanitizeOpti
 };
 
 /**
+ * Maximum depth for recursive sanitization to prevent DoS attacks
+ */
+const MAX_DEPTH = 100;
+
+/**
  * Sanitizes data from HTTP responses
  *
  * This function recursively sanitizes all string values in an object or array.
  * Useful for cleaning data received from external APIs before displaying it.
  *
+ * Protection against:
+ * - Circular references: Uses WeakSet to detect and handle circular objects
+ * - Deep nesting attacks: Limits recursion depth to prevent DoS
+ * - XSS attacks: Sanitizes all string values
+ *
  * @param data - The data to sanitize (can be any type)
  * @param options - Sanitization options
+ * @param depth - Current recursion depth (internal use)
+ * @param seen - WeakSet to track visited objects (internal use)
  * @returns Sanitized data with same structure
  *
  * @example
@@ -115,8 +127,26 @@ export const sanitize = (input: string | undefined | null, options: SanitizeOpti
  *   nested: { title: 'Hello <b>world</b>' }
  * })
  * // => { name: 'John ', nested: { title: 'Hello <b>world</b>' } }
+ *
+ * @example
+ * // Handles circular references gracefully
+ * const obj = { name: 'Test' };
+ * obj.self = obj;
+ * sanitizeHttpResponse(obj)
+ * // => { name: 'Test', self: { name: 'Test' } } // circular ref broken
  */
-export const sanitizeHttpResponse = (data: unknown, options: SanitizeOptions = {}): unknown => {
+export const sanitizeHttpResponse = (
+  data: unknown,
+  options: SanitizeOptions = {},
+  depth = 0,
+  seen: WeakSet<object> = new WeakSet(),
+): unknown => {
+  // Prevent DoS via deep nesting
+  if (depth > MAX_DEPTH) {
+    console.warn(`sanitizeHttpResponse: Maximum depth (${MAX_DEPTH}) exceeded. Returning data as-is to prevent stack overflow.`);
+    return data;
+  }
+
   if (data === null || data === undefined) {
     return data;
   }
@@ -128,15 +158,28 @@ export const sanitizeHttpResponse = (data: unknown, options: SanitizeOptions = {
 
   // Recursively sanitize arrays
   if (Array.isArray(data)) {
-    return data.map((item) => sanitizeHttpResponse(item, options));
+    return data.map((item) => sanitizeHttpResponse(item, options, depth + 1, seen));
   }
 
   // Recursively sanitize objects
   if (typeof data === "object") {
+    // Detect circular references
+    if (seen.has(data as object)) {
+      console.warn("sanitizeHttpResponse: Circular reference detected. Breaking cycle to prevent infinite recursion.");
+      return "[Circular Reference]";
+    }
+
+    // Mark this object as seen
+    seen.add(data as object);
+
     const sanitized: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(data as Record<string, unknown>)) {
-      sanitized[key] = sanitizeHttpResponse(value, options);
+      sanitized[key] = sanitizeHttpResponse(value, options, depth + 1, seen);
     }
+
+    // Remove from seen set after processing (allows the same object in different branches)
+    seen.delete(data as object);
+
     return sanitized;
   }
 
