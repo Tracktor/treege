@@ -264,11 +264,11 @@
       "selectOption": "Select an option"
     },
     "defaultHttpInput": {
-      "fetchFailed": "Failed to fetch data",
-      "httpError": "HTTP {status}: {statusText}",
+      "fetchFailed": "Failed to fetch data. Please check your network connection.",
+      "httpError": "HTTP Error {status}: {statusText}",
       "noDataAvailable": "No data available. Configure \"Fetch on mount\" or add a search parameter.",
       "noResults": "No results found.",
-      "noUrlConfigured": "No URL configured",
+      "noUrlConfigured": "No URL configured. Please add a URL in the HTTP configuration.",
       "retry": "Retry",
       "search": "Search...",
       "searching": "Search...",

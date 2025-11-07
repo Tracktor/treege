@@ -264,11 +264,11 @@
       "selectOption": "اختر خياراً"
     },
     "defaultHttpInput": {
-      "fetchFailed": "فشل في جلب البيانات",
-      "httpError": "HTTP {status}: {statusText}",
+      "fetchFailed": "فشل في جلب البيانات. يرجى التحقق من اتصالك بالشبكة.",
+      "httpError": "خطأ HTTP {status}: {statusText}",
       "noDataAvailable": "لا توجد بيانات متاحة. قم بتكوين \"جلب عند التحميل\" أو أضف معامل بحث.",
       "noResults": "لم يتم العثور على نتائج.",
-      "noUrlConfigured": "لم يتم تكوين رابط",
+      "noUrlConfigured": "لم يتم تكوين رابط. يرجى إضافة عنوان URL في إعدادات HTTP.",
       "retry": "إعادة المحاولة",
       "search": "بحث...",
       "searching": "جاري البحث...",

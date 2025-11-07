@@ -264,11 +264,11 @@
       "selectOption": "Seleccionar una opción"
     },
     "defaultHttpInput": {
-      "fetchFailed": "Error al obtener los datos",
-      "httpError": "HTTP {status}: {statusText}",
+      "fetchFailed": "Error al obtener los datos. Por favor, verifique su conexión de red.",
+      "httpError": "Error HTTP {status}: {statusText}",
       "noDataAvailable": "No hay datos disponibles. Configure \"Cargar al montar\" o agregue un parámetro de búsqueda.",
       "noResults": "No se encontraron resultados.",
-      "noUrlConfigured": "No hay URL configurada",
+      "noUrlConfigured": "No hay URL configurada. Por favor, agregue una URL en la configuración HTTP.",
       "retry": "Reintentar",
       "search": "Buscar...",
       "searching": "Buscando...",

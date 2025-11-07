@@ -264,11 +264,11 @@
       "selectOption": "Sélectionner une option"
     },
     "defaultHttpInput": {
-      "fetchFailed": "Échec de la récupération des données",
-      "httpError": "HTTP {status} : {statusText}",
+      "fetchFailed": "Échec de la récupération des données. Veuillez vérifier votre connexion réseau.",
+      "httpError": "Erreur HTTP {status} : {statusText}",
       "noDataAvailable": "Aucune donnée disponible. Configurez \"Charger au montage\" ou ajoutez un paramètre de recherche.",
       "noResults": "Aucun résultat trouvé.",
-      "noUrlConfigured": "Aucune URL configurée",
+      "noUrlConfigured": "Aucune URL configurée. Veuillez ajouter une URL dans la configuration HTTP.",
       "retry": "Réessayer",
       "search": "Recherche...",
       "searching": "Recherche...",

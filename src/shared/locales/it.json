@@ -264,11 +264,11 @@
       "selectOption": "Seleziona un'opzione"
     },
     "defaultHttpInput": {
-      "fetchFailed": "Impossibile recuperare i dati",
-      "httpError": "HTTP {status}: {statusText}",
+      "fetchFailed": "Impossibile recuperare i dati. Controlla la tua connessione di rete.",
+      "httpError": "Errore HTTP {status}: {statusText}",
       "noDataAvailable": "Nessun dato disponibile. Configura \"Carica al montaggio\" o aggiungi un parametro di ricerca.",
       "noResults": "Nessun risultato trovato.",
-      "noUrlConfigured": "Nessun URL configurato",
+      "noUrlConfigured": "Nessun URL configurato. Aggiungi un URL nella configurazione HTTP.",
       "retry": "Riprova",
       "search": "Cerca...",
       "searching": "Ricerca in corso...",

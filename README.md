@@ -39,6 +39,8 @@ Treege is a modern React library for creating and rendering interactive decision
 - **16 Input Types**: text, number, select, checkbox, radio, date, daterange, time, timerange, file, address, http, textarea, password, switch, autocomplete, and hidden
 - **HTTP Integration**: Built-in API integration with response mapping and search functionality
 - **Advanced Validation**: Required fields, pattern matching, custom validation functions
+- **Security**: Built-in input sanitization to prevent XSS attacks
+- **Enhanced Error Messages**: Clear, user-friendly error messages for HTTP inputs and validation
 - **Conditional Logic**: Dynamic field visibility based on user input and conditional edges
 - **Web & Native**: Both web (React) and React Native renderer implementations
 - **Fully Customizable**: Override any component (FormWrapper, Group, Inputs, SubmitButton, UI elements)
@@ -412,9 +414,28 @@ function CustomForm() {
 Check out the `/example` directory for complete examples:
 
 ```bash
-  # Run the example app
-  bun example
+# Run the example app
+bun example
 ```
+
+### Available Example URLs
+
+Once the development server is running, you can access these examples:
+
+- **Default Example**: [http://localhost:5173/](http://localhost:5173/)
+  - Basic demonstration of Treege functionality
+
+- **Demo Example**: [http://localhost:5173/example](http://localhost:5173/example)
+  - Full featured demo showcasing the library capabilities
+
+- **All Inputs Example**: [http://localhost:5173/example-all-inputs](http://localhost:5173/example-all-inputs)
+  - Comprehensive showcase of all 16 input types
+
+- **Custom Input Example**: [http://localhost:5173/example-custom-input](http://localhost:5173/example-custom-input)
+  - Demonstrates how to create and integrate custom input components
+
+- **TreegeConfigProvider Example**: [http://localhost:5173/example-treege-config-provider](http://localhost:5173/example-treege-config-provider)
+  - Shows global configuration with TreegeConfigProvider
 
 ## API Reference
 
