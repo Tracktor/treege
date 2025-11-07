@@ -203,7 +203,13 @@
       "noGroup": "بدون مجموعة"
     },
     "selectNodeType": {
-      "nodeType": "نوع العقدة"
+      "nodeType": "نوع العقدة",
+      "options": {
+        "flow": "تدفق خارجي",
+        "group": "مجموعة",
+        "input": "سؤال",
+        "ui": "عنصر تصميم"
+      }
     },
     "submitConfigForm": {
       "addHeader": "إضافة رأس",

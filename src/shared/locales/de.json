@@ -203,7 +203,13 @@
       "noGroup": "Keine Gruppe"
     },
     "selectNodeType": {
-      "nodeType": "Knotentyp"
+      "nodeType": "Knotentyp",
+      "options": {
+        "flow": "Externer Ablauf",
+        "group": "Gruppe",
+        "input": "Frage",
+        "ui": "Designelement"
+      }
     },
     "submitConfigForm": {
       "addHeader": "Header hinzufügen",

@@ -203,7 +203,13 @@
       "noGroup": "Nessun gruppo"
     },
     "selectNodeType": {
-      "nodeType": "Tipo di nodo"
+      "nodeType": "Tipo di nodo",
+      "options": {
+        "flow": "Flusso esterno",
+        "group": "Gruppo",
+        "input": "Domanda",
+        "ui": "Elemento di design"
+      }
     },
     "submitConfigForm": {
       "addHeader": "Aggiungi intestazione",

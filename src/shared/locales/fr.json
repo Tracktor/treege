@@ -203,7 +203,13 @@
       "noGroup": "Aucun groupe"
     },
     "selectNodeType": {
-      "nodeType": "Type de nœud"
+      "nodeType": "Type de nœud",
+      "options": {
+        "flow": "Flux externe",
+        "group": "Groupe",
+        "input": "Question",
+        "ui": "Élément de design"
+      }
     },
     "submitConfigForm": {
       "addHeader": "Ajouter un en-tête",

@@ -203,7 +203,13 @@
       "noGroup": "No group"
     },
     "selectNodeType": {
-      "nodeType": "Node Type"
+      "nodeType": "Node Type",
+      "options": {
+        "flow": "External Flow",
+        "group": "Group",
+        "input": "Question",
+        "ui": "Design Element"
+      }
     },
     "submitConfigForm": {
       "addHeader": "Add header",

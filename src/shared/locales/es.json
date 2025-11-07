@@ -203,7 +203,13 @@
       "noGroup": "Sin grupo"
     },
     "selectNodeType": {
-      "nodeType": "Tipo de nodo"
+      "nodeType": "Tipo de nodo",
+      "options": {
+        "flow": "Flujo externo",
+        "group": "Grupo",
+        "input": "Pregunta",
+        "ui": "Elemento de diseño"
+      }
     },
     "submitConfigForm": {
       "addHeader": "Agregar encabezado",
