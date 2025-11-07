@@ -94,6 +94,14 @@ export type InputRenderProps<T extends InputType = InputType> = {
    * Translated helper text (already processed with current language)
    */
   helperText?: string;
+  /**
+   * Missing required fields on form submit (for submit inputs)
+   */
+  missingRequiredFields?: string[];
+  /**
+   * Whether the form is currently being submitted (for submit inputs)
+   */
+  isSubmitting?: boolean;
 };
 
 export type UiRenderProps = {

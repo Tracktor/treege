@@ -1,4 +1,3 @@
-import DefaultSubmitButton from "@/renderer/features/TreegeRenderer/web/components/DefaultSubmitButton";
 import DefaultAddressInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultAddressInput";
 import DefaultAutocompleteInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultAutocompleteInput";
 import DefaultCheckboxInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultCheckboxInput";
@@ -11,6 +10,7 @@ import DefaultNumberInput from "@/renderer/features/TreegeRenderer/web/component
 import DefaultPasswordInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultPasswordInput";
 import DefaultRadioInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultRadioInput";
 import DefaultSelectInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultSelectInput";
+import DefaultSubmitInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultSubmitInput";
 import DefaultSwitchInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultSwitchInput";
 import DefaultTextAreaInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultTextAreaInput";
 import DefaultTextInput from "@/renderer/features/TreegeRenderer/web/components/inputs/DefaultTextInput";
@@ -53,7 +53,7 @@ export const defaultInputRenderers: InputRenderers = {
   password: DefaultPasswordInput,
   radio: DefaultRadioInput,
   select: DefaultSelectInput,
-  submit: DefaultSubmitButton,
+  submit: DefaultSubmitInput,
   switch: DefaultSwitchInput,
   text: DefaultTextInput,
   textarea: DefaultTextAreaInput,

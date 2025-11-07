@@ -177,6 +177,7 @@ const TreegeRenderer = ({
               helperText={helperText}
               name={name}
               setValue={setValue}
+              missingRequiredFields={missingRequiredFields}
             />
           );
         }
@@ -222,7 +223,7 @@ const TreegeRenderer = ({
           return null;
       }
     },
-    [config.components, config.language, visibleNodes, formValues, formErrors, setFieldValue],
+    [config.components, config.language, visibleNodes, formValues, formErrors, setFieldValue, missingRequiredFields],
   );
 
   // ============================================
