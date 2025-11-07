@@ -502,7 +502,7 @@ ISC
 
 ## Credits
 
-Created and maintained by [Mickaël Austoni](https://github.com/Tracktor)
+Created and maintained by [Mickaël Austoni](https://github.com/MickaelAustoni)
 
 ## Support
 
