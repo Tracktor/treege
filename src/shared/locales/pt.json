@@ -144,6 +144,7 @@
       "defaultValueTypeNone": "Nenhum",
       "defaultValueTypeReference": "Campo de referência",
       "defaultValueTypeStatic": "Valor estático",
+      "disablePast": "Desativar datas passadas",
       "errorMessage": "Mensagem de erro",
       "helperText": "Texto de ajuda",
       "httpConfiguration": "Configuração HTTP",
@@ -203,7 +204,47 @@
       "noGroup": "Sem grupo"
     },
     "selectNodeType": {
-      "nodeType": "Tipo de nó"
+      "nodeType": "Tipo de nó",
+      "options": {
+        "flow": "Fluxo externo",
+        "group": "Grupo",
+        "input": "Pergunta",
+        "ui": "Elemento de design"
+      }
+    },
+    "submitConfigForm": {
+      "addHeader": "Adicionar cabeçalho",
+      "apiUrl": "URL da API",
+      "apiUrlDesc": "Use {{fieldId}} para referenciar outros campos",
+      "apiUrlPlaceholder": "https://api.exemplo.com/submit",
+      "behavior": "Comportamento",
+      "errorMessage": "Mensagem de erro",
+      "errorMessageDesc": "Mensagem exibida quando o envio falha",
+      "errorMessagePlaceholder": "Ocorreu um erro. Por favor, tente novamente.",
+      "headerName": "Nome do cabeçalho",
+      "headers": "Cabeçalhos",
+      "headerValue": "Valor do cabeçalho",
+      "httpMethod": "Método HTTP",
+      "insertVariable": "Inserir variável",
+      "methodDelete": "DELETE",
+      "methodPatch": "PATCH",
+      "methodPost": "POST",
+      "methodPut": "PUT",
+      "noFieldsAvailable": "Nenhum campo disponível",
+      "postSubmission": "Após o envio",
+      "redirectUrl": "URL de redirecionamento",
+      "redirectUrlDesc": "URL para redirecionar após envio bem-sucedido",
+      "redirectUrlPlaceholder": "/success ou https://exemplo.com/obrigado",
+      "requestBody": "Corpo da requisição (JSON)",
+      "requestBodyDesc": "Use {{fieldId}} para referenciar outros campos. Certifique-se de que a formatação JSON está correta, incluindo aspas ao redor de valores de string.",
+      "requestBodyPlaceholder": "{\"nome\": \"{{nomeUsuario}}\", \"email\": \"{{emailUsuario}}\"}",
+      "selectMethod": "Selecionar método",
+      "sendFormData": "Enviar todos os dados do formulário",
+      "sendFormDataDesc": "Enviar automaticamente todos os valores do formulário como corpo JSON",
+      "showLoadingState": "Mostrar estado de carregamento",
+      "successMessage": "Mensagem de sucesso",
+      "successMessageDesc": "Mensagem exibida quando o envio é bem-sucedido",
+      "successMessagePlaceholder": "Formulário enviado com sucesso!"
     },
     "submitConfigForm": {
       "addHeader": "Adicionar cabeçalho",

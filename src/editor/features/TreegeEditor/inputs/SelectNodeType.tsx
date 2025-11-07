@@ -27,7 +27,7 @@ const SelectNodeType = () => {
               .filter((type) => (isGroup ? type === "group" : type !== "group"))
               .map((type) => (
                 <SelectItem key={type} value={type}>
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
+                  {t(`editor.selectNodeType.options.${type}`)}
                 </SelectItem>
               ))}
           </SelectGroup>

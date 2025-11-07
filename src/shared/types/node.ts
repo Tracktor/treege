@@ -191,6 +191,10 @@ export type InputNodeData = BaseNodeData & {
    */
   multiple?: boolean;
   /**
+   * Whether past dates should be disabled (for date and daterange types)
+   */
+  disablePast?: boolean;
+  /**
    * The default value config for the input field
    */
   defaultValue?: null | {

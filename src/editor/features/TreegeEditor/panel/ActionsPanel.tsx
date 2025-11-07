@@ -187,7 +187,7 @@ const ActionsPanel = ({ onExportJson, onSave }: ActionsPanelProps) => {
         <DropdownMenuContent align="start">
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col gap-1">
-              <span className="text-muted-foreground text-xs">Treege ID</span>
+              <span className="text-muted-foreground text-xs">Flow ID</span>
               <button
                 onClick={handleCopyId}
                 className="flex items-center gap-2 font-mono text-muted-foreground transition-colors hover:text-primary"

@@ -144,6 +144,7 @@
       "defaultValueTypeNone": "Nessuno",
       "defaultValueTypeReference": "Campo di riferimento",
       "defaultValueTypeStatic": "Valore statico",
+      "disablePast": "Disabilita date passate",
       "errorMessage": "Messaggio di errore",
       "helperText": "Testo di aiuto",
       "httpConfiguration": "Configurazione HTTP",
@@ -203,7 +204,47 @@
       "noGroup": "Nessun gruppo"
     },
     "selectNodeType": {
-      "nodeType": "Tipo di nodo"
+      "nodeType": "Tipo di nodo",
+      "options": {
+        "flow": "Flusso esterno",
+        "group": "Gruppo",
+        "input": "Domanda",
+        "ui": "Elemento di design"
+      }
+    },
+    "submitConfigForm": {
+      "addHeader": "Aggiungi intestazione",
+      "apiUrl": "URL dell'API",
+      "apiUrlDesc": "Usa {{fieldId}} per riferire altri campi",
+      "apiUrlPlaceholder": "https://api.esempio.it/submit",
+      "behavior": "Comportamento",
+      "errorMessage": "Messaggio di errore",
+      "errorMessageDesc": "Messaggio visualizzato quando l'invio fallisce",
+      "errorMessagePlaceholder": "Si è verificato un errore. Riprova.",
+      "headerName": "Nome intestazione",
+      "headers": "Intestazioni",
+      "headerValue": "Valore intestazione",
+      "httpMethod": "Metodo HTTP",
+      "insertVariable": "Inserisci variabile",
+      "methodDelete": "DELETE",
+      "methodPatch": "PATCH",
+      "methodPost": "POST",
+      "methodPut": "PUT",
+      "noFieldsAvailable": "Nessun campo disponibile",
+      "postSubmission": "Dopo l'invio",
+      "redirectUrl": "URL di reindirizzamento",
+      "redirectUrlDesc": "URL a cui reindirizzare dopo un invio riuscito",
+      "redirectUrlPlaceholder": "/success o https://esempio.it/grazie",
+      "requestBody": "Corpo della richiesta (JSON)",
+      "requestBodyDesc": "Usa {{fieldId}} per riferire altri campi. Assicurati che la formattazione JSON sia corretta, comprese le virgolette attorno ai valori stringa.",
+      "requestBodyPlaceholder": "{\"nome\": \"{{nomeUtente}}\", \"email\": \"{{emailUtente}}\"}",
+      "selectMethod": "Seleziona metodo",
+      "sendFormData": "Invia tutti i dati del modulo",
+      "sendFormDataDesc": "Invia automaticamente tutti i valori del modulo come corpo JSON",
+      "showLoadingState": "Mostra stato di caricamento",
+      "successMessage": "Messaggio di successo",
+      "successMessageDesc": "Messaggio visualizzato quando l'invio ha successo",
+      "successMessagePlaceholder": "Modulo inviato con successo!"
     },
     "submitConfigForm": {
       "addHeader": "Aggiungi intestazione",

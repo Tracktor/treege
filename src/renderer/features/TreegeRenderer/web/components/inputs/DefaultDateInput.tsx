@@ -13,6 +13,16 @@ const DefaultDateInput = ({ node, value, setValue, error, label, placeholder, he
   const t = useTranslate();
   const dateValue = value ? new Date(value) : undefined;
 
+  // Function to disable past dates if disablePast is enabled
+  const isDateDisabled = (date: Date) => {
+    if (node.data.disablePast) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return date < today;
+    }
+    return false;
+  };
+
   return (
     <FormItem className="mb-4">
       <Label htmlFor={id}>
@@ -31,6 +41,7 @@ const DefaultDateInput = ({ node, value, setValue, error, label, placeholder, he
             mode="single"
             selected={dateValue}
             captionLayout="dropdown"
+            disabled={isDateDisabled}
             onSelect={(date) => {
               setValue(date ? date.toISOString() : "");
               setOpen(false);
