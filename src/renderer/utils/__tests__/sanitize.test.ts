@@ -362,6 +362,34 @@ describe("sanitizeHttpResponse", () => {
       expect(result).toBeDefined();
     });
 
+    it("should sanitize strings even when max depth is exceeded (XSS protection)", () => {
+      // Security test: Create an object nested beyond MAX_DEPTH with XSS payload at bottom
+      let nested: unknown = '<script>alert("XSS at depth 150")</script>';
+      for (let i = 0; i < 150; i++) {
+        nested = { child: nested };
+      }
+
+      const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+      const result = sanitizeHttpResponse(nested);
+
+      warnSpy.mockRestore();
+
+      // Navigate to max depth level
+      let current = result as Record<string, unknown>;
+      for (let i = 0; i < 100; i++) {
+        current = current.child as Record<string, unknown>;
+      }
+
+      // At level 101, should get either sanitized string or safe placeholder
+      const deepValue = current.child;
+
+      // Must be either empty string (sanitized XSS) or safe placeholder
+      expect(typeof deepValue === "string").toBe(true);
+      expect(deepValue).not.toContain("<script>");
+      expect(deepValue).not.toContain("alert");
+    });
+
     it("should handle deeply nested arrays", () => {
       // Create deeply nested arrays
       let nested: unknown[] = ["value<script>xss</script>"];

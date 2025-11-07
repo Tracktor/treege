@@ -143,8 +143,12 @@ export const sanitizeHttpResponse = (
 ): unknown => {
   // Prevent DoS via deep nesting
   if (depth > MAX_DEPTH) {
-    console.warn(`sanitizeHttpResponse: Maximum depth (${MAX_DEPTH}) exceeded. Returning data as-is to prevent stack overflow.`);
-    return data;
+    console.warn(`sanitizeHttpResponse: Maximum depth (${MAX_DEPTH}) exceeded.`);
+    // Still sanitize strings to prevent XSS even at max depth
+    if (typeof data === "string") {
+      return sanitize(data, options);
+    }
+    return "[Max Depth Exceeded]";
   }
 
   if (data === null || data === undefined) {
