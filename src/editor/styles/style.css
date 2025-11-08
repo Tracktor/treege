@@ -1,5 +1,5 @@
 @import "@xyflow/react/dist/base.css";
-@import "../../shared/styles/style.css";
+@import "@/shared/styles/style.css";
 
 :root {
   --node-width: 280px;
@@ -11,6 +11,7 @@
   --treege-color-submit-primary: #ff4757;
   --treege-color-submit-secondary: #ff6b81;
   --treege-color-submit-tertiary: #ee5a6f;
+  --treege-muted-foreground: oklch(0.556 0 0);
 }
 
 button {
@@ -23,7 +24,8 @@ button {
 }
 
 /* Default node */
-div.react-flow__node {
+div.react-flow__node,
+div.react-flow__node.react-flow__node-input {
   border: 0;
 }
 
@@ -109,13 +111,13 @@ div.react-flow__node-group:hover .react-flow__resize-control,
 
 /* Handle */
 div.react-flow__handle {
-  background-color: var(--muted-foreground);
+  background-color: var(--treege-muted-foreground);
   @apply rounded-sm hover:bg-primary/80 w-6 h-6 flex items-center justify-center cursor-pointer transition-colors;
 }
 
 /* Edge */
 path.react-flow__edge-path {
-  stroke: var(--muted-foreground);
+  stroke: var(--treege-muted-foreground);
 }
 
 /* Edge label */
@@ -131,7 +133,7 @@ path.react-flow__edge-path {
   height: 30px;
   border: 5px solid var(--xy-minimap-background-color-default);
   background-color: var(--color-ring);
-  color: var(--primary);
+  color: var(--treege-primary);
   cursor: pointer;
   border-radius: 50%;
   font-size: 12px;
@@ -140,7 +142,7 @@ path.react-flow__edge-path {
 
 /* Button edge hover*/
 .button-edge__button:hover {
-  background-color: var(--destructive);
+  background-color: var(--treege-destructive);
   color: #ffffff;
 }
 
