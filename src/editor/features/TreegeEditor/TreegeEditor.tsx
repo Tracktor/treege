@@ -10,8 +10,9 @@ import useFlowConnections from "@/editor/hooks/useFlowConnections";
 import { TreegeEditorProps } from "@/editor/types/editor";
 import { Toaster } from "@/shared/components/ui/sonner";
 import { ThemeProvider } from "@/shared/context/ThemeContext";
+import { cn } from "@/shared/lib/utils";
 
-const Flow = ({ flow, onExportJson, onSave, theme }: TreegeEditorProps) => {
+const Flow = ({ flow, onExportJson, onSave, theme, className }: TreegeEditorProps) => {
   const { onConnect, onConnectEnd, onEdgesDelete, isValidConnection } = useFlowConnections();
 
   return (
@@ -27,6 +28,7 @@ const Flow = ({ flow, onExportJson, onSave, theme }: TreegeEditorProps) => {
       onConnectEnd={onConnectEnd}
       onEdgesDelete={onEdgesDelete}
       isValidConnection={isValidConnection}
+      className={cn(className, "treege")}
     >
       <Background gap={10} variant={BackgroundVariant.Dots} />
       <ActionsPanel onExportJson={onExportJson} onSave={onSave} />

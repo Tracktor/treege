@@ -29,4 +29,8 @@ export interface TreegeEditorProps {
    * AI configuration for tree generation
    */
   aiConfig?: AIConfig;
+  /**
+   * Additional CSS class names for custom styling.
+   */
+  className?: string;
 }

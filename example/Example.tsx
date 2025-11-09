@@ -150,7 +150,7 @@ const Layout = ({ flow }: { flow?: Flow }) => {
   };
 
   return (
-    <div className="h-screen w-screen flex">
+    <div className="h-screen w-screen flex bg-background">
       <div className="w-8/12 border-r">
         <EditorPanel onSave={handleSave} flow={flow} theme={theme} language={language} />
       </div>

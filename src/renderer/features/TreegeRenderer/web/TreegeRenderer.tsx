@@ -282,57 +282,59 @@ const TreegeRenderer = ({
   }, [formValues, inputNodes, setMultipleFieldValues, prevFormValuesRef]);
 
   return (
-    <ThemeProvider theme={config.theme} storageKey="treege-renderer-theme">
-      <TreegeRendererProvider
-        value={{
-          flows: mergedFlow,
-          formErrors,
-          formValues,
-          googleApiKey: config.googleApiKey,
-          inputNodes,
-          language: config.language,
-          setFieldValue,
-        }}
-      >
-        <FormWrapper onSubmit={handleSubmit}>
-          {/* Node */}
-          {visibleRootNodes.map((node) => renderNode(node))}
+    <div className="treege">
+      <ThemeProvider theme={config.theme} storageKey="treege-renderer-theme">
+        <TreegeRendererProvider
+          value={{
+            flows: mergedFlow,
+            formErrors,
+            formValues,
+            googleApiKey: config.googleApiKey,
+            inputNodes,
+            language: config.language,
+            setFieldValue,
+          }}
+        >
+          <FormWrapper onSubmit={handleSubmit}>
+            {/* Node */}
+            {visibleRootNodes.map((node) => renderNode(node))}
 
-          {/* Submit */}
-          {canSubmit && (
-            <SubmitButtonWrapper missingFields={missingRequiredFields}>
-              <SubmitButton label={t("renderer.defaultSubmitButton.submit")} disabled={isSubmitting} />
-            </SubmitButtonWrapper>
-          )}
-        </FormWrapper>
+            {/* Submit */}
+            {canSubmit && (
+              <SubmitButtonWrapper missingFields={missingRequiredFields}>
+                <SubmitButton label={t("renderer.defaultSubmitButton.submit")} disabled={isSubmitting} />
+              </SubmitButtonWrapper>
+            )}
+          </FormWrapper>
 
-        {/* Powered by Treege */}
-        <p className="py-2 text-muted-foreground text-xs">Powered by Treege</p>
+          {/* Powered by Treege */}
+          <p className="py-2 text-muted-foreground text-xs">Powered by Treege</p>
 
-        {/* Submit message (success/error) */}
-        {submitMessage && (
-          <div
-            className={`my-4 rounded-md p-4 ${
-              submitMessage.type === "success"
-                ? "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-300"
-                : "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-300"
-            }`}
-            role="alert"
-          >
-            <div className="flex items-center justify-between">
-              <p className="font-medium text-sm">{submitMessage.message}</p>
-              <button
-                type="button"
-                onClick={clearSubmitMessage}
-                className="ml-4 font-medium text-sm underline hover:no-underline focus:outline-none"
-              >
-                {t("common.close")}
-              </button>
+          {/* Submit message (success/error) */}
+          {submitMessage && (
+            <div
+              className={`my-4 rounded-md p-4 ${
+                submitMessage.type === "success"
+                  ? "bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-300"
+                  : "bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-300"
+              }`}
+              role="alert"
+            >
+              <div className="flex items-center justify-between">
+                <p className="font-medium text-sm">{submitMessage.message}</p>
+                <button
+                  type="button"
+                  onClick={clearSubmitMessage}
+                  className="ml-4 font-medium text-sm underline hover:no-underline focus:outline-none"
+                >
+                  {t("common.close")}
+                </button>
+              </div>
             </div>
-          </div>
-        )}
-      </TreegeRendererProvider>
-    </ThemeProvider>
+          )}
+        </TreegeRendererProvider>
+      </ThemeProvider>
+    </div>
   );
 };
 
