@@ -44,6 +44,11 @@ const config = () =>
         jsAssetsFilterFunction: (outputChunk) => {
           return outputChunk.fileName.includes("ThemeContext");
         },
+        // Inject CSS at the beginning of <head> for lower specificity
+        // This allows users to easily override Treege styles
+        injectCode: (cssCode) => {
+          return `try{if(typeof document!=="undefined"){var style=document.createElement("style");style.id="treege-styles";style.appendChild(document.createTextNode(${JSON.stringify(cssCode)}));document.head.insertBefore(style,document.head.firstChild);}}catch(e){console.error("vite-plugin-css-injected-by-js",e);}`;
+        },
       }),
     ],
     resolve: {
