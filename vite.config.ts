@@ -40,11 +40,7 @@ const config = () =>
       }),
       react(),
       tailwindcss(),
-      cssInjectedByJsPlugin({
-        jsAssetsFilterFunction: (outputChunk) => {
-          return outputChunk.fileName.includes("TreegeEditor");
-        },
-      }),
+      cssInjectedByJsPlugin(),
     ],
     resolve: {
       alias: [
