@@ -42,7 +42,7 @@ const config = () =>
       tailwindcss(),
       cssInjectedByJsPlugin({
         jsAssetsFilterFunction: (outputChunk) => {
-          return outputChunk.fileName.includes("TreegeEditor") || outputChunk.fileName.includes("TreegeRenderer");
+          return outputChunk.fileName.includes("ThemeContext");
         },
       }),
     ],
