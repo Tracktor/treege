@@ -8,6 +8,7 @@ export * from "@/renderer/features/TreegeRenderer/native/components/DefaultSubmi
 export * from "@/renderer/features/TreegeRenderer/native/components/DefaultUI";
 export * from "@/renderer/features/TreegeRenderer/native/TreegeRenderer";
 export { default as TreegeRenderer } from "@/renderer/features/TreegeRenderer/native/TreegeRenderer";
+export type { UseTreegeRendererReturn } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
 export { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
 
 // Types

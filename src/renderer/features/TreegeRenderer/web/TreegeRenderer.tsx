@@ -1,7 +1,7 @@
 import { Node } from "@xyflow/react";
 import { FormEvent, ReactNode, useCallback } from "react";
 import { TreegeRendererProvider } from "@/renderer/context/TreegeRendererContext";
-import { useTreegeRendererLogic } from "@/renderer/features/TreegeRenderer/useTreegeRendererLogic";
+import { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
 import DefaultFormWrapper from "@/renderer/features/TreegeRenderer/web/components/DefaultFormWrapper";
 import DefaultGroup from "@/renderer/features/TreegeRenderer/web/components/DefaultGroup";
 import { defaultInputRenderers } from "@/renderer/features/TreegeRenderer/web/components/DefaultInputs";
@@ -23,22 +23,23 @@ const TreegeRenderer = ({
   className,
   flows,
   googleApiKey,
-  initialValues = {},
   language,
   onChange,
   onSubmit,
   theme,
   validate,
   validationMode,
+  initialValues = {},
 }: TreegeRendererProps) => {
   // Use shared logic hook
   const {
     canSubmit,
     clearSubmitMessage,
     config,
+    firstErrorFieldId,
     formErrors,
     formValues,
-    handleSubmit: handleSubmitLogic,
+    handleSubmit,
     inputNodes,
     isSubmitting,
     mergedFlow,
@@ -48,7 +49,7 @@ const TreegeRenderer = ({
     t,
     visibleNodes,
     visibleRootNodes,
-  } = useTreegeRendererLogic({
+  } = useTreegeRenderer({
     components,
     flows,
     googleApiKey,
@@ -69,34 +70,23 @@ const TreegeRenderer = ({
   /**
    * Web-specific form submission handler with FormEvent and focus logic
    */
-  const handleSubmit = useCallback(
+  const handleFormSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
 
       // Call the shared submit logic
-      const isValid = await handleSubmitLogic();
+      const isValid = await handleSubmit();
 
       // If validation failed, focus the first input field with an error
-      if (!isValid) {
-        const firstErrorNodeId = Object.keys(formErrors)[0];
-
-        if (firstErrorNodeId) {
-          // Use id attribute for reliable focus (always present and unique)
-          const input = document.getElementById(firstErrorNodeId);
-          input?.focus();
-        }
+      if (!isValid && firstErrorFieldId) {
+        // Use id attribute for reliable focus (always present and unique)
+        const input = document.getElementById(firstErrorFieldId);
+        input?.focus();
       }
     },
-    [handleSubmitLogic, formErrors],
+    [handleSubmit, firstErrorFieldId],
   );
 
-  // ============================================
-  // RENDERING LOGIC
-  // ============================================
-
-  /**
-   * Render a single node based on its type
-   */
   const renderNode = useCallback(
     (node: Node<TreegeNodeData>): ReactNode => {
       const { type } = node;
@@ -200,7 +190,7 @@ const TreegeRenderer = ({
             setFieldValue,
           }}
         >
-          <FormWrapper onSubmit={handleSubmit}>
+          <FormWrapper onSubmit={handleFormSubmit}>
             {/* Node */}
             {visibleRootNodes.map((node) => renderNode(node))}
 

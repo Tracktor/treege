@@ -7,7 +7,7 @@ import DefaultGroup from "@/renderer/features/TreegeRenderer/native/components/D
 import { defaultInputRenderers } from "@/renderer/features/TreegeRenderer/native/components/DefaultInputs";
 import DefaultSubmitButton from "@/renderer/features/TreegeRenderer/native/components/DefaultSubmitButton";
 import { defaultUI } from "@/renderer/features/TreegeRenderer/native/components/DefaultUI";
-import { useTreegeRendererLogic } from "@/renderer/features/TreegeRenderer/useTreegeRendererLogic";
+import { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
 import { InputRenderProps, InputValue, TreegeRendererNativeProps } from "@/renderer/types/renderer";
 import { resolveNodeKey } from "@/renderer/utils/node";
 import { sanitize } from "@/renderer/utils/sanitize";
@@ -21,13 +21,13 @@ const TreegeRenderer = ({
   contentContainerStyle,
   flows,
   googleApiKey,
-  initialValues = {},
   language,
   onChange,
   onSubmit,
   style,
   validate,
   validationMode,
+  initialValues = {},
 }: TreegeRendererNativeProps) => {
   // Use shared logic hook
   const {
@@ -46,7 +46,7 @@ const TreegeRenderer = ({
     t,
     visibleNodes,
     visibleRootNodes,
-  } = useTreegeRendererLogic({
+  } = useTreegeRenderer({
     components,
     flows,
     googleApiKey,
@@ -62,13 +62,6 @@ const TreegeRenderer = ({
   const FormWrapper = config.components.form || DefaultFormWrapper;
   const SubmitButton = config.components.submitButton || DefaultSubmitButton;
 
-  // ============================================
-  // RENDERING LOGIC
-  // ============================================
-
-  /**
-   * Render a single node based on its type
-   */
   const renderNode = useCallback(
     (node: Node<TreegeNodeData>): ReactNode => {
       const { type } = node;
