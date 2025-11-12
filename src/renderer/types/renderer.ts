@@ -242,7 +242,13 @@ export interface TreegeRendererProps {
   validationMode?: "onChange" | "onSubmit";
 }
 
-export interface TreegeRendererNativeProps extends Omit<TreegeRendererProps, "className"> {
+/**
+ * Props for the TreegeRenderer component (React Native)
+ * Same as TreegeRendererProps but:
+ * - Omits className (not used in React Native)
+ * - Adds style and contentContainerStyle (React Native specific)
+ */
+export type TreegeRendererNativeProps = Omit<TreegeRendererProps, "className" | "theme"> & {
   /**
    * Style for the ScrollView container
    */
@@ -252,4 +258,4 @@ export interface TreegeRendererNativeProps extends Omit<TreegeRendererProps, "cl
    * Use this to center content vertically with flexGrow: 1 and justifyContent: 'center'
    */
   contentContainerStyle?: ViewStyle;
-}
+};

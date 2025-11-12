@@ -1,17 +1,14 @@
 import { Node } from "@xyflow/react";
-import { FormEvent, ReactNode, useCallback, useEffect, useMemo, useRef } from "react";
-import { useTreegeConfig } from "@/renderer/context/TreegeConfigContext";
+import { FormEvent, ReactNode, useCallback } from "react";
 import { TreegeRendererProvider } from "@/renderer/context/TreegeRendererContext";
-import { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
+import { useTreegeRendererLogic } from "@/renderer/features/TreegeRenderer/useTreegeRendererLogic";
 import DefaultFormWrapper from "@/renderer/features/TreegeRenderer/web/components/DefaultFormWrapper";
 import DefaultGroup from "@/renderer/features/TreegeRenderer/web/components/DefaultGroup";
 import { defaultInputRenderers } from "@/renderer/features/TreegeRenderer/web/components/DefaultInputs";
 import DefaultSubmitButton from "@/renderer/features/TreegeRenderer/web/components/DefaultSubmitButton";
 import DefaultSubmitButtonWrapper from "@/renderer/features/TreegeRenderer/web/components/DefaultSubmitButtonWrapper";
 import { defaultUI } from "@/renderer/features/TreegeRenderer/web/components/DefaultUI";
-import { useSubmitHandler } from "@/renderer/hooks/useSubmitHandler";
 import { InputRenderProps, InputValue, TreegeRendererProps } from "@/renderer/types/renderer";
-import { calculateReferenceFieldUpdates, convertFormValuesToNamedFormat } from "@/renderer/utils/form";
 import { resolveNodeKey } from "@/renderer/utils/node";
 import { sanitize } from "@/renderer/utils/sanitize";
 import { NODE_TYPE } from "@/shared/constants/node";
@@ -26,115 +23,71 @@ const TreegeRenderer = ({
   className,
   flows,
   googleApiKey,
+  initialValues = {},
   language,
   onChange,
   onSubmit,
   theme,
   validate,
   validationMode,
-  initialValues = {},
 }: TreegeRendererProps) => {
-  // Get global config from provider (if any)
-  const globalConfig = useTreegeConfig();
-
-  // Merge props with global config (props take precedence)
-  const config = {
-    components: {
-      form: components?.form ?? globalConfig?.components?.form,
-      group: components?.group ?? globalConfig?.components?.group,
-      inputs: { ...globalConfig?.components?.inputs, ...components?.inputs },
-      submitButton: components?.submitButton ?? globalConfig?.components?.submitButton,
-      submitButtonWrapper: components?.submitButtonWrapper ?? globalConfig?.components?.submitButtonWrapper,
-      ui: { ...globalConfig?.components?.ui, ...components?.ui },
-    },
-    googleApiKey: googleApiKey ?? globalConfig?.googleApiKey,
-    language: language ?? globalConfig?.language ?? "en",
-    theme: theme ?? globalConfig?.theme ?? "dark",
-    validationMode: validationMode ?? globalConfig?.validationMode ?? "onSubmit",
-  };
-
+  // Use shared logic hook
   const {
     canSubmit,
-    mergedFlow,
+    clearSubmitMessage,
+    config,
     formErrors,
     formValues,
+    handleSubmit: handleSubmitLogic,
     inputNodes,
+    isSubmitting,
+    mergedFlow,
     missingRequiredFields,
-    prevFormValuesRef,
+    setFieldValue,
+    submitMessage,
+    t,
     visibleNodes,
     visibleRootNodes,
-    setFieldValue,
-    setMultipleFieldValues,
-    validateForm,
-    t,
-  } = useTreegeRenderer(flows, initialValues, config.language);
-
-  // Submit handler for submit button with configuration
-  const { handleSubmitWithConfig, hasSubmitConfig, isSubmitting, submitMessage, clearSubmitMessage } = useSubmitHandler(
-    visibleNodes,
-    formValues,
-    config.language,
-    inputNodes,
-  );
+  } = useTreegeRendererLogic({
+    components,
+    flows,
+    googleApiKey,
+    initialValues,
+    language,
+    onChange,
+    onSubmit,
+    theme,
+    validate,
+    validationMode,
+  });
 
   // Components with fallbacks
   const FormWrapper = config.components.form || DefaultFormWrapper;
   const SubmitButton = config.components.submitButton || DefaultSubmitButton;
   const SubmitButtonWrapper = config.components.submitButtonWrapper || DefaultSubmitButtonWrapper;
-  // Refs to avoid re-creating effects
-  const onChangeRef = useRef(onChange);
-  const validateRef = useRef(validate);
-  // Memoize exported values for callbacks
-  const exportedValues = useMemo(() => convertFormValuesToNamedFormat(formValues, inputNodes), [formValues, inputNodes]);
 
   /**
-   * Handle form submission
+   * Web-specific form submission handler with FormEvent and focus logic
    */
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
 
-      // Validate the form
-      const { isValid, errors } = validateForm(validateRef.current);
+      // Call the shared submit logic
+      const isValid = await handleSubmitLogic();
 
+      // If validation failed, focus the first input field with an error
       if (!isValid) {
-        // Focus the first input field with an error
-        const firstErrorNodeId = Object.keys(errors)[0];
+        const firstErrorNodeId = Object.keys(formErrors)[0];
 
         if (firstErrorNodeId) {
           // Use id attribute for reliable focus (always present and unique)
           const input = document.getElementById(firstErrorNodeId);
           input?.focus();
         }
-        return;
-      }
-
-      // If there's a submit button with configuration, use it
-      if (hasSubmitConfig) {
-        const result = await handleSubmitWithConfig((httpResponse) => {
-          // Call onSubmit callback with form values and HTTP response as second parameter
-          if (onSubmit) {
-            onSubmit(exportedValues, { httpResponse });
-          }
-        });
-
-        // If result is null, it means the submit config is incomplete (no URL)
-        // Fall back to the default submit behavior
-        if (result === null) {
-          onSubmit?.(exportedValues);
-          return;
-        }
-
-        // If submission failed, return early
-        if (!result.success) {
-          return;
-        }
-      } else if (onSubmit) {
-        // Default behavior: call onSubmit directly
-        onSubmit(exportedValues);
       }
     },
-    [validateForm, hasSubmitConfig, handleSubmitWithConfig, onSubmit, exportedValues],
+    [handleSubmitLogic, formErrors],
   );
 
   // ============================================
@@ -232,56 +185,6 @@ const TreegeRenderer = ({
     },
     [config.components, config.language, visibleNodes, formValues, formErrors, setFieldValue, missingRequiredFields],
   );
-
-  // ============================================
-  // SIDE EFFECTS
-  // ============================================
-
-  /**
-   * Keep onChange ref updated
-   */
-  useEffect(() => {
-    onChangeRef.current = onChange;
-  }, [onChange]);
-
-  /**
-   *  Keep validate ref updated
-   */
-  useEffect(() => {
-    validateRef.current = validate;
-  }, [validate]);
-
-  /**
-   * Trigger onChange callback when form values change
-   */
-  useEffect(() => {
-    onChangeRef.current?.(exportedValues);
-  }, [exportedValues]);
-
-  /**
-   * Run validation on form values change if validationMode is "onChange" or "onBlur"
-   */
-  useEffect(() => {
-    if (config.validationMode === "onChange") {
-      validateForm(validateRef.current);
-    }
-  }, [config.validationMode, validateForm]);
-
-  /**
-   * Sync reference fields when their source changes (one-way binding)
-   * Note: prevFormValuesRef is intentionally not in deps (refs don't trigger re-renders)
-   */
-  useEffect(() => {
-    const updatedValues = calculateReferenceFieldUpdates(inputNodes, formValues, prevFormValuesRef.current);
-
-    // Only update if there are changes to avoid unnecessary function calls
-    if (Object.keys(updatedValues).length > 0) {
-      setMultipleFieldValues(updatedValues);
-    }
-
-    // Update previous values ref
-    prevFormValuesRef.current = formValues;
-  }, [formValues, inputNodes, setMultipleFieldValues, prevFormValuesRef]);
 
   return (
     <div className={cn("treege", className)}>

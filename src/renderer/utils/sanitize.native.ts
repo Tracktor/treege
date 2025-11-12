@@ -62,7 +62,7 @@ const decodeHtmlEntities = (str: string): string => {
  * sanitize('<b>Bold text</b><script>alert("xss")</script>')
  * // => 'Bold text'
  */
-export const sanitize = (input: string | undefined | null, options: SanitizeOptions = {}): string => {
+export const sanitize = (input: string | undefined | null, _options: SanitizeOptions = {}): string => {
   // Handle undefined/null - return empty string for React compatibility
   if (input === undefined || input === null || input === "") {
     return "";
