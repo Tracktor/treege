@@ -15,5 +15,5 @@ export * from "@/renderer/utils/conditions";
 export * from "@/renderer/utils/file";
 export * from "@/renderer/utils/flow";
 export * from "@/renderer/utils/form";
-export * from "@/renderer/utils/sanitize";
+export * from "@/renderer/utils/sanitize.native";
 export { getTranslatedText } from "@/shared/utils/translations";
