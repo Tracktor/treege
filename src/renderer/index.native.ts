@@ -5,7 +5,7 @@ export * from "@/renderer/features/TreegeRenderer/native/components/DefaultInput
 export * from "@/renderer/features/TreegeRenderer/native/components/DefaultSubmitButton";
 export * from "@/renderer/features/TreegeRenderer/native/components/DefaultSubmitButtonWrapper";
 export * from "@/renderer/features/TreegeRenderer/native/components/DefaultUI";
-export * from "@/renderer/features/TreegeRenderer/native/TreegeRenderer";
+export type { TreegeRendererNativeProps } from "@/renderer/features/TreegeRenderer/native/TreegeRenderer";
 export { default as TreegeRenderer } from "@/renderer/features/TreegeRenderer/native/TreegeRenderer";
 export type { UseTreegeRendererReturn } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
 export { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";

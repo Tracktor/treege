@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View, ViewStyle } from "react-native";
 import { TreegeRendererProvider } from "@/renderer/context/TreegeRendererContext";
 import DefaultFormWrapper from "@/renderer/features/TreegeRenderer/native/components/DefaultFormWrapper";
 import DefaultGroup from "@/renderer/features/TreegeRenderer/native/components/DefaultGroup";
@@ -8,7 +8,26 @@ import DefaultSubmitButtonWrapper from "@/renderer/features/TreegeRenderer/nativ
 import { defaultUI } from "@/renderer/features/TreegeRenderer/native/components/DefaultUI";
 import { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
 import { useRenderNode } from "@/renderer/hooks/useRenderNode";
-import { TreegeRendererNativeProps } from "@/renderer/types/renderer";
+import { TreegeRendererProps } from "@/renderer/types/renderer";
+
+/**
+ * Props for the TreegeRenderer component (React Native)
+ * Same as TreegeRendererProps but:
+ * - Omits className (not used in React Native)
+ * - Omits theme (not used in React Native)
+ * - Adds style and contentContainerStyle (React Native specific)
+ */
+export type TreegeRendererNativeProps = Omit<TreegeRendererProps, "className" | "theme"> & {
+  /**
+   * Style for the ScrollView container
+   */
+  style?: ViewStyle;
+  /**
+   * Style for the ScrollView content container
+   * Use this to center content vertically with flexGrow: 1 and justifyContent: 'center'
+   */
+  contentContainerStyle?: ViewStyle;
+};
 
 const TreegeRenderer = ({
   components,
