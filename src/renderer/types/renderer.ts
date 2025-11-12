@@ -188,7 +188,11 @@ export type TreegeRendererConfig = {
 /**
  * Props for the TreegeRenderer component
  */
-export type TreegeRendererProps = {
+export interface TreegeRendererProps {
+  /**
+   * Additional class name for the renderer container
+   */
+  className?: string;
   /**
    * Custom component renderers
    */
@@ -235,4 +239,4 @@ export type TreegeRendererProps = {
    * Validation mode
    */
   validationMode?: "onChange" | "onSubmit";
-};
+}

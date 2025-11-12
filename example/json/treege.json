@@ -1,12 +1,5 @@
 {
-  "id": "zYV0qw_gsSalw8ZQhbkCB",
   "edges": [
-    {
-      "id": "a3ttG6QFb8M4mbo2_gI3U",
-      "source": "cduBV4jbyp_vuQGLIYa_v",
-      "target": "_fMC1wrs60fWlQhk1KMLX",
-      "type": "default"
-    },
     {
       "data": {
         "conditions": [
@@ -23,7 +16,8 @@
       "id": "PPv66Nk6JyIQ1awTpPFd1",
       "source": "_fMC1wrs60fWlQhk1KMLX",
       "target": "-D7pyFD9dm4NTEwwDhDmt",
-      "type": "conditional"
+      "type": "conditional",
+      "selected": false
     },
     {
       "data": {
@@ -40,25 +34,29 @@
       "id": "u0emut9DCfPaeZiXH8FtU",
       "source": "_fMC1wrs60fWlQhk1KMLX",
       "target": "kXHUqwgGLMzhrnksbXdyg",
-      "type": "conditional"
+      "type": "conditional",
+      "selected": false
     },
     {
       "id": "adXJ55-xFRv7Qo09QLorO",
       "source": "kXHUqwgGLMzhrnksbXdyg",
       "target": "B-LmqLroRrDAr4Rm6zbk6",
-      "type": "default"
+      "type": "default",
+      "selected": false
     },
     {
       "id": "hc6KA7Vk4B3nBQ12H8gc3",
       "source": "B-LmqLroRrDAr4Rm6zbk6",
       "target": "0N6un3J68xH-efbmV7OOp",
-      "type": "default"
+      "type": "default",
+      "selected": false
     },
     {
       "id": "-ClGJJnvL-aP3BnRp0baB",
       "source": "-D7pyFD9dm4NTEwwDhDmt",
       "target": "-_ZX-b0jGrKFQwA6KgocI",
-      "type": "default"
+      "type": "default",
+      "selected": false
     },
     {
       "data": {
@@ -75,19 +73,17 @@
       "id": "JgobjyWATAwLs6G6-bcqP",
       "source": "_fMC1wrs60fWlQhk1KMLX",
       "target": "WHjELjK_SEZvh8VLRJVpq",
-      "type": "conditional"
+      "type": "conditional",
+      "selected": false
     },
     {
       "source": "edZHIcGqvZTtOGuV0DKIA",
-      "target": "DMTpKuZqmiKU5Ca9ZfEl1",
-      "id": "xy-edge__edZHIcGqvZTtOGuV0DKIA-DMTpKuZqmiKU5Ca9ZfEl1"
-    },
-    {
-      "source": "DMTpKuZqmiKU5Ca9ZfEl1",
-      "target": "cduBV4jbyp_vuQGLIYa_v",
-      "id": "xy-edge__DMTpKuZqmiKU5Ca9ZfEl1-cduBV4jbyp_vuQGLIYa_v"
+      "target": "_fMC1wrs60fWlQhk1KMLX",
+      "id": "xy-edge__edZHIcGqvZTtOGuV0DKIA-_fMC1wrs60fWlQhk1KMLX",
+      "selected": false
     }
   ],
+  "id": "zYV0qw_gsSalw8ZQhbkCB",
   "nodes": [
     {
       "data": {
@@ -129,52 +125,16 @@
       },
       "id": "edZHIcGqvZTtOGuV0DKIA",
       "position": {
-        "x": 573,
-        "y": 255.51412504232331
+        "x": 571.5455977152201,
+        "y": 671.4731784893527
       },
       "type": "input",
       "measured": {
         "width": 270,
         "height": 150
       },
-      "dragging": false
-    },
-    {
-      "data": {
-        "type": "file",
-        "errorMessage": "",
-        "helperText": "",
-        "label": {
-          "en": "Give me a picture !",
-          "fr": "Donnez-moi une photo !",
-          "es": "¡Dame una foto!",
-          "de": "Gib mir ein Bild!",
-          "it": "Dammi una foto!",
-          "pt": "Me dê uma foto!",
-          "ar": "أعطني صورة!"
-        },
-        "multiple": false,
-        "name": "picture",
-        "options": [],
-        "pattern": "",
-        "placeholder": "",
-        "required": false
-      },
-      "id": "cduBV4jbyp_vuQGLIYa_v",
-      "position": {
-        "x": 708.305450520271,
-        "y": 675.0253598482864
-      },
-      "type": "input",
-      "origin": [
-        0.5,
-        0
-      ],
-      "measured": {
-        "width": 270,
-        "height": 150
-      },
-      "dragging": false
+      "dragging": false,
+      "selected": false
     },
     {
       "data": {
@@ -211,7 +171,8 @@
         "width": 270,
         "height": 150
       },
-      "dragging": false
+      "dragging": false,
+      "selected": false
     },
     {
       "data": {
@@ -248,7 +209,8 @@
         "width": 270,
         "height": 150
       },
-      "dragging": false
+      "dragging": false,
+      "selected": false
     },
     {
       "data": {
@@ -285,7 +247,8 @@
         "width": 270,
         "height": 150
       },
-      "dragging": false
+      "dragging": false,
+      "selected": false
     },
     {
       "data": {
@@ -359,7 +322,8 @@
         "width": 270,
         "height": 150
       },
-      "dragging": false
+      "dragging": false,
+      "selected": false
     },
     {
       "data": {
@@ -396,7 +360,8 @@
         "width": 270,
         "height": 150
       },
-      "dragging": false
+      "dragging": false,
+      "selected": false
     },
     {
       "data": {
@@ -470,7 +435,8 @@
         "width": 270,
         "height": 150
       },
-      "dragging": false
+      "dragging": false,
+      "selected": false
     },
     {
       "data": {
@@ -507,40 +473,8 @@
         "width": 270,
         "height": 150
       },
-      "dragging": false
-    },
-    {
-      "data": {
-        "type": "date",
-        "errorMessage": "",
-        "helperText": "",
-        "label": {
-          "en": "What day is it?",
-          "fr": "Quel jour sommes-nous ?",
-          "es": "¿Qué día es hoy?",
-          "de": "Welcher Tag ist heute?",
-          "it": "Che giorno è oggi?",
-          "pt": "Que dia é hoje?",
-          "ar": "ما هو اليوم؟"
-        },
-        "multiple": false,
-        "name": "date",
-        "options": [],
-        "pattern": "",
-        "placeholder": "",
-        "required": false
-      },
-      "id": "DMTpKuZqmiKU5Ca9ZfEl1",
-      "position": {
-        "x": 572.5391448316929,
-        "y": 461.8041658342067
-      },
-      "type": "input",
-      "measured": {
-        "width": 270,
-        "height": 150
-      },
-      "dragging": false
+      "dragging": false,
+      "selected": false
     }
   ]
 }

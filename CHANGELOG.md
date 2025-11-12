@@ -138,12 +138,42 @@ Version 3.0 represents a complete architectural overhaul of Treege, transforming
 - **CSS Strategy**: CSS-in-JS with Vite plugin for component styling
 - **Type Guards**: Comprehensive type guards for runtime type safety
 
-### 🌐 Web & Native Support
+### 🌐 React Native Support
 
-- Full web support with React DOM
-- React Native renderer implementation
-- Platform-specific optimizations
-- Shared core logic between platforms
+Version 3.0 introduces full React Native support with a dedicated renderer implementation.
+
+#### Features
+- **Separate Entry Point**: `treege/renderer-native` for React Native applications
+- **Vanilla Components**: Built with React Native core components (no external dependencies required)
+- **Shared Logic**: Core renderer logic shared between web and native through `useTreegeRenderer` hook
+- **Platform-specific Optimizations**:
+  - Optimized rendering with `useRenderNode` hook
+  - Mobile-first UX (no intrusive auto-focus on validation errors)
+  - Native ScrollView integration
+  - React Native styling with StyleSheet
+- **Component Architecture**:
+  - DefaultFormWrapper, DefaultGroup, DefaultSubmitButton
+  - Default implementations for all 16 input types
+  - Easy to override with custom components
+- **Unified API**: Same props interface as web renderer for consistency
+
+#### Implementation Details
+- **Single Source Directory**: All renderer code (web and native) in `src/renderer/`
+- **Platform Exports**: `index.ts` for web, `index.native.ts` for React Native
+- **Shared Hooks**: `useTreegeRenderer` and `useRenderNode` work across both platforms
+- **Type Safety**: Full TypeScript support with shared types
+
+#### Usage
+```tsx
+import { TreegeRenderer } from "treege/renderer-native";
+
+<TreegeRenderer
+  flows={flow}
+  onSubmit={(values) => console.log(values)}
+/>
+```
+
+See the "React Native Support" section in the README for complete documentation.
 
 ### 📝 Migration from v2.x
 

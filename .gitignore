@@ -13,6 +13,11 @@ lerna-debug.log*
 /.pnp
 .pnp.js
 
+# Expo
+example/native/.expo
+example/native/node_modules
+example/native/bun.lockb
+
 # testing
 /coverage
 
