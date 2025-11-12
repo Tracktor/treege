@@ -5,7 +5,7 @@
   <p><strong>Build powerful decision trees with a visual node-based editor</strong></p>
 
   [![npm version](https://badge.fury.io/js/treege.svg)](https://badge.fury.io/js/treege)
-  [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
   <p>
     <a href="https://treege.io/">🌐 Website</a> •

@@ -4,6 +4,7 @@ import DefaultFormWrapper from "@/renderer/features/TreegeRenderer/native/compon
 import DefaultGroup from "@/renderer/features/TreegeRenderer/native/components/DefaultGroup";
 import { defaultInputRenderers } from "@/renderer/features/TreegeRenderer/native/components/DefaultInputs";
 import DefaultSubmitButton from "@/renderer/features/TreegeRenderer/native/components/DefaultSubmitButton";
+import DefaultSubmitButtonWrapper from "@/renderer/features/TreegeRenderer/native/components/DefaultSubmitButtonWrapper";
 import { defaultUI } from "@/renderer/features/TreegeRenderer/native/components/DefaultUI";
 import { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
 import { useRenderNode } from "@/renderer/hooks/useRenderNode";
@@ -50,11 +51,12 @@ const TreegeRenderer = ({
     validationMode,
   });
 
-  const { FormWrapper, SubmitButton, renderNode } = useRenderNode({
+  const { FormWrapper, SubmitButton, SubmitButtonWrapper, renderNode } = useRenderNode({
     config,
     DefaultFormWrapper,
     DefaultGroup,
     DefaultSubmitButton,
+    DefaultSubmitButtonWrapper,
     defaultInputRenderers,
     defaultUI,
     formErrors,
@@ -83,9 +85,11 @@ const TreegeRenderer = ({
 
           {/* Submit Button */}
           {canSubmit && (
-            <SubmitButton onPress={handleSubmit} disabled={isSubmitting} isSubmitting={isSubmitting}>
-              {t("renderer.defaultSubmitButton.submit")}
-            </SubmitButton>
+            <SubmitButtonWrapper missingFields={missingRequiredFields}>
+              <SubmitButton onPress={handleSubmit} disabled={isSubmitting} isSubmitting={isSubmitting}>
+                {t("renderer.defaultSubmitButton.submit")}
+              </SubmitButton>
+            </SubmitButtonWrapper>
           )}
         </FormWrapper>
 
