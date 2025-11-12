@@ -163,7 +163,7 @@ function App() {
 
 ## Module Structure
 
-Treege provides three import paths for optimal bundle size:
+Treege provides multiple import paths for optimal bundle size:
 
 ```tsx
 // Import everything (editor + renderer + types)
@@ -172,9 +172,159 @@ import { TreegeEditor, TreegeRenderer } from "treege";
 // Import only the editor
 import { TreegeEditor } from "treege/editor";
 
-// Import only the renderer
+// Import only the web renderer
 import { TreegeRenderer } from "treege/renderer";
+
+// Import only the React Native renderer
+import { TreegeRenderer } from "treege/renderer-native";
 ```
+
+## React Native Support
+
+Treege 3.0 includes full React Native support with a dedicated renderer implementation.
+
+### Installation for React Native
+
+```bash
+# Install Treege
+npm install treege
+
+# Install peer dependencies
+npm install react-native
+```
+
+### Basic Usage
+
+```tsx
+import { TreegeRenderer } from "treege/renderer-native";
+import type { Flow, FormValues } from "treege";
+
+function App() {
+  const flow: Flow = {
+    id: "flow-1",
+    nodes: [
+      {
+        id: "name",
+        type: "input",
+        data: {
+          type: "text",
+          name: "fullName",
+          label: "Full Name",
+          required: true
+        }
+      },
+      {
+        id: "email",
+        type: "input",
+        data: {
+          type: "text",
+          name: "email",
+          label: "Email",
+          required: true,
+          pattern: "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$"
+        }
+      }
+    ],
+    edges: []
+  };
+
+  const handleSubmit = (values: FormValues) => {
+    console.log("Form submitted:", values);
+  };
+
+  return (
+    <TreegeRenderer
+      flows={flow}
+      onSubmit={handleSubmit}
+    />
+  );
+}
+```
+
+### Custom Styling
+
+You can customize the appearance using the `style` and `contentContainerStyle` props:
+
+```tsx
+<TreegeRenderer
+  flows={flow}
+  onSubmit={handleSubmit}
+  style={{ flex: 1, backgroundColor: "#f5f5f5" }}
+  contentContainerStyle={{ padding: 20 }}
+/>
+```
+
+### Custom Components
+
+Override default components with your own React Native components:
+
+```tsx
+import { Text, TextInput, View } from "react-native";
+import { TreegeRenderer } from "treege/renderer-native";
+
+const CustomTextInput = ({ value, setValue, label, error }) => {
+  return (
+    <View style={{ marginBottom: 16 }}>
+      <Text style={{ fontSize: 14, marginBottom: 4 }}>{label}</Text>
+      <TextInput
+        value={value}
+        onChangeText={setValue}
+        style={{
+          borderWidth: 1,
+          borderColor: error ? "red" : "#ccc",
+          padding: 10,
+          borderRadius: 8
+        }}
+      />
+      {error && <Text style={{ color: "red", fontSize: 12 }}>{error}</Text>}
+    </View>
+  );
+};
+
+<TreegeRenderer
+  flows={flow}
+  components={{
+    inputs: {
+      text: CustomTextInput
+    }
+  }}
+/>
+```
+
+### Supported Input Types
+
+The React Native renderer includes default implementations for all input types:
+
+**Fully Implemented (Vanilla React Native)**:
+- `text`, `number`, `textarea`, `password`
+- `checkbox`, `switch`, `hidden`
+
+**Requires External Dependencies** (placeholder provided):
+- `select`, `radio`, `autocomplete`
+- `date`, `daterange`, `time`, `timerange`
+- `file`, `address`, `http`
+
+You can override any placeholder with your own implementation using popular React Native libraries like:
+- [@react-native-picker/picker](https://github.com/react-native-picker/picker) for `select`
+- [react-native-date-picker](https://github.com/henninghall/react-native-date-picker) for `date`/`time`
+- [react-native-document-picker](https://github.com/rnmods/react-native-document-picker) for `file`
+
+### API Reference
+
+The React Native renderer shares the same API as the web renderer, with some platform-specific props:
+
+| Prop                     | Type                                        | Default      | Description                     |
+|--------------------------|---------------------------------------------|--------------|--------------------------------|
+| `flows`                  | `Flow \| null`                              | -            | Decision tree to render        |
+| `onSubmit`               | `(values: FormValues) => void`              | -            | Form submission handler        |
+| `onChange`               | `(values: FormValues) => void`              | -            | Form change handler            |
+| `validate`               | `(values, nodes) => Record<string, string>` | -            | Custom validation function     |
+| `initialValues`          | `FormValues`                                | `{}`         | Initial form values            |
+| `components`             | `RendererComponents`                        | -            | Custom component overrides     |
+| `language`               | `string`                                    | `"en"`       | UI language                    |
+| `validationMode`         | `"onSubmit" \| "onChange"`                  | `"onSubmit"` | When to validate               |
+| `style`                  | `ViewStyle`                                 | -            | ScrollView style (RN only)     |
+| `contentContainerStyle`  | `ViewStyle`                                 | -            | Content container style (RN)   |
 
 ## Node Types
 
@@ -498,7 +648,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-ISC
+MIT
 
 ## Credits
 
