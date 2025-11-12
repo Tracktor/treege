@@ -1,7 +1,14 @@
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { InputRenderProps } from "@/renderer/types/renderer";
 
 const DefaultNumberInput = ({ node, value, setValue, error, label, placeholder, helperText, name }: InputRenderProps<"number">) => {
+  const [textValue, setTextValue] = useState(value?.toString() ?? "");
+
+  useEffect(() => {
+    setTextValue(value?.toString() ?? "");
+  }, [value]);
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>
@@ -10,10 +17,19 @@ const DefaultNumberInput = ({ node, value, setValue, error, label, placeholder, 
       </Text>
       <TextInput
         style={[styles.input, error && styles.inputError]}
-        value={value?.toString() ?? ""}
+        value={textValue}
         onChangeText={(text) => {
-          const numValue = text === "" ? null : Number(text);
-          setValue(numValue);
+          setTextValue(text);
+
+          if (text.trim() === "") {
+            setValue(null);
+            return;
+          }
+
+          const parsed = Number(text);
+          if (!Number.isNaN(parsed)) {
+            setValue(parsed);
+          }
         }}
         placeholder={placeholder}
         keyboardType="numeric"
