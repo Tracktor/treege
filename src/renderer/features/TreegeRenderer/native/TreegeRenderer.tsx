@@ -10,7 +10,7 @@ import DefaultSubmitButton from "@/renderer/features/TreegeRenderer/native/compo
 import { defaultUI } from "@/renderer/features/TreegeRenderer/native/components/DefaultUI";
 import { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
 import { useSubmitHandler } from "@/renderer/hooks/useSubmitHandler";
-import { InputRenderProps, InputValue, TreegeRendererProps } from "@/renderer/types/renderer";
+import { InputRenderProps, InputValue, TreegeRendererNativeProps } from "@/renderer/types/renderer";
 import { calculateReferenceFieldUpdates, convertFormValuesToNamedFormat } from "@/renderer/utils/form";
 import { resolveNodeKey } from "@/renderer/utils/node";
 import { sanitize } from "@/renderer/utils/sanitize";
@@ -21,15 +21,17 @@ import { getTranslatedText } from "@/shared/utils/translations";
 
 const TreegeRenderer = ({
   components,
+  contentContainerStyle,
   flows,
   googleApiKey,
   language,
   onChange,
   onSubmit,
+  style,
   validate,
   validationMode,
   initialValues = {},
-}: TreegeRendererProps) => {
+}: TreegeRendererNativeProps) => {
   // Get global config from provider (if any)
   const globalConfig = useTreegeConfig();
 
@@ -268,7 +270,7 @@ const TreegeRenderer = ({
   }, [formValues, inputNodes, setMultipleFieldValues, prevFormValuesRef]);
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container, style]} contentContainerStyle={contentContainerStyle}>
       <TreegeRendererProvider
         value={{
           flows: mergedFlow,

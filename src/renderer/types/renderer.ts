@@ -1,5 +1,6 @@
 import { Node } from "@xyflow/react";
 import { FormEvent, ReactNode } from "react";
+import { ViewStyle } from "react-native";
 import { SerializableFile } from "@/renderer/utils/file";
 import { Flow, InputNodeData, InputType, TreegeNodeData, UINodeData, UIType } from "@/shared/types/node";
 
@@ -188,7 +189,11 @@ export type TreegeRendererConfig = {
 /**
  * Props for the TreegeRenderer component
  */
-export type TreegeRendererProps = {
+export interface TreegeRendererProps {
+  /**
+   * Additional class name for the renderer container
+   */
+  className?: string;
   /**
    * Custom component renderers
    */
@@ -235,4 +240,16 @@ export type TreegeRendererProps = {
    * Validation mode
    */
   validationMode?: "onChange" | "onSubmit";
-};
+}
+
+export interface TreegeRendererNativeProps extends Omit<TreegeRendererProps, "className"> {
+  /**
+   * Style for the ScrollView container
+   */
+  style?: ViewStyle;
+  /**
+   * Style for the ScrollView content container
+   * Use this to center content vertically with flexGrow: 1 and justifyContent: 'center'
+   */
+  contentContainerStyle?: ViewStyle;
+}

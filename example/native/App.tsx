@@ -132,7 +132,11 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <TreegeRenderer flows={[exampleFlow]} onSubmit={handleSubmit} initialValues={{}} />
+      <TreegeRenderer
+        flows={[exampleFlow]}
+        onSubmit={handleSubmit}
+        contentContainerStyle={styles.scrollContent}
+      />
       <StatusBar style="auto" />
     </View>
   );
@@ -142,5 +146,10 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#F9FAFB",
     flex: 1,
+  },
+  scrollContent: {
+    flex: 1,
+    justifyContent: "center",
+    paddingHorizontal: 16,
   },
 });

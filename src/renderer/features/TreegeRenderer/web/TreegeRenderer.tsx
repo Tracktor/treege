@@ -16,12 +16,14 @@ import { resolveNodeKey } from "@/renderer/utils/node";
 import { sanitize } from "@/renderer/utils/sanitize";
 import { NODE_TYPE } from "@/shared/constants/node";
 import { ThemeProvider } from "@/shared/context/ThemeContext";
+import { cn } from "@/shared/lib/utils";
 import { TreegeNodeData, UINodeData } from "@/shared/types/node";
 import { isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
 import { getTranslatedText } from "@/shared/utils/translations";
 
 const TreegeRenderer = ({
   components,
+  className,
   flows,
   googleApiKey,
   language,
@@ -282,7 +284,7 @@ const TreegeRenderer = ({
   }, [formValues, inputNodes, setMultipleFieldValues, prevFormValuesRef]);
 
   return (
-    <div className="treege">
+    <div className={cn("treege", className)}>
       <ThemeProvider theme={config.theme} storageKey="treege-renderer-theme">
         <TreegeRendererProvider
           value={{
