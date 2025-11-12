@@ -1,12 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
 
 const DefaultCheckboxInput = ({ node, value, setValue, error, label, helperText }: InputRenderProps<"checkbox">) => {
+  const t = useTranslate();
   const options = node.data.options || [];
   const hasOptions = options.length > 0;
-
-  // For checkbox groups (with options): always allow multiple selection (array of strings)
-  // For single checkbox (no options): value is boolean
   const selectedValues = Array.isArray(value) ? value : [];
   const isSingleChecked = typeof value === "boolean" ? value : false;
 
@@ -46,9 +45,7 @@ const DefaultCheckboxInput = ({ node, value, setValue, error, label, helperText 
             <View style={[styles.checkbox, isChecked(option.value) && styles.checkboxChecked]}>
               {isChecked(option.value) && <Text style={styles.checkmark}>✓</Text>}
             </View>
-            <Text style={[styles.optionLabel, option.disabled && styles.optionLabelDisabled]}>
-              {typeof option.label === "string" ? option.label : option.value}
-            </Text>
+            <Text style={[styles.optionLabel, option.disabled && styles.optionLabelDisabled]}>{t(option.label) || option.value}</Text>
           </TouchableOpacity>
         ))
       ) : (
