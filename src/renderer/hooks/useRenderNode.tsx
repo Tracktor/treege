@@ -1,5 +1,5 @@
 import { Node } from "@xyflow/react";
-import { ReactNode, useCallback } from "react";
+import { ReactNode, useCallback, useMemo } from "react";
 import { InputRenderProps, InputValue } from "@/renderer/types/renderer";
 import { resolveNodeKey } from "@/renderer/utils/node";
 import { sanitize } from "@/renderer/utils/sanitize";
@@ -11,38 +11,64 @@ import { getTranslatedText } from "@/shared/utils/translations";
 type UseRenderNodeParams = {
   config: {
     components: {
-      inputs?: Record<string, any>;
-      ui?: Record<string, any>;
+      form?: any;
       group?: (props: { node: Node<TreegeNodeData>; children: ReactNode }) => ReactNode;
+      inputs?: Record<string, any>;
+      submitButton?: any;
+      submitButtonWrapper?: any;
+      ui?: Record<string, any>;
     };
     language: string;
   };
-  visibleNodes: Node<TreegeNodeData>[];
-  formValues: Record<string, any>;
-  formErrors: Record<string, string>;
-  setFieldValue: (fieldId: string, value: unknown) => void;
-  missingRequiredFields: string[];
+  DefaultFormWrapper: any;
+  DefaultGroup: (props: { node: Node<TreegeNodeData>; children: ReactNode }) => ReactNode;
+  DefaultSubmitButton: any;
+  DefaultSubmitButtonWrapper?: any;
   defaultInputRenderers: Record<string, any>;
   defaultUI: Record<string, any>;
-  DefaultGroup: (props: { node: Node<TreegeNodeData>; children: ReactNode }) => ReactNode;
+  formErrors: Record<string, string>;
+  formValues: Record<string, any>;
+  missingRequiredFields: string[];
+  setFieldValue: (fieldId: string, value: unknown) => void;
+  visibleNodes: Node<TreegeNodeData>[];
 };
 
 /**
- * Hook that returns the renderNode function
+ * Hook that returns rendering utilities for TreegeRenderer
  * Shared between web and native TreegeRenderer
+ *
+ * Returns:
+ * - renderNode: Function to render individual nodes
+ * - FormWrapper: Form wrapper component with fallback
+ * - SubmitButton: Submit button component with fallback
+ * - SubmitButtonWrapper: Submit button wrapper component with fallback (web only, undefined for native)
  */
 export const useRenderNode = ({
+  DefaultFormWrapper,
+  DefaultGroup,
+  DefaultSubmitButton,
+  DefaultSubmitButtonWrapper,
   config,
-  visibleNodes,
-  formValues,
-  formErrors,
-  setFieldValue,
-  missingRequiredFields,
   defaultInputRenderers,
   defaultUI,
-  DefaultGroup,
+  formErrors,
+  formValues,
+  missingRequiredFields,
+  setFieldValue,
+  visibleNodes,
 }: UseRenderNodeParams) => {
-  return useCallback(
+  // Components with fallbacks
+  const FormWrapper = useMemo(() => config.components.form || DefaultFormWrapper, [config.components.form, DefaultFormWrapper]);
+  const SubmitButton = useMemo(
+    () => config.components.submitButton || DefaultSubmitButton,
+    [config.components.submitButton, DefaultSubmitButton],
+  );
+  const SubmitButtonWrapper = useMemo(
+    () => config.components.submitButtonWrapper || DefaultSubmitButtonWrapper,
+    [config.components.submitButtonWrapper, DefaultSubmitButtonWrapper],
+  );
+
+  const renderNode = useCallback(
     function renderNode(node: Node<TreegeNodeData>): ReactNode {
       const { type } = node;
 
@@ -130,4 +156,11 @@ export const useRenderNode = ({
     },
     [config, visibleNodes, formValues, formErrors, setFieldValue, missingRequiredFields, defaultInputRenderers, defaultUI, DefaultGroup],
   );
+
+  return {
+    FormWrapper,
+    renderNode,
+    SubmitButton,
+    SubmitButtonWrapper,
+  };
 };

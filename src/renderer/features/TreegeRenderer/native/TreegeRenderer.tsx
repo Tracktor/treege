@@ -22,7 +22,6 @@ const TreegeRenderer = ({
   validationMode,
   initialValues = {},
 }: TreegeRendererNativeProps) => {
-  // Use shared logic hook
   const {
     canSubmit,
     clearSubmitMessage,
@@ -51,9 +50,11 @@ const TreegeRenderer = ({
     validationMode,
   });
 
-  const renderNode = useRenderNode({
+  const { FormWrapper, SubmitButton, renderNode } = useRenderNode({
     config,
+    DefaultFormWrapper,
     DefaultGroup,
+    DefaultSubmitButton,
     defaultInputRenderers,
     defaultUI,
     formErrors,
@@ -62,10 +63,6 @@ const TreegeRenderer = ({
     setFieldValue,
     visibleNodes,
   });
-
-  // Components with fallbacks
-  const FormWrapper = config.components.form || DefaultFormWrapper;
-  const SubmitButton = config.components.submitButton || DefaultSubmitButton;
 
   return (
     <ScrollView style={[styles.container, style]} contentContainerStyle={contentContainerStyle}>

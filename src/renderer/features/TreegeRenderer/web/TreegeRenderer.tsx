@@ -55,9 +55,12 @@ const TreegeRenderer = ({
     validationMode,
   });
 
-  const renderNode = useRenderNode({
+  const { FormWrapper, SubmitButton, SubmitButtonWrapper, renderNode } = useRenderNode({
     config,
+    DefaultFormWrapper,
     DefaultGroup,
+    DefaultSubmitButton,
+    DefaultSubmitButtonWrapper,
     defaultInputRenderers,
     defaultUI,
     formErrors,
@@ -66,11 +69,6 @@ const TreegeRenderer = ({
     setFieldValue,
     visibleNodes,
   });
-
-  // Components with fallbacks
-  const FormWrapper = config.components.form || DefaultFormWrapper;
-  const SubmitButton = config.components.submitButton || DefaultSubmitButton;
-  const SubmitButtonWrapper = config.components.submitButtonWrapper || DefaultSubmitButtonWrapper;
 
   /**
    * Web-specific form submission handler with FormEvent and focus logic
