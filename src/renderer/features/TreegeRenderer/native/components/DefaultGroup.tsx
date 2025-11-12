@@ -1,12 +1,14 @@
 import { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { useTranslate } from "@/renderer/hooks/useTranslate";
+import type { NodeRenderProps } from "@/renderer/types/renderer";
 
-export interface DefaultGroupProps {
-  children: ReactNode;
-  label?: string;
-}
+type DefaultGroupProps = NodeRenderProps & { children: ReactNode };
 
-const DefaultGroup = ({ children, label }: DefaultGroupProps) => {
+const DefaultGroup = ({ children, node }: DefaultGroupProps) => {
+  const t = useTranslate();
+  const label = t(node.data.label);
+
   return (
     <View style={styles.container}>
       {label && <Text style={styles.label}>{label}</Text>}
