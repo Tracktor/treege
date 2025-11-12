@@ -3,27 +3,28 @@ import { InputRenderProps } from "@/renderer/types/renderer";
 
 const DefaultCheckboxInput = ({ node, value, setValue, error, label, helperText }: InputRenderProps<"checkbox">) => {
   const options = node.data.options || [];
-  const isMultiple = node.data.multiple;
+  const hasOptions = options.length > 0;
 
-  // For single checkbox, value is boolean
-  // For multiple checkboxes, value is string[]
+  // For checkbox groups (with options): always allow multiple selection (array of strings)
+  // For single checkbox (no options): value is boolean
   const selectedValues = Array.isArray(value) ? value : [];
   const isSingleChecked = typeof value === "boolean" ? value : false;
 
   const handleToggle = (optionValue: string) => {
-    if (isMultiple) {
+    if (hasOptions) {
+      // Checkbox group: always allow multiple selection
       const newValues = selectedValues.includes(optionValue)
         ? selectedValues.filter((v) => v !== optionValue)
         : [...selectedValues, optionValue];
       setValue(newValues);
     } else {
-      // Single checkbox - toggle boolean
+      // Single checkbox: simple boolean toggle
       setValue(!isSingleChecked);
     }
   };
 
   const isChecked = (optionValue: string) => {
-    return isMultiple ? selectedValues.includes(optionValue) : isSingleChecked;
+    return hasOptions ? selectedValues.includes(optionValue) : isSingleChecked;
   };
 
   return (
