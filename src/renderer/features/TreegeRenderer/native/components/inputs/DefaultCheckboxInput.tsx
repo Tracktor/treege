@@ -41,6 +41,10 @@ const DefaultCheckboxInput = ({ node, value, setValue, error, label, helperText 
             onPress={() => handleToggle(option.value)}
             disabled={option.disabled}
             activeOpacity={0.7}
+            accessible={true}
+            accessibilityRole="checkbox"
+            accessibilityState={{ checked: isChecked(option.value), disabled: option.disabled }}
+            accessibilityLabel={t(option.label) || option.value}
           >
             <View style={[styles.checkbox, isChecked(option.value) && styles.checkboxChecked]}>
               {isChecked(option.value) && <Text style={styles.checkmark}>✓</Text>}
@@ -50,7 +54,15 @@ const DefaultCheckboxInput = ({ node, value, setValue, error, label, helperText 
         ))
       ) : (
         // Single checkbox without options
-        <TouchableOpacity style={styles.option} onPress={() => setValue(!isSingleChecked)} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={styles.option}
+          onPress={() => handleToggle("")}
+          activeOpacity={0.7}
+          accessible={true}
+          accessibilityRole="checkbox"
+          accessibilityState={{ checked: isSingleChecked }}
+          accessibilityLabel={label || node.data.name}
+        >
           <View style={[styles.checkbox, isSingleChecked && styles.checkboxChecked]}>
             {isSingleChecked && <Text style={styles.checkmark}>✓</Text>}
           </View>
