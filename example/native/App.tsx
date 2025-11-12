@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import { TreegeRenderer } from "treege/renderer-native";
 import flows from "~/example/json/treege.json";
 import { Flow } from "@/shared/types/node";

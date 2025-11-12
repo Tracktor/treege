@@ -40,7 +40,7 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
   // Handle 'treege/renderer-native' import
   if (moduleName === 'treege/renderer-native') {
     return {
-      filePath: path.resolve(workspaceRoot, 'src/renderer-native/index.ts'),
+      filePath: path.resolve(workspaceRoot, 'src/renderer/index.native.ts'),
       type: 'sourceFile',
     };
   }

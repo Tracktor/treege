@@ -4,7 +4,7 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "treege/renderer-native": ["../../src/renderer-native/index.ts"],
+      "treege/renderer-native": ["../../src/renderer/index.native.ts"],
       "@/*": ["../../src/*"],
       "~/*": ["../../*"]
     }

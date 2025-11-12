@@ -10,7 +10,7 @@ module.exports = function (api) {
           alias: {
             '@': '../../src',
             '~': '../..',
-            'treege/renderer-native': '../../src/renderer-native/index.ts',
+            'treege/renderer-native': '../../src/renderer/index.native.ts',
           },
           extensions: ['.ios.js', '.android.js', '.js', '.jsx', '.json', '.tsx', '.ts'],
         },
