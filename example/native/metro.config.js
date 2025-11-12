@@ -11,17 +11,25 @@ const workspaceRoot = path.resolve(projectRoot, '../..');
 // Watch all files in the monorepo
 config.watchFolders = [workspaceRoot];
 
-// Let Metro know where to find source code (only use root node_modules)
+// Block React from workspace root to force using local version
+config.resolver.blockList = [
+  new RegExp(`${workspaceRoot.replace(/[/\\]/g, '[/\\\\]')}/node_modules/react/`),
+  new RegExp(`${workspaceRoot.replace(/[/\\]/g, '[/\\\\]')}/node_modules/react-native/`),
+];
+
+// Let Metro know where to find source code
+// Put local node_modules FIRST to ensure React is resolved from here
 config.resolver.nodeModulesPaths = [
+  path.resolve(projectRoot, 'node_modules'),
   path.resolve(workspaceRoot, 'node_modules'),
 ];
 
-// Add custom resolver to handle 'treege/renderer-native' alias and force single React instance
+// Add custom resolver to handle 'treege/renderer-native' alias
 config.resolver.extraNodeModules = {
   '@': path.resolve(workspaceRoot, 'src'),
   '~': workspaceRoot,
-  // Force React to be resolved from root to avoid multiple instances
-  react: path.resolve(workspaceRoot, 'node_modules/react'),
+  // Force React to be resolved from local node_modules to ensure single instance
+  react: path.resolve(projectRoot, 'node_modules/react'),
 };
 
 // Add .native.ts support to source extensions
