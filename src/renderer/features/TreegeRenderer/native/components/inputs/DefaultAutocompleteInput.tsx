@@ -48,7 +48,9 @@ const DefaultAutocompleteInput = ({ node, value, setValue, error, label, placeho
       </Text>
 
       <TouchableOpacity style={[styles.trigger, error && styles.triggerError]} onPress={() => setIsOpen(true)} activeOpacity={0.7}>
-        <Text style={[styles.triggerText, !value && styles.triggerPlaceholder]}>{getDisplayText()}</Text>
+        <Text style={[styles.triggerText, !value && styles.triggerPlaceholder]} numberOfLines={1}>
+          {getDisplayText()}
+        </Text>
         <Text style={styles.arrow}>▼</Text>
       </TouchableOpacity>
 

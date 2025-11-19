@@ -327,12 +327,12 @@ const DefaultHttpInput = ({
             {isLoading ? (
               <View style={styles.loadingTrigger}>
                 <ActivityIndicator size="small" color="#3B82F6" />
-                <Text style={styles.triggerPlaceholder}>
+                <Text style={styles.triggerPlaceholder} numberOfLines={1}>
                   {selectedOption?.label || placeholder || t("renderer.defaultHttpInput.search")}
                 </Text>
               </View>
             ) : (
-              <Text style={[styles.triggerText, !selectedOption && styles.triggerPlaceholder]}>
+              <Text style={[styles.triggerText, !selectedOption && styles.triggerPlaceholder]} numberOfLines={1}>
                 {selectedOption?.label || placeholder || t("renderer.defaultHttpInput.search")}
               </Text>
             )}
@@ -450,7 +450,7 @@ const DefaultHttpInput = ({
           activeOpacity={0.7}
         >
           {isLoading && <ActivityIndicator size="small" color="#3B82F6" style={styles.triggerLoader} />}
-          <Text style={[styles.triggerText, !selectedOption && styles.triggerPlaceholder]}>
+          <Text style={[styles.triggerText, !selectedOption && styles.triggerPlaceholder]} numberOfLines={1}>
             {selectedOption?.label || placeholder || t("renderer.defaultHttpInput.selectOption")}
           </Text>
           <Text style={styles.arrow}>▼</Text>
