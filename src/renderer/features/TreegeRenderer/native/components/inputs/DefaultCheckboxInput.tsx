@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
   },
   optionLabel: {
     color: "#374151",
+    flex: 1,
     fontSize: 14,
   },
   optionLabelDisabled: {
