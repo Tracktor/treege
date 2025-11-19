@@ -2,6 +2,9 @@ import { Text } from "react-native";
 import DefaultAddressInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultAddressInput";
 import DefaultAutocompleteInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultAutocompleteInput";
 import DefaultCheckboxInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultCheckboxInput";
+import DefaultDateInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultDateInput";
+import DefaultDateRangeInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultDateRangeInput";
+import DefaultFileInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultFileInput";
 import DefaultHiddenInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultHiddenInput";
 import DefaultHttpInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultHttpInput";
 import DefaultNumberInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultNumberInput";
@@ -11,23 +14,19 @@ import DefaultSelectInput from "@/renderer/features/TreegeRenderer/native/compon
 import DefaultSwitchInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultSwitchInput";
 import DefaultTextareaInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultTextareaInput";
 import DefaultTextInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultTextInput";
+import DefaultTimeInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultTimeInput";
+import DefaultTimeRangeInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultTimeRangeInput";
 import { InputRenderers, InputRenderProps } from "@/renderer/types/renderer";
 
-// TODO: Implement these React Native components (require external dependencies)
-const PlaceholderInput = ({ node }: InputRenderProps<any>) => <Text>TODO: Implement {node.data.type} input for React Native</Text>;
+const PlaceholderInput = ({ node }: InputRenderProps<"submit">) => <Text>TODO: Implement {node.data.type} input for React Native</Text>;
 
-// Vanilla React Native components (implemented)
 export { DefaultTextInput, DefaultNumberInput, DefaultPasswordInput, DefaultTextareaInput };
 export { DefaultCheckboxInput, DefaultSwitchInput, DefaultRadioInput, DefaultSelectInput };
 export { DefaultHiddenInput };
 export { DefaultAddressInput, DefaultAutocompleteInput, DefaultHttpInput };
+export { DefaultDateInput, DefaultDateRangeInput, DefaultTimeInput, DefaultTimeRangeInput };
+export { DefaultFileInput };
 
-// Placeholder exports for inputs requiring external libraries
-export const DefaultDateInput = PlaceholderInput;
-export const DefaultDateRangeInput = PlaceholderInput;
-export const DefaultFileInput = PlaceholderInput;
-export const DefaultTimeInput = PlaceholderInput;
-export const DefaultTimeRangeInput = PlaceholderInput;
 export const DefaultSubmitInput = PlaceholderInput;
 
 // Default input renderers mapping with proper typing
