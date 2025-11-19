@@ -256,7 +256,9 @@
   "renderer": {
     "defaultAddressInput": {
       "enterAddress": "أدخل عنواناً...",
-      "noAddressesFound": "لم يتم العثور على عناوين."
+      "noAddressesFound": "لم يتم العثور على عناوين.",
+      "searching": "جاري البحث...",
+      "typeMinChars": "اكتب 3 أحرف على الأقل للبحث"
     },
     "defaultAutocompleteInput": {
       "noResults": "لم يتم العثور على نتائج.",

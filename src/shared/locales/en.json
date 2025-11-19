@@ -256,7 +256,9 @@
   "renderer": {
     "defaultAddressInput": {
       "enterAddress": "Enter an address...",
-      "noAddressesFound": "No addresses found."
+      "noAddressesFound": "No addresses found.",
+      "searching": "Searching...",
+      "typeMinChars": "Type at least 3 characters to search"
     },
     "defaultAutocompleteInput": {
       "noResults": "No results found.",

@@ -180,7 +180,7 @@ const DefaultAddressInput = ({
             {loading ? (
               <View style={styles.loadingContainer}>
                 <ActivityIndicator size="small" color="#3B82F6" />
-                <Text style={styles.loadingText}>Searching...</Text>
+                <Text style={styles.loadingText}>{t("renderer.defaultAddressInput.searching")}</Text>
               </View>
             ) : (
               <FlatList
@@ -196,7 +196,7 @@ const DefaultAddressInput = ({
                     </View>
                   ) : (
                     <View style={styles.emptyContainer}>
-                      <Text style={styles.emptyText}>Type at least 3 characters to search</Text>
+                      <Text style={styles.emptyText}>{t("renderer.defaultAddressInput.typeMinChars")}</Text>
                     </View>
                   )
                 }
