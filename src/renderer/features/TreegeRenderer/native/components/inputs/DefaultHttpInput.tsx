@@ -90,7 +90,6 @@ const DefaultHttpInput = ({
   const { httpConfig } = node.data;
   const hasFetchedOnMount = useRef(false);
   const lastFetchedTemplateValues = useRef<string>("");
-
   // Refs to store latest values without triggering re-renders
   const httpConfigRef = useRef(httpConfig);
   const formValuesRef = useRef(formValues);
@@ -342,7 +341,7 @@ const DefaultHttpInput = ({
 
           <Modal visible={modalOpen} transparent animationType="fade" onRequestClose={() => setModalOpen(false)}>
             <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={() => setModalOpen(false)}>
-              <View style={styles.modalContent} onStartShouldSetResponder={() => true}>
+              <TouchableOpacity style={styles.modalContent} activeOpacity={1} onPress={() => {}}>
                 <View style={styles.modalHeader}>
                   <Text style={styles.modalTitle}>{label || node.data.name}</Text>
                   <TouchableOpacity onPress={() => setModalOpen(false)}>
@@ -407,7 +406,7 @@ const DefaultHttpInput = ({
                     }}
                   />
                 )}
-              </View>
+              </TouchableOpacity>
             </TouchableOpacity>
           </Modal>
 
@@ -461,7 +460,7 @@ const DefaultHttpInput = ({
 
         <Modal visible={modalOpen} transparent animationType="fade" onRequestClose={() => setModalOpen(false)}>
           <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={() => setModalOpen(false)}>
-            <View style={styles.modalContent} onStartShouldSetResponder={() => true}>
+            <TouchableOpacity style={styles.modalContent} activeOpacity={1} onPress={() => {}}>
               <View style={styles.modalHeader}>
                 <Text style={styles.modalTitle}>{label || node.data.name}</Text>
                 <TouchableOpacity onPress={() => setModalOpen(false)}>
@@ -492,7 +491,7 @@ const DefaultHttpInput = ({
                   );
                 }}
               />
-            </View>
+            </TouchableOpacity>
           </TouchableOpacity>
         </Modal>
 

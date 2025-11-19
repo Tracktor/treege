@@ -8,11 +8,8 @@ const DefaultAutocompleteInput = ({ node, value, setValue, error, label, placeho
   const [searchQuery, setSearchQuery] = useState("");
   const t = useTranslate();
   const options = node.data.options || [];
-
-  // Find selected option to display label
   const selectedOption = options.find((opt) => opt.value === value);
 
-  // Filter options based on search query
   const filteredOptions = useMemo(() => {
     if (!searchQuery.trim()) {
       return options;
@@ -26,15 +23,14 @@ const DefaultAutocompleteInput = ({ node, value, setValue, error, label, placeho
   }, [options, searchQuery, t]);
 
   const handleSelect = (optionValue: string) => {
-    // Toggle behavior: selecting same value deselects it
     setValue(optionValue === value ? "" : optionValue);
     setIsOpen(false);
-    setSearchQuery(""); // Reset search on close
+    setSearchQuery("");
   };
 
   const handleClose = () => {
     setIsOpen(false);
-    setSearchQuery(""); // Reset search on close
+    setSearchQuery("");
   };
 
   const getDisplayText = () => {
@@ -58,7 +54,7 @@ const DefaultAutocompleteInput = ({ node, value, setValue, error, label, placeho
 
       <Modal visible={isOpen} transparent animationType="fade" onRequestClose={handleClose}>
         <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={handleClose}>
-          <View style={styles.modalContent} onStartShouldSetResponder={() => true}>
+          <TouchableOpacity style={styles.modalContent} activeOpacity={1} onPress={() => {}}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>{label || node.data.name}</Text>
               <TouchableOpacity onPress={handleClose}>
@@ -105,7 +101,7 @@ const DefaultAutocompleteInput = ({ node, value, setValue, error, label, placeho
                 );
               }}
             />
-          </View>
+          </TouchableOpacity>
         </TouchableOpacity>
       </Modal>
 

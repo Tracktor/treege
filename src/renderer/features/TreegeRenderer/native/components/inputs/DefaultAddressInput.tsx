@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, FlatList, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useTreegeRendererContext } from "@/renderer/context/TreegeRendererContext";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
@@ -101,13 +101,20 @@ const DefaultAddressInput = ({
   const handleSelectSuggestion = useCallback(
     (suggestion: AddressSuggestion) => {
       setValue(suggestion.value);
+      setSearchQuery(""); // Reset search
       setShowSuggestions(false);
-      setSuggestions([]); // Clear suggestions to prevent reopening
+      setSuggestions([]); // Clear suggestions
     },
     [setValue],
   );
 
-  // Fetch suggestions with debounce
+  const handleClose = () => {
+    setShowSuggestions(false);
+  };
+
+  /**
+   * Fetch suggestions with debounce
+   */
   useEffect(() => {
     if (!searchQuery || searchQuery.trim().length < 3) {
       setSuggestions([]);
@@ -134,14 +141,6 @@ const DefaultAddressInput = ({
     };
   }, [searchQuery, language, googleApiKey]);
 
-  const handleInputChange = useCallback(
-    (newValue: string) => {
-      setValue(newValue);
-      setSearchQuery(newValue);
-    },
-    [setValue],
-  );
-
   return (
     <View style={styles.container}>
       <Text style={styles.label}>
@@ -149,56 +148,73 @@ const DefaultAddressInput = ({
         {node.data.required && <Text style={styles.required}>*</Text>}
       </Text>
 
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={[styles.input, error && styles.inputError]}
-          value={value || ""}
-          onChangeText={handleInputChange}
-          onFocus={() => {
-            if (suggestions.length > 0) {
-              setShowSuggestions(true);
-            }
-          }}
-          placeholder={placeholder || t("renderer.defaultAddressInput.enterAddress")}
-          placeholderTextColor="#9CA3AF"
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-        <View style={styles.iconContainer}>
-          <Text style={styles.icon}>📍</Text>
-        </View>
-      </View>
+      <TouchableOpacity style={[styles.trigger, error && styles.triggerError]} onPress={() => setShowSuggestions(true)} activeOpacity={0.7}>
+        <Text style={[styles.triggerText, !value && styles.triggerPlaceholder]} numberOfLines={1}>
+          {value || placeholder || t("renderer.defaultAddressInput.enterAddress")}
+        </Text>
+        <Text style={styles.icon}>📍</Text>
+      </TouchableOpacity>
 
-      {showSuggestions && (
-        <View style={styles.suggestionsContainer}>
-          {loading ? (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="small" color="#3B82F6" />
-              <Text style={styles.loadingText}>Searching...</Text>
+      <Modal visible={showSuggestions} transparent animationType="fade" onRequestClose={handleClose}>
+        <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={handleClose}>
+          <TouchableOpacity style={styles.modalContent} activeOpacity={1} onPress={() => {}}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>{label || node.data.name}</Text>
+              <TouchableOpacity onPress={handleClose}>
+                <Text style={styles.closeButton}>✕</Text>
+              </TouchableOpacity>
             </View>
-          ) : suggestions.length === 0 ? (
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>{t("renderer.defaultAddressInput.noAddressesFound")}</Text>
+
+            <View style={styles.searchContainer}>
+              <TextInput
+                style={styles.searchInput}
+                placeholder={placeholder || t("renderer.defaultAddressInput.enterAddress")}
+                placeholderTextColor="#9CA3AF"
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                autoFocus
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+              {loading && <ActivityIndicator size="small" color="#3B82F6" style={styles.searchLoader} />}
             </View>
-          ) : (
-            <FlatList
-              data={suggestions}
-              keyExtractor={(_, index) => index.toString()}
-              style={styles.suggestionsList}
-              contentContainerStyle={styles.suggestionsListContent}
-              keyboardShouldPersistTaps="handled"
-              renderItem={({ item }) => (
-                <TouchableOpacity style={styles.suggestionItem} onPress={() => handleSelectSuggestion(item)} activeOpacity={0.7}>
-                  <Text style={styles.suggestionIcon}>📍</Text>
-                  <Text style={styles.suggestionText} numberOfLines={2}>
-                    {item.label}
-                  </Text>
-                </TouchableOpacity>
-              )}
-            />
-          )}
-        </View>
-      )}
+
+            {loading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="small" color="#3B82F6" />
+                <Text style={styles.loadingText}>Searching...</Text>
+              </View>
+            ) : (
+              <FlatList
+                data={suggestions}
+                keyExtractor={(_, index) => index.toString()}
+                style={styles.suggestionsList}
+                contentContainerStyle={styles.suggestionsListContent}
+                keyboardShouldPersistTaps="handled"
+                ListEmptyComponent={
+                  searchQuery.length >= 3 ? (
+                    <View style={styles.emptyContainer}>
+                      <Text style={styles.emptyText}>{t("renderer.defaultAddressInput.noAddressesFound")}</Text>
+                    </View>
+                  ) : (
+                    <View style={styles.emptyContainer}>
+                      <Text style={styles.emptyText}>Type at least 3 characters to search</Text>
+                    </View>
+                  )
+                }
+                renderItem={({ item }) => (
+                  <TouchableOpacity style={styles.suggestionItem} onPress={() => handleSelectSuggestion(item)} activeOpacity={0.7}>
+                    <Text style={styles.suggestionIcon}>📍</Text>
+                    <Text style={styles.suggestionText} numberOfLines={2}>
+                      {item.label}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              />
+            )}
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
 
       {error && <Text style={styles.error}>{error}</Text>}
       {helperText && !error && <Text style={styles.helperText}>{helperText}</Text>}
@@ -207,12 +223,17 @@ const DefaultAddressInput = ({
 };
 
 const styles = StyleSheet.create({
+  closeButton: {
+    color: "#6B7280",
+    fontSize: 24,
+    fontWeight: "300",
+  },
   container: {
     marginBottom: 16,
   },
   emptyContainer: {
     alignItems: "center",
-    paddingVertical: 16,
+    paddingVertical: 24,
   },
   emptyText: {
     color: "#9CA3AF",
@@ -231,30 +252,6 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: 16,
   },
-  iconContainer: {
-    paddingRight: 12,
-    position: "absolute",
-    right: 0,
-    top: "50%",
-    transform: [{ translateY: -12 }],
-  },
-  input: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D1D5DB",
-    borderRadius: 6,
-    borderWidth: 1,
-    color: "#374151",
-    fontSize: 14,
-    paddingHorizontal: 12,
-    paddingRight: 40,
-    paddingVertical: 10,
-  },
-  inputContainer: {
-    position: "relative",
-  },
-  inputError: {
-    borderColor: "#EF4444",
-  },
   label: {
     color: "#374151",
     fontSize: 14,
@@ -265,15 +262,63 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "center",
-    paddingVertical: 16,
+    paddingVertical: 24,
   },
   loadingText: {
     color: "#6B7280",
     fontSize: 14,
     marginLeft: 8,
   },
+  modalContent: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+    maxHeight: "80%",
+    padding: 16,
+    width: "90%",
+  },
+  modalHeader: {
+    alignItems: "center",
+    borderBottomColor: "#E5E7EB",
+    borderBottomWidth: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 12,
+    paddingBottom: 12,
+  },
+  modalOverlay: {
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    flex: 1,
+    justifyContent: "center",
+  },
+  modalTitle: {
+    color: "#111827",
+    fontSize: 18,
+    fontWeight: "600",
+  },
   required: {
     color: "#EF4444",
+  },
+  searchContainer: {
+    marginBottom: 12,
+    position: "relative",
+  },
+  searchInput: {
+    backgroundColor: "#F9FAFB",
+    borderColor: "#D1D5DB",
+    borderRadius: 6,
+    borderWidth: 1,
+    color: "#374151",
+    fontSize: 14,
+    paddingHorizontal: 12,
+    paddingRight: 40,
+    paddingVertical: 10,
+  },
+  searchLoader: {
+    position: "absolute",
+    right: 12,
+    top: "50%",
+    transform: [{ translateY: -10 }],
   },
   suggestionIcon: {
     fontSize: 16,
@@ -281,33 +326,41 @@ const styles = StyleSheet.create({
   },
   suggestionItem: {
     alignItems: "center",
-    borderBottomColor: "#F3F4F6",
-    borderBottomWidth: 1,
+    borderRadius: 6,
     flexDirection: "row",
     paddingHorizontal: 12,
     paddingVertical: 12,
   },
-  suggestionsContainer: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D1D5DB",
-    borderRadius: 6,
-    borderWidth: 1,
-    elevation: 3,
-    marginTop: 4,
-    shadowColor: "#000",
-    shadowOffset: { height: 2, width: 0 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
   suggestionsList: {
     flexGrow: 0,
     flexShrink: 1,
-    maxHeight: 250,
   },
   suggestionsListContent: {
     flexGrow: 0,
   },
   suggestionText: {
+    color: "#374151",
+    flex: 1,
+    fontSize: 14,
+  },
+  trigger: {
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderColor: "#D1D5DB",
+    borderRadius: 6,
+    borderWidth: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  },
+  triggerError: {
+    borderColor: "#EF4444",
+  },
+  triggerPlaceholder: {
+    color: "#9CA3AF",
+  },
+  triggerText: {
     color: "#374151",
     flex: 1,
     fontSize: 14,
