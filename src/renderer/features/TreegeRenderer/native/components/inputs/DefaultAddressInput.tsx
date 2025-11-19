@@ -118,7 +118,6 @@ const DefaultAddressInput = ({
   useEffect(() => {
     if (!searchQuery || searchQuery.trim().length < 3) {
       setSuggestions([]);
-      setShowSuggestions(false);
       setLoading(false);
       return undefined;
     }
@@ -131,7 +130,6 @@ const DefaultAddressInput = ({
         : await fetchNominatimSuggestions(searchQuery, language);
 
       setSuggestions(results);
-      setShowSuggestions(true);
       setLoading(false);
     }, 300);
 
