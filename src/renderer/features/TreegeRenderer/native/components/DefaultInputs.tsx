@@ -1,6 +1,9 @@
 import { Text } from "react-native";
+import DefaultAddressInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultAddressInput";
+import DefaultAutocompleteInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultAutocompleteInput";
 import DefaultCheckboxInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultCheckboxInput";
 import DefaultHiddenInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultHiddenInput";
+import DefaultHttpInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultHttpInput";
 import DefaultNumberInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultNumberInput";
 import DefaultPasswordInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultPasswordInput";
 import DefaultRadioInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultRadioInput";
@@ -17,14 +20,12 @@ const PlaceholderInput = ({ node }: InputRenderProps<any>) => <Text>TODO: Implem
 export { DefaultTextInput, DefaultNumberInput, DefaultPasswordInput, DefaultTextareaInput };
 export { DefaultCheckboxInput, DefaultSwitchInput, DefaultRadioInput, DefaultSelectInput };
 export { DefaultHiddenInput };
+export { DefaultAddressInput, DefaultAutocompleteInput, DefaultHttpInput };
 
 // Placeholder exports for inputs requiring external libraries
-export const DefaultAddressInput = PlaceholderInput;
-export const DefaultAutocompleteInput = PlaceholderInput;
 export const DefaultDateInput = PlaceholderInput;
 export const DefaultDateRangeInput = PlaceholderInput;
 export const DefaultFileInput = PlaceholderInput;
-export const DefaultHttpInput = PlaceholderInput;
 export const DefaultTimeInput = PlaceholderInput;
 export const DefaultTimeRangeInput = PlaceholderInput;
 export const DefaultSubmitInput = PlaceholderInput;

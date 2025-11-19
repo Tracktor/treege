@@ -1,42 +1,47 @@
-import { useState } from "react";
-import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useMemo, useState } from "react";
+import { FlatList, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
 
-const DefaultSelectInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"select">) => {
+const DefaultAutocompleteInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"autocomplete">) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const t = useTranslate();
   const options = node.data.options || [];
-  const isMultiple = node.data.multiple;
 
-  // For single select, value is string
-  // For multiple select, value is string[]
-  const selectedValues = Array.isArray(value) ? value : value ? [value] : [];
+  // Find selected option to display label
+  const selectedOption = options.find((opt) => opt.value === value);
+
+  // Filter options based on search query
+  const filteredOptions = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return options;
+    }
+
+    const query = searchQuery.toLowerCase();
+    return options.filter((option) => {
+      const optionLabel = t(option.label);
+      return optionLabel.toLowerCase().includes(query) || option.value.toLowerCase().includes(query);
+    });
+  }, [options, searchQuery, t]);
 
   const handleSelect = (optionValue: string) => {
-    if (isMultiple) {
-      const newValues = selectedValues.includes(optionValue)
-        ? selectedValues.filter((v) => v !== optionValue)
-        : [...selectedValues, optionValue];
-      setValue(newValues);
-    } else {
-      setValue(optionValue);
-      setIsOpen(false);
-    }
+    // Toggle behavior: selecting same value deselects it
+    setValue(optionValue === value ? "" : optionValue);
+    setIsOpen(false);
+    setSearchQuery(""); // Reset search on close
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+    setSearchQuery(""); // Reset search on close
   };
 
   const getDisplayText = () => {
-    if (selectedValues.length === 0) {
-      return placeholder || "Select...";
+    if (!(value && selectedOption)) {
+      return placeholder || t("renderer.defaultAutocompleteInput.selectOption");
     }
-
-    if (isMultiple) {
-      const selectedLabels = options.filter((opt) => selectedValues.includes(opt.value)).map((opt) => t(opt.label) || opt.value);
-      return selectedLabels.join(", ");
-    }
-
-    const selectedOption = options.find((opt) => opt.value === selectedValues[0]);
-    return selectedOption ? t(selectedOption.label) || selectedOption.value : placeholder || "Select...";
+    return t(selectedOption.label);
   };
 
   return (
@@ -47,44 +52,59 @@ const DefaultSelectInput = ({ node, value, setValue, error, label, placeholder, 
       </Text>
 
       <TouchableOpacity style={[styles.trigger, error && styles.triggerError]} onPress={() => setIsOpen(true)} activeOpacity={0.7}>
-        <Text style={[styles.triggerText, selectedValues.length === 0 && styles.triggerPlaceholder]}>{getDisplayText()}</Text>
+        <Text style={[styles.triggerText, !value && styles.triggerPlaceholder]}>{getDisplayText()}</Text>
         <Text style={styles.arrow}>▼</Text>
       </TouchableOpacity>
 
-      <Modal visible={isOpen} transparent animationType="fade" onRequestClose={() => setIsOpen(false)}>
-        <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={() => setIsOpen(false)}>
+      <Modal visible={isOpen} transparent animationType="fade" onRequestClose={handleClose}>
+        <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={handleClose}>
           <View style={styles.modalContent} onStartShouldSetResponder={() => true}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>{label || node.data.name}</Text>
-              <TouchableOpacity onPress={() => setIsOpen(false)}>
+              <TouchableOpacity onPress={handleClose}>
                 <Text style={styles.closeButton}>✕</Text>
               </TouchableOpacity>
             </View>
 
-            <ScrollView style={styles.optionsList}>
-              {options.map((option) => {
-                const isSelected = selectedValues.includes(option.value);
+            <View style={styles.searchContainer}>
+              <TextInput
+                style={styles.searchInput}
+                placeholder={placeholder || t("renderer.defaultAutocompleteInput.search")}
+                placeholderTextColor="#9CA3AF"
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                autoFocus
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+            </View>
+
+            <FlatList
+              data={filteredOptions}
+              keyExtractor={(item) => item.value}
+              style={styles.optionsList}
+              contentContainerStyle={styles.optionsListContent}
+              ListEmptyComponent={
+                <View style={styles.emptyContainer}>
+                  <Text style={styles.emptyText}>{t("renderer.defaultAutocompleteInput.noResults")}</Text>
+                </View>
+              }
+              renderItem={({ item }) => {
+                const isSelected = item.value === value;
 
                 return (
                   <TouchableOpacity
-                    key={option.value}
                     style={[styles.option, isSelected && styles.optionSelected]}
-                    onPress={() => handleSelect(option.value)}
-                    disabled={option.disabled}
+                    onPress={() => handleSelect(item.value)}
+                    disabled={item.disabled}
                     activeOpacity={0.7}
                   >
-                    <Text style={[styles.optionText, option.disabled && styles.optionTextDisabled]}>{t(option.label) || option.value}</Text>
+                    <Text style={[styles.optionText, item.disabled && styles.optionTextDisabled]}>{t(item.label)}</Text>
                     {isSelected && <Text style={styles.checkmark}>✓</Text>}
                   </TouchableOpacity>
                 );
-              })}
-            </ScrollView>
-
-            {isMultiple && (
-              <TouchableOpacity style={styles.doneButton} onPress={() => setIsOpen(false)}>
-                <Text style={styles.doneButtonText}>Done</Text>
-              </TouchableOpacity>
-            )}
+              }}
+            />
           </View>
         </TouchableOpacity>
       </Modal>
@@ -113,17 +133,13 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 16,
   },
-  doneButton: {
+  emptyContainer: {
     alignItems: "center",
-    backgroundColor: "#3B82F6",
-    borderRadius: 6,
-    marginTop: 12,
-    paddingVertical: 12,
+    paddingVertical: 24,
   },
-  doneButtonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "600",
+  emptyText: {
+    color: "#9CA3AF",
+    fontSize: 14,
   },
   error: {
     color: "#EF4444",
@@ -180,10 +196,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#EFF6FF",
   },
   optionsList: {
-    maxHeight: 300,
+    flexGrow: 0,
+    flexShrink: 1,
+  },
+  optionsListContent: {
+    flexGrow: 0,
   },
   optionText: {
     color: "#374151",
+    flex: 1,
     fontSize: 14,
   },
   optionTextDisabled: {
@@ -191,6 +212,19 @@ const styles = StyleSheet.create({
   },
   required: {
     color: "#EF4444",
+  },
+  searchContainer: {
+    marginBottom: 12,
+  },
+  searchInput: {
+    backgroundColor: "#F9FAFB",
+    borderColor: "#D1D5DB",
+    borderRadius: 6,
+    borderWidth: 1,
+    color: "#374151",
+    fontSize: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
   },
   trigger: {
     alignItems: "center",
@@ -216,4 +250,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DefaultSelectInput;
+export default DefaultAutocompleteInput;

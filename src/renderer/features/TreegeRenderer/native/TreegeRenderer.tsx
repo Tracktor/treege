@@ -86,7 +86,7 @@ const TreegeRenderer = ({
   });
 
   return (
-    <ScrollView style={[styles.container, style]} contentContainerStyle={contentContainerStyle}>
+    <ScrollView style={[styles.container, style]} contentContainerStyle={contentContainerStyle} nestedScrollEnabled>
       <TreegeRendererProvider
         value={{
           flows: mergedFlow,

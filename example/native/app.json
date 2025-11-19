@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "example-native",
-    "slug": "example-native",
+    "name": "Treege Example",
+    "slug": "treege-example",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

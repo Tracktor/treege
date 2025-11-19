@@ -1,7 +1,9 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
 
 const DefaultRadioInput = ({ node, value, setValue, error, label, helperText }: InputRenderProps<"radio">) => {
+  const t = useTranslate();
   const options = node.data.options || [];
   const selectedValue = value || "";
 
@@ -28,9 +30,7 @@ const DefaultRadioInput = ({ node, value, setValue, error, label, helperText }: 
             activeOpacity={0.7}
           >
             <View style={[styles.radio, isSelected && styles.radioSelected]}>{isSelected && <View style={styles.radioInner} />}</View>
-            <Text style={[styles.optionLabel, option.disabled && styles.optionLabelDisabled]}>
-              {typeof option.label === "string" ? option.label : option.value}
-            </Text>
+            <Text style={[styles.optionLabel, option.disabled && styles.optionLabelDisabled]}>{t(option.label) || option.value}</Text>
           </TouchableOpacity>
         );
       })}
