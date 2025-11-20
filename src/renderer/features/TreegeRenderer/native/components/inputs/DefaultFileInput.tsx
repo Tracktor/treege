@@ -45,10 +45,10 @@ const DefaultFileInput = ({ node, value, setValue, error, label, helperText }: I
       }
     } catch (err) {
       if ((err as { code?: string }).code !== "DOCUMENT_PICKER_CANCELED") {
-        Alert.alert("Error", "Failed to pick file");
+        Alert.alert("Error", t("renderer.defaultInputs.filePickerError"));
       }
     }
-  }, [pick, files, isMultiple, setValue]);
+  }, [pick, files, isMultiple, setValue, t]);
 
   const handleRemoveFile = useCallback(
     (index: number) => {
@@ -84,8 +84,23 @@ const DefaultFileInput = ({ node, value, setValue, error, label, helperText }: I
     void loadDocumentPicker();
   }, []);
 
-  if (isLoading || !pick) {
+  if (isLoading) {
     return null;
+  }
+
+  if (!pick) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.label}>
+          {label || node.data.name}
+          {node.data.required && <Text style={styles.required}>*</Text>}
+        </Text>
+        <View style={styles.unavailableContainer}>
+          <Text style={styles.unavailableText}>{t("renderer.defaultInputs.filePickerUnavailable")}</Text>
+        </View>
+        {helperText && <Text style={styles.helperText}>{helperText}</Text>}
+      </View>
+    );
   }
 
   return (
@@ -212,6 +227,20 @@ const styles = StyleSheet.create({
   },
   required: {
     color: "#EF4444",
+  },
+  unavailableContainer: {
+    alignItems: "center",
+    backgroundColor: "#FEF2F2",
+    borderColor: "#FCA5A5",
+    borderRadius: 6,
+    borderWidth: 1,
+    justifyContent: "center",
+    paddingVertical: 16,
+  },
+  unavailableText: {
+    color: "#991B1B",
+    fontSize: 12,
+    textAlign: "center",
   },
 });
 

@@ -281,6 +281,8 @@
       "addMoreFiles": "Weitere Dateien hinzufügen",
       "endDate": "Enddatum",
       "endTime": "Endzeit",
+      "filePickerError": "Fehler beim Auswählen der Datei",
+      "filePickerUnavailable": "Dateiauswahl nicht verfügbar. Bitte installieren Sie react-native-document-picker.",
       "replaceFile": "Datei ersetzen",
       "required": "*",
       "selectDate": "Datum auswählen",

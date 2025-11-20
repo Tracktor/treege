@@ -281,6 +281,8 @@
       "addMoreFiles": "إضافة المزيد من الملفات",
       "endDate": "تاريخ الانتهاء",
       "endTime": "وقت الانتهاء",
+      "filePickerError": "فشل في اختيار الملف",
+      "filePickerUnavailable": "اختيار الملفات غير متاح. يرجى تثبيت react-native-document-picker.",
       "replaceFile": "استبدال الملف",
       "required": "*",
       "selectDate": "اختر التاريخ",
