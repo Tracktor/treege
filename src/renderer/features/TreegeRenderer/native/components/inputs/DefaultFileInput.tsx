@@ -72,7 +72,7 @@ const DefaultFileInput = ({ node, value, setValue, error, label, helperText }: I
     const loadDocumentPicker = async () => {
       try {
         // @ts-expect-error - Optional peer dependency, may not be installed
-        const { pick: pickFunction } = await import("@react-native-documents/picker");
+        const { pick: pickFunction } = await import("react-native-document-picker");
         setPick(() => pickFunction);
       } catch {
         setPick(null);
