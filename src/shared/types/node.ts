@@ -79,7 +79,7 @@ export type HttpConfig = {
   /**
    * If true, automatically sends all form data as JSON body (overrides custom body)
    */
-  sendFormData?: boolean;
+  sendAllFormValues?: boolean;
   /**
    * JSONPath or key to extract from the response
    * Examples: "data.users", "results[0].name"
@@ -134,7 +134,7 @@ export type SubmitConfig = {
   /**
    * If true, automatically sends all form data as JSON body (overrides custom body)
    */
-  sendFormData?: boolean;
+  sendAllFormValues?: boolean;
   /**
    * URL to redirect to after successful submission (supports template variables from response)
    */

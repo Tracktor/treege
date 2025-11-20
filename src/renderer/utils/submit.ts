@@ -37,7 +37,7 @@ export interface SubmitResult {
  *
  * @param config - Submit configuration from the submit button node
  * @param formValues - Current form values
- * @param inputNodes - All input nodes (required when sendFormData is true)
+ * @param inputNodes - All input nodes (required when sendAllFormValues is true)
  * @returns Promise with submission result
  */
 export const submitFormData = async (
@@ -69,8 +69,8 @@ export const submitFormData = async (
     value: replaceTemplateVariables(header.value, formValues),
   }));
 
-  // Prepare body: use all form data if sendFormData is true, otherwise use custom body
-  const body = config.sendFormData
+  // Prepare body: use all form data if sendAllFormValues is true, otherwise use custom body
+  const body = config.sendAllFormValues
     ? JSON.stringify(convertFormValuesToNamedFormat(formValues, inputNodes))
     : config.body
       ? replaceTemplateVariables(config.body, formValues, { json: true })

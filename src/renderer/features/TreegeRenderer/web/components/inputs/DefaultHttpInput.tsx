@@ -186,9 +186,9 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
           headers[header.key] = replaceTemplateVars(header.value, currentFormValues);
         });
 
-        // Prepare body: use all form data if sendFormData is true, otherwise use custom body
+        // Prepare body: use all form data if sendAllFormValues is true, otherwise use custom body
         const body = ["POST", "PUT", "PATCH"].includes(currentHttpConfig.method || "")
-          ? currentHttpConfig.sendFormData
+          ? currentHttpConfig.sendAllFormValues
             ? JSON.stringify(convertFormValuesToNamedFormat(currentFormValues, inputNodesRef.current))
             : currentHttpConfig.body
               ? replaceTemplateVars(currentHttpConfig.body, currentFormValues)

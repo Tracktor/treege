@@ -180,7 +180,7 @@ const DefaultHttpInput = ({
 
         // Prepare body
         const body = ["POST", "PUT", "PATCH"].includes(currentHttpConfig.method || "")
-          ? currentHttpConfig.sendFormData
+          ? currentHttpConfig.sendAllFormValues
             ? JSON.stringify(convertFormValuesToNamedFormat(currentFormValues, inputNodesRef.current))
             : currentHttpConfig.body
               ? replaceTemplateVars(currentHttpConfig.body, currentFormValues)
