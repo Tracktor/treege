@@ -1,6 +1,6 @@
 import { Node } from "@xyflow/react";
 import { ReactNode, useCallback, useMemo } from "react";
-import { InputRenderProps, InputValue } from "@/renderer/types/renderer";
+import { FormValues, InputRenderers, InputRenderProps, InputValue, TreegeRendererComponents } from "@/renderer/types/renderer";
 import { resolveNodeKey } from "@/renderer/utils/node";
 import { sanitize } from "@/renderer/utils/sanitize";
 import { NODE_TYPE } from "@/shared/constants/node";
@@ -10,24 +10,17 @@ import { getTranslatedText } from "@/shared/utils/translations";
 
 type UseRenderNodeParams = {
   config: {
-    components: {
-      form?: any;
-      group?: (props: { node: Node<TreegeNodeData>; children: ReactNode }) => ReactNode;
-      inputs?: Record<string, any>;
-      submitButton?: any;
-      submitButtonWrapper?: any;
-      ui?: Record<string, any>;
-    };
+    components: TreegeRendererComponents;
     language: string;
   };
   DefaultFormWrapper: any;
-  DefaultGroup: (props: { node: Node<TreegeNodeData>; children: ReactNode }) => ReactNode;
+  DefaultGroup: any;
   DefaultSubmitButton: any;
   DefaultSubmitButtonWrapper?: any;
-  defaultInputRenderers: Record<string, any>;
+  defaultInputRenderers: InputRenderers;
   defaultUI: Record<string, any>;
   formErrors: Record<string, string>;
-  formValues: Record<string, any>;
+  formValues: FormValues;
   missingRequiredFields: string[];
   setFieldValue: (fieldId: string, value: unknown) => void;
   visibleNodes: Node<TreegeNodeData>[];
@@ -137,8 +130,12 @@ export const useRenderNode = ({
           const uiData = node.data as UINodeData;
           const uiType = uiData.type || "title";
           const CustomRenderer = config.components.ui?.[uiType];
-          const DefaultRenderer = defaultUI[uiType as keyof typeof defaultUI];
+          const DefaultRenderer = defaultUI[uiType];
           const Renderer = CustomRenderer || DefaultRenderer;
+
+          if (!Renderer) {
+            return null;
+          }
 
           return <Renderer key={node.id} node={node} />;
         }
