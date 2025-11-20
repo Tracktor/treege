@@ -97,6 +97,7 @@ const DefaultHttpInput = ({
   const inputNodesRef = useRef(inputNodes);
   const setValueRef = useRef(setValue);
   const fetchDataRef = useRef<((search?: string) => Promise<void>) | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   /**
    * Extract template variables from URL (memoized)
@@ -135,17 +136,27 @@ const DefaultHttpInput = ({
 
   const fetchData = useCallback(
     async (search?: string) => {
+      // Cancel any in-flight request
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+
+      const abortController = new AbortController();
+      abortControllerRef.current = abortController;
+
       const currentHttpConfig = httpConfigRef.current;
       const currentFormValues = formValuesRef.current;
       const currentSetValue = setValueRef.current;
 
       if (!currentHttpConfig?.url) {
         setFetchError(t("renderer.defaultHttpInput.noUrlConfigured"));
+        abortControllerRef.current = null;
         return;
       }
 
       // Check if we can fetch (all template vars filled)
       if (currentHttpConfig.url && !areTemplateVarsFilled(currentHttpConfig.url, currentFormValues)) {
+        abortControllerRef.current = null;
         return;
       }
 
@@ -176,6 +187,7 @@ const DefaultHttpInput = ({
               : undefined
           : undefined;
 
+        const timeoutId = setTimeout(() => abortController.abort(), 30000);
         const response = await fetch(url, {
           body: body || undefined,
           headers: {
@@ -183,7 +195,9 @@ const DefaultHttpInput = ({
             ...headers,
           },
           method: currentHttpConfig.method || "GET",
+          signal: abortController.signal,
         });
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
           setFetchError(`HTTP Error ${response.status}: ${response.statusText}`);
@@ -216,11 +230,16 @@ const DefaultHttpInput = ({
           currentSetValue(typeof extractedData === "string" ? extractedData : JSON.stringify(extractedData));
         }
       } catch (err) {
+        if (err instanceof Error && err.name === "AbortError") {
+          // Request was cancelled, don't update state
+          return;
+        }
         const errorMessage = err instanceof Error ? err.message : t("renderer.defaultHttpInput.fetchFailed");
         setFetchError(errorMessage);
         console.error("HTTP Input fetch error:", err);
       } finally {
         setLoading(false);
+        abortControllerRef.current = null;
       }
     },
     [t],
@@ -236,6 +255,17 @@ const DefaultHttpInput = ({
     setValueRef.current = setValue;
     fetchDataRef.current = fetchData;
   }, [httpConfig, formValues, inputNodes, setValue, fetchData]);
+
+  /**
+   * Cleanup: abort any pending request on unmount
+   */
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []);
 
   /**
    * Effect 1: Fetch on mount if fetchOnMount is true
