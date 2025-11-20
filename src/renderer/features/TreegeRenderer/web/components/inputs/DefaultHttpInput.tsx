@@ -78,7 +78,8 @@ const areTemplateVarsFilled = (template: string, formValues: Record<string, unkn
  */
 const replaceTemplateVars = (template: string, formValues: Record<string, unknown>, encode = false): string =>
   template.replace(/{{([\w-]+)}}/g, (_, key) => {
-    const value = String(formValues[key] || "");
+    const raw = formValues[key];
+    const value = raw == null ? "" : String(raw);
     return encode ? encodeURIComponent(value) : value;
   });
 
