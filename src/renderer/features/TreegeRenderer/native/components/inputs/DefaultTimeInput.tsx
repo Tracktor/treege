@@ -6,7 +6,11 @@ const DefaultTimeInput = ({ node, value, setValue, error, label, placeholder, he
   const [isOpen, setIsOpen] = useState(false);
 
   const timeValue = value || "";
-  const [hours, minutes] = timeValue.split(":").map((v) => (v ? Number.parseInt(v, 10) : 0));
+  const parts = timeValue.split(":");
+  const parsedHours = Number.parseInt(parts[0], 10);
+  const parsedMinutes = Number.parseInt(parts[1], 10);
+  const hours = Number.isNaN(parsedHours) ? 0 : parsedHours;
+  const minutes = Number.isNaN(parsedMinutes) ? 0 : parsedMinutes;
 
   const [selectedHours, setSelectedHours] = useState(hours || 0);
   const [selectedMinutes, setSelectedMinutes] = useState(minutes || 0);

@@ -12,8 +12,17 @@ const DefaultTimeRangeInput = ({ node, value, setValue, error, label, helperText
   const startTime = timeRange[0] || "";
   const endTime = timeRange[1] || "";
 
-  const [startHours, startMinutes] = startTime.split(":").map((v) => (v ? Number.parseInt(v, 10) : 0));
-  const [endHours, endMinutes] = endTime.split(":").map((v) => (v ? Number.parseInt(v, 10) : 0));
+  const startParts = startTime.split(":");
+  const parsedStartHours = Number.parseInt(startParts[0], 10);
+  const parsedStartMinutes = Number.parseInt(startParts[1], 10);
+  const startHours = Number.isNaN(parsedStartHours) ? 0 : parsedStartHours;
+  const startMinutes = Number.isNaN(parsedStartMinutes) ? 0 : parsedStartMinutes;
+
+  const endParts = endTime.split(":");
+  const parsedEndHours = Number.parseInt(endParts[0], 10);
+  const parsedEndMinutes = Number.parseInt(endParts[1], 10);
+  const endHours = Number.isNaN(parsedEndHours) ? 0 : parsedEndHours;
+  const endMinutes = Number.isNaN(parsedEndMinutes) ? 0 : parsedEndMinutes;
 
   const [selectedHours, setSelectedHours] = useState(0);
   const [selectedMinutes, setSelectedMinutes] = useState(0);
