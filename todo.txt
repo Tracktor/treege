@@ -1,8 +1,0 @@
-TREEGE :
-- Chat bot renderer
-- React Native
-  - Date/Time → react-native-date-picker ou @react-native-community/datetimepicker
-  - File → react-native-document-picker
-
-TREEGE.IO :
-- Maj le site avec l'ajout de DOM Purify et l'ajout de RN sur le renderer
