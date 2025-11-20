@@ -77,9 +77,9 @@ export const useRenderNode = ({
           const inputType = inputData.type || "text";
           const CustomRenderer = config.components.inputs?.[inputType];
           const DefaultRenderer = defaultInputRenderers[inputType as keyof typeof defaultInputRenderers];
-          const Renderer = (CustomRenderer || DefaultRenderer) as (props: InputRenderProps) => ReactNode;
-          const setValue = (newValue: InputValue) => setFieldValue(fieldId, newValue);
+          const Renderer = (CustomRenderer || DefaultRenderer) as ((props: InputRenderProps) => ReactNode) | undefined;
           const fieldId = node.id;
+          const setValue = (newValue: InputValue) => setFieldValue(fieldId, newValue);
           const value = formValues[fieldId];
           const error = formErrors[fieldId];
           const label = getTranslatedText(inputData.label, config.language);
@@ -90,6 +90,11 @@ export const useRenderNode = ({
           const safeLabel = sanitize(label);
           const safePlaceholder = sanitize(placeholder);
           const safeHelperText = sanitize(helperText);
+
+          if (!Renderer) {
+            console.warn("No renderer found for input type:", inputType);
+            return null;
+          }
 
           return (
             <Renderer
