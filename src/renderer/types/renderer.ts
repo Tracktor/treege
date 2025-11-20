@@ -139,15 +139,33 @@ export type TreegeRendererComponents = {
   /**
    * Custom group container renderer
    */
-  group?: (props: NodeRenderProps) => ReactNode;
+  group?: (props: NodeRenderProps & { children?: ReactNode }) => ReactNode;
   /**
    * Custom form wrapper
    */
   form?: (props: { children: ReactNode; onSubmit: (e: FormEvent) => void }) => ReactNode;
   /**
-   * Custom submit button (pure button without wrapper)
+   * Custom submit button (supports both web and native variants)
+   * Web variant: { label?: string; disabled?: boolean; ...otherHTMLAttributes }
+   * Native variant: { children?: ReactNode; disabled?: boolean; isSubmitting?: boolean; onPress?: () => void }
    */
-  submitButton?: (props: { label?: string }) => ReactNode;
+  submitButton?: (
+    props:
+      | {
+          // Web variant
+          label?: string;
+          disabled?: boolean;
+          [key: string]: unknown;
+        }
+      | {
+          // Native variant
+          children?: ReactNode;
+          disabled?: boolean;
+          isSubmitting?: boolean;
+          onPress?: () => void;
+          [key: string]: unknown;
+        },
+  ) => ReactNode;
   /**
    * Custom submit button wrapper (e.g., for tooltip with missing fields)
    */

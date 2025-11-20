@@ -1,5 +1,5 @@
 import { Node } from "@xyflow/react";
-import { ReactNode, useCallback, useMemo } from "react";
+import { ComponentType, Fragment, ReactNode, useCallback, useMemo } from "react";
 import { FormValues, InputRenderers, InputRenderProps, InputValue, TreegeRendererComponents } from "@/renderer/types/renderer";
 import { resolveNodeKey } from "@/renderer/utils/node";
 import { sanitize } from "@/renderer/utils/sanitize";
@@ -8,17 +8,19 @@ import { TreegeNodeData, UINodeData } from "@/shared/types/node";
 import { isGroupNode, isInputNode, isUINode } from "@/shared/utils/nodeTypeGuards";
 import { getTranslatedText } from "@/shared/utils/translations";
 
+type AnyComponent = ComponentType<any>;
+
 type UseRenderNodeParams = {
   config: {
     components: TreegeRendererComponents;
     language: string;
   };
-  DefaultFormWrapper: any;
-  DefaultGroup: any;
-  DefaultSubmitButton: any;
-  DefaultSubmitButtonWrapper?: any;
+  DefaultFormWrapper: AnyComponent;
+  DefaultGroup: AnyComponent;
+  DefaultSubmitButton: AnyComponent;
+  DefaultSubmitButtonWrapper?: AnyComponent;
   defaultInputRenderers: InputRenderers;
-  defaultUI: Record<string, any>;
+  defaultUI: Record<string, AnyComponent>;
   formErrors: Record<string, string>;
   formValues: FormValues;
   missingRequiredFields: string[];
@@ -57,7 +59,7 @@ export const useRenderNode = ({
     [config.components.submitButton, DefaultSubmitButton],
   );
   const SubmitButtonWrapper = useMemo(
-    () => config.components.submitButtonWrapper || DefaultSubmitButtonWrapper,
+    () => config.components.submitButtonWrapper || DefaultSubmitButtonWrapper || Fragment,
     [config.components.submitButtonWrapper, DefaultSubmitButtonWrapper],
   );
 
@@ -111,7 +113,11 @@ export const useRenderNode = ({
             return null;
           }
 
-          const GroupComponent = config.components.group || DefaultGroup;
+          const GroupComponent = (config.components.group || DefaultGroup) as ComponentType<{
+            key?: string;
+            node: Node<TreegeNodeData>;
+            children: ReactNode;
+          }>;
           // Filter children - visibleNodes maintains flow order from getFlowRenderState
           const childNodes = visibleNodes.filter((child) => child.parentId === node.id);
 
