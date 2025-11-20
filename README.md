@@ -37,13 +37,14 @@ Treege is a modern React library for creating and rendering interactive decision
 ### Runtime Renderer (`treege/renderer`)
 - **Production Ready**: Full-featured form generation and validation system
 - **16 Input Types**: text, number, select, checkbox, radio, date, daterange, time, timerange, file, address, http, textarea, password, switch, autocomplete, and hidden
+- **Cross-Platform**: Full support for both React Web and React Native with dedicated implementations
 - **HTTP Integration**: Built-in API integration with response mapping and search functionality
 - **Advanced Validation**: Required fields, pattern matching, custom validation functions
 - **Security**: Built-in input sanitization to prevent XSS attacks
 - **Enhanced Error Messages**: Clear, user-friendly error messages for HTTP inputs and validation
 - **Conditional Logic**: Dynamic field visibility based on user input and conditional edges
-- **Web & Native**: Both web (React) and React Native renderer implementations
 - **Fully Customizable**: Override any component (FormWrapper, Group, Inputs, SubmitButton, UI elements)
+- **Optional Dependencies**: Graceful degradation when optional packages like `@react-native-documents/picker` aren't installed
 - **Theme Support**: Dark/light mode out of the box
 - **Google API Integration**: Address autocomplete support
 
@@ -191,6 +192,9 @@ npm install treege
 
 # Install peer dependencies
 npm install react-native
+
+# Optional: Install for file input support
+npm install @react-native-documents/picker
 ```
 
 ### Basic Usage
@@ -299,15 +303,18 @@ The React Native renderer includes default implementations for all input types:
 - `text`, `number`, `textarea`, `password`
 - `checkbox`, `switch`, `hidden`
 
-**Requires External Dependencies** (placeholder provided):
+**With Optional Dependencies** (gracefully degrades if not installed):
+- `file` - Requires [@react-native-documents/picker](https://react-native-documents.github.io/docs/sponsor-only/picker/import-mode) (optional)
+
+**Requires Custom Implementation** (placeholder provided):
 - `select`, `radio`, `autocomplete`
 - `date`, `daterange`, `time`, `timerange`
-- `file`, `address`, `http`
+- `address`, `http`
 
-You can override any placeholder with your own implementation using popular React Native libraries like:
-- [@react-native-picker/picker](https://github.com/react-native-picker/picker) for `select`
-- [react-native-date-picker](https://github.com/henninghall/react-native-date-picker) for `date`/`time`
-- [react-native-document-picker](https://github.com/rnmods/react-native-document-picker) for `file`
+You can implement these inputs using popular React Native libraries:
+- [@react-native-picker/picker](https://github.com/react-native-picker/picker) for `select` and `radio`
+- [react-native-date-picker](https://github.com/henninghall/react-native-date-picker) for `date` and `time` inputs
+- [@react-native-community/google-places-autocomplete](https://github.com/FaridSafi/react-native-google-places-autocomplete) for `address`
 
 ### API Reference
 

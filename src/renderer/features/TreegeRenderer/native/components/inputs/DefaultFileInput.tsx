@@ -1,41 +1,54 @@
-import { useCallback, useState } from "react";
-import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useCallback, useEffect, useState } from "react";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
 import { SerializableFile } from "@/renderer/utils/file";
 
+type PickResult = {
+  uri: string;
+  name: string;
+  size: number;
+  type: string;
+};
+
+type PickFunction = (options?: { allowMultiSelection?: boolean; type?: string[] }) => Promise<PickResult[]>;
+
 const DefaultFileInput = ({ node, value, setValue, error, label, helperText }: InputRenderProps<"file">) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [fileName, setFileName] = useState("");
-  const [fileData, setFileData] = useState("");
-  const _t = useTranslate();
-
+  const [pick, setPick] = useState<PickFunction | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const t = useTranslate();
   const files: SerializableFile[] = Array.isArray(value) ? value : value ? [value] : [];
-  const multipleFiles = node.data.multiple;
+  const isMultiple = node.data.multiple;
 
-  const handleAddFile = useCallback(() => {
-    if (!(fileName.trim() && fileData.trim())) {
+  const handlePickFile = useCallback(async () => {
+    if (!pick) {
       return;
     }
 
-    const newFile: SerializableFile = {
-      data: fileData.trim(),
-      lastModified: Date.now(),
-      name: fileName.trim(),
-      size: 0,
-      type: "application/octet-stream",
-    };
+    try {
+      const results = await pick({
+        allowMultiSelection: isMultiple,
+      });
 
-    if (multipleFiles) {
-      setValue([...files, newFile]);
-    } else {
-      setValue([newFile]);
+      const newFiles: SerializableFile[] = results.map((result: PickResult) => ({
+        data: result.uri,
+        lastModified: Date.now(),
+        name: result.name,
+        size: result.size,
+        type: result.type || "application/octet-stream",
+      }));
+
+      if (isMultiple) {
+        setValue([...files, ...newFiles]);
+      } else {
+        setValue(newFiles[0] || null);
+      }
+    } catch (err) {
+      if ((err as { code?: string }).code !== "DOCUMENT_PICKER_CANCELED") {
+        Alert.alert("Error", "Failed to pick file");
+      }
     }
-
-    setFileName("");
-    setFileData("");
-    setIsModalOpen(false);
-  }, [fileName, fileData, files, multipleFiles, setValue]);
+  }, [pick, files, isMultiple, setValue]);
 
   const handleRemoveFile = useCallback(
     (index: number) => {
@@ -45,10 +58,7 @@ const DefaultFileInput = ({ node, value, setValue, error, label, helperText }: I
     [files, setValue],
   );
 
-  const formatFileSize = (size?: number) => {
-    if (!size) {
-      return "";
-    }
+  const formatFileSize = (size: number) => {
     if (size < 1024) {
       return `${size} B`;
     }
@@ -57,6 +67,26 @@ const DefaultFileInput = ({ node, value, setValue, error, label, helperText }: I
     }
     return `${(size / (1024 * 1024)).toFixed(1)} MB`;
   };
+
+  useEffect(() => {
+    const loadDocumentPicker = async () => {
+      try {
+        // @ts-expect-error - Optional peer dependency, may not be installed
+        const { pick: pickFunction } = await import("@react-native-documents/picker");
+        setPick(() => pickFunction);
+      } catch {
+        setPick(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    void loadDocumentPicker();
+  }, []);
+
+  if (isLoading || !pick) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
@@ -86,66 +116,13 @@ const DefaultFileInput = ({ node, value, setValue, error, label, helperText }: I
         </View>
       )}
 
-      <TouchableOpacity style={styles.addButton} onPress={() => setIsModalOpen(true)} activeOpacity={0.7}>
-        <Text style={styles.addButtonIcon}>+</Text>
-        <Text style={styles.addButtonText}>
-          {files.length === 0 ? (multipleFiles ? "Add files" : "Add file") : multipleFiles ? "Add more" : "Replace file"}
+      <TouchableOpacity style={styles.pickButton} onPress={handlePickFile} activeOpacity={0.7}>
+        <Text style={styles.pickButtonText}>
+          {files.length === 0
+            ? t(isMultiple ? "renderer.defaultInputs.selectFiles" : "renderer.defaultInputs.selectFile")
+            : t(isMultiple ? "renderer.defaultInputs.addMoreFiles" : "renderer.defaultInputs.replaceFile")}
         </Text>
       </TouchableOpacity>
-
-      <View style={styles.infoBox}>
-        <Text style={styles.infoText}>
-          This is a basic file input. For native file picking, override this component using the `components` prop with
-          react-native-document-picker or similar.
-        </Text>
-      </View>
-
-      <Modal visible={isModalOpen} transparent animationType="fade" onRequestClose={() => setIsModalOpen(false)}>
-        <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={() => setIsModalOpen(false)}>
-          <TouchableOpacity style={styles.modalContent} activeOpacity={1} onPress={() => {}}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Add File</Text>
-              <TouchableOpacity onPress={() => setIsModalOpen(false)}>
-                <Text style={styles.closeButton}>✕</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>File name</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="document.pdf"
-                placeholderTextColor="#9CA3AF"
-                value={fileName}
-                onChangeText={setFileName}
-                autoFocus
-              />
-            </View>
-
-            <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>File data (base64 or URI)</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="data:image/png;base64,... or file://..."
-                placeholderTextColor="#9CA3AF"
-                value={fileData}
-                onChangeText={setFileData}
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
-            </View>
-
-            <TouchableOpacity
-              style={[styles.confirmButton, !(fileName.trim() && fileData.trim()) && styles.confirmButtonDisabled]}
-              onPress={handleAddFile}
-              disabled={!(fileName.trim() && fileData.trim())}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.confirmButtonText}>Add</Text>
-            </TouchableOpacity>
-          </TouchableOpacity>
-        </TouchableOpacity>
-      </Modal>
 
       {error && <Text style={styles.error}>{error}</Text>}
       {helperText && !error && <Text style={styles.helperText}>{helperText}</Text>}
@@ -154,49 +131,6 @@ const DefaultFileInput = ({ node, value, setValue, error, label, helperText }: I
 };
 
 const styles = StyleSheet.create({
-  addButton: {
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D1D5DB",
-    borderRadius: 6,
-    borderStyle: "dashed",
-    borderWidth: 2,
-    flexDirection: "row",
-    gap: 8,
-    justifyContent: "center",
-    paddingVertical: 16,
-  },
-  addButtonIcon: {
-    color: "#3B82F6",
-    fontSize: 20,
-    fontWeight: "600",
-  },
-  addButtonText: {
-    color: "#3B82F6",
-    fontSize: 14,
-    fontWeight: "600",
-  },
-  closeButton: {
-    color: "#6B7280",
-    fontSize: 24,
-    fontWeight: "300",
-  },
-  confirmButton: {
-    alignItems: "center",
-    backgroundColor: "#3B82F6",
-    borderRadius: 6,
-    marginTop: 16,
-    paddingVertical: 12,
-  },
-  confirmButtonDisabled: {
-    backgroundColor: "#9CA3AF",
-    opacity: 0.5,
-  },
-  confirmButtonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "600",
-  },
   container: {
     marginBottom: 16,
   },
@@ -248,69 +182,26 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 4,
   },
-  infoBox: {
-    backgroundColor: "#FEF3C7",
-    borderColor: "#FCD34D",
-    borderLeftWidth: 4,
-    borderRadius: 6,
-    marginTop: 12,
-    padding: 12,
-  },
-  infoText: {
-    color: "#78350F",
-    fontSize: 12,
-    lineHeight: 18,
-  },
-  input: {
-    backgroundColor: "#F9FAFB",
-    borderColor: "#D1D5DB",
-    borderRadius: 6,
-    borderWidth: 1,
-    color: "#374151",
-    fontSize: 14,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-  },
-  inputGroup: {
-    marginBottom: 16,
-  },
-  inputLabel: {
-    color: "#374151",
-    fontSize: 14,
-    fontWeight: "500",
-    marginBottom: 8,
-  },
   label: {
     color: "#374151",
     fontSize: 14,
     fontWeight: "500",
     marginBottom: 8,
   },
-  modalContent: {
+  pickButton: {
+    alignItems: "center",
     backgroundColor: "#FFFFFF",
-    borderRadius: 12,
-    padding: 16,
-    width: "90%",
-  },
-  modalHeader: {
-    alignItems: "center",
-    borderBottomColor: "#E5E7EB",
-    borderBottomWidth: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 16,
-    paddingBottom: 12,
-  },
-  modalOverlay: {
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    flex: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 6,
+    borderStyle: "dashed",
+    borderWidth: 2,
     justifyContent: "center",
+    paddingVertical: 16,
   },
-  modalTitle: {
-    color: "#111827",
-    fontSize: 18,
-    fontWeight: "600",
+  pickButtonText: {
+    color: "#6B7280",
+    fontSize: 14,
+    fontWeight: "500",
   },
   removeButton: {
     padding: 4,

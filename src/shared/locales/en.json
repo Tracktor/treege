@@ -278,11 +278,15 @@
       "waitingForRequiredFields": "Waiting for required fields"
     },
     "defaultInputs": {
+      "addMoreFiles": "Add more files",
       "endDate": "End date",
       "endTime": "End time",
+      "replaceFile": "Replace file",
       "required": "*",
       "selectDate": "Select date",
       "selectDateRange": "Select date range",
+      "selectFile": "Select file",
+      "selectFiles": "Select files",
       "startDate": "Start date",
       "startTime": "Start time"
     },
