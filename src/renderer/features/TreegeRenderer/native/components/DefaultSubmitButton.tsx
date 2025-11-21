@@ -23,7 +23,11 @@ const DefaultSubmitButton = ({ children = "Submit", disabled, isSubmitting, onPr
       onPress={onPress}
       activeOpacity={0.7}
     >
-      {isSubmitting ? <ActivityIndicator color="#FFFFFF" /> : <Text style={styles.buttonText}>{children}</Text>}
+      {isSubmitting ? (
+        <ActivityIndicator color={colors.primaryForeground} />
+      ) : (
+        <Text style={[styles.buttonText, { color: colors.primaryForeground }]}>{children}</Text>
+      )}
     </TouchableOpacity>
   );
 };
@@ -38,7 +42,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   buttonText: {
-    color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "600",
   },
