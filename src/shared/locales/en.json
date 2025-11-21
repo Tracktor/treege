@@ -125,8 +125,8 @@
       "searchParameterDesc": "If set, enables combobox with search that adds this param to API calls (e.g., ?q=Paris)",
       "searchParameterPlaceholder": "q, search, query...",
       "selectMethod": "Select method",
-      "sendFormData": "Send all form data",
-      "sendFormDataDesc": "Automatically send all form values as JSON body",
+      "sendAllFormValues": "Send all form data",
+      "sendAllFormValuesDesc": "Automatically send all form values as JSON body",
       "showLoadingState": "Show loading state",
       "valueField": "Value Field",
       "valueFieldDesc": "Field to use as option value (e.g., id)",
@@ -239,8 +239,8 @@
       "requestBodyDesc": "Use {{fieldId}} to reference form fields. Ensure proper JSON formatting including quotes around string values.",
       "requestBodyPlaceholder": "{\"name\": \"{{userName}}\", \"email\": \"{{userEmail}}\"}",
       "selectMethod": "Select method",
-      "sendFormData": "Send all form data",
-      "sendFormDataDesc": "Automatically send all form values as JSON body",
+      "sendAllFormValues": "Send all form data",
+      "sendAllFormValuesDesc": "Automatically send all form values as JSON body",
       "showLoadingState": "Show loading state",
       "successMessage": "Success Message",
       "successMessageDesc": "Message displayed when submission succeeds",
@@ -256,7 +256,9 @@
   "renderer": {
     "defaultAddressInput": {
       "enterAddress": "Enter an address...",
-      "noAddressesFound": "No addresses found."
+      "noAddressesFound": "No addresses found.",
+      "searching": "Searching...",
+      "typeMinChars": "Type at least 3 characters to search"
     },
     "defaultAutocompleteInput": {
       "noResults": "No results found.",
@@ -276,11 +278,17 @@
       "waitingForRequiredFields": "Waiting for required fields"
     },
     "defaultInputs": {
+      "addMoreFiles": "Add more files",
       "endDate": "End date",
       "endTime": "End time",
+      "filePickerError": "Failed to select file",
+      "filePickerUnavailable": "File selection unavailable. Please install react-native-document-picker.",
+      "replaceFile": "Replace file",
       "required": "*",
       "selectDate": "Select date",
       "selectDateRange": "Select date range",
+      "selectFile": "Select file",
+      "selectFiles": "Select files",
       "startDate": "Start date",
       "startTime": "Start time"
     },

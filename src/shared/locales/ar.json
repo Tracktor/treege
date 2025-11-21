@@ -125,8 +125,8 @@
       "searchParameterDesc": "إذا تم تعيينه، يتم تمكين مربع بحث يضيف هذا المعامل إلى استدعاءات API (مثال: ?q=باريس)",
       "searchParameterPlaceholder": "q، بحث، استعلام...",
       "selectMethod": "اختر الطريقة",
-      "sendFormData": "إرسال جميع بيانات النموذج",
-      "sendFormDataDesc": "إرسال جميع قيم النموذج تلقائياً كمحتوى JSON",
+      "sendAllFormValues": "إرسال جميع بيانات النموذج",
+      "sendAllFormValuesDesc": "إرسال جميع قيم النموذج تلقائياً كمحتوى JSON",
       "showLoadingState": "إظهار حالة التحميل",
       "valueField": "حقل القيمة",
       "valueFieldDesc": "الحقل المستخدم كقيمة خيار (مثال: id)",
@@ -239,8 +239,8 @@
       "requestBodyDesc": "استخدم {{fieldId}} للإشارة إلى حقول أخرى. تأكد من تنسيق JSON الصحيح بما في ذلك علامات الاقتباس حول القيم النصية.",
       "requestBodyPlaceholder": "{\"name\": \"{{userName}}\", \"email\": \"{{userEmail}}\"}",
       "selectMethod": "اختر الطريقة",
-      "sendFormData": "إرسال جميع بيانات النموذج",
-      "sendFormDataDesc": "إرسال جميع قيم النموذج تلقائياً كمحتوى JSON",
+      "sendAllFormValues": "إرسال جميع بيانات النموذج",
+      "sendAllFormValuesDesc": "إرسال جميع قيم النموذج تلقائياً كمحتوى JSON",
       "showLoadingState": "إظهار حالة التحميل",
       "successMessage": "رسالة النجاح",
       "successMessageDesc": "الرسالة المعروضة عند نجاح الإرسال",
@@ -256,7 +256,9 @@
   "renderer": {
     "defaultAddressInput": {
       "enterAddress": "أدخل عنواناً...",
-      "noAddressesFound": "لم يتم العثور على عناوين."
+      "noAddressesFound": "لم يتم العثور على عناوين.",
+      "searching": "جاري البحث...",
+      "typeMinChars": "اكتب 3 أحرف على الأقل للبحث"
     },
     "defaultAutocompleteInput": {
       "noResults": "لم يتم العثور على نتائج.",
@@ -276,11 +278,17 @@
       "waitingForRequiredFields": "في انتظار الحقول المطلوبة"
     },
     "defaultInputs": {
+      "addMoreFiles": "إضافة المزيد من الملفات",
       "endDate": "تاريخ الانتهاء",
       "endTime": "وقت الانتهاء",
+      "filePickerError": "فشل في اختيار الملف",
+      "filePickerUnavailable": "اختيار الملفات غير متاح. يرجى تثبيت react-native-document-picker.",
+      "replaceFile": "استبدال الملف",
       "required": "*",
       "selectDate": "اختر التاريخ",
       "selectDateRange": "اختر نطاق التاريخ",
+      "selectFile": "اختر ملف",
+      "selectFiles": "اختر ملفات",
       "startDate": "تاريخ البدء",
       "startTime": "وقت البدء"
     },

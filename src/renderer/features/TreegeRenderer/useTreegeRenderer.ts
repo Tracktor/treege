@@ -1,48 +1,88 @@
 import { Node } from "@xyflow/react";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTreegeConfig } from "@/renderer/context/TreegeConfigContext";
+import { useSubmitHandler } from "@/renderer/hooks/useSubmitHandler";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
-import { FormValues } from "@/renderer/types/renderer";
+import { FormValues, TreegeRendererProps } from "@/renderer/types/renderer";
 import { getFlowRenderState, mergeFlows } from "@/renderer/utils/flow";
-import { isFieldEmpty } from "@/renderer/utils/form";
+import { calculateReferenceFieldUpdates, convertFormValuesToNamedFormat, isFieldEmpty } from "@/renderer/utils/form";
 import { getInputNodes } from "@/renderer/utils/node";
-import { Flow, TreegeNodeData } from "@/shared/types/node";
+import { TreegeNodeData } from "@/shared/types/node";
 import { isInputNode } from "@/shared/utils/nodeTypeGuards";
 
 /**
- * PURE STATE LOGIC HOOK
+ * Main TreegeRenderer hook
  *
- * This hook manages the internal form state and visibility logic.
- * It contains NO side effects (no useEffect).
- * All state is keyed by nodeId for uniqueness.
+ * Manages all form state, configuration, validation, and submission logic.
+ * Can be used directly in custom components for headless mode.
  *
  * Responsibilities:
+ * - Config merging (props + global provider)
  * - Form values state (keyed by nodeId)
  * - Errors state
  * - Node visibility calculation (progressive rendering)
- * - Form validation (built-in: required, pattern)
- * - Submit button state (combines end-of-path detection + form validity)
+ * - Form validation (built-in: required, pattern + custom validation)
+ * - Submit handling (with HTTP integration support)
+ * - Side effects (onChange callbacks, validation modes, reference field sync)
  *
- * NOT responsible for:
- * - Export/conversion to external format (done in component)
- * - Side effects like onChange callbacks (done in component)
- * - Custom validation (passed to component)
+ * @param props - Configuration props (flows, initialValues, callbacks, etc.)
+ * @returns Complete form state and control methods
  */
+export const useTreegeRenderer = ({
+  components,
+  flows,
+  googleApiKey,
+  initialValues = {},
+  language,
+  onChange,
+  onSubmit,
+  theme,
+  validate,
+  validationMode,
+}: Pick<
+  TreegeRendererProps,
+  "components" | "flows" | "googleApiKey" | "initialValues" | "language" | "onChange" | "onSubmit" | "theme" | "validate" | "validationMode"
+>) => {
+  // ============================================
+  // CONFIGURATION
+  // ============================================
 
-/**
- * Custom hook for TreegeRenderer - Pure state logic only
- *
- * @param flows - Flow or array of flows (can be null/undefined)
- * @param initialValues - Initial form values (will be merged with node defaults)
- * @param language - Preferred language for translations (defaults to 'en')
- * @returns Pure state and computed values (no side effects)
- */
-export const useTreegeRenderer = (flows: Flow | Flow[] | null | undefined, initialValues: FormValues = {}, language: string = "en") => {
+  // Get global config from provider (if any)
+  const globalConfig = useTreegeConfig();
+
+  // Merge props with global config (props take precedence)
+  const config = useMemo(
+    () => ({
+      components: {
+        form: components?.form ?? globalConfig?.components?.form,
+        group: components?.group ?? globalConfig?.components?.group,
+        inputs: { ...globalConfig?.components?.inputs, ...components?.inputs },
+        submitButton: components?.submitButton ?? globalConfig?.components?.submitButton,
+        submitButtonWrapper: components?.submitButtonWrapper ?? globalConfig?.components?.submitButtonWrapper,
+        ui: { ...globalConfig?.components?.ui, ...components?.ui },
+      },
+      googleApiKey: googleApiKey ?? globalConfig?.googleApiKey,
+      language: language ?? globalConfig?.language ?? "en",
+      theme: theme ?? globalConfig?.theme ?? "dark",
+      validationMode: validationMode ?? globalConfig?.validationMode ?? "onSubmit",
+    }),
+    [components, globalConfig, googleApiKey, language, theme, validationMode],
+  );
+
+  // ============================================
+  // FLOW AND NODE STATE
+  // ============================================
+
   const mergedFlow = useMemo(() => mergeFlows(flows), [flows]);
   const { nodes, edges } = mergedFlow;
   const inputNodes = useMemo(() => getInputNodes(nodes), [nodes]);
-  const t = useTranslate(language);
+  const t = useTranslate(config.language);
   const prevFormValuesRef = useRef<FormValues>({});
-  // Form state
+
+  // ============================================
+  // FORM STATE
+  // ============================================
+
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [formValues, setFormValues] = useState<FormValues>(() => {
     const defaultValues: FormValues = { ...initialValues };
@@ -83,6 +123,32 @@ export const useTreegeRenderer = (flows: Flow | Flow[] | null | undefined, initi
     () => getFlowRenderState(nodes, edges, formValues),
     [nodes, edges, formValues],
   );
+
+  // ============================================
+  // SUBMIT HANDLER
+  // ============================================
+
+  // Submit handler for submit button with HTTP configuration
+  const { clearSubmitMessage, handleSubmitWithConfig, hasSubmitConfig, isSubmitting, submitMessage } = useSubmitHandler(
+    visibleNodes,
+    formValues,
+    config.language,
+    inputNodes,
+  );
+
+  // ============================================
+  // REFS FOR CALLBACKS
+  // ============================================
+
+  const onChangeRef = useRef(onChange);
+  const validateRef = useRef(validate);
+
+  // Memoize exported values for callbacks
+  const exportedValues = useMemo(() => convertFormValuesToNamedFormat(formValues, inputNodes), [formValues, inputNodes]);
+
+  // ============================================
+  // FORM CONTROL METHODS
+  // ============================================
 
   /**
    * Set field value and clear error for that field
@@ -185,6 +251,50 @@ export const useTreegeRenderer = (flows: Flow | Flow[] | null | undefined, initi
   );
 
   /**
+   * Handle form submission
+   * @returns {Promise<boolean>} Returns true if validation passed, false otherwise
+   */
+  const handleSubmit = useCallback(async (): Promise<boolean> => {
+    // Validate the form
+    const { isValid } = validateForm(validateRef.current);
+
+    if (!isValid) {
+      return false;
+    }
+
+    // If there's a submit button with configuration, use it
+    if (hasSubmitConfig) {
+      const result = await handleSubmitWithConfig((httpResponse) => {
+        // Call onSubmit callback with form values and HTTP response as second parameter
+        if (onSubmit) {
+          onSubmit(exportedValues, { httpResponse });
+        }
+      });
+
+      // If result is null, it means the submit config is incomplete (no URL)
+      // Fall back to the default submit behavior
+      if (result === null) {
+        onSubmit?.(exportedValues);
+        return true;
+      }
+
+      // If submission failed, return early
+      if (!result.success) {
+        return true; // Validation passed but submission failed
+      }
+    } else if (onSubmit) {
+      // Default behavior: call onSubmit directly
+      onSubmit(exportedValues);
+    }
+
+    return true;
+  }, [validateForm, hasSubmitConfig, handleSubmitWithConfig, onSubmit, exportedValues]);
+
+  // ============================================
+  // COMPUTED VALUES
+  // ============================================
+
+  /**
    * Get list of missing required fields for tooltip
    * Returns array of field labels that are required but not filled
    */
@@ -214,20 +324,95 @@ export const useTreegeRenderer = (flows: Flow | Flow[] | null | undefined, initi
    */
   const hasSubmitInput = useMemo(() => visibleNodes.some((node) => isInputNode(node) && node.data.type === "submit"), [visibleNodes]);
 
+  /**
+   * Get the first field with an error (for focus/scroll)
+   * Returns the field ID or undefined if no errors
+   */
+  const firstErrorFieldId = useMemo(() => {
+    const errorKeys = Object.keys(formErrors);
+    return errorKeys.length > 0 ? errorKeys[0] : undefined;
+  }, [formErrors]);
+
+  // ============================================
+  // SIDE EFFECTS
+  // ============================================
+
+  /**
+   * Keep onChange ref updated
+   */
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+
+  /**
+   * Keep validate ref updated
+   */
+  useEffect(() => {
+    validateRef.current = validate;
+  }, [validate]);
+
+  /**
+   * Trigger onChange callback when form values change
+   */
+  useEffect(() => {
+    onChangeRef.current?.(exportedValues);
+  }, [exportedValues]);
+
+  /**
+   * Run validation on form values change if validationMode is "onChange"
+   */
+  useEffect(() => {
+    if (config.validationMode === "onChange") {
+      validateForm(validateRef.current);
+    }
+  }, [config.validationMode, validateForm]);
+
+  /**
+   * Sync reference fields when their source changes (one-way binding)
+   * Note: prevFormValuesRef is intentionally not in deps (refs don't trigger re-renders)
+   */
+  useEffect(() => {
+    const updatedValues = calculateReferenceFieldUpdates(inputNodes, formValues, prevFormValuesRef.current);
+
+    // Only update if there are changes to avoid unnecessary function calls
+    if (Object.keys(updatedValues).length > 0) {
+      setMultipleFieldValues(updatedValues);
+    }
+
+    // Update previous values ref
+    prevFormValuesRef.current = formValues;
+  }, [formValues, inputNodes, setMultipleFieldValues]);
+
+  // ============================================
+  // RETURN VALUES
+  // ============================================
+
   return {
     canSubmit: !hasSubmitInput && endOfPathReached && nodes.length > 0,
+    clearSubmitMessage,
+    config,
+    firstErrorFieldId,
     formErrors,
     formValues,
+    handleSubmit,
     inputNodes,
+    isSubmitting,
     mergedFlow,
     missingRequiredFields,
     prevFormValuesRef,
+    setFieldErrors: setFormErrors,
     setFieldValue,
-    setFormErrors,
     setMultipleFieldValues,
+    submitMessage,
     t,
     validateForm,
     visibleNodes,
     visibleRootNodes,
   };
 };
+
+/**
+ * Type for the return value of useTreegeRenderer
+ * Useful for TypeScript users building custom components
+ */
+export type UseTreegeRendererReturn = ReturnType<typeof useTreegeRenderer>;

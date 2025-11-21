@@ -78,7 +78,8 @@ const areTemplateVarsFilled = (template: string, formValues: Record<string, unkn
  */
 const replaceTemplateVars = (template: string, formValues: Record<string, unknown>, encode = false): string =>
   template.replace(/{{([\w-]+)}}/g, (_, key) => {
-    const value = String(formValues[key] || "");
+    const raw = formValues[key];
+    const value = raw == null ? "" : String(raw);
     return encode ? encodeURIComponent(value) : value;
   });
 
@@ -100,6 +101,7 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
   const inputNodesRef = useRef(inputNodes);
   const setValueRef = useRef(setValue);
   const fetchDataRef = useRef<((search?: string) => Promise<void>) | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   /**
    * Extract template variables from URL (memoized)
@@ -142,17 +144,27 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
 
   const fetchData = useCallback(
     async (search?: string) => {
+      // Cancel any in-flight request
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+
+      const abortController = new AbortController();
+      abortControllerRef.current = abortController;
+
       const currentHttpConfig = httpConfigRef.current;
       const currentFormValues = formValuesRef.current;
       const currentSetValue = setValueRef.current;
 
       if (!currentHttpConfig?.url) {
         setFetchError(t("renderer.defaultHttpInput.noUrlConfigured"));
+        abortControllerRef.current = null;
         return;
       }
 
       // Check if we can fetch (all template vars filled)
       if (currentHttpConfig.url && !areTemplateVarsFilled(currentHttpConfig.url, currentFormValues)) {
+        abortControllerRef.current = null;
         return;
       }
 
@@ -174,15 +186,16 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
           headers[header.key] = replaceTemplateVars(header.value, currentFormValues);
         });
 
-        // Prepare body: use all form data if sendFormData is true, otherwise use custom body
+        // Prepare body: use all form data if sendAllFormValues is true, otherwise use custom body
         const body = ["POST", "PUT", "PATCH"].includes(currentHttpConfig.method || "")
-          ? currentHttpConfig.sendFormData
+          ? currentHttpConfig.sendAllFormValues
             ? JSON.stringify(convertFormValuesToNamedFormat(currentFormValues, inputNodesRef.current))
             : currentHttpConfig.body
               ? replaceTemplateVars(currentHttpConfig.body, currentFormValues)
               : undefined
           : undefined;
 
+        const timeoutId = setTimeout(() => abortController.abort(), 30000);
         const response = await fetch(url, {
           body: body || undefined,
           headers: {
@@ -190,7 +203,9 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
             ...headers,
           },
           method: currentHttpConfig.method || "GET",
+          signal: abortController.signal,
         });
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
           setFetchError(`HTTP Error ${response.status}: ${response.statusText}`);
@@ -223,11 +238,16 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
           currentSetValue(typeof extractedData === "string" ? extractedData : JSON.stringify(extractedData));
         }
       } catch (err) {
+        if (err instanceof Error && err.name === "AbortError") {
+          // Request was cancelled, don't update state
+          return;
+        }
         const errorMessage = err instanceof Error ? err.message : t("renderer.defaultHttpInput.fetchFailed");
         setFetchError(errorMessage);
         console.error("HTTP Input fetch error:", err);
       } finally {
         setLoading(false);
+        abortControllerRef.current = null;
       }
     },
     [t],
@@ -243,6 +263,17 @@ const DefaultHttpInput = ({ node, value, setValue, error, label, placeholder, he
     setValueRef.current = setValue;
     fetchDataRef.current = fetchData;
   }, [httpConfig, formValues, inputNodes, setValue, fetchData]);
+
+  /**
+   * Cleanup: abort any pending request on unmount
+   */
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []);
 
   /**
    * Effect 1: Fetch on mount if fetchOnMount is true AND all variables are filled

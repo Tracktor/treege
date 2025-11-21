@@ -1,6 +1,6 @@
-import CustomInputExample from "~/example/CustomInputExample";
-import Example from "~/example/Example";
-import TreegeConfigProviderExample from "~/example/TreegeConfigProviderExample";
+import CustomInputExample from "~/example/web/CustomInputExample";
+import Example from "~/example/web/Example";
+import TreegeConfigProviderExample from "~/example/web/TreegeConfigProviderExample";
 
 const App = () => {
   const { pathname } = window.location;

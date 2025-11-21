@@ -125,8 +125,8 @@
       "searchParameterDesc": "Si se configura, habilita un cuadro de búsqueda que agrega este parámetro a las llamadas API (ej: ?q=París)",
       "searchParameterPlaceholder": "q, buscar, consulta...",
       "selectMethod": "Seleccionar método",
-      "sendFormData": "Enviar todos los datos del formulario",
-      "sendFormDataDesc": "Enviar automáticamente todos los valores del formulario como cuerpo JSON",
+      "sendAllFormValues": "Enviar todos los datos del formulario",
+      "sendAllFormValuesDesc": "Enviar automáticamente todos los valores del formulario como cuerpo JSON",
       "showLoadingState": "Mostrar estado de carga",
       "valueField": "Campo de valor",
       "valueFieldDesc": "Campo a usar como valor de opción (ej: id)",
@@ -239,8 +239,8 @@
       "requestBodyDesc": "Use {{fieldId}} para referenciar otros campos. Asegúrese de un formato JSON adecuado, incluyendo comillas alrededor de los valores de cadena.",
       "requestBodyPlaceholder": "{\"nombre\": \"{{nombreUsuario}}\", \"email\": \"{{emailUsuario}}\"}",
       "selectMethod": "Seleccionar método",
-      "sendFormData": "Enviar todos los datos del formulario",
-      "sendFormDataDesc": "Enviar automáticamente todos los valores del formulario como cuerpo JSON",
+      "sendAllFormValues": "Enviar todos los datos del formulario",
+      "sendAllFormValuesDesc": "Enviar automáticamente todos los valores del formulario como cuerpo JSON",
       "showLoadingState": "Mostrar estado de carga",
       "successMessage": "Mensaje de éxito",
       "successMessageDesc": "Mensaje mostrado cuando el envío es exitoso",
@@ -256,7 +256,9 @@
   "renderer": {
     "defaultAddressInput": {
       "enterAddress": "Ingrese una dirección...",
-      "noAddressesFound": "No se encontraron direcciones."
+      "noAddressesFound": "No se encontraron direcciones.",
+      "searching": "Buscando...",
+      "typeMinChars": "Escribe al menos 3 caracteres para buscar"
     },
     "defaultAutocompleteInput": {
       "noResults": "No se encontraron resultados.",
@@ -276,11 +278,17 @@
       "waitingForRequiredFields": "Esperando campos requeridos"
     },
     "defaultInputs": {
+      "addMoreFiles": "Agregar más archivos",
       "endDate": "Fecha de fin",
       "endTime": "Hora de fin",
+      "filePickerError": "Error al seleccionar archivo",
+      "filePickerUnavailable": "Selección de archivos no disponible. Instale react-native-document-picker.",
+      "replaceFile": "Reemplazar archivo",
       "required": "*",
       "selectDate": "Seleccionar fecha",
       "selectDateRange": "Seleccionar rango de fechas",
+      "selectFile": "Seleccionar archivo",
+      "selectFiles": "Seleccionar archivos",
       "startDate": "Fecha de inicio",
       "startTime": "Hora de inicio"
     },

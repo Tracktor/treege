@@ -16,6 +16,7 @@ const config = () =>
           editor: resolve(__dirname, "src/editor/index.ts"),
           main: resolve(__dirname, "src/main.ts"),
           renderer: resolve(__dirname, "src/renderer/index.ts"),
+          "renderer-native": resolve(__dirname, "src/renderer/index.native.ts"),
         },
         fileName: "[name]",
         formats: ["es"],

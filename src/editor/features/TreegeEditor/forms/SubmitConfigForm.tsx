@@ -36,7 +36,7 @@ const SubmitConfigForm = ({ value, onChange }: SubmitConfigFormProps) => {
       headers: value?.headers || [],
       method: value?.method || "POST",
       redirectUrl: value?.redirectUrl || "",
-      sendFormData: !!value?.sendFormData,
+      sendAllFormValues: !!value?.sendAllFormValues,
       showLoading: value?.showLoading !== false,
       successMessage: value?.successMessage || { en: "" },
       url: value?.url || "",
@@ -187,15 +187,15 @@ const SubmitConfigForm = ({ value, onChange }: SubmitConfigFormProps) => {
           </Field>
         </div>
 
-        <Subscribe selector={(state) => ({ method: state.values.method, sendFormData: state.values.sendFormData })}>
-          {({ method, sendFormData }) =>
+        <Subscribe selector={(state) => ({ method: state.values.method, sendAllFormValues: state.values.sendAllFormValues })}>
+          {({ method, sendAllFormValues }) =>
             METHODS_NEEDING_BODY.includes(method || "") && (
               <div className="space-y-4">
-                <Field name="sendFormData">
+                <Field name="sendAllFormValues">
                   {(field) => (
                     <div className="flex items-center space-x-2">
                       <Switch id={field.name} checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
-                      <Label htmlFor={field.name}>{t("editor.submitConfigForm.sendFormData")}</Label>
+                      <Label htmlFor={field.name}>{t("editor.submitConfigForm.sendAllFormValues")}</Label>
                     </div>
                   )}
                 </Field>
@@ -208,7 +208,7 @@ const SubmitConfigForm = ({ value, onChange }: SubmitConfigFormProps) => {
 
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button type="button" variant="ghost" size="sm" disabled={sendFormData}>
+                            <Button type="button" variant="ghost" size="sm" disabled={sendAllFormValues}>
                               <Variable className="mr-2 h-4 w-4" />
                               {t("editor.submitConfigForm.insertVariable")}
                             </Button>
@@ -245,10 +245,12 @@ const SubmitConfigForm = ({ value, onChange }: SubmitConfigFormProps) => {
                         onChange={({ target }) => field.handleChange(target.value)}
                         placeholder={t("editor.submitConfigForm.requestBodyPlaceholder")}
                         rows={4}
-                        disabled={sendFormData}
+                        disabled={sendAllFormValues}
                       />
                       <FormDescription>
-                        {sendFormData ? t("editor.submitConfigForm.sendFormDataDesc") : t("editor.submitConfigForm.requestBodyDesc")}
+                        {sendAllFormValues
+                          ? t("editor.submitConfigForm.sendAllFormValuesDesc")
+                          : t("editor.submitConfigForm.requestBodyDesc")}
                       </FormDescription>
                     </FormItem>
                   )}

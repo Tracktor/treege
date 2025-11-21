@@ -1,16 +1,52 @@
-/**
- * Default Input Components for React Native
- *
- * TODO: Implement React Native versions of all input renderers
- * This should mirror the web version but use React Native components:
- * - TextInput instead of <input>
- * - Picker instead of <select>
- * - Switch instead of <input type="checkbox">
- * - etc.
- *
- * Should export:
- * - defaultInputRenderers object with all input types
- * - Individual input components (DefaultTextInput, DefaultNumberInput, etc.)
- */
+import { Text } from "react-native";
+import DefaultAddressInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultAddressInput";
+import DefaultAutocompleteInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultAutocompleteInput";
+import DefaultCheckboxInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultCheckboxInput";
+import DefaultDateInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultDateInput";
+import DefaultDateRangeInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultDateRangeInput";
+import DefaultFileInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultFileInput";
+import DefaultHiddenInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultHiddenInput";
+import DefaultHttpInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultHttpInput";
+import DefaultNumberInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultNumberInput";
+import DefaultPasswordInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultPasswordInput";
+import DefaultRadioInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultRadioInput";
+import DefaultSelectInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultSelectInput";
+import DefaultSwitchInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultSwitchInput";
+import DefaultTextareaInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultTextareaInput";
+import DefaultTextInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultTextInput";
+import DefaultTimeInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultTimeInput";
+import DefaultTimeRangeInput from "@/renderer/features/TreegeRenderer/native/components/inputs/DefaultTimeRangeInput";
+import { InputRenderers, InputRenderProps } from "@/renderer/types/renderer";
 
-export {};
+const PlaceholderInput = ({ node }: InputRenderProps<"submit">) => <Text>TODO: Implement {node.data.type} input for React Native</Text>;
+
+export { DefaultTextInput, DefaultNumberInput, DefaultPasswordInput, DefaultTextareaInput };
+export { DefaultCheckboxInput, DefaultSwitchInput, DefaultRadioInput, DefaultSelectInput };
+export { DefaultHiddenInput };
+export { DefaultAddressInput, DefaultAutocompleteInput, DefaultHttpInput };
+export { DefaultDateInput, DefaultDateRangeInput, DefaultTimeInput, DefaultTimeRangeInput };
+export { DefaultFileInput };
+
+export const DefaultSubmitInput = PlaceholderInput;
+
+// Default input renderers mapping with proper typing
+export const defaultInputRenderers: InputRenderers = {
+  address: DefaultAddressInput,
+  autocomplete: DefaultAutocompleteInput,
+  checkbox: DefaultCheckboxInput,
+  date: DefaultDateInput,
+  daterange: DefaultDateRangeInput,
+  file: DefaultFileInput,
+  hidden: DefaultHiddenInput,
+  http: DefaultHttpInput,
+  number: DefaultNumberInput,
+  password: DefaultPasswordInput,
+  radio: DefaultRadioInput,
+  select: DefaultSelectInput,
+  submit: DefaultSubmitInput,
+  switch: DefaultSwitchInput,
+  text: DefaultTextInput,
+  textarea: DefaultTextareaInput,
+  time: DefaultTimeInput,
+  timerange: DefaultTimeRangeInput,
+};

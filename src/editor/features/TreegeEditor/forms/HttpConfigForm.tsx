@@ -37,7 +37,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
       },
       responsePath: value?.responsePath || "",
       searchParam: value?.searchParam || "",
-      sendFormData: !!value?.sendFormData,
+      sendAllFormValues: !!value?.sendAllFormValues,
       showLoading: value?.showLoading !== false,
       url: value?.url || "",
     } as HttpConfig,
@@ -188,15 +188,15 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
           </Field>
         </div>
 
-        <Subscribe selector={(state) => ({ method: state.values.method, sendFormData: state.values.sendFormData })}>
-          {({ method, sendFormData }) =>
+        <Subscribe selector={(state) => ({ method: state.values.method, sendAllFormValues: state.values.sendAllFormValues })}>
+          {({ method, sendAllFormValues }) =>
             METHODS_NEEDING_BODY.includes(method || "") && (
               <div className="space-y-4">
-                <Field name="sendFormData">
+                <Field name="sendAllFormValues">
                   {(field) => (
                     <div className="flex items-center space-x-2">
                       <Switch id={field.name} checked={field.state.value} onCheckedChange={(newValue) => field.handleChange(newValue)} />
-                      <Label htmlFor={field.name}>{t("editor.httpConfigForm.sendFormData")}</Label>
+                      <Label htmlFor={field.name}>{t("editor.httpConfigForm.sendAllFormValues")}</Label>
                     </div>
                   )}
                 </Field>
@@ -209,7 +209,7 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
 
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button type="button" variant="ghost" size="sm" disabled={sendFormData}>
+                            <Button type="button" variant="ghost" size="sm" disabled={sendAllFormValues}>
                               <Variable className="mr-2 h-4 w-4" />
                               {t("editor.httpConfigForm.insertVariable")}
                             </Button>
@@ -246,10 +246,10 @@ const HttpConfigForm = ({ value, onChange }: HttpConfigFormProps) => {
                         onChange={({ target }) => field.handleChange(target.value)}
                         placeholder={t("editor.httpConfigForm.requestBodyPlaceholder")}
                         rows={4}
-                        disabled={sendFormData}
+                        disabled={sendAllFormValues}
                       />
                       <FormDescription>
-                        {sendFormData ? t("editor.httpConfigForm.sendFormDataDesc") : t("editor.httpConfigForm.requestBodyDesc")}
+                        {sendAllFormValues ? t("editor.httpConfigForm.sendAllFormValuesDesc") : t("editor.httpConfigForm.requestBodyDesc")}
                       </FormDescription>
                     </FormItem>
                   )}

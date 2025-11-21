@@ -125,8 +125,8 @@
       "searchParameterDesc": "Wenn festgelegt, aktiviert eine Suchbox, die diesen Parameter zu API-Aufrufen hinzufügt (z.B. ?q=Paris)",
       "searchParameterPlaceholder": "q, suche, abfrage...",
       "selectMethod": "Methode auswählen",
-      "sendFormData": "Alle Formulardaten senden",
-      "sendFormDataDesc": "Alle Formularwerte automatisch als JSON-Body senden",
+      "sendAllFormValues": "Alle Formulardaten senden",
+      "sendAllFormValuesDesc": "Alle Formularwerte automatisch als JSON-Body senden",
       "showLoadingState": "Ladezustand anzeigen",
       "valueField": "Wertfeld",
       "valueFieldDesc": "Feld, das als Optionswert verwendet werden soll (z.B. id)",
@@ -239,8 +239,8 @@
       "requestBodyDesc": "Verwenden Sie {{fieldId}}, um andere Felder zu referenzieren. Stellen Sie sicher, dass die JSON-Formatierung korrekt ist, einschließlich Anführungszeichen um Zeichenkettenwerte.",
       "requestBodyPlaceholder": "{\"name\": \"{{benutzername}}\", \"email\": \"{{benutzeremail}}\"}",
       "selectMethod": "Methode auswählen",
-      "sendFormData": "Alle Formulardaten senden",
-      "sendFormDataDesc": "Alle Formularwerte automatisch als JSON-Body senden",
+      "sendAllFormValues": "Alle Formulardaten senden",
+      "sendAllFormValuesDesc": "Alle Formularwerte automatisch als JSON-Body senden",
       "showLoadingState": "Ladezustand anzeigen",
       "successMessage": "Erfolgsmeldung",
       "successMessageDesc": "Nachricht, die bei erfolgreicher Übermittlung angezeigt wird",
@@ -256,7 +256,9 @@
   "renderer": {
     "defaultAddressInput": {
       "enterAddress": "Geben Sie eine Adresse ein...",
-      "noAddressesFound": "Keine Adressen gefunden."
+      "noAddressesFound": "Keine Adressen gefunden.",
+      "searching": "Suche läuft...",
+      "typeMinChars": "Geben Sie mindestens 3 Zeichen ein, um zu suchen"
     },
     "defaultAutocompleteInput": {
       "noResults": "Keine Ergebnisse gefunden.",
@@ -276,11 +278,17 @@
       "waitingForRequiredFields": "Warten auf erforderliche Felder"
     },
     "defaultInputs": {
+      "addMoreFiles": "Weitere Dateien hinzufügen",
       "endDate": "Enddatum",
       "endTime": "Endzeit",
+      "filePickerError": "Fehler beim Auswählen der Datei",
+      "filePickerUnavailable": "Dateiauswahl nicht verfügbar. Bitte installieren Sie react-native-document-picker.",
+      "replaceFile": "Datei ersetzen",
       "required": "*",
       "selectDate": "Datum auswählen",
       "selectDateRange": "Datumsbereich auswählen",
+      "selectFile": "Datei auswählen",
+      "selectFiles": "Dateien auswählen",
       "startDate": "Startdatum",
       "startTime": "Startzeit"
     },
