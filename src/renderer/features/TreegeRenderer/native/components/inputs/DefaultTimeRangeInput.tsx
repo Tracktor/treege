@@ -2,11 +2,13 @@ import { useCallback, useState } from "react";
 import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
+import { useTheme } from "@/shared/context/ThemeContext";
 
 const DefaultTimeRangeInput = ({ node, value, setValue, error, label, helperText }: InputRenderProps<"timerange">) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectingStart, setSelectingStart] = useState(true);
   const t = useTranslate();
+  const { colors } = useTheme();
 
   const timeRange = Array.isArray(value) ? value : [];
   const startTime = timeRange[0] || "";
@@ -64,13 +66,17 @@ const DefaultTimeRangeInput = ({ node, value, setValue, error, label, helperText
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>
+      <Text style={[styles.label, { color: colors.textSecondary }]}>
         {label || node.data.name}
-        {node.data.required && <Text style={styles.required}>*</Text>}
+        {node.data.required && <Text style={{ color: colors.error }}>*</Text>}
       </Text>
 
-      <TouchableOpacity style={[styles.trigger, error && styles.triggerError]} onPress={handleOpen} activeOpacity={0.7}>
-        <Text style={[styles.triggerText, !startTime && styles.triggerPlaceholder]} numberOfLines={1}>
+      <TouchableOpacity
+        style={[styles.trigger, { backgroundColor: colors.input, borderColor: colors.border }, error && { borderColor: colors.error }]}
+        onPress={handleOpen}
+        activeOpacity={0.7}
+      >
+        <Text style={[styles.triggerText, { color: colors.text }, !startTime && { color: colors.textMuted }]} numberOfLines={1}>
           {formatTimeRange()}
         </Text>
         <Text style={styles.icon}>🕐</Text>
@@ -78,32 +84,38 @@ const DefaultTimeRangeInput = ({ node, value, setValue, error, label, helperText
 
       <Modal visible={isOpen} transparent animationType="fade" onRequestClose={() => setIsOpen(false)}>
         <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={() => setIsOpen(false)}>
-          <TouchableOpacity style={styles.modalContent} activeOpacity={1} onPress={() => {}}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>{label || node.data.name}</Text>
+          <TouchableOpacity style={[styles.modalContent, { backgroundColor: colors.card }]} activeOpacity={1} onPress={() => {}}>
+            <View style={[styles.modalHeader, { borderBottomColor: colors.separator }]}>
+              <Text style={[styles.modalTitle, { color: colors.text }]}>{label || node.data.name}</Text>
               <TouchableOpacity onPress={() => setIsOpen(false)}>
-                <Text style={styles.closeButton}>✕</Text>
+                <Text style={[styles.closeButton, { color: colors.textMuted }]}>✕</Text>
               </TouchableOpacity>
             </View>
 
-            <View style={styles.rangeIndicator}>
-              <Text style={styles.rangeIndicatorText}>
+            <View style={[styles.rangeIndicator, { backgroundColor: colors.primaryLight }]}>
+              <Text style={[styles.rangeIndicatorText, { color: colors.primary }]}>
                 {selectingStart ? t("renderer.defaultInputs.startTime") : t("renderer.defaultInputs.endTime")}
               </Text>
             </View>
 
             <View style={styles.pickerContainer}>
               <View style={styles.pickerColumn}>
-                <Text style={styles.pickerLabel}>Hour</Text>
+                <Text style={[styles.pickerLabel, { color: colors.textMuted }]}>Hour</Text>
                 <ScrollView style={styles.picker} contentContainerStyle={styles.pickerContent} showsVerticalScrollIndicator={false}>
                   {hoursList.map((hour) => (
                     <TouchableOpacity
                       key={hour}
-                      style={[styles.pickerItem, selectedHours === hour && styles.pickerItemSelected]}
+                      style={[styles.pickerItem, selectedHours === hour && { backgroundColor: colors.primary }]}
                       onPress={() => setSelectedHours(hour)}
                       activeOpacity={0.7}
                     >
-                      <Text style={[styles.pickerItemText, selectedHours === hour && styles.pickerItemTextSelected]}>
+                      <Text
+                        style={[
+                          styles.pickerItemText,
+                          { color: colors.text },
+                          selectedHours === hour && { color: colors.background, fontWeight: "600" },
+                        ]}
+                      >
                         {String(hour).padStart(2, "0")}
                       </Text>
                     </TouchableOpacity>
@@ -111,19 +123,25 @@ const DefaultTimeRangeInput = ({ node, value, setValue, error, label, helperText
                 </ScrollView>
               </View>
 
-              <Text style={styles.pickerSeparator}>:</Text>
+              <Text style={[styles.pickerSeparator, { color: colors.text }]}>:</Text>
 
               <View style={styles.pickerColumn}>
-                <Text style={styles.pickerLabel}>Minute</Text>
+                <Text style={[styles.pickerLabel, { color: colors.textMuted }]}>Minute</Text>
                 <ScrollView style={styles.picker} contentContainerStyle={styles.pickerContent} showsVerticalScrollIndicator={false}>
                   {minutesList.map((minute) => (
                     <TouchableOpacity
                       key={minute}
-                      style={[styles.pickerItem, selectedMinutes === minute && styles.pickerItemSelected]}
+                      style={[styles.pickerItem, selectedMinutes === minute && { backgroundColor: colors.primary }]}
                       onPress={() => setSelectedMinutes(minute)}
                       activeOpacity={0.7}
                     >
-                      <Text style={[styles.pickerItemText, selectedMinutes === minute && styles.pickerItemTextSelected]}>
+                      <Text
+                        style={[
+                          styles.pickerItemText,
+                          { color: colors.text },
+                          selectedMinutes === minute && { color: colors.background, fontWeight: "600" },
+                        ]}
+                      >
                         {String(minute).padStart(2, "0")}
                       </Text>
                     </TouchableOpacity>
@@ -132,34 +150,35 @@ const DefaultTimeRangeInput = ({ node, value, setValue, error, label, helperText
               </View>
             </View>
 
-            <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm} activeOpacity={0.7}>
-              <Text style={styles.confirmButtonText}>{selectingStart ? "Next" : "Confirm"}</Text>
+            <TouchableOpacity
+              style={[styles.confirmButton, { backgroundColor: colors.primary }]}
+              onPress={handleConfirm}
+              activeOpacity={0.7}
+            >
+              <Text style={[styles.confirmButtonText, { color: colors.background }]}>{selectingStart ? "Next" : "Confirm"}</Text>
             </TouchableOpacity>
           </TouchableOpacity>
         </TouchableOpacity>
       </Modal>
 
-      {error && <Text style={styles.error}>{error}</Text>}
-      {helperText && !error && <Text style={styles.helperText}>{helperText}</Text>}
+      {error && <Text style={[styles.error, { color: colors.error }]}>{error}</Text>}
+      {helperText && !error && <Text style={[styles.helperText, { color: colors.textMuted }]}>{helperText}</Text>}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   closeButton: {
-    color: "#6B7280",
     fontSize: 24,
     fontWeight: "300",
   },
   confirmButton: {
     alignItems: "center",
-    backgroundColor: "#3B82F6",
     borderRadius: 6,
     marginTop: 16,
     paddingVertical: 12,
   },
   confirmButtonText: {
-    color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "600",
   },
@@ -167,12 +186,10 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   error: {
-    color: "#EF4444",
     fontSize: 12,
     marginTop: 4,
   },
   helperText: {
-    color: "#6B7280",
     fontSize: 12,
     marginTop: 4,
   },
@@ -180,20 +197,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   label: {
-    color: "#374151",
     fontSize: 14,
     fontWeight: "500",
     marginBottom: 8,
   },
   modalContent: {
-    backgroundColor: "#FFFFFF",
     borderRadius: 12,
     padding: 16,
     width: "80%",
   },
   modalHeader: {
     alignItems: "center",
-    borderBottomColor: "#E5E7EB",
     borderBottomWidth: 1,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -207,7 +221,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   modalTitle: {
-    color: "#111827",
     fontSize: 18,
     fontWeight: "600",
   },
@@ -231,48 +244,31 @@ const styles = StyleSheet.create({
     marginVertical: 2,
     paddingVertical: 10,
   },
-  pickerItemSelected: {
-    backgroundColor: "#3B82F6",
-  },
   pickerItemText: {
-    color: "#374151",
     fontSize: 18,
   },
-  pickerItemTextSelected: {
-    color: "#FFFFFF",
-    fontWeight: "600",
-  },
   pickerLabel: {
-    color: "#6B7280",
     fontSize: 12,
     fontWeight: "600",
     marginBottom: 8,
     textAlign: "center",
   },
   pickerSeparator: {
-    color: "#374151",
     fontSize: 24,
     fontWeight: "600",
   },
   rangeIndicator: {
     alignItems: "center",
-    backgroundColor: "#EFF6FF",
     borderRadius: 6,
     marginBottom: 12,
     paddingVertical: 8,
   },
   rangeIndicatorText: {
-    color: "#3B82F6",
     fontSize: 14,
     fontWeight: "600",
   },
-  required: {
-    color: "#EF4444",
-  },
   trigger: {
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D1D5DB",
     borderRadius: 6,
     borderWidth: 1,
     flexDirection: "row",
@@ -280,14 +276,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
   },
-  triggerError: {
-    borderColor: "#EF4444",
-  },
-  triggerPlaceholder: {
-    color: "#9CA3AF",
-  },
   triggerText: {
-    color: "#374151",
     flex: 1,
     fontSize: 14,
   },

@@ -2,10 +2,12 @@ import { useCallback, useMemo, useState } from "react";
 import { FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
+import { useTheme } from "@/shared/context/ThemeContext";
 
 const DefaultDateInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"date">) => {
   const [isOpen, setIsOpen] = useState(false);
   const t = useTranslate();
+  const { colors } = useTheme();
   const dateValue = value ? new Date(value) : undefined;
 
   const { year, month, today } = useMemo(() => {
@@ -124,13 +126,17 @@ const DefaultDateInput = ({ node, value, setValue, error, label, placeholder, he
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>
+      <Text style={[styles.label, { color: colors.textSecondary }]}>
         {label || node.data.name}
-        {node.data.required && <Text style={styles.required}>*</Text>}
+        {node.data.required && <Text style={{ color: colors.error }}>*</Text>}
       </Text>
 
-      <TouchableOpacity style={[styles.trigger, error && styles.triggerError]} onPress={() => setIsOpen(true)} activeOpacity={0.7}>
-        <Text style={[styles.triggerText, !value && styles.triggerPlaceholder]} numberOfLines={1}>
+      <TouchableOpacity
+        style={[styles.trigger, { backgroundColor: colors.input, borderColor: colors.border }, error && { borderColor: colors.error }]}
+        onPress={() => setIsOpen(true)}
+        activeOpacity={0.7}
+      >
+        <Text style={[styles.triggerText, { color: colors.text }, !value && { color: colors.textMuted }]} numberOfLines={1}>
           {formatDate()}
         </Text>
         <Text style={styles.icon}>📅</Text>
@@ -138,29 +144,29 @@ const DefaultDateInput = ({ node, value, setValue, error, label, placeholder, he
 
       <Modal visible={isOpen} transparent animationType="fade" onRequestClose={() => setIsOpen(false)}>
         <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={() => setIsOpen(false)}>
-          <TouchableOpacity style={styles.modalContent} activeOpacity={1} onPress={() => {}}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>{label || node.data.name}</Text>
+          <TouchableOpacity style={[styles.modalContent, { backgroundColor: colors.card }]} activeOpacity={1} onPress={() => {}}>
+            <View style={[styles.modalHeader, { borderBottomColor: colors.separator }]}>
+              <Text style={[styles.modalTitle, { color: colors.text }]}>{label || node.data.name}</Text>
               <TouchableOpacity onPress={() => setIsOpen(false)}>
-                <Text style={styles.closeButton}>✕</Text>
+                <Text style={[styles.closeButton, { color: colors.textMuted }]}>✕</Text>
               </TouchableOpacity>
             </View>
 
             <View style={styles.calendarHeader}>
               <TouchableOpacity onPress={handlePreviousMonth} style={styles.navButton}>
-                <Text style={styles.navButtonText}>‹</Text>
+                <Text style={[styles.navButtonText, { color: colors.primary }]}>‹</Text>
               </TouchableOpacity>
-              <Text style={styles.monthYear}>
+              <Text style={[styles.monthYear, { color: colors.text }]}>
                 {monthNames[currentMonth]} {currentYear}
               </Text>
               <TouchableOpacity onPress={handleNextMonth} style={styles.navButton}>
-                <Text style={styles.navButtonText}>›</Text>
+                <Text style={[styles.navButtonText, { color: colors.primary }]}>›</Text>
               </TouchableOpacity>
             </View>
 
             <View style={styles.weekDays}>
               {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                <Text key={day} style={styles.weekDay}>
+                <Text key={day} style={[styles.weekDay, { color: colors.textMuted }]}>
                   {day}
                 </Text>
               ))}
@@ -182,7 +188,7 @@ const DefaultDateInput = ({ node, value, setValue, error, label, placeholder, he
                     style={[
                       styles.dayCell,
                       !item.isCurrentMonth && styles.dayCellOtherMonth,
-                      selected && styles.dayCellSelected,
+                      selected && { backgroundColor: colors.primary, borderRadius: 20 },
                       disabled && styles.dayCellDisabled,
                     ]}
                     onPress={() => handleSelectDate(item.date)}
@@ -192,9 +198,10 @@ const DefaultDateInput = ({ node, value, setValue, error, label, placeholder, he
                     <Text
                       style={[
                         styles.dayText,
-                        !item.isCurrentMonth && styles.dayTextOtherMonth,
-                        selected && styles.dayTextSelected,
-                        disabled && styles.dayTextDisabled,
+                        { color: colors.text },
+                        !item.isCurrentMonth && { color: colors.textMuted },
+                        selected && { color: colors.background, fontWeight: "600" },
+                        disabled && { color: colors.textMuted },
                       ]}
                     >
                       {item.day}
@@ -207,8 +214,8 @@ const DefaultDateInput = ({ node, value, setValue, error, label, placeholder, he
         </TouchableOpacity>
       </Modal>
 
-      {error && <Text style={styles.error}>{error}</Text>}
-      {helperText && !error && <Text style={styles.helperText}>{helperText}</Text>}
+      {error && <Text style={[styles.error, { color: colors.error }]}>{error}</Text>}
+      {helperText && !error && <Text style={[styles.helperText, { color: colors.textMuted }]}>{helperText}</Text>}
     </View>
   );
 };
@@ -229,7 +236,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   closeButton: {
-    color: "#6B7280",
     fontSize: 24,
     fontWeight: "300",
   },
@@ -250,31 +256,14 @@ const styles = StyleSheet.create({
   dayCellOtherMonth: {
     opacity: 0.3,
   },
-  dayCellSelected: {
-    backgroundColor: "#3B82F6",
-    borderRadius: 20,
-  },
   dayText: {
-    color: "#374151",
     fontSize: 14,
   },
-  dayTextDisabled: {
-    color: "#9CA3AF",
-  },
-  dayTextOtherMonth: {
-    color: "#9CA3AF",
-  },
-  dayTextSelected: {
-    color: "#FFFFFF",
-    fontWeight: "600",
-  },
   error: {
-    color: "#EF4444",
     fontSize: 12,
     marginTop: 4,
   },
   helperText: {
-    color: "#6B7280",
     fontSize: 12,
     marginTop: 4,
   },
@@ -282,13 +271,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   label: {
-    color: "#374151",
     fontSize: 14,
     fontWeight: "500",
     marginBottom: 8,
   },
   modalContent: {
-    backgroundColor: "#FFFFFF",
     borderRadius: 12,
     maxHeight: "80%",
     padding: 16,
@@ -296,7 +283,6 @@ const styles = StyleSheet.create({
   },
   modalHeader: {
     alignItems: "center",
-    borderBottomColor: "#E5E7EB",
     borderBottomWidth: 1,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -310,12 +296,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   modalTitle: {
-    color: "#111827",
     fontSize: 18,
     fontWeight: "600",
   },
   monthYear: {
-    color: "#111827",
     fontSize: 16,
     fontWeight: "600",
   },
@@ -323,17 +307,11 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   navButtonText: {
-    color: "#3B82F6",
     fontSize: 24,
     fontWeight: "600",
   },
-  required: {
-    color: "#EF4444",
-  },
   trigger: {
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D1D5DB",
     borderRadius: 6,
     borderWidth: 1,
     flexDirection: "row",
@@ -341,19 +319,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
   },
-  triggerError: {
-    borderColor: "#EF4444",
-  },
-  triggerPlaceholder: {
-    color: "#9CA3AF",
-  },
   triggerText: {
-    color: "#374151",
     flex: 1,
     fontSize: 14,
   },
   weekDay: {
-    color: "#6B7280",
     flex: 1,
     fontSize: 12,
     fontWeight: "600",

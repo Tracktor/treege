@@ -3,6 +3,7 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
 import { SerializableFile } from "@/renderer/utils/file";
+import { useTheme } from "@/shared/context/ThemeContext";
 
 type PickResult = {
   uri: string;
@@ -17,6 +18,7 @@ const DefaultFileInput = ({ node, value, setValue, error, label, helperText }: I
   const [pick, setPick] = useState<PickFunction | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const t = useTranslate();
+  const { colors } = useTheme();
   const files: SerializableFile[] = Array.isArray(value) ? value : value ? [value] : [];
   const isMultiple = node.data.multiple;
 
@@ -91,56 +93,60 @@ const DefaultFileInput = ({ node, value, setValue, error, label, helperText }: I
   if (!pick) {
     return (
       <View style={styles.container}>
-        <Text style={styles.label}>
+        <Text style={[styles.label, { color: colors.textSecondary }]}>
           {label || node.data.name}
-          {node.data.required && <Text style={styles.required}>*</Text>}
+          {node.data.required && <Text style={{ color: colors.error }}>*</Text>}
         </Text>
-        <View style={styles.unavailableContainer}>
-          <Text style={styles.unavailableText}>{t("renderer.defaultInputs.filePickerUnavailable")}</Text>
+        <View style={[styles.unavailableContainer, { backgroundColor: colors.errorLight, borderColor: colors.error }]}>
+          <Text style={[styles.unavailableText, { color: colors.error }]}>{t("renderer.defaultInputs.filePickerUnavailable")}</Text>
         </View>
-        {helperText && <Text style={styles.helperText}>{helperText}</Text>}
+        {helperText && <Text style={[styles.helperText, { color: colors.textMuted }]}>{helperText}</Text>}
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>
+      <Text style={[styles.label, { color: colors.textSecondary }]}>
         {label || node.data.name}
-        {node.data.required && <Text style={styles.required}>*</Text>}
+        {node.data.required && <Text style={{ color: colors.error }}>*</Text>}
       </Text>
 
       {files.length > 0 && (
         <View style={styles.filesList}>
           {files.map((file, index) => (
-            <View key={`${file.name}-${index}`} style={styles.fileItem}>
-              <View style={styles.fileIcon}>
+            <View key={`${file.name}-${index}`} style={[styles.fileItem, { backgroundColor: colors.card, borderColor: colors.separator }]}>
+              <View style={[styles.fileIcon, { backgroundColor: colors.muted }]}>
                 <Text style={styles.fileIconText}>📄</Text>
               </View>
               <View style={styles.fileInfo}>
-                <Text style={styles.fileName} numberOfLines={1}>
+                <Text style={[styles.fileName, { color: colors.text }]} numberOfLines={1}>
                   {file.name}
                 </Text>
-                {file.size > 0 && <Text style={styles.fileSize}>{formatFileSize(file.size)}</Text>}
+                {file.size > 0 && <Text style={[styles.fileSize, { color: colors.textMuted }]}>{formatFileSize(file.size)}</Text>}
               </View>
               <TouchableOpacity style={styles.removeButton} onPress={() => handleRemoveFile(index)} activeOpacity={0.7}>
-                <Text style={styles.removeButtonText}>✕</Text>
+                <Text style={[styles.removeButtonText, { color: colors.textMuted }]}>✕</Text>
               </TouchableOpacity>
             </View>
           ))}
         </View>
       )}
 
-      <TouchableOpacity style={styles.pickButton} onPress={handlePickFile} activeOpacity={0.7}>
-        <Text style={styles.pickButtonText}>
+      <TouchableOpacity
+        style={[styles.pickButton, { backgroundColor: colors.input, borderColor: colors.border }]}
+        onPress={handlePickFile}
+        activeOpacity={0.7}
+      >
+        <Text style={[styles.pickButtonText, { color: colors.textMuted }]}>
           {files.length === 0
             ? t(isMultiple ? "renderer.defaultInputs.selectFiles" : "renderer.defaultInputs.selectFile")
             : t(isMultiple ? "renderer.defaultInputs.addMoreFiles" : "renderer.defaultInputs.replaceFile")}
         </Text>
       </TouchableOpacity>
 
-      {error && <Text style={styles.error}>{error}</Text>}
-      {helperText && !error && <Text style={styles.helperText}>{helperText}</Text>}
+      {error && <Text style={[styles.error, { color: colors.error }]}>{error}</Text>}
+      {helperText && !error && <Text style={[styles.helperText, { color: colors.textMuted }]}>{helperText}</Text>}
     </View>
   );
 };
@@ -150,13 +156,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   error: {
-    color: "#EF4444",
     fontSize: 12,
     marginTop: 4,
   },
   fileIcon: {
     alignItems: "center",
-    backgroundColor: "#F3F4F6",
     borderRadius: 6,
     height: 40,
     justifyContent: "center",
@@ -171,8 +175,6 @@ const styles = StyleSheet.create({
   },
   fileItem: {
     alignItems: "center",
-    backgroundColor: "#F9FAFB",
-    borderColor: "#E5E7EB",
     borderRadius: 6,
     borderWidth: 1,
     flexDirection: "row",
@@ -180,12 +182,10 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   fileName: {
-    color: "#111827",
     fontSize: 14,
     fontWeight: "500",
   },
   fileSize: {
-    color: "#6B7280",
     fontSize: 12,
     marginTop: 2,
   },
@@ -193,20 +193,16 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   helperText: {
-    color: "#6B7280",
     fontSize: 12,
     marginTop: 4,
   },
   label: {
-    color: "#374151",
     fontSize: 14,
     fontWeight: "500",
     marginBottom: 8,
   },
   pickButton: {
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D1D5DB",
     borderRadius: 6,
     borderStyle: "dashed",
     borderWidth: 2,
@@ -214,7 +210,6 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   pickButtonText: {
-    color: "#6B7280",
     fontSize: 14,
     fontWeight: "500",
   },
@@ -222,23 +217,16 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   removeButtonText: {
-    color: "#6B7280",
     fontSize: 18,
-  },
-  required: {
-    color: "#EF4444",
   },
   unavailableContainer: {
     alignItems: "center",
-    backgroundColor: "#FEF2F2",
-    borderColor: "#FCA5A5",
     borderRadius: 6,
     borderWidth: 1,
     justifyContent: "center",
     paddingVertical: 16,
   },
   unavailableText: {
-    color: "#991B1B",
     fontSize: 12,
     textAlign: "center",
   },

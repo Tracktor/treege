@@ -1,9 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
+import { useTheme } from "@/shared/context/ThemeContext";
 
 const DefaultRadioInput = ({ node, value, setValue, error, label, helperText }: InputRenderProps<"radio">) => {
   const t = useTranslate();
+  const { colors } = useTheme();
   const options = node.data.options || [];
   const selectedValue = value || "";
 
@@ -13,9 +15,9 @@ const DefaultRadioInput = ({ node, value, setValue, error, label, helperText }: 
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>
+      <Text style={[styles.label, { color: colors.textSecondary }]}>
         {label || node.data.name}
-        {node.data.required && <Text style={styles.required}>*</Text>}
+        {node.data.required && <Text style={{ color: colors.error }}>*</Text>}
       </Text>
 
       {options.map((option) => {
@@ -29,14 +31,24 @@ const DefaultRadioInput = ({ node, value, setValue, error, label, helperText }: 
             disabled={option.disabled}
             activeOpacity={0.7}
           >
-            <View style={[styles.radio, isSelected && styles.radioSelected]}>{isSelected && <View style={styles.radioInner} />}</View>
-            <Text style={[styles.optionLabel, option.disabled && styles.optionLabelDisabled]}>{t(option.label) || option.value}</Text>
+            <View
+              style={[
+                styles.radio,
+                { backgroundColor: colors.input, borderColor: colors.border },
+                isSelected && { borderColor: colors.primary },
+              ]}
+            >
+              {isSelected && <View style={[styles.radioInner, { backgroundColor: colors.primary }]} />}
+            </View>
+            <Text style={[styles.optionLabel, { color: colors.textSecondary }, option.disabled && { color: colors.textMuted }]}>
+              {t(option.label) || option.value}
+            </Text>
           </TouchableOpacity>
         );
       })}
 
-      {error && <Text style={styles.error}>{error}</Text>}
-      {helperText && !error && <Text style={styles.helperText}>{helperText}</Text>}
+      {error && <Text style={[styles.error, { color: colors.error }]}>{error}</Text>}
+      {helperText && !error && <Text style={[styles.helperText, { color: colors.textMuted }]}>{helperText}</Text>}
     </View>
   );
 };
@@ -46,17 +58,14 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   error: {
-    color: "#EF4444",
     fontSize: 12,
     marginTop: 4,
   },
   helperText: {
-    color: "#6B7280",
     fontSize: 12,
     marginTop: 4,
   },
   label: {
-    color: "#374151",
     fontSize: 14,
     fontWeight: "500",
     marginBottom: 8,
@@ -67,16 +76,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   optionLabel: {
-    color: "#374151",
     fontSize: 14,
-  },
-  optionLabelDisabled: {
-    color: "#9CA3AF",
   },
   radio: {
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D1D5DB",
     borderRadius: 10,
     borderWidth: 2,
     height: 20,
@@ -85,16 +88,9 @@ const styles = StyleSheet.create({
     width: 20,
   },
   radioInner: {
-    backgroundColor: "#3B82F6",
     borderRadius: 5,
     height: 10,
     width: 10,
-  },
-  radioSelected: {
-    borderColor: "#3B82F6",
-  },
-  required: {
-    color: "#EF4444",
   },
 });
 

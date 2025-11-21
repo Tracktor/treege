@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { useTheme } from "@/shared/context/ThemeContext";
 
 export interface DefaultSubmitButtonProps {
   children?: ReactNode;
@@ -9,14 +10,24 @@ export interface DefaultSubmitButtonProps {
 }
 
 const DefaultSubmitButton = ({ children = "Submit", disabled, isSubmitting, onPress }: DefaultSubmitButtonProps) => {
+  const { colors } = useTheme();
+
   return (
     <TouchableOpacity
-      style={[styles.button, (disabled || isSubmitting) && styles.buttonDisabled]}
+      style={[
+        styles.button,
+        { backgroundColor: colors.primary },
+        (disabled || isSubmitting) && { backgroundColor: colors.primaryDisabled, opacity: 0.6 },
+      ]}
       disabled={disabled || isSubmitting}
       onPress={onPress}
       activeOpacity={0.7}
     >
-      {isSubmitting ? <ActivityIndicator color="#FFFFFF" /> : <Text style={styles.buttonText}>{children}</Text>}
+      {isSubmitting ? (
+        <ActivityIndicator color={colors.primaryForeground} />
+      ) : (
+        <Text style={[styles.buttonText, { color: colors.primaryForeground }]}>{children}</Text>
+      )}
     </TouchableOpacity>
   );
 };
@@ -24,19 +35,13 @@ const DefaultSubmitButton = ({ children = "Submit", disabled, isSubmitting, onPr
 const styles = StyleSheet.create({
   button: {
     alignItems: "center",
-    backgroundColor: "#3B82F6",
     borderRadius: 6,
     justifyContent: "center",
     marginTop: 16,
     paddingHorizontal: 24,
     paddingVertical: 12,
   },
-  buttonDisabled: {
-    backgroundColor: "#9CA3AF",
-    opacity: 0.6,
-  },
   buttonText: {
-    color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "600",
   },
