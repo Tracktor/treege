@@ -1,31 +1,38 @@
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { InputRenderProps } from "@/renderer/types/renderer";
+import { useTheme } from "@/shared/context/ThemeContext";
 
 const DefaultPasswordInput = ({ node, value, setValue, error, label, placeholder, helperText, name }: InputRenderProps<"password">) => {
+  const { colors } = useTheme();
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>
+      <Text style={[styles.label, { color: colors.textSecondary }]}>
         {label || node.data.name}
-        {node.data.required && <Text style={styles.required}>*</Text>}
+        {node.data.required && <Text style={{ color: colors.error }}>*</Text>}
       </Text>
       <View style={styles.inputWrapper}>
         <TextInput
-          style={[styles.input, error && styles.inputError]}
+          style={[
+            styles.input,
+            { backgroundColor: colors.input, borderColor: colors.border, color: colors.text },
+            error && { borderColor: colors.error },
+          ]}
           value={value ?? ""}
           onChangeText={setValue}
           placeholder={placeholder}
+          placeholderTextColor={colors.textMuted}
           secureTextEntry={!showPassword}
           accessibilityLabel={name}
         />
         <TouchableOpacity style={styles.toggleButton} onPress={() => setShowPassword(!showPassword)} activeOpacity={0.7}>
-          <Text style={styles.toggleText}>{showPassword ? "Hide" : "Show"}</Text>
+          <Text style={[styles.toggleText, { color: colors.primary }]}>{showPassword ? "Hide" : "Show"}</Text>
         </TouchableOpacity>
       </View>
-      {error && <Text style={styles.error}>{error}</Text>}
-      {helperText && !error && <Text style={styles.helperText}>{helperText}</Text>}
+      {error && <Text style={[styles.error, { color: colors.error }]}>{error}</Text>}
+      {helperText && !error && <Text style={[styles.helperText, { color: colors.textMuted }]}>{helperText}</Text>}
     </View>
   );
 };
@@ -35,18 +42,14 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   error: {
-    color: "#EF4444",
     fontSize: 12,
     marginTop: 4,
   },
   helperText: {
-    color: "#6B7280",
     fontSize: 12,
     marginTop: 4,
   },
   input: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D1D5DB",
     borderRadius: 6,
     borderWidth: 1,
     flex: 1,
@@ -54,22 +57,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
-  inputError: {
-    borderColor: "#EF4444",
-  },
   inputWrapper: {
     alignItems: "center",
     flexDirection: "row",
     position: "relative",
   },
   label: {
-    color: "#374151",
     fontSize: 14,
     fontWeight: "500",
     marginBottom: 8,
-  },
-  required: {
-    color: "#EF4444",
   },
   toggleButton: {
     paddingHorizontal: 12,
@@ -78,7 +74,6 @@ const styles = StyleSheet.create({
     right: 0,
   },
   toggleText: {
-    color: "#3B82F6",
     fontSize: 12,
     fontWeight: "600",
   },

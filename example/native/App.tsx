@@ -15,8 +15,9 @@ export default function App() {
         flows={flows  as Flow}
         onSubmit={handleSubmit}
         contentContainerStyle={styles.scrollContent}
+        theme={"dark"}
       />
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
     </View>
   );
 }

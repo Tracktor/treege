@@ -9,15 +9,15 @@ import { defaultUI } from "@/renderer/features/TreegeRenderer/native/components/
 import { useTreegeRenderer } from "@/renderer/features/TreegeRenderer/useTreegeRenderer";
 import { useRenderNode } from "@/renderer/hooks/useRenderNode";
 import { TreegeRendererProps } from "@/renderer/types/renderer";
+import { ThemeProvider, useTheme } from "@/shared/context/ThemeContext";
 
 /**
  * Props for the TreegeRenderer component (React Native)
  * Same as TreegeRendererProps but:
  * - Omits className (not used in React Native)
- * - Omits theme (not used in React Native)
  * - Adds style and contentContainerStyle (React Native specific)
  */
-export type TreegeRendererNativeProps = Omit<TreegeRendererProps, "className" | "theme"> & {
+export type TreegeRendererNativeProps = Omit<TreegeRendererProps, "className"> & {
   /**
    * Style for the ScrollView container
    */
@@ -29,19 +29,26 @@ export type TreegeRendererNativeProps = Omit<TreegeRendererProps, "className" | 
   contentContainerStyle?: ViewStyle;
 };
 
-const TreegeRenderer = ({
+/**
+ * Internal component that uses theme colors
+ * Must be inside ThemeProvider to access useTheme
+ */
+const TreegeRendererContent = ({
   components,
   contentContainerStyle,
   flows,
   googleApiKey,
+  initialValues,
   language,
   onChange,
   onSubmit,
   style,
+  theme,
   validate,
   validationMode,
-  initialValues = {},
 }: TreegeRendererNativeProps) => {
+  const { colors } = useTheme();
+
   const {
     canSubmit,
     clearSubmitMessage,
@@ -66,6 +73,7 @@ const TreegeRenderer = ({
     language,
     onChange,
     onSubmit,
+    theme,
     validate,
     validationMode,
   });
@@ -86,7 +94,11 @@ const TreegeRenderer = ({
   });
 
   return (
-    <ScrollView nestedScrollEnabled style={[styles.container, style]} contentContainerStyle={contentContainerStyle}>
+    <ScrollView
+      nestedScrollEnabled
+      style={[styles.container, { backgroundColor: colors.background }, style]}
+      contentContainerStyle={contentContainerStyle}
+    >
       <TreegeRendererProvider
         value={{
           flows: mergedFlow,
@@ -112,20 +124,52 @@ const TreegeRenderer = ({
           )}
 
           {/* Powered by Treege */}
-          <Text style={styles.poweredBy}>Powered by Treege</Text>
+          <Text style={[styles.poweredBy, { color: colors.textMuted }]}>Powered by Treege</Text>
         </FormWrapper>
 
         {/* Submit message (success/error) */}
         {submitMessage && (
-          <View style={[styles.message, submitMessage.type === "success" ? styles.messageSuccess : styles.messageError]}>
-            <Text style={styles.messageText}>{submitMessage.message}</Text>
-            <Text style={styles.messageClose} onPress={clearSubmitMessage}>
+          <View
+            style={[
+              styles.message,
+              {
+                backgroundColor: submitMessage.type === "success" ? colors.successBg : colors.errorBg,
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.messageText,
+                {
+                  color: submitMessage.type === "success" ? colors.success : colors.error,
+                },
+              ]}
+            >
+              {submitMessage.message}
+            </Text>
+            <Text
+              style={[
+                styles.messageClose,
+                {
+                  color: submitMessage.type === "success" ? colors.success : colors.error,
+                },
+              ]}
+              onPress={clearSubmitMessage}
+            >
               {t("common.close")}
             </Text>
           </View>
         )}
       </TreegeRendererProvider>
     </ScrollView>
+  );
+};
+
+const TreegeRenderer = (props: TreegeRendererNativeProps) => {
+  return (
+    <ThemeProvider theme={props.theme} storageKey="treege-renderer-theme">
+      <TreegeRendererContent {...props} />
+    </ThemeProvider>
   );
 };
 
@@ -143,18 +187,11 @@ const styles = StyleSheet.create({
     marginTop: 8,
     textDecorationLine: "underline",
   },
-  messageError: {
-    backgroundColor: "#FEE2E2",
-  },
-  messageSuccess: {
-    backgroundColor: "#D1FAE5",
-  },
   messageText: {
     fontSize: 14,
     fontWeight: "500",
   },
   poweredBy: {
-    color: "#9CA3AF",
     fontSize: 12,
     paddingVertical: 8,
     textAlign: "center",

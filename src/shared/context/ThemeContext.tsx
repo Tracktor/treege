@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
+import { ThemeColors, themeColors } from "@/shared/constants/colors";
 
 type Theme = "dark" | "light" | "system";
 
@@ -10,11 +11,13 @@ interface ThemeProviderProps {
 }
 
 interface ThemeProviderState {
+  colors: ThemeColors;
   theme: Theme;
   setTheme: (theme: Theme) => void;
 }
 
 const initialState: ThemeProviderState = {
+  colors: themeColors.light,
   setTheme: () => null,
   theme: "system",
 };
@@ -44,8 +47,19 @@ export const ThemeProvider = ({
   // Use controlled theme if provided, otherwise use internal state
   const theme = controlledTheme ?? internalTheme;
 
+  // For web, we use CSS classes (Tailwind dark:), but provide colors for API compatibility
+  // The resolved theme is used to determine which color palette to expose
+  const resolvedTheme =
+    theme === "system"
+      ? typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light"
+      : theme;
+  const colors = themeColors[resolvedTheme];
+
   const value = useMemo(
     () => ({
+      colors,
       setTheme: (newTheme: Theme) => {
         // Don't update localStorage if controlled
         if (!controlledTheme && typeof window !== "undefined") {
@@ -55,7 +69,7 @@ export const ThemeProvider = ({
       },
       theme,
     }),
-    [storageKey, theme, controlledTheme],
+    [storageKey, theme, controlledTheme, colors],
   );
 
   /**

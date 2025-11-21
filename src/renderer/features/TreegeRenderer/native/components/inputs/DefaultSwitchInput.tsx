@@ -1,28 +1,30 @@
 import { StyleSheet, Switch, Text, View } from "react-native";
 import { InputRenderProps } from "@/renderer/types/renderer";
+import { useTheme } from "@/shared/context/ThemeContext";
 
 const DefaultSwitchInput = ({ node, value, setValue, error, label, helperText }: InputRenderProps<"switch">) => {
+  const { colors } = useTheme();
   const isEnabled = Boolean(value);
 
   return (
     <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.labelContainer}>
-          <Text style={styles.label}>
+          <Text style={[styles.label, { color: colors.textSecondary }]}>
             {label || node.data.name}
-            {node.data.required && <Text style={styles.required}>*</Text>}
+            {node.data.required && <Text style={{ color: colors.error }}>*</Text>}
           </Text>
         </View>
         <Switch
-          trackColor={{ false: "#D1D5DB", true: "#93C5FD" }}
-          thumbColor={isEnabled ? "#3B82F6" : "#F3F4F6"}
-          ios_backgroundColor="#D1D5DB"
+          trackColor={{ false: colors.border, true: `${colors.primary}80` }}
+          thumbColor={isEnabled ? colors.primary : colors.card}
+          ios_backgroundColor={colors.border}
           onValueChange={setValue}
           value={isEnabled}
         />
       </View>
-      {error && <Text style={styles.error}>{error}</Text>}
-      {helperText && !error && <Text style={styles.helperText}>{helperText}</Text>}
+      {error && <Text style={[styles.error, { color: colors.error }]}>{error}</Text>}
+      {helperText && !error && <Text style={[styles.helperText, { color: colors.textMuted }]}>{helperText}</Text>}
     </View>
   );
 };
@@ -32,25 +34,19 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   error: {
-    color: "#EF4444",
     fontSize: 12,
     marginTop: 4,
   },
   helperText: {
-    color: "#6B7280",
     fontSize: 12,
     marginTop: 4,
   },
   label: {
-    color: "#374151",
     fontSize: 14,
     fontWeight: "500",
   },
   labelContainer: {
     flex: 1,
-  },
-  required: {
-    color: "#EF4444",
   },
   row: {
     alignItems: "center",

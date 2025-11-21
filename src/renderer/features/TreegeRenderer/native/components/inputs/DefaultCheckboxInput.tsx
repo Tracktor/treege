@@ -1,9 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
+import { useTheme } from "@/shared/context/ThemeContext";
 
 const DefaultCheckboxInput = ({ node, value, setValue, error, label, helperText }: InputRenderProps<"checkbox">) => {
   const t = useTranslate();
+  const { colors } = useTheme();
   const options = node.data.options || [];
   const hasOptions = options.length > 0;
   const selectedValues = Array.isArray(value) ? value : [];
@@ -28,9 +30,9 @@ const DefaultCheckboxInput = ({ node, value, setValue, error, label, helperText 
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>
+      <Text style={[styles.label, { color: colors.textSecondary }]}>
         {label || node.data.name}
-        {node.data.required && <Text style={styles.required}>*</Text>}
+        {node.data.required && <Text style={{ color: colors.error }}>*</Text>}
       </Text>
 
       {options.length > 0 ? (
@@ -46,10 +48,18 @@ const DefaultCheckboxInput = ({ node, value, setValue, error, label, helperText 
             accessibilityState={{ checked: isChecked(option.value), disabled: option.disabled }}
             accessibilityLabel={t(option.label) || option.value}
           >
-            <View style={[styles.checkbox, isChecked(option.value) && styles.checkboxChecked]}>
+            <View
+              style={[
+                styles.checkbox,
+                { backgroundColor: colors.input, borderColor: colors.border },
+                isChecked(option.value) && { backgroundColor: colors.primary, borderColor: colors.primary },
+              ]}
+            >
               {isChecked(option.value) && <Text style={styles.checkmark}>✓</Text>}
             </View>
-            <Text style={[styles.optionLabel, option.disabled && styles.optionLabelDisabled]}>{t(option.label) || option.value}</Text>
+            <Text style={[styles.optionLabel, { color: colors.textSecondary }, option.disabled && { color: colors.textMuted }]}>
+              {t(option.label) || option.value}
+            </Text>
           </TouchableOpacity>
         ))
       ) : (
@@ -63,15 +73,21 @@ const DefaultCheckboxInput = ({ node, value, setValue, error, label, helperText 
           accessibilityState={{ checked: isSingleChecked }}
           accessibilityLabel={label || node.data.name}
         >
-          <View style={[styles.checkbox, isSingleChecked && styles.checkboxChecked]}>
+          <View
+            style={[
+              styles.checkbox,
+              { backgroundColor: colors.input, borderColor: colors.border },
+              isSingleChecked && { backgroundColor: colors.primary, borderColor: colors.primary },
+            ]}
+          >
             {isSingleChecked && <Text style={styles.checkmark}>✓</Text>}
           </View>
-          <Text style={styles.optionLabel}>{label || node.data.name}</Text>
+          <Text style={[styles.optionLabel, { color: colors.textSecondary }]}>{label || node.data.name}</Text>
         </TouchableOpacity>
       )}
 
-      {error && <Text style={styles.error}>{error}</Text>}
-      {helperText && !error && <Text style={styles.helperText}>{helperText}</Text>}
+      {error && <Text style={[styles.error, { color: colors.error }]}>{error}</Text>}
+      {helperText && !error && <Text style={[styles.helperText, { color: colors.textMuted }]}>{helperText}</Text>}
     </View>
   );
 };
@@ -79,18 +95,12 @@ const DefaultCheckboxInput = ({ node, value, setValue, error, label, helperText 
 const styles = StyleSheet.create({
   checkbox: {
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D1D5DB",
     borderRadius: 4,
     borderWidth: 2,
     height: 20,
     justifyContent: "center",
     marginRight: 12,
     width: 20,
-  },
-  checkboxChecked: {
-    backgroundColor: "#3B82F6",
-    borderColor: "#3B82F6",
   },
   checkmark: {
     color: "#FFFFFF",
@@ -101,17 +111,14 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   error: {
-    color: "#EF4444",
     fontSize: 12,
     marginTop: 4,
   },
   helperText: {
-    color: "#6B7280",
     fontSize: 12,
     marginTop: 4,
   },
   label: {
-    color: "#374151",
     fontSize: 14,
     fontWeight: "500",
     marginBottom: 8,
@@ -122,15 +129,8 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   optionLabel: {
-    color: "#374151",
     flex: 1,
     fontSize: 14,
-  },
-  optionLabelDisabled: {
-    color: "#9CA3AF",
-  },
-  required: {
-    color: "#EF4444",
   },
 });
 

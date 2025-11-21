@@ -6,6 +6,7 @@ import { InputRenderProps } from "@/renderer/types/renderer";
 import { convertFormValuesToNamedFormat } from "@/renderer/utils/form";
 import { getFieldNameFromNodeId } from "@/renderer/utils/node";
 import { sanitizeHttpResponse } from "@/renderer/utils/sanitize.native";
+import { useTheme } from "@/shared/context/ThemeContext";
 
 type HttpResponse = Record<string, unknown> | unknown[];
 
@@ -88,6 +89,7 @@ const DefaultHttpInput = ({
   const [modalOpen, setModalOpen] = useState(false);
   const { formValues, inputNodes } = useTreegeRendererContext();
   const t = useTranslate();
+  const { colors } = useTheme();
   const { httpConfig } = node.data;
   const hasFetchedOnMount = useRef(false);
   const lastFetchedTemplateValues = useRef<string>("");
@@ -349,42 +351,46 @@ const DefaultHttpInput = ({
 
       return (
         <View style={styles.container}>
-          <Text style={styles.label}>
+          <Text style={[styles.label, { color: colors.textSecondary }]}>
             {label || node.data.name}
-            {node.data.required && <Text style={styles.required}>*</Text>}
+            {node.data.required && <Text style={{ color: colors.error }}>*</Text>}
           </Text>
 
-          <TouchableOpacity style={[styles.trigger, error && styles.triggerError]} onPress={() => setModalOpen(true)} activeOpacity={0.7}>
+          <TouchableOpacity
+            style={[styles.trigger, { backgroundColor: colors.input, borderColor: colors.border }, error && { borderColor: colors.error }]}
+            onPress={() => setModalOpen(true)}
+            activeOpacity={0.7}
+          >
             {isLoading ? (
               <View style={styles.loadingTrigger}>
-                <ActivityIndicator size="small" color="#3B82F6" />
-                <Text style={styles.triggerPlaceholder} numberOfLines={1}>
+                <ActivityIndicator size="small" color={colors.primary} />
+                <Text style={[styles.triggerText, { color: colors.textMuted }]} numberOfLines={1}>
                   {selectedOption?.label || placeholder || t("renderer.defaultHttpInput.search")}
                 </Text>
               </View>
             ) : (
-              <Text style={[styles.triggerText, !selectedOption && styles.triggerPlaceholder]} numberOfLines={1}>
+              <Text style={[styles.triggerText, { color: colors.text }, !selectedOption && { color: colors.textMuted }]} numberOfLines={1}>
                 {selectedOption?.label || placeholder || t("renderer.defaultHttpInput.search")}
               </Text>
             )}
-            <Text style={styles.arrow}>▼</Text>
+            <Text style={[styles.arrow, { color: colors.textMuted }]}>▼</Text>
           </TouchableOpacity>
 
           <Modal visible={modalOpen} transparent animationType="fade" onRequestClose={() => setModalOpen(false)}>
             <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={() => setModalOpen(false)}>
-              <TouchableOpacity style={styles.modalContent} activeOpacity={1} onPress={() => {}}>
-                <View style={styles.modalHeader}>
-                  <Text style={styles.modalTitle}>{label || node.data.name}</Text>
+              <TouchableOpacity style={[styles.modalContent, { backgroundColor: colors.card }]} activeOpacity={1} onPress={() => {}}>
+                <View style={[styles.modalHeader, { borderBottomColor: colors.separator }]}>
+                  <Text style={[styles.modalTitle, { color: colors.text }]}>{label || node.data.name}</Text>
                   <TouchableOpacity onPress={() => setModalOpen(false)}>
-                    <Text style={styles.closeButton}>✕</Text>
+                    <Text style={[styles.closeButton, { color: colors.textMuted }]}>✕</Text>
                   </TouchableOpacity>
                 </View>
 
                 <View style={styles.searchContainer}>
                   <TextInput
-                    style={styles.searchInput}
+                    style={[styles.searchInput, { backgroundColor: colors.muted, borderColor: colors.border, color: colors.text }]}
                     placeholder={t("renderer.defaultHttpInput.search")}
-                    placeholderTextColor="#9CA3AF"
+                    placeholderTextColor={colors.textMuted}
                     value={searchQuery}
                     onChangeText={(text) => {
                       setSearchQuery(text);
@@ -398,13 +404,13 @@ const DefaultHttpInput = ({
 
                 {loading ? (
                   <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="small" color="#3B82F6" />
+                    <ActivityIndicator size="small" color={colors.primary} />
                   </View>
                 ) : fetchError ? (
                   <View style={styles.errorContainer}>
-                    <Text style={styles.errorText}>{fetchError}</Text>
+                    <Text style={[styles.errorText, { color: colors.error }]}>{fetchError}</Text>
                     <TouchableOpacity onPress={() => fetchData(searchQuery)} style={styles.retryButton}>
-                      <Text style={styles.retryButtonText}>{t("renderer.defaultHttpInput.retry")}</Text>
+                      <Text style={[styles.retryButtonText, { color: colors.primary }]}>{t("renderer.defaultHttpInput.retry")}</Text>
                     </TouchableOpacity>
                   </View>
                 ) : (
@@ -415,7 +421,7 @@ const DefaultHttpInput = ({
                     contentContainerStyle={styles.optionsListContent}
                     ListEmptyComponent={
                       <View style={styles.emptyContainer}>
-                        <Text style={styles.emptyText}>{t("renderer.defaultHttpInput.noResults")}</Text>
+                        <Text style={[styles.emptyText, { color: colors.textMuted }]}>{t("renderer.defaultHttpInput.noResults")}</Text>
                       </View>
                     }
                     renderItem={({ item }) => {
@@ -423,15 +429,15 @@ const DefaultHttpInput = ({
 
                       return (
                         <TouchableOpacity
-                          style={[styles.option, isSelected && styles.optionSelected]}
+                          style={[styles.option, isSelected && { backgroundColor: colors.primaryLight }]}
                           onPress={() => {
                             setValue(item.value);
                             setModalOpen(false);
                           }}
                           activeOpacity={0.7}
                         >
-                          <Text style={styles.optionText}>{item.label}</Text>
-                          {isSelected && <Text style={styles.checkmark}>✓</Text>}
+                          <Text style={[styles.optionText, { color: colors.text }]}>{item.label}</Text>
+                          {isSelected && <Text style={[styles.checkmark, { color: colors.primary }]}>✓</Text>}
                         </TouchableOpacity>
                       );
                     }}
@@ -441,8 +447,8 @@ const DefaultHttpInput = ({
             </TouchableOpacity>
           </Modal>
 
-          {error && <Text style={styles.error}>{error}</Text>}
-          {helperText && !error && <Text style={styles.helperText}>{helperText}</Text>}
+          {error && <Text style={[styles.error, { color: colors.error }]}>{error}</Text>}
+          {helperText && !error && <Text style={[styles.helperText, { color: colors.textMuted }]}>{helperText}</Text>}
         </View>
       );
     }
@@ -469,33 +475,38 @@ const DefaultHttpInput = ({
 
     return (
       <View style={styles.container}>
-        <Text style={styles.label}>
+        <Text style={[styles.label, { color: colors.textSecondary }]}>
           {label || node.data.name}
-          {node.data.required && <Text style={styles.required}>*</Text>}
+          {node.data.required && <Text style={{ color: colors.error }}>*</Text>}
         </Text>
 
         <TouchableOpacity
-          style={[styles.trigger, error && styles.triggerError, (isLoading || options.length === 0) && styles.triggerDisabled]}
+          style={[
+            styles.trigger,
+            { backgroundColor: colors.input, borderColor: colors.border },
+            error && { borderColor: colors.error },
+            (isLoading || options.length === 0) && { backgroundColor: colors.muted },
+          ]}
           onPress={() => setModalOpen(true)}
           disabled={isLoading || options.length === 0}
           activeOpacity={0.7}
         >
-          {isLoading && <ActivityIndicator size="small" color="#3B82F6" style={styles.triggerLoader} />}
-          <Text style={[styles.triggerText, !selectedOption && styles.triggerPlaceholder]} numberOfLines={1}>
+          {isLoading && <ActivityIndicator size="small" color={colors.primary} style={styles.triggerLoader} />}
+          <Text style={[styles.triggerText, { color: colors.text }, !selectedOption && { color: colors.textMuted }]} numberOfLines={1}>
             {selectedOption?.label || placeholder || t("renderer.defaultHttpInput.selectOption")}
           </Text>
-          <Text style={styles.arrow}>▼</Text>
+          <Text style={[styles.arrow, { color: colors.textMuted }]}>▼</Text>
         </TouchableOpacity>
 
-        {disabledMessage && <Text style={styles.disabledMessage}>{disabledMessage}</Text>}
+        {disabledMessage && <Text style={[styles.disabledMessage, { color: colors.error }]}>{disabledMessage}</Text>}
 
         <Modal visible={modalOpen} transparent animationType="fade" onRequestClose={() => setModalOpen(false)}>
           <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={() => setModalOpen(false)}>
-            <TouchableOpacity style={styles.modalContent} activeOpacity={1} onPress={() => {}}>
-              <View style={styles.modalHeader}>
-                <Text style={styles.modalTitle}>{label || node.data.name}</Text>
+            <TouchableOpacity style={[styles.modalContent, { backgroundColor: colors.card }]} activeOpacity={1} onPress={() => {}}>
+              <View style={[styles.modalHeader, { borderBottomColor: colors.separator }]}>
+                <Text style={[styles.modalTitle, { color: colors.text }]}>{label || node.data.name}</Text>
                 <TouchableOpacity onPress={() => setModalOpen(false)}>
-                  <Text style={styles.closeButton}>✕</Text>
+                  <Text style={[styles.closeButton, { color: colors.textMuted }]}>✕</Text>
                 </TouchableOpacity>
               </View>
 
@@ -509,15 +520,15 @@ const DefaultHttpInput = ({
 
                   return (
                     <TouchableOpacity
-                      style={[styles.option, isSelected && styles.optionSelected]}
+                      style={[styles.option, isSelected && { backgroundColor: colors.primaryLight }]}
                       onPress={() => {
                         setValue(item.value);
                         setModalOpen(false);
                       }}
                       activeOpacity={0.7}
                     >
-                      <Text style={styles.optionText}>{item.label}</Text>
-                      {isSelected && <Text style={styles.checkmark}>✓</Text>}
+                      <Text style={[styles.optionText, { color: colors.text }]}>{item.label}</Text>
+                      {isSelected && <Text style={[styles.checkmark, { color: colors.primary }]}>✓</Text>}
                     </TouchableOpacity>
                   );
                 }}
@@ -526,8 +537,8 @@ const DefaultHttpInput = ({
           </TouchableOpacity>
         </Modal>
 
-        {error && <Text style={styles.error}>{error}</Text>}
-        {helperText && !error && <Text style={styles.helperText}>{helperText}</Text>}
+        {error && <Text style={[styles.error, { color: colors.error }]}>{error}</Text>}
+        {helperText && !error && <Text style={[styles.helperText, { color: colors.textMuted }]}>{helperText}</Text>}
       </View>
     );
   }
@@ -535,33 +546,30 @@ const DefaultHttpInput = ({
   // If no responseMapping, render the value as text (read-only)
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>
+      <Text style={[styles.label, { color: colors.textSecondary }]}>
         {label || node.data.name}
-        {node.data.required && <Text style={styles.required}>*</Text>}
+        {node.data.required && <Text style={{ color: colors.error }}>*</Text>}
       </Text>
       <TextInput
-        style={[styles.input, styles.inputDisabled]}
+        style={[styles.input, { backgroundColor: colors.muted, borderColor: colors.border, color: colors.textMuted }]}
         value={typeof value === "string" ? value : JSON.stringify(value)}
         editable={false}
       />
-      {error && <Text style={styles.error}>{error}</Text>}
-      {helperText && !error && <Text style={styles.helperText}>{helperText}</Text>}
+      {error && <Text style={[styles.error, { color: colors.error }]}>{error}</Text>}
+      {helperText && !error && <Text style={[styles.helperText, { color: colors.textMuted }]}>{helperText}</Text>}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   arrow: {
-    color: "#6B7280",
     fontSize: 12,
   },
   checkmark: {
-    color: "#3B82F6",
     fontSize: 18,
     fontWeight: "700",
   },
   closeButton: {
-    color: "#6B7280",
     fontSize: 24,
     fontWeight: "300",
   },
@@ -569,7 +577,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   disabledMessage: {
-    color: "#EF4444",
     fontSize: 12,
     marginTop: 4,
   },
@@ -578,11 +585,9 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
   },
   emptyText: {
-    color: "#9CA3AF",
     fontSize: 14,
   },
   error: {
-    color: "#EF4444",
     fontSize: 12,
     marginTop: 4,
   },
@@ -591,31 +596,21 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   errorText: {
-    color: "#EF4444",
     fontSize: 14,
     textAlign: "center",
   },
   helperText: {
-    color: "#6B7280",
     fontSize: 12,
     marginTop: 4,
   },
   input: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D1D5DB",
     borderRadius: 6,
     borderWidth: 1,
-    color: "#374151",
     fontSize: 14,
     paddingHorizontal: 12,
     paddingVertical: 10,
   },
-  inputDisabled: {
-    backgroundColor: "#F9FAFB",
-    color: "#9CA3AF",
-  },
   label: {
-    color: "#374151",
     fontSize: 14,
     fontWeight: "500",
     marginBottom: 8,
@@ -631,7 +626,6 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   modalContent: {
-    backgroundColor: "#FFFFFF",
     borderRadius: 12,
     maxHeight: "80%",
     padding: 16,
@@ -639,7 +633,6 @@ const styles = StyleSheet.create({
   },
   modalHeader: {
     alignItems: "center",
-    borderBottomColor: "#E5E7EB",
     borderBottomWidth: 1,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -653,7 +646,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   modalTitle: {
-    color: "#111827",
     fontSize: 18,
     fontWeight: "600",
   },
@@ -665,9 +657,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 12,
   },
-  optionSelected: {
-    backgroundColor: "#EFF6FF",
-  },
   optionsList: {
     flexGrow: 0,
     flexShrink: 1,
@@ -676,18 +665,13 @@ const styles = StyleSheet.create({
     flexGrow: 0,
   },
   optionText: {
-    color: "#374151",
     flex: 1,
     fontSize: 14,
-  },
-  required: {
-    color: "#EF4444",
   },
   retryButton: {
     marginTop: 12,
   },
   retryButtonText: {
-    color: "#3B82F6",
     fontSize: 14,
     textDecorationLine: "underline",
   },
@@ -695,19 +679,14 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   searchInput: {
-    backgroundColor: "#F9FAFB",
-    borderColor: "#D1D5DB",
     borderRadius: 6,
     borderWidth: 1,
-    color: "#374151",
     fontSize: 14,
     paddingHorizontal: 12,
     paddingVertical: 10,
   },
   trigger: {
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D1D5DB",
     borderRadius: 6,
     borderWidth: 1,
     flexDirection: "row",
@@ -715,20 +694,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
   },
-  triggerDisabled: {
-    backgroundColor: "#F9FAFB",
-  },
-  triggerError: {
-    borderColor: "#EF4444",
-  },
   triggerLoader: {
     marginRight: 8,
   },
-  triggerPlaceholder: {
-    color: "#9CA3AF",
-  },
   triggerText: {
-    color: "#374151",
     flex: 1,
     fontSize: 14,
   },

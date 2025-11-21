@@ -2,11 +2,13 @@ import { useMemo, useState } from "react";
 import { FlatList, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useTranslate } from "@/renderer/hooks/useTranslate";
 import { InputRenderProps } from "@/renderer/types/renderer";
+import { useTheme } from "@/shared/context/ThemeContext";
 
 const DefaultAutocompleteInput = ({ node, value, setValue, error, label, placeholder, helperText }: InputRenderProps<"autocomplete">) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const t = useTranslate();
+  const { colors } = useTheme();
   const options = node.data.options || [];
   const selectedOption = options.find((opt) => opt.value === value);
 
@@ -42,33 +44,37 @@ const DefaultAutocompleteInput = ({ node, value, setValue, error, label, placeho
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>
+      <Text style={[styles.label, { color: colors.textSecondary }]}>
         {label || node.data.name}
-        {node.data.required && <Text style={styles.required}>*</Text>}
+        {node.data.required && <Text style={{ color: colors.error }}>*</Text>}
       </Text>
 
-      <TouchableOpacity style={[styles.trigger, error && styles.triggerError]} onPress={() => setIsOpen(true)} activeOpacity={0.7}>
-        <Text style={[styles.triggerText, !value && styles.triggerPlaceholder]} numberOfLines={1}>
+      <TouchableOpacity
+        style={[styles.trigger, { backgroundColor: colors.input, borderColor: colors.border }, error && { borderColor: colors.error }]}
+        onPress={() => setIsOpen(true)}
+        activeOpacity={0.7}
+      >
+        <Text style={[styles.triggerText, { color: colors.text }, !value && { color: colors.textMuted }]} numberOfLines={1}>
           {getDisplayText()}
         </Text>
-        <Text style={styles.arrow}>▼</Text>
+        <Text style={[styles.arrow, { color: colors.textMuted }]}>▼</Text>
       </TouchableOpacity>
 
       <Modal visible={isOpen} transparent animationType="fade" onRequestClose={handleClose}>
         <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={handleClose}>
-          <TouchableOpacity style={styles.modalContent} activeOpacity={1} onPress={() => {}}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>{label || node.data.name}</Text>
+          <TouchableOpacity style={[styles.modalContent, { backgroundColor: colors.card }]} activeOpacity={1} onPress={() => {}}>
+            <View style={[styles.modalHeader, { borderBottomColor: colors.separator }]}>
+              <Text style={[styles.modalTitle, { color: colors.text }]}>{label || node.data.name}</Text>
               <TouchableOpacity onPress={handleClose}>
-                <Text style={styles.closeButton}>✕</Text>
+                <Text style={[styles.closeButton, { color: colors.textMuted }]}>✕</Text>
               </TouchableOpacity>
             </View>
 
             <View style={styles.searchContainer}>
               <TextInput
-                style={styles.searchInput}
+                style={[styles.searchInput, { backgroundColor: colors.muted, borderColor: colors.border, color: colors.text }]}
                 placeholder={placeholder || t("renderer.defaultAutocompleteInput.search")}
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.textMuted}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 autoFocus
@@ -84,7 +90,7 @@ const DefaultAutocompleteInput = ({ node, value, setValue, error, label, placeho
               contentContainerStyle={styles.optionsListContent}
               ListEmptyComponent={
                 <View style={styles.emptyContainer}>
-                  <Text style={styles.emptyText}>{t("renderer.defaultAutocompleteInput.noResults")}</Text>
+                  <Text style={[styles.emptyText, { color: colors.textMuted }]}>{t("renderer.defaultAutocompleteInput.noResults")}</Text>
                 </View>
               }
               renderItem={({ item }) => {
@@ -92,13 +98,15 @@ const DefaultAutocompleteInput = ({ node, value, setValue, error, label, placeho
 
                 return (
                   <TouchableOpacity
-                    style={[styles.option, isSelected && styles.optionSelected]}
+                    style={[styles.option, isSelected && { backgroundColor: colors.primaryLight }]}
                     onPress={() => handleSelect(item.value)}
                     disabled={item.disabled}
                     activeOpacity={0.7}
                   >
-                    <Text style={[styles.optionText, item.disabled && styles.optionTextDisabled]}>{t(item.label)}</Text>
-                    {isSelected && <Text style={styles.checkmark}>✓</Text>}
+                    <Text style={[styles.optionText, { color: colors.text }, item.disabled && { color: colors.textMuted }]}>
+                      {t(item.label)}
+                    </Text>
+                    {isSelected && <Text style={[styles.checkmark, { color: colors.primary }]}>✓</Text>}
                   </TouchableOpacity>
                 );
               }}
@@ -107,24 +115,21 @@ const DefaultAutocompleteInput = ({ node, value, setValue, error, label, placeho
         </TouchableOpacity>
       </Modal>
 
-      {error && <Text style={styles.error}>{error}</Text>}
-      {helperText && !error && <Text style={styles.helperText}>{helperText}</Text>}
+      {error && <Text style={[styles.error, { color: colors.error }]}>{error}</Text>}
+      {helperText && !error && <Text style={[styles.helperText, { color: colors.textMuted }]}>{helperText}</Text>}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   arrow: {
-    color: "#6B7280",
     fontSize: 12,
   },
   checkmark: {
-    color: "#3B82F6",
     fontSize: 18,
     fontWeight: "700",
   },
   closeButton: {
-    color: "#6B7280",
     fontSize: 24,
     fontWeight: "300",
   },
@@ -136,27 +141,22 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
   },
   emptyText: {
-    color: "#9CA3AF",
     fontSize: 14,
   },
   error: {
-    color: "#EF4444",
     fontSize: 12,
     marginTop: 4,
   },
   helperText: {
-    color: "#6B7280",
     fontSize: 12,
     marginTop: 4,
   },
   label: {
-    color: "#374151",
     fontSize: 14,
     fontWeight: "500",
     marginBottom: 8,
   },
   modalContent: {
-    backgroundColor: "#FFFFFF",
     borderRadius: 12,
     maxHeight: "80%",
     padding: 16,
@@ -164,7 +164,6 @@ const styles = StyleSheet.create({
   },
   modalHeader: {
     alignItems: "center",
-    borderBottomColor: "#E5E7EB",
     borderBottomWidth: 1,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -178,7 +177,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   modalTitle: {
-    color: "#111827",
     fontSize: 18,
     fontWeight: "600",
   },
@@ -190,9 +188,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 12,
   },
-  optionSelected: {
-    backgroundColor: "#EFF6FF",
-  },
   optionsList: {
     flexGrow: 0,
     flexShrink: 1,
@@ -201,33 +196,21 @@ const styles = StyleSheet.create({
     flexGrow: 0,
   },
   optionText: {
-    color: "#374151",
     flex: 1,
     fontSize: 14,
-  },
-  optionTextDisabled: {
-    color: "#9CA3AF",
-  },
-  required: {
-    color: "#EF4444",
   },
   searchContainer: {
     marginBottom: 12,
   },
   searchInput: {
-    backgroundColor: "#F9FAFB",
-    borderColor: "#D1D5DB",
     borderRadius: 6,
     borderWidth: 1,
-    color: "#374151",
     fontSize: 14,
     paddingHorizontal: 12,
     paddingVertical: 10,
   },
   trigger: {
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D1D5DB",
     borderRadius: 6,
     borderWidth: 1,
     flexDirection: "row",
@@ -235,14 +218,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
   },
-  triggerError: {
-    borderColor: "#EF4444",
-  },
-  triggerPlaceholder: {
-    color: "#9CA3AF",
-  },
   triggerText: {
-    color: "#374151",
     flex: 1,
     fontSize: 14,
   },
