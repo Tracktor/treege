@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
-import { ThemeColors, themeColors } from "@/shared/constants/colors";
+import { COLORS, ThemeColors } from "@/shared/constants/colors";
 
 type Theme = "dark" | "light" | "system";
 
@@ -17,7 +17,7 @@ interface ThemeProviderState {
 }
 
 const initialState: ThemeProviderState = {
-  colors: themeColors.light,
+  colors: COLORS.light,
   setTheme: () => null,
   theme: "system",
 };
@@ -55,7 +55,7 @@ export const ThemeProvider = ({
         ? "dark"
         : "light"
       : theme;
-  const colors = themeColors[resolvedTheme];
+  const colors = COLORS[resolvedTheme];
 
   const value = useMemo(
     () => ({

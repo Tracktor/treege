@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useMemo, useState } from "react";
 import { useColorScheme } from "react-native";
-import { ThemeColors, themeColors } from "@/shared/constants/colors";
+import { COLORS, ThemeColors } from "@/shared/constants/colors";
 
 type Theme = "dark" | "light" | "system";
 
@@ -18,7 +18,7 @@ interface ThemeProviderState {
 }
 
 const initialState: ThemeProviderState = {
-  colors: themeColors.light,
+  colors: COLORS.light,
   setTheme: () => null,
   theme: "system",
 };
@@ -45,7 +45,7 @@ export const ThemeProvider = ({ children, defaultTheme = "system", theme: contro
 
   // Resolve "system" to actual device preference and get colors
   const resolvedTheme = theme === "system" ? (deviceColorScheme ?? "light") : theme;
-  const colors = themeColors[resolvedTheme];
+  const colors = COLORS[resolvedTheme];
 
   const value = useMemo(
     () => ({
