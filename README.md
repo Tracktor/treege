@@ -13,7 +13,8 @@
     <a href="#features">Features</a> •
     <a href="#installation">Installation</a> •
     <a href="#quick-start">Quick Start</a> •
-    <a href="#examples">Examples</a>
+    <a href="#examples">Examples</a> •
+    <a href="./AI_GENERATION.md">🪄 AI Generation</a>
   </p>
 </div>
 
@@ -29,6 +30,7 @@ Treege is a modern React library for creating and rendering interactive decision
 - **Node-based Interface**: Drag-and-drop editor powered by ReactFlow
 - **4 Node Types**: Flow, Group, Input, and UI nodes
 - **Conditional Edges**: Advanced logic with AND/OR operators (`===`, `!==`, `>`, `<`, `>=`, `<=`)
+- **AI-Powered Generation**: Generate decision trees from natural language descriptions using Gemini, OpenAI, DeepSeek, or Claude ([Learn more](./AI_GENERATION.md))
 - **Multi-language Support**: Built-in translation system for all labels
 - **Type-safe**: Full TypeScript support
 - **Mini-map & Controls**: Navigation tools for complex trees
@@ -44,7 +46,7 @@ Treege is a modern React library for creating and rendering interactive decision
 - **Enhanced Error Messages**: Clear, user-friendly error messages for HTTP inputs and validation
 - **Conditional Logic**: Dynamic field visibility based on user input and conditional edges
 - **Fully Customizable**: Override any component (FormWrapper, Group, Inputs, SubmitButton, UI elements)
-- **Optional Dependencies**: Graceful degradation when optional packages like `@react-native-documents/picker` aren't installed
+- **Optional Dependencies**: Graceful degradation when optional packages like `react-native-document-picker` aren't installed
 - **Theme Support**: Dark/light mode out of the box
 - **Google API Integration**: Address autocomplete support
 
@@ -194,7 +196,7 @@ npm install treege
 npm install react-native
 
 # Optional: Install for file input support
-npm install @react-native-documents/picker
+npm install react-native-document-picker
 ```
 
 ### Basic Usage
@@ -304,7 +306,7 @@ The React Native renderer includes default implementations for all input types:
 - `checkbox`, `switch`, `hidden`
 
 **With Optional Dependencies** (gracefully degrades if not installed):
-- `file` - Requires [@react-native-documents/picker](https://react-native-documents.github.io/docs/sponsor-only/picker/import-mode) (optional)
+- `file` - Requires [react-native-document-picker](https://github.com/rnmods/react-native-document-picker) (optional)
 
 **Requires Custom Implementation** (placeholder provided):
 - `select`, `radio`, `autocomplete`
@@ -320,18 +322,19 @@ You can implement these inputs using popular React Native libraries:
 
 The React Native renderer shares the same API as the web renderer, with some platform-specific props:
 
-| Prop                     | Type                                        | Default      | Description                     |
-|--------------------------|---------------------------------------------|--------------|--------------------------------|
-| `flows`                  | `Flow \| null`                              | -            | Decision tree to render        |
-| `onSubmit`               | `(values: FormValues) => void`              | -            | Form submission handler        |
-| `onChange`               | `(values: FormValues) => void`              | -            | Form change handler            |
-| `validate`               | `(values, nodes) => Record<string, string>` | -            | Custom validation function     |
-| `initialValues`          | `FormValues`                                | `{}`         | Initial form values            |
-| `components`             | `RendererComponents`                        | -            | Custom component overrides     |
-| `language`               | `string`                                    | `"en"`       | UI language                    |
-| `validationMode`         | `"onSubmit" \| "onChange"`                  | `"onSubmit"` | When to validate               |
-| `style`                  | `ViewStyle`                                 | -            | ScrollView style (RN only)     |
-| `contentContainerStyle`  | `ViewStyle`                                 | -            | Content container style (RN)   |
+| Prop                    | Type                                        | Default      | Description                                                |
+|-------------------------|---------------------------------------------|--------------|------------------------------------------------------------|
+| `flows`                 | `Flow \| Flow[] \| null`                    | -            | Decision tree to render (single Flow or array of Flows)    |
+| `onSubmit`              | `(values: FormValues, meta?: Meta) => void` | -            | Form submission handler (meta includes HTTP response data) |
+| `onChange`              | `(values: FormValues) => void`              | -            | Form change handler                                        |
+| `validate`              | `(values, nodes) => Record<string, string>` | -            | Custom validation function                                 |
+| `initialValues`         | `FormValues`                                | `{}`         | Initial form values                                        |
+| `components`            | `TreegeRendererComponents`                  | -            | Custom component overrides                                 |
+| `language`              | `string`                                    | `"en"`       | UI language                                                |
+| `validationMode`        | `"onSubmit" \| "onChange"`                  | `"onSubmit"` | When to validate                                           |
+| `googleApiKey`          | `string`                                    | -            | API key for address input                                  |
+| `style`                 | `ViewStyle`                                 | -            | ScrollView style (RN only)                                 |
+| `contentContainerStyle` | `ViewStyle`                                 | -            | Content container style (RN)                               |
 
 ## Node Types
 
@@ -598,27 +601,31 @@ Once the development server is running, you can access these examples:
 
 ### TreegeEditor Props
 
-| Prop       | Type                   | Default  | Description                 |
-|------------|------------------------|----------|-----------------------------|
-| `flow`     | `Flow \| null`         | `null`   | Initial decision tree       |
-| `onSave`   | `(flow: Flow) => void` | -        | Callback when tree is saved |
-| `language` | `string`               | `"en"`   | UI language                 |
-| `theme`    | `"light" \| "dark"`    | `"dark"` | Editor theme                |
+| Prop           | Type                                     | Default  | Description                                                                    |
+|----------------|------------------------------------------|----------|--------------------------------------------------------------------------------|
+| `flow`         | `Flow \| null`                           | `null`   | Initial decision tree                                                          |
+| `onSave`       | `(flow: Flow) => void`                   | -        | Callback when tree is saved                                                    |
+| `onExportJson` | `() => { nodes: Node[]; edges: Edge[] }` | -        | Callback for exporting JSON data                                               |
+| `language`     | `string`                                 | `"en"`   | UI language                                                                    |
+| `theme`        | `"light" \| "dark"`                      | `"dark"` | Editor theme                                                                   |
+| `aiConfig`     | `AIConfig`                               | -        | AI configuration for tree generation (see [AI Generation](./AI_GENERATION.md)) |
+| `className`    | `string`                                 | -        | Additional CSS class names for custom styling                                  |
 
 ### TreegeRenderer Props
 
-| Prop             | Type                                        | Default      | Description                |
-|------------------|---------------------------------------------|--------------|----------------------------|
-| `flows`          | `Flow \| null`                              | -            | Decision tree to render    |
-| `onSubmit`       | `(values: FormValues) => void`              | -            | Form submission handler    |
-| `onChange`       | `(values: FormValues) => void`              | -            | Form change handler        |
-| `validate`       | `(values, nodes) => Record<string, string>` | -            | Custom validation function |
-| `initialValues`  | `FormValues`                                | `{}`         | Initial form values        |
-| `components`     | `RendererComponents`                        | -            | Custom component overrides |
-| `language`       | `string`                                    | `"en"`       | UI language                |
-| `validationMode` | `"onSubmit" \| "onChange"`                  | `"onSubmit"` | When to validate           |
-| `theme`          | `"light" \| "dark"`                         | `"dark"`     | Renderer theme             |
-| `googleApiKey`   | `string`                                    | -            | API key for address input  |
+| Prop             | Type                                        | Default      | Description                                                |
+|------------------|---------------------------------------------|--------------|------------------------------------------------------------|
+| `flows`          | `Flow \| Flow[] \| null`                    | -            | Decision tree to render (single Flow or array of Flows)    |
+| `onSubmit`       | `(values: FormValues, meta?: Meta) => void` | -            | Form submission handler (meta includes HTTP response data) |
+| `onChange`       | `(values: FormValues) => void`              | -            | Form change handler                                        |
+| `validate`       | `(values, nodes) => Record<string, string>` | -            | Custom validation function                                 |
+| `initialValues`  | `FormValues`                                | `{}`         | Initial form values                                        |
+| `components`     | `TreegeRendererComponents`                  | -            | Custom component overrides                                 |
+| `language`       | `string`                                    | `"en"`       | UI language                                                |
+| `validationMode` | `"onSubmit" \| "onChange"`                  | `"onSubmit"` | When to validate                                           |
+| `theme`          | `"light" \| "dark"`                         | `"dark"`     | Renderer theme                                             |
+| `googleApiKey`   | `string`                                    | -            | API key for address input                                  |
+| `className`      | `string`                                    | -            | Additional CSS class names for custom styling              |
 
 ## Development
 
