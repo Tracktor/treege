@@ -114,10 +114,10 @@ const TreegeRenderer = ({
                 <SubmitButton label={t("renderer.defaultSubmitButton.submit")} disabled={isSubmitting} />
               </SubmitButtonWrapper>
             )}
-          </FormWrapper>
 
-          {/* Powered by Treege */}
-          <p className="py-2 text-muted-foreground text-xs">Powered by Treege</p>
+            {/* Powered by Treege */}
+            <p className="py-2 text-muted-foreground text-xs">Powered by Treege</p>
+          </FormWrapper>
 
           {/* Submit message (success/error) */}
           {submitMessage && (

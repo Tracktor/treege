@@ -110,10 +110,10 @@ const TreegeRenderer = ({
               </SubmitButton>
             </SubmitButtonWrapper>
           )}
-        </FormWrapper>
 
-        {/* Powered by Treege */}
-        <Text style={styles.poweredBy}>Powered by Treege</Text>
+          {/* Powered by Treege */}
+          <Text style={styles.poweredBy}>Powered by Treege</Text>
+        </FormWrapper>
 
         {/* Submit message (success/error) */}
         {submitMessage && (
